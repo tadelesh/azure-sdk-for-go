@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewInvoiceSectionsClient(credential azcore.TokenCredential, options *arm.Cl
 // parameters - The new or updated invoice section.
 // options - InvoiceSectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the InvoiceSectionsClient.BeginCreateOrUpdate
 // method.
-func (client *InvoiceSectionsClient) BeginCreateOrUpdate(ctx context.Context, billingAccountName string, billingProfileName string, invoiceSectionName string, parameters InvoiceSection, options *InvoiceSectionsClientBeginCreateOrUpdateOptions) (InvoiceSectionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, billingAccountName, billingProfileName, invoiceSectionName, parameters, options)
-	if err != nil {
-		return InvoiceSectionsClientCreateOrUpdatePollerResponse{}, err
+func (client *InvoiceSectionsClient) BeginCreateOrUpdate(ctx context.Context, billingAccountName string, billingProfileName string, invoiceSectionName string, parameters InvoiceSection, options *InvoiceSectionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[InvoiceSectionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, billingAccountName, billingProfileName, invoiceSectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InvoiceSectionsClientCreateOrUpdateResponse]("InvoiceSectionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InvoiceSectionsClientCreateOrUpdateResponse]("InvoiceSectionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := InvoiceSectionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("InvoiceSectionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return InvoiceSectionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &InvoiceSectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an invoice section. The operation is supported only for billing accounts with agreement
@@ -179,16 +175,32 @@ func (client *InvoiceSectionsClient) getHandleResponse(resp *http.Response) (Inv
 // billingProfileName - The ID that uniquely identifies a billing profile.
 // options - InvoiceSectionsClientListByBillingProfileOptions contains the optional parameters for the InvoiceSectionsClient.ListByBillingProfile
 // method.
-func (client *InvoiceSectionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *InvoiceSectionsClientListByBillingProfileOptions) *InvoiceSectionsClientListByBillingProfilePager {
-	return &InvoiceSectionsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+func (client *InvoiceSectionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *InvoiceSectionsClientListByBillingProfileOptions) *runtime.Pager[InvoiceSectionsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InvoiceSectionsClientListByBillingProfileResponse]{
+		More: func(page InvoiceSectionsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InvoiceSectionsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvoiceSectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InvoiceSectionsClientListByBillingProfileResponse) (InvoiceSectionsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InvoiceSectionsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InvoiceSectionsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InvoiceSectionsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *MaintenanceConfigurationsClient) getHandleResponse(resp *http.Resp
 // resourceName - The name of the managed cluster resource.
 // options - MaintenanceConfigurationsClientListByManagedClusterOptions contains the optional parameters for the MaintenanceConfigurationsClient.ListByManagedCluster
 // method.
-func (client *MaintenanceConfigurationsClient) ListByManagedCluster(resourceGroupName string, resourceName string, options *MaintenanceConfigurationsClientListByManagedClusterOptions) *MaintenanceConfigurationsClientListByManagedClusterPager {
-	return &MaintenanceConfigurationsClientListByManagedClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagedClusterCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *MaintenanceConfigurationsClient) ListByManagedCluster(resourceGroupName string, resourceName string, options *MaintenanceConfigurationsClientListByManagedClusterOptions) *runtime.Pager[MaintenanceConfigurationsClientListByManagedClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MaintenanceConfigurationsClientListByManagedClusterResponse]{
+		More: func(page MaintenanceConfigurationsClientListByManagedClusterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MaintenanceConfigurationsClientListByManagedClusterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MaintenanceConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MaintenanceConfigurationsClientListByManagedClusterResponse) (MaintenanceConfigurationsClientListByManagedClusterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagedClusterCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MaintenanceConfigurationsClientListByManagedClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MaintenanceConfigurationsClientListByManagedClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MaintenanceConfigurationsClientListByManagedClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagedClusterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagedClusterCreateRequest creates the ListByManagedCluster request.

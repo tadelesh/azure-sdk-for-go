@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewVirtualMachineImageTemplatesClient(subscriptionID string, credential azc
 // imageTemplateName - The name of the image Template
 // options - VirtualMachineImageTemplatesClientBeginCancelOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginCancel
 // method.
-func (client *VirtualMachineImageTemplatesClient) BeginCancel(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginCancelOptions) (VirtualMachineImageTemplatesClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, resourceGroupName, imageTemplateName, options)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientCancelPollerResponse{}, err
+func (client *VirtualMachineImageTemplatesClient) BeginCancel(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginCancelOptions) (*armruntime.Poller[VirtualMachineImageTemplatesClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, resourceGroupName, imageTemplateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineImageTemplatesClientCancelResponse]("VirtualMachineImageTemplatesClient.Cancel", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineImageTemplatesClientCancelResponse]("VirtualMachineImageTemplatesClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineImageTemplatesClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Cancel", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientCancelPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineImageTemplatesClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - Cancel the long running image build based on the image template
@@ -122,20 +118,16 @@ func (client *VirtualMachineImageTemplatesClient) cancelCreateRequest(ctx contex
 // parameters - Parameters supplied to the CreateImageTemplate operation
 // options - VirtualMachineImageTemplatesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualMachineImageTemplatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, imageTemplateName string, parameters ImageTemplate, options *VirtualMachineImageTemplatesClientBeginCreateOrUpdateOptions) (VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, imageTemplateName, parameters, options)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualMachineImageTemplatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, imageTemplateName string, parameters ImageTemplate, options *VirtualMachineImageTemplatesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualMachineImageTemplatesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, imageTemplateName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineImageTemplatesClientCreateOrUpdateResponse]("VirtualMachineImageTemplatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineImageTemplatesClientCreateOrUpdateResponse]("VirtualMachineImageTemplatesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineImageTemplatesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a virtual machine image template
@@ -187,20 +179,16 @@ func (client *VirtualMachineImageTemplatesClient) createOrUpdateCreateRequest(ct
 // imageTemplateName - The name of the image Template
 // options - VirtualMachineImageTemplatesClientBeginDeleteOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginDelete
 // method.
-func (client *VirtualMachineImageTemplatesClient) BeginDelete(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginDeleteOptions) (VirtualMachineImageTemplatesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, imageTemplateName, options)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientDeletePollerResponse{}, err
+func (client *VirtualMachineImageTemplatesClient) BeginDelete(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginDeleteOptions) (*armruntime.Poller[VirtualMachineImageTemplatesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, imageTemplateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineImageTemplatesClientDeleteResponse]("VirtualMachineImageTemplatesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineImageTemplatesClientDeleteResponse]("VirtualMachineImageTemplatesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineImageTemplatesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineImageTemplatesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a virtual machine image template
@@ -367,16 +355,32 @@ func (client *VirtualMachineImageTemplatesClient) getRunOutputHandleResponse(res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualMachineImageTemplatesClientListOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.List
 // method.
-func (client *VirtualMachineImageTemplatesClient) List(options *VirtualMachineImageTemplatesClientListOptions) *VirtualMachineImageTemplatesClientListPager {
-	return &VirtualMachineImageTemplatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VirtualMachineImageTemplatesClient) List(options *VirtualMachineImageTemplatesClientListOptions) *runtime.Pager[VirtualMachineImageTemplatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineImageTemplatesClientListResponse]{
+		More: func(page VirtualMachineImageTemplatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineImageTemplatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ImageTemplateListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineImageTemplatesClientListResponse) (VirtualMachineImageTemplatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineImageTemplatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -411,16 +415,32 @@ func (client *VirtualMachineImageTemplatesClient) listHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group.
 // options - VirtualMachineImageTemplatesClientListByResourceGroupOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.ListByResourceGroup
 // method.
-func (client *VirtualMachineImageTemplatesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachineImageTemplatesClientListByResourceGroupOptions) *VirtualMachineImageTemplatesClientListByResourceGroupPager {
-	return &VirtualMachineImageTemplatesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VirtualMachineImageTemplatesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachineImageTemplatesClientListByResourceGroupOptions) *runtime.Pager[VirtualMachineImageTemplatesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineImageTemplatesClientListByResourceGroupResponse]{
+		More: func(page VirtualMachineImageTemplatesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineImageTemplatesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ImageTemplateListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineImageTemplatesClientListByResourceGroupResponse) (VirtualMachineImageTemplatesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineImageTemplatesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -460,16 +480,32 @@ func (client *VirtualMachineImageTemplatesClient) listByResourceGroupHandleRespo
 // imageTemplateName - The name of the image Template
 // options - VirtualMachineImageTemplatesClientListRunOutputsOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.ListRunOutputs
 // method.
-func (client *VirtualMachineImageTemplatesClient) ListRunOutputs(resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientListRunOutputsOptions) *VirtualMachineImageTemplatesClientListRunOutputsPager {
-	return &VirtualMachineImageTemplatesClientListRunOutputsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRunOutputsCreateRequest(ctx, resourceGroupName, imageTemplateName, options)
+func (client *VirtualMachineImageTemplatesClient) ListRunOutputs(resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientListRunOutputsOptions) *runtime.Pager[VirtualMachineImageTemplatesClientListRunOutputsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineImageTemplatesClientListRunOutputsResponse]{
+		More: func(page VirtualMachineImageTemplatesClientListRunOutputsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineImageTemplatesClientListRunOutputsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RunOutputCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineImageTemplatesClientListRunOutputsResponse) (VirtualMachineImageTemplatesClientListRunOutputsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRunOutputsCreateRequest(ctx, resourceGroupName, imageTemplateName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListRunOutputsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineImageTemplatesClientListRunOutputsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineImageTemplatesClientListRunOutputsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRunOutputsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRunOutputsCreateRequest creates the ListRunOutputs request.
@@ -513,20 +549,16 @@ func (client *VirtualMachineImageTemplatesClient) listRunOutputsHandleResponse(r
 // imageTemplateName - The name of the image Template
 // options - VirtualMachineImageTemplatesClientBeginRunOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginRun
 // method.
-func (client *VirtualMachineImageTemplatesClient) BeginRun(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginRunOptions) (VirtualMachineImageTemplatesClientRunPollerResponse, error) {
-	resp, err := client.run(ctx, resourceGroupName, imageTemplateName, options)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientRunPollerResponse{}, err
+func (client *VirtualMachineImageTemplatesClient) BeginRun(ctx context.Context, resourceGroupName string, imageTemplateName string, options *VirtualMachineImageTemplatesClientBeginRunOptions) (*armruntime.Poller[VirtualMachineImageTemplatesClientRunResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.run(ctx, resourceGroupName, imageTemplateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineImageTemplatesClientRunResponse]("VirtualMachineImageTemplatesClient.Run", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineImageTemplatesClientRunResponse]("VirtualMachineImageTemplatesClient.Run", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineImageTemplatesClientRunPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Run", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientRunPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineImageTemplatesClientRunPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Run - Create artifacts from a existing image template
@@ -579,20 +611,16 @@ func (client *VirtualMachineImageTemplatesClient) runCreateRequest(ctx context.C
 // parameters - Additional parameters for Image Template update.
 // options - VirtualMachineImageTemplatesClientBeginUpdateOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginUpdate
 // method.
-func (client *VirtualMachineImageTemplatesClient) BeginUpdate(ctx context.Context, resourceGroupName string, imageTemplateName string, parameters ImageTemplateUpdateParameters, options *VirtualMachineImageTemplatesClientBeginUpdateOptions) (VirtualMachineImageTemplatesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, imageTemplateName, parameters, options)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientUpdatePollerResponse{}, err
+func (client *VirtualMachineImageTemplatesClient) BeginUpdate(ctx context.Context, resourceGroupName string, imageTemplateName string, parameters ImageTemplateUpdateParameters, options *VirtualMachineImageTemplatesClientBeginUpdateOptions) (*armruntime.Poller[VirtualMachineImageTemplatesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, imageTemplateName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineImageTemplatesClientUpdateResponse]("VirtualMachineImageTemplatesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineImageTemplatesClientUpdateResponse]("VirtualMachineImageTemplatesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineImageTemplatesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineImageTemplatesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineImageTemplatesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update the tags for this Virtual Machine Image Template

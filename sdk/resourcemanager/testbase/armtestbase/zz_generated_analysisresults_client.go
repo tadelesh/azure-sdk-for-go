@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -128,13 +128,26 @@ func (client *AnalysisResultsClient) getHandleResponse(resp *http.Response) (Ana
 // testResultName - The Test Result Name. It equals to {osName}-{TestResultId} string.
 // analysisResultType - The type of the Analysis Result of a Test Result.
 // options - AnalysisResultsClientListOptions contains the optional parameters for the AnalysisResultsClient.List method.
-func (client *AnalysisResultsClient) List(resourceGroupName string, testBaseAccountName string, packageName string, testResultName string, analysisResultType AnalysisResultType, options *AnalysisResultsClientListOptions) *AnalysisResultsClientListPager {
-	return &AnalysisResultsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, testResultName, analysisResultType, options)
+func (client *AnalysisResultsClient) List(resourceGroupName string, testBaseAccountName string, packageName string, testResultName string, analysisResultType AnalysisResultType, options *AnalysisResultsClientListOptions) *runtime.Pager[AnalysisResultsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AnalysisResultsClientListResponse]{
+		More: func(page AnalysisResultsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AnalysisResultsClientListResponse) (AnalysisResultsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, testResultName, analysisResultType, options)
+			if err != nil {
+				return AnalysisResultsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AnalysisResultsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AnalysisResultsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

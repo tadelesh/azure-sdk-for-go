@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // environmentName - The name of the Time Series Insights environment associated with the specified resource group.
 // options - PrivateLinkResourcesClientListSupportedOptions contains the optional parameters for the PrivateLinkResourcesClient.ListSupported
 // method.
-func (client *PrivateLinkResourcesClient) ListSupported(resourceGroupName string, environmentName string, options *PrivateLinkResourcesClientListSupportedOptions) *PrivateLinkResourcesClientListSupportedPager {
-	return &PrivateLinkResourcesClientListSupportedPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSupportedCreateRequest(ctx, resourceGroupName, environmentName, options)
+func (client *PrivateLinkResourcesClient) ListSupported(resourceGroupName string, environmentName string, options *PrivateLinkResourcesClientListSupportedOptions) *runtime.Pager[PrivateLinkResourcesClientListSupportedResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListSupportedResponse]{
+		More: func(page PrivateLinkResourcesClientListSupportedResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListSupportedResponse) (PrivateLinkResourcesClientListSupportedResponse, error) {
+			req, err := client.listSupportedCreateRequest(ctx, resourceGroupName, environmentName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListSupportedResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListSupportedResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListSupportedResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSupportedHandleResponse(resp)
+		},
+	})
 }
 
 // listSupportedCreateRequest creates the ListSupported request.

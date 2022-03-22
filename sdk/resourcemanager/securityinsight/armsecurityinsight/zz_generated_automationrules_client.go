@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *AutomationRulesClient) getHandleResponse(resp *http.Response) (Aut
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - AutomationRulesClientListOptions contains the optional parameters for the AutomationRulesClient.List method.
-func (client *AutomationRulesClient) List(resourceGroupName string, workspaceName string, options *AutomationRulesClientListOptions) *AutomationRulesClientListPager {
-	return &AutomationRulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *AutomationRulesClient) List(resourceGroupName string, workspaceName string, options *AutomationRulesClientListOptions) *runtime.Pager[AutomationRulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutomationRulesClientListResponse]{
+		More: func(page AutomationRulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AutomationRulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AutomationRulesList.NextLink)
+		Fetcher: func(ctx context.Context, page *AutomationRulesClientListResponse) (AutomationRulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AutomationRulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutomationRulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutomationRulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

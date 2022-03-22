@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewSecretsClient(subscriptionID string, credential azcore.TokenCredential, 
 // secretName - Name of the Secret under the profile.
 // secret - The Secret properties.
 // options - SecretsClientBeginCreateOptions contains the optional parameters for the SecretsClient.BeginCreate method.
-func (client *SecretsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, secretName string, secret Secret, options *SecretsClientBeginCreateOptions) (SecretsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, secretName, secret, options)
-	if err != nil {
-		return SecretsClientCreatePollerResponse{}, err
+func (client *SecretsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, secretName string, secret Secret, options *SecretsClientBeginCreateOptions) (*armruntime.Poller[SecretsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, secretName, secret, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SecretsClientCreateResponse]("SecretsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SecretsClientCreateResponse]("SecretsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SecretsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SecretsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SecretsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SecretsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new Secret within the specified profile.
@@ -127,20 +123,16 @@ func (client *SecretsClient) createCreateRequest(ctx context.Context, resourceGr
 // group.
 // secretName - Name of the Secret under the profile.
 // options - SecretsClientBeginDeleteOptions contains the optional parameters for the SecretsClient.BeginDelete method.
-func (client *SecretsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, secretName string, options *SecretsClientBeginDeleteOptions) (SecretsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, secretName, options)
-	if err != nil {
-		return SecretsClientDeletePollerResponse{}, err
+func (client *SecretsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, secretName string, options *SecretsClientBeginDeleteOptions) (*armruntime.Poller[SecretsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, secretName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SecretsClientDeleteResponse]("SecretsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SecretsClientDeleteResponse]("SecretsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SecretsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SecretsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SecretsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SecretsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing Secret within profile.
@@ -257,16 +249,32 @@ func (client *SecretsClient) getHandleResponse(resp *http.Response) (SecretsClie
 // profileName - Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource
 // group.
 // options - SecretsClientListByProfileOptions contains the optional parameters for the SecretsClient.ListByProfile method.
-func (client *SecretsClient) ListByProfile(resourceGroupName string, profileName string, options *SecretsClientListByProfileOptions) *SecretsClientListByProfilePager {
-	return &SecretsClientListByProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+func (client *SecretsClient) ListByProfile(resourceGroupName string, profileName string, options *SecretsClientListByProfileOptions) *runtime.Pager[SecretsClientListByProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecretsClientListByProfileResponse]{
+		More: func(page SecretsClientListByProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecretsClientListByProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecretListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SecretsClientListByProfileResponse) (SecretsClientListByProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecretsClientListByProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecretsClientListByProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecretsClientListByProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProfileCreateRequest creates the ListByProfile request.

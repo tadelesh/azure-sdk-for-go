@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -273,12 +273,14 @@ type DomainTopicProperties struct {
 // DomainTopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainTopicsClient.BeginCreateOrUpdate
 // method.
 type DomainTopicsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainTopicsClientBeginDeleteOptions contains the optional parameters for the DomainTopicsClient.BeginDelete method.
 type DomainTopicsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainTopicsClientGetOptions contains the optional parameters for the DomainTopicsClient.Get method.
@@ -362,17 +364,20 @@ type DomainUpdateParameters struct {
 
 // DomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainsClient.BeginCreateOrUpdate method.
 type DomainsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainsClientBeginDeleteOptions contains the optional parameters for the DomainsClient.BeginDelete method.
 type DomainsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainsClientBeginUpdateOptions contains the optional parameters for the DomainsClient.BeginUpdate method.
 type DomainsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainsClientGetOptions contains the optional parameters for the DomainsClient.Get method.
@@ -617,19 +622,22 @@ type EventSubscriptionUpdateParameters struct {
 // EventSubscriptionsClientBeginCreateOrUpdateOptions contains the optional parameters for the EventSubscriptionsClient.BeginCreateOrUpdate
 // method.
 type EventSubscriptionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EventSubscriptionsClientBeginDeleteOptions contains the optional parameters for the EventSubscriptionsClient.BeginDelete
 // method.
 type EventSubscriptionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EventSubscriptionsClientBeginUpdateOptions contains the optional parameters for the EventSubscriptionsClient.BeginUpdate
 // method.
 type EventSubscriptionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EventSubscriptionsClientGetDeliveryAttributesOptions contains the optional parameters for the EventSubscriptionsClient.GetDeliveryAttributes
@@ -1194,13 +1202,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -1541,19 +1551,22 @@ type SystemTopic struct {
 // SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginCreateOrUpdate
 // method.
 type SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicEventSubscriptionsClientBeginDeleteOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginDelete
 // method.
 type SystemTopicEventSubscriptionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicEventSubscriptionsClientBeginUpdateOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginUpdate
 // method.
 type SystemTopicEventSubscriptionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicEventSubscriptionsClientGetDeliveryAttributesOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.GetDeliveryAttributes
@@ -1616,17 +1629,20 @@ type SystemTopicUpdateParameters struct {
 // SystemTopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the SystemTopicsClient.BeginCreateOrUpdate
 // method.
 type SystemTopicsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicsClientBeginDeleteOptions contains the optional parameters for the SystemTopicsClient.BeginDelete method.
 type SystemTopicsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicsClientBeginUpdateOptions contains the optional parameters for the SystemTopicsClient.BeginUpdate method.
 type SystemTopicsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SystemTopicsClientGetOptions contains the optional parameters for the SystemTopicsClient.Get method.
@@ -1841,22 +1857,26 @@ type TopicUpdateParameters struct {
 
 // TopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the TopicsClient.BeginCreateOrUpdate method.
 type TopicsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TopicsClientBeginDeleteOptions contains the optional parameters for the TopicsClient.BeginDelete method.
 type TopicsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TopicsClientBeginRegenerateKeyOptions contains the optional parameters for the TopicsClient.BeginRegenerateKey method.
 type TopicsClientBeginRegenerateKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TopicsClientBeginUpdateOptions contains the optional parameters for the TopicsClient.BeginUpdate method.
 type TopicsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TopicsClientGetOptions contains the optional parameters for the TopicsClient.Get method.

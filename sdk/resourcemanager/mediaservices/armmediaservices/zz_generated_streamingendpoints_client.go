@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewStreamingEndpointsClient(subscriptionID string, credential azcore.TokenC
 // parameters - Streaming endpoint properties needed for creation.
 // options - StreamingEndpointsClientBeginCreateOptions contains the optional parameters for the StreamingEndpointsClient.BeginCreate
 // method.
-func (client *StreamingEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEndpoint, options *StreamingEndpointsClientBeginCreateOptions) (StreamingEndpointsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
-	if err != nil {
-		return StreamingEndpointsClientCreatePollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEndpoint, options *StreamingEndpointsClientBeginCreateOptions) (*armruntime.Poller[StreamingEndpointsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientCreateResponse]("StreamingEndpointsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientCreateResponse]("StreamingEndpointsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a streaming endpoint.
@@ -131,20 +127,16 @@ func (client *StreamingEndpointsClient) createCreateRequest(ctx context.Context,
 // streamingEndpointName - The name of the streaming endpoint, maximum length is 24.
 // options - StreamingEndpointsClientBeginDeleteOptions contains the optional parameters for the StreamingEndpointsClient.BeginDelete
 // method.
-func (client *StreamingEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginDeleteOptions) (StreamingEndpointsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, streamingEndpointName, options)
-	if err != nil {
-		return StreamingEndpointsClientDeletePollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginDeleteOptions) (*armruntime.Poller[StreamingEndpointsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, streamingEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientDeleteResponse]("StreamingEndpointsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientDeleteResponse]("StreamingEndpointsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a streaming endpoint.
@@ -259,16 +251,32 @@ func (client *StreamingEndpointsClient) getHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group within the Azure subscription.
 // accountName - The Media Services account name.
 // options - StreamingEndpointsClientListOptions contains the optional parameters for the StreamingEndpointsClient.List method.
-func (client *StreamingEndpointsClient) List(resourceGroupName string, accountName string, options *StreamingEndpointsClientListOptions) *StreamingEndpointsClientListPager {
-	return &StreamingEndpointsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *StreamingEndpointsClient) List(resourceGroupName string, accountName string, options *StreamingEndpointsClientListOptions) *runtime.Pager[StreamingEndpointsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StreamingEndpointsClientListResponse]{
+		More: func(page StreamingEndpointsClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StreamingEndpointsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StreamingEndpointListResult.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *StreamingEndpointsClientListResponse) (StreamingEndpointsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return StreamingEndpointsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StreamingEndpointsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StreamingEndpointsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -314,20 +322,16 @@ func (client *StreamingEndpointsClient) listHandleResponse(resp *http.Response) 
 // parameters - Streaming endpoint scale parameters
 // options - StreamingEndpointsClientBeginScaleOptions contains the optional parameters for the StreamingEndpointsClient.BeginScale
 // method.
-func (client *StreamingEndpointsClient) BeginScale(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEntityScaleUnit, options *StreamingEndpointsClientBeginScaleOptions) (StreamingEndpointsClientScalePollerResponse, error) {
-	resp, err := client.scale(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
-	if err != nil {
-		return StreamingEndpointsClientScalePollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginScale(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEntityScaleUnit, options *StreamingEndpointsClientBeginScaleOptions) (*armruntime.Poller[StreamingEndpointsClientScaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.scale(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientScaleResponse]("StreamingEndpointsClient.Scale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientScaleResponse]("StreamingEndpointsClient.Scale", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientScalePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Scale", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientScalePollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientScalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Scale - Scales an existing streaming endpoint.
@@ -384,20 +388,16 @@ func (client *StreamingEndpointsClient) scaleCreateRequest(ctx context.Context, 
 // streamingEndpointName - The name of the streaming endpoint, maximum length is 24.
 // options - StreamingEndpointsClientBeginStartOptions contains the optional parameters for the StreamingEndpointsClient.BeginStart
 // method.
-func (client *StreamingEndpointsClient) BeginStart(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginStartOptions) (StreamingEndpointsClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, accountName, streamingEndpointName, options)
-	if err != nil {
-		return StreamingEndpointsClientStartPollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginStart(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginStartOptions) (*armruntime.Poller[StreamingEndpointsClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, accountName, streamingEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientStartResponse]("StreamingEndpointsClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientStartResponse]("StreamingEndpointsClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Start", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientStartPollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts an existing streaming endpoint.
@@ -454,20 +454,16 @@ func (client *StreamingEndpointsClient) startCreateRequest(ctx context.Context, 
 // streamingEndpointName - The name of the streaming endpoint, maximum length is 24.
 // options - StreamingEndpointsClientBeginStopOptions contains the optional parameters for the StreamingEndpointsClient.BeginStop
 // method.
-func (client *StreamingEndpointsClient) BeginStop(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginStopOptions) (StreamingEndpointsClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, accountName, streamingEndpointName, options)
-	if err != nil {
-		return StreamingEndpointsClientStopPollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginStop(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, options *StreamingEndpointsClientBeginStopOptions) (*armruntime.Poller[StreamingEndpointsClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, accountName, streamingEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientStopResponse]("StreamingEndpointsClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientStopResponse]("StreamingEndpointsClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientStopPollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stops an existing streaming endpoint.
@@ -525,20 +521,16 @@ func (client *StreamingEndpointsClient) stopCreateRequest(ctx context.Context, r
 // parameters - Streaming endpoint properties needed for creation.
 // options - StreamingEndpointsClientBeginUpdateOptions contains the optional parameters for the StreamingEndpointsClient.BeginUpdate
 // method.
-func (client *StreamingEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEndpoint, options *StreamingEndpointsClientBeginUpdateOptions) (StreamingEndpointsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
-	if err != nil {
-		return StreamingEndpointsClientUpdatePollerResponse{}, err
+func (client *StreamingEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, streamingEndpointName string, parameters StreamingEndpoint, options *StreamingEndpointsClientBeginUpdateOptions) (*armruntime.Poller[StreamingEndpointsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, streamingEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingEndpointsClientUpdateResponse]("StreamingEndpointsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingEndpointsClientUpdateResponse]("StreamingEndpointsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingEndpointsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return StreamingEndpointsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &StreamingEndpointsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a existing streaming endpoint.

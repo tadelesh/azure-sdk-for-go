@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // appResource - Parameters for the create or update operation
 // options - AppsClientBeginCreateOrUpdateOptions contains the optional parameters for the AppsClient.BeginCreateOrUpdate
 // method.
-func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginCreateOrUpdateOptions) (AppsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, appResource, options)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
+func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AppsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, appResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientCreateOrUpdateResponse]("AppsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientCreateOrUpdateResponse]("AppsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a new App or update an exiting App.
@@ -129,20 +125,16 @@ func (client *AppsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - AppsClientBeginDeleteOptions contains the optional parameters for the AppsClient.BeginDelete method.
-func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, options *AppsClientBeginDeleteOptions) (AppsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, options)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
+func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, options *AppsClientBeginDeleteOptions) (*armruntime.Poller[AppsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientDeleteResponse]("AppsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientDeleteResponse]("AppsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AppsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete an App.
@@ -324,16 +316,32 @@ func (client *AppsClient) getResourceUploadURLHandleResponse(resp *http.Response
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - AppsClientListOptions contains the optional parameters for the AppsClient.List method.
-func (client *AppsClient) List(resourceGroupName string, serviceName string, options *AppsClientListOptions) *AppsClientListPager {
-	return &AppsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *AppsClient) List(resourceGroupName string, serviceName string, options *AppsClientListOptions) *runtime.Pager[AppsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppsClientListResponse]{
+		More: func(page AppsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AppsClientListResponse) (AppsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -380,20 +388,16 @@ func (client *AppsClient) listHandleResponse(resp *http.Response) (AppsClientLis
 // activeDeploymentCollection - A list of Deployment name to be active.
 // options - AppsClientBeginSetActiveDeploymentsOptions contains the optional parameters for the AppsClient.BeginSetActiveDeployments
 // method.
-func (client *AppsClient) BeginSetActiveDeployments(ctx context.Context, resourceGroupName string, serviceName string, appName string, activeDeploymentCollection ActiveDeploymentCollection, options *AppsClientBeginSetActiveDeploymentsOptions) (AppsClientSetActiveDeploymentsPollerResponse, error) {
-	resp, err := client.setActiveDeployments(ctx, resourceGroupName, serviceName, appName, activeDeploymentCollection, options)
-	if err != nil {
-		return AppsClientSetActiveDeploymentsPollerResponse{}, err
+func (client *AppsClient) BeginSetActiveDeployments(ctx context.Context, resourceGroupName string, serviceName string, appName string, activeDeploymentCollection ActiveDeploymentCollection, options *AppsClientBeginSetActiveDeploymentsOptions) (*armruntime.Poller[AppsClientSetActiveDeploymentsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.setActiveDeployments(ctx, resourceGroupName, serviceName, appName, activeDeploymentCollection, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientSetActiveDeploymentsResponse]("AppsClient.SetActiveDeployments", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientSetActiveDeploymentsResponse]("AppsClient.SetActiveDeployments", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientSetActiveDeploymentsPollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.SetActiveDeployments", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientSetActiveDeploymentsPollerResponse{}, err
-	}
-	result.Poller = &AppsClientSetActiveDeploymentsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // SetActiveDeployments - Set existing Deployment under the app as active
@@ -451,20 +455,16 @@ func (client *AppsClient) setActiveDeploymentsCreateRequest(ctx context.Context,
 // appName - The name of the App resource.
 // appResource - Parameters for the update operation
 // options - AppsClientBeginUpdateOptions contains the optional parameters for the AppsClient.BeginUpdate method.
-func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginUpdateOptions) (AppsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serviceName, appName, appResource, options)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
+func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginUpdateOptions) (*armruntime.Poller[AppsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serviceName, appName, appResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientUpdateResponse]("AppsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientUpdateResponse]("AppsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update an exiting App.

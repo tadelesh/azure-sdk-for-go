@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -48,13 +48,26 @@ func NewMetricNamespacesClient(credential azcore.TokenCredential, options *arm.C
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceURI - The identifier of the resource.
 // options - MetricNamespacesClientListOptions contains the optional parameters for the MetricNamespacesClient.List method.
-func (client *MetricNamespacesClient) List(resourceURI string, options *MetricNamespacesClientListOptions) *MetricNamespacesClientListPager {
-	return &MetricNamespacesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceURI, options)
+func (client *MetricNamespacesClient) List(resourceURI string, options *MetricNamespacesClientListOptions) *runtime.Pager[MetricNamespacesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MetricNamespacesClientListResponse]{
+		More: func(page MetricNamespacesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *MetricNamespacesClientListResponse) (MetricNamespacesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceURI, options)
+			if err != nil {
+				return MetricNamespacesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MetricNamespacesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MetricNamespacesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

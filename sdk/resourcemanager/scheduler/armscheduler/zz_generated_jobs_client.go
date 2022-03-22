@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -226,16 +226,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // resourceGroupName - The resource group name.
 // jobCollectionName - The job collection name.
 // options - JobsClientListOptions contains the optional parameters for the JobsClient.List method.
-func (client *JobsClient) List(resourceGroupName string, jobCollectionName string, options *JobsClientListOptions) *JobsClientListPager {
-	return &JobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, jobCollectionName, options)
+func (client *JobsClient) List(resourceGroupName string, jobCollectionName string, options *JobsClientListOptions) *runtime.Pager[JobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListResponse]{
+		More: func(page JobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListResponse) (JobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, jobCollectionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -288,16 +304,32 @@ func (client *JobsClient) listHandleResponse(resp *http.Response) (JobsClientLis
 // jobCollectionName - The job collection name.
 // jobName - The job name.
 // options - JobsClientListJobHistoryOptions contains the optional parameters for the JobsClient.ListJobHistory method.
-func (client *JobsClient) ListJobHistory(resourceGroupName string, jobCollectionName string, jobName string, options *JobsClientListJobHistoryOptions) *JobsClientListJobHistoryPager {
-	return &JobsClientListJobHistoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listJobHistoryCreateRequest(ctx, resourceGroupName, jobCollectionName, jobName, options)
+func (client *JobsClient) ListJobHistory(resourceGroupName string, jobCollectionName string, jobName string, options *JobsClientListJobHistoryOptions) *runtime.Pager[JobsClientListJobHistoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListJobHistoryResponse]{
+		More: func(page JobsClientListJobHistoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListJobHistoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobHistoryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListJobHistoryResponse) (JobsClientListJobHistoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listJobHistoryCreateRequest(ctx, resourceGroupName, jobCollectionName, jobName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListJobHistoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListJobHistoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListJobHistoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listJobHistoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listJobHistoryCreateRequest creates the ListJobHistory request.

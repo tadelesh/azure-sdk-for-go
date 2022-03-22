@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewIntegrationServiceEnvironmentSKUsClient(subscriptionID string, credentia
 // integrationServiceEnvironmentName - The integration service environment name.
 // options - IntegrationServiceEnvironmentSKUsClientListOptions contains the optional parameters for the IntegrationServiceEnvironmentSKUsClient.List
 // method.
-func (client *IntegrationServiceEnvironmentSKUsClient) List(resourceGroup string, integrationServiceEnvironmentName string, options *IntegrationServiceEnvironmentSKUsClientListOptions) *IntegrationServiceEnvironmentSKUsClientListPager {
-	return &IntegrationServiceEnvironmentSKUsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroup, integrationServiceEnvironmentName, options)
+func (client *IntegrationServiceEnvironmentSKUsClient) List(resourceGroup string, integrationServiceEnvironmentName string, options *IntegrationServiceEnvironmentSKUsClientListOptions) *runtime.Pager[IntegrationServiceEnvironmentSKUsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationServiceEnvironmentSKUsClientListResponse]{
+		More: func(page IntegrationServiceEnvironmentSKUsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationServiceEnvironmentSKUsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationServiceEnvironmentSKUList.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationServiceEnvironmentSKUsClientListResponse) (IntegrationServiceEnvironmentSKUsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroup, integrationServiceEnvironmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationServiceEnvironmentSKUsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationServiceEnvironmentSKUsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationServiceEnvironmentSKUsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

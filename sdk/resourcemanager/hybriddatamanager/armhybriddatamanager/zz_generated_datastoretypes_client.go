@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,16 +117,32 @@ func (client *DataStoreTypesClient) getHandleResponse(resp *http.Response) (Data
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - DataStoreTypesClientListByDataManagerOptions contains the optional parameters for the DataStoreTypesClient.ListByDataManager
 // method.
-func (client *DataStoreTypesClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *DataStoreTypesClientListByDataManagerOptions) *DataStoreTypesClientListByDataManagerPager {
-	return &DataStoreTypesClientListByDataManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+func (client *DataStoreTypesClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *DataStoreTypesClientListByDataManagerOptions) *runtime.Pager[DataStoreTypesClientListByDataManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataStoreTypesClientListByDataManagerResponse]{
+		More: func(page DataStoreTypesClientListByDataManagerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataStoreTypesClientListByDataManagerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataStoreTypeList.NextLink)
+		Fetcher: func(ctx context.Context, page *DataStoreTypesClientListByDataManagerResponse) (DataStoreTypesClientListByDataManagerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataStoreTypesClientListByDataManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataStoreTypesClientListByDataManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataStoreTypesClientListByDataManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDataManagerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDataManagerCreateRequest creates the ListByDataManager request.

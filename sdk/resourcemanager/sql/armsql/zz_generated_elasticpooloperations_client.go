@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -109,16 +109,32 @@ func (client *ElasticPoolOperationsClient) cancelCreateRequest(ctx context.Conte
 // serverName - The name of the server.
 // options - ElasticPoolOperationsClientListByElasticPoolOptions contains the optional parameters for the ElasticPoolOperationsClient.ListByElasticPool
 // method.
-func (client *ElasticPoolOperationsClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolOperationsClientListByElasticPoolOptions) *ElasticPoolOperationsClientListByElasticPoolPager {
-	return &ElasticPoolOperationsClientListByElasticPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+func (client *ElasticPoolOperationsClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolOperationsClientListByElasticPoolOptions) *runtime.Pager[ElasticPoolOperationsClientListByElasticPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ElasticPoolOperationsClientListByElasticPoolResponse]{
+		More: func(page ElasticPoolOperationsClientListByElasticPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ElasticPoolOperationsClientListByElasticPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ElasticPoolOperationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ElasticPoolOperationsClientListByElasticPoolResponse) (ElasticPoolOperationsClientListByElasticPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ElasticPoolOperationsClientListByElasticPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ElasticPoolOperationsClientListByElasticPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ElasticPoolOperationsClientListByElasticPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByElasticPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByElasticPoolCreateRequest creates the ListByElasticPool request.

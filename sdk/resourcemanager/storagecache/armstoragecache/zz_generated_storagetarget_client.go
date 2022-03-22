@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewStorageTargetClient(subscriptionID string, credential azcore.TokenCreden
 // storageTargetName - Name of Storage Target.
 // options - StorageTargetClientBeginFlushOptions contains the optional parameters for the StorageTargetClient.BeginFlush
 // method.
-func (client *StorageTargetClient) BeginFlush(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginFlushOptions) (StorageTargetClientFlushPollerResponse, error) {
-	resp, err := client.flush(ctx, resourceGroupName, cacheName, storageTargetName, options)
-	if err != nil {
-		return StorageTargetClientFlushPollerResponse{}, err
+func (client *StorageTargetClient) BeginFlush(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginFlushOptions) (*armruntime.Poller[StorageTargetClientFlushResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.flush(ctx, resourceGroupName, cacheName, storageTargetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageTargetClientFlushResponse]("StorageTargetClient.Flush", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageTargetClientFlushResponse]("StorageTargetClient.Flush", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageTargetClientFlushPollerResponse{}
-	pt, err := armruntime.NewPoller("StorageTargetClient.Flush", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return StorageTargetClientFlushPollerResponse{}, err
-	}
-	result.Poller = &StorageTargetClientFlushPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Flush - Tells the cache to write all dirty data to the Storage Target's backend storage. Client requests to this storage
@@ -129,20 +125,16 @@ func (client *StorageTargetClient) flushCreateRequest(ctx context.Context, resou
 // storageTargetName - Name of Storage Target.
 // options - StorageTargetClientBeginResumeOptions contains the optional parameters for the StorageTargetClient.BeginResume
 // method.
-func (client *StorageTargetClient) BeginResume(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginResumeOptions) (StorageTargetClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, cacheName, storageTargetName, options)
-	if err != nil {
-		return StorageTargetClientResumePollerResponse{}, err
+func (client *StorageTargetClient) BeginResume(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginResumeOptions) (*armruntime.Poller[StorageTargetClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, cacheName, storageTargetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageTargetClientResumeResponse]("StorageTargetClient.Resume", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageTargetClientResumeResponse]("StorageTargetClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageTargetClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("StorageTargetClient.Resume", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return StorageTargetClientResumePollerResponse{}, err
-	}
-	result.Poller = &StorageTargetClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - Resumes client access to a previously suspended storage target.
@@ -199,20 +191,16 @@ func (client *StorageTargetClient) resumeCreateRequest(ctx context.Context, reso
 // storageTargetName - Name of Storage Target.
 // options - StorageTargetClientBeginSuspendOptions contains the optional parameters for the StorageTargetClient.BeginSuspend
 // method.
-func (client *StorageTargetClient) BeginSuspend(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginSuspendOptions) (StorageTargetClientSuspendPollerResponse, error) {
-	resp, err := client.suspend(ctx, resourceGroupName, cacheName, storageTargetName, options)
-	if err != nil {
-		return StorageTargetClientSuspendPollerResponse{}, err
+func (client *StorageTargetClient) BeginSuspend(ctx context.Context, resourceGroupName string, cacheName string, storageTargetName string, options *StorageTargetClientBeginSuspendOptions) (*armruntime.Poller[StorageTargetClientSuspendResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.suspend(ctx, resourceGroupName, cacheName, storageTargetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageTargetClientSuspendResponse]("StorageTargetClient.Suspend", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageTargetClientSuspendResponse]("StorageTargetClient.Suspend", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageTargetClientSuspendPollerResponse{}
-	pt, err := armruntime.NewPoller("StorageTargetClient.Suspend", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return StorageTargetClientSuspendPollerResponse{}, err
-	}
-	result.Poller = &StorageTargetClientSuspendPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Suspend - Suspends client access to a storage target.

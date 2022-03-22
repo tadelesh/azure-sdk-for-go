@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCrede
 // body - Backup policy object supplied in the body of the operation.
 // options - BackupPoliciesClientBeginCreateOptions contains the optional parameters for the BackupPoliciesClient.BeginCreate
 // method.
-func (client *BackupPoliciesClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicy, options *BackupPoliciesClientBeginCreateOptions) (BackupPoliciesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, backupPolicyName, body, options)
-	if err != nil {
-		return BackupPoliciesClientCreatePollerResponse{}, err
+func (client *BackupPoliciesClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicy, options *BackupPoliciesClientBeginCreateOptions) (*armruntime.Poller[BackupPoliciesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, backupPolicyName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientCreateResponse]("BackupPoliciesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientCreateResponse]("BackupPoliciesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a backup policy for Netapp Account
@@ -128,20 +124,16 @@ func (client *BackupPoliciesClient) createCreateRequest(ctx context.Context, res
 // backupPolicyName - Backup policy Name which uniquely identify backup policy.
 // options - BackupPoliciesClientBeginDeleteOptions contains the optional parameters for the BackupPoliciesClient.BeginDelete
 // method.
-func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, options *BackupPoliciesClientBeginDeleteOptions) (BackupPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, backupPolicyName, options)
-	if err != nil {
-		return BackupPoliciesClientDeletePollerResponse{}, err
+func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, options *BackupPoliciesClientBeginDeleteOptions) (*armruntime.Poller[BackupPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, backupPolicyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientDeleteResponse]("BackupPoliciesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientDeleteResponse]("BackupPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete backup policy
@@ -255,13 +247,26 @@ func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (Back
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - BackupPoliciesClientListOptions contains the optional parameters for the BackupPoliciesClient.List method.
-func (client *BackupPoliciesClient) List(resourceGroupName string, accountName string, options *BackupPoliciesClientListOptions) *BackupPoliciesClientListPager {
-	return &BackupPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *BackupPoliciesClient) List(resourceGroupName string, accountName string, options *BackupPoliciesClientListOptions) *runtime.Pager[BackupPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupPoliciesClientListResponse]{
+		More: func(page BackupPoliciesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupPoliciesClientListResponse) (BackupPoliciesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return BackupPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -307,20 +312,16 @@ func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response) (Bac
 // body - Backup policy object supplied in the body of the operation.
 // options - BackupPoliciesClientBeginUpdateOptions contains the optional parameters for the BackupPoliciesClient.BeginUpdate
 // method.
-func (client *BackupPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicyPatch, options *BackupPoliciesClientBeginUpdateOptions) (BackupPoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, backupPolicyName, body, options)
-	if err != nil {
-		return BackupPoliciesClientUpdatePollerResponse{}, err
+func (client *BackupPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicyPatch, options *BackupPoliciesClientBeginUpdateOptions) (*armruntime.Poller[BackupPoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, backupPolicyName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientUpdateResponse]("BackupPoliciesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientUpdateResponse]("BackupPoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch a backup policy for Netapp Account

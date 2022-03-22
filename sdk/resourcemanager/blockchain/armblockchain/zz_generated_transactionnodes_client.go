@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewTransactionNodesClient(subscriptionID string, credential azcore.TokenCre
 // Resource Manager API or the portal.
 // options - TransactionNodesClientBeginCreateOptions contains the optional parameters for the TransactionNodesClient.BeginCreate
 // method.
-func (client *TransactionNodesClient) BeginCreate(ctx context.Context, blockchainMemberName string, transactionNodeName string, resourceGroupName string, options *TransactionNodesClientBeginCreateOptions) (TransactionNodesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, blockchainMemberName, transactionNodeName, resourceGroupName, options)
-	if err != nil {
-		return TransactionNodesClientCreatePollerResponse{}, err
+func (client *TransactionNodesClient) BeginCreate(ctx context.Context, blockchainMemberName string, transactionNodeName string, resourceGroupName string, options *TransactionNodesClientBeginCreateOptions) (*armruntime.Poller[TransactionNodesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, blockchainMemberName, transactionNodeName, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TransactionNodesClientCreateResponse]("TransactionNodesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TransactionNodesClientCreateResponse]("TransactionNodesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := TransactionNodesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("TransactionNodesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return TransactionNodesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &TransactionNodesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create or update the transaction node.
@@ -132,20 +128,16 @@ func (client *TransactionNodesClient) createCreateRequest(ctx context.Context, b
 // Resource Manager API or the portal.
 // options - TransactionNodesClientBeginDeleteOptions contains the optional parameters for the TransactionNodesClient.BeginDelete
 // method.
-func (client *TransactionNodesClient) BeginDelete(ctx context.Context, blockchainMemberName string, transactionNodeName string, resourceGroupName string, options *TransactionNodesClientBeginDeleteOptions) (TransactionNodesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, blockchainMemberName, transactionNodeName, resourceGroupName, options)
-	if err != nil {
-		return TransactionNodesClientDeletePollerResponse{}, err
+func (client *TransactionNodesClient) BeginDelete(ctx context.Context, blockchainMemberName string, transactionNodeName string, resourceGroupName string, options *TransactionNodesClientBeginDeleteOptions) (*armruntime.Poller[TransactionNodesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, blockchainMemberName, transactionNodeName, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TransactionNodesClientDeleteResponse]("TransactionNodesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TransactionNodesClientDeleteResponse]("TransactionNodesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TransactionNodesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TransactionNodesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TransactionNodesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TransactionNodesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the transaction node.
@@ -261,16 +253,32 @@ func (client *TransactionNodesClient) getHandleResponse(resp *http.Response) (Tr
 // resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
 // Resource Manager API or the portal.
 // options - TransactionNodesClientListOptions contains the optional parameters for the TransactionNodesClient.List method.
-func (client *TransactionNodesClient) List(blockchainMemberName string, resourceGroupName string, options *TransactionNodesClientListOptions) *TransactionNodesClientListPager {
-	return &TransactionNodesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, blockchainMemberName, resourceGroupName, options)
+func (client *TransactionNodesClient) List(blockchainMemberName string, resourceGroupName string, options *TransactionNodesClientListOptions) *runtime.Pager[TransactionNodesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TransactionNodesClientListResponse]{
+		More: func(page TransactionNodesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TransactionNodesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TransactionNodeCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TransactionNodesClientListResponse) (TransactionNodesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, blockchainMemberName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TransactionNodesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TransactionNodesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TransactionNodesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

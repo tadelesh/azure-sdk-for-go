@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,13 +56,26 @@ func NewDatabaseClient(subscriptionID string, credential azcore.TokenCredential,
 // databaseRid - Cosmos DB database rid.
 // options - DatabaseClientListMetricDefinitionsOptions contains the optional parameters for the DatabaseClient.ListMetricDefinitions
 // method.
-func (client *DatabaseClient) ListMetricDefinitions(resourceGroupName string, accountName string, databaseRid string, options *DatabaseClientListMetricDefinitionsOptions) *DatabaseClientListMetricDefinitionsPager {
-	return &DatabaseClientListMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, options)
+func (client *DatabaseClient) ListMetricDefinitions(resourceGroupName string, accountName string, databaseRid string, options *DatabaseClientListMetricDefinitionsOptions) *runtime.Pager[DatabaseClientListMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseClientListMetricDefinitionsResponse]{
+		More: func(page DatabaseClientListMetricDefinitionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseClientListMetricDefinitionsResponse) (DatabaseClientListMetricDefinitionsResponse, error) {
+			req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, options)
+			if err != nil {
+				return DatabaseClientListMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseClientListMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -113,13 +126,26 @@ func (client *DatabaseClient) listMetricDefinitionsHandleResponse(resp *http.Res
 // name.value (name of the metric, can have an or of multiple names), startTime, endTime,
 // and timeGrain. The supported operator is eq.
 // options - DatabaseClientListMetricsOptions contains the optional parameters for the DatabaseClient.ListMetrics method.
-func (client *DatabaseClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, filter string, options *DatabaseClientListMetricsOptions) *DatabaseClientListMetricsPager {
-	return &DatabaseClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, filter, options)
+func (client *DatabaseClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, filter string, options *DatabaseClientListMetricsOptions) *runtime.Pager[DatabaseClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseClientListMetricsResponse]{
+		More: func(page DatabaseClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseClientListMetricsResponse) (DatabaseClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, filter, options)
+			if err != nil {
+				return DatabaseClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -168,13 +194,26 @@ func (client *DatabaseClient) listMetricsHandleResponse(resp *http.Response) (Da
 // accountName - Cosmos DB database account name.
 // databaseRid - Cosmos DB database rid.
 // options - DatabaseClientListUsagesOptions contains the optional parameters for the DatabaseClient.ListUsages method.
-func (client *DatabaseClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, options *DatabaseClientListUsagesOptions) *DatabaseClientListUsagesPager {
-	return &DatabaseClientListUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, options)
+func (client *DatabaseClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, options *DatabaseClientListUsagesOptions) *runtime.Pager[DatabaseClientListUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseClientListUsagesResponse]{
+		More: func(page DatabaseClientListUsagesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseClientListUsagesResponse) (DatabaseClientListUsagesResponse, error) {
+			req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, options)
+			if err != nil {
+				return DatabaseClientListUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseClientListUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseClientListUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUsagesHandleResponse(resp)
+		},
+	})
 }
 
 // listUsagesCreateRequest creates the ListUsages request.

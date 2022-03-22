@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewInvoicesClient(subscriptionID string, credential azcore.TokenCredential,
 // downloadToken - Download token with document source and document ID.
 // options - InvoicesClientBeginDownloadBillingSubscriptionInvoiceOptions contains the optional parameters for the InvoicesClient.BeginDownloadBillingSubscriptionInvoice
 // method.
-func (client *InvoicesClient) BeginDownloadBillingSubscriptionInvoice(ctx context.Context, invoiceName string, downloadToken string, options *InvoicesClientBeginDownloadBillingSubscriptionInvoiceOptions) (InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse, error) {
-	resp, err := client.downloadBillingSubscriptionInvoice(ctx, invoiceName, downloadToken, options)
-	if err != nil {
-		return InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}, err
+func (client *InvoicesClient) BeginDownloadBillingSubscriptionInvoice(ctx context.Context, invoiceName string, downloadToken string, options *InvoicesClientBeginDownloadBillingSubscriptionInvoiceOptions) (*armruntime.Poller[InvoicesClientDownloadBillingSubscriptionInvoiceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.downloadBillingSubscriptionInvoice(ctx, invoiceName, downloadToken, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InvoicesClientDownloadBillingSubscriptionInvoiceResponse]("InvoicesClient.DownloadBillingSubscriptionInvoice", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InvoicesClientDownloadBillingSubscriptionInvoiceResponse]("InvoicesClient.DownloadBillingSubscriptionInvoice", options.ResumeToken, client.pl, nil)
 	}
-	result := InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}
-	pt, err := armruntime.NewPoller("InvoicesClient.DownloadBillingSubscriptionInvoice", "location", resp, client.pl)
-	if err != nil {
-		return InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}, err
-	}
-	result.Poller = &InvoicesClientDownloadBillingSubscriptionInvoicePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DownloadBillingSubscriptionInvoice - Gets a URL to download an invoice.
@@ -119,20 +115,16 @@ func (client *InvoicesClient) downloadBillingSubscriptionInvoiceCreateRequest(ct
 // downloadToken - Download token with document source and document ID.
 // options - InvoicesClientBeginDownloadInvoiceOptions contains the optional parameters for the InvoicesClient.BeginDownloadInvoice
 // method.
-func (client *InvoicesClient) BeginDownloadInvoice(ctx context.Context, billingAccountName string, invoiceName string, downloadToken string, options *InvoicesClientBeginDownloadInvoiceOptions) (InvoicesClientDownloadInvoicePollerResponse, error) {
-	resp, err := client.downloadInvoice(ctx, billingAccountName, invoiceName, downloadToken, options)
-	if err != nil {
-		return InvoicesClientDownloadInvoicePollerResponse{}, err
+func (client *InvoicesClient) BeginDownloadInvoice(ctx context.Context, billingAccountName string, invoiceName string, downloadToken string, options *InvoicesClientBeginDownloadInvoiceOptions) (*armruntime.Poller[InvoicesClientDownloadInvoiceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.downloadInvoice(ctx, billingAccountName, invoiceName, downloadToken, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InvoicesClientDownloadInvoiceResponse]("InvoicesClient.DownloadInvoice", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InvoicesClientDownloadInvoiceResponse]("InvoicesClient.DownloadInvoice", options.ResumeToken, client.pl, nil)
 	}
-	result := InvoicesClientDownloadInvoicePollerResponse{}
-	pt, err := armruntime.NewPoller("InvoicesClient.DownloadInvoice", "location", resp, client.pl)
-	if err != nil {
-		return InvoicesClientDownloadInvoicePollerResponse{}, err
-	}
-	result.Poller = &InvoicesClientDownloadInvoicePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DownloadInvoice - Gets a URL to download an invoice. The operation is supported for billing accounts with agreement type
@@ -184,20 +176,16 @@ func (client *InvoicesClient) downloadInvoiceCreateRequest(ctx context.Context, 
 // downloadUrls - An array of download urls for individual documents
 // options - InvoicesClientBeginDownloadMultipleBillingProfileInvoicesOptions contains the optional parameters for the InvoicesClient.BeginDownloadMultipleBillingProfileInvoices
 // method.
-func (client *InvoicesClient) BeginDownloadMultipleBillingProfileInvoices(ctx context.Context, billingAccountName string, downloadUrls []*string, options *InvoicesClientBeginDownloadMultipleBillingProfileInvoicesOptions) (InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse, error) {
-	resp, err := client.downloadMultipleBillingProfileInvoices(ctx, billingAccountName, downloadUrls, options)
-	if err != nil {
-		return InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}, err
+func (client *InvoicesClient) BeginDownloadMultipleBillingProfileInvoices(ctx context.Context, billingAccountName string, downloadUrls []*string, options *InvoicesClientBeginDownloadMultipleBillingProfileInvoicesOptions) (*armruntime.Poller[InvoicesClientDownloadMultipleBillingProfileInvoicesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.downloadMultipleBillingProfileInvoices(ctx, billingAccountName, downloadUrls, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InvoicesClientDownloadMultipleBillingProfileInvoicesResponse]("InvoicesClient.DownloadMultipleBillingProfileInvoices", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InvoicesClientDownloadMultipleBillingProfileInvoicesResponse]("InvoicesClient.DownloadMultipleBillingProfileInvoices", options.ResumeToken, client.pl, nil)
 	}
-	result := InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}
-	pt, err := armruntime.NewPoller("InvoicesClient.DownloadMultipleBillingProfileInvoices", "location", resp, client.pl)
-	if err != nil {
-		return InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}, err
-	}
-	result.Poller = &InvoicesClientDownloadMultipleBillingProfileInvoicesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DownloadMultipleBillingProfileInvoices - Gets a URL to download multiple invoice documents (invoice pdf, tax receipts,
@@ -243,20 +231,16 @@ func (client *InvoicesClient) downloadMultipleBillingProfileInvoicesCreateReques
 // downloadUrls - An array of download urls for individual documents
 // options - InvoicesClientBeginDownloadMultipleBillingSubscriptionInvoicesOptions contains the optional parameters for the
 // InvoicesClient.BeginDownloadMultipleBillingSubscriptionInvoices method.
-func (client *InvoicesClient) BeginDownloadMultipleBillingSubscriptionInvoices(ctx context.Context, downloadUrls []*string, options *InvoicesClientBeginDownloadMultipleBillingSubscriptionInvoicesOptions) (InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse, error) {
-	resp, err := client.downloadMultipleBillingSubscriptionInvoices(ctx, downloadUrls, options)
-	if err != nil {
-		return InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}, err
+func (client *InvoicesClient) BeginDownloadMultipleBillingSubscriptionInvoices(ctx context.Context, downloadUrls []*string, options *InvoicesClientBeginDownloadMultipleBillingSubscriptionInvoicesOptions) (*armruntime.Poller[InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.downloadMultipleBillingSubscriptionInvoices(ctx, downloadUrls, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse]("InvoicesClient.DownloadMultipleBillingSubscriptionInvoices", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse]("InvoicesClient.DownloadMultipleBillingSubscriptionInvoices", options.ResumeToken, client.pl, nil)
 	}
-	result := InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}
-	pt, err := armruntime.NewPoller("InvoicesClient.DownloadMultipleBillingSubscriptionInvoices", "location", resp, client.pl)
-	if err != nil {
-		return InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}, err
-	}
-	result.Poller = &InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DownloadMultipleBillingSubscriptionInvoices - Gets a URL to download multiple invoice documents (invoice pdf, tax receipts,
@@ -454,16 +438,32 @@ func (client *InvoicesClient) getBySubscriptionAndInvoiceIDHandleResponse(resp *
 // periodEndDate - The end date to fetch the invoices. The date should be specified in MM-DD-YYYY format.
 // options - InvoicesClientListByBillingAccountOptions contains the optional parameters for the InvoicesClient.ListByBillingAccount
 // method.
-func (client *InvoicesClient) ListByBillingAccount(billingAccountName string, periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingAccountOptions) *InvoicesClientListByBillingAccountPager {
-	return &InvoicesClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountName, periodStartDate, periodEndDate, options)
+func (client *InvoicesClient) ListByBillingAccount(billingAccountName string, periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingAccountOptions) *runtime.Pager[InvoicesClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InvoicesClientListByBillingAccountResponse]{
+		More: func(page InvoicesClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InvoicesClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvoiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InvoicesClientListByBillingAccountResponse) (InvoicesClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountName, periodStartDate, periodEndDate, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InvoicesClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InvoicesClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
@@ -505,16 +505,32 @@ func (client *InvoicesClient) listByBillingAccountHandleResponse(resp *http.Resp
 // periodEndDate - The end date to fetch the invoices. The date should be specified in MM-DD-YYYY format.
 // options - InvoicesClientListByBillingProfileOptions contains the optional parameters for the InvoicesClient.ListByBillingProfile
 // method.
-func (client *InvoicesClient) ListByBillingProfile(billingAccountName string, billingProfileName string, periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingProfileOptions) *InvoicesClientListByBillingProfilePager {
-	return &InvoicesClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, periodStartDate, periodEndDate, options)
+func (client *InvoicesClient) ListByBillingProfile(billingAccountName string, billingProfileName string, periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingProfileOptions) *runtime.Pager[InvoicesClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InvoicesClientListByBillingProfileResponse]{
+		More: func(page InvoicesClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InvoicesClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvoiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InvoicesClientListByBillingProfileResponse) (InvoicesClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, periodStartDate, periodEndDate, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InvoicesClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InvoicesClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.
@@ -556,16 +572,32 @@ func (client *InvoicesClient) listByBillingProfileHandleResponse(resp *http.Resp
 // periodEndDate - Invoice period end date.
 // options - InvoicesClientListByBillingSubscriptionOptions contains the optional parameters for the InvoicesClient.ListByBillingSubscription
 // method.
-func (client *InvoicesClient) ListByBillingSubscription(periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingSubscriptionOptions) *InvoicesClientListByBillingSubscriptionPager {
-	return &InvoicesClientListByBillingSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingSubscriptionCreateRequest(ctx, periodStartDate, periodEndDate, options)
+func (client *InvoicesClient) ListByBillingSubscription(periodStartDate string, periodEndDate string, options *InvoicesClientListByBillingSubscriptionOptions) *runtime.Pager[InvoicesClientListByBillingSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InvoicesClientListByBillingSubscriptionResponse]{
+		More: func(page InvoicesClientListByBillingSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InvoicesClientListByBillingSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvoiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InvoicesClientListByBillingSubscriptionResponse) (InvoicesClientListByBillingSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingSubscriptionCreateRequest(ctx, periodStartDate, periodEndDate, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InvoicesClientListByBillingSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InvoicesClientListByBillingSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingSubscriptionCreateRequest creates the ListByBillingSubscription request.

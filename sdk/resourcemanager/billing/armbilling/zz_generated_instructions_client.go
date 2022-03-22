@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -108,16 +108,32 @@ func (client *InstructionsClient) getHandleResponse(resp *http.Response) (Instru
 // billingProfileName - The ID that uniquely identifies a billing profile.
 // options - InstructionsClientListByBillingProfileOptions contains the optional parameters for the InstructionsClient.ListByBillingProfile
 // method.
-func (client *InstructionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *InstructionsClientListByBillingProfileOptions) *InstructionsClientListByBillingProfilePager {
-	return &InstructionsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+func (client *InstructionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *InstructionsClientListByBillingProfileOptions) *runtime.Pager[InstructionsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InstructionsClientListByBillingProfileResponse]{
+		More: func(page InstructionsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InstructionsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InstructionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InstructionsClientListByBillingProfileResponse) (InstructionsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InstructionsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InstructionsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InstructionsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.

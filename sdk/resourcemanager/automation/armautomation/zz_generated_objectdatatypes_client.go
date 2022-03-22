@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,13 +58,26 @@ func NewObjectDataTypesClient(subscriptionID string, credential azcore.TokenCred
 // typeName - The name of type.
 // options - ObjectDataTypesClientListFieldsByModuleAndTypeOptions contains the optional parameters for the ObjectDataTypesClient.ListFieldsByModuleAndType
 // method.
-func (client *ObjectDataTypesClient) ListFieldsByModuleAndType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *ObjectDataTypesClientListFieldsByModuleAndTypeOptions) *ObjectDataTypesClientListFieldsByModuleAndTypePager {
-	return &ObjectDataTypesClientListFieldsByModuleAndTypePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listFieldsByModuleAndTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+func (client *ObjectDataTypesClient) ListFieldsByModuleAndType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *ObjectDataTypesClientListFieldsByModuleAndTypeOptions) *runtime.Pager[ObjectDataTypesClientListFieldsByModuleAndTypeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ObjectDataTypesClientListFieldsByModuleAndTypeResponse]{
+		More: func(page ObjectDataTypesClientListFieldsByModuleAndTypeResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ObjectDataTypesClientListFieldsByModuleAndTypeResponse) (ObjectDataTypesClientListFieldsByModuleAndTypeResponse, error) {
+			req, err := client.listFieldsByModuleAndTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+			if err != nil {
+				return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listFieldsByModuleAndTypeHandleResponse(resp)
+		},
+	})
 }
 
 // listFieldsByModuleAndTypeCreateRequest creates the ListFieldsByModuleAndType request.
@@ -117,13 +130,26 @@ func (client *ObjectDataTypesClient) listFieldsByModuleAndTypeHandleResponse(res
 // typeName - The name of type.
 // options - ObjectDataTypesClientListFieldsByTypeOptions contains the optional parameters for the ObjectDataTypesClient.ListFieldsByType
 // method.
-func (client *ObjectDataTypesClient) ListFieldsByType(resourceGroupName string, automationAccountName string, typeName string, options *ObjectDataTypesClientListFieldsByTypeOptions) *ObjectDataTypesClientListFieldsByTypePager {
-	return &ObjectDataTypesClientListFieldsByTypePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listFieldsByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, typeName, options)
+func (client *ObjectDataTypesClient) ListFieldsByType(resourceGroupName string, automationAccountName string, typeName string, options *ObjectDataTypesClientListFieldsByTypeOptions) *runtime.Pager[ObjectDataTypesClientListFieldsByTypeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ObjectDataTypesClientListFieldsByTypeResponse]{
+		More: func(page ObjectDataTypesClientListFieldsByTypeResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ObjectDataTypesClientListFieldsByTypeResponse) (ObjectDataTypesClientListFieldsByTypeResponse, error) {
+			req, err := client.listFieldsByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, typeName, options)
+			if err != nil {
+				return ObjectDataTypesClientListFieldsByTypeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ObjectDataTypesClientListFieldsByTypeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ObjectDataTypesClientListFieldsByTypeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listFieldsByTypeHandleResponse(resp)
+		},
+	})
 }
 
 // listFieldsByTypeCreateRequest creates the ListFieldsByType request.

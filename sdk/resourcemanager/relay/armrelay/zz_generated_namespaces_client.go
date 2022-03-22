@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -104,20 +104,16 @@ func (client *NamespacesClient) checkNameAvailabilityHandleResponse(resp *http.R
 // parameters - Parameters supplied to create a namespace resource.
 // options - NamespacesClientBeginCreateOrUpdateOptions contains the optional parameters for the NamespacesClient.BeginCreateOrUpdate
 // method.
-func (client *NamespacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, parameters Namespace, options *NamespacesClientBeginCreateOrUpdateOptions) (NamespacesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, namespaceName, parameters, options)
-	if err != nil {
-		return NamespacesClientCreateOrUpdatePollerResponse{}, err
+func (client *NamespacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, parameters Namespace, options *NamespacesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NamespacesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, namespaceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NamespacesClientCreateOrUpdateResponse]("NamespacesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NamespacesClientCreateOrUpdateResponse]("NamespacesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NamespacesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NamespacesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return NamespacesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NamespacesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create Azure Relay namespace.
@@ -230,20 +226,16 @@ func (client *NamespacesClient) createOrUpdateAuthorizationRuleHandleResponse(re
 // resourceGroupName - Name of the Resource group within the Azure subscription.
 // namespaceName - The namespace name
 // options - NamespacesClientBeginDeleteOptions contains the optional parameters for the NamespacesClient.BeginDelete method.
-func (client *NamespacesClient) BeginDelete(ctx context.Context, resourceGroupName string, namespaceName string, options *NamespacesClientBeginDeleteOptions) (NamespacesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, namespaceName, options)
-	if err != nil {
-		return NamespacesClientDeletePollerResponse{}, err
+func (client *NamespacesClient) BeginDelete(ctx context.Context, resourceGroupName string, namespaceName string, options *NamespacesClientBeginDeleteOptions) (*armruntime.Poller[NamespacesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, namespaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NamespacesClientDeleteResponse]("NamespacesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NamespacesClientDeleteResponse]("NamespacesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := NamespacesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("NamespacesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return NamespacesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &NamespacesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing namespace. This operation also removes all associated resources under the namespace.
@@ -460,16 +452,32 @@ func (client *NamespacesClient) getAuthorizationRuleHandleResponse(resp *http.Re
 // List - Lists all the available namespaces within the subscription regardless of the resourceGroups.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - NamespacesClientListOptions contains the optional parameters for the NamespacesClient.List method.
-func (client *NamespacesClient) List(options *NamespacesClientListOptions) *NamespacesClientListPager {
-	return &NamespacesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *NamespacesClient) List(options *NamespacesClientListOptions) *runtime.Pager[NamespacesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NamespacesClientListResponse]{
+		More: func(page NamespacesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NamespacesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NamespaceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NamespacesClientListResponse) (NamespacesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NamespacesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NamespacesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NamespacesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -505,16 +513,32 @@ func (client *NamespacesClient) listHandleResponse(resp *http.Response) (Namespa
 // namespaceName - The namespace name
 // options - NamespacesClientListAuthorizationRulesOptions contains the optional parameters for the NamespacesClient.ListAuthorizationRules
 // method.
-func (client *NamespacesClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, options *NamespacesClientListAuthorizationRulesOptions) *NamespacesClientListAuthorizationRulesPager {
-	return &NamespacesClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *NamespacesClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, options *NamespacesClientListAuthorizationRulesOptions) *runtime.Pager[NamespacesClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NamespacesClientListAuthorizationRulesResponse]{
+		More: func(page NamespacesClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NamespacesClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NamespacesClientListAuthorizationRulesResponse) (NamespacesClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NamespacesClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NamespacesClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NamespacesClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.
@@ -557,16 +581,32 @@ func (client *NamespacesClient) listAuthorizationRulesHandleResponse(resp *http.
 // resourceGroupName - Name of the Resource group within the Azure subscription.
 // options - NamespacesClientListByResourceGroupOptions contains the optional parameters for the NamespacesClient.ListByResourceGroup
 // method.
-func (client *NamespacesClient) ListByResourceGroup(resourceGroupName string, options *NamespacesClientListByResourceGroupOptions) *NamespacesClientListByResourceGroupPager {
-	return &NamespacesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *NamespacesClient) ListByResourceGroup(resourceGroupName string, options *NamespacesClientListByResourceGroupOptions) *runtime.Pager[NamespacesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NamespacesClientListByResourceGroupResponse]{
+		More: func(page NamespacesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NamespacesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NamespaceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NamespacesClientListByResourceGroupResponse) (NamespacesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NamespacesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NamespacesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NamespacesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

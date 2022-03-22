@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewExportPipelinesClient(subscriptionID string, credential azcore.TokenCred
 // exportPipelineCreateParameters - The parameters for creating an export pipeline.
 // options - ExportPipelinesClientBeginCreateOptions contains the optional parameters for the ExportPipelinesClient.BeginCreate
 // method.
-func (client *ExportPipelinesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, exportPipelineName string, exportPipelineCreateParameters ExportPipeline, options *ExportPipelinesClientBeginCreateOptions) (ExportPipelinesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, exportPipelineName, exportPipelineCreateParameters, options)
-	if err != nil {
-		return ExportPipelinesClientCreatePollerResponse{}, err
+func (client *ExportPipelinesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, exportPipelineName string, exportPipelineCreateParameters ExportPipeline, options *ExportPipelinesClientBeginCreateOptions) (*armruntime.Poller[ExportPipelinesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, exportPipelineName, exportPipelineCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExportPipelinesClientCreateResponse]("ExportPipelinesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExportPipelinesClientCreateResponse]("ExportPipelinesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ExportPipelinesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExportPipelinesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ExportPipelinesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ExportPipelinesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates an export pipeline for a container registry with the specified parameters.
@@ -127,20 +123,16 @@ func (client *ExportPipelinesClient) createCreateRequest(ctx context.Context, re
 // exportPipelineName - The name of the export pipeline.
 // options - ExportPipelinesClientBeginDeleteOptions contains the optional parameters for the ExportPipelinesClient.BeginDelete
 // method.
-func (client *ExportPipelinesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, exportPipelineName string, options *ExportPipelinesClientBeginDeleteOptions) (ExportPipelinesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, exportPipelineName, options)
-	if err != nil {
-		return ExportPipelinesClientDeletePollerResponse{}, err
+func (client *ExportPipelinesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, exportPipelineName string, options *ExportPipelinesClientBeginDeleteOptions) (*armruntime.Poller[ExportPipelinesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, exportPipelineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExportPipelinesClientDeleteResponse]("ExportPipelinesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExportPipelinesClientDeleteResponse]("ExportPipelinesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ExportPipelinesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ExportPipelinesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ExportPipelinesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ExportPipelinesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an export pipeline from a container registry.
@@ -255,16 +247,32 @@ func (client *ExportPipelinesClient) getHandleResponse(resp *http.Response) (Exp
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - ExportPipelinesClientListOptions contains the optional parameters for the ExportPipelinesClient.List method.
-func (client *ExportPipelinesClient) List(resourceGroupName string, registryName string, options *ExportPipelinesClientListOptions) *ExportPipelinesClientListPager {
-	return &ExportPipelinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *ExportPipelinesClient) List(resourceGroupName string, registryName string, options *ExportPipelinesClientListOptions) *runtime.Pager[ExportPipelinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExportPipelinesClientListResponse]{
+		More: func(page ExportPipelinesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExportPipelinesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExportPipelineListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ExportPipelinesClientListResponse) (ExportPipelinesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExportPipelinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExportPipelinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExportPipelinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

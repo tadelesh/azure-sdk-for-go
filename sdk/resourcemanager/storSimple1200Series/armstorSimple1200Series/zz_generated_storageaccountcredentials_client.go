@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewStorageAccountCredentialsClient(subscriptionID string, credential azcore
 // storageAccount - The storage account credential to be added or updated.
 // options - StorageAccountCredentialsClientBeginCreateOrUpdateOptions contains the optional parameters for the StorageAccountCredentialsClient.BeginCreateOrUpdate
 // method.
-func (client *StorageAccountCredentialsClient) BeginCreateOrUpdate(ctx context.Context, credentialName string, resourceGroupName string, managerName string, storageAccount StorageAccountCredential, options *StorageAccountCredentialsClientBeginCreateOrUpdateOptions) (StorageAccountCredentialsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, credentialName, resourceGroupName, managerName, storageAccount, options)
-	if err != nil {
-		return StorageAccountCredentialsClientCreateOrUpdatePollerResponse{}, err
+func (client *StorageAccountCredentialsClient) BeginCreateOrUpdate(ctx context.Context, credentialName string, resourceGroupName string, managerName string, storageAccount StorageAccountCredential, options *StorageAccountCredentialsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[StorageAccountCredentialsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, credentialName, resourceGroupName, managerName, storageAccount, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageAccountCredentialsClientCreateOrUpdateResponse]("StorageAccountCredentialsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageAccountCredentialsClientCreateOrUpdateResponse]("StorageAccountCredentialsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageAccountCredentialsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("StorageAccountCredentialsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return StorageAccountCredentialsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &StorageAccountCredentialsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the storage account credential
@@ -127,20 +123,16 @@ func (client *StorageAccountCredentialsClient) createOrUpdateCreateRequest(ctx c
 // managerName - The manager name
 // options - StorageAccountCredentialsClientBeginDeleteOptions contains the optional parameters for the StorageAccountCredentialsClient.BeginDelete
 // method.
-func (client *StorageAccountCredentialsClient) BeginDelete(ctx context.Context, credentialName string, resourceGroupName string, managerName string, options *StorageAccountCredentialsClientBeginDeleteOptions) (StorageAccountCredentialsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, credentialName, resourceGroupName, managerName, options)
-	if err != nil {
-		return StorageAccountCredentialsClientDeletePollerResponse{}, err
+func (client *StorageAccountCredentialsClient) BeginDelete(ctx context.Context, credentialName string, resourceGroupName string, managerName string, options *StorageAccountCredentialsClientBeginDeleteOptions) (*armruntime.Poller[StorageAccountCredentialsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, credentialName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageAccountCredentialsClientDeleteResponse]("StorageAccountCredentialsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageAccountCredentialsClientDeleteResponse]("StorageAccountCredentialsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageAccountCredentialsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("StorageAccountCredentialsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return StorageAccountCredentialsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &StorageAccountCredentialsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the storage account credential
@@ -257,13 +249,26 @@ func (client *StorageAccountCredentialsClient) getHandleResponse(resp *http.Resp
 // managerName - The manager name
 // options - StorageAccountCredentialsClientListByManagerOptions contains the optional parameters for the StorageAccountCredentialsClient.ListByManager
 // method.
-func (client *StorageAccountCredentialsClient) ListByManager(resourceGroupName string, managerName string, options *StorageAccountCredentialsClientListByManagerOptions) *StorageAccountCredentialsClientListByManagerPager {
-	return &StorageAccountCredentialsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *StorageAccountCredentialsClient) ListByManager(resourceGroupName string, managerName string, options *StorageAccountCredentialsClientListByManagerOptions) *runtime.Pager[StorageAccountCredentialsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageAccountCredentialsClientListByManagerResponse]{
+		More: func(page StorageAccountCredentialsClientListByManagerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *StorageAccountCredentialsClientListByManagerResponse) (StorageAccountCredentialsClientListByManagerResponse, error) {
+			req, err := client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return StorageAccountCredentialsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageAccountCredentialsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageAccountCredentialsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
+		},
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -112,7 +112,8 @@ type LoadTestResourcePatchRequestBodyProperties struct {
 
 // LoadTestsClientBeginDeleteOptions contains the optional parameters for the LoadTestsClient.BeginDelete method.
 type LoadTestsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadTestsClientCreateOrUpdateOptions contains the optional parameters for the LoadTestsClient.CreateOrUpdate method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,16 +228,32 @@ func (client *HcxEnterpriseSitesClient) getHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // privateCloudName - Name of the private cloud
 // options - HcxEnterpriseSitesClientListOptions contains the optional parameters for the HcxEnterpriseSitesClient.List method.
-func (client *HcxEnterpriseSitesClient) List(resourceGroupName string, privateCloudName string, options *HcxEnterpriseSitesClientListOptions) *HcxEnterpriseSitesClientListPager {
-	return &HcxEnterpriseSitesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+func (client *HcxEnterpriseSitesClient) List(resourceGroupName string, privateCloudName string, options *HcxEnterpriseSitesClientListOptions) *runtime.Pager[HcxEnterpriseSitesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HcxEnterpriseSitesClientListResponse]{
+		More: func(page HcxEnterpriseSitesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HcxEnterpriseSitesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HcxEnterpriseSiteList.NextLink)
+		Fetcher: func(ctx context.Context, page *HcxEnterpriseSitesClientListResponse) (HcxEnterpriseSitesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HcxEnterpriseSitesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HcxEnterpriseSitesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HcxEnterpriseSitesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

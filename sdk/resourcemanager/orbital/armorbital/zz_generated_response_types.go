@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armorbital
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AvailableGroundStationsClientGetResponse contains the response from method AvailableGroundStationsClient.Get.
 type AvailableGroundStationsClientGetResponse struct {
@@ -24,79 +18,9 @@ type AvailableGroundStationsClientListByCapabilityResponse struct {
 	AvailableGroundStationListResult
 }
 
-// ContactProfilesClientCreateOrUpdatePollerResponse contains the response from method ContactProfilesClient.CreateOrUpdate.
-type ContactProfilesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContactProfilesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContactProfilesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContactProfilesClientCreateOrUpdateResponse, error) {
-	respType := ContactProfilesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ContactProfile)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContactProfilesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ContactProfilesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ContactProfilesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContactProfilesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContactProfilesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ContactProfilesClientCreateOrUpdateResponse contains the response from method ContactProfilesClient.CreateOrUpdate.
 type ContactProfilesClientCreateOrUpdateResponse struct {
 	ContactProfile
-}
-
-// ContactProfilesClientDeletePollerResponse contains the response from method ContactProfilesClient.Delete.
-type ContactProfilesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContactProfilesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContactProfilesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContactProfilesClientDeleteResponse, error) {
-	respType := ContactProfilesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContactProfilesClientDeletePollerResponse from the provided client and resume token.
-func (l *ContactProfilesClientDeletePollerResponse) Resume(ctx context.Context, client *ContactProfilesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContactProfilesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContactProfilesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ContactProfilesClientDeleteResponse contains the response from method ContactProfilesClient.Delete.
@@ -124,79 +48,9 @@ type ContactProfilesClientUpdateTagsResponse struct {
 	ContactProfile
 }
 
-// ContactsClientCreatePollerResponse contains the response from method ContactsClient.Create.
-type ContactsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContactsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContactsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContactsClientCreateResponse, error) {
-	respType := ContactsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Contact)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContactsClientCreatePollerResponse from the provided client and resume token.
-func (l *ContactsClientCreatePollerResponse) Resume(ctx context.Context, client *ContactsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContactsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContactsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ContactsClientCreateResponse contains the response from method ContactsClient.Create.
 type ContactsClientCreateResponse struct {
 	Contact
-}
-
-// ContactsClientDeletePollerResponse contains the response from method ContactsClient.Delete.
-type ContactsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContactsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContactsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContactsClientDeleteResponse, error) {
-	respType := ContactsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContactsClientDeletePollerResponse from the provided client and resume token.
-func (l *ContactsClientDeletePollerResponse) Resume(ctx context.Context, client *ContactsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContactsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContactsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ContactsClientDeleteResponse contains the response from method ContactsClient.Delete.
@@ -219,79 +73,9 @@ type OperationsClientListResponse struct {
 	OperationListResult
 }
 
-// SpacecraftsClientCreateOrUpdatePollerResponse contains the response from method SpacecraftsClient.CreateOrUpdate.
-type SpacecraftsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SpacecraftsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SpacecraftsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SpacecraftsClientCreateOrUpdateResponse, error) {
-	respType := SpacecraftsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Spacecraft)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SpacecraftsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *SpacecraftsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *SpacecraftsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SpacecraftsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SpacecraftsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SpacecraftsClientCreateOrUpdateResponse contains the response from method SpacecraftsClient.CreateOrUpdate.
 type SpacecraftsClientCreateOrUpdateResponse struct {
 	Spacecraft
-}
-
-// SpacecraftsClientDeletePollerResponse contains the response from method SpacecraftsClient.Delete.
-type SpacecraftsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SpacecraftsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SpacecraftsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SpacecraftsClientDeleteResponse, error) {
-	respType := SpacecraftsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SpacecraftsClientDeletePollerResponse from the provided client and resume token.
-func (l *SpacecraftsClientDeletePollerResponse) Resume(ctx context.Context, client *SpacecraftsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SpacecraftsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SpacecraftsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SpacecraftsClientDeleteResponse contains the response from method SpacecraftsClient.Delete.
@@ -302,41 +86,6 @@ type SpacecraftsClientDeleteResponse struct {
 // SpacecraftsClientGetResponse contains the response from method SpacecraftsClient.Get.
 type SpacecraftsClientGetResponse struct {
 	Spacecraft
-}
-
-// SpacecraftsClientListAvailableContactsPollerResponse contains the response from method SpacecraftsClient.ListAvailableContacts.
-type SpacecraftsClientListAvailableContactsPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SpacecraftsClientListAvailableContactsPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SpacecraftsClientListAvailableContactsPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SpacecraftsClientListAvailableContactsResponse, error) {
-	respType := SpacecraftsClientListAvailableContactsResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AvailableContactsListResult)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SpacecraftsClientListAvailableContactsPollerResponse from the provided client and resume token.
-func (l *SpacecraftsClientListAvailableContactsPollerResponse) Resume(ctx context.Context, client *SpacecraftsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SpacecraftsClient.ListAvailableContacts", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SpacecraftsClientListAvailableContactsPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SpacecraftsClientListAvailableContactsResponse contains the response from method SpacecraftsClient.ListAvailableContacts.

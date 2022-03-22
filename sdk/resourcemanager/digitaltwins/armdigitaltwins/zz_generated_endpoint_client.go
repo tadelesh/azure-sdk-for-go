@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewEndpointClient(subscriptionID string, credential azcore.TokenCredential,
 // endpointDescription - The DigitalTwinsInstance endpoint metadata and security metadata.
 // options - EndpointClientBeginCreateOrUpdateOptions contains the optional parameters for the EndpointClient.BeginCreateOrUpdate
 // method.
-func (client *EndpointClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, endpointName string, endpointDescription EndpointResource, options *EndpointClientBeginCreateOrUpdateOptions) (EndpointClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, endpointName, endpointDescription, options)
-	if err != nil {
-		return EndpointClientCreateOrUpdatePollerResponse{}, err
+func (client *EndpointClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, endpointName string, endpointDescription EndpointResource, options *EndpointClientBeginCreateOrUpdateOptions) (*armruntime.Poller[EndpointClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, endpointName, endpointDescription, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EndpointClientCreateOrUpdateResponse]("EndpointClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EndpointClientCreateOrUpdateResponse]("EndpointClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := EndpointClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("EndpointClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return EndpointClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &EndpointClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update DigitalTwinsInstance endpoint.
@@ -126,20 +122,16 @@ func (client *EndpointClient) createOrUpdateCreateRequest(ctx context.Context, r
 // resourceName - The name of the DigitalTwinsInstance.
 // endpointName - Name of Endpoint Resource.
 // options - EndpointClientBeginDeleteOptions contains the optional parameters for the EndpointClient.BeginDelete method.
-func (client *EndpointClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, endpointName string, options *EndpointClientBeginDeleteOptions) (EndpointClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, endpointName, options)
-	if err != nil {
-		return EndpointClientDeletePollerResponse{}, err
+func (client *EndpointClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, endpointName string, options *EndpointClientBeginDeleteOptions) (*armruntime.Poller[EndpointClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, endpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EndpointClientDeleteResponse]("EndpointClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EndpointClientDeleteResponse]("EndpointClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := EndpointClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("EndpointClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return EndpointClientDeletePollerResponse{}, err
-	}
-	result.Poller = &EndpointClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a DigitalTwinsInstance endpoint.
@@ -254,16 +246,32 @@ func (client *EndpointClient) getHandleResponse(resp *http.Response) (EndpointCl
 // resourceGroupName - The name of the resource group that contains the DigitalTwinsInstance.
 // resourceName - The name of the DigitalTwinsInstance.
 // options - EndpointClientListOptions contains the optional parameters for the EndpointClient.List method.
-func (client *EndpointClient) List(resourceGroupName string, resourceName string, options *EndpointClientListOptions) *EndpointClientListPager {
-	return &EndpointClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *EndpointClient) List(resourceGroupName string, resourceName string, options *EndpointClientListOptions) *runtime.Pager[EndpointClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EndpointClientListResponse]{
+		More: func(page EndpointClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EndpointClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EndpointResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EndpointClientListResponse) (EndpointClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EndpointClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EndpointClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EndpointClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

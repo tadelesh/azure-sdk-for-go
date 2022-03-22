@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -251,13 +251,26 @@ func (client *SyncGroupsClient) getHandleResponse(resp *http.Response) (SyncGrou
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - SyncGroupsClientListByStorageSyncServiceOptions contains the optional parameters for the SyncGroupsClient.ListByStorageSyncService
 // method.
-func (client *SyncGroupsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *SyncGroupsClientListByStorageSyncServiceOptions) *SyncGroupsClientListByStorageSyncServicePager {
-	return &SyncGroupsClientListByStorageSyncServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+func (client *SyncGroupsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *SyncGroupsClientListByStorageSyncServiceOptions) *runtime.Pager[SyncGroupsClientListByStorageSyncServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SyncGroupsClientListByStorageSyncServiceResponse]{
+		More: func(page SyncGroupsClientListByStorageSyncServiceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *SyncGroupsClientListByStorageSyncServiceResponse) (SyncGroupsClientListByStorageSyncServiceResponse, error) {
+			req, err := client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+			if err != nil {
+				return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SyncGroupsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByStorageSyncServiceHandleResponse(resp)
+		},
+	})
 }
 
 // listByStorageSyncServiceCreateRequest creates the ListByStorageSyncService request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -179,16 +179,32 @@ func (client *AuthorizationPoliciesClient) getHandleResponse(resp *http.Response
 // hubName - The name of the hub.
 // options - AuthorizationPoliciesClientListByHubOptions contains the optional parameters for the AuthorizationPoliciesClient.ListByHub
 // method.
-func (client *AuthorizationPoliciesClient) ListByHub(resourceGroupName string, hubName string, options *AuthorizationPoliciesClientListByHubOptions) *AuthorizationPoliciesClientListByHubPager {
-	return &AuthorizationPoliciesClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *AuthorizationPoliciesClient) ListByHub(resourceGroupName string, hubName string, options *AuthorizationPoliciesClientListByHubOptions) *runtime.Pager[AuthorizationPoliciesClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AuthorizationPoliciesClientListByHubResponse]{
+		More: func(page AuthorizationPoliciesClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AuthorizationPoliciesClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AuthorizationPoliciesClientListByHubResponse) (AuthorizationPoliciesClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AuthorizationPoliciesClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AuthorizationPoliciesClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AuthorizationPoliciesClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

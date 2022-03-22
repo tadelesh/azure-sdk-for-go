@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewManagedInstanceKeysClient(subscriptionID string, credential azcore.Token
 // parameters - The requested managed instance key resource state.
 // options - ManagedInstanceKeysClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedInstanceKeysClient.BeginCreateOrUpdate
 // method.
-func (client *ManagedInstanceKeysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, keyName string, parameters ManagedInstanceKey, options *ManagedInstanceKeysClientBeginCreateOrUpdateOptions) (ManagedInstanceKeysClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, keyName, parameters, options)
-	if err != nil {
-		return ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedInstanceKeysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, keyName string, parameters ManagedInstanceKey, options *ManagedInstanceKeysClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedInstanceKeysClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, keyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceKeysClientCreateOrUpdateResponse]("ManagedInstanceKeysClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceKeysClientCreateOrUpdateResponse]("ManagedInstanceKeysClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceKeysClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceKeysClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a managed instance key.
@@ -129,20 +125,16 @@ func (client *ManagedInstanceKeysClient) createOrUpdateCreateRequest(ctx context
 // keyName - The name of the managed instance key to be deleted.
 // options - ManagedInstanceKeysClientBeginDeleteOptions contains the optional parameters for the ManagedInstanceKeysClient.BeginDelete
 // method.
-func (client *ManagedInstanceKeysClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, keyName string, options *ManagedInstanceKeysClientBeginDeleteOptions) (ManagedInstanceKeysClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, keyName, options)
-	if err != nil {
-		return ManagedInstanceKeysClientDeletePollerResponse{}, err
+func (client *ManagedInstanceKeysClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, keyName string, options *ManagedInstanceKeysClientBeginDeleteOptions) (*armruntime.Poller[ManagedInstanceKeysClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, keyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceKeysClientDeleteResponse]("ManagedInstanceKeysClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceKeysClientDeleteResponse]("ManagedInstanceKeysClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceKeysClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceKeysClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceKeysClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceKeysClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the managed instance key with the given name.
@@ -259,16 +251,32 @@ func (client *ManagedInstanceKeysClient) getHandleResponse(resp *http.Response) 
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstanceKeysClientListByInstanceOptions contains the optional parameters for the ManagedInstanceKeysClient.ListByInstance
 // method.
-func (client *ManagedInstanceKeysClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceKeysClientListByInstanceOptions) *ManagedInstanceKeysClientListByInstancePager {
-	return &ManagedInstanceKeysClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstanceKeysClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceKeysClientListByInstanceOptions) *runtime.Pager[ManagedInstanceKeysClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstanceKeysClientListByInstanceResponse]{
+		More: func(page ManagedInstanceKeysClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstanceKeysClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstanceKeyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstanceKeysClientListByInstanceResponse) (ManagedInstanceKeysClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstanceKeysClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstanceKeysClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstanceKeysClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.

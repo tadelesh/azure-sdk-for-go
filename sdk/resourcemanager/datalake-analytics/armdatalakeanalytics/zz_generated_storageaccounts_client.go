@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -288,16 +288,32 @@ func (client *StorageAccountsClient) getStorageContainerHandleResponse(resp *htt
 // accountName - The name of the Data Lake Analytics account.
 // options - StorageAccountsClientListByAccountOptions contains the optional parameters for the StorageAccountsClient.ListByAccount
 // method.
-func (client *StorageAccountsClient) ListByAccount(resourceGroupName string, accountName string, options *StorageAccountsClientListByAccountOptions) *StorageAccountsClientListByAccountPager {
-	return &StorageAccountsClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *StorageAccountsClient) ListByAccount(resourceGroupName string, accountName string, options *StorageAccountsClientListByAccountOptions) *runtime.Pager[StorageAccountsClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageAccountsClientListByAccountResponse]{
+		More: func(page StorageAccountsClientListByAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StorageAccountsClientListByAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageAccountInformationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *StorageAccountsClientListByAccountResponse) (StorageAccountsClientListByAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StorageAccountsClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageAccountsClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageAccountsClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.
@@ -362,16 +378,32 @@ func (client *StorageAccountsClient) listByAccountHandleResponse(resp *http.Resp
 // containerName - The name of the Azure storage container for which the SAS token is being requested.
 // options - StorageAccountsClientListSasTokensOptions contains the optional parameters for the StorageAccountsClient.ListSasTokens
 // method.
-func (client *StorageAccountsClient) ListSasTokens(resourceGroupName string, accountName string, storageAccountName string, containerName string, options *StorageAccountsClientListSasTokensOptions) *StorageAccountsClientListSasTokensPager {
-	return &StorageAccountsClientListSasTokensPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSasTokensCreateRequest(ctx, resourceGroupName, accountName, storageAccountName, containerName, options)
+func (client *StorageAccountsClient) ListSasTokens(resourceGroupName string, accountName string, storageAccountName string, containerName string, options *StorageAccountsClientListSasTokensOptions) *runtime.Pager[StorageAccountsClientListSasTokensResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageAccountsClientListSasTokensResponse]{
+		More: func(page StorageAccountsClientListSasTokensResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StorageAccountsClientListSasTokensResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SasTokenInformationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *StorageAccountsClientListSasTokensResponse) (StorageAccountsClientListSasTokensResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSasTokensCreateRequest(ctx, resourceGroupName, accountName, storageAccountName, containerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StorageAccountsClientListSasTokensResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageAccountsClientListSasTokensResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageAccountsClientListSasTokensResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSasTokensHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSasTokensCreateRequest creates the ListSasTokens request.
@@ -425,16 +457,32 @@ func (client *StorageAccountsClient) listSasTokensHandleResponse(resp *http.Resp
 // storageAccountName - The name of the Azure storage account from which to list blob containers.
 // options - StorageAccountsClientListStorageContainersOptions contains the optional parameters for the StorageAccountsClient.ListStorageContainers
 // method.
-func (client *StorageAccountsClient) ListStorageContainers(resourceGroupName string, accountName string, storageAccountName string, options *StorageAccountsClientListStorageContainersOptions) *StorageAccountsClientListStorageContainersPager {
-	return &StorageAccountsClientListStorageContainersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listStorageContainersCreateRequest(ctx, resourceGroupName, accountName, storageAccountName, options)
+func (client *StorageAccountsClient) ListStorageContainers(resourceGroupName string, accountName string, storageAccountName string, options *StorageAccountsClientListStorageContainersOptions) *runtime.Pager[StorageAccountsClientListStorageContainersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageAccountsClientListStorageContainersResponse]{
+		More: func(page StorageAccountsClientListStorageContainersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StorageAccountsClientListStorageContainersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageContainerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *StorageAccountsClientListStorageContainersResponse) (StorageAccountsClientListStorageContainersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listStorageContainersCreateRequest(ctx, resourceGroupName, accountName, storageAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StorageAccountsClientListStorageContainersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageAccountsClientListStorageContainersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageAccountsClientListStorageContainersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listStorageContainersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listStorageContainersCreateRequest creates the ListStorageContainers request.

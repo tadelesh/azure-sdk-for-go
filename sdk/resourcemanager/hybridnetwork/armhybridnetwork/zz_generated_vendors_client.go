@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewVendorsClient(subscriptionID string, credential azcore.TokenCredential, 
 // vendorName - The name of the vendor.
 // options - VendorsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorsClient.BeginCreateOrUpdate
 // method.
-func (client *VendorsClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, options *VendorsClientBeginCreateOrUpdateOptions) (VendorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, vendorName, options)
-	if err != nil {
-		return VendorsClientCreateOrUpdatePollerResponse{}, err
+func (client *VendorsClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, options *VendorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VendorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, vendorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorsClientCreateOrUpdateResponse]("VendorsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorsClientCreateOrUpdateResponse]("VendorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VendorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VendorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a vendor.
@@ -116,20 +112,16 @@ func (client *VendorsClient) createOrUpdateCreateRequest(ctx context.Context, ve
 // If the operation fails it returns an *azcore.ResponseError type.
 // vendorName - The name of the vendor.
 // options - VendorsClientBeginDeleteOptions contains the optional parameters for the VendorsClient.BeginDelete method.
-func (client *VendorsClient) BeginDelete(ctx context.Context, vendorName string, options *VendorsClientBeginDeleteOptions) (VendorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, vendorName, options)
-	if err != nil {
-		return VendorsClientDeletePollerResponse{}, err
+func (client *VendorsClient) BeginDelete(ctx context.Context, vendorName string, options *VendorsClientBeginDeleteOptions) (*armruntime.Poller[VendorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, vendorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorsClientDeleteResponse]("VendorsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorsClientDeleteResponse]("VendorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VendorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VendorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified vendor.
@@ -225,16 +217,32 @@ func (client *VendorsClient) getHandleResponse(resp *http.Response) (VendorsClie
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VendorsClientListBySubscriptionOptions contains the optional parameters for the VendorsClient.ListBySubscription
 // method.
-func (client *VendorsClient) ListBySubscription(options *VendorsClientListBySubscriptionOptions) *VendorsClientListBySubscriptionPager {
-	return &VendorsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *VendorsClient) ListBySubscription(options *VendorsClientListBySubscriptionOptions) *runtime.Pager[VendorsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VendorsClientListBySubscriptionResponse]{
+		More: func(page VendorsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VendorsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VendorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VendorsClientListBySubscriptionResponse) (VendorsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VendorsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VendorsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VendorsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

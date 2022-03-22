@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewRulesClient(subscriptionID string, credential azcore.TokenCredential, op
 // ruleName - Name of the delivery rule which is unique within the endpoint.
 // rule - The delivery rule properties.
 // options - RulesClientBeginCreateOptions contains the optional parameters for the RulesClient.BeginCreate method.
-func (client *RulesClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, rule Rule, options *RulesClientBeginCreateOptions) (RulesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, ruleSetName, ruleName, rule, options)
-	if err != nil {
-		return RulesClientCreatePollerResponse{}, err
+func (client *RulesClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, rule Rule, options *RulesClientBeginCreateOptions) (*armruntime.Poller[RulesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, ruleSetName, ruleName, rule, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RulesClientCreateResponse]("RulesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RulesClientCreateResponse]("RulesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := RulesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("RulesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return RulesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &RulesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new delivery rule within the specified rule set.
@@ -133,20 +129,16 @@ func (client *RulesClient) createCreateRequest(ctx context.Context, resourceGrou
 // ruleSetName - Name of the rule set under the profile.
 // ruleName - Name of the delivery rule which is unique within the endpoint.
 // options - RulesClientBeginDeleteOptions contains the optional parameters for the RulesClient.BeginDelete method.
-func (client *RulesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, options *RulesClientBeginDeleteOptions) (RulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, ruleSetName, ruleName, options)
-	if err != nil {
-		return RulesClientDeletePollerResponse{}, err
+func (client *RulesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, options *RulesClientBeginDeleteOptions) (*armruntime.Poller[RulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, ruleSetName, ruleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RulesClientDeleteResponse]("RulesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RulesClientDeleteResponse]("RulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RulesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return RulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing delivery rule within a rule set.
@@ -273,16 +265,32 @@ func (client *RulesClient) getHandleResponse(resp *http.Response) (RulesClientGe
 // group.
 // ruleSetName - Name of the rule set under the profile.
 // options - RulesClientListByRuleSetOptions contains the optional parameters for the RulesClient.ListByRuleSet method.
-func (client *RulesClient) ListByRuleSet(resourceGroupName string, profileName string, ruleSetName string, options *RulesClientListByRuleSetOptions) *RulesClientListByRuleSetPager {
-	return &RulesClientListByRuleSetPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRuleSetCreateRequest(ctx, resourceGroupName, profileName, ruleSetName, options)
+func (client *RulesClient) ListByRuleSet(resourceGroupName string, profileName string, ruleSetName string, options *RulesClientListByRuleSetOptions) *runtime.Pager[RulesClientListByRuleSetResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RulesClientListByRuleSetResponse]{
+		More: func(page RulesClientListByRuleSetResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RulesClientListByRuleSetResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RulesClientListByRuleSetResponse) (RulesClientListByRuleSetResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByRuleSetCreateRequest(ctx, resourceGroupName, profileName, ruleSetName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RulesClientListByRuleSetResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RulesClientListByRuleSetResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RulesClientListByRuleSetResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRuleSetHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByRuleSetCreateRequest creates the ListByRuleSet request.
@@ -333,20 +341,16 @@ func (client *RulesClient) listByRuleSetHandleResponse(resp *http.Response) (Rul
 // ruleName - Name of the delivery rule which is unique within the endpoint.
 // ruleUpdateProperties - Delivery rule properties
 // options - RulesClientBeginUpdateOptions contains the optional parameters for the RulesClient.BeginUpdate method.
-func (client *RulesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, ruleUpdateProperties RuleUpdateParameters, options *RulesClientBeginUpdateOptions) (RulesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, ruleSetName, ruleName, ruleUpdateProperties, options)
-	if err != nil {
-		return RulesClientUpdatePollerResponse{}, err
+func (client *RulesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, ruleName string, ruleUpdateProperties RuleUpdateParameters, options *RulesClientBeginUpdateOptions) (*armruntime.Poller[RulesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, ruleSetName, ruleName, ruleUpdateProperties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RulesClientUpdateResponse]("RulesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RulesClientUpdateResponse]("RulesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := RulesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RulesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return RulesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &RulesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing delivery rule within a rule set.

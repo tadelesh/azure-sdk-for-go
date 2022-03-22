@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewFirewallRulesClient(subscriptionID string, credential azcore.TokenCreden
 // parameters - The required parameters for creating or updating a firewall rule.
 // options - FirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallRulesClient.BeginCreateOrUpdate
 // method.
-func (client *FirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, firewallRuleName string, parameters FirewallRule, options *FirewallRulesClientBeginCreateOrUpdateOptions) (FirewallRulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, firewallRuleName, parameters, options)
-	if err != nil {
-		return FirewallRulesClientCreateOrUpdatePollerResponse{}, err
+func (client *FirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, firewallRuleName string, parameters FirewallRule, options *FirewallRulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[FirewallRulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, firewallRuleName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FirewallRulesClientCreateOrUpdateResponse]("FirewallRulesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FirewallRulesClientCreateOrUpdateResponse]("FirewallRulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := FirewallRulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FirewallRulesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return FirewallRulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &FirewallRulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a new firewall rule or updates an existing firewall rule.
@@ -127,20 +123,16 @@ func (client *FirewallRulesClient) createOrUpdateCreateRequest(ctx context.Conte
 // firewallRuleName - The name of the server firewall rule.
 // options - FirewallRulesClientBeginDeleteOptions contains the optional parameters for the FirewallRulesClient.BeginDelete
 // method.
-func (client *FirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, firewallRuleName string, options *FirewallRulesClientBeginDeleteOptions) (FirewallRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, firewallRuleName, options)
-	if err != nil {
-		return FirewallRulesClientDeletePollerResponse{}, err
+func (client *FirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, firewallRuleName string, options *FirewallRulesClientBeginDeleteOptions) (*armruntime.Poller[FirewallRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, firewallRuleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FirewallRulesClientDeleteResponse]("FirewallRulesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FirewallRulesClientDeleteResponse]("FirewallRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := FirewallRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("FirewallRulesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return FirewallRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &FirewallRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a server firewall rule.
@@ -256,13 +248,26 @@ func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (Firew
 // serverName - The name of the server.
 // options - FirewallRulesClientListByServerOptions contains the optional parameters for the FirewallRulesClient.ListByServer
 // method.
-func (client *FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) *FirewallRulesClientListByServerPager {
-	return &FirewallRulesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) *runtime.Pager[FirewallRulesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FirewallRulesClientListByServerResponse]{
+		More: func(page FirewallRulesClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FirewallRulesClientListByServerResponse) (FirewallRulesClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return FirewallRulesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FirewallRulesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FirewallRulesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

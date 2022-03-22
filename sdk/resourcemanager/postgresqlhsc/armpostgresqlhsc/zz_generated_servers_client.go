@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,13 +115,26 @@ func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClie
 // serverGroupName - The name of the server group.
 // options - ServersClientListByServerGroupOptions contains the optional parameters for the ServersClient.ListByServerGroup
 // method.
-func (client *ServersClient) ListByServerGroup(resourceGroupName string, serverGroupName string, options *ServersClientListByServerGroupOptions) *ServersClientListByServerGroupPager {
-	return &ServersClientListByServerGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
+func (client *ServersClient) ListByServerGroup(resourceGroupName string, serverGroupName string, options *ServersClientListByServerGroupOptions) *runtime.Pager[ServersClientListByServerGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServersClientListByServerGroupResponse]{
+		More: func(page ServersClientListByServerGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServersClientListByServerGroupResponse) (ServersClientListByServerGroupResponse, error) {
+			req, err := client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
+			if err != nil {
+				return ServersClientListByServerGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServersClientListByServerGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServersClientListByServerGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerGroupCreateRequest creates the ListByServerGroup request.

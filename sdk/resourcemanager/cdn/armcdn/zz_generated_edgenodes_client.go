@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -46,16 +46,32 @@ func NewEdgeNodesClient(credential azcore.TokenCredential, options *arm.ClientOp
 // List - Edgenodes are the global Point of Presence (POP) locations used to deliver CDN content to end users.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EdgeNodesClientListOptions contains the optional parameters for the EdgeNodesClient.List method.
-func (client *EdgeNodesClient) List(options *EdgeNodesClientListOptions) *EdgeNodesClientListPager {
-	return &EdgeNodesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *EdgeNodesClient) List(options *EdgeNodesClientListOptions) *runtime.Pager[EdgeNodesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EdgeNodesClientListResponse]{
+		More: func(page EdgeNodesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EdgeNodesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EdgenodeResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EdgeNodesClientListResponse) (EdgeNodesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EdgeNodesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EdgeNodesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EdgeNodesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

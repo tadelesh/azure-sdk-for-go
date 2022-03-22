@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,20 +61,16 @@ func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredentia
 // extensionName - Name of the Extension.
 // extension - Properties necessary to Create an Extension.
 // options - ExtensionsClientBeginCreateOptions contains the optional parameters for the ExtensionsClient.BeginCreate method.
-func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, extension Extension, options *ExtensionsClientBeginCreateOptions) (ExtensionsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, extension, options)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
+func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, extension Extension, options *ExtensionsClientBeginCreateOptions) (*armruntime.Poller[ExtensionsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, extension, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientCreateResponse]("ExtensionsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientCreateResponse]("ExtensionsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a new Kubernetes Cluster Extension.
@@ -142,20 +138,16 @@ func (client *ExtensionsClient) createCreateRequest(ctx context.Context, resourc
 // clusterName - The name of the kubernetes cluster.
 // extensionName - Name of the Extension.
 // options - ExtensionsClientBeginDeleteOptions contains the optional parameters for the ExtensionsClient.BeginDelete method.
-func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (ExtensionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, options)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
+func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (*armruntime.Poller[ExtensionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Kubernetes Cluster Extension. This will cause the Agent to Uninstall the extension from the cluster.
@@ -297,16 +289,32 @@ func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (Extensio
 // (for OnPrem K8S clusters).
 // clusterName - The name of the kubernetes cluster.
 // options - ExtensionsClientListOptions contains the optional parameters for the ExtensionsClient.List method.
-func (client *ExtensionsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *ExtensionsClientListOptions) *ExtensionsClientListPager {
-	return &ExtensionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+func (client *ExtensionsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *ExtensionsClientListOptions) *runtime.Pager[ExtensionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExtensionsClientListResponse]{
+		More: func(page ExtensionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExtensionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExtensionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ExtensionsClientListResponse) (ExtensionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExtensionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExtensionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExtensionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -363,20 +371,16 @@ func (client *ExtensionsClient) listHandleResponse(resp *http.Response) (Extensi
 // extensionName - Name of the Extension.
 // patchExtension - Properties to Patch in an existing Extension.
 // options - ExtensionsClientBeginUpdateOptions contains the optional parameters for the ExtensionsClient.BeginUpdate method.
-func (client *ExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, patchExtension PatchExtension, options *ExtensionsClientBeginUpdateOptions) (ExtensionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, patchExtension, options)
-	if err != nil {
-		return ExtensionsClientUpdatePollerResponse{}, err
+func (client *ExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, extensionName string, patchExtension PatchExtension, options *ExtensionsClientBeginUpdateOptions) (*armruntime.Poller[ExtensionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, extensionName, patchExtension, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientUpdateResponse]("ExtensionsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientUpdateResponse]("ExtensionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch an existing Kubernetes Cluster Extension.

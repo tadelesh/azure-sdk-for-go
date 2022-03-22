@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewShareSubscriptionsClient(subscriptionID string, credential azcore.TokenC
 // shareSubscriptionSynchronization - Share Subscription Synchronization payload.
 // options - ShareSubscriptionsClientBeginCancelSynchronizationOptions contains the optional parameters for the ShareSubscriptionsClient.BeginCancelSynchronization
 // method.
-func (client *ShareSubscriptionsClient) BeginCancelSynchronization(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, shareSubscriptionSynchronization ShareSubscriptionSynchronization, options *ShareSubscriptionsClientBeginCancelSynchronizationOptions) (ShareSubscriptionsClientCancelSynchronizationPollerResponse, error) {
-	resp, err := client.cancelSynchronization(ctx, resourceGroupName, accountName, shareSubscriptionName, shareSubscriptionSynchronization, options)
-	if err != nil {
-		return ShareSubscriptionsClientCancelSynchronizationPollerResponse{}, err
+func (client *ShareSubscriptionsClient) BeginCancelSynchronization(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, shareSubscriptionSynchronization ShareSubscriptionSynchronization, options *ShareSubscriptionsClientBeginCancelSynchronizationOptions) (*armruntime.Poller[ShareSubscriptionsClientCancelSynchronizationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancelSynchronization(ctx, resourceGroupName, accountName, shareSubscriptionName, shareSubscriptionSynchronization, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ShareSubscriptionsClientCancelSynchronizationResponse]("ShareSubscriptionsClient.CancelSynchronization", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ShareSubscriptionsClientCancelSynchronizationResponse]("ShareSubscriptionsClient.CancelSynchronization", options.ResumeToken, client.pl, nil)
 	}
-	result := ShareSubscriptionsClientCancelSynchronizationPollerResponse{}
-	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.CancelSynchronization", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ShareSubscriptionsClientCancelSynchronizationPollerResponse{}, err
-	}
-	result.Poller = &ShareSubscriptionsClientCancelSynchronizationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CancelSynchronization - Request to cancel a synchronization.
@@ -189,20 +185,16 @@ func (client *ShareSubscriptionsClient) createHandleResponse(resp *http.Response
 // shareSubscriptionName - The name of the shareSubscription.
 // options - ShareSubscriptionsClientBeginDeleteOptions contains the optional parameters for the ShareSubscriptionsClient.BeginDelete
 // method.
-func (client *ShareSubscriptionsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientBeginDeleteOptions) (ShareSubscriptionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
-	if err != nil {
-		return ShareSubscriptionsClientDeletePollerResponse{}, err
+func (client *ShareSubscriptionsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientBeginDeleteOptions) (*armruntime.Poller[ShareSubscriptionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ShareSubscriptionsClientDeleteResponse]("ShareSubscriptionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ShareSubscriptionsClientDeleteResponse]("ShareSubscriptionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ShareSubscriptionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ShareSubscriptionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ShareSubscriptionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a shareSubscription in an account
@@ -318,16 +310,32 @@ func (client *ShareSubscriptionsClient) getHandleResponse(resp *http.Response) (
 // accountName - The name of the share account.
 // options - ShareSubscriptionsClientListByAccountOptions contains the optional parameters for the ShareSubscriptionsClient.ListByAccount
 // method.
-func (client *ShareSubscriptionsClient) ListByAccount(resourceGroupName string, accountName string, options *ShareSubscriptionsClientListByAccountOptions) *ShareSubscriptionsClientListByAccountPager {
-	return &ShareSubscriptionsClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *ShareSubscriptionsClient) ListByAccount(resourceGroupName string, accountName string, options *ShareSubscriptionsClientListByAccountOptions) *runtime.Pager[ShareSubscriptionsClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ShareSubscriptionsClientListByAccountResponse]{
+		More: func(page ShareSubscriptionsClientListByAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ShareSubscriptionsClientListByAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ShareSubscriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *ShareSubscriptionsClientListByAccountResponse) (ShareSubscriptionsClientListByAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ShareSubscriptionsClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ShareSubscriptionsClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ShareSubscriptionsClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.
@@ -381,16 +389,32 @@ func (client *ShareSubscriptionsClient) listByAccountHandleResponse(resp *http.R
 // shareSubscriptionName - The name of the shareSubscription.
 // options - ShareSubscriptionsClientListSourceShareSynchronizationSettingsOptions contains the optional parameters for the
 // ShareSubscriptionsClient.ListSourceShareSynchronizationSettings method.
-func (client *ShareSubscriptionsClient) ListSourceShareSynchronizationSettings(resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientListSourceShareSynchronizationSettingsOptions) *ShareSubscriptionsClientListSourceShareSynchronizationSettingsPager {
-	return &ShareSubscriptionsClientListSourceShareSynchronizationSettingsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSourceShareSynchronizationSettingsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+func (client *ShareSubscriptionsClient) ListSourceShareSynchronizationSettings(resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientListSourceShareSynchronizationSettingsOptions) *runtime.Pager[ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse]{
+		More: func(page ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SourceShareSynchronizationSettingList.NextLink)
+		Fetcher: func(ctx context.Context, page *ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse) (ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSourceShareSynchronizationSettingsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSourceShareSynchronizationSettingsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSourceShareSynchronizationSettingsCreateRequest creates the ListSourceShareSynchronizationSettings request.
@@ -443,16 +467,32 @@ func (client *ShareSubscriptionsClient) listSourceShareSynchronizationSettingsHa
 // shareSubscriptionSynchronization - Share Subscription Synchronization payload.
 // options - ShareSubscriptionsClientListSynchronizationDetailsOptions contains the optional parameters for the ShareSubscriptionsClient.ListSynchronizationDetails
 // method.
-func (client *ShareSubscriptionsClient) ListSynchronizationDetails(resourceGroupName string, accountName string, shareSubscriptionName string, shareSubscriptionSynchronization ShareSubscriptionSynchronization, options *ShareSubscriptionsClientListSynchronizationDetailsOptions) *ShareSubscriptionsClientListSynchronizationDetailsPager {
-	return &ShareSubscriptionsClientListSynchronizationDetailsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSynchronizationDetailsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, shareSubscriptionSynchronization, options)
+func (client *ShareSubscriptionsClient) ListSynchronizationDetails(resourceGroupName string, accountName string, shareSubscriptionName string, shareSubscriptionSynchronization ShareSubscriptionSynchronization, options *ShareSubscriptionsClientListSynchronizationDetailsOptions) *runtime.Pager[ShareSubscriptionsClientListSynchronizationDetailsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ShareSubscriptionsClientListSynchronizationDetailsResponse]{
+		More: func(page ShareSubscriptionsClientListSynchronizationDetailsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ShareSubscriptionsClientListSynchronizationDetailsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SynchronizationDetailsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ShareSubscriptionsClientListSynchronizationDetailsResponse) (ShareSubscriptionsClientListSynchronizationDetailsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSynchronizationDetailsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, shareSubscriptionSynchronization, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ShareSubscriptionsClientListSynchronizationDetailsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ShareSubscriptionsClientListSynchronizationDetailsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ShareSubscriptionsClientListSynchronizationDetailsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSynchronizationDetailsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSynchronizationDetailsCreateRequest creates the ListSynchronizationDetails request.
@@ -510,16 +550,32 @@ func (client *ShareSubscriptionsClient) listSynchronizationDetailsHandleResponse
 // shareSubscriptionName - The name of the share subscription.
 // options - ShareSubscriptionsClientListSynchronizationsOptions contains the optional parameters for the ShareSubscriptionsClient.ListSynchronizations
 // method.
-func (client *ShareSubscriptionsClient) ListSynchronizations(resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientListSynchronizationsOptions) *ShareSubscriptionsClientListSynchronizationsPager {
-	return &ShareSubscriptionsClientListSynchronizationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSynchronizationsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+func (client *ShareSubscriptionsClient) ListSynchronizations(resourceGroupName string, accountName string, shareSubscriptionName string, options *ShareSubscriptionsClientListSynchronizationsOptions) *runtime.Pager[ShareSubscriptionsClientListSynchronizationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ShareSubscriptionsClientListSynchronizationsResponse]{
+		More: func(page ShareSubscriptionsClientListSynchronizationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ShareSubscriptionsClientListSynchronizationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ShareSubscriptionSynchronizationList.NextLink)
+		Fetcher: func(ctx context.Context, page *ShareSubscriptionsClientListSynchronizationsResponse) (ShareSubscriptionsClientListSynchronizationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSynchronizationsCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ShareSubscriptionsClientListSynchronizationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ShareSubscriptionsClientListSynchronizationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ShareSubscriptionsClientListSynchronizationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSynchronizationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSynchronizationsCreateRequest creates the ListSynchronizations request.
@@ -578,20 +634,16 @@ func (client *ShareSubscriptionsClient) listSynchronizationsHandleResponse(resp 
 // synchronize - Synchronize payload
 // options - ShareSubscriptionsClientBeginSynchronizeOptions contains the optional parameters for the ShareSubscriptionsClient.BeginSynchronize
 // method.
-func (client *ShareSubscriptionsClient) BeginSynchronize(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, synchronize Synchronize, options *ShareSubscriptionsClientBeginSynchronizeOptions) (ShareSubscriptionsClientSynchronizePollerResponse, error) {
-	resp, err := client.synchronize(ctx, resourceGroupName, accountName, shareSubscriptionName, synchronize, options)
-	if err != nil {
-		return ShareSubscriptionsClientSynchronizePollerResponse{}, err
+func (client *ShareSubscriptionsClient) BeginSynchronize(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, synchronize Synchronize, options *ShareSubscriptionsClientBeginSynchronizeOptions) (*armruntime.Poller[ShareSubscriptionsClientSynchronizeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.synchronize(ctx, resourceGroupName, accountName, shareSubscriptionName, synchronize, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ShareSubscriptionsClientSynchronizeResponse]("ShareSubscriptionsClient.Synchronize", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ShareSubscriptionsClientSynchronizeResponse]("ShareSubscriptionsClient.Synchronize", options.ResumeToken, client.pl, nil)
 	}
-	result := ShareSubscriptionsClientSynchronizePollerResponse{}
-	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.Synchronize", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ShareSubscriptionsClientSynchronizePollerResponse{}, err
-	}
-	result.Poller = &ShareSubscriptionsClientSynchronizePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Synchronize - Initiate a copy

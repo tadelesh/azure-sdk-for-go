@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -273,19 +273,22 @@ type MachineExtensionUpgrade struct {
 // MachineExtensionsClientBeginCreateOrUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginCreateOrUpdate
 // method.
 type MachineExtensionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientBeginDeleteOptions contains the optional parameters for the MachineExtensionsClient.BeginDelete
 // method.
 type MachineExtensionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientBeginUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginUpdate
 // method.
 type MachineExtensionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientGetOptions contains the optional parameters for the MachineExtensionsClient.Get method.
@@ -462,7 +465,8 @@ type MachinesClientUpdateOptions struct {
 // ManagementClientBeginUpgradeExtensionsOptions contains the optional parameters for the ManagementClient.BeginUpgradeExtensions
 // method.
 type ManagementClientBeginUpgradeExtensionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OSProfile - Specifies the operating system settings for the hybrid machine.
@@ -593,13 +597,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -735,7 +741,8 @@ type PrivateLinkScopeValidationDetails struct {
 // PrivateLinkScopesClientBeginDeleteOptions contains the optional parameters for the PrivateLinkScopesClient.BeginDelete
 // method.
 type PrivateLinkScopesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkScopesClientCreateOrUpdateOptions contains the optional parameters for the PrivateLinkScopesClient.CreateOrUpdate

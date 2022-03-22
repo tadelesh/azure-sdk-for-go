@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -106,16 +106,32 @@ func (client *SubAssessmentsClient) getHandleResponse(resp *http.Response) (SubA
 // (/providers/Microsoft.Management/managementGroups/mgName).
 // assessmentName - The Assessment Key - Unique key for the assessment type
 // options - SubAssessmentsClientListOptions contains the optional parameters for the SubAssessmentsClient.List method.
-func (client *SubAssessmentsClient) List(scope string, assessmentName string, options *SubAssessmentsClientListOptions) *SubAssessmentsClientListPager {
-	return &SubAssessmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, assessmentName, options)
+func (client *SubAssessmentsClient) List(scope string, assessmentName string, options *SubAssessmentsClientListOptions) *runtime.Pager[SubAssessmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAssessmentsClientListResponse]{
+		More: func(page SubAssessmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAssessmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SubAssessmentList.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAssessmentsClientListResponse) (SubAssessmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, assessmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAssessmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAssessmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAssessmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -151,16 +167,32 @@ func (client *SubAssessmentsClient) listHandleResponse(resp *http.Response) (Sub
 // scope - Scope of the query, can be subscription (/subscriptions/0b06d9ea-afe6-4779-bd59-30e5c2d9d13f) or management group
 // (/providers/Microsoft.Management/managementGroups/mgName).
 // options - SubAssessmentsClientListAllOptions contains the optional parameters for the SubAssessmentsClient.ListAll method.
-func (client *SubAssessmentsClient) ListAll(scope string, options *SubAssessmentsClientListAllOptions) *SubAssessmentsClientListAllPager {
-	return &SubAssessmentsClientListAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAllCreateRequest(ctx, scope, options)
+func (client *SubAssessmentsClient) ListAll(scope string, options *SubAssessmentsClientListAllOptions) *runtime.Pager[SubAssessmentsClientListAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAssessmentsClientListAllResponse]{
+		More: func(page SubAssessmentsClientListAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAssessmentsClientListAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SubAssessmentList.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAssessmentsClientListAllResponse) (SubAssessmentsClientListAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAllCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAssessmentsClientListAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAssessmentsClientListAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAssessmentsClientListAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAllCreateRequest creates the ListAll request.

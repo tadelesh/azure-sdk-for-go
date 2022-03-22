@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -167,7 +167,8 @@ type AzureADOnlyAuthenticationProperties struct {
 // AzureADOnlyAuthenticationsClientBeginCreateOptions contains the optional parameters for the AzureADOnlyAuthenticationsClient.BeginCreate
 // method.
 type AzureADOnlyAuthenticationsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AzureADOnlyAuthenticationsClientGetOptions contains the optional parameters for the AzureADOnlyAuthenticationsClient.Get
@@ -334,11 +335,14 @@ type BigDataPoolResourceProperties struct {
 type BigDataPoolsClientBeginCreateOrUpdateOptions struct {
 	// Whether to stop any running jobs in the Big Data pool
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BigDataPoolsClientBeginDeleteOptions contains the optional parameters for the BigDataPoolsClient.BeginDelete method.
 type BigDataPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BigDataPoolsClientGetOptions contains the optional parameters for the BigDataPoolsClient.Get method.
@@ -1439,18 +1443,21 @@ type IPFirewallRuleProperties struct {
 // IPFirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the IPFirewallRulesClient.BeginCreateOrUpdate
 // method.
 type IPFirewallRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPFirewallRulesClientBeginDeleteOptions contains the optional parameters for the IPFirewallRulesClient.BeginDelete method.
 type IPFirewallRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPFirewallRulesClientBeginReplaceAllOptions contains the optional parameters for the IPFirewallRulesClient.BeginReplaceAll
 // method.
 type IPFirewallRulesClientBeginReplaceAllOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPFirewallRulesClientGetOptions contains the optional parameters for the IPFirewallRulesClient.Get method.
@@ -1692,7 +1699,8 @@ type IntegrationRuntimeNodesClientUpdateOptions struct {
 // IntegrationRuntimeObjectMetadataClientBeginRefreshOptions contains the optional parameters for the IntegrationRuntimeObjectMetadataClient.BeginRefresh
 // method.
 type IntegrationRuntimeObjectMetadataClientBeginRefreshOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimeObjectMetadataClientListOptions contains the optional parameters for the IntegrationRuntimeObjectMetadataClient.List
@@ -1864,36 +1872,43 @@ type IntegrationRuntimesClientBeginCreateOptions struct {
 	// ETag of the integration runtime entity. Should only be specified for update, for which it should match existing entity
 	// or can be * for unconditional update.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginDeleteOptions contains the optional parameters for the IntegrationRuntimesClient.BeginDelete
 // method.
 type IntegrationRuntimesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginDisableInteractiveQueryOptions contains the optional parameters for the IntegrationRuntimesClient.BeginDisableInteractiveQuery
 // method.
 type IntegrationRuntimesClientBeginDisableInteractiveQueryOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginEnableInteractiveQueryOptions contains the optional parameters for the IntegrationRuntimesClient.BeginEnableInteractiveQuery
 // method.
 type IntegrationRuntimesClientBeginEnableInteractiveQueryOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginStartOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStart
 // method.
 type IntegrationRuntimesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginStopOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStop
 // method.
 type IntegrationRuntimesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientGetOptions contains the optional parameters for the IntegrationRuntimesClient.Get method.
@@ -2076,13 +2091,15 @@ type KustoPool struct {
 // KustoPoolAttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolAttachedDatabaseConfigurationsClient.BeginCreateOrUpdate
 // method.
 type KustoPoolAttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolAttachedDatabaseConfigurationsClientBeginDeleteOptions contains the optional parameters for the KustoPoolAttachedDatabaseConfigurationsClient.BeginDelete
 // method.
 type KustoPoolAttachedDatabaseConfigurationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolAttachedDatabaseConfigurationsClientGetOptions contains the optional parameters for the KustoPoolAttachedDatabaseConfigurationsClient.Get
@@ -2115,25 +2132,29 @@ type KustoPoolChildResourceClientCheckNameAvailabilityOptions struct {
 // KustoPoolDataConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolDataConnectionsClient.BeginCreateOrUpdate
 // method.
 type KustoPoolDataConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDataConnectionsClientBeginDataConnectionValidationOptions contains the optional parameters for the KustoPoolDataConnectionsClient.BeginDataConnectionValidation
 // method.
 type KustoPoolDataConnectionsClientBeginDataConnectionValidationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDataConnectionsClientBeginDeleteOptions contains the optional parameters for the KustoPoolDataConnectionsClient.BeginDelete
 // method.
 type KustoPoolDataConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDataConnectionsClientBeginUpdateOptions contains the optional parameters for the KustoPoolDataConnectionsClient.BeginUpdate
 // method.
 type KustoPoolDataConnectionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDataConnectionsClientCheckNameAvailabilityOptions contains the optional parameters for the KustoPoolDataConnectionsClient.CheckNameAvailability
@@ -2156,13 +2177,15 @@ type KustoPoolDataConnectionsClientListByDatabaseOptions struct {
 // KustoPoolDatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolDatabasePrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
 type KustoPoolDatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDatabasePrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the KustoPoolDatabasePrincipalAssignmentsClient.BeginDelete
 // method.
 type KustoPoolDatabasePrincipalAssignmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDatabasePrincipalAssignmentsClientCheckNameAvailabilityOptions contains the optional parameters for the KustoPoolDatabasePrincipalAssignmentsClient.CheckNameAvailability
@@ -2186,19 +2209,22 @@ type KustoPoolDatabasePrincipalAssignmentsClientListOptions struct {
 // KustoPoolDatabasesClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolDatabasesClient.BeginCreateOrUpdate
 // method.
 type KustoPoolDatabasesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDatabasesClientBeginDeleteOptions contains the optional parameters for the KustoPoolDatabasesClient.BeginDelete
 // method.
 type KustoPoolDatabasesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDatabasesClientBeginUpdateOptions contains the optional parameters for the KustoPoolDatabasesClient.BeginUpdate
 // method.
 type KustoPoolDatabasesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolDatabasesClientGetOptions contains the optional parameters for the KustoPoolDatabasesClient.Get method.
@@ -2221,13 +2247,15 @@ type KustoPoolListResult struct {
 // KustoPoolPrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolPrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
 type KustoPoolPrincipalAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolPrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the KustoPoolPrincipalAssignmentsClient.BeginDelete
 // method.
 type KustoPoolPrincipalAssignmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolPrincipalAssignmentsClientCheckNameAvailabilityOptions contains the optional parameters for the KustoPoolPrincipalAssignmentsClient.CheckNameAvailability
@@ -2305,7 +2333,8 @@ type KustoPoolUpdate struct {
 // KustoPoolsClientBeginAddLanguageExtensionsOptions contains the optional parameters for the KustoPoolsClient.BeginAddLanguageExtensions
 // method.
 type KustoPoolsClientBeginAddLanguageExtensionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the KustoPoolsClient.BeginCreateOrUpdate
@@ -2317,33 +2346,40 @@ type KustoPoolsClientBeginCreateOrUpdateOptions struct {
 	// Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto Pool. Other values will result
 	// in a 412 Pre-condition Failed response.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginDeleteOptions contains the optional parameters for the KustoPoolsClient.BeginDelete method.
 type KustoPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginDetachFollowerDatabasesOptions contains the optional parameters for the KustoPoolsClient.BeginDetachFollowerDatabases
 // method.
 type KustoPoolsClientBeginDetachFollowerDatabasesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginRemoveLanguageExtensionsOptions contains the optional parameters for the KustoPoolsClient.BeginRemoveLanguageExtensions
 // method.
 type KustoPoolsClientBeginRemoveLanguageExtensionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginStartOptions contains the optional parameters for the KustoPoolsClient.BeginStart method.
 type KustoPoolsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginStopOptions contains the optional parameters for the KustoPoolsClient.BeginStop method.
 type KustoPoolsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientBeginUpdateOptions contains the optional parameters for the KustoPoolsClient.BeginUpdate method.
@@ -2351,6 +2387,8 @@ type KustoPoolsClientBeginUpdateOptions struct {
 	// The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify the last-seen ETag value
 	// to prevent accidentally overwriting concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KustoPoolsClientCheckNameAvailabilityOptions contains the optional parameters for the KustoPoolsClient.CheckNameAvailability
@@ -3091,13 +3129,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -3183,7 +3223,8 @@ type PrivateLinkHubProperties struct {
 
 // PrivateLinkHubsClientBeginDeleteOptions contains the optional parameters for the PrivateLinkHubsClient.BeginDelete method.
 type PrivateLinkHubsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkHubsClientCreateOrUpdateOptions contains the optional parameters for the PrivateLinkHubsClient.CreateOrUpdate
@@ -4177,7 +4218,8 @@ type SQLPoolResourceProperties struct {
 // SQLPoolRestorePointsClientBeginCreateOptions contains the optional parameters for the SQLPoolRestorePointsClient.BeginCreate
 // method.
 type SQLPoolRestorePointsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolRestorePointsClientDeleteOptions contains the optional parameters for the SQLPoolRestorePointsClient.Delete method.
@@ -4505,7 +4547,8 @@ type SQLPoolVulnerabilityAssessmentScanExportProperties struct {
 // SQLPoolVulnerabilityAssessmentScansClientBeginInitiateScanOptions contains the optional parameters for the SQLPoolVulnerabilityAssessmentScansClient.BeginInitiateScan
 // method.
 type SQLPoolVulnerabilityAssessmentScansClientBeginInitiateScanOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolVulnerabilityAssessmentScansClientExportOptions contains the optional parameters for the SQLPoolVulnerabilityAssessmentScansClient.Export
@@ -4568,13 +4611,15 @@ type SQLPoolVulnerabilityAssessmentsClientListOptions struct {
 // SQLPoolWorkloadClassifierClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLPoolWorkloadClassifierClient.BeginCreateOrUpdate
 // method.
 type SQLPoolWorkloadClassifierClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolWorkloadClassifierClientBeginDeleteOptions contains the optional parameters for the SQLPoolWorkloadClassifierClient.BeginDelete
 // method.
 type SQLPoolWorkloadClassifierClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolWorkloadClassifierClientGetOptions contains the optional parameters for the SQLPoolWorkloadClassifierClient.Get
@@ -4592,13 +4637,15 @@ type SQLPoolWorkloadClassifierClientListOptions struct {
 // SQLPoolWorkloadGroupClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.BeginCreateOrUpdate
 // method.
 type SQLPoolWorkloadGroupClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolWorkloadGroupClientBeginDeleteOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.BeginDelete
 // method.
 type SQLPoolWorkloadGroupClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolWorkloadGroupClientGetOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.Get method.
@@ -4613,22 +4660,26 @@ type SQLPoolWorkloadGroupClientListOptions struct {
 
 // SQLPoolsClientBeginCreateOptions contains the optional parameters for the SQLPoolsClient.BeginCreate method.
 type SQLPoolsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolsClientBeginDeleteOptions contains the optional parameters for the SQLPoolsClient.BeginDelete method.
 type SQLPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolsClientBeginPauseOptions contains the optional parameters for the SQLPoolsClient.BeginPause method.
 type SQLPoolsClientBeginPauseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolsClientBeginResumeOptions contains the optional parameters for the SQLPoolsClient.BeginResume method.
 type SQLPoolsClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLPoolsClientGetOptions contains the optional parameters for the SQLPoolsClient.Get method.
@@ -5867,13 +5918,15 @@ type WorkspaceAADAdminInfo struct {
 // WorkspaceAADAdminsClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceAADAdminsClient.BeginCreateOrUpdate
 // method.
 type WorkspaceAADAdminsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceAADAdminsClientBeginDeleteOptions contains the optional parameters for the WorkspaceAADAdminsClient.BeginDelete
 // method.
 type WorkspaceAADAdminsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceAADAdminsClientGetOptions contains the optional parameters for the WorkspaceAADAdminsClient.Get method.
@@ -5902,7 +5955,8 @@ type WorkspaceKeyDetails struct {
 // WorkspaceManagedIdentitySQLControlSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceManagedIdentitySQLControlSettingsClient.BeginCreateOrUpdate
 // method.
 type WorkspaceManagedIdentitySQLControlSettingsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedIdentitySQLControlSettingsClientGetOptions contains the optional parameters for the WorkspaceManagedIdentitySQLControlSettingsClient.Get
@@ -5914,7 +5968,8 @@ type WorkspaceManagedIdentitySQLControlSettingsClientGetOptions struct {
 // WorkspaceManagedSQLServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the
 // WorkspaceManagedSQLServerBlobAuditingPoliciesClient.BeginCreateOrUpdate method.
 type WorkspaceManagedSQLServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedSQLServerBlobAuditingPoliciesClientGetOptions contains the optional parameters for the WorkspaceManagedSQLServerBlobAuditingPoliciesClient.Get
@@ -5932,13 +5987,15 @@ type WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceOptions s
 // WorkspaceManagedSQLServerEncryptionProtectorClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceManagedSQLServerEncryptionProtectorClient.BeginCreateOrUpdate
 // method.
 type WorkspaceManagedSQLServerEncryptionProtectorClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedSQLServerEncryptionProtectorClientBeginRevalidateOptions contains the optional parameters for the WorkspaceManagedSQLServerEncryptionProtectorClient.BeginRevalidate
 // method.
 type WorkspaceManagedSQLServerEncryptionProtectorClientBeginRevalidateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedSQLServerEncryptionProtectorClientGetOptions contains the optional parameters for the WorkspaceManagedSQLServerEncryptionProtectorClient.Get
@@ -5956,7 +6013,8 @@ type WorkspaceManagedSQLServerEncryptionProtectorClientListOptions struct {
 // WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters
 // for the WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient.BeginCreateOrUpdate method.
 type WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientGetOptions contains the optional parameters for the WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient.Get
@@ -5986,7 +6044,8 @@ type WorkspaceManagedSQLServerRecoverableSQLPoolsClientListOptions struct {
 // WorkspaceManagedSQLServerSecurityAlertPolicyClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceManagedSQLServerSecurityAlertPolicyClient.BeginCreateOrUpdate
 // method.
 type WorkspaceManagedSQLServerSecurityAlertPolicyClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceManagedSQLServerSecurityAlertPolicyClientGetOptions contains the optional parameters for the WorkspaceManagedSQLServerSecurityAlertPolicyClient.Get
@@ -6170,13 +6229,15 @@ type WorkspaceRepositoryConfiguration struct {
 // WorkspaceSQLAADAdminsClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceSQLAADAdminsClient.BeginCreateOrUpdate
 // method.
 type WorkspaceSQLAADAdminsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceSQLAADAdminsClientBeginDeleteOptions contains the optional parameters for the WorkspaceSQLAADAdminsClient.BeginDelete
 // method.
 type WorkspaceSQLAADAdminsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspaceSQLAADAdminsClientGetOptions contains the optional parameters for the WorkspaceSQLAADAdminsClient.Get method.
@@ -6187,17 +6248,20 @@ type WorkspaceSQLAADAdminsClientGetOptions struct {
 // WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
 type WorkspacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
 type WorkspacesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginUpdateOptions contains the optional parameters for the WorkspacesClient.BeginUpdate method.
 type WorkspacesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientGetOptions contains the optional parameters for the WorkspacesClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewManagedInstancePrivateEndpointConnectionsClient(subscriptionID string, c
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstancePrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the ManagedInstancePrivateEndpointConnectionsClient.BeginCreateOrUpdate method.
-func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, privateEndpointConnectionName string, parameters ManagedInstancePrivateEndpointConnection, options *ManagedInstancePrivateEndpointConnectionsClientBeginCreateOrUpdateOptions) (ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, privateEndpointConnectionName, parameters, options)
-	if err != nil {
-		return ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, privateEndpointConnectionName string, parameters ManagedInstancePrivateEndpointConnection, options *ManagedInstancePrivateEndpointConnectionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, privateEndpointConnectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdateResponse]("ManagedInstancePrivateEndpointConnectionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdateResponse]("ManagedInstancePrivateEndpointConnectionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstancePrivateEndpointConnectionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Approve or reject a private endpoint connection with a given name.
@@ -126,20 +122,16 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) createOrUpdateCre
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstancePrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the ManagedInstancePrivateEndpointConnectionsClient.BeginDelete
 // method.
-func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, privateEndpointConnectionName string, options *ManagedInstancePrivateEndpointConnectionsClientBeginDeleteOptions) (ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, privateEndpointConnectionName, options)
-	if err != nil {
-		return ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}, err
+func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, privateEndpointConnectionName string, options *ManagedInstancePrivateEndpointConnectionsClientBeginDeleteOptions) (*armruntime.Poller[ManagedInstancePrivateEndpointConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstancePrivateEndpointConnectionsClientDeleteResponse]("ManagedInstancePrivateEndpointConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstancePrivateEndpointConnectionsClientDeleteResponse]("ManagedInstancePrivateEndpointConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstancePrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstancePrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a private endpoint connection with a given name.
@@ -257,16 +249,32 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) getHandleResponse
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceOptions contains the optional parameters
 // for the ManagedInstancePrivateEndpointConnectionsClient.ListByManagedInstance method.
-func (client *ManagedInstancePrivateEndpointConnectionsClient) ListByManagedInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceOptions) *ManagedInstancePrivateEndpointConnectionsClientListByManagedInstancePager {
-	return &ManagedInstancePrivateEndpointConnectionsClientListByManagedInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagedInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstancePrivateEndpointConnectionsClient) ListByManagedInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceOptions) *runtime.Pager[ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse]{
+		More: func(page ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstancePrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse) (ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagedInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagedInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagedInstanceCreateRequest creates the ListByManagedInstance request.

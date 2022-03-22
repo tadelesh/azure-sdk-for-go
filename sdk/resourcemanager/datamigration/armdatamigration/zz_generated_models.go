@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1360,19 +1360,22 @@ type DatabaseMigrationSQLVM struct {
 // DatabaseMigrationsSQLMiClientBeginCancelOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCancel
 // method.
 type DatabaseMigrationsSQLMiClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLMiClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCreateOrUpdate
 // method.
 type DatabaseMigrationsSQLMiClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLMiClientBeginCutoverOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCutover
 // method.
 type DatabaseMigrationsSQLMiClientBeginCutoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLMiClientGetOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.Get method.
@@ -1388,19 +1391,22 @@ type DatabaseMigrationsSQLMiClientGetOptions struct {
 // DatabaseMigrationsSQLVMClientBeginCancelOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCancel
 // method.
 type DatabaseMigrationsSQLVMClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLVMClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCreateOrUpdate
 // method.
 type DatabaseMigrationsSQLVMClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLVMClientBeginCutoverOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCutover
 // method.
 type DatabaseMigrationsSQLVMClientBeginCutoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseMigrationsSQLVMClientGetOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.Get method.
@@ -5842,19 +5848,22 @@ type SQLMigrationServiceUpdate struct {
 // SQLMigrationServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLMigrationServicesClient.BeginCreateOrUpdate
 // method.
 type SQLMigrationServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLMigrationServicesClientBeginDeleteOptions contains the optional parameters for the SQLMigrationServicesClient.BeginDelete
 // method.
 type SQLMigrationServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLMigrationServicesClientBeginUpdateOptions contains the optional parameters for the SQLMigrationServicesClient.BeginUpdate
 // method.
 type SQLMigrationServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLMigrationServicesClientDeleteNodeOptions contains the optional parameters for the SQLMigrationServicesClient.DeleteNode
@@ -6179,28 +6188,34 @@ type ServiceTasksClientUpdateOptions struct {
 
 // ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate method.
 type ServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
 type ServicesClientBeginDeleteOptions struct {
 	// Delete the resource even if it contains running tasks
 	DeleteRunningTasks *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginStartOptions contains the optional parameters for the ServicesClient.BeginStart method.
 type ServicesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginStopOptions contains the optional parameters for the ServicesClient.BeginStop method.
 type ServicesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
 type ServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientCheckChildrenNameAvailabilityOptions contains the optional parameters for the ServicesClient.CheckChildrenNameAvailability

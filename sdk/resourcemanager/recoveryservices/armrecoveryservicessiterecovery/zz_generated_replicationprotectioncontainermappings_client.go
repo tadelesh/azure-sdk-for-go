@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -63,20 +63,16 @@ func NewReplicationProtectionContainerMappingsClient(resourceName string, resour
 // creationInput - Mapping creation input.
 // options - ReplicationProtectionContainerMappingsClientBeginCreateOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginCreate
 // method.
-func (client *ReplicationProtectionContainerMappingsClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, creationInput CreateProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginCreateOptions) (ReplicationProtectionContainerMappingsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, fabricName, protectionContainerName, mappingName, creationInput, options)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientCreatePollerResponse{}, err
+func (client *ReplicationProtectionContainerMappingsClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, creationInput CreateProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginCreateOptions) (*armruntime.Poller[ReplicationProtectionContainerMappingsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, fabricName, protectionContainerName, mappingName, creationInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainerMappingsClientCreateResponse]("ReplicationProtectionContainerMappingsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainerMappingsClientCreateResponse]("ReplicationProtectionContainerMappingsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainerMappingsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainerMappingsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - The operation to create a protection container mapping.
@@ -142,20 +138,16 @@ func (client *ReplicationProtectionContainerMappingsClient) createCreateRequest(
 // removalInput - Removal input.
 // options - ReplicationProtectionContainerMappingsClientBeginDeleteOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginDelete
 // method.
-func (client *ReplicationProtectionContainerMappingsClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, removalInput RemoveProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginDeleteOptions) (ReplicationProtectionContainerMappingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, mappingName, removalInput, options)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientDeletePollerResponse{}, err
+func (client *ReplicationProtectionContainerMappingsClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, removalInput RemoveProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginDeleteOptions) (*armruntime.Poller[ReplicationProtectionContainerMappingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, mappingName, removalInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainerMappingsClientDeleteResponse]("ReplicationProtectionContainerMappingsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainerMappingsClientDeleteResponse]("ReplicationProtectionContainerMappingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainerMappingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainerMappingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to delete or remove a protection container mapping.
@@ -285,16 +277,32 @@ func (client *ReplicationProtectionContainerMappingsClient) getHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationProtectionContainerMappingsClientListOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.List
 // method.
-func (client *ReplicationProtectionContainerMappingsClient) List(options *ReplicationProtectionContainerMappingsClientListOptions) *ReplicationProtectionContainerMappingsClientListPager {
-	return &ReplicationProtectionContainerMappingsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationProtectionContainerMappingsClient) List(options *ReplicationProtectionContainerMappingsClientListOptions) *runtime.Pager[ReplicationProtectionContainerMappingsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationProtectionContainerMappingsClientListResponse]{
+		More: func(page ReplicationProtectionContainerMappingsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationProtectionContainerMappingsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectionContainerMappingCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationProtectionContainerMappingsClientListResponse) (ReplicationProtectionContainerMappingsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationProtectionContainerMappingsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationProtectionContainerMappingsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationProtectionContainerMappingsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -338,16 +346,32 @@ func (client *ReplicationProtectionContainerMappingsClient) listHandleResponse(r
 // protectionContainerName - Protection container name.
 // options - ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersOptions contains the optional
 // parameters for the ReplicationProtectionContainerMappingsClient.ListByReplicationProtectionContainers method.
-func (client *ReplicationProtectionContainerMappingsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersOptions) *ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersPager {
-	return &ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+func (client *ReplicationProtectionContainerMappingsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersOptions) *runtime.Pager[ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse]{
+		More: func(page ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectionContainerMappingCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse) (ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationProtectionContainersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationProtectionContainersCreateRequest creates the ListByReplicationProtectionContainers request.
@@ -400,20 +424,16 @@ func (client *ReplicationProtectionContainerMappingsClient) listByReplicationPro
 // mappingName - Protection container mapping name.
 // options - ReplicationProtectionContainerMappingsClientBeginPurgeOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginPurge
 // method.
-func (client *ReplicationProtectionContainerMappingsClient) BeginPurge(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, options *ReplicationProtectionContainerMappingsClientBeginPurgeOptions) (ReplicationProtectionContainerMappingsClientPurgePollerResponse, error) {
-	resp, err := client.purge(ctx, fabricName, protectionContainerName, mappingName, options)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientPurgePollerResponse{}, err
+func (client *ReplicationProtectionContainerMappingsClient) BeginPurge(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, options *ReplicationProtectionContainerMappingsClientBeginPurgeOptions) (*armruntime.Poller[ReplicationProtectionContainerMappingsClientPurgeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purge(ctx, fabricName, protectionContainerName, mappingName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainerMappingsClientPurgeResponse]("ReplicationProtectionContainerMappingsClient.Purge", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainerMappingsClientPurgeResponse]("ReplicationProtectionContainerMappingsClient.Purge", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainerMappingsClientPurgePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Purge", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientPurgePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainerMappingsClientPurgePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Purge - The operation to purge(force delete) a protection container mapping.
@@ -478,20 +498,16 @@ func (client *ReplicationProtectionContainerMappingsClient) purgeCreateRequest(c
 // updateInput - Mapping update input.
 // options - ReplicationProtectionContainerMappingsClientBeginUpdateOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginUpdate
 // method.
-func (client *ReplicationProtectionContainerMappingsClient) BeginUpdate(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, updateInput UpdateProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginUpdateOptions) (ReplicationProtectionContainerMappingsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, fabricName, protectionContainerName, mappingName, updateInput, options)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}, err
+func (client *ReplicationProtectionContainerMappingsClient) BeginUpdate(ctx context.Context, fabricName string, protectionContainerName string, mappingName string, updateInput UpdateProtectionContainerMappingInput, options *ReplicationProtectionContainerMappingsClientBeginUpdateOptions) (*armruntime.Poller[ReplicationProtectionContainerMappingsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, fabricName, protectionContainerName, mappingName, updateInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainerMappingsClientUpdateResponse]("ReplicationProtectionContainerMappingsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainerMappingsClientUpdateResponse]("ReplicationProtectionContainerMappingsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainerMappingsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation to update protection container mapping.

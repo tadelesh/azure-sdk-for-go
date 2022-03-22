@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *MSIXPackagesClient) getHandleResponse(resp *http.Response) (MSIXPa
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // hostPoolName - The name of the host pool within the specified resource group
 // options - MSIXPackagesClientListOptions contains the optional parameters for the MSIXPackagesClient.List method.
-func (client *MSIXPackagesClient) List(resourceGroupName string, hostPoolName string, options *MSIXPackagesClientListOptions) *MSIXPackagesClientListPager {
-	return &MSIXPackagesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+func (client *MSIXPackagesClient) List(resourceGroupName string, hostPoolName string, options *MSIXPackagesClientListOptions) *runtime.Pager[MSIXPackagesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MSIXPackagesClientListResponse]{
+		More: func(page MSIXPackagesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MSIXPackagesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MSIXPackageList.NextLink)
+		Fetcher: func(ctx context.Context, page *MSIXPackagesClientListResponse) (MSIXPackagesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MSIXPackagesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MSIXPackagesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MSIXPackagesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

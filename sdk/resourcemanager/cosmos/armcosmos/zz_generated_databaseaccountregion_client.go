@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,13 +59,26 @@ func NewDatabaseAccountRegionClient(subscriptionID string, credential azcore.Tok
 // and timeGrain. The supported operator is eq.
 // options - DatabaseAccountRegionClientListMetricsOptions contains the optional parameters for the DatabaseAccountRegionClient.ListMetrics
 // method.
-func (client *DatabaseAccountRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, filter string, options *DatabaseAccountRegionClientListMetricsOptions) *DatabaseAccountRegionClientListMetricsPager {
-	return &DatabaseAccountRegionClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, filter, options)
+func (client *DatabaseAccountRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, filter string, options *DatabaseAccountRegionClientListMetricsOptions) *runtime.Pager[DatabaseAccountRegionClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountRegionClientListMetricsResponse]{
+		More: func(page DatabaseAccountRegionClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountRegionClientListMetricsResponse) (DatabaseAccountRegionClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, filter, options)
+			if err != nil {
+				return DatabaseAccountRegionClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountRegionClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountRegionClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

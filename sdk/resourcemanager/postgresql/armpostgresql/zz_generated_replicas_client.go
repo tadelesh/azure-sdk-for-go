@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewReplicasClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // serverName - The name of the server.
 // options - ReplicasClientListByServerOptions contains the optional parameters for the ReplicasClient.ListByServer method.
-func (client *ReplicasClient) ListByServer(resourceGroupName string, serverName string, options *ReplicasClientListByServerOptions) *ReplicasClientListByServerPager {
-	return &ReplicasClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ReplicasClient) ListByServer(resourceGroupName string, serverName string, options *ReplicasClientListByServerOptions) *runtime.Pager[ReplicasClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicasClientListByServerResponse]{
+		More: func(page ReplicasClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ReplicasClientListByServerResponse) (ReplicasClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ReplicasClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicasClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicasClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

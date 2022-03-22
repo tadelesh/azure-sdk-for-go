@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armscheduler
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // JobCollectionsClientCreateOrUpdateResponse contains the response from method JobCollectionsClient.CreateOrUpdate.
 type JobCollectionsClientCreateOrUpdateResponse struct {
 	JobCollectionDefinition
-}
-
-// JobCollectionsClientDeletePollerResponse contains the response from method JobCollectionsClient.Delete.
-type JobCollectionsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *JobCollectionsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l JobCollectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobCollectionsClientDeleteResponse, error) {
-	respType := JobCollectionsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a JobCollectionsClientDeletePollerResponse from the provided client and resume token.
-func (l *JobCollectionsClientDeletePollerResponse) Resume(ctx context.Context, client *JobCollectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("JobCollectionsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &JobCollectionsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // JobCollectionsClientDeleteResponse contains the response from method JobCollectionsClient.Delete.
@@ -59,79 +18,9 @@ type JobCollectionsClientDeleteResponse struct {
 	// placeholder for future response values
 }
 
-// JobCollectionsClientDisablePollerResponse contains the response from method JobCollectionsClient.Disable.
-type JobCollectionsClientDisablePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *JobCollectionsClientDisablePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l JobCollectionsClientDisablePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobCollectionsClientDisableResponse, error) {
-	respType := JobCollectionsClientDisableResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a JobCollectionsClientDisablePollerResponse from the provided client and resume token.
-func (l *JobCollectionsClientDisablePollerResponse) Resume(ctx context.Context, client *JobCollectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("JobCollectionsClient.Disable", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &JobCollectionsClientDisablePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // JobCollectionsClientDisableResponse contains the response from method JobCollectionsClient.Disable.
 type JobCollectionsClientDisableResponse struct {
 	// placeholder for future response values
-}
-
-// JobCollectionsClientEnablePollerResponse contains the response from method JobCollectionsClient.Enable.
-type JobCollectionsClientEnablePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *JobCollectionsClientEnablePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l JobCollectionsClientEnablePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobCollectionsClientEnableResponse, error) {
-	respType := JobCollectionsClientEnableResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a JobCollectionsClientEnablePollerResponse from the provided client and resume token.
-func (l *JobCollectionsClientEnablePollerResponse) Resume(ctx context.Context, client *JobCollectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("JobCollectionsClient.Enable", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &JobCollectionsClientEnablePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // JobCollectionsClientEnableResponse contains the response from method JobCollectionsClient.Enable.

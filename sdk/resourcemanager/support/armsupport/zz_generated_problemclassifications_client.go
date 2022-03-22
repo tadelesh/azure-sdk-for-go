@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -105,13 +105,26 @@ func (client *ProblemClassificationsClient) getHandleResponse(resp *http.Respons
 // serviceName - Name of the Azure service for which the problem classifications need to be retrieved.
 // options - ProblemClassificationsClientListOptions contains the optional parameters for the ProblemClassificationsClient.List
 // method.
-func (client *ProblemClassificationsClient) List(serviceName string, options *ProblemClassificationsClientListOptions) *ProblemClassificationsClientListPager {
-	return &ProblemClassificationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, serviceName, options)
+func (client *ProblemClassificationsClient) List(serviceName string, options *ProblemClassificationsClientListOptions) *runtime.Pager[ProblemClassificationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProblemClassificationsClientListResponse]{
+		More: func(page ProblemClassificationsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ProblemClassificationsClientListResponse) (ProblemClassificationsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, serviceName, options)
+			if err != nil {
+				return ProblemClassificationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProblemClassificationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProblemClassificationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

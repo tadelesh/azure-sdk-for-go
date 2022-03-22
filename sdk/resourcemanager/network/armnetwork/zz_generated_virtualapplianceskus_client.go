@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -105,16 +105,32 @@ func (client *VirtualApplianceSKUsClient) getHandleResponse(resp *http.Response)
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualApplianceSKUsClientListOptions contains the optional parameters for the VirtualApplianceSKUsClient.List
 // method.
-func (client *VirtualApplianceSKUsClient) List(options *VirtualApplianceSKUsClientListOptions) *VirtualApplianceSKUsClientListPager {
-	return &VirtualApplianceSKUsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VirtualApplianceSKUsClient) List(options *VirtualApplianceSKUsClientListOptions) *runtime.Pager[VirtualApplianceSKUsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualApplianceSKUsClientListResponse]{
+		More: func(page VirtualApplianceSKUsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualApplianceSKUsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualApplianceSKUListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualApplianceSKUsClientListResponse) (VirtualApplianceSKUsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualApplianceSKUsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualApplianceSKUsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualApplianceSKUsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

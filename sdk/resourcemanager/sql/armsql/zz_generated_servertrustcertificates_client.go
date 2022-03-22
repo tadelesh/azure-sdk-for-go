@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServerTrustCertificatesClient(subscriptionID string, credential azcore.T
 // parameters - The server trust certificate info.
 // options - ServerTrustCertificatesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerTrustCertificatesClient.BeginCreateOrUpdate
 // method.
-func (client *ServerTrustCertificatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, certificateName string, parameters ServerTrustCertificate, options *ServerTrustCertificatesClientBeginCreateOrUpdateOptions) (ServerTrustCertificatesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, certificateName, parameters, options)
-	if err != nil {
-		return ServerTrustCertificatesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerTrustCertificatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, certificateName string, parameters ServerTrustCertificate, options *ServerTrustCertificatesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerTrustCertificatesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, certificateName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerTrustCertificatesClientCreateOrUpdateResponse]("ServerTrustCertificatesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerTrustCertificatesClientCreateOrUpdateResponse]("ServerTrustCertificatesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerTrustCertificatesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerTrustCertificatesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServerTrustCertificatesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerTrustCertificatesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Uploads a server trust certificate from box to Sql Managed Instance.
@@ -129,20 +125,16 @@ func (client *ServerTrustCertificatesClient) createOrUpdateCreateRequest(ctx con
 // certificateName - Name of of the certificate to delete.
 // options - ServerTrustCertificatesClientBeginDeleteOptions contains the optional parameters for the ServerTrustCertificatesClient.BeginDelete
 // method.
-func (client *ServerTrustCertificatesClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, certificateName string, options *ServerTrustCertificatesClientBeginDeleteOptions) (ServerTrustCertificatesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, certificateName, options)
-	if err != nil {
-		return ServerTrustCertificatesClientDeletePollerResponse{}, err
+func (client *ServerTrustCertificatesClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, certificateName string, options *ServerTrustCertificatesClientBeginDeleteOptions) (*armruntime.Poller[ServerTrustCertificatesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, certificateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerTrustCertificatesClientDeleteResponse]("ServerTrustCertificatesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerTrustCertificatesClientDeleteResponse]("ServerTrustCertificatesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerTrustCertificatesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerTrustCertificatesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServerTrustCertificatesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServerTrustCertificatesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a server trust certificate that was uploaded from box to Sql Managed Instance.
@@ -261,16 +253,32 @@ func (client *ServerTrustCertificatesClient) getHandleResponse(resp *http.Respon
 // managedInstanceName - The name of the managed instance.
 // options - ServerTrustCertificatesClientListByInstanceOptions contains the optional parameters for the ServerTrustCertificatesClient.ListByInstance
 // method.
-func (client *ServerTrustCertificatesClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ServerTrustCertificatesClientListByInstanceOptions) *ServerTrustCertificatesClientListByInstancePager {
-	return &ServerTrustCertificatesClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ServerTrustCertificatesClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ServerTrustCertificatesClientListByInstanceOptions) *runtime.Pager[ServerTrustCertificatesClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerTrustCertificatesClientListByInstanceResponse]{
+		More: func(page ServerTrustCertificatesClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServerTrustCertificatesClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerTrustCertificatesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServerTrustCertificatesClientListByInstanceResponse) (ServerTrustCertificatesClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServerTrustCertificatesClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerTrustCertificatesClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerTrustCertificatesClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.

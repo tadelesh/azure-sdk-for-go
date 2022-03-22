@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,20 +113,16 @@ func (client *AccountsClient) checkPackageNameAvailabilityHandleResponse(resp *h
 // testBaseAccountName - The resource name of the Test Base Account.
 // parameters - Parameters supplied to create a Test Base Account.
 // options - AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
-func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, parameters AccountResource, options *AccountsClientBeginCreateOptions) (AccountsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, parameters, options)
-	if err != nil {
-		return AccountsClientCreatePollerResponse{}, err
+func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, parameters AccountResource, options *AccountsClientBeginCreateOptions) (*armruntime.Poller[AccountsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientCreateResponse]("AccountsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientCreateResponse]("AccountsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AccountsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AccountsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create or replace (overwrite/recreate, with potential downtime) a Test Base Account in the specified subscription.
@@ -180,20 +176,16 @@ func (client *AccountsClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The name of the resource group that contains the resource.
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
-func (client *AccountsClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, options *AccountsClientBeginDeleteOptions) (AccountsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, options)
-	if err != nil {
-		return AccountsClientDeletePollerResponse{}, err
+func (client *AccountsClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, options *AccountsClientBeginDeleteOptions) (*armruntime.Poller[AccountsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientDeleteResponse]("AccountsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientDeleteResponse]("AccountsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AccountsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AccountsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Test Base Account.
@@ -358,16 +350,32 @@ func (client *AccountsClient) getFileUploadURLHandleResponse(resp *http.Response
 // resourceGroupName - The name of the resource group that contains the resource.
 // options - AccountsClientListByResourceGroupOptions contains the optional parameters for the AccountsClient.ListByResourceGroup
 // method.
-func (client *AccountsClient) ListByResourceGroup(resourceGroupName string, options *AccountsClientListByResourceGroupOptions) *AccountsClientListByResourceGroupPager {
-	return &AccountsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AccountsClient) ListByResourceGroup(resourceGroupName string, options *AccountsClientListByResourceGroupOptions) *runtime.Pager[AccountsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListByResourceGroupResponse]{
+		More: func(page AccountsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListByResourceGroupResponse) (AccountsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -408,16 +416,32 @@ func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountsClientListBySubscriptionOptions contains the optional parameters for the AccountsClient.ListBySubscription
 // method.
-func (client *AccountsClient) ListBySubscription(options *AccountsClientListBySubscriptionOptions) *AccountsClientListBySubscriptionPager {
-	return &AccountsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AccountsClient) ListBySubscription(options *AccountsClientListBySubscriptionOptions) *runtime.Pager[AccountsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListBySubscriptionResponse]{
+		More: func(page AccountsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListBySubscriptionResponse) (AccountsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -455,20 +479,16 @@ func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group that contains the resource.
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - AccountsClientBeginOffboardOptions contains the optional parameters for the AccountsClient.BeginOffboard method.
-func (client *AccountsClient) BeginOffboard(ctx context.Context, resourceGroupName string, testBaseAccountName string, options *AccountsClientBeginOffboardOptions) (AccountsClientOffboardPollerResponse, error) {
-	resp, err := client.offboard(ctx, resourceGroupName, testBaseAccountName, options)
-	if err != nil {
-		return AccountsClientOffboardPollerResponse{}, err
+func (client *AccountsClient) BeginOffboard(ctx context.Context, resourceGroupName string, testBaseAccountName string, options *AccountsClientBeginOffboardOptions) (*armruntime.Poller[AccountsClientOffboardResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.offboard(ctx, resourceGroupName, testBaseAccountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientOffboardResponse]("AccountsClient.Offboard", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientOffboardResponse]("AccountsClient.Offboard", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientOffboardPollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Offboard", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AccountsClientOffboardPollerResponse{}, err
-	}
-	result.Poller = &AccountsClientOffboardPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Offboard - Offboard a Test Base Account.
@@ -520,20 +540,16 @@ func (client *AccountsClient) offboardCreateRequest(ctx context.Context, resourc
 // testBaseAccountName - The resource name of the Test Base Account.
 // parameters - Parameters supplied to update a Test Base Account.
 // options - AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
-func (client *AccountsClient) BeginUpdate(ctx context.Context, resourceGroupName string, testBaseAccountName string, parameters AccountUpdateParameters, options *AccountsClientBeginUpdateOptions) (AccountsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, testBaseAccountName, parameters, options)
-	if err != nil {
-		return AccountsClientUpdatePollerResponse{}, err
+func (client *AccountsClient) BeginUpdate(ctx context.Context, resourceGroupName string, testBaseAccountName string, parameters AccountUpdateParameters, options *AccountsClientBeginUpdateOptions) (*armruntime.Poller[AccountsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, testBaseAccountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientUpdateResponse]("AccountsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientUpdateResponse]("AccountsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AccountsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AccountsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update an existing Test Base Account.

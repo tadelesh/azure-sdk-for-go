@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -10,7 +10,7 @@ package armvideoanalyzer
 
 const (
 	moduleName    = "armvideoanalyzer"
-	moduleVersion = "v0.2.1"
+	moduleVersion = "v0.3.0"
 )
 
 // AccessPolicyEccAlgo - Elliptical curve algorithm to be used: ES256, ES384 or ES512.

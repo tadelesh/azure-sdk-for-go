@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewLinkedServerClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - Parameters supplied to the Create Linked server operation.
 // options - LinkedServerClientBeginCreateOptions contains the optional parameters for the LinkedServerClient.BeginCreate
 // method.
-func (client *LinkedServerClient) BeginCreate(ctx context.Context, resourceGroupName string, name string, linkedServerName string, parameters LinkedServerCreateParameters, options *LinkedServerClientBeginCreateOptions) (LinkedServerClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, name, linkedServerName, parameters, options)
-	if err != nil {
-		return LinkedServerClientCreatePollerResponse{}, err
+func (client *LinkedServerClient) BeginCreate(ctx context.Context, resourceGroupName string, name string, linkedServerName string, parameters LinkedServerCreateParameters, options *LinkedServerClientBeginCreateOptions) (*armruntime.Poller[LinkedServerClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, name, linkedServerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LinkedServerClientCreateResponse]("LinkedServerClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LinkedServerClientCreateResponse]("LinkedServerClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := LinkedServerClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("LinkedServerClient.Create", "", resp, client.pl)
-	if err != nil {
-		return LinkedServerClientCreatePollerResponse{}, err
-	}
-	result.Poller = &LinkedServerClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Adds a linked server to the Redis cache (requires Premium SKU).
@@ -237,16 +233,32 @@ func (client *LinkedServerClient) getHandleResponse(resp *http.Response) (Linked
 // resourceGroupName - The name of the resource group.
 // name - The name of the redis cache.
 // options - LinkedServerClientListOptions contains the optional parameters for the LinkedServerClient.List method.
-func (client *LinkedServerClient) List(resourceGroupName string, name string, options *LinkedServerClientListOptions) *LinkedServerClientListPager {
-	return &LinkedServerClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, name, options)
+func (client *LinkedServerClient) List(resourceGroupName string, name string, options *LinkedServerClientListOptions) *runtime.Pager[LinkedServerClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinkedServerClientListResponse]{
+		More: func(page LinkedServerClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LinkedServerClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LinkedServerWithPropertiesList.NextLink)
+		Fetcher: func(ctx context.Context, page *LinkedServerClientListResponse) (LinkedServerClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LinkedServerClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinkedServerClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinkedServerClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

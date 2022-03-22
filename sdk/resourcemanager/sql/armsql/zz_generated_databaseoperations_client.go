@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,16 +111,32 @@ func (client *DatabaseOperationsClient) cancelCreateRequest(ctx context.Context,
 // databaseName - The name of the database.
 // options - DatabaseOperationsClientListByDatabaseOptions contains the optional parameters for the DatabaseOperationsClient.ListByDatabase
 // method.
-func (client *DatabaseOperationsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseOperationsClientListByDatabaseOptions) *DatabaseOperationsClientListByDatabasePager {
-	return &DatabaseOperationsClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DatabaseOperationsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseOperationsClientListByDatabaseOptions) *runtime.Pager[DatabaseOperationsClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseOperationsClientListByDatabaseResponse]{
+		More: func(page DatabaseOperationsClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabaseOperationsClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseOperationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabaseOperationsClientListByDatabaseResponse) (DatabaseOperationsClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabaseOperationsClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseOperationsClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseOperationsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

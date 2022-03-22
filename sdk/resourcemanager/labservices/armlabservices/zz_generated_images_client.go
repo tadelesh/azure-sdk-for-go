@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -178,16 +178,32 @@ func (client *ImagesClient) getHandleResponse(resp *http.Response) (ImagesClient
 // labPlanName - The name of the lab plan that uniquely identifies it within containing resource group. Used in resource URIs
 // and in UI.
 // options - ImagesClientListByLabPlanOptions contains the optional parameters for the ImagesClient.ListByLabPlan method.
-func (client *ImagesClient) ListByLabPlan(resourceGroupName string, labPlanName string, options *ImagesClientListByLabPlanOptions) *ImagesClientListByLabPlanPager {
-	return &ImagesClientListByLabPlanPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLabPlanCreateRequest(ctx, resourceGroupName, labPlanName, options)
+func (client *ImagesClient) ListByLabPlan(resourceGroupName string, labPlanName string, options *ImagesClientListByLabPlanOptions) *runtime.Pager[ImagesClientListByLabPlanResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ImagesClientListByLabPlanResponse]{
+		More: func(page ImagesClientListByLabPlanResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ImagesClientListByLabPlanResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedImages.NextLink)
+		Fetcher: func(ctx context.Context, page *ImagesClientListByLabPlanResponse) (ImagesClientListByLabPlanResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByLabPlanCreateRequest(ctx, resourceGroupName, labPlanName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ImagesClientListByLabPlanResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ImagesClientListByLabPlanResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ImagesClientListByLabPlanResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLabPlanHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByLabPlanCreateRequest creates the ListByLabPlan request.

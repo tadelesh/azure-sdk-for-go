@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewScopeMapsClient(subscriptionID string, credential azcore.TokenCredential
 // scopeMapName - The name of the scope map.
 // scopeMapCreateParameters - The parameters for creating a scope map.
 // options - ScopeMapsClientBeginCreateOptions contains the optional parameters for the ScopeMapsClient.BeginCreate method.
-func (client *ScopeMapsClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, scopeMapCreateParameters ScopeMap, options *ScopeMapsClientBeginCreateOptions) (ScopeMapsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, scopeMapName, scopeMapCreateParameters, options)
-	if err != nil {
-		return ScopeMapsClientCreatePollerResponse{}, err
+func (client *ScopeMapsClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, scopeMapCreateParameters ScopeMap, options *ScopeMapsClientBeginCreateOptions) (*armruntime.Poller[ScopeMapsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, scopeMapName, scopeMapCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScopeMapsClientCreateResponse]("ScopeMapsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScopeMapsClientCreateResponse]("ScopeMapsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ScopeMapsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ScopeMapsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ScopeMapsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ScopeMapsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a scope map for a container registry with the specified parameters.
@@ -125,20 +121,16 @@ func (client *ScopeMapsClient) createCreateRequest(ctx context.Context, resource
 // registryName - The name of the container registry.
 // scopeMapName - The name of the scope map.
 // options - ScopeMapsClientBeginDeleteOptions contains the optional parameters for the ScopeMapsClient.BeginDelete method.
-func (client *ScopeMapsClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, options *ScopeMapsClientBeginDeleteOptions) (ScopeMapsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, scopeMapName, options)
-	if err != nil {
-		return ScopeMapsClientDeletePollerResponse{}, err
+func (client *ScopeMapsClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, options *ScopeMapsClientBeginDeleteOptions) (*armruntime.Poller[ScopeMapsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, scopeMapName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScopeMapsClientDeleteResponse]("ScopeMapsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScopeMapsClientDeleteResponse]("ScopeMapsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ScopeMapsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ScopeMapsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ScopeMapsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ScopeMapsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a scope map from a container registry.
@@ -253,16 +245,32 @@ func (client *ScopeMapsClient) getHandleResponse(resp *http.Response) (ScopeMaps
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - ScopeMapsClientListOptions contains the optional parameters for the ScopeMapsClient.List method.
-func (client *ScopeMapsClient) List(resourceGroupName string, registryName string, options *ScopeMapsClientListOptions) *ScopeMapsClientListPager {
-	return &ScopeMapsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *ScopeMapsClient) List(resourceGroupName string, registryName string, options *ScopeMapsClientListOptions) *runtime.Pager[ScopeMapsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScopeMapsClientListResponse]{
+		More: func(page ScopeMapsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScopeMapsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScopeMapListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ScopeMapsClientListResponse) (ScopeMapsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScopeMapsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScopeMapsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScopeMapsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -307,20 +315,16 @@ func (client *ScopeMapsClient) listHandleResponse(resp *http.Response) (ScopeMap
 // scopeMapName - The name of the scope map.
 // scopeMapUpdateParameters - The parameters for updating a scope map.
 // options - ScopeMapsClientBeginUpdateOptions contains the optional parameters for the ScopeMapsClient.BeginUpdate method.
-func (client *ScopeMapsClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, scopeMapUpdateParameters ScopeMapUpdateParameters, options *ScopeMapsClientBeginUpdateOptions) (ScopeMapsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, registryName, scopeMapName, scopeMapUpdateParameters, options)
-	if err != nil {
-		return ScopeMapsClientUpdatePollerResponse{}, err
+func (client *ScopeMapsClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, scopeMapName string, scopeMapUpdateParameters ScopeMapUpdateParameters, options *ScopeMapsClientBeginUpdateOptions) (*armruntime.Poller[ScopeMapsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, registryName, scopeMapName, scopeMapUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScopeMapsClientUpdateResponse]("ScopeMapsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScopeMapsClientUpdateResponse]("ScopeMapsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ScopeMapsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ScopeMapsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ScopeMapsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ScopeMapsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a scope map with the specified parameters.

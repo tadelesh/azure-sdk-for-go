@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -136,16 +136,32 @@ func (client *JobTargetExecutionsClient) getHandleResponse(resp *http.Response) 
 // jobExecutionID - The id of the job execution
 // options - JobTargetExecutionsClientListByJobExecutionOptions contains the optional parameters for the JobTargetExecutionsClient.ListByJobExecution
 // method.
-func (client *JobTargetExecutionsClient) ListByJobExecution(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, options *JobTargetExecutionsClientListByJobExecutionOptions) *JobTargetExecutionsClientListByJobExecutionPager {
-	return &JobTargetExecutionsClientListByJobExecutionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByJobExecutionCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, options)
+func (client *JobTargetExecutionsClient) ListByJobExecution(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, options *JobTargetExecutionsClientListByJobExecutionOptions) *runtime.Pager[JobTargetExecutionsClientListByJobExecutionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobTargetExecutionsClientListByJobExecutionResponse]{
+		More: func(page JobTargetExecutionsClientListByJobExecutionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobTargetExecutionsClientListByJobExecutionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobExecutionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobTargetExecutionsClientListByJobExecutionResponse) (JobTargetExecutionsClientListByJobExecutionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByJobExecutionCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobTargetExecutionsClientListByJobExecutionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobTargetExecutionsClientListByJobExecutionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobTargetExecutionsClientListByJobExecutionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByJobExecutionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByJobExecutionCreateRequest creates the ListByJobExecution request.
@@ -224,16 +240,32 @@ func (client *JobTargetExecutionsClient) listByJobExecutionHandleResponse(resp *
 // stepName - The name of the step.
 // options - JobTargetExecutionsClientListByStepOptions contains the optional parameters for the JobTargetExecutionsClient.ListByStep
 // method.
-func (client *JobTargetExecutionsClient) ListByStep(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, stepName string, options *JobTargetExecutionsClientListByStepOptions) *JobTargetExecutionsClientListByStepPager {
-	return &JobTargetExecutionsClientListByStepPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByStepCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, stepName, options)
+func (client *JobTargetExecutionsClient) ListByStep(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, stepName string, options *JobTargetExecutionsClientListByStepOptions) *runtime.Pager[JobTargetExecutionsClientListByStepResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobTargetExecutionsClientListByStepResponse]{
+		More: func(page JobTargetExecutionsClientListByStepResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobTargetExecutionsClientListByStepResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobExecutionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobTargetExecutionsClientListByStepResponse) (JobTargetExecutionsClientListByStepResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByStepCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, stepName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobTargetExecutionsClientListByStepResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobTargetExecutionsClientListByStepResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobTargetExecutionsClientListByStepResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByStepHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByStepCreateRequest creates the ListByStep request.

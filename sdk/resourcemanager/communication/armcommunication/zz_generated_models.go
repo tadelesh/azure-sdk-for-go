@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -162,11 +162,14 @@ type Resource struct {
 type ServiceClientBeginCreateOrUpdateOptions struct {
 	// Parameters for the create or update operation
 	Parameters *ServiceResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginDeleteOptions contains the optional parameters for the ServiceClient.BeginDelete method.
 type ServiceClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientCheckNameAvailabilityOptions contains the optional parameters for the ServiceClient.CheckNameAvailability

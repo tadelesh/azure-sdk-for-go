@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armpowerbidedicated
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AutoScaleVCoresClientCreateResponse contains the response from method AutoScaleVCoresClient.Create.
 type AutoScaleVCoresClientCreateResponse struct {
@@ -49,79 +43,9 @@ type CapacitiesClientCheckNameAvailabilityResponse struct {
 	CheckCapacityNameAvailabilityResult
 }
 
-// CapacitiesClientCreatePollerResponse contains the response from method CapacitiesClient.Create.
-type CapacitiesClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CapacitiesClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CapacitiesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientCreateResponse, error) {
-	respType := CapacitiesClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CapacitiesClientCreatePollerResponse from the provided client and resume token.
-func (l *CapacitiesClientCreatePollerResponse) Resume(ctx context.Context, client *CapacitiesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CapacitiesClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CapacitiesClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // CapacitiesClientCreateResponse contains the response from method CapacitiesClient.Create.
 type CapacitiesClientCreateResponse struct {
 	DedicatedCapacity
-}
-
-// CapacitiesClientDeletePollerResponse contains the response from method CapacitiesClient.Delete.
-type CapacitiesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CapacitiesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CapacitiesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientDeleteResponse, error) {
-	respType := CapacitiesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CapacitiesClientDeletePollerResponse from the provided client and resume token.
-func (l *CapacitiesClientDeletePollerResponse) Resume(ctx context.Context, client *CapacitiesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CapacitiesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CapacitiesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // CapacitiesClientDeleteResponse contains the response from method CapacitiesClient.Delete.
@@ -154,119 +78,14 @@ type CapacitiesClientListSKUsResponse struct {
 	SKUEnumerationForNewResourceResult
 }
 
-// CapacitiesClientResumePollerResponse contains the response from method CapacitiesClient.Resume.
-type CapacitiesClientResumePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CapacitiesClientResumePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CapacitiesClientResumePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientResumeResponse, error) {
-	respType := CapacitiesClientResumeResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CapacitiesClientResumePollerResponse from the provided client and resume token.
-func (l *CapacitiesClientResumePollerResponse) Resume(ctx context.Context, client *CapacitiesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CapacitiesClient.Resume", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CapacitiesClientResumePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // CapacitiesClientResumeResponse contains the response from method CapacitiesClient.Resume.
 type CapacitiesClientResumeResponse struct {
 	// placeholder for future response values
 }
 
-// CapacitiesClientSuspendPollerResponse contains the response from method CapacitiesClient.Suspend.
-type CapacitiesClientSuspendPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CapacitiesClientSuspendPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CapacitiesClientSuspendPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientSuspendResponse, error) {
-	respType := CapacitiesClientSuspendResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CapacitiesClientSuspendPollerResponse from the provided client and resume token.
-func (l *CapacitiesClientSuspendPollerResponse) Resume(ctx context.Context, client *CapacitiesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CapacitiesClient.Suspend", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CapacitiesClientSuspendPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // CapacitiesClientSuspendResponse contains the response from method CapacitiesClient.Suspend.
 type CapacitiesClientSuspendResponse struct {
 	// placeholder for future response values
-}
-
-// CapacitiesClientUpdatePollerResponse contains the response from method CapacitiesClient.Update.
-type CapacitiesClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CapacitiesClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CapacitiesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientUpdateResponse, error) {
-	respType := CapacitiesClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CapacitiesClientUpdatePollerResponse from the provided client and resume token.
-func (l *CapacitiesClientUpdatePollerResponse) Resume(ctx context.Context, client *CapacitiesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CapacitiesClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CapacitiesClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // CapacitiesClientUpdateResponse contains the response from method CapacitiesClient.Update.

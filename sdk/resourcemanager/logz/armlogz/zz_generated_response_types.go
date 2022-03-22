@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armlogz
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // MonitorClientListVMHostUpdateResponse contains the response from method MonitorClient.ListVMHostUpdate.
 type MonitorClientListVMHostUpdateResponse struct {
@@ -29,79 +23,9 @@ type MonitorClientVMHostPayloadResponse struct {
 	VMExtensionPayload
 }
 
-// MonitorsClientCreatePollerResponse contains the response from method MonitorsClient.Create.
-type MonitorsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MonitorsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MonitorsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MonitorsClientCreateResponse, error) {
-	respType := MonitorsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MonitorResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MonitorsClientCreatePollerResponse from the provided client and resume token.
-func (l *MonitorsClientCreatePollerResponse) Resume(ctx context.Context, client *MonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MonitorsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MonitorsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // MonitorsClientCreateResponse contains the response from method MonitorsClient.Create.
 type MonitorsClientCreateResponse struct {
 	MonitorResource
-}
-
-// MonitorsClientDeletePollerResponse contains the response from method MonitorsClient.Delete.
-type MonitorsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MonitorsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MonitorsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MonitorsClientDeleteResponse, error) {
-	respType := MonitorsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MonitorsClientDeletePollerResponse from the provided client and resume token.
-func (l *MonitorsClientDeletePollerResponse) Resume(ctx context.Context, client *MonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MonitorsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MonitorsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // MonitorsClientDeleteResponse contains the response from method MonitorsClient.Delete.
@@ -144,41 +68,6 @@ type OperationsClientListResponse struct {
 	OperationListResult
 }
 
-// SingleSignOnClientCreateOrUpdatePollerResponse contains the response from method SingleSignOnClient.CreateOrUpdate.
-type SingleSignOnClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SingleSignOnClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SingleSignOnClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SingleSignOnClientCreateOrUpdateResponse, error) {
-	respType := SingleSignOnClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SingleSignOnResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SingleSignOnClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *SingleSignOnClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *SingleSignOnClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SingleSignOnClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SingleSignOnClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SingleSignOnClientCreateOrUpdateResponse contains the response from method SingleSignOnClient.CreateOrUpdate.
 type SingleSignOnClientCreateOrUpdateResponse struct {
 	SingleSignOnResource
@@ -194,79 +83,9 @@ type SingleSignOnClientListResponse struct {
 	SingleSignOnResourceListResponse
 }
 
-// SubAccountClientCreatePollerResponse contains the response from method SubAccountClient.Create.
-type SubAccountClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SubAccountClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SubAccountClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubAccountClientCreateResponse, error) {
-	respType := SubAccountClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MonitorResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SubAccountClientCreatePollerResponse from the provided client and resume token.
-func (l *SubAccountClientCreatePollerResponse) Resume(ctx context.Context, client *SubAccountClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SubAccountClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SubAccountClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SubAccountClientCreateResponse contains the response from method SubAccountClient.Create.
 type SubAccountClientCreateResponse struct {
 	MonitorResource
-}
-
-// SubAccountClientDeletePollerResponse contains the response from method SubAccountClient.Delete.
-type SubAccountClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SubAccountClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SubAccountClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubAccountClientDeleteResponse, error) {
-	respType := SubAccountClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SubAccountClientDeletePollerResponse from the provided client and resume token.
-func (l *SubAccountClientDeletePollerResponse) Resume(ctx context.Context, client *SubAccountClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SubAccountClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SubAccountClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SubAccountClientDeleteResponse contains the response from method SubAccountClient.Delete.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -119,16 +119,32 @@ func (client *IssueClient) getHandleResponse(resp *http.Response) (IssueClientGe
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - IssueClientListByServiceOptions contains the optional parameters for the IssueClient.ListByService method.
-func (client *IssueClient) ListByService(resourceGroupName string, serviceName string, options *IssueClientListByServiceOptions) *IssueClientListByServicePager {
-	return &IssueClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *IssueClient) ListByService(resourceGroupName string, serviceName string, options *IssueClientListByServiceOptions) *runtime.Pager[IssueClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IssueClientListByServiceResponse]{
+		More: func(page IssueClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IssueClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IssueCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *IssueClientListByServiceResponse) (IssueClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IssueClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IssueClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IssueClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

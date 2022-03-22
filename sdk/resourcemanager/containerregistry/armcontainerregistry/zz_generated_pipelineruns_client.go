@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewPipelineRunsClient(subscriptionID string, credential azcore.TokenCredent
 // pipelineRunCreateParameters - The parameters for creating a pipeline run.
 // options - PipelineRunsClientBeginCreateOptions contains the optional parameters for the PipelineRunsClient.BeginCreate
 // method.
-func (client *PipelineRunsClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, pipelineRunName string, pipelineRunCreateParameters PipelineRun, options *PipelineRunsClientBeginCreateOptions) (PipelineRunsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, pipelineRunName, pipelineRunCreateParameters, options)
-	if err != nil {
-		return PipelineRunsClientCreatePollerResponse{}, err
+func (client *PipelineRunsClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, pipelineRunName string, pipelineRunCreateParameters PipelineRun, options *PipelineRunsClientBeginCreateOptions) (*armruntime.Poller[PipelineRunsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, pipelineRunName, pipelineRunCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PipelineRunsClientCreateResponse]("PipelineRunsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PipelineRunsClientCreateResponse]("PipelineRunsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := PipelineRunsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("PipelineRunsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return PipelineRunsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &PipelineRunsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a pipeline run for a container registry with the specified parameters
@@ -127,20 +123,16 @@ func (client *PipelineRunsClient) createCreateRequest(ctx context.Context, resou
 // pipelineRunName - The name of the pipeline run.
 // options - PipelineRunsClientBeginDeleteOptions contains the optional parameters for the PipelineRunsClient.BeginDelete
 // method.
-func (client *PipelineRunsClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, pipelineRunName string, options *PipelineRunsClientBeginDeleteOptions) (PipelineRunsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, pipelineRunName, options)
-	if err != nil {
-		return PipelineRunsClientDeletePollerResponse{}, err
+func (client *PipelineRunsClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, pipelineRunName string, options *PipelineRunsClientBeginDeleteOptions) (*armruntime.Poller[PipelineRunsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, pipelineRunName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PipelineRunsClientDeleteResponse]("PipelineRunsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PipelineRunsClientDeleteResponse]("PipelineRunsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PipelineRunsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PipelineRunsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PipelineRunsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PipelineRunsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a pipeline run from a container registry.
@@ -255,16 +247,32 @@ func (client *PipelineRunsClient) getHandleResponse(resp *http.Response) (Pipeli
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - PipelineRunsClientListOptions contains the optional parameters for the PipelineRunsClient.List method.
-func (client *PipelineRunsClient) List(resourceGroupName string, registryName string, options *PipelineRunsClientListOptions) *PipelineRunsClientListPager {
-	return &PipelineRunsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *PipelineRunsClient) List(resourceGroupName string, registryName string, options *PipelineRunsClientListOptions) *runtime.Pager[PipelineRunsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PipelineRunsClientListResponse]{
+		More: func(page PipelineRunsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PipelineRunsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PipelineRunListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PipelineRunsClientListResponse) (PipelineRunsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PipelineRunsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PipelineRunsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PipelineRunsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

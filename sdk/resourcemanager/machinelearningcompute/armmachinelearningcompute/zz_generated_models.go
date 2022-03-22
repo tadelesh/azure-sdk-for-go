@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -264,7 +264,8 @@ type OperationalizationClusterUpdateParameters struct {
 // OperationalizationClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the OperationalizationClustersClient.BeginCreateOrUpdate
 // method.
 type OperationalizationClustersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OperationalizationClustersClientBeginDeleteOptions contains the optional parameters for the OperationalizationClustersClient.BeginDelete
@@ -272,12 +273,15 @@ type OperationalizationClustersClientBeginCreateOrUpdateOptions struct {
 type OperationalizationClustersClientBeginDeleteOptions struct {
 	// If true, deletes all resources associated with this cluster.
 	DeleteAll *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OperationalizationClustersClientBeginUpdateSystemServicesOptions contains the optional parameters for the OperationalizationClustersClient.BeginUpdateSystemServices
 // method.
 type OperationalizationClustersClientBeginUpdateSystemServicesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OperationalizationClustersClientCheckSystemServicesUpdatesAvailableOptions contains the optional parameters for the OperationalizationClustersClient.CheckSystemServicesUpdatesAvailable

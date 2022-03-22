@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,16 +228,32 @@ func (client *DataSourcesClient) getHandleResponse(resp *http.Response) (DataSou
 // filter - The filter to apply on the operation.
 // options - DataSourcesClientListByWorkspaceOptions contains the optional parameters for the DataSourcesClient.ListByWorkspace
 // method.
-func (client *DataSourcesClient) ListByWorkspace(resourceGroupName string, workspaceName string, filter string, options *DataSourcesClientListByWorkspaceOptions) *DataSourcesClientListByWorkspacePager {
-	return &DataSourcesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, filter, options)
+func (client *DataSourcesClient) ListByWorkspace(resourceGroupName string, workspaceName string, filter string, options *DataSourcesClientListByWorkspaceOptions) *runtime.Pager[DataSourcesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataSourcesClientListByWorkspaceResponse]{
+		More: func(page DataSourcesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataSourcesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataSourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataSourcesClientListByWorkspaceResponse) (DataSourcesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, filter, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataSourcesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataSourcesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataSourcesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

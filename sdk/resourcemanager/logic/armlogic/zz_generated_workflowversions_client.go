@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,16 +115,32 @@ func (client *WorkflowVersionsClient) getHandleResponse(resp *http.Response) (Wo
 // resourceGroupName - The resource group name.
 // workflowName - The workflow name.
 // options - WorkflowVersionsClientListOptions contains the optional parameters for the WorkflowVersionsClient.List method.
-func (client *WorkflowVersionsClient) List(resourceGroupName string, workflowName string, options *WorkflowVersionsClientListOptions) *WorkflowVersionsClientListPager {
-	return &WorkflowVersionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workflowName, options)
+func (client *WorkflowVersionsClient) List(resourceGroupName string, workflowName string, options *WorkflowVersionsClientListOptions) *runtime.Pager[WorkflowVersionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowVersionsClientListResponse]{
+		More: func(page WorkflowVersionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkflowVersionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkflowVersionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkflowVersionsClientListResponse) (WorkflowVersionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workflowName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkflowVersionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowVersionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowVersionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

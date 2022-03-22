@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -47,16 +47,32 @@ func NewOuContainerOperationsClient(credential azcore.TokenCredential, options *
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OuContainerOperationsClientListOptions contains the optional parameters for the OuContainerOperationsClient.List
 // method.
-func (client *OuContainerOperationsClient) List(options *OuContainerOperationsClientListOptions) *OuContainerOperationsClientListPager {
-	return &OuContainerOperationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *OuContainerOperationsClient) List(options *OuContainerOperationsClientListOptions) *runtime.Pager[OuContainerOperationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OuContainerOperationsClientListResponse]{
+		More: func(page OuContainerOperationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OuContainerOperationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OperationEntityListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OuContainerOperationsClientListResponse) (OuContainerOperationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OuContainerOperationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OuContainerOperationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OuContainerOperationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

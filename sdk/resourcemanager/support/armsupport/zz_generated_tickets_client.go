@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,20 +120,16 @@ func (client *TicketsClient) checkNameAvailabilityHandleResponse(resp *http.Resp
 // supportTicketName - Support ticket name.
 // createSupportTicketParameters - Support ticket request payload.
 // options - TicketsClientBeginCreateOptions contains the optional parameters for the TicketsClient.BeginCreate method.
-func (client *TicketsClient) BeginCreate(ctx context.Context, supportTicketName string, createSupportTicketParameters TicketDetails, options *TicketsClientBeginCreateOptions) (TicketsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, supportTicketName, createSupportTicketParameters, options)
-	if err != nil {
-		return TicketsClientCreatePollerResponse{}, err
+func (client *TicketsClient) BeginCreate(ctx context.Context, supportTicketName string, createSupportTicketParameters TicketDetails, options *TicketsClientBeginCreateOptions) (*armruntime.Poller[TicketsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, supportTicketName, createSupportTicketParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TicketsClientCreateResponse]("TicketsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TicketsClientCreateResponse]("TicketsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := TicketsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("TicketsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return TicketsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &TicketsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new support ticket for Subscription and Service limits (Quota), Technical, Billing, and Subscription
@@ -251,16 +247,32 @@ func (client *TicketsClient) getHandleResponse(resp *http.Response) (TicketsClie
 // a request for data might cause an error.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TicketsClientListOptions contains the optional parameters for the TicketsClient.List method.
-func (client *TicketsClient) List(options *TicketsClientListOptions) *TicketsClientListPager {
-	return &TicketsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *TicketsClient) List(options *TicketsClientListOptions) *runtime.Pager[TicketsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TicketsClientListResponse]{
+		More: func(page TicketsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TicketsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TicketsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TicketsClientListResponse) (TicketsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TicketsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TicketsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TicketsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

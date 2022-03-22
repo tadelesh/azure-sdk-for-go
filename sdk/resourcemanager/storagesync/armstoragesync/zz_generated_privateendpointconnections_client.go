@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewPrivateEndpointConnectionsClient(subscriptionID string, credential azcor
 // properties - The private endpoint connection properties.
 // options - PrivateEndpointConnectionsClientBeginCreateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreate
 // method.
-func (client *PrivateEndpointConnectionsClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsClientBeginCreateOptions) (PrivateEndpointConnectionsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, privateEndpointConnectionName, properties, options)
-	if err != nil {
-		return PrivateEndpointConnectionsClientCreatePollerResponse{}, err
+func (client *PrivateEndpointConnectionsClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsClientBeginCreateOptions) (*armruntime.Poller[PrivateEndpointConnectionsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, privateEndpointConnectionName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsClientCreateResponse]("PrivateEndpointConnectionsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsClientCreateResponse]("PrivateEndpointConnectionsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Update the state of specified private endpoint connection associated with the storage sync service.
@@ -127,20 +123,16 @@ func (client *PrivateEndpointConnectionsClient) createCreateRequest(ctx context.
 // privateEndpointConnectionName - The name of the private endpoint connection associated with the Azure resource
 // options - PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
-func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsClientBeginDeleteOptions) (PrivateEndpointConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, privateEndpointConnectionName, options)
-	if err != nil {
-		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
+func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsClientDeleteResponse]("PrivateEndpointConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsClientDeleteResponse]("PrivateEndpointConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified private endpoint connection associated with the storage sync service.
@@ -257,13 +249,26 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - PrivateEndpointConnectionsClientListByStorageSyncServiceOptions contains the optional parameters for the PrivateEndpointConnectionsClient.ListByStorageSyncService
 // method.
-func (client *PrivateEndpointConnectionsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *PrivateEndpointConnectionsClientListByStorageSyncServiceOptions) *PrivateEndpointConnectionsClientListByStorageSyncServicePager {
-	return &PrivateEndpointConnectionsClientListByStorageSyncServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+func (client *PrivateEndpointConnectionsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *PrivateEndpointConnectionsClientListByStorageSyncServiceOptions) *runtime.Pager[PrivateEndpointConnectionsClientListByStorageSyncServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsClientListByStorageSyncServiceResponse]{
+		More: func(page PrivateEndpointConnectionsClientListByStorageSyncServiceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsClientListByStorageSyncServiceResponse) (PrivateEndpointConnectionsClientListByStorageSyncServiceResponse, error) {
+			req, err := client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByStorageSyncServiceHandleResponse(resp)
+		},
+	})
 }
 
 // listByStorageSyncServiceCreateRequest creates the ListByStorageSyncService request.

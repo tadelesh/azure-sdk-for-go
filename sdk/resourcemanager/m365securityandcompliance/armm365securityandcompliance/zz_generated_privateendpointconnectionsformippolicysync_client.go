@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewPrivateEndpointConnectionsForMIPPolicySyncClient(subscriptionID string, 
 // properties - The private endpoint connection properties.
 // options - PrivateEndpointConnectionsForMIPPolicySyncClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the PrivateEndpointConnectionsForMIPPolicySyncClient.BeginCreateOrUpdate method.
-func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsForMIPPolicySyncClientBeginCreateOrUpdateOptions) (PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, properties, options)
-	if err != nil {
-		return PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
+func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsForMIPPolicySyncClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse]("PrivateEndpointConnectionsForMIPPolicySyncClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse]("PrivateEndpointConnectionsForMIPPolicySyncClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForMIPPolicySyncClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Update the state of the specified private endpoint connection associated with the service.
@@ -127,20 +123,16 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) createOrUpdateCr
 // privateEndpointConnectionName - The name of the private endpoint connection associated with the Azure resource
 // options - PrivateEndpointConnectionsForMIPPolicySyncClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsForMIPPolicySyncClient.BeginDelete
 // method.
-func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsForMIPPolicySyncClientBeginDeleteOptions) (PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, options)
-	if err != nil {
-		return PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}, err
+func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsForMIPPolicySyncClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse]("PrivateEndpointConnectionsForMIPPolicySyncClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse]("PrivateEndpointConnectionsForMIPPolicySyncClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForMIPPolicySyncClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsForMIPPolicySyncClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a private endpoint connection.
@@ -257,16 +249,32 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) getHandleRespons
 // resourceName - The name of the service instance.
 // options - PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceOptions contains the optional parameters for the
 // PrivateEndpointConnectionsForMIPPolicySyncClient.ListByService method.
-func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) ListByService(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceOptions) *PrivateEndpointConnectionsForMIPPolicySyncClientListByServicePager {
-	return &PrivateEndpointConnectionsForMIPPolicySyncClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) ListByService(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceOptions) *runtime.Pager[PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse]{
+		More: func(page PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse) (PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

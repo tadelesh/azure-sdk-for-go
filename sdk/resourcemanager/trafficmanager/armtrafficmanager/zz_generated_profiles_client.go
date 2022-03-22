@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -264,13 +264,26 @@ func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesCl
 // resourceGroupName - The name of the resource group containing the Traffic Manager profiles to be listed.
 // options - ProfilesClientListByResourceGroupOptions contains the optional parameters for the ProfilesClient.ListByResourceGroup
 // method.
-func (client *ProfilesClient) ListByResourceGroup(resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) *ProfilesClientListByResourceGroupPager {
-	return &ProfilesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ProfilesClient) ListByResourceGroup(resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) *runtime.Pager[ProfilesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListByResourceGroupResponse]{
+		More: func(page ProfilesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ProfilesClientListByResourceGroupResponse) (ProfilesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ProfilesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -308,13 +321,26 @@ func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProfilesClientListBySubscriptionOptions contains the optional parameters for the ProfilesClient.ListBySubscription
 // method.
-func (client *ProfilesClient) ListBySubscription(options *ProfilesClientListBySubscriptionOptions) *ProfilesClientListBySubscriptionPager {
-	return &ProfilesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ProfilesClient) ListBySubscription(options *ProfilesClientListBySubscriptionOptions) *runtime.Pager[ProfilesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListBySubscriptionResponse]{
+		More: func(page ProfilesClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ProfilesClientListBySubscriptionResponse) (ProfilesClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return ProfilesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

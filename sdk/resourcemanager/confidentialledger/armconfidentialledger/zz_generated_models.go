@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,17 +117,20 @@ type ErrorResponse struct {
 
 // LedgerClientBeginCreateOptions contains the optional parameters for the LedgerClient.BeginCreate method.
 type LedgerClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LedgerClientBeginDeleteOptions contains the optional parameters for the LedgerClient.BeginDelete method.
 type LedgerClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LedgerClientBeginUpdateOptions contains the optional parameters for the LedgerClient.BeginUpdate method.
 type LedgerClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LedgerClientGetOptions contains the optional parameters for the LedgerClient.Get method.

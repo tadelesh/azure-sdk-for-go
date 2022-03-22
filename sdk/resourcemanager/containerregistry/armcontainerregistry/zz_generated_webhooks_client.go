@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewWebhooksClient(subscriptionID string, credential azcore.TokenCredential,
 // webhookName - The name of the webhook.
 // webhookCreateParameters - The parameters for creating a webhook.
 // options - WebhooksClientBeginCreateOptions contains the optional parameters for the WebhooksClient.BeginCreate method.
-func (client *WebhooksClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookCreateParameters WebhookCreateParameters, options *WebhooksClientBeginCreateOptions) (WebhooksClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, webhookName, webhookCreateParameters, options)
-	if err != nil {
-		return WebhooksClientCreatePollerResponse{}, err
+func (client *WebhooksClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookCreateParameters WebhookCreateParameters, options *WebhooksClientBeginCreateOptions) (*armruntime.Poller[WebhooksClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, webhookName, webhookCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WebhooksClientCreateResponse]("WebhooksClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WebhooksClientCreateResponse]("WebhooksClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := WebhooksClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("WebhooksClient.Create", "", resp, client.pl)
-	if err != nil {
-		return WebhooksClientCreatePollerResponse{}, err
-	}
-	result.Poller = &WebhooksClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a webhook for a container registry with the specified parameters.
@@ -125,20 +121,16 @@ func (client *WebhooksClient) createCreateRequest(ctx context.Context, resourceG
 // registryName - The name of the container registry.
 // webhookName - The name of the webhook.
 // options - WebhooksClientBeginDeleteOptions contains the optional parameters for the WebhooksClient.BeginDelete method.
-func (client *WebhooksClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, webhookName string, options *WebhooksClientBeginDeleteOptions) (WebhooksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, webhookName, options)
-	if err != nil {
-		return WebhooksClientDeletePollerResponse{}, err
+func (client *WebhooksClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, webhookName string, options *WebhooksClientBeginDeleteOptions) (*armruntime.Poller[WebhooksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, webhookName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WebhooksClientDeleteResponse]("WebhooksClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WebhooksClientDeleteResponse]("WebhooksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WebhooksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WebhooksClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return WebhooksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WebhooksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a webhook from a container registry.
@@ -313,16 +305,32 @@ func (client *WebhooksClient) getCallbackConfigHandleResponse(resp *http.Respons
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - WebhooksClientListOptions contains the optional parameters for the WebhooksClient.List method.
-func (client *WebhooksClient) List(resourceGroupName string, registryName string, options *WebhooksClientListOptions) *WebhooksClientListPager {
-	return &WebhooksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *WebhooksClient) List(resourceGroupName string, registryName string, options *WebhooksClientListOptions) *runtime.Pager[WebhooksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebhooksClientListResponse]{
+		More: func(page WebhooksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebhooksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebhookListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebhooksClientListResponse) (WebhooksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebhooksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebhooksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebhooksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -366,16 +374,32 @@ func (client *WebhooksClient) listHandleResponse(resp *http.Response) (WebhooksC
 // registryName - The name of the container registry.
 // webhookName - The name of the webhook.
 // options - WebhooksClientListEventsOptions contains the optional parameters for the WebhooksClient.ListEvents method.
-func (client *WebhooksClient) ListEvents(resourceGroupName string, registryName string, webhookName string, options *WebhooksClientListEventsOptions) *WebhooksClientListEventsPager {
-	return &WebhooksClientListEventsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listEventsCreateRequest(ctx, resourceGroupName, registryName, webhookName, options)
+func (client *WebhooksClient) ListEvents(resourceGroupName string, registryName string, webhookName string, options *WebhooksClientListEventsOptions) *runtime.Pager[WebhooksClientListEventsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebhooksClientListEventsResponse]{
+		More: func(page WebhooksClientListEventsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebhooksClientListEventsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EventListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebhooksClientListEventsResponse) (WebhooksClientListEventsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listEventsCreateRequest(ctx, resourceGroupName, registryName, webhookName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebhooksClientListEventsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebhooksClientListEventsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebhooksClientListEventsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listEventsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listEventsCreateRequest creates the ListEvents request.
@@ -484,20 +508,16 @@ func (client *WebhooksClient) pingHandleResponse(resp *http.Response) (WebhooksC
 // webhookName - The name of the webhook.
 // webhookUpdateParameters - The parameters for updating a webhook.
 // options - WebhooksClientBeginUpdateOptions contains the optional parameters for the WebhooksClient.BeginUpdate method.
-func (client *WebhooksClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookUpdateParameters WebhookUpdateParameters, options *WebhooksClientBeginUpdateOptions) (WebhooksClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, registryName, webhookName, webhookUpdateParameters, options)
-	if err != nil {
-		return WebhooksClientUpdatePollerResponse{}, err
+func (client *WebhooksClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookUpdateParameters WebhookUpdateParameters, options *WebhooksClientBeginUpdateOptions) (*armruntime.Poller[WebhooksClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, registryName, webhookName, webhookUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WebhooksClientUpdateResponse]("WebhooksClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WebhooksClientUpdateResponse]("WebhooksClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := WebhooksClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WebhooksClient.Update", "", resp, client.pl)
-	if err != nil {
-		return WebhooksClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &WebhooksClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a webhook with the specified parameters.

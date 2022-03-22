@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armrecoveryservicesbackup
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // BMSPrepareDataMoveOperationResultClientGetResponse contains the response from method BMSPrepareDataMoveOperationResultClient.Get.
 type BMSPrepareDataMoveOperationResultClientGetResponse struct {
@@ -139,79 +133,9 @@ type BackupsClientTriggerResponse struct {
 	// placeholder for future response values
 }
 
-// ClientBMSPrepareDataMovePollerResponse contains the response from method Client.BMSPrepareDataMove.
-type ClientBMSPrepareDataMovePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ClientBMSPrepareDataMovePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ClientBMSPrepareDataMovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientBMSPrepareDataMoveResponse, error) {
-	respType := ClientBMSPrepareDataMoveResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ClientBMSPrepareDataMovePollerResponse from the provided client and resume token.
-func (l *ClientBMSPrepareDataMovePollerResponse) Resume(ctx context.Context, client *Client, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("Client.BMSPrepareDataMove", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ClientBMSPrepareDataMovePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ClientBMSPrepareDataMoveResponse contains the response from method Client.BMSPrepareDataMove.
 type ClientBMSPrepareDataMoveResponse struct {
 	// placeholder for future response values
-}
-
-// ClientBMSTriggerDataMovePollerResponse contains the response from method Client.BMSTriggerDataMove.
-type ClientBMSTriggerDataMovePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ClientBMSTriggerDataMovePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ClientBMSTriggerDataMovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientBMSTriggerDataMoveResponse, error) {
-	respType := ClientBMSTriggerDataMoveResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ClientBMSTriggerDataMovePollerResponse from the provided client and resume token.
-func (l *ClientBMSTriggerDataMovePollerResponse) Resume(ctx context.Context, client *Client, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("Client.BMSTriggerDataMove", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ClientBMSTriggerDataMovePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ClientBMSTriggerDataMoveResponse contains the response from method Client.BMSTriggerDataMove.
@@ -222,41 +146,6 @@ type ClientBMSTriggerDataMoveResponse struct {
 // ClientGetOperationStatusResponse contains the response from method Client.GetOperationStatus.
 type ClientGetOperationStatusResponse struct {
 	OperationStatus
-}
-
-// ClientMoveRecoveryPointPollerResponse contains the response from method Client.MoveRecoveryPoint.
-type ClientMoveRecoveryPointPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ClientMoveRecoveryPointPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ClientMoveRecoveryPointPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientMoveRecoveryPointResponse, error) {
-	respType := ClientMoveRecoveryPointResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ClientMoveRecoveryPointPollerResponse from the provided client and resume token.
-func (l *ClientMoveRecoveryPointPollerResponse) Resume(ctx context.Context, client *Client, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("Client.MoveRecoveryPoint", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ClientMoveRecoveryPointPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ClientMoveRecoveryPointResponse contains the response from method Client.MoveRecoveryPoint.
@@ -319,41 +208,6 @@ type PrivateEndpointClientGetOperationStatusResponse struct {
 	OperationStatus
 }
 
-// PrivateEndpointConnectionClientDeletePollerResponse contains the response from method PrivateEndpointConnectionClient.Delete.
-type PrivateEndpointConnectionClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateEndpointConnectionClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateEndpointConnectionClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionClientDeleteResponse, error) {
-	respType := PrivateEndpointConnectionClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateEndpointConnectionClientDeletePollerResponse from the provided client and resume token.
-func (l *PrivateEndpointConnectionClientDeletePollerResponse) Resume(ctx context.Context, client *PrivateEndpointConnectionClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateEndpointConnectionClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateEndpointConnectionClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // PrivateEndpointConnectionClientDeleteResponse contains the response from method PrivateEndpointConnectionClient.Delete.
 type PrivateEndpointConnectionClientDeleteResponse struct {
 	// placeholder for future response values
@@ -362,41 +216,6 @@ type PrivateEndpointConnectionClientDeleteResponse struct {
 // PrivateEndpointConnectionClientGetResponse contains the response from method PrivateEndpointConnectionClient.Get.
 type PrivateEndpointConnectionClientGetResponse struct {
 	PrivateEndpointConnectionResource
-}
-
-// PrivateEndpointConnectionClientPutPollerResponse contains the response from method PrivateEndpointConnectionClient.Put.
-type PrivateEndpointConnectionClientPutPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateEndpointConnectionClientPutPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateEndpointConnectionClientPutPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionClientPutResponse, error) {
-	respType := PrivateEndpointConnectionClientPutResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnectionResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateEndpointConnectionClientPutPollerResponse from the provided client and resume token.
-func (l *PrivateEndpointConnectionClientPutPollerResponse) Resume(ctx context.Context, client *PrivateEndpointConnectionClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateEndpointConnectionClient.Put", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateEndpointConnectionClientPutPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PrivateEndpointConnectionClientPutResponse contains the response from method PrivateEndpointConnectionClient.Put.
@@ -494,41 +313,6 @@ type ProtectionPoliciesClientCreateOrUpdateResponse struct {
 	ProtectionPolicyResource
 }
 
-// ProtectionPoliciesClientDeletePollerResponse contains the response from method ProtectionPoliciesClient.Delete.
-type ProtectionPoliciesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProtectionPoliciesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProtectionPoliciesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProtectionPoliciesClientDeleteResponse, error) {
-	respType := ProtectionPoliciesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProtectionPoliciesClientDeletePollerResponse from the provided client and resume token.
-func (l *ProtectionPoliciesClientDeletePollerResponse) Resume(ctx context.Context, client *ProtectionPoliciesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProtectionPoliciesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProtectionPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ProtectionPoliciesClientDeleteResponse contains the response from method ProtectionPoliciesClient.Delete.
 type ProtectionPoliciesClientDeleteResponse struct {
 	// placeholder for future response values
@@ -589,41 +373,6 @@ type ResourceGuardProxyClientUnlockDeleteResponse struct {
 	UnlockDeleteResponse
 }
 
-// RestoresClientTriggerPollerResponse contains the response from method RestoresClient.Trigger.
-type RestoresClientTriggerPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *RestoresClientTriggerPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l RestoresClientTriggerPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RestoresClientTriggerResponse, error) {
-	respType := RestoresClientTriggerResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a RestoresClientTriggerPollerResponse from the provided client and resume token.
-func (l *RestoresClientTriggerPollerResponse) Resume(ctx context.Context, client *RestoresClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("RestoresClient.Trigger", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &RestoresClientTriggerPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // RestoresClientTriggerResponse contains the response from method RestoresClient.Trigger.
 type RestoresClientTriggerResponse struct {
 	// placeholder for future response values
@@ -632,41 +381,6 @@ type RestoresClientTriggerResponse struct {
 // SecurityPINsClientGetResponse contains the response from method SecurityPINsClient.Get.
 type SecurityPINsClientGetResponse struct {
 	TokenInformation
-}
-
-// ValidateOperationClientTriggerPollerResponse contains the response from method ValidateOperationClient.Trigger.
-type ValidateOperationClientTriggerPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ValidateOperationClientTriggerPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ValidateOperationClientTriggerPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ValidateOperationClientTriggerResponse, error) {
-	respType := ValidateOperationClientTriggerResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ValidateOperationClientTriggerPollerResponse from the provided client and resume token.
-func (l *ValidateOperationClientTriggerPollerResponse) Resume(ctx context.Context, client *ValidateOperationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ValidateOperationClient.Trigger", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ValidateOperationClientTriggerPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ValidateOperationClientTriggerResponse contains the response from method ValidateOperationClient.Trigger.

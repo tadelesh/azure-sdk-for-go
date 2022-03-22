@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewTokensClient(subscriptionID string, credential azcore.TokenCredential, o
 // tokenName - The name of the token.
 // tokenCreateParameters - The parameters for creating a token.
 // options - TokensClientBeginCreateOptions contains the optional parameters for the TokensClient.BeginCreate method.
-func (client *TokensClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, tokenName string, tokenCreateParameters Token, options *TokensClientBeginCreateOptions) (TokensClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, tokenName, tokenCreateParameters, options)
-	if err != nil {
-		return TokensClientCreatePollerResponse{}, err
+func (client *TokensClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, tokenName string, tokenCreateParameters Token, options *TokensClientBeginCreateOptions) (*armruntime.Poller[TokensClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, tokenName, tokenCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TokensClientCreateResponse]("TokensClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TokensClientCreateResponse]("TokensClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := TokensClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("TokensClient.Create", "", resp, client.pl)
-	if err != nil {
-		return TokensClientCreatePollerResponse{}, err
-	}
-	result.Poller = &TokensClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a token for a container registry with the specified parameters.
@@ -125,20 +121,16 @@ func (client *TokensClient) createCreateRequest(ctx context.Context, resourceGro
 // registryName - The name of the container registry.
 // tokenName - The name of the token.
 // options - TokensClientBeginDeleteOptions contains the optional parameters for the TokensClient.BeginDelete method.
-func (client *TokensClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, tokenName string, options *TokensClientBeginDeleteOptions) (TokensClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, tokenName, options)
-	if err != nil {
-		return TokensClientDeletePollerResponse{}, err
+func (client *TokensClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, tokenName string, options *TokensClientBeginDeleteOptions) (*armruntime.Poller[TokensClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, tokenName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TokensClientDeleteResponse]("TokensClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TokensClientDeleteResponse]("TokensClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TokensClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TokensClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TokensClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TokensClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a token from a container registry.
@@ -253,16 +245,32 @@ func (client *TokensClient) getHandleResponse(resp *http.Response) (TokensClient
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - TokensClientListOptions contains the optional parameters for the TokensClient.List method.
-func (client *TokensClient) List(resourceGroupName string, registryName string, options *TokensClientListOptions) *TokensClientListPager {
-	return &TokensClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *TokensClient) List(resourceGroupName string, registryName string, options *TokensClientListOptions) *runtime.Pager[TokensClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TokensClientListResponse]{
+		More: func(page TokensClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TokensClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TokenListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TokensClientListResponse) (TokensClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TokensClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TokensClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TokensClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -307,20 +315,16 @@ func (client *TokensClient) listHandleResponse(resp *http.Response) (TokensClien
 // tokenName - The name of the token.
 // tokenUpdateParameters - The parameters for updating a token.
 // options - TokensClientBeginUpdateOptions contains the optional parameters for the TokensClient.BeginUpdate method.
-func (client *TokensClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, tokenName string, tokenUpdateParameters TokenUpdateParameters, options *TokensClientBeginUpdateOptions) (TokensClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, registryName, tokenName, tokenUpdateParameters, options)
-	if err != nil {
-		return TokensClientUpdatePollerResponse{}, err
+func (client *TokensClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, tokenName string, tokenUpdateParameters TokenUpdateParameters, options *TokensClientBeginUpdateOptions) (*armruntime.Poller[TokensClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, registryName, tokenName, tokenUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TokensClientUpdateResponse]("TokensClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TokensClientUpdateResponse]("TokensClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := TokensClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("TokensClient.Update", "", resp, client.pl)
-	if err != nil {
-		return TokensClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &TokensClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a token with the specified parameters.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewServicesClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The name of the resource group that contains the service instance.
 // resourceName - The name of the service instance.
 // options - ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
-func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ServicesClientBeginDeleteOptions) (ServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
+func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ServicesClientBeginDeleteOptions) (*armruntime.Poller[ServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientDeleteResponse]("ServicesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientDeleteResponse]("ServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a service instance.

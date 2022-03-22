@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -125,16 +125,32 @@ func (client *UserSubscriptionClient) getHandleResponse(resp *http.Response) (Us
 // serviceName - The name of the API Management service.
 // userID - User identifier. Must be unique in the current API Management service instance.
 // options - UserSubscriptionClientListOptions contains the optional parameters for the UserSubscriptionClient.List method.
-func (client *UserSubscriptionClient) List(resourceGroupName string, serviceName string, userID string, options *UserSubscriptionClientListOptions) *UserSubscriptionClientListPager {
-	return &UserSubscriptionClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, userID, options)
+func (client *UserSubscriptionClient) List(resourceGroupName string, serviceName string, userID string, options *UserSubscriptionClientListOptions) *runtime.Pager[UserSubscriptionClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserSubscriptionClientListResponse]{
+		More: func(page UserSubscriptionClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserSubscriptionClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SubscriptionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *UserSubscriptionClientListResponse) (UserSubscriptionClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, userID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserSubscriptionClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserSubscriptionClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserSubscriptionClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

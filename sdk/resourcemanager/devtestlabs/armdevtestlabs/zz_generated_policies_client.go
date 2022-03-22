@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -246,16 +246,32 @@ func (client *PoliciesClient) getHandleResponse(resp *http.Response) (PoliciesCl
 // labName - The name of the lab.
 // policySetName - The name of the policy set.
 // options - PoliciesClientListOptions contains the optional parameters for the PoliciesClient.List method.
-func (client *PoliciesClient) List(resourceGroupName string, labName string, policySetName string, options *PoliciesClientListOptions) *PoliciesClientListPager {
-	return &PoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, policySetName, options)
+func (client *PoliciesClient) List(resourceGroupName string, labName string, policySetName string, options *PoliciesClientListOptions) *runtime.Pager[PoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PoliciesClientListResponse]{
+		More: func(page PoliciesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PoliciesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyList.NextLink)
+		Fetcher: func(ctx context.Context, page *PoliciesClientListResponse) (PoliciesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, policySetName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

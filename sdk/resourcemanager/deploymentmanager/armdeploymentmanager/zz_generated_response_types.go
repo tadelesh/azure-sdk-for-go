@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armdeploymentmanager
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // ArtifactSourcesClientCreateOrUpdateResponse contains the response from method ArtifactSourcesClient.CreateOrUpdate.
 type ArtifactSourcesClientCreateOrUpdateResponse struct {
@@ -43,41 +37,6 @@ type OperationsClientListResponse struct {
 // RolloutsClientCancelResponse contains the response from method RolloutsClient.Cancel.
 type RolloutsClientCancelResponse struct {
 	Rollout
-}
-
-// RolloutsClientCreateOrUpdatePollerResponse contains the response from method RolloutsClient.CreateOrUpdate.
-type RolloutsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *RolloutsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l RolloutsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RolloutsClientCreateOrUpdateResponse, error) {
-	respType := RolloutsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RolloutRequest)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a RolloutsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *RolloutsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *RolloutsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("RolloutsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &RolloutsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // RolloutsClientCreateOrUpdateResponse contains the response from method RolloutsClient.CreateOrUpdate.
@@ -125,41 +84,6 @@ type ServiceTopologiesClientGetResponse struct {
 type ServiceTopologiesClientListResponse struct {
 	// The list of service topologies.
 	ServiceTopologyResourceArray []*ServiceTopologyResource
-}
-
-// ServiceUnitsClientCreateOrUpdatePollerResponse contains the response from method ServiceUnitsClient.CreateOrUpdate.
-type ServiceUnitsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ServiceUnitsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ServiceUnitsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServiceUnitsClientCreateOrUpdateResponse, error) {
-	respType := ServiceUnitsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ServiceUnitResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ServiceUnitsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ServiceUnitsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ServiceUnitsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ServiceUnitsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ServiceUnitsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ServiceUnitsClientCreateOrUpdateResponse contains the response from method ServiceUnitsClient.CreateOrUpdate.

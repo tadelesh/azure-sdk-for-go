@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewRelationshipLinksClient(subscriptionID string, credential azcore.TokenCr
 // parameters - Parameters supplied to the CreateOrUpdate relationship link operation.
 // options - RelationshipLinksClientBeginCreateOrUpdateOptions contains the optional parameters for the RelationshipLinksClient.BeginCreateOrUpdate
 // method.
-func (client *RelationshipLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string, parameters RelationshipLinkResourceFormat, options *RelationshipLinksClientBeginCreateOrUpdateOptions) (RelationshipLinksClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, relationshipLinkName, parameters, options)
-	if err != nil {
-		return RelationshipLinksClientCreateOrUpdatePollerResponse{}, err
+func (client *RelationshipLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string, parameters RelationshipLinkResourceFormat, options *RelationshipLinksClientBeginCreateOrUpdateOptions) (*armruntime.Poller[RelationshipLinksClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, relationshipLinkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RelationshipLinksClientCreateOrUpdateResponse]("RelationshipLinksClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RelationshipLinksClientCreateOrUpdateResponse]("RelationshipLinksClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := RelationshipLinksClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RelationshipLinksClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return RelationshipLinksClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &RelationshipLinksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a relationship link or updates an existing relationship link within a hub.
@@ -128,20 +124,16 @@ func (client *RelationshipLinksClient) createOrUpdateCreateRequest(ctx context.C
 // relationshipLinkName - The name of the relationship.
 // options - RelationshipLinksClientBeginDeleteOptions contains the optional parameters for the RelationshipLinksClient.BeginDelete
 // method.
-func (client *RelationshipLinksClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string, options *RelationshipLinksClientBeginDeleteOptions) (RelationshipLinksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, relationshipLinkName, options)
-	if err != nil {
-		return RelationshipLinksClientDeletePollerResponse{}, err
+func (client *RelationshipLinksClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string, options *RelationshipLinksClientBeginDeleteOptions) (*armruntime.Poller[RelationshipLinksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, relationshipLinkName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RelationshipLinksClientDeleteResponse]("RelationshipLinksClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RelationshipLinksClientDeleteResponse]("RelationshipLinksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RelationshipLinksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RelationshipLinksClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return RelationshipLinksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RelationshipLinksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a relationship link within a hub.
@@ -256,16 +248,32 @@ func (client *RelationshipLinksClient) getHandleResponse(resp *http.Response) (R
 // hubName - The name of the hub.
 // options - RelationshipLinksClientListByHubOptions contains the optional parameters for the RelationshipLinksClient.ListByHub
 // method.
-func (client *RelationshipLinksClient) ListByHub(resourceGroupName string, hubName string, options *RelationshipLinksClientListByHubOptions) *RelationshipLinksClientListByHubPager {
-	return &RelationshipLinksClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *RelationshipLinksClient) ListByHub(resourceGroupName string, hubName string, options *RelationshipLinksClientListByHubOptions) *runtime.Pager[RelationshipLinksClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RelationshipLinksClientListByHubResponse]{
+		More: func(page RelationshipLinksClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RelationshipLinksClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RelationshipLinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RelationshipLinksClientListByHubResponse) (RelationshipLinksClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RelationshipLinksClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RelationshipLinksClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RelationshipLinksClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

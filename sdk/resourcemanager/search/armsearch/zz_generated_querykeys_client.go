@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -176,16 +176,32 @@ func (client *QueryKeysClient) deleteCreateRequest(ctx context.Context, resource
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *QueryKeysClientListBySearchServicePager {
-	return &QueryKeysClientListBySearchServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySearchServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *runtime.Pager[QueryKeysClientListBySearchServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[QueryKeysClientListBySearchServiceResponse]{
+		More: func(page QueryKeysClientListBySearchServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp QueryKeysClientListBySearchServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListQueryKeysResult.NextLink)
+		Fetcher: func(ctx context.Context, page *QueryKeysClientListBySearchServiceResponse) (QueryKeysClientListBySearchServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySearchServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return QueryKeysClientListBySearchServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return QueryKeysClientListBySearchServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return QueryKeysClientListBySearchServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySearchServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySearchServiceCreateRequest creates the ListBySearchService request.

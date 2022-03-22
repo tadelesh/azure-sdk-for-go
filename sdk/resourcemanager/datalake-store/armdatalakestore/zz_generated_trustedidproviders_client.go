@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *TrustedIDProvidersClient) getHandleResponse(resp *http.Response) (
 // accountName - The name of the Data Lake Store account.
 // options - TrustedIDProvidersClientListByAccountOptions contains the optional parameters for the TrustedIDProvidersClient.ListByAccount
 // method.
-func (client *TrustedIDProvidersClient) ListByAccount(resourceGroupName string, accountName string, options *TrustedIDProvidersClientListByAccountOptions) *TrustedIDProvidersClientListByAccountPager {
-	return &TrustedIDProvidersClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *TrustedIDProvidersClient) ListByAccount(resourceGroupName string, accountName string, options *TrustedIDProvidersClientListByAccountOptions) *runtime.Pager[TrustedIDProvidersClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TrustedIDProvidersClientListByAccountResponse]{
+		More: func(page TrustedIDProvidersClientListByAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TrustedIDProvidersClientListByAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TrustedIDProviderListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TrustedIDProvidersClientListByAccountResponse) (TrustedIDProvidersClientListByAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TrustedIDProvidersClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TrustedIDProvidersClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TrustedIDProvidersClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

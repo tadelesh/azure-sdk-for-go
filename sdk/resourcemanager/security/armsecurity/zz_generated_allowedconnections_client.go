@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *AllowedConnectionsClient) getHandleResponse(resp *http.Response) (
 // List - Gets the list of all possible traffic between resources for the subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AllowedConnectionsClientListOptions contains the optional parameters for the AllowedConnectionsClient.List method.
-func (client *AllowedConnectionsClient) List(options *AllowedConnectionsClientListOptions) *AllowedConnectionsClientListPager {
-	return &AllowedConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AllowedConnectionsClient) List(options *AllowedConnectionsClientListOptions) *runtime.Pager[AllowedConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AllowedConnectionsClientListResponse]{
+		More: func(page AllowedConnectionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AllowedConnectionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AllowedConnectionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *AllowedConnectionsClientListResponse) (AllowedConnectionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AllowedConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AllowedConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AllowedConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -157,16 +173,32 @@ func (client *AllowedConnectionsClient) listHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AllowedConnectionsClientListByHomeRegionOptions contains the optional parameters for the AllowedConnectionsClient.ListByHomeRegion
 // method.
-func (client *AllowedConnectionsClient) ListByHomeRegion(options *AllowedConnectionsClientListByHomeRegionOptions) *AllowedConnectionsClientListByHomeRegionPager {
-	return &AllowedConnectionsClientListByHomeRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHomeRegionCreateRequest(ctx, options)
+func (client *AllowedConnectionsClient) ListByHomeRegion(options *AllowedConnectionsClientListByHomeRegionOptions) *runtime.Pager[AllowedConnectionsClientListByHomeRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AllowedConnectionsClientListByHomeRegionResponse]{
+		More: func(page AllowedConnectionsClientListByHomeRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AllowedConnectionsClientListByHomeRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AllowedConnectionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *AllowedConnectionsClientListByHomeRegionResponse) (AllowedConnectionsClientListByHomeRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHomeRegionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AllowedConnectionsClientListByHomeRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AllowedConnectionsClientListByHomeRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AllowedConnectionsClientListByHomeRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHomeRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHomeRegionCreateRequest creates the ListByHomeRegion request.

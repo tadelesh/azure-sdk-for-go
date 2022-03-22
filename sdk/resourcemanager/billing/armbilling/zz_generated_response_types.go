@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armbilling
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AccountsClientGetResponse contains the response from method AccountsClient.Get.
 type AccountsClientGetResponse struct {
@@ -27,41 +21,6 @@ type AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse str
 // AccountsClientListResponse contains the response from method AccountsClient.List.
 type AccountsClientListResponse struct {
 	AccountListResult
-}
-
-// AccountsClientUpdatePollerResponse contains the response from method AccountsClient.Update.
-type AccountsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientUpdateResponse, error) {
-	respType := AccountsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientUpdatePollerResponse from the provided client and resume token.
-func (l *AccountsClientUpdatePollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AccountsClientUpdateResponse contains the response from method AccountsClient.Update.
@@ -129,41 +88,6 @@ type InstructionsClientPutResponse struct {
 	Instruction
 }
 
-// InvoiceSectionsClientCreateOrUpdatePollerResponse contains the response from method InvoiceSectionsClient.CreateOrUpdate.
-type InvoiceSectionsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *InvoiceSectionsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l InvoiceSectionsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (InvoiceSectionsClientCreateOrUpdateResponse, error) {
-	respType := InvoiceSectionsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.InvoiceSection)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a InvoiceSectionsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *InvoiceSectionsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *InvoiceSectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("InvoiceSectionsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &InvoiceSectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // InvoiceSectionsClientCreateOrUpdateResponse contains the response from method InvoiceSectionsClient.CreateOrUpdate.
 type InvoiceSectionsClientCreateOrUpdateResponse struct {
 	InvoiceSection
@@ -179,80 +103,9 @@ type InvoiceSectionsClientListByBillingProfileResponse struct {
 	InvoiceSectionListResult
 }
 
-// InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse contains the response from method InvoicesClient.DownloadBillingSubscriptionInvoice.
-type InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *InvoicesClientDownloadBillingSubscriptionInvoicePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (InvoicesClientDownloadBillingSubscriptionInvoiceResponse, error) {
-	respType := InvoicesClientDownloadBillingSubscriptionInvoiceResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DownloadURL)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse from the provided client and resume
-// token.
-func (l *InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse) Resume(ctx context.Context, client *InvoicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("InvoicesClient.DownloadBillingSubscriptionInvoice", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &InvoicesClientDownloadBillingSubscriptionInvoicePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // InvoicesClientDownloadBillingSubscriptionInvoiceResponse contains the response from method InvoicesClient.DownloadBillingSubscriptionInvoice.
 type InvoicesClientDownloadBillingSubscriptionInvoiceResponse struct {
 	DownloadURL
-}
-
-// InvoicesClientDownloadInvoicePollerResponse contains the response from method InvoicesClient.DownloadInvoice.
-type InvoicesClientDownloadInvoicePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *InvoicesClientDownloadInvoicePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l InvoicesClientDownloadInvoicePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (InvoicesClientDownloadInvoiceResponse, error) {
-	respType := InvoicesClientDownloadInvoiceResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DownloadURL)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a InvoicesClientDownloadInvoicePollerResponse from the provided client and resume token.
-func (l *InvoicesClientDownloadInvoicePollerResponse) Resume(ctx context.Context, client *InvoicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("InvoicesClient.DownloadInvoice", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &InvoicesClientDownloadInvoicePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // InvoicesClientDownloadInvoiceResponse contains the response from method InvoicesClient.DownloadInvoice.
@@ -260,81 +113,9 @@ type InvoicesClientDownloadInvoiceResponse struct {
 	DownloadURL
 }
 
-// InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse contains the response from method InvoicesClient.DownloadMultipleBillingProfileInvoices.
-type InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *InvoicesClientDownloadMultipleBillingProfileInvoicesPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (InvoicesClientDownloadMultipleBillingProfileInvoicesResponse, error) {
-	respType := InvoicesClientDownloadMultipleBillingProfileInvoicesResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DownloadURL)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse from the provided client and resume
-// token.
-func (l *InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse) Resume(ctx context.Context, client *InvoicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("InvoicesClient.DownloadMultipleBillingProfileInvoices", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &InvoicesClientDownloadMultipleBillingProfileInvoicesPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // InvoicesClientDownloadMultipleBillingProfileInvoicesResponse contains the response from method InvoicesClient.DownloadMultipleBillingProfileInvoices.
 type InvoicesClientDownloadMultipleBillingProfileInvoicesResponse struct {
 	DownloadURL
-}
-
-// InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse contains the response from method InvoicesClient.DownloadMultipleBillingSubscriptionInvoices.
-type InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse, error) {
-	respType := InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DownloadURL)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse from the provided client and
-// resume token.
-func (l *InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse) Resume(ctx context.Context, client *InvoicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("InvoicesClient.DownloadMultipleBillingSubscriptionInvoices", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse contains the response from method InvoicesClient.DownloadMultipleBillingSubscriptionInvoices.
@@ -472,41 +253,6 @@ type ProductsClientValidateMoveResponse struct {
 	ValidateProductTransferEligibilityResult
 }
 
-// ProfilesClientCreateOrUpdatePollerResponse contains the response from method ProfilesClient.CreateOrUpdate.
-type ProfilesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProfilesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProfilesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProfilesClientCreateOrUpdateResponse, error) {
-	respType := ProfilesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Profile)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProfilesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ProfilesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ProfilesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProfilesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProfilesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ProfilesClientCreateOrUpdateResponse contains the response from method ProfilesClient.CreateOrUpdate.
 type ProfilesClientCreateOrUpdateResponse struct {
 	Profile
@@ -640,41 +386,6 @@ type SubscriptionsClientListByCustomerResponse struct {
 // SubscriptionsClientListByInvoiceSectionResponse contains the response from method SubscriptionsClient.ListByInvoiceSection.
 type SubscriptionsClientListByInvoiceSectionResponse struct {
 	SubscriptionsListResult
-}
-
-// SubscriptionsClientMovePollerResponse contains the response from method SubscriptionsClient.Move.
-type SubscriptionsClientMovePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SubscriptionsClientMovePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SubscriptionsClientMovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionsClientMoveResponse, error) {
-	respType := SubscriptionsClientMoveResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Subscription)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SubscriptionsClientMovePollerResponse from the provided client and resume token.
-func (l *SubscriptionsClientMovePollerResponse) Resume(ctx context.Context, client *SubscriptionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SubscriptionsClient.Move", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SubscriptionsClientMovePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SubscriptionsClientMoveResponse contains the response from method SubscriptionsClient.Move.

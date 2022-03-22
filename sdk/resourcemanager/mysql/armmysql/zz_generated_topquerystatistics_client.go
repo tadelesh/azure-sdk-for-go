@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *TopQueryStatisticsClient) getHandleResponse(resp *http.Response) (
 // parameters - The required parameters for retrieving top query statistics.
 // options - TopQueryStatisticsClientListByServerOptions contains the optional parameters for the TopQueryStatisticsClient.ListByServer
 // method.
-func (client *TopQueryStatisticsClient) ListByServer(resourceGroupName string, serverName string, parameters TopQueryStatisticsInput, options *TopQueryStatisticsClientListByServerOptions) *TopQueryStatisticsClientListByServerPager {
-	return &TopQueryStatisticsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, parameters, options)
+func (client *TopQueryStatisticsClient) ListByServer(resourceGroupName string, serverName string, parameters TopQueryStatisticsInput, options *TopQueryStatisticsClientListByServerOptions) *runtime.Pager[TopQueryStatisticsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopQueryStatisticsClientListByServerResponse]{
+		More: func(page TopQueryStatisticsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TopQueryStatisticsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TopQueryStatisticsResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *TopQueryStatisticsClientListByServerResponse) (TopQueryStatisticsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, parameters, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TopQueryStatisticsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopQueryStatisticsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopQueryStatisticsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -516,42 +516,49 @@ type BackupInstanceResourceList struct {
 // BackupInstancesClientBeginAdhocBackupOptions contains the optional parameters for the BackupInstancesClient.BeginAdhocBackup
 // method.
 type BackupInstancesClientBeginAdhocBackupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupInstancesClient.BeginCreateOrUpdate
 // method.
 type BackupInstancesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginDeleteOptions contains the optional parameters for the BackupInstancesClient.BeginDelete method.
 type BackupInstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginTriggerRehydrateOptions contains the optional parameters for the BackupInstancesClient.BeginTriggerRehydrate
 // method.
 type BackupInstancesClientBeginTriggerRehydrateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginTriggerRestoreOptions contains the optional parameters for the BackupInstancesClient.BeginTriggerRestore
 // method.
 type BackupInstancesClientBeginTriggerRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginValidateForBackupOptions contains the optional parameters for the BackupInstancesClient.BeginValidateForBackup
 // method.
 type BackupInstancesClientBeginValidateForBackupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientBeginValidateForRestoreOptions contains the optional parameters for the BackupInstancesClient.BeginValidateForRestore
 // method.
 type BackupInstancesClientBeginValidateForRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupInstancesClientGetOptions contains the optional parameters for the BackupInstancesClient.Get method.
@@ -684,12 +691,14 @@ type BackupVaultResourceList struct {
 // BackupVaultsClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupVaultsClient.BeginCreateOrUpdate
 // method.
 type BackupVaultsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupVaultsClientBeginUpdateOptions contains the optional parameters for the BackupVaultsClient.BeginUpdate method.
 type BackupVaultsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupVaultsClientCheckNameAvailabilityOptions contains the optional parameters for the BackupVaultsClient.CheckNameAvailability
@@ -1144,7 +1153,8 @@ type ErrorAdditionalInfo struct {
 
 // ExportJobsClientBeginTriggerOptions contains the optional parameters for the ExportJobsClient.BeginTrigger method.
 type ExportJobsClientBeginTriggerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExportJobsOperationResultClientGetOptions contains the optional parameters for the ExportJobsOperationResultClient.Get

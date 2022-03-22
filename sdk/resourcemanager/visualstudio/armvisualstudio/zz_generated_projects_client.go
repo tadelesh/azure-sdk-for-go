@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewProjectsClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceName - Name of the Team Services project.
 // body - The request data.
 // options - ProjectsClientBeginCreateOptions contains the optional parameters for the ProjectsClient.BeginCreate method.
-func (client *ProjectsClient) BeginCreate(ctx context.Context, resourceGroupName string, rootResourceName string, resourceName string, body ProjectResource, options *ProjectsClientBeginCreateOptions) (ProjectsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, rootResourceName, resourceName, body, options)
-	if err != nil {
-		return ProjectsClientCreatePollerResponse{}, err
+func (client *ProjectsClient) BeginCreate(ctx context.Context, resourceGroupName string, rootResourceName string, resourceName string, body ProjectResource, options *ProjectsClientBeginCreateOptions) (*armruntime.Poller[ProjectsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, rootResourceName, resourceName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProjectsClientCreateResponse]("ProjectsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProjectsClientCreateResponse]("ProjectsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ProjectsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ProjectsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ProjectsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ProjectsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a Team Services project in the collection with the specified name. 'VersionControlOption' and 'ProcessTemplateId'

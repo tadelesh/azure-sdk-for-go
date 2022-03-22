@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -66,16 +66,32 @@ func NewActivityLogsClient(subscriptionID string, credential azcore.TokenCredent
 // and correlationId eq 'correlationID'.
 // NOTE: No other syntax is allowed.
 // options - ActivityLogsClientListOptions contains the optional parameters for the ActivityLogsClient.List method.
-func (client *ActivityLogsClient) List(filter string, options *ActivityLogsClientListOptions) *ActivityLogsClientListPager {
-	return &ActivityLogsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, filter, options)
+func (client *ActivityLogsClient) List(filter string, options *ActivityLogsClientListOptions) *runtime.Pager[ActivityLogsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActivityLogsClientListResponse]{
+		More: func(page ActivityLogsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ActivityLogsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EventDataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ActivityLogsClientListResponse) (ActivityLogsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, filter, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ActivityLogsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActivityLogsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActivityLogsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

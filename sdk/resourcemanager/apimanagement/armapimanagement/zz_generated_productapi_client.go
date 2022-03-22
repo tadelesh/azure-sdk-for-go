@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -240,16 +240,32 @@ func (client *ProductAPIClient) deleteCreateRequest(ctx context.Context, resourc
 // productID - Product identifier. Must be unique in the current API Management service instance.
 // options - ProductAPIClientListByProductOptions contains the optional parameters for the ProductAPIClient.ListByProduct
 // method.
-func (client *ProductAPIClient) ListByProduct(resourceGroupName string, serviceName string, productID string, options *ProductAPIClientListByProductOptions) *ProductAPIClientListByProductPager {
-	return &ProductAPIClientListByProductPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProductCreateRequest(ctx, resourceGroupName, serviceName, productID, options)
+func (client *ProductAPIClient) ListByProduct(resourceGroupName string, serviceName string, productID string, options *ProductAPIClientListByProductOptions) *runtime.Pager[ProductAPIClientListByProductResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProductAPIClientListByProductResponse]{
+		More: func(page ProductAPIClientListByProductResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProductAPIClientListByProductResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.APICollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProductAPIClientListByProductResponse) (ProductAPIClientListByProductResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProductCreateRequest(ctx, resourceGroupName, serviceName, productID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProductAPIClientListByProductResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProductAPIClientListByProductResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProductAPIClientListByProductResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProductHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProductCreateRequest creates the ListByProduct request.

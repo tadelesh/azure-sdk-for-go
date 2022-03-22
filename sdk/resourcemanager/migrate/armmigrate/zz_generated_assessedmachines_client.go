@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -134,16 +134,32 @@ func (client *AssessedMachinesClient) getHandleResponse(resp *http.Response) (As
 // assessmentName - Unique name of an assessment within a project.
 // options - AssessedMachinesClientListByAssessmentOptions contains the optional parameters for the AssessedMachinesClient.ListByAssessment
 // method.
-func (client *AssessedMachinesClient) ListByAssessment(resourceGroupName string, projectName string, groupName string, assessmentName string, options *AssessedMachinesClientListByAssessmentOptions) *AssessedMachinesClientListByAssessmentPager {
-	return &AssessedMachinesClientListByAssessmentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAssessmentCreateRequest(ctx, resourceGroupName, projectName, groupName, assessmentName, options)
+func (client *AssessedMachinesClient) ListByAssessment(resourceGroupName string, projectName string, groupName string, assessmentName string, options *AssessedMachinesClientListByAssessmentOptions) *runtime.Pager[AssessedMachinesClientListByAssessmentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessedMachinesClientListByAssessmentResponse]{
+		More: func(page AssessedMachinesClientListByAssessmentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AssessedMachinesClientListByAssessmentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AssessedMachineResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *AssessedMachinesClientListByAssessmentResponse) (AssessedMachinesClientListByAssessmentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAssessmentCreateRequest(ctx, resourceGroupName, projectName, groupName, assessmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AssessedMachinesClientListByAssessmentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessedMachinesClientListByAssessmentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessedMachinesClientListByAssessmentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAssessmentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAssessmentCreateRequest creates the ListByAssessment request.

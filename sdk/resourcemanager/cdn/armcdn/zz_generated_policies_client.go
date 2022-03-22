@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewPoliciesClient(subscriptionID string, credential azcore.TokenCredential,
 // cdnWebApplicationFirewallPolicy - Policy to be created.
 // options - PoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *PoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, policyName string, cdnWebApplicationFirewallPolicy WebApplicationFirewallPolicy, options *PoliciesClientBeginCreateOrUpdateOptions) (PoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, policyName, cdnWebApplicationFirewallPolicy, options)
-	if err != nil {
-		return PoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *PoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, policyName string, cdnWebApplicationFirewallPolicy WebApplicationFirewallPolicy, options *PoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, policyName, cdnWebApplicationFirewallPolicy, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PoliciesClientCreateOrUpdateResponse]("PoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PoliciesClientCreateOrUpdateResponse]("PoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return PoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update policy with specified rule set name within a resource group.
@@ -220,16 +216,32 @@ func (client *PoliciesClient) getHandleResponse(resp *http.Response) (PoliciesCl
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - Name of the Resource group within the Azure subscription.
 // options - PoliciesClientListOptions contains the optional parameters for the PoliciesClient.List method.
-func (client *PoliciesClient) List(resourceGroupName string, options *PoliciesClientListOptions) *PoliciesClientListPager {
-	return &PoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *PoliciesClient) List(resourceGroupName string, options *PoliciesClientListOptions) *runtime.Pager[PoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PoliciesClientListResponse]{
+		More: func(page PoliciesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PoliciesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebApplicationFirewallPolicyList.NextLink)
+		Fetcher: func(ctx context.Context, page *PoliciesClientListResponse) (PoliciesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -270,20 +282,16 @@ func (client *PoliciesClient) listHandleResponse(resp *http.Response) (PoliciesC
 // policyName - The name of the CdnWebApplicationFirewallPolicy.
 // cdnWebApplicationFirewallPolicyPatchParameters - CdnWebApplicationFirewallPolicy parameters to be patched.
 // options - PoliciesClientBeginUpdateOptions contains the optional parameters for the PoliciesClient.BeginUpdate method.
-func (client *PoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, policyName string, cdnWebApplicationFirewallPolicyPatchParameters WebApplicationFirewallPolicyPatchParameters, options *PoliciesClientBeginUpdateOptions) (PoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, policyName, cdnWebApplicationFirewallPolicyPatchParameters, options)
-	if err != nil {
-		return PoliciesClientUpdatePollerResponse{}, err
+func (client *PoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, policyName string, cdnWebApplicationFirewallPolicyPatchParameters WebApplicationFirewallPolicyPatchParameters, options *PoliciesClientBeginUpdateOptions) (*armruntime.Poller[PoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, policyName, cdnWebApplicationFirewallPolicyPatchParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PoliciesClientUpdateResponse]("PoliciesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PoliciesClientUpdateResponse]("PoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := PoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PoliciesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return PoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &PoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update an existing CdnWebApplicationFirewallPolicy with the specified policy name under the specified subscription

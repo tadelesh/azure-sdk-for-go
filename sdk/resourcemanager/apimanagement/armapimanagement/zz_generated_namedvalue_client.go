@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewNamedValueClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - Create parameters.
 // options - NamedValueClientBeginCreateOrUpdateOptions contains the optional parameters for the NamedValueClient.BeginCreateOrUpdate
 // method.
-func (client *NamedValueClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, parameters NamedValueCreateContract, options *NamedValueClientBeginCreateOrUpdateOptions) (NamedValueClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, namedValueID, parameters, options)
-	if err != nil {
-		return NamedValueClientCreateOrUpdatePollerResponse{}, err
+func (client *NamedValueClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, parameters NamedValueCreateContract, options *NamedValueClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NamedValueClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, namedValueID, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NamedValueClientCreateOrUpdateResponse]("NamedValueClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NamedValueClientCreateOrUpdateResponse]("NamedValueClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NamedValueClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NamedValueClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return NamedValueClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NamedValueClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates named value.
@@ -307,16 +303,32 @@ func (client *NamedValueClient) getEntityTagHandleResponse(resp *http.Response) 
 // serviceName - The name of the API Management service.
 // options - NamedValueClientListByServiceOptions contains the optional parameters for the NamedValueClient.ListByService
 // method.
-func (client *NamedValueClient) ListByService(resourceGroupName string, serviceName string, options *NamedValueClientListByServiceOptions) *NamedValueClientListByServicePager {
-	return &NamedValueClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *NamedValueClient) ListByService(resourceGroupName string, serviceName string, options *NamedValueClientListByServiceOptions) *runtime.Pager[NamedValueClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NamedValueClientListByServiceResponse]{
+		More: func(page NamedValueClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NamedValueClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NamedValueCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *NamedValueClientListByServiceResponse) (NamedValueClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NamedValueClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NamedValueClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NamedValueClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.
@@ -436,20 +448,16 @@ func (client *NamedValueClient) listValueHandleResponse(resp *http.Response) (Na
 // namedValueID - Identifier of the NamedValue.
 // options - NamedValueClientBeginRefreshSecretOptions contains the optional parameters for the NamedValueClient.BeginRefreshSecret
 // method.
-func (client *NamedValueClient) BeginRefreshSecret(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, options *NamedValueClientBeginRefreshSecretOptions) (NamedValueClientRefreshSecretPollerResponse, error) {
-	resp, err := client.refreshSecret(ctx, resourceGroupName, serviceName, namedValueID, options)
-	if err != nil {
-		return NamedValueClientRefreshSecretPollerResponse{}, err
+func (client *NamedValueClient) BeginRefreshSecret(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, options *NamedValueClientBeginRefreshSecretOptions) (*armruntime.Poller[NamedValueClientRefreshSecretResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.refreshSecret(ctx, resourceGroupName, serviceName, namedValueID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NamedValueClientRefreshSecretResponse]("NamedValueClient.RefreshSecret", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NamedValueClientRefreshSecretResponse]("NamedValueClient.RefreshSecret", options.ResumeToken, client.pl, nil)
 	}
-	result := NamedValueClientRefreshSecretPollerResponse{}
-	pt, err := armruntime.NewPoller("NamedValueClient.RefreshSecret", "location", resp, client.pl)
-	if err != nil {
-		return NamedValueClientRefreshSecretPollerResponse{}, err
-	}
-	result.Poller = &NamedValueClientRefreshSecretPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RefreshSecret - Refresh the secret of the named value specified by its identifier.
@@ -508,20 +516,16 @@ func (client *NamedValueClient) refreshSecretCreateRequest(ctx context.Context, 
 // it should be * for unconditional update.
 // parameters - Update parameters.
 // options - NamedValueClientBeginUpdateOptions contains the optional parameters for the NamedValueClient.BeginUpdate method.
-func (client *NamedValueClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, ifMatch string, parameters NamedValueUpdateParameters, options *NamedValueClientBeginUpdateOptions) (NamedValueClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serviceName, namedValueID, ifMatch, parameters, options)
-	if err != nil {
-		return NamedValueClientUpdatePollerResponse{}, err
+func (client *NamedValueClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, namedValueID string, ifMatch string, parameters NamedValueUpdateParameters, options *NamedValueClientBeginUpdateOptions) (*armruntime.Poller[NamedValueClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serviceName, namedValueID, ifMatch, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NamedValueClientUpdateResponse]("NamedValueClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NamedValueClientUpdateResponse]("NamedValueClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := NamedValueClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NamedValueClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return NamedValueClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &NamedValueClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the specific named value.

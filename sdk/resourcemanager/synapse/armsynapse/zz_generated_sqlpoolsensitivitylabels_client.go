@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -418,16 +418,32 @@ func (client *SQLPoolSensitivityLabelsClient) getHandleResponse(resp *http.Respo
 // sqlPoolName - SQL pool name
 // options - SQLPoolSensitivityLabelsClientListCurrentOptions contains the optional parameters for the SQLPoolSensitivityLabelsClient.ListCurrent
 // method.
-func (client *SQLPoolSensitivityLabelsClient) ListCurrent(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolSensitivityLabelsClientListCurrentOptions) *SQLPoolSensitivityLabelsClientListCurrentPager {
-	return &SQLPoolSensitivityLabelsClientListCurrentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCurrentCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *SQLPoolSensitivityLabelsClient) ListCurrent(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolSensitivityLabelsClientListCurrentOptions) *runtime.Pager[SQLPoolSensitivityLabelsClientListCurrentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolSensitivityLabelsClientListCurrentResponse]{
+		More: func(page SQLPoolSensitivityLabelsClientListCurrentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolSensitivityLabelsClientListCurrentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SensitivityLabelListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolSensitivityLabelsClientListCurrentResponse) (SQLPoolSensitivityLabelsClientListCurrentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCurrentCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolSensitivityLabelsClientListCurrentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolSensitivityLabelsClientListCurrentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolSensitivityLabelsClientListCurrentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCurrentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCurrentCreateRequest creates the ListCurrent request.
@@ -479,16 +495,32 @@ func (client *SQLPoolSensitivityLabelsClient) listCurrentHandleResponse(resp *ht
 // sqlPoolName - SQL pool name
 // options - SQLPoolSensitivityLabelsClientListRecommendedOptions contains the optional parameters for the SQLPoolSensitivityLabelsClient.ListRecommended
 // method.
-func (client *SQLPoolSensitivityLabelsClient) ListRecommended(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolSensitivityLabelsClientListRecommendedOptions) *SQLPoolSensitivityLabelsClientListRecommendedPager {
-	return &SQLPoolSensitivityLabelsClientListRecommendedPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRecommendedCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *SQLPoolSensitivityLabelsClient) ListRecommended(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolSensitivityLabelsClientListRecommendedOptions) *runtime.Pager[SQLPoolSensitivityLabelsClientListRecommendedResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolSensitivityLabelsClientListRecommendedResponse]{
+		More: func(page SQLPoolSensitivityLabelsClientListRecommendedResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolSensitivityLabelsClientListRecommendedResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SensitivityLabelListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolSensitivityLabelsClientListRecommendedResponse) (SQLPoolSensitivityLabelsClientListRecommendedResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRecommendedCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolSensitivityLabelsClientListRecommendedResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolSensitivityLabelsClientListRecommendedResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolSensitivityLabelsClientListRecommendedResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRecommendedHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRecommendedCreateRequest creates the ListRecommended request.

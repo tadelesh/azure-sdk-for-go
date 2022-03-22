@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,20 +115,16 @@ func (client *AttachedDatabaseConfigurationsClient) checkNameAvailabilityHandleR
 // parameters - The database parameters supplied to the CreateOrUpdate operation.
 // options - AttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.BeginCreateOrUpdate
 // method.
-func (client *AttachedDatabaseConfigurationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, attachedDatabaseConfigurationName string, parameters AttachedDatabaseConfiguration, options *AttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions) (AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, attachedDatabaseConfigurationName, parameters, options)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
+func (client *AttachedDatabaseConfigurationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, attachedDatabaseConfigurationName string, parameters AttachedDatabaseConfiguration, options *AttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AttachedDatabaseConfigurationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, attachedDatabaseConfigurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AttachedDatabaseConfigurationsClientCreateOrUpdateResponse]("AttachedDatabaseConfigurationsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AttachedDatabaseConfigurationsClientCreateOrUpdateResponse]("AttachedDatabaseConfigurationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AttachedDatabaseConfigurationsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AttachedDatabaseConfigurationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an attached database configuration.
@@ -185,20 +181,16 @@ func (client *AttachedDatabaseConfigurationsClient) createOrUpdateCreateRequest(
 // attachedDatabaseConfigurationName - The name of the attached database configuration.
 // options - AttachedDatabaseConfigurationsClientBeginDeleteOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.BeginDelete
 // method.
-func (client *AttachedDatabaseConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, attachedDatabaseConfigurationName string, options *AttachedDatabaseConfigurationsClientBeginDeleteOptions) (AttachedDatabaseConfigurationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, attachedDatabaseConfigurationName, options)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
+func (client *AttachedDatabaseConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, attachedDatabaseConfigurationName string, options *AttachedDatabaseConfigurationsClientBeginDeleteOptions) (*armruntime.Poller[AttachedDatabaseConfigurationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, attachedDatabaseConfigurationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AttachedDatabaseConfigurationsClientDeleteResponse]("AttachedDatabaseConfigurationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AttachedDatabaseConfigurationsClientDeleteResponse]("AttachedDatabaseConfigurationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AttachedDatabaseConfigurationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AttachedDatabaseConfigurationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AttachedDatabaseConfigurationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the attached database configuration with the given name.
@@ -315,13 +307,26 @@ func (client *AttachedDatabaseConfigurationsClient) getHandleResponse(resp *http
 // clusterName - The name of the Kusto cluster.
 // options - AttachedDatabaseConfigurationsClientListByClusterOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.ListByCluster
 // method.
-func (client *AttachedDatabaseConfigurationsClient) ListByCluster(resourceGroupName string, clusterName string, options *AttachedDatabaseConfigurationsClientListByClusterOptions) *AttachedDatabaseConfigurationsClientListByClusterPager {
-	return &AttachedDatabaseConfigurationsClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *AttachedDatabaseConfigurationsClient) ListByCluster(resourceGroupName string, clusterName string, options *AttachedDatabaseConfigurationsClientListByClusterOptions) *runtime.Pager[AttachedDatabaseConfigurationsClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AttachedDatabaseConfigurationsClientListByClusterResponse]{
+		More: func(page AttachedDatabaseConfigurationsClientListByClusterResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AttachedDatabaseConfigurationsClientListByClusterResponse) (AttachedDatabaseConfigurationsClientListByClusterResponse, error) {
+			req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return AttachedDatabaseConfigurationsClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AttachedDatabaseConfigurationsClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AttachedDatabaseConfigurationsClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
+		},
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.

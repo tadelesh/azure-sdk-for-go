@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,16 +212,32 @@ func (client *ConnectorsClient) getHandleResponse(resp *http.Response) (Connecto
 // get the next page of security connectors for the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConnectorsClientListOptions contains the optional parameters for the ConnectorsClient.List method.
-func (client *ConnectorsClient) List(options *ConnectorsClientListOptions) *ConnectorsClientListPager {
-	return &ConnectorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ConnectorsClient) List(options *ConnectorsClientListOptions) *runtime.Pager[ConnectorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectorsClientListResponse]{
+		More: func(page ConnectorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectorsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectorsClientListResponse) (ConnectorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -257,16 +273,32 @@ func (client *ConnectorsClient) listHandleResponse(resp *http.Response) (Connect
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - ConnectorsClientListByResourceGroupOptions contains the optional parameters for the ConnectorsClient.ListByResourceGroup
 // method.
-func (client *ConnectorsClient) ListByResourceGroup(resourceGroupName string, options *ConnectorsClientListByResourceGroupOptions) *ConnectorsClientListByResourceGroupPager {
-	return &ConnectorsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ConnectorsClient) ListByResourceGroup(resourceGroupName string, options *ConnectorsClientListByResourceGroupOptions) *runtime.Pager[ConnectorsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectorsClientListByResourceGroupResponse]{
+		More: func(page ConnectorsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectorsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectorsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectorsClientListByResourceGroupResponse) (ConnectorsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectorsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectorsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectorsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

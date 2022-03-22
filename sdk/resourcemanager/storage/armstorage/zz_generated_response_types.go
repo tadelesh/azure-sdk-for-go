@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,48 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armstorage
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse contains the response from method AccountsClient.AbortHierarchicalNamespaceMigration.
-type AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientAbortHierarchicalNamespaceMigrationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientAbortHierarchicalNamespaceMigrationResponse, error) {
-	respType := AccountsClientAbortHierarchicalNamespaceMigrationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse from the provided client and resume
-// token.
-func (l *AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.AbortHierarchicalNamespaceMigration", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientAbortHierarchicalNamespaceMigrationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
 
 // AccountsClientAbortHierarchicalNamespaceMigrationResponse contains the response from method AccountsClient.AbortHierarchicalNamespaceMigration.
 type AccountsClientAbortHierarchicalNamespaceMigrationResponse struct {
@@ -58,41 +16,6 @@ type AccountsClientAbortHierarchicalNamespaceMigrationResponse struct {
 // AccountsClientCheckNameAvailabilityResponse contains the response from method AccountsClient.CheckNameAvailability.
 type AccountsClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityResult
-}
-
-// AccountsClientCreatePollerResponse contains the response from method AccountsClient.Create.
-type AccountsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientCreateResponse, error) {
-	respType := AccountsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientCreatePollerResponse from the provided client and resume token.
-func (l *AccountsClientCreatePollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AccountsClientCreateResponse contains the response from method AccountsClient.Create.
@@ -105,41 +28,6 @@ type AccountsClientDeleteResponse struct {
 	// placeholder for future response values
 }
 
-// AccountsClientFailoverPollerResponse contains the response from method AccountsClient.Failover.
-type AccountsClientFailoverPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientFailoverPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientFailoverPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientFailoverResponse, error) {
-	respType := AccountsClientFailoverResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientFailoverPollerResponse from the provided client and resume token.
-func (l *AccountsClientFailoverPollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.Failover", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientFailoverPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // AccountsClientFailoverResponse contains the response from method AccountsClient.Failover.
 type AccountsClientFailoverResponse struct {
 	// placeholder for future response values
@@ -148,41 +36,6 @@ type AccountsClientFailoverResponse struct {
 // AccountsClientGetPropertiesResponse contains the response from method AccountsClient.GetProperties.
 type AccountsClientGetPropertiesResponse struct {
 	Account
-}
-
-// AccountsClientHierarchicalNamespaceMigrationPollerResponse contains the response from method AccountsClient.HierarchicalNamespaceMigration.
-type AccountsClientHierarchicalNamespaceMigrationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientHierarchicalNamespaceMigrationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientHierarchicalNamespaceMigrationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientHierarchicalNamespaceMigrationResponse, error) {
-	respType := AccountsClientHierarchicalNamespaceMigrationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientHierarchicalNamespaceMigrationPollerResponse from the provided client and resume token.
-func (l *AccountsClientHierarchicalNamespaceMigrationPollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.HierarchicalNamespaceMigration", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientHierarchicalNamespaceMigrationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AccountsClientHierarchicalNamespaceMigrationResponse contains the response from method AccountsClient.HierarchicalNamespaceMigration.
@@ -218,41 +71,6 @@ type AccountsClientListServiceSASResponse struct {
 // AccountsClientRegenerateKeyResponse contains the response from method AccountsClient.RegenerateKey.
 type AccountsClientRegenerateKeyResponse struct {
 	AccountListKeysResult
-}
-
-// AccountsClientRestoreBlobRangesPollerResponse contains the response from method AccountsClient.RestoreBlobRanges.
-type AccountsClientRestoreBlobRangesPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AccountsClientRestoreBlobRangesPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AccountsClientRestoreBlobRangesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientRestoreBlobRangesResponse, error) {
-	respType := AccountsClientRestoreBlobRangesResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.BlobRestoreStatus)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AccountsClientRestoreBlobRangesPollerResponse from the provided client and resume token.
-func (l *AccountsClientRestoreBlobRangesPollerResponse) Resume(ctx context.Context, client *AccountsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AccountsClient.RestoreBlobRanges", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AccountsClientRestoreBlobRangesPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AccountsClientRestoreBlobRangesResponse contains the response from method AccountsClient.RestoreBlobRanges.
@@ -333,41 +151,6 @@ type BlobContainersClientLockImmutabilityPolicyResponse struct {
 	ImmutabilityPolicy
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
-}
-
-// BlobContainersClientObjectLevelWormPollerResponse contains the response from method BlobContainersClient.ObjectLevelWorm.
-type BlobContainersClientObjectLevelWormPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BlobContainersClientObjectLevelWormPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BlobContainersClientObjectLevelWormPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BlobContainersClientObjectLevelWormResponse, error) {
-	respType := BlobContainersClientObjectLevelWormResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BlobContainersClientObjectLevelWormPollerResponse from the provided client and resume token.
-func (l *BlobContainersClientObjectLevelWormPollerResponse) Resume(ctx context.Context, client *BlobContainersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BlobContainersClient.ObjectLevelWorm", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BlobContainersClientObjectLevelWormPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // BlobContainersClientObjectLevelWormResponse contains the response from method BlobContainersClient.ObjectLevelWorm.

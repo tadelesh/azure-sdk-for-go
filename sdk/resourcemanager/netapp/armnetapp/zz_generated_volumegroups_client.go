@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewVolumeGroupsClient(subscriptionID string, credential azcore.TokenCredent
 // body - Volume Group object supplied in the body of the operation.
 // options - VolumeGroupsClientBeginCreateOptions contains the optional parameters for the VolumeGroupsClient.BeginCreate
 // method.
-func (client *VolumeGroupsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, volumeGroupName string, body VolumeGroupDetails, options *VolumeGroupsClientBeginCreateOptions) (VolumeGroupsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, volumeGroupName, body, options)
-	if err != nil {
-		return VolumeGroupsClientCreatePollerResponse{}, err
+func (client *VolumeGroupsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, volumeGroupName string, body VolumeGroupDetails, options *VolumeGroupsClientBeginCreateOptions) (*armruntime.Poller[VolumeGroupsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, volumeGroupName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumeGroupsClientCreateResponse]("VolumeGroupsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumeGroupsClientCreateResponse]("VolumeGroupsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumeGroupsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumeGroupsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return VolumeGroupsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &VolumeGroupsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a volume group along with specified volumes
@@ -128,20 +124,16 @@ func (client *VolumeGroupsClient) createCreateRequest(ctx context.Context, resou
 // volumeGroupName - The name of the volumeGroup
 // options - VolumeGroupsClientBeginDeleteOptions contains the optional parameters for the VolumeGroupsClient.BeginDelete
 // method.
-func (client *VolumeGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, volumeGroupName string, options *VolumeGroupsClientBeginDeleteOptions) (VolumeGroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, volumeGroupName, options)
-	if err != nil {
-		return VolumeGroupsClientDeletePollerResponse{}, err
+func (client *VolumeGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, volumeGroupName string, options *VolumeGroupsClientBeginDeleteOptions) (*armruntime.Poller[VolumeGroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, volumeGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumeGroupsClientDeleteResponse]("VolumeGroupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumeGroupsClientDeleteResponse]("VolumeGroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumeGroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumeGroupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VolumeGroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VolumeGroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified volume group only if there are no volumes under volume group.
@@ -256,13 +248,26 @@ func (client *VolumeGroupsClient) getHandleResponse(resp *http.Response) (Volume
 // accountName - The name of the NetApp account
 // options - VolumeGroupsClientListByNetAppAccountOptions contains the optional parameters for the VolumeGroupsClient.ListByNetAppAccount
 // method.
-func (client *VolumeGroupsClient) ListByNetAppAccount(resourceGroupName string, accountName string, options *VolumeGroupsClientListByNetAppAccountOptions) *VolumeGroupsClientListByNetAppAccountPager {
-	return &VolumeGroupsClientListByNetAppAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNetAppAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *VolumeGroupsClient) ListByNetAppAccount(resourceGroupName string, accountName string, options *VolumeGroupsClientListByNetAppAccountOptions) *runtime.Pager[VolumeGroupsClientListByNetAppAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeGroupsClientListByNetAppAccountResponse]{
+		More: func(page VolumeGroupsClientListByNetAppAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *VolumeGroupsClientListByNetAppAccountResponse) (VolumeGroupsClientListByNetAppAccountResponse, error) {
+			req, err := client.listByNetAppAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return VolumeGroupsClientListByNetAppAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeGroupsClientListByNetAppAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeGroupsClientListByNetAppAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNetAppAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByNetAppAccountCreateRequest creates the ListByNetAppAccount request.

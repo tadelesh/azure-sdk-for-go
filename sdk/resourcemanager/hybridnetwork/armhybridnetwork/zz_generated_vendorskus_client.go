@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewVendorSKUsClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - Parameters supplied to the create or update sku operation.
 // options - VendorSKUsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorSKUsClient.BeginCreateOrUpdate
 // method.
-func (client *VendorSKUsClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, skuName string, parameters VendorSKU, options *VendorSKUsClientBeginCreateOrUpdateOptions) (VendorSKUsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, vendorName, skuName, parameters, options)
-	if err != nil {
-		return VendorSKUsClientCreateOrUpdatePollerResponse{}, err
+func (client *VendorSKUsClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, skuName string, parameters VendorSKU, options *VendorSKUsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VendorSKUsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, vendorName, skuName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorSKUsClientCreateOrUpdateResponse]("VendorSKUsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorSKUsClientCreateOrUpdateResponse]("VendorSKUsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorSKUsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorSKUsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VendorSKUsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VendorSKUsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a sku. This operation can take up to 2 hours to complete. This is expected service
@@ -122,20 +118,16 @@ func (client *VendorSKUsClient) createOrUpdateCreateRequest(ctx context.Context,
 // vendorName - The name of the vendor.
 // skuName - The name of the sku.
 // options - VendorSKUsClientBeginDeleteOptions contains the optional parameters for the VendorSKUsClient.BeginDelete method.
-func (client *VendorSKUsClient) BeginDelete(ctx context.Context, vendorName string, skuName string, options *VendorSKUsClientBeginDeleteOptions) (VendorSKUsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, vendorName, skuName, options)
-	if err != nil {
-		return VendorSKUsClientDeletePollerResponse{}, err
+func (client *VendorSKUsClient) BeginDelete(ctx context.Context, vendorName string, skuName string, options *VendorSKUsClientBeginDeleteOptions) (*armruntime.Poller[VendorSKUsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, vendorName, skuName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorSKUsClientDeleteResponse]("VendorSKUsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorSKUsClientDeleteResponse]("VendorSKUsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorSKUsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorSKUsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VendorSKUsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VendorSKUsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified sku. This operation can take up to 2 hours to complete. This is expected service behavior.
@@ -240,16 +232,32 @@ func (client *VendorSKUsClient) getHandleResponse(resp *http.Response) (VendorSK
 // If the operation fails it returns an *azcore.ResponseError type.
 // vendorName - The name of the vendor.
 // options - VendorSKUsClientListOptions contains the optional parameters for the VendorSKUsClient.List method.
-func (client *VendorSKUsClient) List(vendorName string, options *VendorSKUsClientListOptions) *VendorSKUsClientListPager {
-	return &VendorSKUsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vendorName, options)
+func (client *VendorSKUsClient) List(vendorName string, options *VendorSKUsClientListOptions) *runtime.Pager[VendorSKUsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VendorSKUsClientListResponse]{
+		More: func(page VendorSKUsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VendorSKUsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VendorSKUListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VendorSKUsClientListResponse) (VendorSKUsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vendorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VendorSKUsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VendorSKUsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VendorSKUsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

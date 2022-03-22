@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewNetworkFunctionVendorsClient(subscriptionID string, credential azcore.To
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - NetworkFunctionVendorsClientListOptions contains the optional parameters for the NetworkFunctionVendorsClient.List
 // method.
-func (client *NetworkFunctionVendorsClient) List(options *NetworkFunctionVendorsClientListOptions) *NetworkFunctionVendorsClientListPager {
-	return &NetworkFunctionVendorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *NetworkFunctionVendorsClient) List(options *NetworkFunctionVendorsClientListOptions) *runtime.Pager[NetworkFunctionVendorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkFunctionVendorsClientListResponse]{
+		More: func(page NetworkFunctionVendorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkFunctionVendorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionVendorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkFunctionVendorsClientListResponse) (NetworkFunctionVendorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkFunctionVendorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkFunctionVendorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkFunctionVendorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

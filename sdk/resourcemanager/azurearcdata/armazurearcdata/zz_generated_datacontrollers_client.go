@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewDataControllersClient(subscriptionID string, credential azcore.TokenCred
 // resourceGroupName - The name of the Azure resource group
 // options - DataControllersClientBeginDeleteDataControllerOptions contains the optional parameters for the DataControllersClient.BeginDeleteDataController
 // method.
-func (client *DataControllersClient) BeginDeleteDataController(ctx context.Context, resourceGroupName string, dataControllerName string, options *DataControllersClientBeginDeleteDataControllerOptions) (DataControllersClientDeleteDataControllerPollerResponse, error) {
-	resp, err := client.deleteDataController(ctx, resourceGroupName, dataControllerName, options)
-	if err != nil {
-		return DataControllersClientDeleteDataControllerPollerResponse{}, err
+func (client *DataControllersClient) BeginDeleteDataController(ctx context.Context, resourceGroupName string, dataControllerName string, options *DataControllersClientBeginDeleteDataControllerOptions) (*armruntime.Poller[DataControllersClientDeleteDataControllerResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteDataController(ctx, resourceGroupName, dataControllerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataControllersClientDeleteDataControllerResponse]("DataControllersClient.DeleteDataController", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataControllersClientDeleteDataControllerResponse]("DataControllersClient.DeleteDataController", options.ResumeToken, client.pl, nil)
 	}
-	result := DataControllersClientDeleteDataControllerPollerResponse{}
-	pt, err := armruntime.NewPoller("DataControllersClient.DeleteDataController", "", resp, client.pl)
-	if err != nil {
-		return DataControllersClientDeleteDataControllerPollerResponse{}, err
-	}
-	result.Poller = &DataControllersClientDeleteDataControllerPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteDataController - Deletes a dataController resource
@@ -173,16 +169,32 @@ func (client *DataControllersClient) getDataControllerHandleResponse(resp *http.
 // resourceGroupName - The name of the Azure resource group
 // options - DataControllersClientListInGroupOptions contains the optional parameters for the DataControllersClient.ListInGroup
 // method.
-func (client *DataControllersClient) ListInGroup(resourceGroupName string, options *DataControllersClientListInGroupOptions) *DataControllersClientListInGroupPager {
-	return &DataControllersClientListInGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listInGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DataControllersClient) ListInGroup(resourceGroupName string, options *DataControllersClientListInGroupOptions) *runtime.Pager[DataControllersClientListInGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataControllersClientListInGroupResponse]{
+		More: func(page DataControllersClientListInGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataControllersClientListInGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PageOfDataControllerResource.NextLink)
+		Fetcher: func(ctx context.Context, page *DataControllersClientListInGroupResponse) (DataControllersClientListInGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listInGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataControllersClientListInGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataControllersClientListInGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataControllersClientListInGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listInGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listInGroupCreateRequest creates the ListInGroup request.
@@ -220,16 +232,32 @@ func (client *DataControllersClient) listInGroupHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DataControllersClientListInSubscriptionOptions contains the optional parameters for the DataControllersClient.ListInSubscription
 // method.
-func (client *DataControllersClient) ListInSubscription(options *DataControllersClientListInSubscriptionOptions) *DataControllersClientListInSubscriptionPager {
-	return &DataControllersClientListInSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listInSubscriptionCreateRequest(ctx, options)
+func (client *DataControllersClient) ListInSubscription(options *DataControllersClientListInSubscriptionOptions) *runtime.Pager[DataControllersClientListInSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataControllersClientListInSubscriptionResponse]{
+		More: func(page DataControllersClientListInSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataControllersClientListInSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PageOfDataControllerResource.NextLink)
+		Fetcher: func(ctx context.Context, page *DataControllersClientListInSubscriptionResponse) (DataControllersClientListInSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listInSubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataControllersClientListInSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataControllersClientListInSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataControllersClientListInSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listInSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listInSubscriptionCreateRequest creates the ListInSubscription request.
@@ -321,20 +349,16 @@ func (client *DataControllersClient) patchDataControllerHandleResponse(resp *htt
 // dataControllerResource - desc
 // options - DataControllersClientBeginPutDataControllerOptions contains the optional parameters for the DataControllersClient.BeginPutDataController
 // method.
-func (client *DataControllersClient) BeginPutDataController(ctx context.Context, resourceGroupName string, dataControllerName string, dataControllerResource DataControllerResource, options *DataControllersClientBeginPutDataControllerOptions) (DataControllersClientPutDataControllerPollerResponse, error) {
-	resp, err := client.putDataController(ctx, resourceGroupName, dataControllerName, dataControllerResource, options)
-	if err != nil {
-		return DataControllersClientPutDataControllerPollerResponse{}, err
+func (client *DataControllersClient) BeginPutDataController(ctx context.Context, resourceGroupName string, dataControllerName string, dataControllerResource DataControllerResource, options *DataControllersClientBeginPutDataControllerOptions) (*armruntime.Poller[DataControllersClientPutDataControllerResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.putDataController(ctx, resourceGroupName, dataControllerName, dataControllerResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataControllersClientPutDataControllerResponse]("DataControllersClient.PutDataController", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataControllersClientPutDataControllerResponse]("DataControllersClient.PutDataController", options.ResumeToken, client.pl, nil)
 	}
-	result := DataControllersClientPutDataControllerPollerResponse{}
-	pt, err := armruntime.NewPoller("DataControllersClient.PutDataController", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DataControllersClientPutDataControllerPollerResponse{}, err
-	}
-	result.Poller = &DataControllersClientPutDataControllerPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PutDataController - Creates or replaces a dataController resource

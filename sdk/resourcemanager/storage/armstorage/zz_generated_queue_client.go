@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -236,16 +236,32 @@ func (client *QueueClient) getHandleResponse(resp *http.Response) (QueueClientGe
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - QueueClientListOptions contains the optional parameters for the QueueClient.List method.
-func (client *QueueClient) List(resourceGroupName string, accountName string, options *QueueClientListOptions) *QueueClientListPager {
-	return &QueueClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *QueueClient) List(resourceGroupName string, accountName string, options *QueueClientListOptions) *runtime.Pager[QueueClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[QueueClientListResponse]{
+		More: func(page QueueClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp QueueClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListQueueResource.NextLink)
+		Fetcher: func(ctx context.Context, page *QueueClientListResponse) (QueueClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return QueueClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return QueueClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return QueueClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

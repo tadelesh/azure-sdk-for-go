@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewDatabaseMigrationsSQLVMClient(subscriptionID string, credential azcore.T
 // targetDbName - The name of the target database.
 // options - DatabaseMigrationsSQLVMClientBeginCancelOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCancel
 // method.
-func (client *DatabaseMigrationsSQLVMClient) BeginCancel(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLVMClientBeginCancelOptions) (DatabaseMigrationsSQLVMClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCancelPollerResponse{}, err
+func (client *DatabaseMigrationsSQLVMClient) BeginCancel(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLVMClientBeginCancelOptions) (*armruntime.Poller[DatabaseMigrationsSQLVMClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLVMClientCancelResponse]("DatabaseMigrationsSQLVMClient.Cancel", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLVMClientCancelResponse]("DatabaseMigrationsSQLVMClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLVMClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLVMClient.Cancel", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCancelPollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLVMClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - Stop ongoing migration for the database.
@@ -126,20 +122,16 @@ func (client *DatabaseMigrationsSQLVMClient) cancelCreateRequest(ctx context.Con
 // parameters - Details of SqlMigrationService resource.
 // options - DatabaseMigrationsSQLVMClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCreateOrUpdate
 // method.
-func (client *DatabaseMigrationsSQLVMClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters DatabaseMigrationSQLVM, options *DatabaseMigrationsSQLVMClientBeginCreateOrUpdateOptions) (DatabaseMigrationsSQLVMClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabaseMigrationsSQLVMClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters DatabaseMigrationSQLVM, options *DatabaseMigrationsSQLVMClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabaseMigrationsSQLVMClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLVMClientCreateOrUpdateResponse]("DatabaseMigrationsSQLVMClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLVMClientCreateOrUpdateResponse]("DatabaseMigrationsSQLVMClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLVMClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLVMClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLVMClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or Update Database Migration resource.
@@ -196,20 +188,16 @@ func (client *DatabaseMigrationsSQLVMClient) createOrUpdateCreateRequest(ctx con
 // targetDbName - The name of the target database.
 // options - DatabaseMigrationsSQLVMClientBeginCutoverOptions contains the optional parameters for the DatabaseMigrationsSQLVMClient.BeginCutover
 // method.
-func (client *DatabaseMigrationsSQLVMClient) BeginCutover(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLVMClientBeginCutoverOptions) (DatabaseMigrationsSQLVMClientCutoverPollerResponse, error) {
-	resp, err := client.cutover(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCutoverPollerResponse{}, err
+func (client *DatabaseMigrationsSQLVMClient) BeginCutover(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLVMClientBeginCutoverOptions) (*armruntime.Poller[DatabaseMigrationsSQLVMClientCutoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cutover(ctx, resourceGroupName, sqlVirtualMachineName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLVMClientCutoverResponse]("DatabaseMigrationsSQLVMClient.Cutover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLVMClientCutoverResponse]("DatabaseMigrationsSQLVMClient.Cutover", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLVMClientCutoverPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLVMClient.Cutover", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLVMClientCutoverPollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLVMClientCutoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cutover - Cutover online migration operation for the database.

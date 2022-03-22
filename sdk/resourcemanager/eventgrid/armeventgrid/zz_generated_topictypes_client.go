@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -95,13 +95,26 @@ func (client *TopicTypesClient) getHandleResponse(resp *http.Response) (TopicTyp
 // List - List all registered topic types.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TopicTypesClientListOptions contains the optional parameters for the TopicTypesClient.List method.
-func (client *TopicTypesClient) List(options *TopicTypesClientListOptions) *TopicTypesClientListPager {
-	return &TopicTypesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *TopicTypesClient) List(options *TopicTypesClientListOptions) *runtime.Pager[TopicTypesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopicTypesClientListResponse]{
+		More: func(page TopicTypesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *TopicTypesClientListResponse) (TopicTypesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return TopicTypesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopicTypesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopicTypesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -132,13 +145,26 @@ func (client *TopicTypesClient) listHandleResponse(resp *http.Response) (TopicTy
 // topicTypeName - Name of the topic type.
 // options - TopicTypesClientListEventTypesOptions contains the optional parameters for the TopicTypesClient.ListEventTypes
 // method.
-func (client *TopicTypesClient) ListEventTypes(topicTypeName string, options *TopicTypesClientListEventTypesOptions) *TopicTypesClientListEventTypesPager {
-	return &TopicTypesClientListEventTypesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listEventTypesCreateRequest(ctx, topicTypeName, options)
+func (client *TopicTypesClient) ListEventTypes(topicTypeName string, options *TopicTypesClientListEventTypesOptions) *runtime.Pager[TopicTypesClientListEventTypesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopicTypesClientListEventTypesResponse]{
+		More: func(page TopicTypesClientListEventTypesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *TopicTypesClientListEventTypesResponse) (TopicTypesClientListEventTypesResponse, error) {
+			req, err := client.listEventTypesCreateRequest(ctx, topicTypeName, options)
+			if err != nil {
+				return TopicTypesClientListEventTypesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopicTypesClientListEventTypesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopicTypesClientListEventTypesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listEventTypesHandleResponse(resp)
+		},
+	})
 }
 
 // listEventTypesCreateRequest creates the ListEventTypes request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -886,12 +886,14 @@ type VaultUsageList struct {
 
 // VaultsClientBeginCreateOrUpdateOptions contains the optional parameters for the VaultsClient.BeginCreateOrUpdate method.
 type VaultsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VaultsClientBeginUpdateOptions contains the optional parameters for the VaultsClient.BeginUpdate method.
 type VaultsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VaultsClientDeleteOptions contains the optional parameters for the VaultsClient.Delete method.

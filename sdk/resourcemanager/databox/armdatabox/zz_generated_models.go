@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1288,18 +1288,22 @@ type JobStages struct {
 
 // JobsClientBeginCreateOptions contains the optional parameters for the JobsClient.BeginCreate method.
 type JobsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientBeginDeleteOptions contains the optional parameters for the JobsClient.BeginDelete method.
 type JobsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientBeginUpdateOptions contains the optional parameters for the JobsClient.BeginUpdate method.
 type JobsClientBeginUpdateOptions struct {
 	// Defines the If-Match condition. The patch will be performed only if the ETag of the job on the server matches this value.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientBookShipmentPickUpOptions contains the optional parameters for the JobsClient.BookShipmentPickUp method.

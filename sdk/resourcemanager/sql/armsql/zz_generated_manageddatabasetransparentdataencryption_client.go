@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -192,16 +192,32 @@ func (client *ManagedDatabaseTransparentDataEncryptionClient) getHandleResponse(
 // databaseName - The name of the managed database for which the transparent data encryption is defined.
 // options - ManagedDatabaseTransparentDataEncryptionClientListByDatabaseOptions contains the optional parameters for the
 // ManagedDatabaseTransparentDataEncryptionClient.ListByDatabase method.
-func (client *ManagedDatabaseTransparentDataEncryptionClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedDatabaseTransparentDataEncryptionClientListByDatabaseOptions) *ManagedDatabaseTransparentDataEncryptionClientListByDatabasePager {
-	return &ManagedDatabaseTransparentDataEncryptionClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+func (client *ManagedDatabaseTransparentDataEncryptionClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedDatabaseTransparentDataEncryptionClientListByDatabaseOptions) *runtime.Pager[ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse]{
+		More: func(page ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedTransparentDataEncryptionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse) (ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedDatabaseTransparentDataEncryptionClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

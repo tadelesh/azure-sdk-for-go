@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewLivePipelinesClient(subscriptionID string, credential azcore.TokenCreden
 // livePipelineName - Live pipeline unique identifier.
 // options - LivePipelinesClientBeginActivateOptions contains the optional parameters for the LivePipelinesClient.BeginActivate
 // method.
-func (client *LivePipelinesClient) BeginActivate(ctx context.Context, resourceGroupName string, accountName string, livePipelineName string, options *LivePipelinesClientBeginActivateOptions) (LivePipelinesClientActivatePollerResponse, error) {
-	resp, err := client.activate(ctx, resourceGroupName, accountName, livePipelineName, options)
-	if err != nil {
-		return LivePipelinesClientActivatePollerResponse{}, err
+func (client *LivePipelinesClient) BeginActivate(ctx context.Context, resourceGroupName string, accountName string, livePipelineName string, options *LivePipelinesClientBeginActivateOptions) (*armruntime.Poller[LivePipelinesClientActivateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.activate(ctx, resourceGroupName, accountName, livePipelineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LivePipelinesClientActivateResponse]("LivePipelinesClient.Activate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LivePipelinesClientActivateResponse]("LivePipelinesClient.Activate", options.ResumeToken, client.pl, nil)
 	}
-	result := LivePipelinesClientActivatePollerResponse{}
-	pt, err := armruntime.NewPoller("LivePipelinesClient.Activate", "", resp, client.pl)
-	if err != nil {
-		return LivePipelinesClientActivatePollerResponse{}, err
-	}
-	result.Poller = &LivePipelinesClientActivatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Activate - Activates a live pipeline with the given name.
@@ -189,20 +185,16 @@ func (client *LivePipelinesClient) createOrUpdateHandleResponse(resp *http.Respo
 // livePipelineName - Live pipeline unique identifier.
 // options - LivePipelinesClientBeginDeactivateOptions contains the optional parameters for the LivePipelinesClient.BeginDeactivate
 // method.
-func (client *LivePipelinesClient) BeginDeactivate(ctx context.Context, resourceGroupName string, accountName string, livePipelineName string, options *LivePipelinesClientBeginDeactivateOptions) (LivePipelinesClientDeactivatePollerResponse, error) {
-	resp, err := client.deactivate(ctx, resourceGroupName, accountName, livePipelineName, options)
-	if err != nil {
-		return LivePipelinesClientDeactivatePollerResponse{}, err
+func (client *LivePipelinesClient) BeginDeactivate(ctx context.Context, resourceGroupName string, accountName string, livePipelineName string, options *LivePipelinesClientBeginDeactivateOptions) (*armruntime.Poller[LivePipelinesClientDeactivateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deactivate(ctx, resourceGroupName, accountName, livePipelineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LivePipelinesClientDeactivateResponse]("LivePipelinesClient.Deactivate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LivePipelinesClientDeactivateResponse]("LivePipelinesClient.Deactivate", options.ResumeToken, client.pl, nil)
 	}
-	result := LivePipelinesClientDeactivatePollerResponse{}
-	pt, err := armruntime.NewPoller("LivePipelinesClient.Deactivate", "", resp, client.pl)
-	if err != nil {
-		return LivePipelinesClientDeactivatePollerResponse{}, err
-	}
-	result.Poller = &LivePipelinesClientDeactivatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Deactivate - Deactivates a live pipeline with the given name.
@@ -369,16 +361,32 @@ func (client *LivePipelinesClient) getHandleResponse(resp *http.Response) (LiveP
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // accountName - The Azure Video Analyzer account name.
 // options - LivePipelinesClientListOptions contains the optional parameters for the LivePipelinesClient.List method.
-func (client *LivePipelinesClient) List(resourceGroupName string, accountName string, options *LivePipelinesClientListOptions) *LivePipelinesClientListPager {
-	return &LivePipelinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *LivePipelinesClient) List(resourceGroupName string, accountName string, options *LivePipelinesClientListOptions) *runtime.Pager[LivePipelinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LivePipelinesClientListResponse]{
+		More: func(page LivePipelinesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LivePipelinesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LivePipelineCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *LivePipelinesClientListResponse) (LivePipelinesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LivePipelinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LivePipelinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LivePipelinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

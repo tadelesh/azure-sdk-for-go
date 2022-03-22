@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -420,16 +420,32 @@ func (client *WCFRelaysClient) getAuthorizationRuleHandleResponse(resp *http.Res
 // relayName - The relay name.
 // options - WCFRelaysClientListAuthorizationRulesOptions contains the optional parameters for the WCFRelaysClient.ListAuthorizationRules
 // method.
-func (client *WCFRelaysClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, relayName string, options *WCFRelaysClientListAuthorizationRulesOptions) *WCFRelaysClientListAuthorizationRulesPager {
-	return &WCFRelaysClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, relayName, options)
+func (client *WCFRelaysClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, relayName string, options *WCFRelaysClientListAuthorizationRulesOptions) *runtime.Pager[WCFRelaysClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WCFRelaysClientListAuthorizationRulesResponse]{
+		More: func(page WCFRelaysClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WCFRelaysClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WCFRelaysClientListAuthorizationRulesResponse) (WCFRelaysClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, relayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WCFRelaysClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WCFRelaysClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WCFRelaysClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.
@@ -477,16 +493,32 @@ func (client *WCFRelaysClient) listAuthorizationRulesHandleResponse(resp *http.R
 // namespaceName - The namespace name
 // options - WCFRelaysClientListByNamespaceOptions contains the optional parameters for the WCFRelaysClient.ListByNamespace
 // method.
-func (client *WCFRelaysClient) ListByNamespace(resourceGroupName string, namespaceName string, options *WCFRelaysClientListByNamespaceOptions) *WCFRelaysClientListByNamespacePager {
-	return &WCFRelaysClientListByNamespacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *WCFRelaysClient) ListByNamespace(resourceGroupName string, namespaceName string, options *WCFRelaysClientListByNamespaceOptions) *runtime.Pager[WCFRelaysClientListByNamespaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WCFRelaysClientListByNamespaceResponse]{
+		More: func(page WCFRelaysClientListByNamespaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WCFRelaysClientListByNamespaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WcfRelaysListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WCFRelaysClientListByNamespaceResponse) (WCFRelaysClientListByNamespaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WCFRelaysClientListByNamespaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WCFRelaysClientListByNamespaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WCFRelaysClientListByNamespaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNamespaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByNamespaceCreateRequest creates the ListByNamespace request.

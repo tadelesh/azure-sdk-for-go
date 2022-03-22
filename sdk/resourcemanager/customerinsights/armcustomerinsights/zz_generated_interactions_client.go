@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewInteractionsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - Parameters supplied to the CreateOrUpdate Interaction operation.
 // options - InteractionsClientBeginCreateOrUpdateOptions contains the optional parameters for the InteractionsClient.BeginCreateOrUpdate
 // method.
-func (client *InteractionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, interactionName string, parameters InteractionResourceFormat, options *InteractionsClientBeginCreateOrUpdateOptions) (InteractionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, interactionName, parameters, options)
-	if err != nil {
-		return InteractionsClientCreateOrUpdatePollerResponse{}, err
+func (client *InteractionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, interactionName string, parameters InteractionResourceFormat, options *InteractionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[InteractionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, interactionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InteractionsClientCreateOrUpdateResponse]("InteractionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InteractionsClientCreateOrUpdateResponse]("InteractionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := InteractionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("InteractionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return InteractionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &InteractionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates an interaction or updates an existing interaction within a hub.
@@ -189,16 +185,32 @@ func (client *InteractionsClient) getHandleResponse(resp *http.Response) (Intera
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - InteractionsClientListByHubOptions contains the optional parameters for the InteractionsClient.ListByHub method.
-func (client *InteractionsClient) ListByHub(resourceGroupName string, hubName string, options *InteractionsClientListByHubOptions) *InteractionsClientListByHubPager {
-	return &InteractionsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *InteractionsClient) ListByHub(resourceGroupName string, hubName string, options *InteractionsClientListByHubOptions) *runtime.Pager[InteractionsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InteractionsClientListByHubResponse]{
+		More: func(page InteractionsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InteractionsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InteractionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *InteractionsClientListByHubResponse) (InteractionsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InteractionsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InteractionsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InteractionsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

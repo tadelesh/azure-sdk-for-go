@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,20 +113,16 @@ func (client *OperationalizationClustersClient) checkSystemServicesUpdatesAvaila
 // parameters - Parameters supplied to create or update an Operationalization cluster.
 // options - OperationalizationClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the OperationalizationClustersClient.BeginCreateOrUpdate
 // method.
-func (client *OperationalizationClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters OperationalizationCluster, options *OperationalizationClustersClientBeginCreateOrUpdateOptions) (OperationalizationClustersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return OperationalizationClustersClientCreateOrUpdatePollerResponse{}, err
+func (client *OperationalizationClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters OperationalizationCluster, options *OperationalizationClustersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[OperationalizationClustersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OperationalizationClustersClientCreateOrUpdateResponse]("OperationalizationClustersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OperationalizationClustersClientCreateOrUpdateResponse]("OperationalizationClustersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := OperationalizationClustersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("OperationalizationClustersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return OperationalizationClustersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &OperationalizationClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update an operationalization cluster.
@@ -178,20 +174,16 @@ func (client *OperationalizationClustersClient) createOrUpdateCreateRequest(ctx 
 // clusterName - The name of the cluster.
 // options - OperationalizationClustersClientBeginDeleteOptions contains the optional parameters for the OperationalizationClustersClient.BeginDelete
 // method.
-func (client *OperationalizationClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *OperationalizationClustersClientBeginDeleteOptions) (OperationalizationClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return OperationalizationClustersClientDeletePollerResponse{}, err
+func (client *OperationalizationClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *OperationalizationClustersClientBeginDeleteOptions) (*armruntime.Poller[OperationalizationClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OperationalizationClustersClientDeleteResponse]("OperationalizationClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OperationalizationClustersClientDeleteResponse]("OperationalizationClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OperationalizationClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OperationalizationClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return OperationalizationClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OperationalizationClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified cluster.
@@ -302,16 +294,32 @@ func (client *OperationalizationClustersClient) getHandleResponse(resp *http.Res
 // resourceGroupName - Name of the resource group in which the cluster is located.
 // options - OperationalizationClustersClientListByResourceGroupOptions contains the optional parameters for the OperationalizationClustersClient.ListByResourceGroup
 // method.
-func (client *OperationalizationClustersClient) ListByResourceGroup(resourceGroupName string, options *OperationalizationClustersClientListByResourceGroupOptions) *OperationalizationClustersClientListByResourceGroupPager {
-	return &OperationalizationClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *OperationalizationClustersClient) ListByResourceGroup(resourceGroupName string, options *OperationalizationClustersClientListByResourceGroupOptions) *runtime.Pager[OperationalizationClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OperationalizationClustersClientListByResourceGroupResponse]{
+		More: func(page OperationalizationClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OperationalizationClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PaginatedOperationalizationClustersList.NextLink)
+		Fetcher: func(ctx context.Context, page *OperationalizationClustersClientListByResourceGroupResponse) (OperationalizationClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OperationalizationClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OperationalizationClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OperationalizationClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -352,16 +360,32 @@ func (client *OperationalizationClustersClient) listByResourceGroupHandleRespons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OperationalizationClustersClientListBySubscriptionIDOptions contains the optional parameters for the OperationalizationClustersClient.ListBySubscriptionID
 // method.
-func (client *OperationalizationClustersClient) ListBySubscriptionID(options *OperationalizationClustersClientListBySubscriptionIDOptions) *OperationalizationClustersClientListBySubscriptionIDPager {
-	return &OperationalizationClustersClientListBySubscriptionIDPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionIDCreateRequest(ctx, options)
+func (client *OperationalizationClustersClient) ListBySubscriptionID(options *OperationalizationClustersClientListBySubscriptionIDOptions) *runtime.Pager[OperationalizationClustersClientListBySubscriptionIDResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OperationalizationClustersClientListBySubscriptionIDResponse]{
+		More: func(page OperationalizationClustersClientListBySubscriptionIDResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OperationalizationClustersClientListBySubscriptionIDResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PaginatedOperationalizationClustersList.NextLink)
+		Fetcher: func(ctx context.Context, page *OperationalizationClustersClientListBySubscriptionIDResponse) (OperationalizationClustersClientListBySubscriptionIDResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionIDCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OperationalizationClustersClientListBySubscriptionIDResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OperationalizationClustersClientListBySubscriptionIDResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OperationalizationClustersClientListBySubscriptionIDResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionIDHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionIDCreateRequest creates the ListBySubscriptionID request.
@@ -514,20 +538,16 @@ func (client *OperationalizationClustersClient) updateHandleResponse(resp *http.
 // clusterName - The name of the cluster.
 // options - OperationalizationClustersClientBeginUpdateSystemServicesOptions contains the optional parameters for the OperationalizationClustersClient.BeginUpdateSystemServices
 // method.
-func (client *OperationalizationClustersClient) BeginUpdateSystemServices(ctx context.Context, resourceGroupName string, clusterName string, options *OperationalizationClustersClientBeginUpdateSystemServicesOptions) (OperationalizationClustersClientUpdateSystemServicesPollerResponse, error) {
-	resp, err := client.updateSystemServices(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return OperationalizationClustersClientUpdateSystemServicesPollerResponse{}, err
+func (client *OperationalizationClustersClient) BeginUpdateSystemServices(ctx context.Context, resourceGroupName string, clusterName string, options *OperationalizationClustersClientBeginUpdateSystemServicesOptions) (*armruntime.Poller[OperationalizationClustersClientUpdateSystemServicesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateSystemServices(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OperationalizationClustersClientUpdateSystemServicesResponse]("OperationalizationClustersClient.UpdateSystemServices", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OperationalizationClustersClientUpdateSystemServicesResponse]("OperationalizationClustersClient.UpdateSystemServices", options.ResumeToken, client.pl, nil)
 	}
-	result := OperationalizationClustersClientUpdateSystemServicesPollerResponse{}
-	pt, err := armruntime.NewPoller("OperationalizationClustersClient.UpdateSystemServices", "", resp, client.pl)
-	if err != nil {
-		return OperationalizationClustersClientUpdateSystemServicesPollerResponse{}, err
-	}
-	result.Poller = &OperationalizationClustersClientUpdateSystemServicesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateSystemServices - Updates system services in a cluster.

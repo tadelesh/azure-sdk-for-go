@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewTopicsClient(subscriptionID string, credential azcore.TokenCredential, o
 // topicInfo - Topic information.
 // options - TopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the TopicsClient.BeginCreateOrUpdate
 // method.
-func (client *TopicsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, topicName string, topicInfo Topic, options *TopicsClientBeginCreateOrUpdateOptions) (TopicsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, topicName, topicInfo, options)
-	if err != nil {
-		return TopicsClientCreateOrUpdatePollerResponse{}, err
+func (client *TopicsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, topicName string, topicInfo Topic, options *TopicsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[TopicsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, topicName, topicInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TopicsClientCreateOrUpdateResponse]("TopicsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TopicsClientCreateOrUpdateResponse]("TopicsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := TopicsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("TopicsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return TopicsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &TopicsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Asynchronously creates a new topic with the specified parameters.
@@ -122,20 +118,16 @@ func (client *TopicsClient) createOrUpdateCreateRequest(ctx context.Context, res
 // resourceGroupName - The name of the resource group within the user's subscription.
 // topicName - Name of the topic.
 // options - TopicsClientBeginDeleteOptions contains the optional parameters for the TopicsClient.BeginDelete method.
-func (client *TopicsClient) BeginDelete(ctx context.Context, resourceGroupName string, topicName string, options *TopicsClientBeginDeleteOptions) (TopicsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, topicName, options)
-	if err != nil {
-		return TopicsClientDeletePollerResponse{}, err
+func (client *TopicsClient) BeginDelete(ctx context.Context, resourceGroupName string, topicName string, options *TopicsClientBeginDeleteOptions) (*armruntime.Poller[TopicsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, topicName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TopicsClientDeleteResponse]("TopicsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TopicsClientDeleteResponse]("TopicsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TopicsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TopicsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TopicsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TopicsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete existing topic.
@@ -240,16 +232,32 @@ func (client *TopicsClient) getHandleResponse(resp *http.Response) (TopicsClient
 // resourceGroupName - The name of the resource group within the user's subscription.
 // options - TopicsClientListByResourceGroupOptions contains the optional parameters for the TopicsClient.ListByResourceGroup
 // method.
-func (client *TopicsClient) ListByResourceGroup(resourceGroupName string, options *TopicsClientListByResourceGroupOptions) *TopicsClientListByResourceGroupPager {
-	return &TopicsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *TopicsClient) ListByResourceGroup(resourceGroupName string, options *TopicsClientListByResourceGroupOptions) *runtime.Pager[TopicsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopicsClientListByResourceGroupResponse]{
+		More: func(page TopicsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TopicsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TopicsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TopicsClientListByResourceGroupResponse) (TopicsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TopicsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopicsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopicsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -293,16 +301,32 @@ func (client *TopicsClient) listByResourceGroupHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TopicsClientListBySubscriptionOptions contains the optional parameters for the TopicsClient.ListBySubscription
 // method.
-func (client *TopicsClient) ListBySubscription(options *TopicsClientListBySubscriptionOptions) *TopicsClientListBySubscriptionPager {
-	return &TopicsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *TopicsClient) ListBySubscription(options *TopicsClientListBySubscriptionOptions) *runtime.Pager[TopicsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopicsClientListBySubscriptionResponse]{
+		More: func(page TopicsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TopicsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TopicsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TopicsClientListBySubscriptionResponse) (TopicsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TopicsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopicsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopicsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -345,13 +369,26 @@ func (client *TopicsClient) listBySubscriptionHandleResponse(resp *http.Response
 // resourceTypeName - Name of the topic type.
 // resourceName - Name of the topic.
 // options - TopicsClientListEventTypesOptions contains the optional parameters for the TopicsClient.ListEventTypes method.
-func (client *TopicsClient) ListEventTypes(resourceGroupName string, providerNamespace string, resourceTypeName string, resourceName string, options *TopicsClientListEventTypesOptions) *TopicsClientListEventTypesPager {
-	return &TopicsClientListEventTypesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listEventTypesCreateRequest(ctx, resourceGroupName, providerNamespace, resourceTypeName, resourceName, options)
+func (client *TopicsClient) ListEventTypes(resourceGroupName string, providerNamespace string, resourceTypeName string, resourceName string, options *TopicsClientListEventTypesOptions) *runtime.Pager[TopicsClientListEventTypesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopicsClientListEventTypesResponse]{
+		More: func(page TopicsClientListEventTypesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *TopicsClientListEventTypesResponse) (TopicsClientListEventTypesResponse, error) {
+			req, err := client.listEventTypesCreateRequest(ctx, resourceGroupName, providerNamespace, resourceTypeName, resourceName, options)
+			if err != nil {
+				return TopicsClientListEventTypesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopicsClientListEventTypesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopicsClientListEventTypesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listEventTypesHandleResponse(resp)
+		},
+	})
 }
 
 // listEventTypesCreateRequest creates the ListEventTypes request.
@@ -460,20 +497,16 @@ func (client *TopicsClient) listSharedAccessKeysHandleResponse(resp *http.Respon
 // regenerateKeyRequest - Request body to regenerate key.
 // options - TopicsClientBeginRegenerateKeyOptions contains the optional parameters for the TopicsClient.BeginRegenerateKey
 // method.
-func (client *TopicsClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, topicName string, regenerateKeyRequest TopicRegenerateKeyRequest, options *TopicsClientBeginRegenerateKeyOptions) (TopicsClientRegenerateKeyPollerResponse, error) {
-	resp, err := client.regenerateKey(ctx, resourceGroupName, topicName, regenerateKeyRequest, options)
-	if err != nil {
-		return TopicsClientRegenerateKeyPollerResponse{}, err
+func (client *TopicsClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, topicName string, regenerateKeyRequest TopicRegenerateKeyRequest, options *TopicsClientBeginRegenerateKeyOptions) (*armruntime.Poller[TopicsClientRegenerateKeyResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.regenerateKey(ctx, resourceGroupName, topicName, regenerateKeyRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TopicsClientRegenerateKeyResponse]("TopicsClient.RegenerateKey", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TopicsClientRegenerateKeyResponse]("TopicsClient.RegenerateKey", options.ResumeToken, client.pl, nil)
 	}
-	result := TopicsClientRegenerateKeyPollerResponse{}
-	pt, err := armruntime.NewPoller("TopicsClient.RegenerateKey", "", resp, client.pl)
-	if err != nil {
-		return TopicsClientRegenerateKeyPollerResponse{}, err
-	}
-	result.Poller = &TopicsClientRegenerateKeyPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegenerateKey - Regenerate a shared access key for a topic.
@@ -525,20 +558,16 @@ func (client *TopicsClient) regenerateKeyCreateRequest(ctx context.Context, reso
 // topicName - Name of the topic.
 // topicUpdateParameters - Topic update information.
 // options - TopicsClientBeginUpdateOptions contains the optional parameters for the TopicsClient.BeginUpdate method.
-func (client *TopicsClient) BeginUpdate(ctx context.Context, resourceGroupName string, topicName string, topicUpdateParameters TopicUpdateParameters, options *TopicsClientBeginUpdateOptions) (TopicsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, topicName, topicUpdateParameters, options)
-	if err != nil {
-		return TopicsClientUpdatePollerResponse{}, err
+func (client *TopicsClient) BeginUpdate(ctx context.Context, resourceGroupName string, topicName string, topicUpdateParameters TopicUpdateParameters, options *TopicsClientBeginUpdateOptions) (*armruntime.Poller[TopicsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, topicName, topicUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TopicsClientUpdateResponse]("TopicsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TopicsClientUpdateResponse]("TopicsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := TopicsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("TopicsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return TopicsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &TopicsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Asynchronously updates a topic with the specified parameters.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewEnvironmentsClient(subscriptionID string, credential azcore.TokenCredent
 // dtlEnvironment - An environment, which is essentially an ARM template deployment.
 // options - EnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdate
 // method.
-func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, userName string, name string, dtlEnvironment DtlEnvironment, options *EnvironmentsClientBeginCreateOrUpdateOptions) (EnvironmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, userName, name, dtlEnvironment, options)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, userName string, name string, dtlEnvironment DtlEnvironment, options *EnvironmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[EnvironmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, userName, name, dtlEnvironment, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing environment. This operation can take a while to complete.
@@ -134,20 +130,16 @@ func (client *EnvironmentsClient) createOrUpdateCreateRequest(ctx context.Contex
 // name - The name of the environment.
 // options - EnvironmentsClientBeginDeleteOptions contains the optional parameters for the EnvironmentsClient.BeginDelete
 // method.
-func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *EnvironmentsClientBeginDeleteOptions) (EnvironmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, userName, name, options)
-	if err != nil {
-		return EnvironmentsClientDeletePollerResponse{}, err
+func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *EnvironmentsClientBeginDeleteOptions) (*armruntime.Poller[EnvironmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, userName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientDeleteResponse]("EnvironmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientDeleteResponse]("EnvironmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete environment. This operation can take a while to complete.
@@ -275,16 +267,32 @@ func (client *EnvironmentsClient) getHandleResponse(resp *http.Response) (Enviro
 // labName - The name of the lab.
 // userName - The name of the user profile.
 // options - EnvironmentsClientListOptions contains the optional parameters for the EnvironmentsClient.List method.
-func (client *EnvironmentsClient) List(resourceGroupName string, labName string, userName string, options *EnvironmentsClientListOptions) *EnvironmentsClientListPager {
-	return &EnvironmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, userName, options)
+func (client *EnvironmentsClient) List(resourceGroupName string, labName string, userName string, options *EnvironmentsClientListOptions) *runtime.Pager[EnvironmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListResponse]{
+		More: func(page EnvironmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DtlEnvironmentList.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListResponse) (EnvironmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, userName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

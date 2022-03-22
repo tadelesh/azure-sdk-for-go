@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *StreamingLocatorsClient) getHandleResponse(resp *http.Response) (S
 // resourceGroupName - The name of the resource group within the Azure subscription.
 // accountName - The Media Services account name.
 // options - StreamingLocatorsClientListOptions contains the optional parameters for the StreamingLocatorsClient.List method.
-func (client *StreamingLocatorsClient) List(resourceGroupName string, accountName string, options *StreamingLocatorsClientListOptions) *StreamingLocatorsClientListPager {
-	return &StreamingLocatorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *StreamingLocatorsClient) List(resourceGroupName string, accountName string, options *StreamingLocatorsClientListOptions) *runtime.Pager[StreamingLocatorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StreamingLocatorsClientListResponse]{
+		More: func(page StreamingLocatorsClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StreamingLocatorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StreamingLocatorCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *StreamingLocatorsClientListResponse) (StreamingLocatorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return StreamingLocatorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StreamingLocatorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StreamingLocatorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

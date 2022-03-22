@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewWebTestLocationsClient(subscriptionID string, credential azcore.TokenCre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - The name of the Application Insights component resource.
 // options - WebTestLocationsClientListOptions contains the optional parameters for the WebTestLocationsClient.List method.
-func (client *WebTestLocationsClient) List(resourceGroupName string, resourceName string, options *WebTestLocationsClientListOptions) *WebTestLocationsClientListPager {
-	return &WebTestLocationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *WebTestLocationsClient) List(resourceGroupName string, resourceName string, options *WebTestLocationsClientListOptions) *runtime.Pager[WebTestLocationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebTestLocationsClientListResponse]{
+		More: func(page WebTestLocationsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WebTestLocationsClientListResponse) (WebTestLocationsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			if err != nil {
+				return WebTestLocationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebTestLocationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebTestLocationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

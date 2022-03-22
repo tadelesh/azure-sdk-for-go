@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -255,17 +255,20 @@ type SolutionPropertiesList struct {
 // SolutionsClientBeginCreateOrUpdateOptions contains the optional parameters for the SolutionsClient.BeginCreateOrUpdate
 // method.
 type SolutionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SolutionsClientBeginDeleteOptions contains the optional parameters for the SolutionsClient.BeginDelete method.
 type SolutionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SolutionsClientBeginUpdateOptions contains the optional parameters for the SolutionsClient.BeginUpdate method.
 type SolutionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SolutionsClientGetOptions contains the optional parameters for the SolutionsClient.Get method.

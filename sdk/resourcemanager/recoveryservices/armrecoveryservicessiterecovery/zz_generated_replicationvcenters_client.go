@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -62,20 +62,16 @@ func NewReplicationvCentersClient(resourceName string, resourceGroupName string,
 // addVCenterRequest - The input to the add vCenter operation.
 // options - ReplicationvCentersClientBeginCreateOptions contains the optional parameters for the ReplicationvCentersClient.BeginCreate
 // method.
-func (client *ReplicationvCentersClient) BeginCreate(ctx context.Context, fabricName string, vcenterName string, addVCenterRequest AddVCenterRequest, options *ReplicationvCentersClientBeginCreateOptions) (ReplicationvCentersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, fabricName, vcenterName, addVCenterRequest, options)
-	if err != nil {
-		return ReplicationvCentersClientCreatePollerResponse{}, err
+func (client *ReplicationvCentersClient) BeginCreate(ctx context.Context, fabricName string, vcenterName string, addVCenterRequest AddVCenterRequest, options *ReplicationvCentersClientBeginCreateOptions) (*armruntime.Poller[ReplicationvCentersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, fabricName, vcenterName, addVCenterRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationvCentersClientCreateResponse]("ReplicationvCentersClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationvCentersClientCreateResponse]("ReplicationvCentersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationvCentersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ReplicationvCentersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationvCentersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - The operation to create a vCenter object..
@@ -135,20 +131,16 @@ func (client *ReplicationvCentersClient) createCreateRequest(ctx context.Context
 // vcenterName - vcenter name.
 // options - ReplicationvCentersClientBeginDeleteOptions contains the optional parameters for the ReplicationvCentersClient.BeginDelete
 // method.
-func (client *ReplicationvCentersClient) BeginDelete(ctx context.Context, fabricName string, vcenterName string, options *ReplicationvCentersClientBeginDeleteOptions) (ReplicationvCentersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, fabricName, vcenterName, options)
-	if err != nil {
-		return ReplicationvCentersClientDeletePollerResponse{}, err
+func (client *ReplicationvCentersClient) BeginDelete(ctx context.Context, fabricName string, vcenterName string, options *ReplicationvCentersClientBeginDeleteOptions) (*armruntime.Poller[ReplicationvCentersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, fabricName, vcenterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationvCentersClientDeleteResponse]("ReplicationvCentersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationvCentersClientDeleteResponse]("ReplicationvCentersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationvCentersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ReplicationvCentersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ReplicationvCentersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to remove(unregister) a registered vCenter server from the vault.
@@ -268,16 +260,32 @@ func (client *ReplicationvCentersClient) getHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationvCentersClientListOptions contains the optional parameters for the ReplicationvCentersClient.List
 // method.
-func (client *ReplicationvCentersClient) List(options *ReplicationvCentersClientListOptions) *ReplicationvCentersClientListPager {
-	return &ReplicationvCentersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationvCentersClient) List(options *ReplicationvCentersClientListOptions) *runtime.Pager[ReplicationvCentersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationvCentersClientListResponse]{
+		More: func(page ReplicationvCentersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationvCentersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VCenterCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationvCentersClientListResponse) (ReplicationvCentersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationvCentersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationvCentersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationvCentersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -320,16 +328,32 @@ func (client *ReplicationvCentersClient) listHandleResponse(resp *http.Response)
 // fabricName - Fabric name.
 // options - ReplicationvCentersClientListByReplicationFabricsOptions contains the optional parameters for the ReplicationvCentersClient.ListByReplicationFabrics
 // method.
-func (client *ReplicationvCentersClient) ListByReplicationFabrics(fabricName string, options *ReplicationvCentersClientListByReplicationFabricsOptions) *ReplicationvCentersClientListByReplicationFabricsPager {
-	return &ReplicationvCentersClientListByReplicationFabricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+func (client *ReplicationvCentersClient) ListByReplicationFabrics(fabricName string, options *ReplicationvCentersClientListByReplicationFabricsOptions) *runtime.Pager[ReplicationvCentersClientListByReplicationFabricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationvCentersClientListByReplicationFabricsResponse]{
+		More: func(page ReplicationvCentersClientListByReplicationFabricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationvCentersClientListByReplicationFabricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VCenterCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationvCentersClientListByReplicationFabricsResponse) (ReplicationvCentersClientListByReplicationFabricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationvCentersClientListByReplicationFabricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationvCentersClientListByReplicationFabricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationvCentersClientListByReplicationFabricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationFabricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.
@@ -378,20 +402,16 @@ func (client *ReplicationvCentersClient) listByReplicationFabricsHandleResponse(
 // updateVCenterRequest - The input to the update vCenter operation.
 // options - ReplicationvCentersClientBeginUpdateOptions contains the optional parameters for the ReplicationvCentersClient.BeginUpdate
 // method.
-func (client *ReplicationvCentersClient) BeginUpdate(ctx context.Context, fabricName string, vcenterName string, updateVCenterRequest UpdateVCenterRequest, options *ReplicationvCentersClientBeginUpdateOptions) (ReplicationvCentersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, fabricName, vcenterName, updateVCenterRequest, options)
-	if err != nil {
-		return ReplicationvCentersClientUpdatePollerResponse{}, err
+func (client *ReplicationvCentersClient) BeginUpdate(ctx context.Context, fabricName string, vcenterName string, updateVCenterRequest UpdateVCenterRequest, options *ReplicationvCentersClientBeginUpdateOptions) (*armruntime.Poller[ReplicationvCentersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, fabricName, vcenterName, updateVCenterRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationvCentersClientUpdateResponse]("ReplicationvCentersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationvCentersClientUpdateResponse]("ReplicationvCentersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationvCentersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ReplicationvCentersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationvCentersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation to update a registered vCenter.

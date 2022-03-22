@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (Firew
 // serverName - The name of the server.
 // options - FirewallRulesClientListByServerOptions contains the optional parameters for the FirewallRulesClient.ListByServer
 // method.
-func (client *FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) *FirewallRulesClientListByServerPager {
-	return &FirewallRulesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) *runtime.Pager[FirewallRulesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FirewallRulesClientListByServerResponse]{
+		More: func(page FirewallRulesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FirewallRulesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FirewallRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *FirewallRulesClientListByServerResponse) (FirewallRulesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FirewallRulesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FirewallRulesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FirewallRulesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

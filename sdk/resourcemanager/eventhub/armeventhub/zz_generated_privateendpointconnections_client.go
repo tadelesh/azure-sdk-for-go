@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -119,20 +119,16 @@ func (client *PrivateEndpointConnectionsClient) createOrUpdateHandleResponse(res
 // privateEndpointConnectionName - The PrivateEndpointConnection name
 // options - PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
-func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, namespaceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsClientBeginDeleteOptions) (PrivateEndpointConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, namespaceName, privateEndpointConnectionName, options)
-	if err != nil {
-		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
+func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, namespaceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, namespaceName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsClientDeleteResponse]("PrivateEndpointConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsClientDeleteResponse]("PrivateEndpointConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing namespace. This operation also removes all associated resources under the namespace.
@@ -249,16 +245,32 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // namespaceName - The Namespace name
 // options - PrivateEndpointConnectionsClientListOptions contains the optional parameters for the PrivateEndpointConnectionsClient.List
 // method.
-func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, namespaceName string, options *PrivateEndpointConnectionsClientListOptions) *PrivateEndpointConnectionsClientListPager {
-	return &PrivateEndpointConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, namespaceName string, options *PrivateEndpointConnectionsClientListOptions) *runtime.Pager[PrivateEndpointConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsClientListResponse]{
+		More: func(page PrivateEndpointConnectionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointConnectionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsClientListResponse) (PrivateEndpointConnectionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -400,16 +400,32 @@ func (client *RoleAssignmentsClient) getByInvoiceSectionHandleResponse(resp *htt
 // billingAccountName - The ID that uniquely identifies a billing account.
 // options - RoleAssignmentsClientListByBillingAccountOptions contains the optional parameters for the RoleAssignmentsClient.ListByBillingAccount
 // method.
-func (client *RoleAssignmentsClient) ListByBillingAccount(billingAccountName string, options *RoleAssignmentsClientListByBillingAccountOptions) *RoleAssignmentsClientListByBillingAccountPager {
-	return &RoleAssignmentsClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+func (client *RoleAssignmentsClient) ListByBillingAccount(billingAccountName string, options *RoleAssignmentsClientListByBillingAccountOptions) *runtime.Pager[RoleAssignmentsClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RoleAssignmentsClientListByBillingAccountResponse]{
+		More: func(page RoleAssignmentsClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RoleAssignmentsClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleAssignmentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RoleAssignmentsClientListByBillingAccountResponse) (RoleAssignmentsClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RoleAssignmentsClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RoleAssignmentsClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RoleAssignmentsClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
@@ -446,16 +462,32 @@ func (client *RoleAssignmentsClient) listByBillingAccountHandleResponse(resp *ht
 // billingProfileName - The ID that uniquely identifies a billing profile.
 // options - RoleAssignmentsClientListByBillingProfileOptions contains the optional parameters for the RoleAssignmentsClient.ListByBillingProfile
 // method.
-func (client *RoleAssignmentsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *RoleAssignmentsClientListByBillingProfileOptions) *RoleAssignmentsClientListByBillingProfilePager {
-	return &RoleAssignmentsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+func (client *RoleAssignmentsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *RoleAssignmentsClientListByBillingProfileOptions) *runtime.Pager[RoleAssignmentsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RoleAssignmentsClientListByBillingProfileResponse]{
+		More: func(page RoleAssignmentsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RoleAssignmentsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleAssignmentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RoleAssignmentsClientListByBillingProfileResponse) (RoleAssignmentsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RoleAssignmentsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RoleAssignmentsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RoleAssignmentsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.
@@ -497,16 +529,32 @@ func (client *RoleAssignmentsClient) listByBillingProfileHandleResponse(resp *ht
 // invoiceSectionName - The ID that uniquely identifies an invoice section.
 // options - RoleAssignmentsClientListByInvoiceSectionOptions contains the optional parameters for the RoleAssignmentsClient.ListByInvoiceSection
 // method.
-func (client *RoleAssignmentsClient) ListByInvoiceSection(billingAccountName string, billingProfileName string, invoiceSectionName string, options *RoleAssignmentsClientListByInvoiceSectionOptions) *RoleAssignmentsClientListByInvoiceSectionPager {
-	return &RoleAssignmentsClientListByInvoiceSectionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInvoiceSectionCreateRequest(ctx, billingAccountName, billingProfileName, invoiceSectionName, options)
+func (client *RoleAssignmentsClient) ListByInvoiceSection(billingAccountName string, billingProfileName string, invoiceSectionName string, options *RoleAssignmentsClientListByInvoiceSectionOptions) *runtime.Pager[RoleAssignmentsClientListByInvoiceSectionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RoleAssignmentsClientListByInvoiceSectionResponse]{
+		More: func(page RoleAssignmentsClientListByInvoiceSectionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RoleAssignmentsClientListByInvoiceSectionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleAssignmentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RoleAssignmentsClientListByInvoiceSectionResponse) (RoleAssignmentsClientListByInvoiceSectionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInvoiceSectionCreateRequest(ctx, billingAccountName, billingProfileName, invoiceSectionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RoleAssignmentsClientListByInvoiceSectionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RoleAssignmentsClientListByInvoiceSectionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RoleAssignmentsClientListByInvoiceSectionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInvoiceSectionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInvoiceSectionCreateRequest creates the ListByInvoiceSection request.

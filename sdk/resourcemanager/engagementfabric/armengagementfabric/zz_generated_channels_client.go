@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -226,13 +226,26 @@ func (client *ChannelsClient) getHandleResponse(resp *http.Response) (ChannelsCl
 // resourceGroupName - Resource Group Name
 // accountName - Account Name
 // options - ChannelsClientListByAccountOptions contains the optional parameters for the ChannelsClient.ListByAccount method.
-func (client *ChannelsClient) ListByAccount(resourceGroupName string, accountName string, options *ChannelsClientListByAccountOptions) *ChannelsClientListByAccountPager {
-	return &ChannelsClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *ChannelsClient) ListByAccount(resourceGroupName string, accountName string, options *ChannelsClientListByAccountOptions) *runtime.Pager[ChannelsClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ChannelsClientListByAccountResponse]{
+		More: func(page ChannelsClientListByAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ChannelsClientListByAccountResponse) (ChannelsClientListByAccountResponse, error) {
+			req, err := client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return ChannelsClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ChannelsClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ChannelsClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

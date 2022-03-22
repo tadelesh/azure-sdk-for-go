@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,16 +52,32 @@ func NewTransactionsClient(credential azcore.TokenCredential, options *arm.Clien
 // invoiceName - The ID that uniquely identifies an invoice.
 // options - TransactionsClientListByInvoiceOptions contains the optional parameters for the TransactionsClient.ListByInvoice
 // method.
-func (client *TransactionsClient) ListByInvoice(billingAccountName string, invoiceName string, options *TransactionsClientListByInvoiceOptions) *TransactionsClientListByInvoicePager {
-	return &TransactionsClientListByInvoicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInvoiceCreateRequest(ctx, billingAccountName, invoiceName, options)
+func (client *TransactionsClient) ListByInvoice(billingAccountName string, invoiceName string, options *TransactionsClientListByInvoiceOptions) *runtime.Pager[TransactionsClientListByInvoiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TransactionsClientListByInvoiceResponse]{
+		More: func(page TransactionsClientListByInvoiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TransactionsClientListByInvoiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TransactionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TransactionsClientListByInvoiceResponse) (TransactionsClientListByInvoiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInvoiceCreateRequest(ctx, billingAccountName, invoiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TransactionsClientListByInvoiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TransactionsClientListByInvoiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TransactionsClientListByInvoiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInvoiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInvoiceCreateRequest creates the ListByInvoice request.

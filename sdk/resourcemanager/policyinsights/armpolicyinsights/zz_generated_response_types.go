@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,125 +8,14 @@
 
 package armpolicyinsights
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse contains the response from method AttestationsClient.CreateOrUpdateAtResourceGroup.
-type AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AttestationsClientCreateOrUpdateAtResourceGroupPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AttestationsClientCreateOrUpdateAtResourceGroupResponse, error) {
-	respType := AttestationsClientCreateOrUpdateAtResourceGroupResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Attestation)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse from the provided client and resume token.
-func (l *AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse) Resume(ctx context.Context, client *AttestationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AttestationsClient.CreateOrUpdateAtResourceGroup", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AttestationsClientCreateOrUpdateAtResourceGroupPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // AttestationsClientCreateOrUpdateAtResourceGroupResponse contains the response from method AttestationsClient.CreateOrUpdateAtResourceGroup.
 type AttestationsClientCreateOrUpdateAtResourceGroupResponse struct {
 	Attestation
 }
 
-// AttestationsClientCreateOrUpdateAtResourcePollerResponse contains the response from method AttestationsClient.CreateOrUpdateAtResource.
-type AttestationsClientCreateOrUpdateAtResourcePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AttestationsClientCreateOrUpdateAtResourcePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AttestationsClientCreateOrUpdateAtResourcePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AttestationsClientCreateOrUpdateAtResourceResponse, error) {
-	respType := AttestationsClientCreateOrUpdateAtResourceResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Attestation)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AttestationsClientCreateOrUpdateAtResourcePollerResponse from the provided client and resume token.
-func (l *AttestationsClientCreateOrUpdateAtResourcePollerResponse) Resume(ctx context.Context, client *AttestationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AttestationsClient.CreateOrUpdateAtResource", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AttestationsClientCreateOrUpdateAtResourcePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // AttestationsClientCreateOrUpdateAtResourceResponse contains the response from method AttestationsClient.CreateOrUpdateAtResource.
 type AttestationsClientCreateOrUpdateAtResourceResponse struct {
 	Attestation
-}
-
-// AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse contains the response from method AttestationsClient.CreateOrUpdateAtSubscription.
-type AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AttestationsClientCreateOrUpdateAtSubscriptionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AttestationsClientCreateOrUpdateAtSubscriptionResponse, error) {
-	respType := AttestationsClientCreateOrUpdateAtSubscriptionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Attestation)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse from the provided client and resume token.
-func (l *AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse) Resume(ctx context.Context, client *AttestationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AttestationsClient.CreateOrUpdateAtSubscription", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AttestationsClientCreateOrUpdateAtSubscriptionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AttestationsClientCreateOrUpdateAtSubscriptionResponse contains the response from method AttestationsClient.CreateOrUpdateAtSubscription.
@@ -324,80 +213,9 @@ type PolicyStatesClientSummarizeForSubscriptionResponse struct {
 	SummarizeResults
 }
 
-// PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse contains the response from method PolicyStatesClient.TriggerResourceGroupEvaluation.
-type PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PolicyStatesClientTriggerResourceGroupEvaluationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PolicyStatesClientTriggerResourceGroupEvaluationResponse, error) {
-	respType := PolicyStatesClientTriggerResourceGroupEvaluationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse from the provided client and resume
-// token.
-func (l *PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse) Resume(ctx context.Context, client *PolicyStatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PolicyStatesClient.TriggerResourceGroupEvaluation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PolicyStatesClientTriggerResourceGroupEvaluationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // PolicyStatesClientTriggerResourceGroupEvaluationResponse contains the response from method PolicyStatesClient.TriggerResourceGroupEvaluation.
 type PolicyStatesClientTriggerResourceGroupEvaluationResponse struct {
 	// placeholder for future response values
-}
-
-// PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse contains the response from method PolicyStatesClient.TriggerSubscriptionEvaluation.
-type PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PolicyStatesClientTriggerSubscriptionEvaluationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PolicyStatesClientTriggerSubscriptionEvaluationResponse, error) {
-	respType := PolicyStatesClientTriggerSubscriptionEvaluationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse from the provided client and resume token.
-func (l *PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse) Resume(ctx context.Context, client *PolicyStatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PolicyStatesClient.TriggerSubscriptionEvaluation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PolicyStatesClientTriggerSubscriptionEvaluationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PolicyStatesClientTriggerSubscriptionEvaluationResponse contains the response from method PolicyStatesClient.TriggerSubscriptionEvaluation.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,90 +8,14 @@
 
 package armconfidentialledger
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // ClientCheckNameAvailabilityResponse contains the response from method Client.CheckNameAvailability.
 type ClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityResponse
 }
 
-// LedgerClientCreatePollerResponse contains the response from method LedgerClient.Create.
-type LedgerClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *LedgerClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l LedgerClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientCreateResponse, error) {
-	respType := LedgerClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a LedgerClientCreatePollerResponse from the provided client and resume token.
-func (l *LedgerClientCreatePollerResponse) Resume(ctx context.Context, client *LedgerClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("LedgerClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &LedgerClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // LedgerClientCreateResponse contains the response from method LedgerClient.Create.
 type LedgerClientCreateResponse struct {
 	ConfidentialLedger
-}
-
-// LedgerClientDeletePollerResponse contains the response from method LedgerClient.Delete.
-type LedgerClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *LedgerClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l LedgerClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientDeleteResponse, error) {
-	respType := LedgerClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a LedgerClientDeletePollerResponse from the provided client and resume token.
-func (l *LedgerClientDeletePollerResponse) Resume(ctx context.Context, client *LedgerClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("LedgerClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &LedgerClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // LedgerClientDeleteResponse contains the response from method LedgerClient.Delete.
@@ -112,41 +36,6 @@ type LedgerClientListByResourceGroupResponse struct {
 // LedgerClientListBySubscriptionResponse contains the response from method LedgerClient.ListBySubscription.
 type LedgerClientListBySubscriptionResponse struct {
 	List
-}
-
-// LedgerClientUpdatePollerResponse contains the response from method LedgerClient.Update.
-type LedgerClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *LedgerClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l LedgerClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientUpdateResponse, error) {
-	respType := LedgerClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a LedgerClientUpdatePollerResponse from the provided client and resume token.
-func (l *LedgerClientUpdatePollerResponse) Resume(ctx context.Context, client *LedgerClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("LedgerClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &LedgerClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // LedgerClientUpdateResponse contains the response from method LedgerClient.Update.

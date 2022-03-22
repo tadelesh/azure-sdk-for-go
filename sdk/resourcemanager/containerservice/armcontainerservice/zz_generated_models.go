@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -123,18 +123,21 @@ type AgentPoolUpgradeSettings struct {
 // AgentPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the AgentPoolsClient.BeginCreateOrUpdate
 // method.
 type AgentPoolsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AgentPoolsClientBeginDeleteOptions contains the optional parameters for the AgentPoolsClient.BeginDelete method.
 type AgentPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AgentPoolsClientBeginUpgradeNodeImageVersionOptions contains the optional parameters for the AgentPoolsClient.BeginUpgradeNodeImageVersion
 // method.
 type AgentPoolsClientBeginUpgradeNodeImageVersionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AgentPoolsClientGetAvailableAgentPoolVersionsOptions contains the optional parameters for the AgentPoolsClient.GetAvailableAgentPoolVersions
@@ -1314,52 +1317,61 @@ type ManagedClusterWindowsProfile struct {
 // ManagedClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedClustersClient.BeginCreateOrUpdate
 // method.
 type ManagedClustersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginDeleteOptions contains the optional parameters for the ManagedClustersClient.BeginDelete method.
 type ManagedClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginResetAADProfileOptions contains the optional parameters for the ManagedClustersClient.BeginResetAADProfile
 // method.
 type ManagedClustersClientBeginResetAADProfileOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginResetServicePrincipalProfileOptions contains the optional parameters for the ManagedClustersClient.BeginResetServicePrincipalProfile
 // method.
 type ManagedClustersClientBeginResetServicePrincipalProfileOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginRotateClusterCertificatesOptions contains the optional parameters for the ManagedClustersClient.BeginRotateClusterCertificates
 // method.
 type ManagedClustersClientBeginRotateClusterCertificatesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginRunCommandOptions contains the optional parameters for the ManagedClustersClient.BeginRunCommand
 // method.
 type ManagedClustersClientBeginRunCommandOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginStartOptions contains the optional parameters for the ManagedClustersClient.BeginStart method.
 type ManagedClustersClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginStopOptions contains the optional parameters for the ManagedClustersClient.BeginStop method.
 type ManagedClustersClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientBeginUpdateTagsOptions contains the optional parameters for the ManagedClustersClient.BeginUpdateTags
 // method.
 type ManagedClustersClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedClustersClientGetAccessProfileOptions contains the optional parameters for the ManagedClustersClient.GetAccessProfile
@@ -1652,7 +1664,8 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get

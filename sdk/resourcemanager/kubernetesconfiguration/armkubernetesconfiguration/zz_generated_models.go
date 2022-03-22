@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -302,18 +302,22 @@ type ExtensionVersionListVersionsItem struct {
 
 // ExtensionsClientBeginCreateOptions contains the optional parameters for the ExtensionsClient.BeginCreate method.
 type ExtensionsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginDeleteOptions contains the optional parameters for the ExtensionsClient.BeginDelete method.
 type ExtensionsClientBeginDeleteOptions struct {
 	// Delete the extension resource in Azure - not the normal asynchronous delete.
 	ForceDelete *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginUpdateOptions contains the optional parameters for the ExtensionsClient.BeginUpdate method.
 type ExtensionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientGetOptions contains the optional parameters for the ExtensionsClient.Get method.
@@ -441,7 +445,8 @@ type FluxConfigurationProperties struct {
 // FluxConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the FluxConfigurationsClient.BeginCreateOrUpdate
 // method.
 type FluxConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FluxConfigurationsClientBeginDeleteOptions contains the optional parameters for the FluxConfigurationsClient.BeginDelete
@@ -449,12 +454,15 @@ type FluxConfigurationsClientBeginCreateOrUpdateOptions struct {
 type FluxConfigurationsClientBeginDeleteOptions struct {
 	// Delete the extension resource in Azure - not the normal asynchronous delete.
 	ForceDelete *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FluxConfigurationsClientBeginUpdateOptions contains the optional parameters for the FluxConfigurationsClient.BeginUpdate
 // method.
 type FluxConfigurationsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FluxConfigurationsClientGetOptions contains the optional parameters for the FluxConfigurationsClient.Get method.
@@ -922,7 +930,8 @@ type SourceControlConfigurationProperties struct {
 // SourceControlConfigurationsClientBeginDeleteOptions contains the optional parameters for the SourceControlConfigurationsClient.BeginDelete
 // method.
 type SourceControlConfigurationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SourceControlConfigurationsClientCreateOrUpdateOptions contains the optional parameters for the SourceControlConfigurationsClient.CreateOrUpdate

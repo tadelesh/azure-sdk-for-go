@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,16 +213,32 @@ func (client *EnterprisePoliciesClient) getHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - EnterprisePoliciesClientListByResourceGroupOptions contains the optional parameters for the EnterprisePoliciesClient.ListByResourceGroup
 // method.
-func (client *EnterprisePoliciesClient) ListByResourceGroup(resourceGroupName string, options *EnterprisePoliciesClientListByResourceGroupOptions) *EnterprisePoliciesClientListByResourceGroupPager {
-	return &EnterprisePoliciesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *EnterprisePoliciesClient) ListByResourceGroup(resourceGroupName string, options *EnterprisePoliciesClientListByResourceGroupOptions) *runtime.Pager[EnterprisePoliciesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnterprisePoliciesClientListByResourceGroupResponse]{
+		More: func(page EnterprisePoliciesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnterprisePoliciesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnterprisePolicyList.NextLink)
+		Fetcher: func(ctx context.Context, page *EnterprisePoliciesClientListByResourceGroupResponse) (EnterprisePoliciesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnterprisePoliciesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnterprisePoliciesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnterprisePoliciesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -260,16 +276,32 @@ func (client *EnterprisePoliciesClient) listByResourceGroupHandleResponse(resp *
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EnterprisePoliciesClientListBySubscriptionOptions contains the optional parameters for the EnterprisePoliciesClient.ListBySubscription
 // method.
-func (client *EnterprisePoliciesClient) ListBySubscription(options *EnterprisePoliciesClientListBySubscriptionOptions) *EnterprisePoliciesClientListBySubscriptionPager {
-	return &EnterprisePoliciesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *EnterprisePoliciesClient) ListBySubscription(options *EnterprisePoliciesClientListBySubscriptionOptions) *runtime.Pager[EnterprisePoliciesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnterprisePoliciesClientListBySubscriptionResponse]{
+		More: func(page EnterprisePoliciesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnterprisePoliciesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnterprisePolicyList.NextLink)
+		Fetcher: func(ctx context.Context, page *EnterprisePoliciesClientListBySubscriptionResponse) (EnterprisePoliciesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnterprisePoliciesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnterprisePoliciesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnterprisePoliciesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

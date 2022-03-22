@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDatabaseExtensionsClient(subscriptionID string, credential azcore.TokenC
 // parameters - The database import request parameters.
 // options - DatabaseExtensionsClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseExtensionsClient.BeginCreateOrUpdate
 // method.
-func (client *DatabaseExtensionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, extensionName string, parameters DatabaseExtensions, options *DatabaseExtensionsClientBeginCreateOrUpdateOptions) (DatabaseExtensionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, extensionName, parameters, options)
-	if err != nil {
-		return DatabaseExtensionsClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabaseExtensionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, extensionName string, parameters DatabaseExtensions, options *DatabaseExtensionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabaseExtensionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, extensionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseExtensionsClientCreateOrUpdateResponse]("DatabaseExtensionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseExtensionsClientCreateOrUpdateResponse]("DatabaseExtensionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseExtensionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseExtensionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabaseExtensionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabaseExtensionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Perform a database extension operation, like polybase import
@@ -188,16 +184,32 @@ func (client *DatabaseExtensionsClient) getCreateRequest(ctx context.Context, re
 // databaseName - The name of the database.
 // options - DatabaseExtensionsClientListByDatabaseOptions contains the optional parameters for the DatabaseExtensionsClient.ListByDatabase
 // method.
-func (client *DatabaseExtensionsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseExtensionsClientListByDatabaseOptions) *DatabaseExtensionsClientListByDatabasePager {
-	return &DatabaseExtensionsClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DatabaseExtensionsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseExtensionsClientListByDatabaseOptions) *runtime.Pager[DatabaseExtensionsClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseExtensionsClientListByDatabaseResponse]{
+		More: func(page DatabaseExtensionsClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabaseExtensionsClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ImportExportExtensionsOperationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabaseExtensionsClientListByDatabaseResponse) (DatabaseExtensionsClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabaseExtensionsClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseExtensionsClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseExtensionsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

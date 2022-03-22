@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,13 +111,26 @@ func (client *RestorableDatabaseAccountsClient) getByLocationHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RestorableDatabaseAccountsClientListOptions contains the optional parameters for the RestorableDatabaseAccountsClient.List
 // method.
-func (client *RestorableDatabaseAccountsClient) List(options *RestorableDatabaseAccountsClientListOptions) *RestorableDatabaseAccountsClientListPager {
-	return &RestorableDatabaseAccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *RestorableDatabaseAccountsClient) List(options *RestorableDatabaseAccountsClientListOptions) *runtime.Pager[RestorableDatabaseAccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RestorableDatabaseAccountsClientListResponse]{
+		More: func(page RestorableDatabaseAccountsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RestorableDatabaseAccountsClientListResponse) (RestorableDatabaseAccountsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return RestorableDatabaseAccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RestorableDatabaseAccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RestorableDatabaseAccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -154,13 +167,26 @@ func (client *RestorableDatabaseAccountsClient) listHandleResponse(resp *http.Re
 // location - Cosmos DB region, with spaces between words and each word capitalized.
 // options - RestorableDatabaseAccountsClientListByLocationOptions contains the optional parameters for the RestorableDatabaseAccountsClient.ListByLocation
 // method.
-func (client *RestorableDatabaseAccountsClient) ListByLocation(location string, options *RestorableDatabaseAccountsClientListByLocationOptions) *RestorableDatabaseAccountsClientListByLocationPager {
-	return &RestorableDatabaseAccountsClientListByLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLocationCreateRequest(ctx, location, options)
+func (client *RestorableDatabaseAccountsClient) ListByLocation(location string, options *RestorableDatabaseAccountsClientListByLocationOptions) *runtime.Pager[RestorableDatabaseAccountsClientListByLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RestorableDatabaseAccountsClientListByLocationResponse]{
+		More: func(page RestorableDatabaseAccountsClientListByLocationResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RestorableDatabaseAccountsClientListByLocationResponse) (RestorableDatabaseAccountsClientListByLocationResponse, error) {
+			req, err := client.listByLocationCreateRequest(ctx, location, options)
+			if err != nil {
+				return RestorableDatabaseAccountsClientListByLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RestorableDatabaseAccountsClientListByLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RestorableDatabaseAccountsClientListByLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLocationHandleResponse(resp)
+		},
+	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.

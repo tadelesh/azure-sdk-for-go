@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewApplyUpdateForResourceGroupClient(subscriptionID string, credential azco
 // resourceGroupName - Resource Group Name
 // options - ApplyUpdateForResourceGroupClientListOptions contains the optional parameters for the ApplyUpdateForResourceGroupClient.List
 // method.
-func (client *ApplyUpdateForResourceGroupClient) List(resourceGroupName string, options *ApplyUpdateForResourceGroupClientListOptions) *ApplyUpdateForResourceGroupClientListPager {
-	return &ApplyUpdateForResourceGroupClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *ApplyUpdateForResourceGroupClient) List(resourceGroupName string, options *ApplyUpdateForResourceGroupClientListOptions) *runtime.Pager[ApplyUpdateForResourceGroupClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplyUpdateForResourceGroupClientListResponse]{
+		More: func(page ApplyUpdateForResourceGroupClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ApplyUpdateForResourceGroupClientListResponse) (ApplyUpdateForResourceGroupClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ApplyUpdateForResourceGroupClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplyUpdateForResourceGroupClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplyUpdateForResourceGroupClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

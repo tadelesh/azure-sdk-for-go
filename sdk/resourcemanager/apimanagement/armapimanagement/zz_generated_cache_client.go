@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -299,16 +299,32 @@ func (client *CacheClient) getEntityTagHandleResponse(resp *http.Response) (Cach
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - CacheClientListByServiceOptions contains the optional parameters for the CacheClient.ListByService method.
-func (client *CacheClient) ListByService(resourceGroupName string, serviceName string, options *CacheClientListByServiceOptions) *CacheClientListByServicePager {
-	return &CacheClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *CacheClient) ListByService(resourceGroupName string, serviceName string, options *CacheClientListByServiceOptions) *runtime.Pager[CacheClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CacheClientListByServiceResponse]{
+		More: func(page CacheClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CacheClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CacheCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CacheClientListByServiceResponse) (CacheClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CacheClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CacheClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CacheClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *StorageInsightConfigsClient) getHandleResponse(resp *http.Response
 // workspaceName - The name of the workspace.
 // options - StorageInsightConfigsClientListByWorkspaceOptions contains the optional parameters for the StorageInsightConfigsClient.ListByWorkspace
 // method.
-func (client *StorageInsightConfigsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *StorageInsightConfigsClientListByWorkspaceOptions) *StorageInsightConfigsClientListByWorkspacePager {
-	return &StorageInsightConfigsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *StorageInsightConfigsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *StorageInsightConfigsClientListByWorkspaceOptions) *runtime.Pager[StorageInsightConfigsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageInsightConfigsClientListByWorkspaceResponse]{
+		More: func(page StorageInsightConfigsClientListByWorkspaceResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StorageInsightConfigsClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageInsightListResult.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *StorageInsightConfigsClientListByWorkspaceResponse) (StorageInsightConfigsClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return StorageInsightConfigsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageInsightConfigsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageInsightConfigsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

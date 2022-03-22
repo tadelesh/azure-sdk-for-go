@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -108,16 +108,32 @@ func (client *RequestStatusClient) getHandleResponse(resp *http.Response) (Reque
 // resource URI for the List GET operation. If a {resourceName} is added after /quotas, then it's the target Azure resource
 // URI in the GET operation for the specific resource.
 // options - RequestStatusClientListOptions contains the optional parameters for the RequestStatusClient.List method.
-func (client *RequestStatusClient) List(scope string, options *RequestStatusClientListOptions) *RequestStatusClientListPager {
-	return &RequestStatusClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *RequestStatusClient) List(scope string, options *RequestStatusClientListOptions) *runtime.Pager[RequestStatusClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RequestStatusClientListResponse]{
+		More: func(page RequestStatusClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RequestStatusClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RequestDetailsList.NextLink)
+		Fetcher: func(ctx context.Context, page *RequestStatusClientListResponse) (RequestStatusClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RequestStatusClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RequestStatusClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RequestStatusClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

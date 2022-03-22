@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewSubAccountClient(subscriptionID string, credential azcore.TokenCredentia
 // monitorName - Monitor resource name
 // subAccountName - Sub Account resource name
 // options - SubAccountClientBeginCreateOptions contains the optional parameters for the SubAccountClient.BeginCreate method.
-func (client *SubAccountClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientBeginCreateOptions) (SubAccountClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, monitorName, subAccountName, options)
-	if err != nil {
-		return SubAccountClientCreatePollerResponse{}, err
+func (client *SubAccountClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientBeginCreateOptions) (*armruntime.Poller[SubAccountClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, monitorName, subAccountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SubAccountClientCreateResponse]("SubAccountClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SubAccountClientCreateResponse]("SubAccountClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SubAccountClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SubAccountClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SubAccountClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SubAccountClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create sub account under a given monitor resource. This create operation can take upto 10 minutes to complete.
@@ -127,20 +123,16 @@ func (client *SubAccountClient) createCreateRequest(ctx context.Context, resourc
 // monitorName - Monitor resource name
 // subAccountName - Sub Account resource name
 // options - SubAccountClientBeginDeleteOptions contains the optional parameters for the SubAccountClient.BeginDelete method.
-func (client *SubAccountClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientBeginDeleteOptions) (SubAccountClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, subAccountName, options)
-	if err != nil {
-		return SubAccountClientDeletePollerResponse{}, err
+func (client *SubAccountClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientBeginDeleteOptions) (*armruntime.Poller[SubAccountClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, subAccountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SubAccountClientDeleteResponse]("SubAccountClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SubAccountClientDeleteResponse]("SubAccountClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SubAccountClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SubAccountClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return SubAccountClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SubAccountClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a sub account resource. This delete operation can take upto 10 minutes to complete.
@@ -255,16 +247,32 @@ func (client *SubAccountClient) getHandleResponse(resp *http.Response) (SubAccou
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - SubAccountClientListOptions contains the optional parameters for the SubAccountClient.List method.
-func (client *SubAccountClient) List(resourceGroupName string, monitorName string, options *SubAccountClientListOptions) *SubAccountClientListPager {
-	return &SubAccountClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *SubAccountClient) List(resourceGroupName string, monitorName string, options *SubAccountClientListOptions) *runtime.Pager[SubAccountClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAccountClientListResponse]{
+		More: func(page SubAccountClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAccountClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitorResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAccountClientListResponse) (SubAccountClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAccountClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAccountClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAccountClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -309,16 +317,32 @@ func (client *SubAccountClient) listHandleResponse(resp *http.Response) (SubAcco
 // subAccountName - Sub Account resource name
 // options - SubAccountClientListMonitoredResourcesOptions contains the optional parameters for the SubAccountClient.ListMonitoredResources
 // method.
-func (client *SubAccountClient) ListMonitoredResources(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListMonitoredResourcesOptions) *SubAccountClientListMonitoredResourcesPager {
-	return &SubAccountClientListMonitoredResourcesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+func (client *SubAccountClient) ListMonitoredResources(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListMonitoredResourcesOptions) *runtime.Pager[SubAccountClientListMonitoredResourcesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAccountClientListMonitoredResourcesResponse]{
+		More: func(page SubAccountClientListMonitoredResourcesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAccountClientListMonitoredResourcesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitoredResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAccountClientListMonitoredResourcesResponse) (SubAccountClientListMonitoredResourcesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAccountClientListMonitoredResourcesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAccountClientListMonitoredResourcesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAccountClientListMonitoredResourcesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMonitoredResourcesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMonitoredResourcesCreateRequest creates the ListMonitoredResources request.
@@ -367,16 +391,32 @@ func (client *SubAccountClient) listMonitoredResourcesHandleResponse(resp *http.
 // subAccountName - Sub Account resource name
 // options - SubAccountClientListVMHostUpdateOptions contains the optional parameters for the SubAccountClient.ListVMHostUpdate
 // method.
-func (client *SubAccountClient) ListVMHostUpdate(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListVMHostUpdateOptions) *SubAccountClientListVMHostUpdatePager {
-	return &SubAccountClientListVMHostUpdatePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVMHostUpdateCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+func (client *SubAccountClient) ListVMHostUpdate(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListVMHostUpdateOptions) *runtime.Pager[SubAccountClientListVMHostUpdateResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAccountClientListVMHostUpdateResponse]{
+		More: func(page SubAccountClientListVMHostUpdateResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAccountClientListVMHostUpdateResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VMResourcesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAccountClientListVMHostUpdateResponse) (SubAccountClientListVMHostUpdateResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVMHostUpdateCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAccountClientListVMHostUpdateResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAccountClientListVMHostUpdateResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAccountClientListVMHostUpdateResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVMHostUpdateHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVMHostUpdateCreateRequest creates the ListVMHostUpdate request.
@@ -427,16 +467,32 @@ func (client *SubAccountClient) listVMHostUpdateHandleResponse(resp *http.Respon
 // monitorName - Monitor resource name
 // subAccountName - Sub Account resource name
 // options - SubAccountClientListVMHostsOptions contains the optional parameters for the SubAccountClient.ListVMHosts method.
-func (client *SubAccountClient) ListVMHosts(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListVMHostsOptions) *SubAccountClientListVMHostsPager {
-	return &SubAccountClientListVMHostsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVMHostsCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+func (client *SubAccountClient) ListVMHosts(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountClientListVMHostsOptions) *runtime.Pager[SubAccountClientListVMHostsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAccountClientListVMHostsResponse]{
+		More: func(page SubAccountClientListVMHostsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAccountClientListVMHostsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VMResourcesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAccountClientListVMHostsResponse) (SubAccountClientListVMHostsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVMHostsCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAccountClientListVMHostsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAccountClientListVMHostsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAccountClientListVMHostsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVMHostsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVMHostsCreateRequest creates the ListVMHosts request.

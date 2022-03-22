@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -208,16 +208,32 @@ func (client *WebTestsClient) getHandleResponse(resp *http.Response) (WebTestsCl
 // List - Get all Application Insights web test alerts definitions within a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebTestsClientListOptions contains the optional parameters for the WebTestsClient.List method.
-func (client *WebTestsClient) List(options *WebTestsClientListOptions) *WebTestsClientListPager {
-	return &WebTestsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *WebTestsClient) List(options *WebTestsClientListOptions) *runtime.Pager[WebTestsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebTestsClientListResponse]{
+		More: func(page WebTestsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebTestsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebTestListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebTestsClientListResponse) (WebTestsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebTestsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebTestsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebTestsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -253,16 +269,32 @@ func (client *WebTestsClient) listHandleResponse(resp *http.Response) (WebTestsC
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WebTestsClientListByComponentOptions contains the optional parameters for the WebTestsClient.ListByComponent
 // method.
-func (client *WebTestsClient) ListByComponent(componentName string, resourceGroupName string, options *WebTestsClientListByComponentOptions) *WebTestsClientListByComponentPager {
-	return &WebTestsClientListByComponentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByComponentCreateRequest(ctx, componentName, resourceGroupName, options)
+func (client *WebTestsClient) ListByComponent(componentName string, resourceGroupName string, options *WebTestsClientListByComponentOptions) *runtime.Pager[WebTestsClientListByComponentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebTestsClientListByComponentResponse]{
+		More: func(page WebTestsClientListByComponentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebTestsClientListByComponentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebTestListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebTestsClientListByComponentResponse) (WebTestsClientListByComponentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByComponentCreateRequest(ctx, componentName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebTestsClientListByComponentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebTestsClientListByComponentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebTestsClientListByComponentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByComponentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByComponentCreateRequest creates the ListByComponent request.
@@ -305,16 +337,32 @@ func (client *WebTestsClient) listByComponentHandleResponse(resp *http.Response)
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WebTestsClientListByResourceGroupOptions contains the optional parameters for the WebTestsClient.ListByResourceGroup
 // method.
-func (client *WebTestsClient) ListByResourceGroup(resourceGroupName string, options *WebTestsClientListByResourceGroupOptions) *WebTestsClientListByResourceGroupPager {
-	return &WebTestsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WebTestsClient) ListByResourceGroup(resourceGroupName string, options *WebTestsClientListByResourceGroupOptions) *runtime.Pager[WebTestsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebTestsClientListByResourceGroupResponse]{
+		More: func(page WebTestsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebTestsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebTestListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebTestsClientListByResourceGroupResponse) (WebTestsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebTestsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebTestsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebTestsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

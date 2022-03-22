@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -51,7 +51,8 @@ type AcceptOwnershipStatusResponse struct {
 
 // AliasClientBeginCreateOptions contains the optional parameters for the AliasClient.BeginCreate method.
 type AliasClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AliasClientDeleteOptions contains the optional parameters for the AliasClient.Delete method.
@@ -182,7 +183,8 @@ type ClientAcceptOwnershipStatusOptions struct {
 
 // ClientBeginAcceptOwnershipOptions contains the optional parameters for the Client.BeginAcceptOwnership method.
 type ClientBeginAcceptOwnershipOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientCancelOptions contains the optional parameters for the Client.Cancel method.

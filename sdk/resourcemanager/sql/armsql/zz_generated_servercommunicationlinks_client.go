@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServerCommunicationLinksClient(subscriptionID string, credential azcore.
 // parameters - The required parameters for creating a server communication link.
 // options - ServerCommunicationLinksClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerCommunicationLinksClient.BeginCreateOrUpdate
 // method.
-func (client *ServerCommunicationLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, communicationLinkName string, parameters ServerCommunicationLink, options *ServerCommunicationLinksClientBeginCreateOrUpdateOptions) (ServerCommunicationLinksClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, communicationLinkName, parameters, options)
-	if err != nil {
-		return ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerCommunicationLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, communicationLinkName string, parameters ServerCommunicationLink, options *ServerCommunicationLinksClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerCommunicationLinksClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, communicationLinkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerCommunicationLinksClientCreateOrUpdateResponse]("ServerCommunicationLinksClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerCommunicationLinksClientCreateOrUpdateResponse]("ServerCommunicationLinksClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerCommunicationLinksClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerCommunicationLinksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a server communication link.
@@ -242,13 +238,26 @@ func (client *ServerCommunicationLinksClient) getHandleResponse(resp *http.Respo
 // serverName - The name of the server.
 // options - ServerCommunicationLinksClientListByServerOptions contains the optional parameters for the ServerCommunicationLinksClient.ListByServer
 // method.
-func (client *ServerCommunicationLinksClient) ListByServer(resourceGroupName string, serverName string, options *ServerCommunicationLinksClientListByServerOptions) *ServerCommunicationLinksClientListByServerPager {
-	return &ServerCommunicationLinksClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerCommunicationLinksClient) ListByServer(resourceGroupName string, serverName string, options *ServerCommunicationLinksClientListByServerOptions) *runtime.Pager[ServerCommunicationLinksClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerCommunicationLinksClientListByServerResponse]{
+		More: func(page ServerCommunicationLinksClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServerCommunicationLinksClientListByServerResponse) (ServerCommunicationLinksClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ServerCommunicationLinksClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerCommunicationLinksClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerCommunicationLinksClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

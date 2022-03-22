@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -87,11 +87,14 @@ type EnergyServiceProperties struct {
 type EnergyServicesClientBeginCreateOptions struct {
 	// Request body.
 	Body *EnergyService
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnergyServicesClientBeginDeleteOptions contains the optional parameters for the EnergyServicesClient.BeginDelete method.
 type EnergyServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnergyServicesClientGetOptions contains the optional parameters for the EnergyServicesClient.Get method.

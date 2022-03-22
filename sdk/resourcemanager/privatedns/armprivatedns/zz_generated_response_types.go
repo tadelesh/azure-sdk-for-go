@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armprivatedns
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// PrivateZonesClientCreateOrUpdatePollerResponse contains the response from method PrivateZonesClient.CreateOrUpdate.
-type PrivateZonesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateZonesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateZonesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateZonesClientCreateOrUpdateResponse, error) {
-	respType := PrivateZonesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateZone)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateZonesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *PrivateZonesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *PrivateZonesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateZonesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateZonesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // PrivateZonesClientCreateOrUpdateResponse contains the response from method PrivateZonesClient.CreateOrUpdate.
 type PrivateZonesClientCreateOrUpdateResponse struct {
 	PrivateZone
-}
-
-// PrivateZonesClientDeletePollerResponse contains the response from method PrivateZonesClient.Delete.
-type PrivateZonesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateZonesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateZonesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateZonesClientDeleteResponse, error) {
-	respType := PrivateZonesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateZonesClientDeletePollerResponse from the provided client and resume token.
-func (l *PrivateZonesClientDeletePollerResponse) Resume(ctx context.Context, client *PrivateZonesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateZonesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateZonesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PrivateZonesClientDeleteResponse contains the response from method PrivateZonesClient.Delete.
@@ -107,41 +31,6 @@ type PrivateZonesClientListByResourceGroupResponse struct {
 // PrivateZonesClientListResponse contains the response from method PrivateZonesClient.List.
 type PrivateZonesClientListResponse struct {
 	PrivateZoneListResult
-}
-
-// PrivateZonesClientUpdatePollerResponse contains the response from method PrivateZonesClient.Update.
-type PrivateZonesClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateZonesClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateZonesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateZonesClientUpdateResponse, error) {
-	respType := PrivateZonesClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateZone)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateZonesClientUpdatePollerResponse from the provided client and resume token.
-func (l *PrivateZonesClientUpdatePollerResponse) Resume(ctx context.Context, client *PrivateZonesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateZonesClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateZonesClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PrivateZonesClientUpdateResponse contains the response from method PrivateZonesClient.Update.
@@ -179,79 +68,9 @@ type RecordSetsClientUpdateResponse struct {
 	RecordSet
 }
 
-// VirtualNetworkLinksClientCreateOrUpdatePollerResponse contains the response from method VirtualNetworkLinksClient.CreateOrUpdate.
-type VirtualNetworkLinksClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualNetworkLinksClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualNetworkLinksClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualNetworkLinksClientCreateOrUpdateResponse, error) {
-	respType := VirtualNetworkLinksClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualNetworkLink)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualNetworkLinksClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *VirtualNetworkLinksClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *VirtualNetworkLinksClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualNetworkLinksClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualNetworkLinksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // VirtualNetworkLinksClientCreateOrUpdateResponse contains the response from method VirtualNetworkLinksClient.CreateOrUpdate.
 type VirtualNetworkLinksClientCreateOrUpdateResponse struct {
 	VirtualNetworkLink
-}
-
-// VirtualNetworkLinksClientDeletePollerResponse contains the response from method VirtualNetworkLinksClient.Delete.
-type VirtualNetworkLinksClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualNetworkLinksClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualNetworkLinksClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualNetworkLinksClientDeleteResponse, error) {
-	respType := VirtualNetworkLinksClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualNetworkLinksClientDeletePollerResponse from the provided client and resume token.
-func (l *VirtualNetworkLinksClientDeletePollerResponse) Resume(ctx context.Context, client *VirtualNetworkLinksClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualNetworkLinksClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualNetworkLinksClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VirtualNetworkLinksClientDeleteResponse contains the response from method VirtualNetworkLinksClient.Delete.
@@ -267,41 +86,6 @@ type VirtualNetworkLinksClientGetResponse struct {
 // VirtualNetworkLinksClientListResponse contains the response from method VirtualNetworkLinksClient.List.
 type VirtualNetworkLinksClientListResponse struct {
 	VirtualNetworkLinkListResult
-}
-
-// VirtualNetworkLinksClientUpdatePollerResponse contains the response from method VirtualNetworkLinksClient.Update.
-type VirtualNetworkLinksClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualNetworkLinksClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualNetworkLinksClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualNetworkLinksClientUpdateResponse, error) {
-	respType := VirtualNetworkLinksClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualNetworkLink)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualNetworkLinksClientUpdatePollerResponse from the provided client and resume token.
-func (l *VirtualNetworkLinksClientUpdatePollerResponse) Resume(ctx context.Context, client *VirtualNetworkLinksClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualNetworkLinksClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualNetworkLinksClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VirtualNetworkLinksClientUpdateResponse contains the response from method VirtualNetworkLinksClient.Update.

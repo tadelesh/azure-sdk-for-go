@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -126,20 +126,16 @@ func (client *PoolClient) createHandleResponse(resp *http.Response) (PoolClientC
 // accountName - The name of the Batch account.
 // poolName - The pool name. This must be unique within the account.
 // options - PoolClientBeginDeleteOptions contains the optional parameters for the PoolClient.BeginDelete method.
-func (client *PoolClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, options *PoolClientBeginDeleteOptions) (PoolClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, options)
-	if err != nil {
-		return PoolClientDeletePollerResponse{}, err
+func (client *PoolClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, options *PoolClientBeginDeleteOptions) (*armruntime.Poller[PoolClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PoolClientDeleteResponse]("PoolClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PoolClientDeleteResponse]("PoolClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PoolClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PoolClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return PoolClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PoolClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified pool.
@@ -320,16 +316,32 @@ func (client *PoolClient) getHandleResponse(resp *http.Response) (PoolClientGetR
 // resourceGroupName - The name of the resource group that contains the Batch account.
 // accountName - The name of the Batch account.
 // options - PoolClientListByBatchAccountOptions contains the optional parameters for the PoolClient.ListByBatchAccount method.
-func (client *PoolClient) ListByBatchAccount(resourceGroupName string, accountName string, options *PoolClientListByBatchAccountOptions) *PoolClientListByBatchAccountPager {
-	return &PoolClientListByBatchAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PoolClient) ListByBatchAccount(resourceGroupName string, accountName string, options *PoolClientListByBatchAccountOptions) *runtime.Pager[PoolClientListByBatchAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PoolClientListByBatchAccountResponse]{
+		More: func(page PoolClientListByBatchAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PoolClientListByBatchAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListPoolsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PoolClientListByBatchAccountResponse) (PoolClientListByBatchAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PoolClientListByBatchAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PoolClientListByBatchAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PoolClientListByBatchAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBatchAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBatchAccountCreateRequest creates the ListByBatchAccount request.

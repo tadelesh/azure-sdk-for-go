@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewElasticPoolsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - The elastic pool parameters.
 // options - ElasticPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the ElasticPoolsClient.BeginCreateOrUpdate
 // method.
-func (client *ElasticPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, parameters ElasticPool, options *ElasticPoolsClientBeginCreateOrUpdateOptions) (ElasticPoolsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, elasticPoolName, parameters, options)
-	if err != nil {
-		return ElasticPoolsClientCreateOrUpdatePollerResponse{}, err
+func (client *ElasticPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, parameters ElasticPool, options *ElasticPoolsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ElasticPoolsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, elasticPoolName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ElasticPoolsClientCreateOrUpdateResponse]("ElasticPoolsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ElasticPoolsClientCreateOrUpdateResponse]("ElasticPoolsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ElasticPoolsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ElasticPoolsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ElasticPoolsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ElasticPoolsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an elastic pool.
@@ -130,20 +126,16 @@ func (client *ElasticPoolsClient) createOrUpdateCreateRequest(ctx context.Contex
 // elasticPoolName - The name of the elastic pool.
 // options - ElasticPoolsClientBeginDeleteOptions contains the optional parameters for the ElasticPoolsClient.BeginDelete
 // method.
-func (client *ElasticPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientBeginDeleteOptions) (ElasticPoolsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, elasticPoolName, options)
-	if err != nil {
-		return ElasticPoolsClientDeletePollerResponse{}, err
+func (client *ElasticPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientBeginDeleteOptions) (*armruntime.Poller[ElasticPoolsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, elasticPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ElasticPoolsClientDeleteResponse]("ElasticPoolsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ElasticPoolsClientDeleteResponse]("ElasticPoolsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ElasticPoolsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ElasticPoolsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ElasticPoolsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ElasticPoolsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an elastic pool.
@@ -200,20 +192,16 @@ func (client *ElasticPoolsClient) deleteCreateRequest(ctx context.Context, resou
 // elasticPoolName - The name of the elastic pool to failover.
 // options - ElasticPoolsClientBeginFailoverOptions contains the optional parameters for the ElasticPoolsClient.BeginFailover
 // method.
-func (client *ElasticPoolsClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientBeginFailoverOptions) (ElasticPoolsClientFailoverPollerResponse, error) {
-	resp, err := client.failover(ctx, resourceGroupName, serverName, elasticPoolName, options)
-	if err != nil {
-		return ElasticPoolsClientFailoverPollerResponse{}, err
+func (client *ElasticPoolsClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientBeginFailoverOptions) (*armruntime.Poller[ElasticPoolsClientFailoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failover(ctx, resourceGroupName, serverName, elasticPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ElasticPoolsClientFailoverResponse]("ElasticPoolsClient.Failover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ElasticPoolsClientFailoverResponse]("ElasticPoolsClient.Failover", options.ResumeToken, client.pl, nil)
 	}
-	result := ElasticPoolsClientFailoverPollerResponse{}
-	pt, err := armruntime.NewPoller("ElasticPoolsClient.Failover", "", resp, client.pl)
-	if err != nil {
-		return ElasticPoolsClientFailoverPollerResponse{}, err
-	}
-	result.Poller = &ElasticPoolsClientFailoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Failover - Failovers an elastic pool.
@@ -330,16 +318,32 @@ func (client *ElasticPoolsClient) getHandleResponse(resp *http.Response) (Elasti
 // serverName - The name of the server.
 // options - ElasticPoolsClientListByServerOptions contains the optional parameters for the ElasticPoolsClient.ListByServer
 // method.
-func (client *ElasticPoolsClient) ListByServer(resourceGroupName string, serverName string, options *ElasticPoolsClientListByServerOptions) *ElasticPoolsClientListByServerPager {
-	return &ElasticPoolsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ElasticPoolsClient) ListByServer(resourceGroupName string, serverName string, options *ElasticPoolsClientListByServerOptions) *runtime.Pager[ElasticPoolsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ElasticPoolsClientListByServerResponse]{
+		More: func(page ElasticPoolsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ElasticPoolsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ElasticPoolListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ElasticPoolsClientListByServerResponse) (ElasticPoolsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ElasticPoolsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ElasticPoolsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ElasticPoolsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -388,13 +392,26 @@ func (client *ElasticPoolsClient) listByServerHandleResponse(resp *http.Response
 // elasticPoolName - The name of the elastic pool.
 // options - ElasticPoolsClientListMetricDefinitionsOptions contains the optional parameters for the ElasticPoolsClient.ListMetricDefinitions
 // method.
-func (client *ElasticPoolsClient) ListMetricDefinitions(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientListMetricDefinitionsOptions) *ElasticPoolsClientListMetricDefinitionsPager {
-	return &ElasticPoolsClientListMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+func (client *ElasticPoolsClient) ListMetricDefinitions(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientListMetricDefinitionsOptions) *runtime.Pager[ElasticPoolsClientListMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ElasticPoolsClientListMetricDefinitionsResponse]{
+		More: func(page ElasticPoolsClientListMetricDefinitionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ElasticPoolsClientListMetricDefinitionsResponse) (ElasticPoolsClientListMetricDefinitionsResponse, error) {
+			req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+			if err != nil {
+				return ElasticPoolsClientListMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ElasticPoolsClientListMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ElasticPoolsClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -445,13 +462,26 @@ func (client *ElasticPoolsClient) listMetricDefinitionsHandleResponse(resp *http
 // filter - An OData filter expression that describes a subset of metrics to return.
 // options - ElasticPoolsClientListMetricsOptions contains the optional parameters for the ElasticPoolsClient.ListMetrics
 // method.
-func (client *ElasticPoolsClient) ListMetrics(resourceGroupName string, serverName string, elasticPoolName string, filter string, options *ElasticPoolsClientListMetricsOptions) *ElasticPoolsClientListMetricsPager {
-	return &ElasticPoolsClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, filter, options)
+func (client *ElasticPoolsClient) ListMetrics(resourceGroupName string, serverName string, elasticPoolName string, filter string, options *ElasticPoolsClientListMetricsOptions) *runtime.Pager[ElasticPoolsClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ElasticPoolsClientListMetricsResponse]{
+		More: func(page ElasticPoolsClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ElasticPoolsClientListMetricsResponse) (ElasticPoolsClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, filter, options)
+			if err != nil {
+				return ElasticPoolsClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ElasticPoolsClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ElasticPoolsClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -503,20 +533,16 @@ func (client *ElasticPoolsClient) listMetricsHandleResponse(resp *http.Response)
 // parameters - The elastic pool update parameters.
 // options - ElasticPoolsClientBeginUpdateOptions contains the optional parameters for the ElasticPoolsClient.BeginUpdate
 // method.
-func (client *ElasticPoolsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, parameters ElasticPoolUpdate, options *ElasticPoolsClientBeginUpdateOptions) (ElasticPoolsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverName, elasticPoolName, parameters, options)
-	if err != nil {
-		return ElasticPoolsClientUpdatePollerResponse{}, err
+func (client *ElasticPoolsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, parameters ElasticPoolUpdate, options *ElasticPoolsClientBeginUpdateOptions) (*armruntime.Poller[ElasticPoolsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverName, elasticPoolName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ElasticPoolsClientUpdateResponse]("ElasticPoolsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ElasticPoolsClientUpdateResponse]("ElasticPoolsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ElasticPoolsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ElasticPoolsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ElasticPoolsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ElasticPoolsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an elastic pool.

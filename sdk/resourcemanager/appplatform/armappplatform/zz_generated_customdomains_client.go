@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewCustomDomainsClient(subscriptionID string, credential azcore.TokenCreden
 // domainResource - Parameters for the create or update operation
 // options - CustomDomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomDomainsClient.BeginCreateOrUpdate
 // method.
-func (client *CustomDomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, domainResource CustomDomainResource, options *CustomDomainsClientBeginCreateOrUpdateOptions) (CustomDomainsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, domainName, domainResource, options)
-	if err != nil {
-		return CustomDomainsClientCreateOrUpdatePollerResponse{}, err
+func (client *CustomDomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, domainResource CustomDomainResource, options *CustomDomainsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CustomDomainsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, domainName, domainResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomDomainsClientCreateOrUpdateResponse]("CustomDomainsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomDomainsClientCreateOrUpdateResponse]("CustomDomainsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomDomainsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomDomainsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomDomainsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomDomainsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update custom domain of one lifecycle application.
@@ -136,20 +132,16 @@ func (client *CustomDomainsClient) createOrUpdateCreateRequest(ctx context.Conte
 // domainName - The name of the custom domain resource.
 // options - CustomDomainsClientBeginDeleteOptions contains the optional parameters for the CustomDomainsClient.BeginDelete
 // method.
-func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, options *CustomDomainsClientBeginDeleteOptions) (CustomDomainsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, domainName, options)
-	if err != nil {
-		return CustomDomainsClientDeletePollerResponse{}, err
+func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, options *CustomDomainsClientBeginDeleteOptions) (*armruntime.Poller[CustomDomainsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, domainName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomDomainsClientDeleteResponse]("CustomDomainsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomDomainsClientDeleteResponse]("CustomDomainsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomDomainsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomDomainsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomDomainsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomDomainsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the custom domain of one lifecycle application.
@@ -276,16 +268,32 @@ func (client *CustomDomainsClient) getHandleResponse(resp *http.Response) (Custo
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - CustomDomainsClientListOptions contains the optional parameters for the CustomDomainsClient.List method.
-func (client *CustomDomainsClient) List(resourceGroupName string, serviceName string, appName string, options *CustomDomainsClientListOptions) *CustomDomainsClientListPager {
-	return &CustomDomainsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, appName, options)
+func (client *CustomDomainsClient) List(resourceGroupName string, serviceName string, appName string, options *CustomDomainsClientListOptions) *runtime.Pager[CustomDomainsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomDomainsClientListResponse]{
+		More: func(page CustomDomainsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomDomainsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomDomainResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomDomainsClientListResponse) (CustomDomainsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, appName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomDomainsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomDomainsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomDomainsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -337,20 +345,16 @@ func (client *CustomDomainsClient) listHandleResponse(resp *http.Response) (Cust
 // domainResource - Parameters for the create or update operation
 // options - CustomDomainsClientBeginUpdateOptions contains the optional parameters for the CustomDomainsClient.BeginUpdate
 // method.
-func (client *CustomDomainsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, domainResource CustomDomainResource, options *CustomDomainsClientBeginUpdateOptions) (CustomDomainsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serviceName, appName, domainName, domainResource, options)
-	if err != nil {
-		return CustomDomainsClientUpdatePollerResponse{}, err
+func (client *CustomDomainsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, domainName string, domainResource CustomDomainResource, options *CustomDomainsClientBeginUpdateOptions) (*armruntime.Poller[CustomDomainsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serviceName, appName, domainName, domainResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomDomainsClientUpdateResponse]("CustomDomainsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomDomainsClientUpdateResponse]("CustomDomainsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomDomainsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomDomainsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomDomainsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomDomainsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update custom domain of one lifecycle application.

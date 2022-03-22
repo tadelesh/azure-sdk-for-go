@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,16 +121,32 @@ func (client *ActivityClient) getHandleResponse(resp *http.Response) (ActivityCl
 // automationAccountName - The name of the automation account.
 // moduleName - The name of module.
 // options - ActivityClientListByModuleOptions contains the optional parameters for the ActivityClient.ListByModule method.
-func (client *ActivityClient) ListByModule(resourceGroupName string, automationAccountName string, moduleName string, options *ActivityClientListByModuleOptions) *ActivityClientListByModulePager {
-	return &ActivityClientListByModulePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByModuleCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, options)
+func (client *ActivityClient) ListByModule(resourceGroupName string, automationAccountName string, moduleName string, options *ActivityClientListByModuleOptions) *runtime.Pager[ActivityClientListByModuleResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActivityClientListByModuleResponse]{
+		More: func(page ActivityClientListByModuleResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ActivityClientListByModuleResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ActivityListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ActivityClientListByModuleResponse) (ActivityClientListByModuleResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByModuleCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ActivityClientListByModuleResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActivityClientListByModuleResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActivityClientListByModuleResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByModuleHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByModuleCreateRequest creates the ListByModule request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -69,7 +69,8 @@ type CommunicationDetailsProperties struct {
 
 // CommunicationsClientBeginCreateOptions contains the optional parameters for the CommunicationsClient.BeginCreate method.
 type CommunicationsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CommunicationsClientCheckNameAvailabilityOptions contains the optional parameters for the CommunicationsClient.CheckNameAvailability
@@ -415,7 +416,8 @@ type TicketDetailsProperties struct {
 
 // TicketsClientBeginCreateOptions contains the optional parameters for the TicketsClient.BeginCreate method.
 type TicketsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TicketsClientCheckNameAvailabilityOptions contains the optional parameters for the TicketsClient.CheckNameAvailability

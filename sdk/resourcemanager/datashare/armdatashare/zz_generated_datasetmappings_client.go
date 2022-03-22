@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -243,16 +243,32 @@ func (client *DataSetMappingsClient) getHandleResponse(resp *http.Response) (Dat
 // shareSubscriptionName - The name of the share subscription.
 // options - DataSetMappingsClientListByShareSubscriptionOptions contains the optional parameters for the DataSetMappingsClient.ListByShareSubscription
 // method.
-func (client *DataSetMappingsClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *DataSetMappingsClientListByShareSubscriptionOptions) *DataSetMappingsClientListByShareSubscriptionPager {
-	return &DataSetMappingsClientListByShareSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+func (client *DataSetMappingsClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *DataSetMappingsClientListByShareSubscriptionOptions) *runtime.Pager[DataSetMappingsClientListByShareSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataSetMappingsClientListByShareSubscriptionResponse]{
+		More: func(page DataSetMappingsClientListByShareSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataSetMappingsClientListByShareSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataSetMappingList.NextLink)
+		Fetcher: func(ctx context.Context, page *DataSetMappingsClientListByShareSubscriptionResponse) (DataSetMappingsClientListByShareSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataSetMappingsClientListByShareSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataSetMappingsClientListByShareSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataSetMappingsClientListByShareSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareSubscriptionCreateRequest creates the ListByShareSubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewPlacementPoliciesClient(subscriptionID string, credential azcore.TokenCr
 // placementPolicy - A placement policy in the private cloud cluster
 // options - PlacementPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PlacementPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *PlacementPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, placementPolicy PlacementPolicy, options *PlacementPoliciesClientBeginCreateOrUpdateOptions) (PlacementPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, placementPolicy, options)
-	if err != nil {
-		return PlacementPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *PlacementPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, placementPolicy PlacementPolicy, options *PlacementPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PlacementPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, placementPolicy, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PlacementPoliciesClientCreateOrUpdateResponse]("PlacementPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PlacementPoliciesClientCreateOrUpdateResponse]("PlacementPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PlacementPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PlacementPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return PlacementPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PlacementPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a placement policy in a private cloud cluster
@@ -133,20 +129,16 @@ func (client *PlacementPoliciesClient) createOrUpdateCreateRequest(ctx context.C
 // placementPolicyName - Name of the VMware vSphere Distributed Resource Scheduler (DRS) placement policy
 // options - PlacementPoliciesClientBeginDeleteOptions contains the optional parameters for the PlacementPoliciesClient.BeginDelete
 // method.
-func (client *PlacementPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, options *PlacementPoliciesClientBeginDeleteOptions) (PlacementPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, options)
-	if err != nil {
-		return PlacementPoliciesClientDeletePollerResponse{}, err
+func (client *PlacementPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, options *PlacementPoliciesClientBeginDeleteOptions) (*armruntime.Poller[PlacementPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PlacementPoliciesClientDeleteResponse]("PlacementPoliciesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PlacementPoliciesClientDeleteResponse]("PlacementPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PlacementPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PlacementPoliciesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PlacementPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PlacementPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a placement policy in a private cloud cluster
@@ -271,16 +263,32 @@ func (client *PlacementPoliciesClient) getHandleResponse(resp *http.Response) (P
 // privateCloudName - Name of the private cloud
 // clusterName - Name of the cluster in the private cloud
 // options - PlacementPoliciesClientListOptions contains the optional parameters for the PlacementPoliciesClient.List method.
-func (client *PlacementPoliciesClient) List(resourceGroupName string, privateCloudName string, clusterName string, options *PlacementPoliciesClientListOptions) *PlacementPoliciesClientListPager {
-	return &PlacementPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, clusterName, options)
+func (client *PlacementPoliciesClient) List(resourceGroupName string, privateCloudName string, clusterName string, options *PlacementPoliciesClientListOptions) *runtime.Pager[PlacementPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PlacementPoliciesClientListResponse]{
+		More: func(page PlacementPoliciesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PlacementPoliciesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PlacementPoliciesList.NextLink)
+		Fetcher: func(ctx context.Context, page *PlacementPoliciesClientListResponse) (PlacementPoliciesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PlacementPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PlacementPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PlacementPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -331,20 +339,16 @@ func (client *PlacementPoliciesClient) listHandleResponse(resp *http.Response) (
 // placementPolicyUpdate - The placement policy properties that may be updated
 // options - PlacementPoliciesClientBeginUpdateOptions contains the optional parameters for the PlacementPoliciesClient.BeginUpdate
 // method.
-func (client *PlacementPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, placementPolicyUpdate PlacementPolicyUpdate, options *PlacementPoliciesClientBeginUpdateOptions) (PlacementPoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, placementPolicyUpdate, options)
-	if err != nil {
-		return PlacementPoliciesClientUpdatePollerResponse{}, err
+func (client *PlacementPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, placementPolicyName string, placementPolicyUpdate PlacementPolicyUpdate, options *PlacementPoliciesClientBeginUpdateOptions) (*armruntime.Poller[PlacementPoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, privateCloudName, clusterName, placementPolicyName, placementPolicyUpdate, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PlacementPoliciesClientUpdateResponse]("PlacementPoliciesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PlacementPoliciesClientUpdateResponse]("PlacementPoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := PlacementPoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PlacementPoliciesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return PlacementPoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &PlacementPoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a placement policy in a private cloud cluster

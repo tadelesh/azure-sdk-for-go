@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,13 +56,26 @@ func NewServerUsagesClient(subscriptionID string, credential azcore.TokenCredent
 // serverName - The name of the server.
 // options - ServerUsagesClientListByServerOptions contains the optional parameters for the ServerUsagesClient.ListByServer
 // method.
-func (client *ServerUsagesClient) ListByServer(resourceGroupName string, serverName string, options *ServerUsagesClientListByServerOptions) *ServerUsagesClientListByServerPager {
-	return &ServerUsagesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerUsagesClient) ListByServer(resourceGroupName string, serverName string, options *ServerUsagesClientListByServerOptions) *runtime.Pager[ServerUsagesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerUsagesClientListByServerResponse]{
+		More: func(page ServerUsagesClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServerUsagesClientListByServerResponse) (ServerUsagesClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ServerUsagesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerUsagesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerUsagesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

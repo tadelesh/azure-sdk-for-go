@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *PrivateLinkHubPrivateLinkResourcesClient) getHandleResponse(resp *
 // privateLinkHubName - The name of the private link hub
 // options - PrivateLinkHubPrivateLinkResourcesClientListOptions contains the optional parameters for the PrivateLinkHubPrivateLinkResourcesClient.List
 // method.
-func (client *PrivateLinkHubPrivateLinkResourcesClient) List(resourceGroupName string, privateLinkHubName string, options *PrivateLinkHubPrivateLinkResourcesClientListOptions) *PrivateLinkHubPrivateLinkResourcesClientListPager {
-	return &PrivateLinkHubPrivateLinkResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateLinkHubName, options)
+func (client *PrivateLinkHubPrivateLinkResourcesClient) List(resourceGroupName string, privateLinkHubName string, options *PrivateLinkHubPrivateLinkResourcesClientListOptions) *runtime.Pager[PrivateLinkHubPrivateLinkResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkHubPrivateLinkResourcesClientListResponse]{
+		More: func(page PrivateLinkHubPrivateLinkResourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkHubPrivateLinkResourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkHubPrivateLinkResourcesClientListResponse) (PrivateLinkHubPrivateLinkResourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateLinkHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkHubPrivateLinkResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkHubPrivateLinkResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkHubPrivateLinkResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

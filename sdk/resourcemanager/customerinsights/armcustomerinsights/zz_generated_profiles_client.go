@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential,
 // parameters - Parameters supplied to the create/delete Profile type operation
 // options - ProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the ProfilesClient.BeginCreateOrUpdate
 // method.
-func (client *ProfilesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, profileName string, parameters ProfileResourceFormat, options *ProfilesClientBeginCreateOrUpdateOptions) (ProfilesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, profileName, parameters, options)
-	if err != nil {
-		return ProfilesClientCreateOrUpdatePollerResponse{}, err
+func (client *ProfilesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, profileName string, parameters ProfileResourceFormat, options *ProfilesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ProfilesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, profileName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProfilesClientCreateOrUpdateResponse]("ProfilesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProfilesClientCreateOrUpdateResponse]("ProfilesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ProfilesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ProfilesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ProfilesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ProfilesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a profile within a Hub, or updates an existing profile.
@@ -127,20 +123,16 @@ func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, r
 // hubName - The name of the hub.
 // profileName - The name of the profile.
 // options - ProfilesClientBeginDeleteOptions contains the optional parameters for the ProfilesClient.BeginDelete method.
-func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, profileName string, options *ProfilesClientBeginDeleteOptions) (ProfilesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, profileName, options)
-	if err != nil {
-		return ProfilesClientDeletePollerResponse{}, err
+func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, profileName string, options *ProfilesClientBeginDeleteOptions) (*armruntime.Poller[ProfilesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, profileName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProfilesClientDeleteResponse]("ProfilesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProfilesClientDeleteResponse]("ProfilesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ProfilesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ProfilesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ProfilesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ProfilesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a profile within a hub
@@ -322,16 +314,32 @@ func (client *ProfilesClient) getEnrichingKpisHandleResponse(resp *http.Response
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - ProfilesClientListByHubOptions contains the optional parameters for the ProfilesClient.ListByHub method.
-func (client *ProfilesClient) ListByHub(resourceGroupName string, hubName string, options *ProfilesClientListByHubOptions) *ProfilesClientListByHubPager {
-	return &ProfilesClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *ProfilesClient) ListByHub(resourceGroupName string, hubName string, options *ProfilesClientListByHubOptions) *runtime.Pager[ProfilesClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListByHubResponse]{
+		More: func(page ProfilesClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProfilesClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProfileListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProfilesClientListByHubResponse) (ProfilesClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProfilesClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

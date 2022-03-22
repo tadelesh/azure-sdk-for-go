@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -205,16 +205,32 @@ func (client *SecretClient) getHandleResponse(resp *http.Response) (SecretClient
 // resourceGroupName - Azure resource group name
 // options - SecretClientListByResourceGroupOptions contains the optional parameters for the SecretClient.ListByResourceGroup
 // method.
-func (client *SecretClient) ListByResourceGroup(resourceGroupName string, options *SecretClientListByResourceGroupOptions) *SecretClientListByResourceGroupPager {
-	return &SecretClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SecretClient) ListByResourceGroup(resourceGroupName string, options *SecretClientListByResourceGroupOptions) *runtime.Pager[SecretClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecretClientListByResourceGroupResponse]{
+		More: func(page SecretClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecretClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecretResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SecretClientListByResourceGroupResponse) (SecretClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecretClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecretClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecretClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -253,16 +269,32 @@ func (client *SecretClient) listByResourceGroupHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SecretClientListBySubscriptionOptions contains the optional parameters for the SecretClient.ListBySubscription
 // method.
-func (client *SecretClient) ListBySubscription(options *SecretClientListBySubscriptionOptions) *SecretClientListBySubscriptionPager {
-	return &SecretClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *SecretClient) ListBySubscription(options *SecretClientListBySubscriptionOptions) *runtime.Pager[SecretClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecretClientListBySubscriptionResponse]{
+		More: func(page SecretClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecretClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecretResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SecretClientListBySubscriptionResponse) (SecretClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecretClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecretClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecretClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

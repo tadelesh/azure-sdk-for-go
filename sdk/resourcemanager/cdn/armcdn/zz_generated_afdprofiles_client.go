@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *AFDProfilesClient) checkHostNameAvailabilityHandleResponse(resp *h
 // resource group.
 // options - AFDProfilesClientListResourceUsageOptions contains the optional parameters for the AFDProfilesClient.ListResourceUsage
 // method.
-func (client *AFDProfilesClient) ListResourceUsage(resourceGroupName string, profileName string, options *AFDProfilesClientListResourceUsageOptions) *AFDProfilesClientListResourceUsagePager {
-	return &AFDProfilesClientListResourceUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, options)
+func (client *AFDProfilesClient) ListResourceUsage(resourceGroupName string, profileName string, options *AFDProfilesClientListResourceUsageOptions) *runtime.Pager[AFDProfilesClientListResourceUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AFDProfilesClientListResourceUsageResponse]{
+		More: func(page AFDProfilesClientListResourceUsageResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AFDProfilesClientListResourceUsageResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsagesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AFDProfilesClientListResourceUsageResponse) (AFDProfilesClientListResourceUsageResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AFDProfilesClientListResourceUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AFDProfilesClientListResourceUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AFDProfilesClientListResourceUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listResourceUsageHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listResourceUsageCreateRequest creates the ListResourceUsage request.

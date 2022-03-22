@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -151,11 +151,14 @@ type OperationResult struct {
 type OrganizationClientBeginCreateOptions struct {
 	// Organization resource model
 	Body *OrganizationResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OrganizationClientBeginDeleteOptions contains the optional parameters for the OrganizationClient.BeginDelete method.
 type OrganizationClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OrganizationClientGetOptions contains the optional parameters for the OrganizationClient.Get method.

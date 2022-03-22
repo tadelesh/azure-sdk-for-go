@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -210,16 +210,32 @@ func (client *AccountClient) getHandleResponse(resp *http.Response) (AccountClie
 // List - Retrieve a list of accounts within a given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountClientListOptions contains the optional parameters for the AccountClient.List method.
-func (client *AccountClient) List(options *AccountClientListOptions) *AccountClientListPager {
-	return &AccountClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AccountClient) List(options *AccountClientListOptions) *runtime.Pager[AccountClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountClientListResponse]{
+		More: func(page AccountClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountClientListResponse) (AccountClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -254,16 +270,32 @@ func (client *AccountClient) listHandleResponse(resp *http.Response) (AccountCli
 // resourceGroupName - Name of an Azure Resource group.
 // options - AccountClientListByResourceGroupOptions contains the optional parameters for the AccountClient.ListByResourceGroup
 // method.
-func (client *AccountClient) ListByResourceGroup(resourceGroupName string, options *AccountClientListByResourceGroupOptions) *AccountClientListByResourceGroupPager {
-	return &AccountClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AccountClient) ListByResourceGroup(resourceGroupName string, options *AccountClientListByResourceGroupOptions) *runtime.Pager[AccountClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountClientListByResourceGroupResponse]{
+		More: func(page AccountClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountClientListByResourceGroupResponse) (AccountClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

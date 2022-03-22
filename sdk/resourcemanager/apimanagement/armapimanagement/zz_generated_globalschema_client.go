@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewGlobalSchemaClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - Create or update parameters.
 // options - GlobalSchemaClientBeginCreateOrUpdateOptions contains the optional parameters for the GlobalSchemaClient.BeginCreateOrUpdate
 // method.
-func (client *GlobalSchemaClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, schemaID string, parameters GlobalSchemaContract, options *GlobalSchemaClientBeginCreateOrUpdateOptions) (GlobalSchemaClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, schemaID, parameters, options)
-	if err != nil {
-		return GlobalSchemaClientCreateOrUpdatePollerResponse{}, err
+func (client *GlobalSchemaClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, schemaID string, parameters GlobalSchemaContract, options *GlobalSchemaClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GlobalSchemaClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, schemaID, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GlobalSchemaClientCreateOrUpdateResponse]("GlobalSchemaClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GlobalSchemaClientCreateOrUpdateResponse]("GlobalSchemaClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GlobalSchemaClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GlobalSchemaClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return GlobalSchemaClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GlobalSchemaClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates new or updates existing specified Schema of the API Management service instance.
@@ -308,16 +304,32 @@ func (client *GlobalSchemaClient) getEntityTagHandleResponse(resp *http.Response
 // serviceName - The name of the API Management service.
 // options - GlobalSchemaClientListByServiceOptions contains the optional parameters for the GlobalSchemaClient.ListByService
 // method.
-func (client *GlobalSchemaClient) ListByService(resourceGroupName string, serviceName string, options *GlobalSchemaClientListByServiceOptions) *GlobalSchemaClientListByServicePager {
-	return &GlobalSchemaClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *GlobalSchemaClient) ListByService(resourceGroupName string, serviceName string, options *GlobalSchemaClientListByServiceOptions) *runtime.Pager[GlobalSchemaClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GlobalSchemaClientListByServiceResponse]{
+		More: func(page GlobalSchemaClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GlobalSchemaClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GlobalSchemaCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *GlobalSchemaClientListByServiceResponse) (GlobalSchemaClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GlobalSchemaClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GlobalSchemaClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GlobalSchemaClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

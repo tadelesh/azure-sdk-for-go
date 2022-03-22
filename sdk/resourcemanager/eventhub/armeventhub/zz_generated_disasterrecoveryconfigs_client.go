@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -458,16 +458,32 @@ func (client *DisasterRecoveryConfigsClient) getAuthorizationRuleHandleResponse(
 // namespaceName - The Namespace name
 // options - DisasterRecoveryConfigsClientListOptions contains the optional parameters for the DisasterRecoveryConfigsClient.List
 // method.
-func (client *DisasterRecoveryConfigsClient) List(resourceGroupName string, namespaceName string, options *DisasterRecoveryConfigsClientListOptions) *DisasterRecoveryConfigsClientListPager {
-	return &DisasterRecoveryConfigsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *DisasterRecoveryConfigsClient) List(resourceGroupName string, namespaceName string, options *DisasterRecoveryConfigsClientListOptions) *runtime.Pager[DisasterRecoveryConfigsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DisasterRecoveryConfigsClientListResponse]{
+		More: func(page DisasterRecoveryConfigsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DisasterRecoveryConfigsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ArmDisasterRecoveryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DisasterRecoveryConfigsClientListResponse) (DisasterRecoveryConfigsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DisasterRecoveryConfigsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DisasterRecoveryConfigsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DisasterRecoveryConfigsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -512,16 +528,32 @@ func (client *DisasterRecoveryConfigsClient) listHandleResponse(resp *http.Respo
 // alias - The Disaster Recovery configuration name
 // options - DisasterRecoveryConfigsClientListAuthorizationRulesOptions contains the optional parameters for the DisasterRecoveryConfigsClient.ListAuthorizationRules
 // method.
-func (client *DisasterRecoveryConfigsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, alias string, options *DisasterRecoveryConfigsClientListAuthorizationRulesOptions) *DisasterRecoveryConfigsClientListAuthorizationRulesPager {
-	return &DisasterRecoveryConfigsClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, alias, options)
+func (client *DisasterRecoveryConfigsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, alias string, options *DisasterRecoveryConfigsClientListAuthorizationRulesOptions) *runtime.Pager[DisasterRecoveryConfigsClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DisasterRecoveryConfigsClientListAuthorizationRulesResponse]{
+		More: func(page DisasterRecoveryConfigsClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DisasterRecoveryConfigsClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DisasterRecoveryConfigsClientListAuthorizationRulesResponse) (DisasterRecoveryConfigsClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, alias, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DisasterRecoveryConfigsClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DisasterRecoveryConfigsClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DisasterRecoveryConfigsClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.

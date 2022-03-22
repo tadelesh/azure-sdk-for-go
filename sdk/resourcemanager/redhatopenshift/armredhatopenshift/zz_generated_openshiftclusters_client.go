@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewOpenShiftClustersClient(subscriptionID string, credential azcore.TokenCr
 // parameters - The OpenShift cluster resource.
 // options - OpenShiftClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the OpenShiftClustersClient.BeginCreateOrUpdate
 // method.
-func (client *OpenShiftClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters OpenShiftCluster, options *OpenShiftClustersClientBeginCreateOrUpdateOptions) (OpenShiftClustersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return OpenShiftClustersClientCreateOrUpdatePollerResponse{}, err
+func (client *OpenShiftClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters OpenShiftCluster, options *OpenShiftClustersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[OpenShiftClustersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OpenShiftClustersClientCreateOrUpdateResponse]("OpenShiftClustersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OpenShiftClustersClientCreateOrUpdateResponse]("OpenShiftClustersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := OpenShiftClustersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("OpenShiftClustersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return OpenShiftClustersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &OpenShiftClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The operation returns properties of a OpenShift cluster.
@@ -121,20 +117,16 @@ func (client *OpenShiftClustersClient) createOrUpdateCreateRequest(ctx context.C
 // resourceName - The name of the OpenShift cluster resource.
 // options - OpenShiftClustersClientBeginDeleteOptions contains the optional parameters for the OpenShiftClustersClient.BeginDelete
 // method.
-func (client *OpenShiftClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *OpenShiftClustersClientBeginDeleteOptions) (OpenShiftClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return OpenShiftClustersClientDeletePollerResponse{}, err
+func (client *OpenShiftClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *OpenShiftClustersClientBeginDeleteOptions) (*armruntime.Poller[OpenShiftClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OpenShiftClustersClientDeleteResponse]("OpenShiftClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OpenShiftClustersClientDeleteResponse]("OpenShiftClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OpenShiftClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OpenShiftClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return OpenShiftClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OpenShiftClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation returns nothing.
@@ -238,16 +230,32 @@ func (client *OpenShiftClustersClient) getHandleResponse(resp *http.Response) (O
 // List - The operation returns properties of each OpenShift cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OpenShiftClustersClientListOptions contains the optional parameters for the OpenShiftClustersClient.List method.
-func (client *OpenShiftClustersClient) List(options *OpenShiftClustersClientListOptions) *OpenShiftClustersClientListPager {
-	return &OpenShiftClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *OpenShiftClustersClient) List(options *OpenShiftClustersClientListOptions) *runtime.Pager[OpenShiftClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OpenShiftClustersClientListResponse]{
+		More: func(page OpenShiftClustersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OpenShiftClustersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OpenShiftClusterList.NextLink)
+		Fetcher: func(ctx context.Context, page *OpenShiftClustersClientListResponse) (OpenShiftClustersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OpenShiftClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OpenShiftClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OpenShiftClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -282,16 +290,32 @@ func (client *OpenShiftClustersClient) listHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - OpenShiftClustersClientListByResourceGroupOptions contains the optional parameters for the OpenShiftClustersClient.ListByResourceGroup
 // method.
-func (client *OpenShiftClustersClient) ListByResourceGroup(resourceGroupName string, options *OpenShiftClustersClientListByResourceGroupOptions) *OpenShiftClustersClientListByResourceGroupPager {
-	return &OpenShiftClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *OpenShiftClustersClient) ListByResourceGroup(resourceGroupName string, options *OpenShiftClustersClientListByResourceGroupOptions) *runtime.Pager[OpenShiftClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OpenShiftClustersClientListByResourceGroupResponse]{
+		More: func(page OpenShiftClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OpenShiftClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OpenShiftClusterList.NextLink)
+		Fetcher: func(ctx context.Context, page *OpenShiftClustersClientListByResourceGroupResponse) (OpenShiftClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OpenShiftClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OpenShiftClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OpenShiftClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -388,20 +412,16 @@ func (client *OpenShiftClustersClient) listCredentialsHandleResponse(resp *http.
 // parameters - The OpenShift cluster resource.
 // options - OpenShiftClustersClientBeginUpdateOptions contains the optional parameters for the OpenShiftClustersClient.BeginUpdate
 // method.
-func (client *OpenShiftClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters OpenShiftClusterUpdate, options *OpenShiftClustersClientBeginUpdateOptions) (OpenShiftClustersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return OpenShiftClustersClientUpdatePollerResponse{}, err
+func (client *OpenShiftClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters OpenShiftClusterUpdate, options *OpenShiftClustersClientBeginUpdateOptions) (*armruntime.Poller[OpenShiftClustersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OpenShiftClustersClientUpdateResponse]("OpenShiftClustersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OpenShiftClustersClientUpdateResponse]("OpenShiftClustersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := OpenShiftClustersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("OpenShiftClustersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return OpenShiftClustersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &OpenShiftClustersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation returns properties of a OpenShift cluster.

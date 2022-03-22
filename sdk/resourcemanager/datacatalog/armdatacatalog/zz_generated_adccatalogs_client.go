@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,20 +115,16 @@ func (client *ADCCatalogsClient) createOrUpdateHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - ADCCatalogsClientBeginDeleteOptions contains the optional parameters for the ADCCatalogsClient.BeginDelete method.
-func (client *ADCCatalogsClient) BeginDelete(ctx context.Context, resourceGroupName string, options *ADCCatalogsClientBeginDeleteOptions) (ADCCatalogsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, options)
-	if err != nil {
-		return ADCCatalogsClientDeletePollerResponse{}, err
+func (client *ADCCatalogsClient) BeginDelete(ctx context.Context, resourceGroupName string, options *ADCCatalogsClientBeginDeleteOptions) (*armruntime.Poller[ADCCatalogsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ADCCatalogsClientDeleteResponse]("ADCCatalogsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ADCCatalogsClientDeleteResponse]("ADCCatalogsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ADCCatalogsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ADCCatalogsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ADCCatalogsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ADCCatalogsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The Delete Azure Data Catalog Service operation deletes an existing data catalog.

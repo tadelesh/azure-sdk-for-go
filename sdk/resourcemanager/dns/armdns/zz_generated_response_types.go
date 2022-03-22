@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armdns
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // RecordSetsClientCreateOrUpdateResponse contains the response from method RecordSetsClient.CreateOrUpdate.
 type RecordSetsClientCreateOrUpdateResponse struct {
@@ -57,41 +51,6 @@ type ResourceReferenceClientGetByTargetResourcesResponse struct {
 // ZonesClientCreateOrUpdateResponse contains the response from method ZonesClient.CreateOrUpdate.
 type ZonesClientCreateOrUpdateResponse struct {
 	Zone
-}
-
-// ZonesClientDeletePollerResponse contains the response from method ZonesClient.Delete.
-type ZonesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ZonesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ZonesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ZonesClientDeleteResponse, error) {
-	respType := ZonesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ZonesClientDeletePollerResponse from the provided client and resume token.
-func (l *ZonesClientDeletePollerResponse) Resume(ctx context.Context, client *ZonesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ZonesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ZonesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ZonesClientDeleteResponse contains the response from method ZonesClient.Delete.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewBitLockerKeysClient(subscriptionID string, acceptLanguage *string, crede
 // jobName - The name of the import/export job.
 // resourceGroupName - The resource group name uniquely identifies the resource group within the user subscription.
 // options - BitLockerKeysClientListOptions contains the optional parameters for the BitLockerKeysClient.List method.
-func (client *BitLockerKeysClient) List(jobName string, resourceGroupName string, options *BitLockerKeysClientListOptions) *BitLockerKeysClientListPager {
-	return &BitLockerKeysClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, jobName, resourceGroupName, options)
+func (client *BitLockerKeysClient) List(jobName string, resourceGroupName string, options *BitLockerKeysClientListOptions) *runtime.Pager[BitLockerKeysClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BitLockerKeysClientListResponse]{
+		More: func(page BitLockerKeysClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BitLockerKeysClientListResponse) (BitLockerKeysClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, jobName, resourceGroupName, options)
+			if err != nil {
+				return BitLockerKeysClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BitLockerKeysClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BitLockerKeysClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

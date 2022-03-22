@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewDeviceSettingsClient(subscriptionID string, credential azcore.TokenCrede
 // parameters - The alert settings to be added or updated.
 // options - DeviceSettingsClientBeginCreateOrUpdateAlertSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginCreateOrUpdateAlertSettings
 // method.
-func (client *DeviceSettingsClient) BeginCreateOrUpdateAlertSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters AlertSettings, options *DeviceSettingsClientBeginCreateOrUpdateAlertSettingsOptions) (DeviceSettingsClientCreateOrUpdateAlertSettingsPollerResponse, error) {
-	resp, err := client.createOrUpdateAlertSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return DeviceSettingsClientCreateOrUpdateAlertSettingsPollerResponse{}, err
+func (client *DeviceSettingsClient) BeginCreateOrUpdateAlertSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters AlertSettings, options *DeviceSettingsClientBeginCreateOrUpdateAlertSettingsOptions) (*armruntime.Poller[DeviceSettingsClientCreateOrUpdateAlertSettingsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateAlertSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeviceSettingsClientCreateOrUpdateAlertSettingsResponse]("DeviceSettingsClient.CreateOrUpdateAlertSettings", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeviceSettingsClientCreateOrUpdateAlertSettingsResponse]("DeviceSettingsClient.CreateOrUpdateAlertSettings", options.ResumeToken, client.pl, nil)
 	}
-	result := DeviceSettingsClientCreateOrUpdateAlertSettingsPollerResponse{}
-	pt, err := armruntime.NewPoller("DeviceSettingsClient.CreateOrUpdateAlertSettings", "", resp, client.pl)
-	if err != nil {
-		return DeviceSettingsClientCreateOrUpdateAlertSettingsPollerResponse{}, err
-	}
-	result.Poller = &DeviceSettingsClientCreateOrUpdateAlertSettingsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateAlertSettings - Creates or updates the alert settings of the specified device.
@@ -114,20 +110,16 @@ func (client *DeviceSettingsClient) createOrUpdateAlertSettingsCreateRequest(ctx
 // parameters - The time settings to be added or updated.
 // options - DeviceSettingsClientBeginCreateOrUpdateTimeSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginCreateOrUpdateTimeSettings
 // method.
-func (client *DeviceSettingsClient) BeginCreateOrUpdateTimeSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters TimeSettings, options *DeviceSettingsClientBeginCreateOrUpdateTimeSettingsOptions) (DeviceSettingsClientCreateOrUpdateTimeSettingsPollerResponse, error) {
-	resp, err := client.createOrUpdateTimeSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return DeviceSettingsClientCreateOrUpdateTimeSettingsPollerResponse{}, err
+func (client *DeviceSettingsClient) BeginCreateOrUpdateTimeSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters TimeSettings, options *DeviceSettingsClientBeginCreateOrUpdateTimeSettingsOptions) (*armruntime.Poller[DeviceSettingsClientCreateOrUpdateTimeSettingsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateTimeSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeviceSettingsClientCreateOrUpdateTimeSettingsResponse]("DeviceSettingsClient.CreateOrUpdateTimeSettings", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeviceSettingsClientCreateOrUpdateTimeSettingsResponse]("DeviceSettingsClient.CreateOrUpdateTimeSettings", options.ResumeToken, client.pl, nil)
 	}
-	result := DeviceSettingsClientCreateOrUpdateTimeSettingsPollerResponse{}
-	pt, err := armruntime.NewPoller("DeviceSettingsClient.CreateOrUpdateTimeSettings", "", resp, client.pl)
-	if err != nil {
-		return DeviceSettingsClientCreateOrUpdateTimeSettingsPollerResponse{}, err
-	}
-	result.Poller = &DeviceSettingsClientCreateOrUpdateTimeSettingsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateTimeSettings - Creates or updates the time settings of the specified device.
@@ -368,20 +360,16 @@ func (client *DeviceSettingsClient) getTimeSettingsHandleResponse(resp *http.Res
 // managerName - The manager name
 // options - DeviceSettingsClientBeginSyncRemotemanagementCertificateOptions contains the optional parameters for the DeviceSettingsClient.BeginSyncRemotemanagementCertificate
 // method.
-func (client *DeviceSettingsClient) BeginSyncRemotemanagementCertificate(ctx context.Context, deviceName string, resourceGroupName string, managerName string, options *DeviceSettingsClientBeginSyncRemotemanagementCertificateOptions) (DeviceSettingsClientSyncRemotemanagementCertificatePollerResponse, error) {
-	resp, err := client.syncRemotemanagementCertificate(ctx, deviceName, resourceGroupName, managerName, options)
-	if err != nil {
-		return DeviceSettingsClientSyncRemotemanagementCertificatePollerResponse{}, err
+func (client *DeviceSettingsClient) BeginSyncRemotemanagementCertificate(ctx context.Context, deviceName string, resourceGroupName string, managerName string, options *DeviceSettingsClientBeginSyncRemotemanagementCertificateOptions) (*armruntime.Poller[DeviceSettingsClientSyncRemotemanagementCertificateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.syncRemotemanagementCertificate(ctx, deviceName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeviceSettingsClientSyncRemotemanagementCertificateResponse]("DeviceSettingsClient.SyncRemotemanagementCertificate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeviceSettingsClientSyncRemotemanagementCertificateResponse]("DeviceSettingsClient.SyncRemotemanagementCertificate", options.ResumeToken, client.pl, nil)
 	}
-	result := DeviceSettingsClientSyncRemotemanagementCertificatePollerResponse{}
-	pt, err := armruntime.NewPoller("DeviceSettingsClient.SyncRemotemanagementCertificate", "", resp, client.pl)
-	if err != nil {
-		return DeviceSettingsClientSyncRemotemanagementCertificatePollerResponse{}, err
-	}
-	result.Poller = &DeviceSettingsClientSyncRemotemanagementCertificatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // SyncRemotemanagementCertificate - sync Remote management Certificate between appliance and Service
@@ -426,20 +414,16 @@ func (client *DeviceSettingsClient) syncRemotemanagementCertificateCreateRequest
 // parameters - The network settings to be updated.
 // options - DeviceSettingsClientBeginUpdateNetworkSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginUpdateNetworkSettings
 // method.
-func (client *DeviceSettingsClient) BeginUpdateNetworkSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters NetworkSettingsPatch, options *DeviceSettingsClientBeginUpdateNetworkSettingsOptions) (DeviceSettingsClientUpdateNetworkSettingsPollerResponse, error) {
-	resp, err := client.updateNetworkSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return DeviceSettingsClientUpdateNetworkSettingsPollerResponse{}, err
+func (client *DeviceSettingsClient) BeginUpdateNetworkSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters NetworkSettingsPatch, options *DeviceSettingsClientBeginUpdateNetworkSettingsOptions) (*armruntime.Poller[DeviceSettingsClientUpdateNetworkSettingsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateNetworkSettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeviceSettingsClientUpdateNetworkSettingsResponse]("DeviceSettingsClient.UpdateNetworkSettings", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeviceSettingsClientUpdateNetworkSettingsResponse]("DeviceSettingsClient.UpdateNetworkSettings", options.ResumeToken, client.pl, nil)
 	}
-	result := DeviceSettingsClientUpdateNetworkSettingsPollerResponse{}
-	pt, err := armruntime.NewPoller("DeviceSettingsClient.UpdateNetworkSettings", "", resp, client.pl)
-	if err != nil {
-		return DeviceSettingsClientUpdateNetworkSettingsPollerResponse{}, err
-	}
-	result.Poller = &DeviceSettingsClientUpdateNetworkSettingsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateNetworkSettings - Updates the network settings on the specified device.
@@ -485,20 +469,16 @@ func (client *DeviceSettingsClient) updateNetworkSettingsCreateRequest(ctx conte
 // parameters - The security settings properties to be patched.
 // options - DeviceSettingsClientBeginUpdateSecuritySettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginUpdateSecuritySettings
 // method.
-func (client *DeviceSettingsClient) BeginUpdateSecuritySettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters SecuritySettingsPatch, options *DeviceSettingsClientBeginUpdateSecuritySettingsOptions) (DeviceSettingsClientUpdateSecuritySettingsPollerResponse, error) {
-	resp, err := client.updateSecuritySettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return DeviceSettingsClientUpdateSecuritySettingsPollerResponse{}, err
+func (client *DeviceSettingsClient) BeginUpdateSecuritySettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string, parameters SecuritySettingsPatch, options *DeviceSettingsClientBeginUpdateSecuritySettingsOptions) (*armruntime.Poller[DeviceSettingsClientUpdateSecuritySettingsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateSecuritySettings(ctx, deviceName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeviceSettingsClientUpdateSecuritySettingsResponse]("DeviceSettingsClient.UpdateSecuritySettings", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeviceSettingsClientUpdateSecuritySettingsResponse]("DeviceSettingsClient.UpdateSecuritySettings", options.ResumeToken, client.pl, nil)
 	}
-	result := DeviceSettingsClientUpdateSecuritySettingsPollerResponse{}
-	pt, err := armruntime.NewPoller("DeviceSettingsClient.UpdateSecuritySettings", "", resp, client.pl)
-	if err != nil {
-		return DeviceSettingsClientUpdateSecuritySettingsPollerResponse{}, err
-	}
-	result.Poller = &DeviceSettingsClientUpdateSecuritySettingsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateSecuritySettings - Patch Security properties of the specified device name.

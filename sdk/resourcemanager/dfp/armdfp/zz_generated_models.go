@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,17 +143,20 @@ type Instances struct {
 
 // InstancesClientBeginCreateOptions contains the optional parameters for the InstancesClient.BeginCreate method.
 type InstancesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InstancesClientBeginDeleteOptions contains the optional parameters for the InstancesClient.BeginDelete method.
 type InstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InstancesClientBeginUpdateOptions contains the optional parameters for the InstancesClient.BeginUpdate method.
 type InstancesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InstancesClientCheckNameAvailabilityOptions contains the optional parameters for the InstancesClient.CheckNameAvailability

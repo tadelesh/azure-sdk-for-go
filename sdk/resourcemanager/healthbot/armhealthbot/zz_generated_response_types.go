@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armhealthbot
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// BotsClientCreatePollerResponse contains the response from method BotsClient.Create.
-type BotsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BotsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BotsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BotsClientCreateResponse, error) {
-	respType := BotsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.HealthBot)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BotsClientCreatePollerResponse from the provided client and resume token.
-func (l *BotsClientCreatePollerResponse) Resume(ctx context.Context, client *BotsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BotsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BotsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BotsClientCreateResponse contains the response from method BotsClient.Create.
 type BotsClientCreateResponse struct {
 	HealthBot
-}
-
-// BotsClientDeletePollerResponse contains the response from method BotsClient.Delete.
-type BotsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BotsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BotsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BotsClientDeleteResponse, error) {
-	respType := BotsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BotsClientDeletePollerResponse from the provided client and resume token.
-func (l *BotsClientDeletePollerResponse) Resume(ctx context.Context, client *BotsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BotsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BotsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // BotsClientDeleteResponse contains the response from method BotsClient.Delete.

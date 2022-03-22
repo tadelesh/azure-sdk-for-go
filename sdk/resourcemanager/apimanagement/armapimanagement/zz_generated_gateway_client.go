@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -363,16 +363,32 @@ func (client *GatewayClient) getEntityTagHandleResponse(resp *http.Response) (Ga
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - GatewayClientListByServiceOptions contains the optional parameters for the GatewayClient.ListByService method.
-func (client *GatewayClient) ListByService(resourceGroupName string, serviceName string, options *GatewayClientListByServiceOptions) *GatewayClientListByServicePager {
-	return &GatewayClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *GatewayClient) ListByService(resourceGroupName string, serviceName string, options *GatewayClientListByServiceOptions) *runtime.Pager[GatewayClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewayClientListByServiceResponse]{
+		More: func(page GatewayClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewayClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewayClientListByServiceResponse) (GatewayClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewayClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewayClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewayClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

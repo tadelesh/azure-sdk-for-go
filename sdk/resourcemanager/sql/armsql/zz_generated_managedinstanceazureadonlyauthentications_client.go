@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewManagedInstanceAzureADOnlyAuthenticationsClient(subscriptionID string, c
 // parameters - The required parameters for creating or updating an Active Directory only authentication property.
 // options - ManagedInstanceAzureADOnlyAuthenticationsClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the ManagedInstanceAzureADOnlyAuthenticationsClient.BeginCreateOrUpdate method.
-func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, authenticationName AuthenticationName, parameters ManagedInstanceAzureADOnlyAuthentication, options *ManagedInstanceAzureADOnlyAuthenticationsClientBeginCreateOrUpdateOptions) (ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, authenticationName, parameters, options)
-	if err != nil {
-		return ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, authenticationName AuthenticationName, parameters ManagedInstanceAzureADOnlyAuthentication, options *ManagedInstanceAzureADOnlyAuthenticationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, authenticationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdateResponse]("ManagedInstanceAzureADOnlyAuthenticationsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdateResponse]("ManagedInstanceAzureADOnlyAuthenticationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceAzureADOnlyAuthenticationsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Sets Server Active Directory only authentication property or updates an existing server Active Directory
@@ -131,20 +127,16 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) createOrUpdateCre
 // authenticationName - The name of server azure active directory only authentication.
 // options - ManagedInstanceAzureADOnlyAuthenticationsClientBeginDeleteOptions contains the optional parameters for the ManagedInstanceAzureADOnlyAuthenticationsClient.BeginDelete
 // method.
-func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, authenticationName AuthenticationName, options *ManagedInstanceAzureADOnlyAuthenticationsClientBeginDeleteOptions) (ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, authenticationName, options)
-	if err != nil {
-		return ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
+func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, authenticationName AuthenticationName, options *ManagedInstanceAzureADOnlyAuthenticationsClientBeginDeleteOptions) (*armruntime.Poller[ManagedInstanceAzureADOnlyAuthenticationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, authenticationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceAzureADOnlyAuthenticationsClientDeleteResponse]("ManagedInstanceAzureADOnlyAuthenticationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceAzureADOnlyAuthenticationsClientDeleteResponse]("ManagedInstanceAzureADOnlyAuthenticationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceAzureADOnlyAuthenticationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceAzureADOnlyAuthenticationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing server Active Directory only authentication property.
@@ -262,16 +254,32 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) getHandleResponse
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceOptions contains the optional parameters for the
 // ManagedInstanceAzureADOnlyAuthenticationsClient.ListByInstance method.
-func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceOptions) *ManagedInstanceAzureADOnlyAuthenticationsClientListByInstancePager {
-	return &ManagedInstanceAzureADOnlyAuthenticationsClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceOptions) *runtime.Pager[ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse]{
+		More: func(page ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstanceAzureADOnlyAuthListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse) (ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.

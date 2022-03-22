@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewDiskPoolsClient(subscriptionID string, credential azcore.TokenCredential
 // diskPoolCreatePayload - Request payload for Disk Pool create operation
 // options - DiskPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the DiskPoolsClient.BeginCreateOrUpdate
 // method.
-func (client *DiskPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, diskPoolName string, diskPoolCreatePayload DiskPoolCreate, options *DiskPoolsClientBeginCreateOrUpdateOptions) (DiskPoolsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, diskPoolName, diskPoolCreatePayload, options)
-	if err != nil {
-		return DiskPoolsClientCreateOrUpdatePollerResponse{}, err
+func (client *DiskPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, diskPoolName string, diskPoolCreatePayload DiskPoolCreate, options *DiskPoolsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DiskPoolsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, diskPoolName, diskPoolCreatePayload, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientCreateOrUpdateResponse]("DiskPoolsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientCreateOrUpdateResponse]("DiskPoolsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or Update Disk pool. This create or update operation can take 15 minutes to complete. This is expected
@@ -125,20 +121,16 @@ func (client *DiskPoolsClient) createOrUpdateCreateRequest(ctx context.Context, 
 // diskPoolName - The name of the Disk Pool.
 // options - DiskPoolsClientBeginDeallocateOptions contains the optional parameters for the DiskPoolsClient.BeginDeallocate
 // method.
-func (client *DiskPoolsClient) BeginDeallocate(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginDeallocateOptions) (DiskPoolsClientDeallocatePollerResponse, error) {
-	resp, err := client.deallocate(ctx, resourceGroupName, diskPoolName, options)
-	if err != nil {
-		return DiskPoolsClientDeallocatePollerResponse{}, err
+func (client *DiskPoolsClient) BeginDeallocate(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginDeallocateOptions) (*armruntime.Poller[DiskPoolsClientDeallocateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deallocate(ctx, resourceGroupName, diskPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientDeallocateResponse]("DiskPoolsClient.Deallocate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientDeallocateResponse]("DiskPoolsClient.Deallocate", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientDeallocatePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.Deallocate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientDeallocatePollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientDeallocatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Deallocate - Shuts down the Disk Pool and releases the compute resources. You are not billed for the compute resources
@@ -192,20 +184,16 @@ func (client *DiskPoolsClient) deallocateCreateRequest(ctx context.Context, reso
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // diskPoolName - The name of the Disk Pool.
 // options - DiskPoolsClientBeginDeleteOptions contains the optional parameters for the DiskPoolsClient.BeginDelete method.
-func (client *DiskPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginDeleteOptions) (DiskPoolsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, diskPoolName, options)
-	if err != nil {
-		return DiskPoolsClientDeletePollerResponse{}, err
+func (client *DiskPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginDeleteOptions) (*armruntime.Poller[DiskPoolsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, diskPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientDeleteResponse]("DiskPoolsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientDeleteResponse]("DiskPoolsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Disk pool; attached disks are not affected. This delete operation can take 10 minutes to complete. This
@@ -312,16 +300,32 @@ func (client *DiskPoolsClient) getHandleResponse(resp *http.Response) (DiskPools
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DiskPoolsClientListByResourceGroupOptions contains the optional parameters for the DiskPoolsClient.ListByResourceGroup
 // method.
-func (client *DiskPoolsClient) ListByResourceGroup(resourceGroupName string, options *DiskPoolsClientListByResourceGroupOptions) *DiskPoolsClientListByResourceGroupPager {
-	return &DiskPoolsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DiskPoolsClient) ListByResourceGroup(resourceGroupName string, options *DiskPoolsClientListByResourceGroupOptions) *runtime.Pager[DiskPoolsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskPoolsClientListByResourceGroupResponse]{
+		More: func(page DiskPoolsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskPoolsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiskPoolListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskPoolsClientListByResourceGroupResponse) (DiskPoolsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskPoolsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskPoolsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskPoolsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -359,16 +363,32 @@ func (client *DiskPoolsClient) listByResourceGroupHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DiskPoolsClientListBySubscriptionOptions contains the optional parameters for the DiskPoolsClient.ListBySubscription
 // method.
-func (client *DiskPoolsClient) ListBySubscription(options *DiskPoolsClientListBySubscriptionOptions) *DiskPoolsClientListBySubscriptionPager {
-	return &DiskPoolsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DiskPoolsClient) ListBySubscription(options *DiskPoolsClientListBySubscriptionOptions) *runtime.Pager[DiskPoolsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskPoolsClientListBySubscriptionResponse]{
+		More: func(page DiskPoolsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskPoolsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiskPoolListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskPoolsClientListBySubscriptionResponse) (DiskPoolsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskPoolsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskPoolsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskPoolsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -404,16 +424,32 @@ func (client *DiskPoolsClient) listBySubscriptionHandleResponse(resp *http.Respo
 // diskPoolName - The name of the Disk Pool.
 // options - DiskPoolsClientListOutboundNetworkDependenciesEndpointsOptions contains the optional parameters for the DiskPoolsClient.ListOutboundNetworkDependenciesEndpoints
 // method.
-func (client *DiskPoolsClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, diskPoolName string, options *DiskPoolsClientListOutboundNetworkDependenciesEndpointsOptions) *DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager {
-	return &DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, diskPoolName, options)
+func (client *DiskPoolsClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, diskPoolName string, options *DiskPoolsClientListOutboundNetworkDependenciesEndpointsOptions) *runtime.Pager[DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse]{
+		More: func(page DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundEnvironmentEndpointList.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse) (DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, diskPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOutboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOutboundNetworkDependenciesEndpointsCreateRequest creates the ListOutboundNetworkDependenciesEndpoints request.
@@ -457,20 +493,16 @@ func (client *DiskPoolsClient) listOutboundNetworkDependenciesEndpointsHandleRes
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // diskPoolName - The name of the Disk Pool.
 // options - DiskPoolsClientBeginStartOptions contains the optional parameters for the DiskPoolsClient.BeginStart method.
-func (client *DiskPoolsClient) BeginStart(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginStartOptions) (DiskPoolsClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, diskPoolName, options)
-	if err != nil {
-		return DiskPoolsClientStartPollerResponse{}, err
+func (client *DiskPoolsClient) BeginStart(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginStartOptions) (*armruntime.Poller[DiskPoolsClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, diskPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientStartResponse]("DiskPoolsClient.Start", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientStartResponse]("DiskPoolsClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.Start", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientStartPollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - The operation to start a Disk Pool. This start operation can take 10 minutes to complete. This is expected service
@@ -523,20 +555,16 @@ func (client *DiskPoolsClient) startCreateRequest(ctx context.Context, resourceG
 // diskPoolName - The name of the Disk Pool.
 // diskPoolUpdatePayload - Request payload for Disk Pool update operation.
 // options - DiskPoolsClientBeginUpdateOptions contains the optional parameters for the DiskPoolsClient.BeginUpdate method.
-func (client *DiskPoolsClient) BeginUpdate(ctx context.Context, resourceGroupName string, diskPoolName string, diskPoolUpdatePayload DiskPoolUpdate, options *DiskPoolsClientBeginUpdateOptions) (DiskPoolsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, diskPoolName, diskPoolUpdatePayload, options)
-	if err != nil {
-		return DiskPoolsClientUpdatePollerResponse{}, err
+func (client *DiskPoolsClient) BeginUpdate(ctx context.Context, resourceGroupName string, diskPoolName string, diskPoolUpdatePayload DiskPoolUpdate, options *DiskPoolsClientBeginUpdateOptions) (*armruntime.Poller[DiskPoolsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, diskPoolName, diskPoolUpdatePayload, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientUpdateResponse]("DiskPoolsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientUpdateResponse]("DiskPoolsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a Disk pool.
@@ -588,20 +616,16 @@ func (client *DiskPoolsClient) updateCreateRequest(ctx context.Context, resource
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // diskPoolName - The name of the Disk Pool.
 // options - DiskPoolsClientBeginUpgradeOptions contains the optional parameters for the DiskPoolsClient.BeginUpgrade method.
-func (client *DiskPoolsClient) BeginUpgrade(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginUpgradeOptions) (DiskPoolsClientUpgradePollerResponse, error) {
-	resp, err := client.upgrade(ctx, resourceGroupName, diskPoolName, options)
-	if err != nil {
-		return DiskPoolsClientUpgradePollerResponse{}, err
+func (client *DiskPoolsClient) BeginUpgrade(ctx context.Context, resourceGroupName string, diskPoolName string, options *DiskPoolsClientBeginUpgradeOptions) (*armruntime.Poller[DiskPoolsClientUpgradeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.upgrade(ctx, resourceGroupName, diskPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskPoolsClientUpgradeResponse]("DiskPoolsClient.Upgrade", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskPoolsClientUpgradeResponse]("DiskPoolsClient.Upgrade", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskPoolsClientUpgradePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskPoolsClient.Upgrade", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DiskPoolsClientUpgradePollerResponse{}, err
-	}
-	result.Poller = &DiskPoolsClientUpgradePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Upgrade - Upgrade replaces the underlying virtual machine hosts one at a time. This operation can take 10-15 minutes to

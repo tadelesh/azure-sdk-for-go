@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewLotsClient(credential azcore.TokenCredential, options *arm.ClientOptions
 // billingAccountID - BillingAccount ID
 // options - LotsClientListByBillingAccountOptions contains the optional parameters for the LotsClient.ListByBillingAccount
 // method.
-func (client *LotsClient) ListByBillingAccount(billingAccountID string, options *LotsClientListByBillingAccountOptions) *LotsClientListByBillingAccountPager {
-	return &LotsClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountID, options)
+func (client *LotsClient) ListByBillingAccount(billingAccountID string, options *LotsClientListByBillingAccountOptions) *runtime.Pager[LotsClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LotsClientListByBillingAccountResponse]{
+		More: func(page LotsClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LotsClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Lots.NextLink)
+		Fetcher: func(ctx context.Context, page *LotsClientListByBillingAccountResponse) (LotsClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LotsClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LotsClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LotsClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
@@ -103,16 +119,32 @@ func (client *LotsClient) listByBillingAccountHandleResponse(resp *http.Response
 // billingProfileID - Azure Billing Profile ID.
 // options - LotsClientListByBillingProfileOptions contains the optional parameters for the LotsClient.ListByBillingProfile
 // method.
-func (client *LotsClient) ListByBillingProfile(billingAccountID string, billingProfileID string, options *LotsClientListByBillingProfileOptions) *LotsClientListByBillingProfilePager {
-	return &LotsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountID, billingProfileID, options)
+func (client *LotsClient) ListByBillingProfile(billingAccountID string, billingProfileID string, options *LotsClientListByBillingProfileOptions) *runtime.Pager[LotsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LotsClientListByBillingProfileResponse]{
+		More: func(page LotsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LotsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Lots.NextLink)
+		Fetcher: func(ctx context.Context, page *LotsClientListByBillingProfileResponse) (LotsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountID, billingProfileID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LotsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LotsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LotsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.

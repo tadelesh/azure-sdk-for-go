@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewJobAgentsClient(subscriptionID string, credential azcore.TokenCredential
 // parameters - The requested job agent resource state.
 // options - JobAgentsClientBeginCreateOrUpdateOptions contains the optional parameters for the JobAgentsClient.BeginCreateOrUpdate
 // method.
-func (client *JobAgentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgent, options *JobAgentsClientBeginCreateOrUpdateOptions) (JobAgentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, jobAgentName, parameters, options)
-	if err != nil {
-		return JobAgentsClientCreateOrUpdatePollerResponse{}, err
+func (client *JobAgentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgent, options *JobAgentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[JobAgentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, jobAgentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobAgentsClientCreateOrUpdateResponse]("JobAgentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobAgentsClientCreateOrUpdateResponse]("JobAgentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := JobAgentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("JobAgentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return JobAgentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &JobAgentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a job agent.
@@ -128,20 +124,16 @@ func (client *JobAgentsClient) createOrUpdateCreateRequest(ctx context.Context, 
 // serverName - The name of the server.
 // jobAgentName - The name of the job agent to be deleted.
 // options - JobAgentsClientBeginDeleteOptions contains the optional parameters for the JobAgentsClient.BeginDelete method.
-func (client *JobAgentsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, options *JobAgentsClientBeginDeleteOptions) (JobAgentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, jobAgentName, options)
-	if err != nil {
-		return JobAgentsClientDeletePollerResponse{}, err
+func (client *JobAgentsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, options *JobAgentsClientBeginDeleteOptions) (*armruntime.Poller[JobAgentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, jobAgentName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobAgentsClientDeleteResponse]("JobAgentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobAgentsClientDeleteResponse]("JobAgentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := JobAgentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("JobAgentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return JobAgentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &JobAgentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a job agent.
@@ -257,16 +249,32 @@ func (client *JobAgentsClient) getHandleResponse(resp *http.Response) (JobAgents
 // Resource Manager API or the portal.
 // serverName - The name of the server.
 // options - JobAgentsClientListByServerOptions contains the optional parameters for the JobAgentsClient.ListByServer method.
-func (client *JobAgentsClient) ListByServer(resourceGroupName string, serverName string, options *JobAgentsClientListByServerOptions) *JobAgentsClientListByServerPager {
-	return &JobAgentsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *JobAgentsClient) ListByServer(resourceGroupName string, serverName string, options *JobAgentsClientListByServerOptions) *runtime.Pager[JobAgentsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobAgentsClientListByServerResponse]{
+		More: func(page JobAgentsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobAgentsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobAgentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobAgentsClientListByServerResponse) (JobAgentsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobAgentsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobAgentsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobAgentsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -312,20 +320,16 @@ func (client *JobAgentsClient) listByServerHandleResponse(resp *http.Response) (
 // jobAgentName - The name of the job agent to be updated.
 // parameters - The update to the job agent.
 // options - JobAgentsClientBeginUpdateOptions contains the optional parameters for the JobAgentsClient.BeginUpdate method.
-func (client *JobAgentsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgentUpdate, options *JobAgentsClientBeginUpdateOptions) (JobAgentsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverName, jobAgentName, parameters, options)
-	if err != nil {
-		return JobAgentsClientUpdatePollerResponse{}, err
+func (client *JobAgentsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgentUpdate, options *JobAgentsClientBeginUpdateOptions) (*armruntime.Poller[JobAgentsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverName, jobAgentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobAgentsClientUpdateResponse]("JobAgentsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobAgentsClientUpdateResponse]("JobAgentsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := JobAgentsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("JobAgentsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return JobAgentsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &JobAgentsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a job agent.

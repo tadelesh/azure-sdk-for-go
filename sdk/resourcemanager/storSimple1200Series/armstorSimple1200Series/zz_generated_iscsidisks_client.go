@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewIscsiDisksClient(subscriptionID string, credential azcore.TokenCredentia
 // iscsiDisk - The iSCSI disk.
 // options - IscsiDisksClientBeginCreateOrUpdateOptions contains the optional parameters for the IscsiDisksClient.BeginCreateOrUpdate
 // method.
-func (client *IscsiDisksClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, iscsiDisk ISCSIDisk, options *IscsiDisksClientBeginCreateOrUpdateOptions) (IscsiDisksClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, iscsiDisk, options)
-	if err != nil {
-		return IscsiDisksClientCreateOrUpdatePollerResponse{}, err
+func (client *IscsiDisksClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, iscsiDisk ISCSIDisk, options *IscsiDisksClientBeginCreateOrUpdateOptions) (*armruntime.Poller[IscsiDisksClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, iscsiDisk, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IscsiDisksClientCreateOrUpdateResponse]("IscsiDisksClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IscsiDisksClientCreateOrUpdateResponse]("IscsiDisksClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := IscsiDisksClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IscsiDisksClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return IscsiDisksClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &IscsiDisksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the iSCSI disk.
@@ -138,20 +134,16 @@ func (client *IscsiDisksClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - IscsiDisksClientBeginDeleteOptions contains the optional parameters for the IscsiDisksClient.BeginDelete method.
-func (client *IscsiDisksClient) BeginDelete(ctx context.Context, deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientBeginDeleteOptions) (IscsiDisksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
-	if err != nil {
-		return IscsiDisksClientDeletePollerResponse{}, err
+func (client *IscsiDisksClient) BeginDelete(ctx context.Context, deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientBeginDeleteOptions) (*armruntime.Poller[IscsiDisksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IscsiDisksClientDeleteResponse]("IscsiDisksClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IscsiDisksClientDeleteResponse]("IscsiDisksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IscsiDisksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IscsiDisksClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return IscsiDisksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IscsiDisksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the iSCSI disk.
@@ -285,13 +277,26 @@ func (client *IscsiDisksClient) getHandleResponse(resp *http.Response) (IscsiDis
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - IscsiDisksClientListByDeviceOptions contains the optional parameters for the IscsiDisksClient.ListByDevice method.
-func (client *IscsiDisksClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *IscsiDisksClientListByDeviceOptions) *IscsiDisksClientListByDevicePager {
-	return &IscsiDisksClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *IscsiDisksClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *IscsiDisksClientListByDeviceOptions) *runtime.Pager[IscsiDisksClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiDisksClientListByDeviceResponse]{
+		More: func(page IscsiDisksClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiDisksClientListByDeviceResponse) (IscsiDisksClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiDisksClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiDisksClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiDisksClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -341,13 +346,26 @@ func (client *IscsiDisksClient) listByDeviceHandleResponse(resp *http.Response) 
 // managerName - The manager name
 // options - IscsiDisksClientListByIscsiServerOptions contains the optional parameters for the IscsiDisksClient.ListByIscsiServer
 // method.
-func (client *IscsiDisksClient) ListByIscsiServer(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiDisksClientListByIscsiServerOptions) *IscsiDisksClientListByIscsiServerPager {
-	return &IscsiDisksClientListByIscsiServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByIscsiServerCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+func (client *IscsiDisksClient) ListByIscsiServer(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiDisksClientListByIscsiServerOptions) *runtime.Pager[IscsiDisksClientListByIscsiServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiDisksClientListByIscsiServerResponse]{
+		More: func(page IscsiDisksClientListByIscsiServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiDisksClientListByIscsiServerResponse) (IscsiDisksClientListByIscsiServerResponse, error) {
+			req, err := client.listByIscsiServerCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiDisksClientListByIscsiServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiDisksClientListByIscsiServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiDisksClientListByIscsiServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByIscsiServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByIscsiServerCreateRequest creates the ListByIscsiServer request.
@@ -402,13 +420,26 @@ func (client *IscsiDisksClient) listByIscsiServerHandleResponse(resp *http.Respo
 // managerName - The manager name
 // options - IscsiDisksClientListMetricDefinitionOptions contains the optional parameters for the IscsiDisksClient.ListMetricDefinition
 // method.
-func (client *IscsiDisksClient) ListMetricDefinition(deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientListMetricDefinitionOptions) *IscsiDisksClientListMetricDefinitionPager {
-	return &IscsiDisksClientListMetricDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionCreateRequest(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
+func (client *IscsiDisksClient) ListMetricDefinition(deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientListMetricDefinitionOptions) *runtime.Pager[IscsiDisksClientListMetricDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiDisksClientListMetricDefinitionResponse]{
+		More: func(page IscsiDisksClientListMetricDefinitionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiDisksClientListMetricDefinitionResponse) (IscsiDisksClientListMetricDefinitionResponse, error) {
+			req, err := client.listMetricDefinitionCreateRequest(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiDisksClientListMetricDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiDisksClientListMetricDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiDisksClientListMetricDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionCreateRequest creates the ListMetricDefinition request.
@@ -466,13 +497,26 @@ func (client *IscsiDisksClient) listMetricDefinitionHandleResponse(resp *http.Re
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - IscsiDisksClientListMetricsOptions contains the optional parameters for the IscsiDisksClient.ListMetrics method.
-func (client *IscsiDisksClient) ListMetrics(deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientListMetricsOptions) *IscsiDisksClientListMetricsPager {
-	return &IscsiDisksClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
+func (client *IscsiDisksClient) ListMetrics(deviceName string, iscsiServerName string, diskName string, resourceGroupName string, managerName string, options *IscsiDisksClientListMetricsOptions) *runtime.Pager[IscsiDisksClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiDisksClientListMetricsResponse]{
+		More: func(page IscsiDisksClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiDisksClientListMetricsResponse) (IscsiDisksClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, deviceName, iscsiServerName, diskName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiDisksClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiDisksClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiDisksClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

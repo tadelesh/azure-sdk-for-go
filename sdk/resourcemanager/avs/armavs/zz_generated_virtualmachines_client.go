@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,16 +120,32 @@ func (client *VirtualMachinesClient) getHandleResponse(resp *http.Response) (Vir
 // privateCloudName - Name of the private cloud
 // clusterName - Name of the cluster in the private cloud
 // options - VirtualMachinesClientListOptions contains the optional parameters for the VirtualMachinesClient.List method.
-func (client *VirtualMachinesClient) List(resourceGroupName string, privateCloudName string, clusterName string, options *VirtualMachinesClientListOptions) *VirtualMachinesClientListPager {
-	return &VirtualMachinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, clusterName, options)
+func (client *VirtualMachinesClient) List(resourceGroupName string, privateCloudName string, clusterName string, options *VirtualMachinesClientListOptions) *runtime.Pager[VirtualMachinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListResponse]{
+		More: func(page VirtualMachinesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachinesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualMachinesList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachinesClientListResponse) (VirtualMachinesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -180,20 +196,16 @@ func (client *VirtualMachinesClient) listHandleResponse(resp *http.Response) (Vi
 // restrictMovement - Whether VM DRS-driven movement is restricted (Enabled) or not (Disabled)
 // options - VirtualMachinesClientBeginRestrictMovementOptions contains the optional parameters for the VirtualMachinesClient.BeginRestrictMovement
 // method.
-func (client *VirtualMachinesClient) BeginRestrictMovement(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, virtualMachineID string, restrictMovement VirtualMachineRestrictMovement, options *VirtualMachinesClientBeginRestrictMovementOptions) (VirtualMachinesClientRestrictMovementPollerResponse, error) {
-	resp, err := client.restrictMovement(ctx, resourceGroupName, privateCloudName, clusterName, virtualMachineID, restrictMovement, options)
-	if err != nil {
-		return VirtualMachinesClientRestrictMovementPollerResponse{}, err
+func (client *VirtualMachinesClient) BeginRestrictMovement(ctx context.Context, resourceGroupName string, privateCloudName string, clusterName string, virtualMachineID string, restrictMovement VirtualMachineRestrictMovement, options *VirtualMachinesClientBeginRestrictMovementOptions) (*armruntime.Poller[VirtualMachinesClientRestrictMovementResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restrictMovement(ctx, resourceGroupName, privateCloudName, clusterName, virtualMachineID, restrictMovement, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientRestrictMovementResponse]("VirtualMachinesClient.RestrictMovement", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientRestrictMovementResponse]("VirtualMachinesClient.RestrictMovement", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientRestrictMovementPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.RestrictMovement", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientRestrictMovementPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientRestrictMovementPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RestrictMovement - Enable or disable DRS-driven VM movement restriction

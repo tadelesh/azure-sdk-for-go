@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewEndpointsClient(subscriptionID string, credential azcore.TokenCredential
 // files in the directory.
 // options - EndpointsClientBeginPurgeContentOptions contains the optional parameters for the EndpointsClient.BeginPurgeContent
 // method.
-func (client *EndpointsClient) BeginPurgeContent(ctx context.Context, resourceGroupName string, frontDoorName string, contentFilePaths PurgeParameters, options *EndpointsClientBeginPurgeContentOptions) (EndpointsClientPurgeContentPollerResponse, error) {
-	resp, err := client.purgeContent(ctx, resourceGroupName, frontDoorName, contentFilePaths, options)
-	if err != nil {
-		return EndpointsClientPurgeContentPollerResponse{}, err
+func (client *EndpointsClient) BeginPurgeContent(ctx context.Context, resourceGroupName string, frontDoorName string, contentFilePaths PurgeParameters, options *EndpointsClientBeginPurgeContentOptions) (*armruntime.Poller[EndpointsClientPurgeContentResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purgeContent(ctx, resourceGroupName, frontDoorName, contentFilePaths, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EndpointsClientPurgeContentResponse]("EndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EndpointsClientPurgeContentResponse]("EndpointsClient.PurgeContent", options.ResumeToken, client.pl, nil)
 	}
-	result := EndpointsClientPurgeContentPollerResponse{}
-	pt, err := armruntime.NewPoller("EndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return EndpointsClientPurgeContentPollerResponse{}, err
-	}
-	result.Poller = &EndpointsClientPurgeContentPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PurgeContent - Removes a content from Front Door.

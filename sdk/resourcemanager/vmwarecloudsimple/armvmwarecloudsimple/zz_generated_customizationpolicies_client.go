@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *CustomizationPoliciesClient) getHandleResponse(resp *http.Response
 // pcName - The private cloud name
 // options - CustomizationPoliciesClientListOptions contains the optional parameters for the CustomizationPoliciesClient.List
 // method.
-func (client *CustomizationPoliciesClient) List(regionID string, pcName string, options *CustomizationPoliciesClientListOptions) *CustomizationPoliciesClientListPager {
-	return &CustomizationPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, regionID, pcName, options)
+func (client *CustomizationPoliciesClient) List(regionID string, pcName string, options *CustomizationPoliciesClientListOptions) *runtime.Pager[CustomizationPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomizationPoliciesClientListResponse]{
+		More: func(page CustomizationPoliciesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomizationPoliciesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomizationPoliciesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomizationPoliciesClientListResponse) (CustomizationPoliciesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, regionID, pcName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomizationPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomizationPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomizationPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

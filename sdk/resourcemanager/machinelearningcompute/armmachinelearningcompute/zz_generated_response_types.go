@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armmachinelearningcompute
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // ClientListAvailableOperationsResponse contains the response from method Client.ListAvailableOperations.
 type ClientListAvailableOperationsResponse struct {
@@ -24,79 +18,9 @@ type OperationalizationClustersClientCheckSystemServicesUpdatesAvailableResponse
 	CheckSystemServicesUpdatesAvailableResponse
 }
 
-// OperationalizationClustersClientCreateOrUpdatePollerResponse contains the response from method OperationalizationClustersClient.CreateOrUpdate.
-type OperationalizationClustersClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OperationalizationClustersClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OperationalizationClustersClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OperationalizationClustersClientCreateOrUpdateResponse, error) {
-	respType := OperationalizationClustersClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationalizationCluster)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OperationalizationClustersClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *OperationalizationClustersClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *OperationalizationClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OperationalizationClustersClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OperationalizationClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // OperationalizationClustersClientCreateOrUpdateResponse contains the response from method OperationalizationClustersClient.CreateOrUpdate.
 type OperationalizationClustersClientCreateOrUpdateResponse struct {
 	OperationalizationCluster
-}
-
-// OperationalizationClustersClientDeletePollerResponse contains the response from method OperationalizationClustersClient.Delete.
-type OperationalizationClustersClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OperationalizationClustersClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OperationalizationClustersClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OperationalizationClustersClientDeleteResponse, error) {
-	respType := OperationalizationClustersClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OperationalizationClustersClientDeletePollerResponse from the provided client and resume token.
-func (l *OperationalizationClustersClientDeletePollerResponse) Resume(ctx context.Context, client *OperationalizationClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OperationalizationClustersClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OperationalizationClustersClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // OperationalizationClustersClientDeleteResponse contains the response from method OperationalizationClustersClient.Delete.
@@ -127,42 +51,6 @@ type OperationalizationClustersClientListKeysResponse struct {
 // OperationalizationClustersClientUpdateResponse contains the response from method OperationalizationClustersClient.Update.
 type OperationalizationClustersClientUpdateResponse struct {
 	OperationalizationCluster
-}
-
-// OperationalizationClustersClientUpdateSystemServicesPollerResponse contains the response from method OperationalizationClustersClient.UpdateSystemServices.
-type OperationalizationClustersClientUpdateSystemServicesPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OperationalizationClustersClientUpdateSystemServicesPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OperationalizationClustersClientUpdateSystemServicesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OperationalizationClustersClientUpdateSystemServicesResponse, error) {
-	respType := OperationalizationClustersClientUpdateSystemServicesResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.UpdateSystemServicesResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OperationalizationClustersClientUpdateSystemServicesPollerResponse from the provided client and resume
-// token.
-func (l *OperationalizationClustersClientUpdateSystemServicesPollerResponse) Resume(ctx context.Context, client *OperationalizationClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OperationalizationClustersClient.UpdateSystemServices", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OperationalizationClustersClientUpdateSystemServicesPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // OperationalizationClustersClientUpdateSystemServicesResponse contains the response from method OperationalizationClustersClient.UpdateSystemServices.

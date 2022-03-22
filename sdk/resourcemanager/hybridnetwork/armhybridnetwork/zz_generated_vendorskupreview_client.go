@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewVendorSKUPreviewClient(subscriptionID string, credential azcore.TokenCre
 // parameters - Parameters supplied to the create or update vendor preview subscription operation.
 // options - VendorSKUPreviewClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorSKUPreviewClient.BeginCreateOrUpdate
 // method.
-func (client *VendorSKUPreviewClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, skuName string, previewSubscription string, parameters PreviewSubscription, options *VendorSKUPreviewClientBeginCreateOrUpdateOptions) (VendorSKUPreviewClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, vendorName, skuName, previewSubscription, parameters, options)
-	if err != nil {
-		return VendorSKUPreviewClientCreateOrUpdatePollerResponse{}, err
+func (client *VendorSKUPreviewClient) BeginCreateOrUpdate(ctx context.Context, vendorName string, skuName string, previewSubscription string, parameters PreviewSubscription, options *VendorSKUPreviewClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VendorSKUPreviewClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, vendorName, skuName, previewSubscription, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorSKUPreviewClientCreateOrUpdateResponse]("VendorSKUPreviewClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorSKUPreviewClientCreateOrUpdateResponse]("VendorSKUPreviewClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorSKUPreviewClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorSKUPreviewClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VendorSKUPreviewClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VendorSKUPreviewClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates preview information of a vendor sku.
@@ -127,20 +123,16 @@ func (client *VendorSKUPreviewClient) createOrUpdateCreateRequest(ctx context.Co
 // previewSubscription - Preview subscription ID.
 // options - VendorSKUPreviewClientBeginDeleteOptions contains the optional parameters for the VendorSKUPreviewClient.BeginDelete
 // method.
-func (client *VendorSKUPreviewClient) BeginDelete(ctx context.Context, vendorName string, skuName string, previewSubscription string, options *VendorSKUPreviewClientBeginDeleteOptions) (VendorSKUPreviewClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, vendorName, skuName, previewSubscription, options)
-	if err != nil {
-		return VendorSKUPreviewClientDeletePollerResponse{}, err
+func (client *VendorSKUPreviewClient) BeginDelete(ctx context.Context, vendorName string, skuName string, previewSubscription string, options *VendorSKUPreviewClientBeginDeleteOptions) (*armruntime.Poller[VendorSKUPreviewClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, vendorName, skuName, previewSubscription, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorSKUPreviewClientDeleteResponse]("VendorSKUPreviewClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorSKUPreviewClientDeleteResponse]("VendorSKUPreviewClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorSKUPreviewClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorSKUPreviewClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VendorSKUPreviewClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VendorSKUPreviewClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the preview information of a vendor sku.
@@ -255,16 +247,32 @@ func (client *VendorSKUPreviewClient) getHandleResponse(resp *http.Response) (Ve
 // vendorName - The name of the vendor.
 // skuName - The name of the sku.
 // options - VendorSKUPreviewClientListOptions contains the optional parameters for the VendorSKUPreviewClient.List method.
-func (client *VendorSKUPreviewClient) List(vendorName string, skuName string, options *VendorSKUPreviewClientListOptions) *VendorSKUPreviewClientListPager {
-	return &VendorSKUPreviewClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vendorName, skuName, options)
+func (client *VendorSKUPreviewClient) List(vendorName string, skuName string, options *VendorSKUPreviewClientListOptions) *runtime.Pager[VendorSKUPreviewClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VendorSKUPreviewClientListResponse]{
+		More: func(page VendorSKUPreviewClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VendorSKUPreviewClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PreviewSubscriptionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *VendorSKUPreviewClientListResponse) (VendorSKUPreviewClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vendorName, skuName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VendorSKUPreviewClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VendorSKUPreviewClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VendorSKUPreviewClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

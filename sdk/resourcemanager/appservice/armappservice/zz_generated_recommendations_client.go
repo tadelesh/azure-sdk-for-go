@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -430,16 +430,32 @@ func (client *RecommendationsClient) getRuleDetailsByWebAppHandleResponse(resp *
 // List - Description for List all recommendations for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RecommendationsClientListOptions contains the optional parameters for the RecommendationsClient.List method.
-func (client *RecommendationsClient) List(options *RecommendationsClientListOptions) *RecommendationsClientListPager {
-	return &RecommendationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *RecommendationsClient) List(options *RecommendationsClientListOptions) *runtime.Pager[RecommendationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListResponse]{
+		More: func(page RecommendationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListResponse) (RecommendationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -484,16 +500,32 @@ func (client *RecommendationsClient) listHandleResponse(resp *http.Response) (Re
 // hostingEnvironmentName - Name of the hosting environment.
 // options - RecommendationsClientListHistoryForHostingEnvironmentOptions contains the optional parameters for the RecommendationsClient.ListHistoryForHostingEnvironment
 // method.
-func (client *RecommendationsClient) ListHistoryForHostingEnvironment(resourceGroupName string, hostingEnvironmentName string, options *RecommendationsClientListHistoryForHostingEnvironmentOptions) *RecommendationsClientListHistoryForHostingEnvironmentPager {
-	return &RecommendationsClientListHistoryForHostingEnvironmentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listHistoryForHostingEnvironmentCreateRequest(ctx, resourceGroupName, hostingEnvironmentName, options)
+func (client *RecommendationsClient) ListHistoryForHostingEnvironment(resourceGroupName string, hostingEnvironmentName string, options *RecommendationsClientListHistoryForHostingEnvironmentOptions) *runtime.Pager[RecommendationsClientListHistoryForHostingEnvironmentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListHistoryForHostingEnvironmentResponse]{
+		More: func(page RecommendationsClientListHistoryForHostingEnvironmentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListHistoryForHostingEnvironmentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListHistoryForHostingEnvironmentResponse) (RecommendationsClientListHistoryForHostingEnvironmentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listHistoryForHostingEnvironmentCreateRequest(ctx, resourceGroupName, hostingEnvironmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListHistoryForHostingEnvironmentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListHistoryForHostingEnvironmentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListHistoryForHostingEnvironmentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHistoryForHostingEnvironmentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listHistoryForHostingEnvironmentCreateRequest creates the ListHistoryForHostingEnvironment request.
@@ -545,16 +577,32 @@ func (client *RecommendationsClient) listHistoryForHostingEnvironmentHandleRespo
 // siteName - Name of the app.
 // options - RecommendationsClientListHistoryForWebAppOptions contains the optional parameters for the RecommendationsClient.ListHistoryForWebApp
 // method.
-func (client *RecommendationsClient) ListHistoryForWebApp(resourceGroupName string, siteName string, options *RecommendationsClientListHistoryForWebAppOptions) *RecommendationsClientListHistoryForWebAppPager {
-	return &RecommendationsClientListHistoryForWebAppPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listHistoryForWebAppCreateRequest(ctx, resourceGroupName, siteName, options)
+func (client *RecommendationsClient) ListHistoryForWebApp(resourceGroupName string, siteName string, options *RecommendationsClientListHistoryForWebAppOptions) *runtime.Pager[RecommendationsClientListHistoryForWebAppResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListHistoryForWebAppResponse]{
+		More: func(page RecommendationsClientListHistoryForWebAppResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListHistoryForWebAppResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListHistoryForWebAppResponse) (RecommendationsClientListHistoryForWebAppResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listHistoryForWebAppCreateRequest(ctx, resourceGroupName, siteName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListHistoryForWebAppResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListHistoryForWebAppResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListHistoryForWebAppResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHistoryForWebAppHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listHistoryForWebAppCreateRequest creates the ListHistoryForWebApp request.
@@ -606,16 +654,32 @@ func (client *RecommendationsClient) listHistoryForWebAppHandleResponse(resp *ht
 // hostingEnvironmentName - Name of the app.
 // options - RecommendationsClientListRecommendedRulesForHostingEnvironmentOptions contains the optional parameters for the
 // RecommendationsClient.ListRecommendedRulesForHostingEnvironment method.
-func (client *RecommendationsClient) ListRecommendedRulesForHostingEnvironment(resourceGroupName string, hostingEnvironmentName string, options *RecommendationsClientListRecommendedRulesForHostingEnvironmentOptions) *RecommendationsClientListRecommendedRulesForHostingEnvironmentPager {
-	return &RecommendationsClientListRecommendedRulesForHostingEnvironmentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRecommendedRulesForHostingEnvironmentCreateRequest(ctx, resourceGroupName, hostingEnvironmentName, options)
+func (client *RecommendationsClient) ListRecommendedRulesForHostingEnvironment(resourceGroupName string, hostingEnvironmentName string, options *RecommendationsClientListRecommendedRulesForHostingEnvironmentOptions) *runtime.Pager[RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse]{
+		More: func(page RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse) (RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRecommendedRulesForHostingEnvironmentCreateRequest(ctx, resourceGroupName, hostingEnvironmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListRecommendedRulesForHostingEnvironmentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRecommendedRulesForHostingEnvironmentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRecommendedRulesForHostingEnvironmentCreateRequest creates the ListRecommendedRulesForHostingEnvironment request.
@@ -667,16 +731,32 @@ func (client *RecommendationsClient) listRecommendedRulesForHostingEnvironmentHa
 // siteName - Name of the app.
 // options - RecommendationsClientListRecommendedRulesForWebAppOptions contains the optional parameters for the RecommendationsClient.ListRecommendedRulesForWebApp
 // method.
-func (client *RecommendationsClient) ListRecommendedRulesForWebApp(resourceGroupName string, siteName string, options *RecommendationsClientListRecommendedRulesForWebAppOptions) *RecommendationsClientListRecommendedRulesForWebAppPager {
-	return &RecommendationsClientListRecommendedRulesForWebAppPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRecommendedRulesForWebAppCreateRequest(ctx, resourceGroupName, siteName, options)
+func (client *RecommendationsClient) ListRecommendedRulesForWebApp(resourceGroupName string, siteName string, options *RecommendationsClientListRecommendedRulesForWebAppOptions) *runtime.Pager[RecommendationsClientListRecommendedRulesForWebAppResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListRecommendedRulesForWebAppResponse]{
+		More: func(page RecommendationsClientListRecommendedRulesForWebAppResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListRecommendedRulesForWebAppResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListRecommendedRulesForWebAppResponse) (RecommendationsClientListRecommendedRulesForWebAppResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRecommendedRulesForWebAppCreateRequest(ctx, resourceGroupName, siteName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListRecommendedRulesForWebAppResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListRecommendedRulesForWebAppResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListRecommendedRulesForWebAppResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRecommendedRulesForWebAppHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRecommendedRulesForWebAppCreateRequest creates the ListRecommendedRulesForWebApp request.

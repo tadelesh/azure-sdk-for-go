@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,20 +117,16 @@ func (client *ZonesClient) createOrUpdateHandleResponse(resp *http.Response) (Zo
 // resourceGroupName - The name of the resource group.
 // zoneName - The name of the DNS zone (without a terminating dot).
 // options - ZonesClientBeginDeleteOptions contains the optional parameters for the ZonesClient.BeginDelete method.
-func (client *ZonesClient) BeginDelete(ctx context.Context, resourceGroupName string, zoneName string, options *ZonesClientBeginDeleteOptions) (ZonesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, zoneName, options)
-	if err != nil {
-		return ZonesClientDeletePollerResponse{}, err
+func (client *ZonesClient) BeginDelete(ctx context.Context, resourceGroupName string, zoneName string, options *ZonesClientBeginDeleteOptions) (*armruntime.Poller[ZonesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, zoneName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ZonesClientDeleteResponse]("ZonesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ZonesClientDeleteResponse]("ZonesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ZonesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ZonesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ZonesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ZonesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a DNS zone. WARNING: All DNS records in the zone will also be deleted. This operation cannot be undone.
@@ -237,16 +233,32 @@ func (client *ZonesClient) getHandleResponse(resp *http.Response) (ZonesClientGe
 // List - Lists the DNS zones in all resource groups in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ZonesClientListOptions contains the optional parameters for the ZonesClient.List method.
-func (client *ZonesClient) List(options *ZonesClientListOptions) *ZonesClientListPager {
-	return &ZonesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ZonesClient) List(options *ZonesClientListOptions) *runtime.Pager[ZonesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ZonesClientListResponse]{
+		More: func(page ZonesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ZonesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ZoneListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ZonesClientListResponse) (ZonesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ZonesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ZonesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ZonesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -284,16 +296,32 @@ func (client *ZonesClient) listHandleResponse(resp *http.Response) (ZonesClientL
 // resourceGroupName - The name of the resource group.
 // options - ZonesClientListByResourceGroupOptions contains the optional parameters for the ZonesClient.ListByResourceGroup
 // method.
-func (client *ZonesClient) ListByResourceGroup(resourceGroupName string, options *ZonesClientListByResourceGroupOptions) *ZonesClientListByResourceGroupPager {
-	return &ZonesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ZonesClient) ListByResourceGroup(resourceGroupName string, options *ZonesClientListByResourceGroupOptions) *runtime.Pager[ZonesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ZonesClientListByResourceGroupResponse]{
+		More: func(page ZonesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ZonesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ZoneListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ZonesClientListByResourceGroupResponse) (ZonesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ZonesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ZonesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ZonesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

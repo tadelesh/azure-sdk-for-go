@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewConfigurationServicesClient(subscriptionID string, credential azcore.Tok
 // configurationServiceResource - Parameters for the update operation
 // options - ConfigurationServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ConfigurationServicesClient.BeginCreateOrUpdate
 // method.
-func (client *ConfigurationServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, configurationServiceResource ConfigurationServiceResource, options *ConfigurationServicesClientBeginCreateOrUpdateOptions) (ConfigurationServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, configurationServiceName, configurationServiceResource, options)
-	if err != nil {
-		return ConfigurationServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *ConfigurationServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, configurationServiceResource ConfigurationServiceResource, options *ConfigurationServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ConfigurationServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, configurationServiceName, configurationServiceResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigurationServicesClientCreateOrUpdateResponse]("ConfigurationServicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigurationServicesClientCreateOrUpdateResponse]("ConfigurationServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigurationServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigurationServicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ConfigurationServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ConfigurationServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create the default Application Configuration Service or update the existing Application Configuration
@@ -132,20 +128,16 @@ func (client *ConfigurationServicesClient) createOrUpdateCreateRequest(ctx conte
 // configurationServiceName - The name of Application Configuration Service.
 // options - ConfigurationServicesClientBeginDeleteOptions contains the optional parameters for the ConfigurationServicesClient.BeginDelete
 // method.
-func (client *ConfigurationServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, options *ConfigurationServicesClientBeginDeleteOptions) (ConfigurationServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, configurationServiceName, options)
-	if err != nil {
-		return ConfigurationServicesClientDeletePollerResponse{}, err
+func (client *ConfigurationServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, options *ConfigurationServicesClientBeginDeleteOptions) (*armruntime.Poller[ConfigurationServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, configurationServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigurationServicesClientDeleteResponse]("ConfigurationServicesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigurationServicesClientDeleteResponse]("ConfigurationServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigurationServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigurationServicesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ConfigurationServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ConfigurationServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Disable the default Application Configuration Service.
@@ -264,16 +256,32 @@ func (client *ConfigurationServicesClient) getHandleResponse(resp *http.Response
 // serviceName - The name of the Service resource.
 // options - ConfigurationServicesClientListOptions contains the optional parameters for the ConfigurationServicesClient.List
 // method.
-func (client *ConfigurationServicesClient) List(resourceGroupName string, serviceName string, options *ConfigurationServicesClientListOptions) *ConfigurationServicesClientListPager {
-	return &ConfigurationServicesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *ConfigurationServicesClient) List(resourceGroupName string, serviceName string, options *ConfigurationServicesClientListOptions) *runtime.Pager[ConfigurationServicesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationServicesClientListResponse]{
+		More: func(page ConfigurationServicesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConfigurationServicesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConfigurationServiceResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ConfigurationServicesClientListResponse) (ConfigurationServicesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConfigurationServicesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationServicesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationServicesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -320,20 +328,16 @@ func (client *ConfigurationServicesClient) listHandleResponse(resp *http.Respons
 // settings - Application Configuration Service settings to be validated
 // options - ConfigurationServicesClientBeginValidateOptions contains the optional parameters for the ConfigurationServicesClient.BeginValidate
 // method.
-func (client *ConfigurationServicesClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, settings ConfigurationServiceSettings, options *ConfigurationServicesClientBeginValidateOptions) (ConfigurationServicesClientValidatePollerResponse, error) {
-	resp, err := client.validate(ctx, resourceGroupName, serviceName, configurationServiceName, settings, options)
-	if err != nil {
-		return ConfigurationServicesClientValidatePollerResponse{}, err
+func (client *ConfigurationServicesClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configurationServiceName string, settings ConfigurationServiceSettings, options *ConfigurationServicesClientBeginValidateOptions) (*armruntime.Poller[ConfigurationServicesClientValidateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validate(ctx, resourceGroupName, serviceName, configurationServiceName, settings, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigurationServicesClientValidateResponse]("ConfigurationServicesClient.Validate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigurationServicesClientValidateResponse]("ConfigurationServicesClient.Validate", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigurationServicesClientValidatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigurationServicesClient.Validate", "location", resp, client.pl)
-	if err != nil {
-		return ConfigurationServicesClientValidatePollerResponse{}, err
-	}
-	result.Poller = &ConfigurationServicesClientValidatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Validate - Check if the Application Configuration Service settings are valid.

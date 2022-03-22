@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -244,11 +244,14 @@ type MonitoringTagRulesProperties struct {
 // MonitorsClientBeginCreateOptions contains the optional parameters for the MonitorsClient.BeginCreate method.
 type MonitorsClientBeginCreateOptions struct {
 	Body *MonitorResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
 type MonitorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientGetOptions contains the optional parameters for the MonitorsClient.Get method.
@@ -358,6 +361,8 @@ type PlanData struct {
 // method.
 type SingleSignOnClientBeginCreateOrUpdateOptions struct {
 	Body *SingleSignOnResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SingleSignOnClientGetOptions contains the optional parameters for the SingleSignOnClient.Get method.
@@ -412,11 +417,14 @@ type SingleSignOnResourceListResponse struct {
 // SubAccountClientBeginCreateOptions contains the optional parameters for the SubAccountClient.BeginCreate method.
 type SubAccountClientBeginCreateOptions struct {
 	Body *MonitorResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubAccountClientBeginDeleteOptions contains the optional parameters for the SubAccountClient.BeginDelete method.
 type SubAccountClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubAccountClientGetOptions contains the optional parameters for the SubAccountClient.Get method.

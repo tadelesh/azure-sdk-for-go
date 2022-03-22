@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDistributedAvailabilityGroupsClient(subscriptionID string, credential az
 // parameters - The distributed availability group info.
 // options - DistributedAvailabilityGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the DistributedAvailabilityGroupsClient.BeginCreateOrUpdate
 // method.
-func (client *DistributedAvailabilityGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, parameters DistributedAvailabilityGroup, options *DistributedAvailabilityGroupsClientBeginCreateOrUpdateOptions) (DistributedAvailabilityGroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, parameters, options)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *DistributedAvailabilityGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, parameters DistributedAvailabilityGroup, options *DistributedAvailabilityGroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DistributedAvailabilityGroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DistributedAvailabilityGroupsClientCreateOrUpdateResponse]("DistributedAvailabilityGroupsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DistributedAvailabilityGroupsClientCreateOrUpdateResponse]("DistributedAvailabilityGroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DistributedAvailabilityGroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DistributedAvailabilityGroupsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DistributedAvailabilityGroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a distributed availability group between Sql On-Prem and Sql Managed Instance.
@@ -129,20 +125,16 @@ func (client *DistributedAvailabilityGroupsClient) createOrUpdateCreateRequest(c
 // distributedAvailabilityGroupName - The distributed availability group name.
 // options - DistributedAvailabilityGroupsClientBeginDeleteOptions contains the optional parameters for the DistributedAvailabilityGroupsClient.BeginDelete
 // method.
-func (client *DistributedAvailabilityGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, options *DistributedAvailabilityGroupsClientBeginDeleteOptions) (DistributedAvailabilityGroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, options)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientDeletePollerResponse{}, err
+func (client *DistributedAvailabilityGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, options *DistributedAvailabilityGroupsClientBeginDeleteOptions) (*armruntime.Poller[DistributedAvailabilityGroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DistributedAvailabilityGroupsClientDeleteResponse]("DistributedAvailabilityGroupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DistributedAvailabilityGroupsClientDeleteResponse]("DistributedAvailabilityGroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DistributedAvailabilityGroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DistributedAvailabilityGroupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DistributedAvailabilityGroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Drops a distributed availability group between Sql On-Prem and Sql Managed Instance.
@@ -260,16 +252,32 @@ func (client *DistributedAvailabilityGroupsClient) getHandleResponse(resp *http.
 // managedInstanceName - The name of the managed instance.
 // options - DistributedAvailabilityGroupsClientListByInstanceOptions contains the optional parameters for the DistributedAvailabilityGroupsClient.ListByInstance
 // method.
-func (client *DistributedAvailabilityGroupsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *DistributedAvailabilityGroupsClientListByInstanceOptions) *DistributedAvailabilityGroupsClientListByInstancePager {
-	return &DistributedAvailabilityGroupsClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *DistributedAvailabilityGroupsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *DistributedAvailabilityGroupsClientListByInstanceOptions) *runtime.Pager[DistributedAvailabilityGroupsClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DistributedAvailabilityGroupsClientListByInstanceResponse]{
+		More: func(page DistributedAvailabilityGroupsClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DistributedAvailabilityGroupsClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DistributedAvailabilityGroupsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DistributedAvailabilityGroupsClientListByInstanceResponse) (DistributedAvailabilityGroupsClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DistributedAvailabilityGroupsClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DistributedAvailabilityGroupsClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DistributedAvailabilityGroupsClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.
@@ -316,20 +324,16 @@ func (client *DistributedAvailabilityGroupsClient) listByInstanceHandleResponse(
 // parameters - The distributed availability group info.
 // options - DistributedAvailabilityGroupsClientBeginUpdateOptions contains the optional parameters for the DistributedAvailabilityGroupsClient.BeginUpdate
 // method.
-func (client *DistributedAvailabilityGroupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, parameters DistributedAvailabilityGroup, options *DistributedAvailabilityGroupsClientBeginUpdateOptions) (DistributedAvailabilityGroupsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, parameters, options)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientUpdatePollerResponse{}, err
+func (client *DistributedAvailabilityGroupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, distributedAvailabilityGroupName string, parameters DistributedAvailabilityGroup, options *DistributedAvailabilityGroupsClientBeginUpdateOptions) (*armruntime.Poller[DistributedAvailabilityGroupsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, managedInstanceName, distributedAvailabilityGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DistributedAvailabilityGroupsClientUpdateResponse]("DistributedAvailabilityGroupsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DistributedAvailabilityGroupsClientUpdateResponse]("DistributedAvailabilityGroupsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DistributedAvailabilityGroupsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DistributedAvailabilityGroupsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DistributedAvailabilityGroupsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DistributedAvailabilityGroupsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a distributed availability group replication mode.

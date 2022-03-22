@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,13 +117,26 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // clusterName - The name of the Kusto cluster.
 // options - PrivateLinkResourcesClientListOptions contains the optional parameters for the PrivateLinkResourcesClient.List
 // method.
-func (client *PrivateLinkResourcesClient) List(resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListOptions) *PrivateLinkResourcesClientListPager {
-	return &PrivateLinkResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *PrivateLinkResourcesClient) List(resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListOptions) *runtime.Pager[PrivateLinkResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListResponse]{
+		More: func(page PrivateLinkResourcesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListResponse) (PrivateLinkResourcesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

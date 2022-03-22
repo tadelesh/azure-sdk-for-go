@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,20 +118,16 @@ func (client *ApplicationTypesClient) createOrUpdateHandleResponse(resp *http.Re
 // applicationTypeName - The name of the application type name resource.
 // options - ApplicationTypesClientBeginDeleteOptions contains the optional parameters for the ApplicationTypesClient.BeginDelete
 // method.
-func (client *ApplicationTypesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, options *ApplicationTypesClientBeginDeleteOptions) (ApplicationTypesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationTypeName, options)
-	if err != nil {
-		return ApplicationTypesClientDeletePollerResponse{}, err
+func (client *ApplicationTypesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, options *ApplicationTypesClientBeginDeleteOptions) (*armruntime.Poller[ApplicationTypesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationTypeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationTypesClientDeleteResponse]("ApplicationTypesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationTypesClientDeleteResponse]("ApplicationTypesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationTypesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationTypesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ApplicationTypesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ApplicationTypesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Service Fabric application type name resource with the specified name.

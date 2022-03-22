@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,20 +113,16 @@ func (client *ReplicationVaultHealthClient) getHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationVaultHealthClientBeginRefreshOptions contains the optional parameters for the ReplicationVaultHealthClient.BeginRefresh
 // method.
-func (client *ReplicationVaultHealthClient) BeginRefresh(ctx context.Context, options *ReplicationVaultHealthClientBeginRefreshOptions) (ReplicationVaultHealthClientRefreshPollerResponse, error) {
-	resp, err := client.refresh(ctx, options)
-	if err != nil {
-		return ReplicationVaultHealthClientRefreshPollerResponse{}, err
+func (client *ReplicationVaultHealthClient) BeginRefresh(ctx context.Context, options *ReplicationVaultHealthClientBeginRefreshOptions) (*armruntime.Poller[ReplicationVaultHealthClientRefreshResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.refresh(ctx, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationVaultHealthClientRefreshResponse]("ReplicationVaultHealthClient.Refresh", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationVaultHealthClientRefreshResponse]("ReplicationVaultHealthClient.Refresh", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationVaultHealthClientRefreshPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationVaultHealthClient.Refresh", "", resp, client.pl)
-	if err != nil {
-		return ReplicationVaultHealthClientRefreshPollerResponse{}, err
-	}
-	result.Poller = &ReplicationVaultHealthClientRefreshPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Refresh - Refreshes health summary of the vault.

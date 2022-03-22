@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -109,20 +109,16 @@ func (client *CapacitiesClient) checkNameAvailabilityHandleResponse(resp *http.R
 // dedicatedCapacityName - The name of the Dedicated capacity. It must be a minimum of 3 characters, and a maximum of 63.
 // capacityParameters - Contains the information used to provision the Dedicated capacity.
 // options - CapacitiesClientBeginCreateOptions contains the optional parameters for the CapacitiesClient.BeginCreate method.
-func (client *CapacitiesClient) BeginCreate(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, capacityParameters DedicatedCapacity, options *CapacitiesClientBeginCreateOptions) (CapacitiesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, dedicatedCapacityName, capacityParameters, options)
-	if err != nil {
-		return CapacitiesClientCreatePollerResponse{}, err
+func (client *CapacitiesClient) BeginCreate(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, capacityParameters DedicatedCapacity, options *CapacitiesClientBeginCreateOptions) (*armruntime.Poller[CapacitiesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, dedicatedCapacityName, capacityParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacitiesClientCreateResponse]("CapacitiesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacitiesClientCreateResponse]("CapacitiesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacitiesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacitiesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return CapacitiesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &CapacitiesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Provisions the specified Dedicated capacity based on the configuration specified in the request.
@@ -175,20 +171,16 @@ func (client *CapacitiesClient) createCreateRequest(ctx context.Context, resourc
 // dedicatedCapacityName - The name of the Dedicated capacity. It must be at least 3 characters in length, and no more than
 // 63.
 // options - CapacitiesClientBeginDeleteOptions contains the optional parameters for the CapacitiesClient.BeginDelete method.
-func (client *CapacitiesClient) BeginDelete(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginDeleteOptions) (CapacitiesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, dedicatedCapacityName, options)
-	if err != nil {
-		return CapacitiesClientDeletePollerResponse{}, err
+func (client *CapacitiesClient) BeginDelete(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginDeleteOptions) (*armruntime.Poller[CapacitiesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, dedicatedCapacityName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacitiesClientDeleteResponse]("CapacitiesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacitiesClientDeleteResponse]("CapacitiesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacitiesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacitiesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CapacitiesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CapacitiesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified Dedicated capacity.
@@ -293,13 +285,26 @@ func (client *CapacitiesClient) getDetailsHandleResponse(resp *http.Response) (C
 // List - Lists all the Dedicated capacities for the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CapacitiesClientListOptions contains the optional parameters for the CapacitiesClient.List method.
-func (client *CapacitiesClient) List(options *CapacitiesClientListOptions) *CapacitiesClientListPager {
-	return &CapacitiesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *CapacitiesClient) List(options *CapacitiesClientListOptions) *runtime.Pager[CapacitiesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapacitiesClientListResponse]{
+		More: func(page CapacitiesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CapacitiesClientListResponse) (CapacitiesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return CapacitiesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapacitiesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapacitiesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -335,13 +340,26 @@ func (client *CapacitiesClient) listHandleResponse(resp *http.Response) (Capacit
 // must be at least 1 character in length, and no more than 90.
 // options - CapacitiesClientListByResourceGroupOptions contains the optional parameters for the CapacitiesClient.ListByResourceGroup
 // method.
-func (client *CapacitiesClient) ListByResourceGroup(resourceGroupName string, options *CapacitiesClientListByResourceGroupOptions) *CapacitiesClientListByResourceGroupPager {
-	return &CapacitiesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CapacitiesClient) ListByResourceGroup(resourceGroupName string, options *CapacitiesClientListByResourceGroupOptions) *runtime.Pager[CapacitiesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapacitiesClientListByResourceGroupResponse]{
+		More: func(page CapacitiesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CapacitiesClientListByResourceGroupResponse) (CapacitiesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return CapacitiesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapacitiesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapacitiesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -485,20 +503,16 @@ func (client *CapacitiesClient) listSKUsForCapacityHandleResponse(resp *http.Res
 // dedicatedCapacityName - The name of the Dedicated capacity. It must be at least 3 characters in length, and no more than
 // 63.
 // options - CapacitiesClientBeginResumeOptions contains the optional parameters for the CapacitiesClient.BeginResume method.
-func (client *CapacitiesClient) BeginResume(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginResumeOptions) (CapacitiesClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, dedicatedCapacityName, options)
-	if err != nil {
-		return CapacitiesClientResumePollerResponse{}, err
+func (client *CapacitiesClient) BeginResume(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginResumeOptions) (*armruntime.Poller[CapacitiesClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, dedicatedCapacityName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacitiesClientResumeResponse]("CapacitiesClient.Resume", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacitiesClientResumeResponse]("CapacitiesClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacitiesClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacitiesClient.Resume", "", resp, client.pl)
-	if err != nil {
-		return CapacitiesClientResumePollerResponse{}, err
-	}
-	result.Poller = &CapacitiesClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - Resumes operation of the specified Dedicated capacity instance.
@@ -551,20 +565,16 @@ func (client *CapacitiesClient) resumeCreateRequest(ctx context.Context, resourc
 // dedicatedCapacityName - The name of the Dedicated capacity. It must be at least 3 characters in length, and no more than
 // 63.
 // options - CapacitiesClientBeginSuspendOptions contains the optional parameters for the CapacitiesClient.BeginSuspend method.
-func (client *CapacitiesClient) BeginSuspend(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginSuspendOptions) (CapacitiesClientSuspendPollerResponse, error) {
-	resp, err := client.suspend(ctx, resourceGroupName, dedicatedCapacityName, options)
-	if err != nil {
-		return CapacitiesClientSuspendPollerResponse{}, err
+func (client *CapacitiesClient) BeginSuspend(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, options *CapacitiesClientBeginSuspendOptions) (*armruntime.Poller[CapacitiesClientSuspendResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.suspend(ctx, resourceGroupName, dedicatedCapacityName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacitiesClientSuspendResponse]("CapacitiesClient.Suspend", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacitiesClientSuspendResponse]("CapacitiesClient.Suspend", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacitiesClientSuspendPollerResponse{}
-	pt, err := armruntime.NewPoller("CapacitiesClient.Suspend", "", resp, client.pl)
-	if err != nil {
-		return CapacitiesClientSuspendPollerResponse{}, err
-	}
-	result.Poller = &CapacitiesClientSuspendPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Suspend - Suspends operation of the specified dedicated capacity instance.
@@ -618,20 +628,16 @@ func (client *CapacitiesClient) suspendCreateRequest(ctx context.Context, resour
 // 63.
 // capacityUpdateParameters - Request object that contains the updated information for the capacity.
 // options - CapacitiesClientBeginUpdateOptions contains the optional parameters for the CapacitiesClient.BeginUpdate method.
-func (client *CapacitiesClient) BeginUpdate(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, capacityUpdateParameters DedicatedCapacityUpdateParameters, options *CapacitiesClientBeginUpdateOptions) (CapacitiesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, dedicatedCapacityName, capacityUpdateParameters, options)
-	if err != nil {
-		return CapacitiesClientUpdatePollerResponse{}, err
+func (client *CapacitiesClient) BeginUpdate(ctx context.Context, resourceGroupName string, dedicatedCapacityName string, capacityUpdateParameters DedicatedCapacityUpdateParameters, options *CapacitiesClientBeginUpdateOptions) (*armruntime.Poller[CapacitiesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, dedicatedCapacityName, capacityUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacitiesClientUpdateResponse]("CapacitiesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacitiesClientUpdateResponse]("CapacitiesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacitiesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacitiesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return CapacitiesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &CapacitiesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the current state of the specified Dedicated capacity.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -47,16 +47,32 @@ func NewApplicationClient(credential azcore.TokenCredential, options *arm.Client
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ApplicationClientListOperationsOptions contains the optional parameters for the ApplicationClient.ListOperations
 // method.
-func (client *ApplicationClient) ListOperations(options *ApplicationClientListOperationsOptions) *ApplicationClientListOperationsPager {
-	return &ApplicationClientListOperationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOperationsCreateRequest(ctx, options)
+func (client *ApplicationClient) ListOperations(options *ApplicationClientListOperationsOptions) *runtime.Pager[ApplicationClientListOperationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationClientListOperationsResponse]{
+		More: func(page ApplicationClientListOperationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationClientListOperationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OperationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationClientListOperationsResponse) (ApplicationClientListOperationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOperationsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationClientListOperationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationClientListOperationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationClientListOperationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOperationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,20 +113,16 @@ func (client *BackupVaultsClient) checkNameAvailabilityHandleResponse(resp *http
 // parameters - Request body for operation
 // options - BackupVaultsClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupVaultsClient.BeginCreateOrUpdate
 // method.
-func (client *BackupVaultsClient) BeginCreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, parameters BackupVaultResource, options *BackupVaultsClientBeginCreateOrUpdateOptions) (BackupVaultsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, vaultName, resourceGroupName, parameters, options)
-	if err != nil {
-		return BackupVaultsClientCreateOrUpdatePollerResponse{}, err
+func (client *BackupVaultsClient) BeginCreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, parameters BackupVaultResource, options *BackupVaultsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BackupVaultsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, vaultName, resourceGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupVaultsClientCreateOrUpdateResponse]("BackupVaultsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupVaultsClientCreateOrUpdateResponse]("BackupVaultsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupVaultsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupVaultsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BackupVaultsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupVaultsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a BackupVault resource belonging to a resource group.
@@ -278,16 +274,32 @@ func (client *BackupVaultsClient) getHandleResponse(resp *http.Response) (Backup
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - BackupVaultsClientGetInResourceGroupOptions contains the optional parameters for the BackupVaultsClient.GetInResourceGroup
 // method.
-func (client *BackupVaultsClient) GetInResourceGroup(resourceGroupName string, options *BackupVaultsClientGetInResourceGroupOptions) *BackupVaultsClientGetInResourceGroupPager {
-	return &BackupVaultsClientGetInResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getInResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *BackupVaultsClient) GetInResourceGroup(resourceGroupName string, options *BackupVaultsClientGetInResourceGroupOptions) *runtime.Pager[BackupVaultsClientGetInResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupVaultsClientGetInResourceGroupResponse]{
+		More: func(page BackupVaultsClientGetInResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupVaultsClientGetInResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BackupVaultResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupVaultsClientGetInResourceGroupResponse) (BackupVaultsClientGetInResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getInResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupVaultsClientGetInResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupVaultsClientGetInResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupVaultsClientGetInResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getInResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getInResourceGroupCreateRequest creates the GetInResourceGroup request.
@@ -325,16 +337,32 @@ func (client *BackupVaultsClient) getInResourceGroupHandleResponse(resp *http.Re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - BackupVaultsClientGetInSubscriptionOptions contains the optional parameters for the BackupVaultsClient.GetInSubscription
 // method.
-func (client *BackupVaultsClient) GetInSubscription(options *BackupVaultsClientGetInSubscriptionOptions) *BackupVaultsClientGetInSubscriptionPager {
-	return &BackupVaultsClientGetInSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getInSubscriptionCreateRequest(ctx, options)
+func (client *BackupVaultsClient) GetInSubscription(options *BackupVaultsClientGetInSubscriptionOptions) *runtime.Pager[BackupVaultsClientGetInSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupVaultsClientGetInSubscriptionResponse]{
+		More: func(page BackupVaultsClientGetInSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupVaultsClientGetInSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BackupVaultResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupVaultsClientGetInSubscriptionResponse) (BackupVaultsClientGetInSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getInSubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupVaultsClientGetInSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupVaultsClientGetInSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupVaultsClientGetInSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getInSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getInSubscriptionCreateRequest creates the GetInSubscription request.
@@ -371,20 +399,16 @@ func (client *BackupVaultsClient) getInSubscriptionHandleResponse(resp *http.Res
 // parameters - Request body for operation
 // options - BackupVaultsClientBeginUpdateOptions contains the optional parameters for the BackupVaultsClient.BeginUpdate
 // method.
-func (client *BackupVaultsClient) BeginUpdate(ctx context.Context, vaultName string, resourceGroupName string, parameters PatchResourceRequestInput, options *BackupVaultsClientBeginUpdateOptions) (BackupVaultsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, vaultName, resourceGroupName, parameters, options)
-	if err != nil {
-		return BackupVaultsClientUpdatePollerResponse{}, err
+func (client *BackupVaultsClient) BeginUpdate(ctx context.Context, vaultName string, resourceGroupName string, parameters PatchResourceRequestInput, options *BackupVaultsClientBeginUpdateOptions) (*armruntime.Poller[BackupVaultsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, vaultName, resourceGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupVaultsClientUpdateResponse]("BackupVaultsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupVaultsClientUpdateResponse]("BackupVaultsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupVaultsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupVaultsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return BackupVaultsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupVaultsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a BackupVault resource belonging to a resource group. For example, updating tags for a resource.

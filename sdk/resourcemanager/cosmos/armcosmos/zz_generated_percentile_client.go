@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,13 +58,26 @@ func NewPercentileClient(subscriptionID string, credential azcore.TokenCredentia
 // name.value (name of the metric, can have an or of multiple names), startTime, endTime,
 // and timeGrain. The supported operator is eq.
 // options - PercentileClientListMetricsOptions contains the optional parameters for the PercentileClient.ListMetrics method.
-func (client *PercentileClient) ListMetrics(resourceGroupName string, accountName string, filter string, options *PercentileClientListMetricsOptions) *PercentileClientListMetricsPager {
-	return &PercentileClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
+func (client *PercentileClient) ListMetrics(resourceGroupName string, accountName string, filter string, options *PercentileClientListMetricsOptions) *runtime.Pager[PercentileClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PercentileClientListMetricsResponse]{
+		More: func(page PercentileClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PercentileClientListMetricsResponse) (PercentileClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
+			if err != nil {
+				return PercentileClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PercentileClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PercentileClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

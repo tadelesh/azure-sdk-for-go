@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armedgeorderpartner
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // APISClientListOperationsPartnerResponse contains the response from method APISClient.ListOperationsPartner.
 type APISClientListOperationsPartnerResponse struct {
 	OperationListResult
-}
-
-// APISClientManageInventoryMetadataPollerResponse contains the response from method APISClient.ManageInventoryMetadata.
-type APISClientManageInventoryMetadataPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *APISClientManageInventoryMetadataPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l APISClientManageInventoryMetadataPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (APISClientManageInventoryMetadataResponse, error) {
-	respType := APISClientManageInventoryMetadataResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a APISClientManageInventoryMetadataPollerResponse from the provided client and resume token.
-func (l *APISClientManageInventoryMetadataPollerResponse) Resume(ctx context.Context, client *APISClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("APISClient.ManageInventoryMetadata", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &APISClientManageInventoryMetadataPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // APISClientManageInventoryMetadataResponse contains the response from method APISClient.ManageInventoryMetadata.

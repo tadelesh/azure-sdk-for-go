@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -51,16 +51,32 @@ func NewChildResourcesClient(credential azcore.TokenCredential, options *arm.Cli
 // only support not nested parent resource type:
 // /subscriptions/{subscriptionId}/resourceGroups/{resource-group-name}/providers/{resource-provider-name}/{resource-type}/{resource-name}
 // options - ChildResourcesClientListOptions contains the optional parameters for the ChildResourcesClient.List method.
-func (client *ChildResourcesClient) List(resourceURI string, options *ChildResourcesClientListOptions) *ChildResourcesClientListPager {
-	return &ChildResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceURI, options)
+func (client *ChildResourcesClient) List(resourceURI string, options *ChildResourcesClientListOptions) *runtime.Pager[ChildResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ChildResourcesClientListResponse]{
+		More: func(page ChildResourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ChildResourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailabilityStatusListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ChildResourcesClientListResponse) (ChildResourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceURI, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ChildResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ChildResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ChildResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

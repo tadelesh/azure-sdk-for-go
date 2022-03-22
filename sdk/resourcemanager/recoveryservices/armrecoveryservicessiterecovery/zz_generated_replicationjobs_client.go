@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewReplicationJobsClient(resourceName string, resourceGroupName string, sub
 // jobName - Job identifier.
 // options - ReplicationJobsClientBeginCancelOptions contains the optional parameters for the ReplicationJobsClient.BeginCancel
 // method.
-func (client *ReplicationJobsClient) BeginCancel(ctx context.Context, jobName string, options *ReplicationJobsClientBeginCancelOptions) (ReplicationJobsClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, jobName, options)
-	if err != nil {
-		return ReplicationJobsClientCancelPollerResponse{}, err
+func (client *ReplicationJobsClient) BeginCancel(ctx context.Context, jobName string, options *ReplicationJobsClientBeginCancelOptions) (*armruntime.Poller[ReplicationJobsClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationJobsClientCancelResponse]("ReplicationJobsClient.Cancel", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationJobsClientCancelResponse]("ReplicationJobsClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationJobsClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationJobsClient.Cancel", "", resp, client.pl)
-	if err != nil {
-		return ReplicationJobsClientCancelPollerResponse{}, err
-	}
-	result.Poller = &ReplicationJobsClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - The operation to cancel an Azure Site Recovery job.
@@ -128,20 +124,16 @@ func (client *ReplicationJobsClient) cancelCreateRequest(ctx context.Context, jo
 // jobQueryParameter - job query filter.
 // options - ReplicationJobsClientBeginExportOptions contains the optional parameters for the ReplicationJobsClient.BeginExport
 // method.
-func (client *ReplicationJobsClient) BeginExport(ctx context.Context, jobQueryParameter JobQueryParameter, options *ReplicationJobsClientBeginExportOptions) (ReplicationJobsClientExportPollerResponse, error) {
-	resp, err := client.export(ctx, jobQueryParameter, options)
-	if err != nil {
-		return ReplicationJobsClientExportPollerResponse{}, err
+func (client *ReplicationJobsClient) BeginExport(ctx context.Context, jobQueryParameter JobQueryParameter, options *ReplicationJobsClientBeginExportOptions) (*armruntime.Poller[ReplicationJobsClientExportResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.export(ctx, jobQueryParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationJobsClientExportResponse]("ReplicationJobsClient.Export", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationJobsClientExportResponse]("ReplicationJobsClient.Export", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationJobsClientExportPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationJobsClient.Export", "", resp, client.pl)
-	if err != nil {
-		return ReplicationJobsClientExportPollerResponse{}, err
-	}
-	result.Poller = &ReplicationJobsClientExportPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Export - The operation to export the details of the Azure Site Recovery jobs of the vault.
@@ -248,16 +240,32 @@ func (client *ReplicationJobsClient) getHandleResponse(resp *http.Response) (Rep
 // List - Gets the list of Azure Site Recovery Jobs for the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationJobsClientListOptions contains the optional parameters for the ReplicationJobsClient.List method.
-func (client *ReplicationJobsClient) List(options *ReplicationJobsClientListOptions) *ReplicationJobsClientListPager {
-	return &ReplicationJobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationJobsClient) List(options *ReplicationJobsClientListOptions) *runtime.Pager[ReplicationJobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationJobsClientListResponse]{
+		More: func(page ReplicationJobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationJobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationJobsClientListResponse) (ReplicationJobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationJobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationJobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationJobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -303,20 +311,16 @@ func (client *ReplicationJobsClient) listHandleResponse(resp *http.Response) (Re
 // jobName - Job identifier.
 // options - ReplicationJobsClientBeginRestartOptions contains the optional parameters for the ReplicationJobsClient.BeginRestart
 // method.
-func (client *ReplicationJobsClient) BeginRestart(ctx context.Context, jobName string, options *ReplicationJobsClientBeginRestartOptions) (ReplicationJobsClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, jobName, options)
-	if err != nil {
-		return ReplicationJobsClientRestartPollerResponse{}, err
+func (client *ReplicationJobsClient) BeginRestart(ctx context.Context, jobName string, options *ReplicationJobsClientBeginRestartOptions) (*armruntime.Poller[ReplicationJobsClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationJobsClientRestartResponse]("ReplicationJobsClient.Restart", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationJobsClientRestartResponse]("ReplicationJobsClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationJobsClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationJobsClient.Restart", "", resp, client.pl)
-	if err != nil {
-		return ReplicationJobsClientRestartPollerResponse{}, err
-	}
-	result.Poller = &ReplicationJobsClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - The operation to restart an Azure Site Recovery job.
@@ -372,20 +376,16 @@ func (client *ReplicationJobsClient) restartCreateRequest(ctx context.Context, j
 // resumeJobParams - Resume rob comments.
 // options - ReplicationJobsClientBeginResumeOptions contains the optional parameters for the ReplicationJobsClient.BeginResume
 // method.
-func (client *ReplicationJobsClient) BeginResume(ctx context.Context, jobName string, resumeJobParams ResumeJobParams, options *ReplicationJobsClientBeginResumeOptions) (ReplicationJobsClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, jobName, resumeJobParams, options)
-	if err != nil {
-		return ReplicationJobsClientResumePollerResponse{}, err
+func (client *ReplicationJobsClient) BeginResume(ctx context.Context, jobName string, resumeJobParams ResumeJobParams, options *ReplicationJobsClientBeginResumeOptions) (*armruntime.Poller[ReplicationJobsClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, jobName, resumeJobParams, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationJobsClientResumeResponse]("ReplicationJobsClient.Resume", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationJobsClientResumeResponse]("ReplicationJobsClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationJobsClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationJobsClient.Resume", "", resp, client.pl)
-	if err != nil {
-		return ReplicationJobsClientResumePollerResponse{}, err
-	}
-	result.Poller = &ReplicationJobsClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - The operation to resume an Azure Site Recovery job.

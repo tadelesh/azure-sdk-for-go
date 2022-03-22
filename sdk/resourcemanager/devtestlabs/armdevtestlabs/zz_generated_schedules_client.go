@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -169,20 +169,16 @@ func (client *SchedulesClient) deleteCreateRequest(ctx context.Context, resource
 // labName - The name of the lab.
 // name - The name of the schedule.
 // options - SchedulesClientBeginExecuteOptions contains the optional parameters for the SchedulesClient.BeginExecute method.
-func (client *SchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, name string, options *SchedulesClientBeginExecuteOptions) (SchedulesClientExecutePollerResponse, error) {
-	resp, err := client.execute(ctx, resourceGroupName, labName, name, options)
-	if err != nil {
-		return SchedulesClientExecutePollerResponse{}, err
+func (client *SchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, name string, options *SchedulesClientBeginExecuteOptions) (*armruntime.Poller[SchedulesClientExecuteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.execute(ctx, resourceGroupName, labName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SchedulesClientExecuteResponse]("SchedulesClient.Execute", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SchedulesClientExecuteResponse]("SchedulesClient.Execute", options.ResumeToken, client.pl, nil)
 	}
-	result := SchedulesClientExecutePollerResponse{}
-	pt, err := armruntime.NewPoller("SchedulesClient.Execute", "", resp, client.pl)
-	if err != nil {
-		return SchedulesClientExecutePollerResponse{}, err
-	}
-	result.Poller = &SchedulesClientExecutePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Execute - Execute a schedule. This operation can take a while to complete.
@@ -300,16 +296,32 @@ func (client *SchedulesClient) getHandleResponse(resp *http.Response) (Schedules
 // resourceGroupName - The name of the resource group.
 // labName - The name of the lab.
 // options - SchedulesClientListOptions contains the optional parameters for the SchedulesClient.List method.
-func (client *SchedulesClient) List(resourceGroupName string, labName string, options *SchedulesClientListOptions) *SchedulesClientListPager {
-	return &SchedulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *SchedulesClient) List(resourceGroupName string, labName string, options *SchedulesClientListOptions) *runtime.Pager[SchedulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SchedulesClientListResponse]{
+		More: func(page SchedulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SchedulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScheduleList.NextLink)
+		Fetcher: func(ctx context.Context, page *SchedulesClientListResponse) (SchedulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SchedulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SchedulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SchedulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -366,16 +378,32 @@ func (client *SchedulesClient) listHandleResponse(resp *http.Response) (Schedule
 // name - The name of the schedule.
 // options - SchedulesClientListApplicableOptions contains the optional parameters for the SchedulesClient.ListApplicable
 // method.
-func (client *SchedulesClient) ListApplicable(resourceGroupName string, labName string, name string, options *SchedulesClientListApplicableOptions) *SchedulesClientListApplicablePager {
-	return &SchedulesClientListApplicablePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listApplicableCreateRequest(ctx, resourceGroupName, labName, name, options)
+func (client *SchedulesClient) ListApplicable(resourceGroupName string, labName string, name string, options *SchedulesClientListApplicableOptions) *runtime.Pager[SchedulesClientListApplicableResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SchedulesClientListApplicableResponse]{
+		More: func(page SchedulesClientListApplicableResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SchedulesClientListApplicableResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScheduleList.NextLink)
+		Fetcher: func(ctx context.Context, page *SchedulesClientListApplicableResponse) (SchedulesClientListApplicableResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listApplicableCreateRequest(ctx, resourceGroupName, labName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SchedulesClientListApplicableResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SchedulesClientListApplicableResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SchedulesClientListApplicableResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listApplicableHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listApplicableCreateRequest creates the ListApplicable request.

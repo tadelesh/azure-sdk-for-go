@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,13 +114,26 @@ func (client *BlobServicesClient) getServicePropertiesHandleResponse(resp *http.
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - BlobServicesClientListOptions contains the optional parameters for the BlobServicesClient.List method.
-func (client *BlobServicesClient) List(resourceGroupName string, accountName string, options *BlobServicesClientListOptions) *BlobServicesClientListPager {
-	return &BlobServicesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *BlobServicesClient) List(resourceGroupName string, accountName string, options *BlobServicesClientListOptions) *runtime.Pager[BlobServicesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BlobServicesClientListResponse]{
+		More: func(page BlobServicesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BlobServicesClientListResponse) (BlobServicesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return BlobServicesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BlobServicesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BlobServicesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

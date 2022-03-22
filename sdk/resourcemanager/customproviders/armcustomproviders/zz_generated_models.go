@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -35,12 +35,14 @@ type AssociationProperties struct {
 // AssociationsClientBeginCreateOrUpdateOptions contains the optional parameters for the AssociationsClient.BeginCreateOrUpdate
 // method.
 type AssociationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AssociationsClientBeginDeleteOptions contains the optional parameters for the AssociationsClient.BeginDelete method.
 type AssociationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AssociationsClientGetOptions contains the optional parameters for the AssociationsClient.Get method.
@@ -153,13 +155,15 @@ type CustomRPValidations struct {
 // CustomResourceProviderClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomResourceProviderClient.BeginCreateOrUpdate
 // method.
 type CustomResourceProviderClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomResourceProviderClientBeginDeleteOptions contains the optional parameters for the CustomResourceProviderClient.BeginDelete
 // method.
 type CustomResourceProviderClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomResourceProviderClientGetOptions contains the optional parameters for the CustomResourceProviderClient.Get method.

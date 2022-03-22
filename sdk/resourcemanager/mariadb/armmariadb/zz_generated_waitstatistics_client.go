@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *WaitStatisticsClient) getHandleResponse(resp *http.Response) (Wait
 // parameters - The required parameters for retrieving wait statistics.
 // options - WaitStatisticsClientListByServerOptions contains the optional parameters for the WaitStatisticsClient.ListByServer
 // method.
-func (client *WaitStatisticsClient) ListByServer(resourceGroupName string, serverName string, parameters WaitStatisticsInput, options *WaitStatisticsClientListByServerOptions) *WaitStatisticsClientListByServerPager {
-	return &WaitStatisticsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, parameters, options)
+func (client *WaitStatisticsClient) ListByServer(resourceGroupName string, serverName string, parameters WaitStatisticsInput, options *WaitStatisticsClientListByServerOptions) *runtime.Pager[WaitStatisticsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WaitStatisticsClientListByServerResponse]{
+		More: func(page WaitStatisticsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WaitStatisticsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WaitStatisticsResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *WaitStatisticsClientListByServerResponse) (WaitStatisticsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, parameters, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WaitStatisticsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WaitStatisticsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WaitStatisticsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

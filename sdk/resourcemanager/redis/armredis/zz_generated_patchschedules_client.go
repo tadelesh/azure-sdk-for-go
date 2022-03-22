@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *PatchSchedulesClient) getHandleResponse(resp *http.Response) (Patc
 // cacheName - The name of the Redis cache.
 // options - PatchSchedulesClientListByRedisResourceOptions contains the optional parameters for the PatchSchedulesClient.ListByRedisResource
 // method.
-func (client *PatchSchedulesClient) ListByRedisResource(resourceGroupName string, cacheName string, options *PatchSchedulesClientListByRedisResourceOptions) *PatchSchedulesClientListByRedisResourcePager {
-	return &PatchSchedulesClientListByRedisResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRedisResourceCreateRequest(ctx, resourceGroupName, cacheName, options)
+func (client *PatchSchedulesClient) ListByRedisResource(resourceGroupName string, cacheName string, options *PatchSchedulesClientListByRedisResourceOptions) *runtime.Pager[PatchSchedulesClientListByRedisResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PatchSchedulesClientListByRedisResourceResponse]{
+		More: func(page PatchSchedulesClientListByRedisResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PatchSchedulesClientListByRedisResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PatchScheduleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PatchSchedulesClientListByRedisResourceResponse) (PatchSchedulesClientListByRedisResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByRedisResourceCreateRequest(ctx, resourceGroupName, cacheName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PatchSchedulesClientListByRedisResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PatchSchedulesClientListByRedisResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PatchSchedulesClientListByRedisResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRedisResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByRedisResourceCreateRequest creates the ListByRedisResource request.

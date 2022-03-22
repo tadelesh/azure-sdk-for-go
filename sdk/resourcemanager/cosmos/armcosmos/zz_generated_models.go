@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -153,36 +153,42 @@ type CassandraClusterPublicStatusDataCentersItem struct {
 // CassandraClustersClientBeginCreateUpdateOptions contains the optional parameters for the CassandraClustersClient.BeginCreateUpdate
 // method.
 type CassandraClustersClientBeginCreateUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientBeginDeallocateOptions contains the optional parameters for the CassandraClustersClient.BeginDeallocate
 // method.
 type CassandraClustersClientBeginDeallocateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientBeginDeleteOptions contains the optional parameters for the CassandraClustersClient.BeginDelete
 // method.
 type CassandraClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientBeginInvokeCommandOptions contains the optional parameters for the CassandraClustersClient.BeginInvokeCommand
 // method.
 type CassandraClustersClientBeginInvokeCommandOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientBeginStartOptions contains the optional parameters for the CassandraClustersClient.BeginStart method.
 type CassandraClustersClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientBeginUpdateOptions contains the optional parameters for the CassandraClustersClient.BeginUpdate
 // method.
 type CassandraClustersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraClustersClientGetOptions contains the optional parameters for the CassandraClustersClient.Get method.
@@ -210,19 +216,22 @@ type CassandraClustersClientStatusOptions struct {
 // CassandraDataCentersClientBeginCreateUpdateOptions contains the optional parameters for the CassandraDataCentersClient.BeginCreateUpdate
 // method.
 type CassandraDataCentersClientBeginCreateUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraDataCentersClientBeginDeleteOptions contains the optional parameters for the CassandraDataCentersClient.BeginDelete
 // method.
 type CassandraDataCentersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraDataCentersClientBeginUpdateOptions contains the optional parameters for the CassandraDataCentersClient.BeginUpdate
 // method.
 type CassandraDataCentersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraDataCentersClientGetOptions contains the optional parameters for the CassandraDataCentersClient.Get method.
@@ -344,61 +353,71 @@ type CassandraPartitionKey struct {
 // CassandraResourcesClientBeginCreateUpdateCassandraKeyspaceOptions contains the optional parameters for the CassandraResourcesClient.BeginCreateUpdateCassandraKeyspace
 // method.
 type CassandraResourcesClientBeginCreateUpdateCassandraKeyspaceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginCreateUpdateCassandraTableOptions contains the optional parameters for the CassandraResourcesClient.BeginCreateUpdateCassandraTable
 // method.
 type CassandraResourcesClientBeginCreateUpdateCassandraTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginDeleteCassandraKeyspaceOptions contains the optional parameters for the CassandraResourcesClient.BeginDeleteCassandraKeyspace
 // method.
 type CassandraResourcesClientBeginDeleteCassandraKeyspaceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginDeleteCassandraTableOptions contains the optional parameters for the CassandraResourcesClient.BeginDeleteCassandraTable
 // method.
 type CassandraResourcesClientBeginDeleteCassandraTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginMigrateCassandraKeyspaceToAutoscaleOptions contains the optional parameters for the CassandraResourcesClient.BeginMigrateCassandraKeyspaceToAutoscale
 // method.
 type CassandraResourcesClientBeginMigrateCassandraKeyspaceToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginMigrateCassandraKeyspaceToManualThroughputOptions contains the optional parameters for the
 // CassandraResourcesClient.BeginMigrateCassandraKeyspaceToManualThroughput method.
 type CassandraResourcesClientBeginMigrateCassandraKeyspaceToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginMigrateCassandraTableToAutoscaleOptions contains the optional parameters for the CassandraResourcesClient.BeginMigrateCassandraTableToAutoscale
 // method.
 type CassandraResourcesClientBeginMigrateCassandraTableToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginMigrateCassandraTableToManualThroughputOptions contains the optional parameters for the CassandraResourcesClient.BeginMigrateCassandraTableToManualThroughput
 // method.
 type CassandraResourcesClientBeginMigrateCassandraTableToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginUpdateCassandraKeyspaceThroughputOptions contains the optional parameters for the CassandraResourcesClient.BeginUpdateCassandraKeyspaceThroughput
 // method.
 type CassandraResourcesClientBeginUpdateCassandraKeyspaceThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientBeginUpdateCassandraTableThroughputOptions contains the optional parameters for the CassandraResourcesClient.BeginUpdateCassandraTableThroughput
 // method.
 type CassandraResourcesClientBeginUpdateCassandraTableThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CassandraResourcesClientGetCassandraKeyspaceOptions contains the optional parameters for the CassandraResourcesClient.GetCassandraKeyspace
@@ -1423,41 +1442,48 @@ type DatabaseAccountUpdateProperties struct {
 // DatabaseAccountsClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseAccountsClient.BeginCreateOrUpdate
 // method.
 type DatabaseAccountsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginDeleteOptions contains the optional parameters for the DatabaseAccountsClient.BeginDelete method.
 type DatabaseAccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginFailoverPriorityChangeOptions contains the optional parameters for the DatabaseAccountsClient.BeginFailoverPriorityChange
 // method.
 type DatabaseAccountsClientBeginFailoverPriorityChangeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginOfflineRegionOptions contains the optional parameters for the DatabaseAccountsClient.BeginOfflineRegion
 // method.
 type DatabaseAccountsClientBeginOfflineRegionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginOnlineRegionOptions contains the optional parameters for the DatabaseAccountsClient.BeginOnlineRegion
 // method.
 type DatabaseAccountsClientBeginOnlineRegionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginRegenerateKeyOptions contains the optional parameters for the DatabaseAccountsClient.BeginRegenerateKey
 // method.
 type DatabaseAccountsClientBeginRegenerateKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientBeginUpdateOptions contains the optional parameters for the DatabaseAccountsClient.BeginUpdate method.
 type DatabaseAccountsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabaseAccountsClientCheckNameExistsOptions contains the optional parameters for the DatabaseAccountsClient.CheckNameExists
@@ -1838,61 +1864,71 @@ type GremlinGraphResource struct {
 // GremlinResourcesClientBeginCreateUpdateGremlinDatabaseOptions contains the optional parameters for the GremlinResourcesClient.BeginCreateUpdateGremlinDatabase
 // method.
 type GremlinResourcesClientBeginCreateUpdateGremlinDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginCreateUpdateGremlinGraphOptions contains the optional parameters for the GremlinResourcesClient.BeginCreateUpdateGremlinGraph
 // method.
 type GremlinResourcesClientBeginCreateUpdateGremlinGraphOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginDeleteGremlinDatabaseOptions contains the optional parameters for the GremlinResourcesClient.BeginDeleteGremlinDatabase
 // method.
 type GremlinResourcesClientBeginDeleteGremlinDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginDeleteGremlinGraphOptions contains the optional parameters for the GremlinResourcesClient.BeginDeleteGremlinGraph
 // method.
 type GremlinResourcesClientBeginDeleteGremlinGraphOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginMigrateGremlinDatabaseToAutoscaleOptions contains the optional parameters for the GremlinResourcesClient.BeginMigrateGremlinDatabaseToAutoscale
 // method.
 type GremlinResourcesClientBeginMigrateGremlinDatabaseToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginMigrateGremlinDatabaseToManualThroughputOptions contains the optional parameters for the GremlinResourcesClient.BeginMigrateGremlinDatabaseToManualThroughput
 // method.
 type GremlinResourcesClientBeginMigrateGremlinDatabaseToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginMigrateGremlinGraphToAutoscaleOptions contains the optional parameters for the GremlinResourcesClient.BeginMigrateGremlinGraphToAutoscale
 // method.
 type GremlinResourcesClientBeginMigrateGremlinGraphToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginMigrateGremlinGraphToManualThroughputOptions contains the optional parameters for the GremlinResourcesClient.BeginMigrateGremlinGraphToManualThroughput
 // method.
 type GremlinResourcesClientBeginMigrateGremlinGraphToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginUpdateGremlinDatabaseThroughputOptions contains the optional parameters for the GremlinResourcesClient.BeginUpdateGremlinDatabaseThroughput
 // method.
 type GremlinResourcesClientBeginUpdateGremlinDatabaseThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientBeginUpdateGremlinGraphThroughputOptions contains the optional parameters for the GremlinResourcesClient.BeginUpdateGremlinGraphThroughput
 // method.
 type GremlinResourcesClientBeginUpdateGremlinGraphThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GremlinResourcesClientGetGremlinDatabaseOptions contains the optional parameters for the GremlinResourcesClient.GetGremlinDatabase
@@ -2443,67 +2479,78 @@ type MongoDBDatabaseResource struct {
 // MongoDBResourcesClientBeginCreateUpdateMongoDBCollectionOptions contains the optional parameters for the MongoDBResourcesClient.BeginCreateUpdateMongoDBCollection
 // method.
 type MongoDBResourcesClientBeginCreateUpdateMongoDBCollectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginCreateUpdateMongoDBDatabaseOptions contains the optional parameters for the MongoDBResourcesClient.BeginCreateUpdateMongoDBDatabase
 // method.
 type MongoDBResourcesClientBeginCreateUpdateMongoDBDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginDeleteMongoDBCollectionOptions contains the optional parameters for the MongoDBResourcesClient.BeginDeleteMongoDBCollection
 // method.
 type MongoDBResourcesClientBeginDeleteMongoDBCollectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginDeleteMongoDBDatabaseOptions contains the optional parameters for the MongoDBResourcesClient.BeginDeleteMongoDBDatabase
 // method.
 type MongoDBResourcesClientBeginDeleteMongoDBDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginMigrateMongoDBCollectionToAutoscaleOptions contains the optional parameters for the MongoDBResourcesClient.BeginMigrateMongoDBCollectionToAutoscale
 // method.
 type MongoDBResourcesClientBeginMigrateMongoDBCollectionToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginMigrateMongoDBCollectionToManualThroughputOptions contains the optional parameters for the MongoDBResourcesClient.BeginMigrateMongoDBCollectionToManualThroughput
 // method.
 type MongoDBResourcesClientBeginMigrateMongoDBCollectionToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginMigrateMongoDBDatabaseToAutoscaleOptions contains the optional parameters for the MongoDBResourcesClient.BeginMigrateMongoDBDatabaseToAutoscale
 // method.
 type MongoDBResourcesClientBeginMigrateMongoDBDatabaseToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginMigrateMongoDBDatabaseToManualThroughputOptions contains the optional parameters for the MongoDBResourcesClient.BeginMigrateMongoDBDatabaseToManualThroughput
 // method.
 type MongoDBResourcesClientBeginMigrateMongoDBDatabaseToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginRetrieveContinuousBackupInformationOptions contains the optional parameters for the MongoDBResourcesClient.BeginRetrieveContinuousBackupInformation
 // method.
 type MongoDBResourcesClientBeginRetrieveContinuousBackupInformationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginUpdateMongoDBCollectionThroughputOptions contains the optional parameters for the MongoDBResourcesClient.BeginUpdateMongoDBCollectionThroughput
 // method.
 type MongoDBResourcesClientBeginUpdateMongoDBCollectionThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientBeginUpdateMongoDBDatabaseThroughputOptions contains the optional parameters for the MongoDBResourcesClient.BeginUpdateMongoDBDatabaseThroughput
 // method.
 type MongoDBResourcesClientBeginUpdateMongoDBDatabaseThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MongoDBResourcesClientGetMongoDBCollectionOptions contains the optional parameters for the MongoDBResourcesClient.GetMongoDBCollection
@@ -2620,25 +2667,29 @@ type NotebookWorkspaceProperties struct {
 // NotebookWorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the NotebookWorkspacesClient.BeginCreateOrUpdate
 // method.
 type NotebookWorkspacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NotebookWorkspacesClientBeginDeleteOptions contains the optional parameters for the NotebookWorkspacesClient.BeginDelete
 // method.
 type NotebookWorkspacesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NotebookWorkspacesClientBeginRegenerateAuthTokenOptions contains the optional parameters for the NotebookWorkspacesClient.BeginRegenerateAuthToken
 // method.
 type NotebookWorkspacesClientBeginRegenerateAuthTokenOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NotebookWorkspacesClientBeginStartOptions contains the optional parameters for the NotebookWorkspacesClient.BeginStart
 // method.
 type NotebookWorkspacesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NotebookWorkspacesClientGetOptions contains the optional parameters for the NotebookWorkspacesClient.Get method.
@@ -2939,13 +2990,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -3698,127 +3751,148 @@ type SQLDatabaseResource struct {
 // SQLResourcesClientBeginCreateUpdateSQLContainerOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLContainer
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLContainerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLDatabaseOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLDatabase
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLRoleAssignmentOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLRoleAssignment
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLRoleAssignmentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLRoleDefinitionOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLRoleDefinition
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLRoleDefinitionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLStoredProcedureOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLStoredProcedure
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLStoredProcedureOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLTriggerOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLTrigger
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLTriggerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginCreateUpdateSQLUserDefinedFunctionOptions contains the optional parameters for the SQLResourcesClient.BeginCreateUpdateSQLUserDefinedFunction
 // method.
 type SQLResourcesClientBeginCreateUpdateSQLUserDefinedFunctionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLContainerOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLContainer
 // method.
 type SQLResourcesClientBeginDeleteSQLContainerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLDatabaseOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLDatabase
 // method.
 type SQLResourcesClientBeginDeleteSQLDatabaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLRoleAssignmentOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLRoleAssignment
 // method.
 type SQLResourcesClientBeginDeleteSQLRoleAssignmentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLRoleDefinitionOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLRoleDefinition
 // method.
 type SQLResourcesClientBeginDeleteSQLRoleDefinitionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLStoredProcedureOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLStoredProcedure
 // method.
 type SQLResourcesClientBeginDeleteSQLStoredProcedureOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLTriggerOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLTrigger
 // method.
 type SQLResourcesClientBeginDeleteSQLTriggerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginDeleteSQLUserDefinedFunctionOptions contains the optional parameters for the SQLResourcesClient.BeginDeleteSQLUserDefinedFunction
 // method.
 type SQLResourcesClientBeginDeleteSQLUserDefinedFunctionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginMigrateSQLContainerToAutoscaleOptions contains the optional parameters for the SQLResourcesClient.BeginMigrateSQLContainerToAutoscale
 // method.
 type SQLResourcesClientBeginMigrateSQLContainerToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginMigrateSQLContainerToManualThroughputOptions contains the optional parameters for the SQLResourcesClient.BeginMigrateSQLContainerToManualThroughput
 // method.
 type SQLResourcesClientBeginMigrateSQLContainerToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginMigrateSQLDatabaseToAutoscaleOptions contains the optional parameters for the SQLResourcesClient.BeginMigrateSQLDatabaseToAutoscale
 // method.
 type SQLResourcesClientBeginMigrateSQLDatabaseToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginMigrateSQLDatabaseToManualThroughputOptions contains the optional parameters for the SQLResourcesClient.BeginMigrateSQLDatabaseToManualThroughput
 // method.
 type SQLResourcesClientBeginMigrateSQLDatabaseToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginRetrieveContinuousBackupInformationOptions contains the optional parameters for the SQLResourcesClient.BeginRetrieveContinuousBackupInformation
 // method.
 type SQLResourcesClientBeginRetrieveContinuousBackupInformationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginUpdateSQLContainerThroughputOptions contains the optional parameters for the SQLResourcesClient.BeginUpdateSQLContainerThroughput
 // method.
 type SQLResourcesClientBeginUpdateSQLContainerThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientBeginUpdateSQLDatabaseThroughputOptions contains the optional parameters for the SQLResourcesClient.BeginUpdateSQLDatabaseThroughput
 // method.
 type SQLResourcesClientBeginUpdateSQLDatabaseThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLResourcesClientGetSQLContainerOptions contains the optional parameters for the SQLResourcesClient.GetSQLContainer method.
@@ -4437,31 +4511,36 @@ type TableResource struct {
 // TableResourcesClientBeginCreateUpdateTableOptions contains the optional parameters for the TableResourcesClient.BeginCreateUpdateTable
 // method.
 type TableResourcesClientBeginCreateUpdateTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TableResourcesClientBeginDeleteTableOptions contains the optional parameters for the TableResourcesClient.BeginDeleteTable
 // method.
 type TableResourcesClientBeginDeleteTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TableResourcesClientBeginMigrateTableToAutoscaleOptions contains the optional parameters for the TableResourcesClient.BeginMigrateTableToAutoscale
 // method.
 type TableResourcesClientBeginMigrateTableToAutoscaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TableResourcesClientBeginMigrateTableToManualThroughputOptions contains the optional parameters for the TableResourcesClient.BeginMigrateTableToManualThroughput
 // method.
 type TableResourcesClientBeginMigrateTableToManualThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TableResourcesClientBeginUpdateTableThroughputOptions contains the optional parameters for the TableResourcesClient.BeginUpdateTableThroughput
 // method.
 type TableResourcesClientBeginUpdateTableThroughputOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TableResourcesClientGetTableOptions contains the optional parameters for the TableResourcesClient.GetTable method.

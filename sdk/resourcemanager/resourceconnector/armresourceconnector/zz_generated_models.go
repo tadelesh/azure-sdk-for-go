@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,12 +141,14 @@ type AppliancePropertiesInfrastructureConfig struct {
 // AppliancesClientBeginCreateOrUpdateOptions contains the optional parameters for the AppliancesClient.BeginCreateOrUpdate
 // method.
 type AppliancesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AppliancesClientBeginDeleteOptions contains the optional parameters for the AppliancesClient.BeginDelete method.
 type AppliancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AppliancesClientGetOptions contains the optional parameters for the AppliancesClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,20 +121,16 @@ func (client *DataConnectionsClient) checkNameAvailabilityHandleResponse(resp *h
 // parameters - The data connection parameters supplied to the CreateOrUpdate operation.
 // options - DataConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the DataConnectionsClient.BeginCreateOrUpdate
 // method.
-func (client *DataConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, parameters DataConnectionClassification, options *DataConnectionsClientBeginCreateOrUpdateOptions) (DataConnectionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, parameters, options)
-	if err != nil {
-		return DataConnectionsClientCreateOrUpdatePollerResponse{}, err
+func (client *DataConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, parameters DataConnectionClassification, options *DataConnectionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DataConnectionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataConnectionsClientCreateOrUpdateResponse]("DataConnectionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataConnectionsClientCreateOrUpdateResponse]("DataConnectionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DataConnectionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DataConnectionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DataConnectionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DataConnectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a data connection.
@@ -196,20 +192,16 @@ func (client *DataConnectionsClient) createOrUpdateCreateRequest(ctx context.Con
 // parameters - The data connection parameters supplied to the CreateOrUpdate operation.
 // options - DataConnectionsClientBeginDataConnectionValidationOptions contains the optional parameters for the DataConnectionsClient.BeginDataConnectionValidation
 // method.
-func (client *DataConnectionsClient) BeginDataConnectionValidation(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DataConnectionValidation, options *DataConnectionsClientBeginDataConnectionValidationOptions) (DataConnectionsClientDataConnectionValidationPollerResponse, error) {
-	resp, err := client.dataConnectionValidation(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DataConnectionsClientDataConnectionValidationPollerResponse{}, err
+func (client *DataConnectionsClient) BeginDataConnectionValidation(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DataConnectionValidation, options *DataConnectionsClientBeginDataConnectionValidationOptions) (*armruntime.Poller[DataConnectionsClientDataConnectionValidationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.dataConnectionValidation(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataConnectionsClientDataConnectionValidationResponse]("DataConnectionsClient.DataConnectionValidation", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataConnectionsClientDataConnectionValidationResponse]("DataConnectionsClient.DataConnectionValidation", options.ResumeToken, client.pl, nil)
 	}
-	result := DataConnectionsClientDataConnectionValidationPollerResponse{}
-	pt, err := armruntime.NewPoller("DataConnectionsClient.DataConnectionValidation", "location", resp, client.pl)
-	if err != nil {
-		return DataConnectionsClientDataConnectionValidationPollerResponse{}, err
-	}
-	result.Poller = &DataConnectionsClientDataConnectionValidationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DataConnectionValidation - Checks that the data connection parameters are valid.
@@ -267,20 +259,16 @@ func (client *DataConnectionsClient) dataConnectionValidationCreateRequest(ctx c
 // dataConnectionName - The name of the data connection.
 // options - DataConnectionsClientBeginDeleteOptions contains the optional parameters for the DataConnectionsClient.BeginDelete
 // method.
-func (client *DataConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, options *DataConnectionsClientBeginDeleteOptions) (DataConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, options)
-	if err != nil {
-		return DataConnectionsClientDeletePollerResponse{}, err
+func (client *DataConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, options *DataConnectionsClientBeginDeleteOptions) (*armruntime.Poller[DataConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataConnectionsClientDeleteResponse]("DataConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataConnectionsClientDeleteResponse]("DataConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DataConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DataConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DataConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DataConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the data connection with the given name.
@@ -406,13 +394,26 @@ func (client *DataConnectionsClient) getHandleResponse(resp *http.Response) (Dat
 // databaseName - The name of the database in the Kusto cluster.
 // options - DataConnectionsClientListByDatabaseOptions contains the optional parameters for the DataConnectionsClient.ListByDatabase
 // method.
-func (client *DataConnectionsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *DataConnectionsClientListByDatabaseOptions) *DataConnectionsClientListByDatabasePager {
-	return &DataConnectionsClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+func (client *DataConnectionsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *DataConnectionsClientListByDatabaseOptions) *runtime.Pager[DataConnectionsClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataConnectionsClientListByDatabaseResponse]{
+		More: func(page DataConnectionsClientListByDatabaseResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataConnectionsClientListByDatabaseResponse) (DataConnectionsClientListByDatabaseResponse, error) {
+			req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+			if err != nil {
+				return DataConnectionsClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataConnectionsClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataConnectionsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -463,20 +464,16 @@ func (client *DataConnectionsClient) listByDatabaseHandleResponse(resp *http.Res
 // parameters - The data connection parameters supplied to the Update operation.
 // options - DataConnectionsClientBeginUpdateOptions contains the optional parameters for the DataConnectionsClient.BeginUpdate
 // method.
-func (client *DataConnectionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, parameters DataConnectionClassification, options *DataConnectionsClientBeginUpdateOptions) (DataConnectionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, parameters, options)
-	if err != nil {
-		return DataConnectionsClientUpdatePollerResponse{}, err
+func (client *DataConnectionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, dataConnectionName string, parameters DataConnectionClassification, options *DataConnectionsClientBeginUpdateOptions) (*armruntime.Poller[DataConnectionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, dataConnectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataConnectionsClientUpdateResponse]("DataConnectionsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataConnectionsClientUpdateResponse]("DataConnectionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DataConnectionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DataConnectionsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DataConnectionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DataConnectionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a data connection.

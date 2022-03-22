@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewElasticPoolActivitiesClient(subscriptionID string, credential azcore.Tok
 // elasticPoolName - The name of the elastic pool for which to get the current activity.
 // options - ElasticPoolActivitiesClientListByElasticPoolOptions contains the optional parameters for the ElasticPoolActivitiesClient.ListByElasticPool
 // method.
-func (client *ElasticPoolActivitiesClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolActivitiesClientListByElasticPoolOptions) *ElasticPoolActivitiesClientListByElasticPoolPager {
-	return &ElasticPoolActivitiesClientListByElasticPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+func (client *ElasticPoolActivitiesClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolActivitiesClientListByElasticPoolOptions) *runtime.Pager[ElasticPoolActivitiesClientListByElasticPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ElasticPoolActivitiesClientListByElasticPoolResponse]{
+		More: func(page ElasticPoolActivitiesClientListByElasticPoolResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ElasticPoolActivitiesClientListByElasticPoolResponse) (ElasticPoolActivitiesClientListByElasticPoolResponse, error) {
+			req, err := client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+			if err != nil {
+				return ElasticPoolActivitiesClientListByElasticPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ElasticPoolActivitiesClientListByElasticPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ElasticPoolActivitiesClientListByElasticPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByElasticPoolHandleResponse(resp)
+		},
+	})
 }
 
 // listByElasticPoolCreateRequest creates the ListByElasticPool request.

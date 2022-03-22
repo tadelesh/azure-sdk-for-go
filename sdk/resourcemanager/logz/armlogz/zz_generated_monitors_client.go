@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewMonitorsClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - MonitorsClientBeginCreateOptions contains the optional parameters for the MonitorsClient.BeginCreate method.
-func (client *MonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginCreateOptions) (MonitorsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, monitorName, options)
-	if err != nil {
-		return MonitorsClientCreatePollerResponse{}, err
+func (client *MonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginCreateOptions) (*armruntime.Poller[MonitorsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, monitorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitorsClientCreateResponse]("MonitorsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitorsClientCreateResponse]("MonitorsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitorsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("MonitorsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return MonitorsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &MonitorsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a monitor resource. This create operation can take upto 10 minutes to complete.
@@ -121,20 +117,16 @@ func (client *MonitorsClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
-func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginDeleteOptions) (MonitorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, options)
-	if err != nil {
-		return MonitorsClientDeletePollerResponse{}, err
+func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginDeleteOptions) (*armruntime.Poller[MonitorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitorsClientDeleteResponse]("MonitorsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitorsClientDeleteResponse]("MonitorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("MonitorsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return MonitorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &MonitorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a monitor resource. This delete operation can take upto 10 minutes to complete.
@@ -240,16 +232,32 @@ func (client *MonitorsClient) getHandleResponse(resp *http.Response) (MonitorsCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - MonitorsClientListByResourceGroupOptions contains the optional parameters for the MonitorsClient.ListByResourceGroup
 // method.
-func (client *MonitorsClient) ListByResourceGroup(resourceGroupName string, options *MonitorsClientListByResourceGroupOptions) *MonitorsClientListByResourceGroupPager {
-	return &MonitorsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *MonitorsClient) ListByResourceGroup(resourceGroupName string, options *MonitorsClientListByResourceGroupOptions) *runtime.Pager[MonitorsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListByResourceGroupResponse]{
+		More: func(page MonitorsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitorResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListByResourceGroupResponse) (MonitorsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -287,16 +295,32 @@ func (client *MonitorsClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - MonitorsClientListBySubscriptionOptions contains the optional parameters for the MonitorsClient.ListBySubscription
 // method.
-func (client *MonitorsClient) ListBySubscription(options *MonitorsClientListBySubscriptionOptions) *MonitorsClientListBySubscriptionPager {
-	return &MonitorsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *MonitorsClient) ListBySubscription(options *MonitorsClientListBySubscriptionOptions) *runtime.Pager[MonitorsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListBySubscriptionResponse]{
+		More: func(page MonitorsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitorResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListBySubscriptionResponse) (MonitorsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -332,16 +356,32 @@ func (client *MonitorsClient) listBySubscriptionHandleResponse(resp *http.Respon
 // monitorName - Monitor resource name
 // options - MonitorsClientListMonitoredResourcesOptions contains the optional parameters for the MonitorsClient.ListMonitoredResources
 // method.
-func (client *MonitorsClient) ListMonitoredResources(resourceGroupName string, monitorName string, options *MonitorsClientListMonitoredResourcesOptions) *MonitorsClientListMonitoredResourcesPager {
-	return &MonitorsClientListMonitoredResourcesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *MonitorsClient) ListMonitoredResources(resourceGroupName string, monitorName string, options *MonitorsClientListMonitoredResourcesOptions) *runtime.Pager[MonitorsClientListMonitoredResourcesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListMonitoredResourcesResponse]{
+		More: func(page MonitorsClientListMonitoredResourcesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListMonitoredResourcesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitoredResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListMonitoredResourcesResponse) (MonitorsClientListMonitoredResourcesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListMonitoredResourcesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListMonitoredResourcesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListMonitoredResourcesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMonitoredResourcesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMonitoredResourcesCreateRequest creates the ListMonitoredResources request.
@@ -384,16 +424,32 @@ func (client *MonitorsClient) listMonitoredResourcesHandleResponse(resp *http.Re
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - MonitorsClientListUserRolesOptions contains the optional parameters for the MonitorsClient.ListUserRoles method.
-func (client *MonitorsClient) ListUserRoles(resourceGroupName string, monitorName string, options *MonitorsClientListUserRolesOptions) *MonitorsClientListUserRolesPager {
-	return &MonitorsClientListUserRolesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUserRolesCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *MonitorsClient) ListUserRoles(resourceGroupName string, monitorName string, options *MonitorsClientListUserRolesOptions) *runtime.Pager[MonitorsClientListUserRolesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListUserRolesResponse]{
+		More: func(page MonitorsClientListUserRolesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListUserRolesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserRoleListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListUserRolesResponse) (MonitorsClientListUserRolesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listUserRolesCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListUserRolesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListUserRolesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListUserRolesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUserRolesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listUserRolesCreateRequest creates the ListUserRoles request.

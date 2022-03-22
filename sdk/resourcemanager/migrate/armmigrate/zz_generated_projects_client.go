@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -119,13 +119,26 @@ func (client *ProjectsClient) assessmentOptionsHandleResponse(resp *http.Respons
 // projectName - Name of the Azure Migrate project.
 // options - ProjectsClientAssessmentOptionsListOptions contains the optional parameters for the ProjectsClient.AssessmentOptionsList
 // method.
-func (client *ProjectsClient) AssessmentOptionsList(resourceGroupName string, projectName string, options *ProjectsClientAssessmentOptionsListOptions) *ProjectsClientAssessmentOptionsListPager {
-	return &ProjectsClientAssessmentOptionsListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.assessmentOptionsListCreateRequest(ctx, resourceGroupName, projectName, options)
+func (client *ProjectsClient) AssessmentOptionsList(resourceGroupName string, projectName string, options *ProjectsClientAssessmentOptionsListOptions) *runtime.Pager[ProjectsClientAssessmentOptionsListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProjectsClientAssessmentOptionsListResponse]{
+		More: func(page ProjectsClientAssessmentOptionsListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ProjectsClientAssessmentOptionsListResponse) (ProjectsClientAssessmentOptionsListResponse, error) {
+			req, err := client.assessmentOptionsListCreateRequest(ctx, resourceGroupName, projectName, options)
+			if err != nil {
+				return ProjectsClientAssessmentOptionsListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProjectsClientAssessmentOptionsListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProjectsClientAssessmentOptionsListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.assessmentOptionsListHandleResponse(resp)
+		},
+	})
 }
 
 // assessmentOptionsListCreateRequest creates the AssessmentOptionsList request.
@@ -344,16 +357,32 @@ func (client *ProjectsClient) getHandleResponse(resp *http.Response) (ProjectsCl
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - Name of the Azure Resource Group that project is part of.
 // options - ProjectsClientListOptions contains the optional parameters for the ProjectsClient.List method.
-func (client *ProjectsClient) List(resourceGroupName string, options *ProjectsClientListOptions) *ProjectsClientListPager {
-	return &ProjectsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *ProjectsClient) List(resourceGroupName string, options *ProjectsClientListOptions) *runtime.Pager[ProjectsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProjectsClientListResponse]{
+		More: func(page ProjectsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProjectsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProjectResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *ProjectsClientListResponse) (ProjectsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProjectsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProjectsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProjectsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -394,16 +423,32 @@ func (client *ProjectsClient) listHandleResponse(resp *http.Response) (ProjectsC
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProjectsClientListBySubscriptionOptions contains the optional parameters for the ProjectsClient.ListBySubscription
 // method.
-func (client *ProjectsClient) ListBySubscription(options *ProjectsClientListBySubscriptionOptions) *ProjectsClientListBySubscriptionPager {
-	return &ProjectsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ProjectsClient) ListBySubscription(options *ProjectsClientListBySubscriptionOptions) *runtime.Pager[ProjectsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProjectsClientListBySubscriptionResponse]{
+		More: func(page ProjectsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProjectsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProjectResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *ProjectsClientListBySubscriptionResponse) (ProjectsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProjectsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProjectsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProjectsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewBackupsClient(subscriptionID string, credential azcore.TokenCredential, 
 // managerName - The manager name
 // parameters - The clone request object.
 // options - BackupsClientBeginCloneOptions contains the optional parameters for the BackupsClient.BeginClone method.
-func (client *BackupsClient) BeginClone(ctx context.Context, deviceName string, backupName string, backupElementName string, resourceGroupName string, managerName string, parameters CloneRequest, options *BackupsClientBeginCloneOptions) (BackupsClientClonePollerResponse, error) {
-	resp, err := client.clone(ctx, deviceName, backupName, backupElementName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return BackupsClientClonePollerResponse{}, err
+func (client *BackupsClient) BeginClone(ctx context.Context, deviceName string, backupName string, backupElementName string, resourceGroupName string, managerName string, parameters CloneRequest, options *BackupsClientBeginCloneOptions) (*armruntime.Poller[BackupsClientCloneResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.clone(ctx, deviceName, backupName, backupElementName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientCloneResponse]("BackupsClient.Clone", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientCloneResponse]("BackupsClient.Clone", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientClonePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Clone", "", resp, client.pl)
-	if err != nil {
-		return BackupsClientClonePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientClonePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Clone - Clones the backup element as a new volume.
@@ -115,20 +111,16 @@ func (client *BackupsClient) cloneCreateRequest(ctx context.Context, deviceName 
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - BackupsClientBeginDeleteOptions contains the optional parameters for the BackupsClient.BeginDelete method.
-func (client *BackupsClient) BeginDelete(ctx context.Context, deviceName string, backupName string, resourceGroupName string, managerName string, options *BackupsClientBeginDeleteOptions) (BackupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, backupName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupsClientDeletePollerResponse{}, err
+func (client *BackupsClient) BeginDelete(ctx context.Context, deviceName string, backupName string, resourceGroupName string, managerName string, options *BackupsClientBeginDeleteOptions) (*armruntime.Poller[BackupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, backupName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientDeleteResponse]("BackupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientDeleteResponse]("BackupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BackupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the backup.
@@ -172,16 +164,32 @@ func (client *BackupsClient) deleteCreateRequest(ctx context.Context, deviceName
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - BackupsClientListByDeviceOptions contains the optional parameters for the BackupsClient.ListByDevice method.
-func (client *BackupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupsClientListByDeviceOptions) *BackupsClientListByDevicePager {
-	return &BackupsClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *BackupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupsClientListByDeviceOptions) *runtime.Pager[BackupsClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupsClientListByDeviceResponse]{
+		More: func(page BackupsClientListByDeviceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupsClientListByDeviceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BackupList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupsClientListByDeviceResponse) (BackupsClientListByDeviceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupsClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupsClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupsClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -221,20 +229,16 @@ func (client *BackupsClient) listByDeviceHandleResponse(resp *http.Response) (Ba
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - BackupsClientBeginRestoreOptions contains the optional parameters for the BackupsClient.BeginRestore method.
-func (client *BackupsClient) BeginRestore(ctx context.Context, deviceName string, backupName string, resourceGroupName string, managerName string, options *BackupsClientBeginRestoreOptions) (BackupsClientRestorePollerResponse, error) {
-	resp, err := client.restore(ctx, deviceName, backupName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupsClientRestorePollerResponse{}, err
+func (client *BackupsClient) BeginRestore(ctx context.Context, deviceName string, backupName string, resourceGroupName string, managerName string, options *BackupsClientBeginRestoreOptions) (*armruntime.Poller[BackupsClientRestoreResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restore(ctx, deviceName, backupName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientRestoreResponse]("BackupsClient.Restore", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientRestoreResponse]("BackupsClient.Restore", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientRestorePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Restore", "", resp, client.pl)
-	if err != nil {
-		return BackupsClientRestorePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientRestorePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restore - Restores the backup on the device.

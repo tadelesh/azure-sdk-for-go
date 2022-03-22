@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armvideoanalyzer
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AccessPoliciesClientCreateOrUpdateResponse contains the response from method AccessPoliciesClient.CreateOrUpdate.
 type AccessPoliciesClientCreateOrUpdateResponse struct {
@@ -69,41 +63,6 @@ type LivePipelineOperationStatusesClientGetResponse struct {
 	LivePipelineOperationStatus
 }
 
-// LivePipelinesClientActivatePollerResponse contains the response from method LivePipelinesClient.Activate.
-type LivePipelinesClientActivatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *LivePipelinesClientActivatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l LivePipelinesClientActivatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LivePipelinesClientActivateResponse, error) {
-	respType := LivePipelinesClientActivateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a LivePipelinesClientActivatePollerResponse from the provided client and resume token.
-func (l *LivePipelinesClientActivatePollerResponse) Resume(ctx context.Context, client *LivePipelinesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("LivePipelinesClient.Activate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &LivePipelinesClientActivatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // LivePipelinesClientActivateResponse contains the response from method LivePipelinesClient.Activate.
 type LivePipelinesClientActivateResponse struct {
 	// placeholder for future response values
@@ -112,41 +71,6 @@ type LivePipelinesClientActivateResponse struct {
 // LivePipelinesClientCreateOrUpdateResponse contains the response from method LivePipelinesClient.CreateOrUpdate.
 type LivePipelinesClientCreateOrUpdateResponse struct {
 	LivePipeline
-}
-
-// LivePipelinesClientDeactivatePollerResponse contains the response from method LivePipelinesClient.Deactivate.
-type LivePipelinesClientDeactivatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *LivePipelinesClientDeactivatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l LivePipelinesClientDeactivatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LivePipelinesClientDeactivateResponse, error) {
-	respType := LivePipelinesClientDeactivateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a LivePipelinesClientDeactivatePollerResponse from the provided client and resume token.
-func (l *LivePipelinesClientDeactivatePollerResponse) Resume(ctx context.Context, client *LivePipelinesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("LivePipelinesClient.Deactivate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &LivePipelinesClientDeactivatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // LivePipelinesClientDeactivateResponse contains the response from method LivePipelinesClient.Deactivate.
@@ -197,41 +121,6 @@ type OperationsClientListResponse struct {
 // PipelineJobOperationStatusesClientGetResponse contains the response from method PipelineJobOperationStatusesClient.Get.
 type PipelineJobOperationStatusesClientGetResponse struct {
 	PipelineJobOperationStatus
-}
-
-// PipelineJobsClientCancelPollerResponse contains the response from method PipelineJobsClient.Cancel.
-type PipelineJobsClientCancelPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PipelineJobsClientCancelPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PipelineJobsClientCancelPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PipelineJobsClientCancelResponse, error) {
-	respType := PipelineJobsClientCancelResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PipelineJobsClientCancelPollerResponse from the provided client and resume token.
-func (l *PipelineJobsClientCancelPollerResponse) Resume(ctx context.Context, client *PipelineJobsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PipelineJobsClient.Cancel", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PipelineJobsClientCancelPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PipelineJobsClientCancelResponse contains the response from method PipelineJobsClient.Cancel.
@@ -337,41 +226,6 @@ type PrivateLinkResourcesClientListResponse struct {
 	PrivateLinkResourceListResult
 }
 
-// VideoAnalyzersClientCreateOrUpdatePollerResponse contains the response from method VideoAnalyzersClient.CreateOrUpdate.
-type VideoAnalyzersClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VideoAnalyzersClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VideoAnalyzersClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VideoAnalyzersClientCreateOrUpdateResponse, error) {
-	respType := VideoAnalyzersClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VideoAnalyzer)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VideoAnalyzersClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *VideoAnalyzersClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *VideoAnalyzersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VideoAnalyzersClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VideoAnalyzersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // VideoAnalyzersClientCreateOrUpdateResponse contains the response from method VideoAnalyzersClient.CreateOrUpdate.
 type VideoAnalyzersClientCreateOrUpdateResponse struct {
 	VideoAnalyzer
@@ -395,41 +249,6 @@ type VideoAnalyzersClientListBySubscriptionResponse struct {
 // VideoAnalyzersClientListResponse contains the response from method VideoAnalyzersClient.List.
 type VideoAnalyzersClientListResponse struct {
 	Collection
-}
-
-// VideoAnalyzersClientUpdatePollerResponse contains the response from method VideoAnalyzersClient.Update.
-type VideoAnalyzersClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VideoAnalyzersClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VideoAnalyzersClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VideoAnalyzersClientUpdateResponse, error) {
-	respType := VideoAnalyzersClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VideoAnalyzer)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VideoAnalyzersClientUpdatePollerResponse from the provided client and resume token.
-func (l *VideoAnalyzersClientUpdatePollerResponse) Resume(ctx context.Context, client *VideoAnalyzersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VideoAnalyzersClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VideoAnalyzersClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VideoAnalyzersClientUpdateResponse contains the response from method VideoAnalyzersClient.Update.

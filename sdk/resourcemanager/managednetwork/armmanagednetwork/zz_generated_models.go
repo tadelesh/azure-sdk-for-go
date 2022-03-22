@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -80,12 +80,14 @@ type GroupProperties struct {
 
 // GroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the GroupsClient.BeginCreateOrUpdate method.
 type GroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GroupsClientBeginDeleteOptions contains the optional parameters for the GroupsClient.BeginDelete method.
 type GroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GroupsClientGetOptions contains the optional parameters for the GroupsClient.Get method.
@@ -157,12 +159,14 @@ type ManagedNetwork struct {
 
 // ManagedNetworksClientBeginDeleteOptions contains the optional parameters for the ManagedNetworksClient.BeginDelete method.
 type ManagedNetworksClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedNetworksClientBeginUpdateOptions contains the optional parameters for the ManagedNetworksClient.BeginUpdate method.
 type ManagedNetworksClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedNetworksClientCreateOrUpdateOptions contains the optional parameters for the ManagedNetworksClient.CreateOrUpdate
@@ -258,12 +262,14 @@ type OperationsClientListOptions struct {
 // PeeringPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PeeringPoliciesClient.BeginCreateOrUpdate
 // method.
 type PeeringPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PeeringPoliciesClientBeginDeleteOptions contains the optional parameters for the PeeringPoliciesClient.BeginDelete method.
 type PeeringPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PeeringPoliciesClientGetOptions contains the optional parameters for the PeeringPoliciesClient.Get method.

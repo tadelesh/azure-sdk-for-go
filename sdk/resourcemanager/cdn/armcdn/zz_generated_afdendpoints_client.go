@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAFDEndpointsClient(subscriptionID string, credential azcore.TokenCredent
 // endpoint - Endpoint properties
 // options - AFDEndpointsClientBeginCreateOptions contains the optional parameters for the AFDEndpointsClient.BeginCreate
 // method.
-func (client *AFDEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpoint AFDEndpoint, options *AFDEndpointsClientBeginCreateOptions) (AFDEndpointsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, endpoint, options)
-	if err != nil {
-		return AFDEndpointsClientCreatePollerResponse{}, err
+func (client *AFDEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpoint AFDEndpoint, options *AFDEndpointsClientBeginCreateOptions) (*armruntime.Poller[AFDEndpointsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, endpoint, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDEndpointsClientCreateResponse]("AFDEndpointsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDEndpointsClientCreateResponse]("AFDEndpointsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDEndpointsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDEndpointsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDEndpointsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AFDEndpointsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new AzureFrontDoor endpoint with the specified endpoint name under the specified subscription, resource
@@ -132,20 +128,16 @@ func (client *AFDEndpointsClient) createCreateRequest(ctx context.Context, resou
 // endpointName - Name of the endpoint under the profile which is unique globally.
 // options - AFDEndpointsClientBeginDeleteOptions contains the optional parameters for the AFDEndpointsClient.BeginDelete
 // method.
-func (client *AFDEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, options *AFDEndpointsClientBeginDeleteOptions) (AFDEndpointsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, options)
-	if err != nil {
-		return AFDEndpointsClientDeletePollerResponse{}, err
+func (client *AFDEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, options *AFDEndpointsClientBeginDeleteOptions) (*armruntime.Poller[AFDEndpointsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDEndpointsClientDeleteResponse]("AFDEndpointsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDEndpointsClientDeleteResponse]("AFDEndpointsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDEndpointsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDEndpointsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDEndpointsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AFDEndpointsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing AzureFrontDoor endpoint with the specified endpoint name under the specified subscription,
@@ -265,16 +257,32 @@ func (client *AFDEndpointsClient) getHandleResponse(resp *http.Response) (AFDEnd
 // group.
 // options - AFDEndpointsClientListByProfileOptions contains the optional parameters for the AFDEndpointsClient.ListByProfile
 // method.
-func (client *AFDEndpointsClient) ListByProfile(resourceGroupName string, profileName string, options *AFDEndpointsClientListByProfileOptions) *AFDEndpointsClientListByProfilePager {
-	return &AFDEndpointsClientListByProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+func (client *AFDEndpointsClient) ListByProfile(resourceGroupName string, profileName string, options *AFDEndpointsClientListByProfileOptions) *runtime.Pager[AFDEndpointsClientListByProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AFDEndpointsClientListByProfileResponse]{
+		More: func(page AFDEndpointsClientListByProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AFDEndpointsClientListByProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AFDEndpointListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AFDEndpointsClientListByProfileResponse) (AFDEndpointsClientListByProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AFDEndpointsClientListByProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AFDEndpointsClientListByProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AFDEndpointsClientListByProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProfileCreateRequest creates the ListByProfile request.
@@ -320,16 +328,32 @@ func (client *AFDEndpointsClient) listByProfileHandleResponse(resp *http.Respons
 // endpointName - Name of the endpoint under the profile which is unique globally.
 // options - AFDEndpointsClientListResourceUsageOptions contains the optional parameters for the AFDEndpointsClient.ListResourceUsage
 // method.
-func (client *AFDEndpointsClient) ListResourceUsage(resourceGroupName string, profileName string, endpointName string, options *AFDEndpointsClientListResourceUsageOptions) *AFDEndpointsClientListResourceUsagePager {
-	return &AFDEndpointsClientListResourceUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+func (client *AFDEndpointsClient) ListResourceUsage(resourceGroupName string, profileName string, endpointName string, options *AFDEndpointsClientListResourceUsageOptions) *runtime.Pager[AFDEndpointsClientListResourceUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AFDEndpointsClientListResourceUsageResponse]{
+		More: func(page AFDEndpointsClientListResourceUsageResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AFDEndpointsClientListResourceUsageResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsagesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AFDEndpointsClientListResourceUsageResponse) (AFDEndpointsClientListResourceUsageResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AFDEndpointsClientListResourceUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AFDEndpointsClientListResourceUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AFDEndpointsClientListResourceUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listResourceUsageHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listResourceUsageCreateRequest creates the ListResourceUsage request.
@@ -382,20 +406,16 @@ func (client *AFDEndpointsClient) listResourceUsageHandleResponse(resp *http.Res
 // '/pictures/*' which removes all folders and files in the directory.
 // options - AFDEndpointsClientBeginPurgeContentOptions contains the optional parameters for the AFDEndpointsClient.BeginPurgeContent
 // method.
-func (client *AFDEndpointsClient) BeginPurgeContent(ctx context.Context, resourceGroupName string, profileName string, endpointName string, contents AfdPurgeParameters, options *AFDEndpointsClientBeginPurgeContentOptions) (AFDEndpointsClientPurgeContentPollerResponse, error) {
-	resp, err := client.purgeContent(ctx, resourceGroupName, profileName, endpointName, contents, options)
-	if err != nil {
-		return AFDEndpointsClientPurgeContentPollerResponse{}, err
+func (client *AFDEndpointsClient) BeginPurgeContent(ctx context.Context, resourceGroupName string, profileName string, endpointName string, contents AfdPurgeParameters, options *AFDEndpointsClientBeginPurgeContentOptions) (*armruntime.Poller[AFDEndpointsClientPurgeContentResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purgeContent(ctx, resourceGroupName, profileName, endpointName, contents, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDEndpointsClientPurgeContentResponse]("AFDEndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDEndpointsClientPurgeContentResponse]("AFDEndpointsClient.PurgeContent", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDEndpointsClientPurgeContentPollerResponse{}
-	pt, err := armruntime.NewPoller("AFDEndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDEndpointsClientPurgeContentPollerResponse{}, err
-	}
-	result.Poller = &AFDEndpointsClientPurgeContentPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PurgeContent - Removes a content from AzureFrontDoor.
@@ -457,20 +477,16 @@ func (client *AFDEndpointsClient) purgeContentCreateRequest(ctx context.Context,
 // endpointUpdateProperties - Endpoint update properties
 // options - AFDEndpointsClientBeginUpdateOptions contains the optional parameters for the AFDEndpointsClient.BeginUpdate
 // method.
-func (client *AFDEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpointUpdateProperties AFDEndpointUpdateParameters, options *AFDEndpointsClientBeginUpdateOptions) (AFDEndpointsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, endpointName, endpointUpdateProperties, options)
-	if err != nil {
-		return AFDEndpointsClientUpdatePollerResponse{}, err
+func (client *AFDEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpointUpdateProperties AFDEndpointUpdateParameters, options *AFDEndpointsClientBeginUpdateOptions) (*armruntime.Poller[AFDEndpointsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, endpointName, endpointUpdateProperties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDEndpointsClientUpdateResponse]("AFDEndpointsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDEndpointsClientUpdateResponse]("AFDEndpointsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDEndpointsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDEndpointsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDEndpointsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AFDEndpointsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing AzureFrontDoor endpoint with the specified endpoint name under the specified subscription,

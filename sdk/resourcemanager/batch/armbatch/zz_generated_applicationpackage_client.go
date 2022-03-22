@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -319,16 +319,32 @@ func (client *ApplicationPackageClient) getHandleResponse(resp *http.Response) (
 // accountName - The name of the Batch account.
 // applicationName - The name of the application. This must be unique within the account.
 // options - ApplicationPackageClientListOptions contains the optional parameters for the ApplicationPackageClient.List method.
-func (client *ApplicationPackageClient) List(resourceGroupName string, accountName string, applicationName string, options *ApplicationPackageClientListOptions) *ApplicationPackageClientListPager {
-	return &ApplicationPackageClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, applicationName, options)
+func (client *ApplicationPackageClient) List(resourceGroupName string, accountName string, applicationName string, options *ApplicationPackageClientListOptions) *runtime.Pager[ApplicationPackageClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationPackageClientListResponse]{
+		More: func(page ApplicationPackageClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationPackageClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListApplicationPackagesResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationPackageClientListResponse) (ApplicationPackageClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, applicationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationPackageClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationPackageClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationPackageClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

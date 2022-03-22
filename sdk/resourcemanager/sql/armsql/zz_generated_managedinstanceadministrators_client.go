@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewManagedInstanceAdministratorsClient(subscriptionID string, credential az
 // parameters - The requested administrator parameters.
 // options - ManagedInstanceAdministratorsClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedInstanceAdministratorsClient.BeginCreateOrUpdate
 // method.
-func (client *ManagedInstanceAdministratorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, administratorName AdministratorName, parameters ManagedInstanceAdministrator, options *ManagedInstanceAdministratorsClientBeginCreateOrUpdateOptions) (ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, administratorName, parameters, options)
-	if err != nil {
-		return ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedInstanceAdministratorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, administratorName AdministratorName, parameters ManagedInstanceAdministrator, options *ManagedInstanceAdministratorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedInstanceAdministratorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, administratorName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceAdministratorsClientCreateOrUpdateResponse]("ManagedInstanceAdministratorsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceAdministratorsClientCreateOrUpdateResponse]("ManagedInstanceAdministratorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceAdministratorsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceAdministratorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a managed instance administrator.
@@ -127,20 +123,16 @@ func (client *ManagedInstanceAdministratorsClient) createOrUpdateCreateRequest(c
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstanceAdministratorsClientBeginDeleteOptions contains the optional parameters for the ManagedInstanceAdministratorsClient.BeginDelete
 // method.
-func (client *ManagedInstanceAdministratorsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, administratorName AdministratorName, options *ManagedInstanceAdministratorsClientBeginDeleteOptions) (ManagedInstanceAdministratorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, administratorName, options)
-	if err != nil {
-		return ManagedInstanceAdministratorsClientDeletePollerResponse{}, err
+func (client *ManagedInstanceAdministratorsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedInstanceName string, administratorName AdministratorName, options *ManagedInstanceAdministratorsClientBeginDeleteOptions) (*armruntime.Poller[ManagedInstanceAdministratorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedInstanceName, administratorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceAdministratorsClientDeleteResponse]("ManagedInstanceAdministratorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceAdministratorsClientDeleteResponse]("ManagedInstanceAdministratorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceAdministratorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceAdministratorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceAdministratorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceAdministratorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a managed instance administrator.
@@ -257,16 +249,32 @@ func (client *ManagedInstanceAdministratorsClient) getHandleResponse(resp *http.
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstanceAdministratorsClientListByInstanceOptions contains the optional parameters for the ManagedInstanceAdministratorsClient.ListByInstance
 // method.
-func (client *ManagedInstanceAdministratorsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceAdministratorsClientListByInstanceOptions) *ManagedInstanceAdministratorsClientListByInstancePager {
-	return &ManagedInstanceAdministratorsClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstanceAdministratorsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceAdministratorsClientListByInstanceOptions) *runtime.Pager[ManagedInstanceAdministratorsClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstanceAdministratorsClientListByInstanceResponse]{
+		More: func(page ManagedInstanceAdministratorsClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstanceAdministratorsClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstanceAdministratorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstanceAdministratorsClientListByInstanceResponse) (ManagedInstanceAdministratorsClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstanceAdministratorsClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstanceAdministratorsClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstanceAdministratorsClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,20 +53,16 @@ func NewRegistrationDefinitionsClient(credential azcore.TokenCredential, options
 // requestBody - The parameters required to create a new registration definition.
 // options - RegistrationDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the RegistrationDefinitionsClient.BeginCreateOrUpdate
 // method.
-func (client *RegistrationDefinitionsClient) BeginCreateOrUpdate(ctx context.Context, registrationDefinitionID string, scope string, requestBody RegistrationDefinition, options *RegistrationDefinitionsClientBeginCreateOrUpdateOptions) (RegistrationDefinitionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, registrationDefinitionID, scope, requestBody, options)
-	if err != nil {
-		return RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}, err
+func (client *RegistrationDefinitionsClient) BeginCreateOrUpdate(ctx context.Context, registrationDefinitionID string, scope string, requestBody RegistrationDefinition, options *RegistrationDefinitionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[RegistrationDefinitionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, registrationDefinitionID, scope, requestBody, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistrationDefinitionsClientCreateOrUpdateResponse]("RegistrationDefinitionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistrationDefinitionsClientCreateOrUpdateResponse]("RegistrationDefinitionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistrationDefinitionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &RegistrationDefinitionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a registration definition.
@@ -199,16 +195,32 @@ func (client *RegistrationDefinitionsClient) getHandleResponse(resp *http.Respon
 // scope - The scope of the resource.
 // options - RegistrationDefinitionsClientListOptions contains the optional parameters for the RegistrationDefinitionsClient.List
 // method.
-func (client *RegistrationDefinitionsClient) List(scope string, options *RegistrationDefinitionsClientListOptions) *RegistrationDefinitionsClientListPager {
-	return &RegistrationDefinitionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *RegistrationDefinitionsClient) List(scope string, options *RegistrationDefinitionsClientListOptions) *runtime.Pager[RegistrationDefinitionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistrationDefinitionsClientListResponse]{
+		More: func(page RegistrationDefinitionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistrationDefinitionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistrationDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistrationDefinitionsClientListResponse) (RegistrationDefinitionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistrationDefinitionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistrationDefinitionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistrationDefinitionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

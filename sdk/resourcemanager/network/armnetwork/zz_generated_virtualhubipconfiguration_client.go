@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewVirtualHubIPConfigurationClient(subscriptionID string, credential azcore
 // parameters - Hub Ip Configuration parameters.
 // options - VirtualHubIPConfigurationClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubIPConfigurationClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualHubIPConfigurationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualHubName string, ipConfigName string, parameters HubIPConfiguration, options *VirtualHubIPConfigurationClientBeginCreateOrUpdateOptions) (VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualHubName, ipConfigName, parameters, options)
-	if err != nil {
-		return VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualHubIPConfigurationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualHubName string, ipConfigName string, parameters HubIPConfiguration, options *VirtualHubIPConfigurationClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualHubIPConfigurationClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualHubName, ipConfigName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualHubIPConfigurationClientCreateOrUpdateResponse]("VirtualHubIPConfigurationClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualHubIPConfigurationClientCreateOrUpdateResponse]("VirtualHubIPConfigurationClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualHubIPConfigurationClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualHubIPConfigurationClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a VirtualHubIpConfiguration resource if it doesn't exist else updates the existing VirtualHubIpConfiguration.
@@ -128,20 +124,16 @@ func (client *VirtualHubIPConfigurationClient) createOrUpdateCreateRequest(ctx c
 // ipConfigName - The name of the ipconfig.
 // options - VirtualHubIPConfigurationClientBeginDeleteOptions contains the optional parameters for the VirtualHubIPConfigurationClient.BeginDelete
 // method.
-func (client *VirtualHubIPConfigurationClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualHubName string, ipConfigName string, options *VirtualHubIPConfigurationClientBeginDeleteOptions) (VirtualHubIPConfigurationClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualHubName, ipConfigName, options)
-	if err != nil {
-		return VirtualHubIPConfigurationClientDeletePollerResponse{}, err
+func (client *VirtualHubIPConfigurationClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualHubName string, ipConfigName string, options *VirtualHubIPConfigurationClientBeginDeleteOptions) (*armruntime.Poller[VirtualHubIPConfigurationClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualHubName, ipConfigName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualHubIPConfigurationClientDeleteResponse]("VirtualHubIPConfigurationClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualHubIPConfigurationClientDeleteResponse]("VirtualHubIPConfigurationClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualHubIPConfigurationClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualHubIPConfigurationClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VirtualHubIPConfigurationClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualHubIPConfigurationClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a VirtualHubIpConfiguration.
@@ -258,16 +250,32 @@ func (client *VirtualHubIPConfigurationClient) getHandleResponse(resp *http.Resp
 // virtualHubName - The name of the VirtualHub.
 // options - VirtualHubIPConfigurationClientListOptions contains the optional parameters for the VirtualHubIPConfigurationClient.List
 // method.
-func (client *VirtualHubIPConfigurationClient) List(resourceGroupName string, virtualHubName string, options *VirtualHubIPConfigurationClientListOptions) *VirtualHubIPConfigurationClientListPager {
-	return &VirtualHubIPConfigurationClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, virtualHubName, options)
+func (client *VirtualHubIPConfigurationClient) List(resourceGroupName string, virtualHubName string, options *VirtualHubIPConfigurationClientListOptions) *runtime.Pager[VirtualHubIPConfigurationClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualHubIPConfigurationClientListResponse]{
+		More: func(page VirtualHubIPConfigurationClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualHubIPConfigurationClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListVirtualHubIPConfigurationResults.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualHubIPConfigurationClientListResponse) (VirtualHubIPConfigurationClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, virtualHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualHubIPConfigurationClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualHubIPConfigurationClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualHubIPConfigurationClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

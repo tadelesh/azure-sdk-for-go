@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,16 +124,32 @@ func (client *DataWarehouseUserActivitiesClient) getHandleResponse(resp *http.Re
 // databaseName - The name of the database.
 // options - DataWarehouseUserActivitiesClientListByDatabaseOptions contains the optional parameters for the DataWarehouseUserActivitiesClient.ListByDatabase
 // method.
-func (client *DataWarehouseUserActivitiesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DataWarehouseUserActivitiesClientListByDatabaseOptions) *DataWarehouseUserActivitiesClientListByDatabasePager {
-	return &DataWarehouseUserActivitiesClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DataWarehouseUserActivitiesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DataWarehouseUserActivitiesClientListByDatabaseOptions) *runtime.Pager[DataWarehouseUserActivitiesClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataWarehouseUserActivitiesClientListByDatabaseResponse]{
+		More: func(page DataWarehouseUserActivitiesClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataWarehouseUserActivitiesClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataWarehouseUserActivitiesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataWarehouseUserActivitiesClientListByDatabaseResponse) (DataWarehouseUserActivitiesClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataWarehouseUserActivitiesClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataWarehouseUserActivitiesClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataWarehouseUserActivitiesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

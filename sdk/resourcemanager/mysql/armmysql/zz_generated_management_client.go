@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewManagementClient(subscriptionID string, credential azcore.TokenCredentia
 // databaseName - The name of the database.
 // options - ManagementClientBeginCreateRecommendedActionSessionOptions contains the optional parameters for the ManagementClient.BeginCreateRecommendedActionSession
 // method.
-func (client *ManagementClient) BeginCreateRecommendedActionSession(ctx context.Context, resourceGroupName string, serverName string, advisorName string, databaseName string, options *ManagementClientBeginCreateRecommendedActionSessionOptions) (ManagementClientCreateRecommendedActionSessionPollerResponse, error) {
-	resp, err := client.createRecommendedActionSession(ctx, resourceGroupName, serverName, advisorName, databaseName, options)
-	if err != nil {
-		return ManagementClientCreateRecommendedActionSessionPollerResponse{}, err
+func (client *ManagementClient) BeginCreateRecommendedActionSession(ctx context.Context, resourceGroupName string, serverName string, advisorName string, databaseName string, options *ManagementClientBeginCreateRecommendedActionSessionOptions) (*armruntime.Poller[ManagementClientCreateRecommendedActionSessionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createRecommendedActionSession(ctx, resourceGroupName, serverName, advisorName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientCreateRecommendedActionSessionResponse]("ManagementClient.CreateRecommendedActionSession", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientCreateRecommendedActionSessionResponse]("ManagementClient.CreateRecommendedActionSession", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientCreateRecommendedActionSessionPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.CreateRecommendedActionSession", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientCreateRecommendedActionSessionPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientCreateRecommendedActionSessionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateRecommendedActionSession - Create recommendation action session for the advisor.

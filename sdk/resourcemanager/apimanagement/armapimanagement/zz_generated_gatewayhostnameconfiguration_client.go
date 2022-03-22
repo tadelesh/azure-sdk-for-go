@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -329,16 +329,32 @@ func (client *GatewayHostnameConfigurationClient) getEntityTagHandleResponse(res
 // 'managed'
 // options - GatewayHostnameConfigurationClientListByServiceOptions contains the optional parameters for the GatewayHostnameConfigurationClient.ListByService
 // method.
-func (client *GatewayHostnameConfigurationClient) ListByService(resourceGroupName string, serviceName string, gatewayID string, options *GatewayHostnameConfigurationClientListByServiceOptions) *GatewayHostnameConfigurationClientListByServicePager {
-	return &GatewayHostnameConfigurationClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, gatewayID, options)
+func (client *GatewayHostnameConfigurationClient) ListByService(resourceGroupName string, serviceName string, gatewayID string, options *GatewayHostnameConfigurationClientListByServiceOptions) *runtime.Pager[GatewayHostnameConfigurationClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewayHostnameConfigurationClientListByServiceResponse]{
+		More: func(page GatewayHostnameConfigurationClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewayHostnameConfigurationClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayHostnameConfigurationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewayHostnameConfigurationClientListByServiceResponse) (GatewayHostnameConfigurationClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, gatewayID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewayHostnameConfigurationClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewayHostnameConfigurationClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewayHostnameConfigurationClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

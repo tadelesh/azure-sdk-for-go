@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -128,13 +128,26 @@ func (client *WorkflowRunActionScopeRepetitionsClient) getHandleResponse(resp *h
 // actionName - The workflow action name.
 // options - WorkflowRunActionScopeRepetitionsClientListOptions contains the optional parameters for the WorkflowRunActionScopeRepetitionsClient.List
 // method.
-func (client *WorkflowRunActionScopeRepetitionsClient) List(resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionScopeRepetitionsClientListOptions) *WorkflowRunActionScopeRepetitionsClientListPager {
-	return &WorkflowRunActionScopeRepetitionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
+func (client *WorkflowRunActionScopeRepetitionsClient) List(resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionScopeRepetitionsClientListOptions) *runtime.Pager[WorkflowRunActionScopeRepetitionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowRunActionScopeRepetitionsClientListResponse]{
+		More: func(page WorkflowRunActionScopeRepetitionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkflowRunActionScopeRepetitionsClientListResponse) (WorkflowRunActionScopeRepetitionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
+			if err != nil {
+				return WorkflowRunActionScopeRepetitionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowRunActionScopeRepetitionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowRunActionScopeRepetitionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

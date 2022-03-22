@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewVirtualClustersClient(subscriptionID string, credential azcore.TokenCred
 // virtualClusterName - The name of the virtual cluster.
 // options - VirtualClustersClientBeginDeleteOptions contains the optional parameters for the VirtualClustersClient.BeginDelete
 // method.
-func (client *VirtualClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualClusterName string, options *VirtualClustersClientBeginDeleteOptions) (VirtualClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualClusterName, options)
-	if err != nil {
-		return VirtualClustersClientDeletePollerResponse{}, err
+func (client *VirtualClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualClusterName string, options *VirtualClustersClientBeginDeleteOptions) (*armruntime.Poller[VirtualClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualClusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualClustersClientDeleteResponse]("VirtualClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualClustersClientDeleteResponse]("VirtualClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VirtualClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a virtual cluster.
@@ -173,16 +169,32 @@ func (client *VirtualClustersClient) getHandleResponse(resp *http.Response) (Vir
 // List - Gets a list of all virtualClusters in the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualClustersClientListOptions contains the optional parameters for the VirtualClustersClient.List method.
-func (client *VirtualClustersClient) List(options *VirtualClustersClientListOptions) *VirtualClustersClientListPager {
-	return &VirtualClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VirtualClustersClient) List(options *VirtualClustersClientListOptions) *runtime.Pager[VirtualClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualClustersClientListResponse]{
+		More: func(page VirtualClustersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualClustersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualClustersClientListResponse) (VirtualClustersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -218,16 +230,32 @@ func (client *VirtualClustersClient) listHandleResponse(resp *http.Response) (Vi
 // Resource Manager API or the portal.
 // options - VirtualClustersClientListByResourceGroupOptions contains the optional parameters for the VirtualClustersClient.ListByResourceGroup
 // method.
-func (client *VirtualClustersClient) ListByResourceGroup(resourceGroupName string, options *VirtualClustersClientListByResourceGroupOptions) *VirtualClustersClientListByResourceGroupPager {
-	return &VirtualClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VirtualClustersClient) ListByResourceGroup(resourceGroupName string, options *VirtualClustersClientListByResourceGroupOptions) *runtime.Pager[VirtualClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualClustersClientListByResourceGroupResponse]{
+		More: func(page VirtualClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualClustersClientListByResourceGroupResponse) (VirtualClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -269,20 +297,16 @@ func (client *VirtualClustersClient) listByResourceGroupHandleResponse(resp *htt
 // parameters - The requested virtual cluster resource state.
 // options - VirtualClustersClientBeginUpdateOptions contains the optional parameters for the VirtualClustersClient.BeginUpdate
 // method.
-func (client *VirtualClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, virtualClusterName string, parameters VirtualClusterUpdate, options *VirtualClustersClientBeginUpdateOptions) (VirtualClustersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, virtualClusterName, parameters, options)
-	if err != nil {
-		return VirtualClustersClientUpdatePollerResponse{}, err
+func (client *VirtualClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, virtualClusterName string, parameters VirtualClusterUpdate, options *VirtualClustersClientBeginUpdateOptions) (*armruntime.Poller[VirtualClustersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, virtualClusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualClustersClientUpdateResponse]("VirtualClustersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualClustersClientUpdateResponse]("VirtualClustersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualClustersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualClustersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return VirtualClustersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualClustersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a virtual cluster.

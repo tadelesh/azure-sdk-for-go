@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -133,16 +133,32 @@ func (client *DatabaseColumnsClient) getHandleResponse(resp *http.Response) (Dat
 // databaseName - The name of the database.
 // options - DatabaseColumnsClientListByDatabaseOptions contains the optional parameters for the DatabaseColumnsClient.ListByDatabase
 // method.
-func (client *DatabaseColumnsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseColumnsClientListByDatabaseOptions) *DatabaseColumnsClientListByDatabasePager {
-	return &DatabaseColumnsClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DatabaseColumnsClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseColumnsClientListByDatabaseOptions) *runtime.Pager[DatabaseColumnsClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseColumnsClientListByDatabaseResponse]{
+		More: func(page DatabaseColumnsClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabaseColumnsClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseColumnListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabaseColumnsClientListByDatabaseResponse) (DatabaseColumnsClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabaseColumnsClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseColumnsClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseColumnsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -217,16 +233,32 @@ func (client *DatabaseColumnsClient) listByDatabaseHandleResponse(resp *http.Res
 // tableName - The name of the table.
 // options - DatabaseColumnsClientListByTableOptions contains the optional parameters for the DatabaseColumnsClient.ListByTable
 // method.
-func (client *DatabaseColumnsClient) ListByTable(resourceGroupName string, serverName string, databaseName string, schemaName string, tableName string, options *DatabaseColumnsClientListByTableOptions) *DatabaseColumnsClientListByTablePager {
-	return &DatabaseColumnsClientListByTablePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTableCreateRequest(ctx, resourceGroupName, serverName, databaseName, schemaName, tableName, options)
+func (client *DatabaseColumnsClient) ListByTable(resourceGroupName string, serverName string, databaseName string, schemaName string, tableName string, options *DatabaseColumnsClientListByTableOptions) *runtime.Pager[DatabaseColumnsClientListByTableResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseColumnsClientListByTableResponse]{
+		More: func(page DatabaseColumnsClientListByTableResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabaseColumnsClientListByTableResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseColumnListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabaseColumnsClientListByTableResponse) (DatabaseColumnsClientListByTableResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTableCreateRequest(ctx, resourceGroupName, serverName, databaseName, schemaName, tableName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabaseColumnsClientListByTableResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseColumnsClientListByTableResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseColumnsClientListByTableResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTableHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTableCreateRequest creates the ListByTable request.

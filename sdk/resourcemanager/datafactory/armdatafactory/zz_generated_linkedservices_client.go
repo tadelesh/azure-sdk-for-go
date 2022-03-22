@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -234,16 +234,32 @@ func (client *LinkedServicesClient) getHandleResponse(resp *http.Response) (Link
 // factoryName - The factory name.
 // options - LinkedServicesClientListByFactoryOptions contains the optional parameters for the LinkedServicesClient.ListByFactory
 // method.
-func (client *LinkedServicesClient) ListByFactory(resourceGroupName string, factoryName string, options *LinkedServicesClientListByFactoryOptions) *LinkedServicesClientListByFactoryPager {
-	return &LinkedServicesClientListByFactoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+func (client *LinkedServicesClient) ListByFactory(resourceGroupName string, factoryName string, options *LinkedServicesClientListByFactoryOptions) *runtime.Pager[LinkedServicesClientListByFactoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinkedServicesClientListByFactoryResponse]{
+		More: func(page LinkedServicesClientListByFactoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LinkedServicesClientListByFactoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LinkedServiceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *LinkedServicesClientListByFactoryResponse) (LinkedServicesClientListByFactoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LinkedServicesClientListByFactoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinkedServicesClientListByFactoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinkedServicesClientListByFactoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFactoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.

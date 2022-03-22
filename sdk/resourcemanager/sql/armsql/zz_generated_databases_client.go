@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential
 // parameters - The requested database resource state.
 // options - DatabasesClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasesClient.BeginCreateOrUpdate
 // method.
-func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters Database, options *DatabasesClientBeginCreateOrUpdateOptions) (DatabasesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters Database, options *DatabasesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabasesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientCreateOrUpdateResponse]("DatabasesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientCreateOrUpdateResponse]("DatabasesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a new database or updates an existing database.
@@ -128,20 +124,16 @@ func (client *DatabasesClient) createOrUpdateCreateRequest(ctx context.Context, 
 // serverName - The name of the server.
 // databaseName - The name of the database.
 // options - DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
-func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (DatabasesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
+func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (*armruntime.Poller[DatabasesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientDeleteResponse]("DatabasesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientDeleteResponse]("DatabasesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the database.
@@ -198,20 +190,16 @@ func (client *DatabasesClient) deleteCreateRequest(ctx context.Context, resource
 // databaseName - The name of the database.
 // parameters - The database export request parameters.
 // options - DatabasesClientBeginExportOptions contains the optional parameters for the DatabasesClient.BeginExport method.
-func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters ExportDatabaseDefinition, options *DatabasesClientBeginExportOptions) (DatabasesClientExportPollerResponse, error) {
-	resp, err := client.export(ctx, resourceGroupName, serverName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientExportPollerResponse{}, err
+func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters ExportDatabaseDefinition, options *DatabasesClientBeginExportOptions) (*armruntime.Poller[DatabasesClientExportResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.export(ctx, resourceGroupName, serverName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientExportResponse]("DatabasesClient.Export", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientExportResponse]("DatabasesClient.Export", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientExportPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Export", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientExportPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientExportPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Export - Exports a database.
@@ -268,20 +256,16 @@ func (client *DatabasesClient) exportCreateRequest(ctx context.Context, resource
 // serverName - The name of the server.
 // databaseName - The name of the database to failover.
 // options - DatabasesClientBeginFailoverOptions contains the optional parameters for the DatabasesClient.BeginFailover method.
-func (client *DatabasesClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginFailoverOptions) (DatabasesClientFailoverPollerResponse, error) {
-	resp, err := client.failover(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientFailoverPollerResponse{}, err
+func (client *DatabasesClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginFailoverOptions) (*armruntime.Poller[DatabasesClientFailoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failover(ctx, resourceGroupName, serverName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientFailoverResponse]("DatabasesClient.Failover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientFailoverResponse]("DatabasesClient.Failover", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientFailoverPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Failover", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientFailoverPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientFailoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Failover - Failovers a database.
@@ -402,20 +386,16 @@ func (client *DatabasesClient) getHandleResponse(resp *http.Response) (Databases
 // databaseName - The name of the database.
 // parameters - The database import request parameters.
 // options - DatabasesClientBeginImportOptions contains the optional parameters for the DatabasesClient.BeginImport method.
-func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters ImportExistingDatabaseDefinition, options *DatabasesClientBeginImportOptions) (DatabasesClientImportPollerResponse, error) {
-	resp, err := client.importOperation(ctx, resourceGroupName, serverName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientImportPollerResponse{}, err
+func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters ImportExistingDatabaseDefinition, options *DatabasesClientBeginImportOptions) (*armruntime.Poller[DatabasesClientImportResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.importOperation(ctx, resourceGroupName, serverName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientImportResponse]("DatabasesClient.Import", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientImportResponse]("DatabasesClient.Import", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientImportPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Import", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientImportPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientImportPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Import - Imports a bacpac into a new database.
@@ -473,16 +453,32 @@ func (client *DatabasesClient) importCreateRequest(ctx context.Context, resource
 // elasticPoolName - The name of the elastic pool.
 // options - DatabasesClientListByElasticPoolOptions contains the optional parameters for the DatabasesClient.ListByElasticPool
 // method.
-func (client *DatabasesClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *DatabasesClientListByElasticPoolOptions) *DatabasesClientListByElasticPoolPager {
-	return &DatabasesClientListByElasticPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+func (client *DatabasesClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *DatabasesClientListByElasticPoolOptions) *runtime.Pager[DatabasesClientListByElasticPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListByElasticPoolResponse]{
+		More: func(page DatabasesClientListByElasticPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabasesClientListByElasticPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabasesClientListByElasticPoolResponse) (DatabasesClientListByElasticPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabasesClientListByElasticPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListByElasticPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListByElasticPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByElasticPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByElasticPoolCreateRequest creates the ListByElasticPool request.
@@ -530,16 +526,32 @@ func (client *DatabasesClient) listByElasticPoolHandleResponse(resp *http.Respon
 // Resource Manager API or the portal.
 // serverName - The name of the server.
 // options - DatabasesClientListByServerOptions contains the optional parameters for the DatabasesClient.ListByServer method.
-func (client *DatabasesClient) ListByServer(resourceGroupName string, serverName string, options *DatabasesClientListByServerOptions) *DatabasesClientListByServerPager {
-	return &DatabasesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *DatabasesClient) ListByServer(resourceGroupName string, serverName string, options *DatabasesClientListByServerOptions) *runtime.Pager[DatabasesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListByServerResponse]{
+		More: func(page DatabasesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabasesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabasesClientListByServerResponse) (DatabasesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabasesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -587,16 +599,32 @@ func (client *DatabasesClient) listByServerHandleResponse(resp *http.Response) (
 // serverName - The name of the server.
 // options - DatabasesClientListInaccessibleByServerOptions contains the optional parameters for the DatabasesClient.ListInaccessibleByServer
 // method.
-func (client *DatabasesClient) ListInaccessibleByServer(resourceGroupName string, serverName string, options *DatabasesClientListInaccessibleByServerOptions) *DatabasesClientListInaccessibleByServerPager {
-	return &DatabasesClientListInaccessibleByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listInaccessibleByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *DatabasesClient) ListInaccessibleByServer(resourceGroupName string, serverName string, options *DatabasesClientListInaccessibleByServerOptions) *runtime.Pager[DatabasesClientListInaccessibleByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListInaccessibleByServerResponse]{
+		More: func(page DatabasesClientListInaccessibleByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabasesClientListInaccessibleByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabasesClientListInaccessibleByServerResponse) (DatabasesClientListInaccessibleByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listInaccessibleByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabasesClientListInaccessibleByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListInaccessibleByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListInaccessibleByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listInaccessibleByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listInaccessibleByServerCreateRequest creates the ListInaccessibleByServer request.
@@ -642,13 +670,26 @@ func (client *DatabasesClient) listInaccessibleByServerHandleResponse(resp *http
 // databaseName - The name of the database.
 // options - DatabasesClientListMetricDefinitionsOptions contains the optional parameters for the DatabasesClient.ListMetricDefinitions
 // method.
-func (client *DatabasesClient) ListMetricDefinitions(resourceGroupName string, serverName string, databaseName string, options *DatabasesClientListMetricDefinitionsOptions) *DatabasesClientListMetricDefinitionsPager {
-	return &DatabasesClientListMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DatabasesClient) ListMetricDefinitions(resourceGroupName string, serverName string, databaseName string, options *DatabasesClientListMetricDefinitionsOptions) *runtime.Pager[DatabasesClientListMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListMetricDefinitionsResponse]{
+		More: func(page DatabasesClientListMetricDefinitionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabasesClientListMetricDefinitionsResponse) (DatabasesClientListMetricDefinitionsResponse, error) {
+			req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			if err != nil {
+				return DatabasesClientListMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -698,13 +739,26 @@ func (client *DatabasesClient) listMetricDefinitionsHandleResponse(resp *http.Re
 // databaseName - The name of the database.
 // filter - An OData filter expression that describes a subset of metrics to return.
 // options - DatabasesClientListMetricsOptions contains the optional parameters for the DatabasesClient.ListMetrics method.
-func (client *DatabasesClient) ListMetrics(resourceGroupName string, serverName string, databaseName string, filter string, options *DatabasesClientListMetricsOptions) *DatabasesClientListMetricsPager {
-	return &DatabasesClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, databaseName, filter, options)
+func (client *DatabasesClient) ListMetrics(resourceGroupName string, serverName string, databaseName string, filter string, options *DatabasesClientListMetricsOptions) *runtime.Pager[DatabasesClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListMetricsResponse]{
+		More: func(page DatabasesClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabasesClientListMetricsResponse) (DatabasesClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, databaseName, filter, options)
+			if err != nil {
+				return DatabasesClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -754,20 +808,16 @@ func (client *DatabasesClient) listMetricsHandleResponse(resp *http.Response) (D
 // serverName - The name of the server.
 // databaseName - The name of the database to be paused.
 // options - DatabasesClientBeginPauseOptions contains the optional parameters for the DatabasesClient.BeginPause method.
-func (client *DatabasesClient) BeginPause(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginPauseOptions) (DatabasesClientPausePollerResponse, error) {
-	resp, err := client.pause(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientPausePollerResponse{}, err
+func (client *DatabasesClient) BeginPause(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginPauseOptions) (*armruntime.Poller[DatabasesClientPauseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.pause(ctx, resourceGroupName, serverName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientPauseResponse]("DatabasesClient.Pause", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientPauseResponse]("DatabasesClient.Pause", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientPausePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Pause", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientPausePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientPausePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Pause - Pauses a database.
@@ -876,20 +926,16 @@ func (client *DatabasesClient) renameCreateRequest(ctx context.Context, resource
 // serverName - The name of the server.
 // databaseName - The name of the database to be resumed.
 // options - DatabasesClientBeginResumeOptions contains the optional parameters for the DatabasesClient.BeginResume method.
-func (client *DatabasesClient) BeginResume(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginResumeOptions) (DatabasesClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientResumePollerResponse{}, err
+func (client *DatabasesClient) BeginResume(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginResumeOptions) (*armruntime.Poller[DatabasesClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, serverName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientResumeResponse]("DatabasesClient.Resume", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientResumeResponse]("DatabasesClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Resume", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientResumePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - Resumes a database.
@@ -947,20 +993,16 @@ func (client *DatabasesClient) resumeCreateRequest(ctx context.Context, resource
 // databaseName - The name of the database.
 // parameters - The requested database resource state.
 // options - DatabasesClientBeginUpdateOptions contains the optional parameters for the DatabasesClient.BeginUpdate method.
-func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters DatabaseUpdate, options *DatabasesClientBeginUpdateOptions) (DatabasesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
+func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters DatabaseUpdate, options *DatabasesClientBeginUpdateOptions) (*armruntime.Poller[DatabasesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientUpdateResponse]("DatabasesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientUpdateResponse]("DatabasesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing database.
@@ -1018,20 +1060,16 @@ func (client *DatabasesClient) updateCreateRequest(ctx context.Context, resource
 // databaseName - The name of the database to be upgraded.
 // options - DatabasesClientBeginUpgradeDataWarehouseOptions contains the optional parameters for the DatabasesClient.BeginUpgradeDataWarehouse
 // method.
-func (client *DatabasesClient) BeginUpgradeDataWarehouse(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginUpgradeDataWarehouseOptions) (DatabasesClientUpgradeDataWarehousePollerResponse, error) {
-	resp, err := client.upgradeDataWarehouse(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientUpgradeDataWarehousePollerResponse{}, err
+func (client *DatabasesClient) BeginUpgradeDataWarehouse(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientBeginUpgradeDataWarehouseOptions) (*armruntime.Poller[DatabasesClientUpgradeDataWarehouseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.upgradeDataWarehouse(ctx, resourceGroupName, serverName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientUpgradeDataWarehouseResponse]("DatabasesClient.UpgradeDataWarehouse", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientUpgradeDataWarehouseResponse]("DatabasesClient.UpgradeDataWarehouse", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientUpgradeDataWarehousePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.UpgradeDataWarehouse", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientUpgradeDataWarehousePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientUpgradeDataWarehousePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpgradeDataWarehouse - Upgrades a data warehouse.

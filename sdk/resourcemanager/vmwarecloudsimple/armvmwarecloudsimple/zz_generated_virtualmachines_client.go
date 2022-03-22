@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewVirtualMachinesClient(subscriptionID string, referer string, credential 
 // virtualMachineRequest - Create or Update Virtual Machine request
 // options - VirtualMachinesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachinesClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualMachineName string, virtualMachineRequest VirtualMachine, options *VirtualMachinesClientBeginCreateOrUpdateOptions) (VirtualMachinesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualMachineName, virtualMachineRequest, options)
-	if err != nil {
-		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualMachineName string, virtualMachineRequest VirtualMachine, options *VirtualMachinesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualMachinesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualMachineName, virtualMachineRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientCreateOrUpdateResponse]("VirtualMachinesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientCreateOrUpdateResponse]("VirtualMachinesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create Or Update Virtual Machine
@@ -126,20 +122,16 @@ func (client *VirtualMachinesClient) createOrUpdateCreateRequest(ctx context.Con
 // virtualMachineName - virtual machine name
 // options - VirtualMachinesClientBeginDeleteOptions contains the optional parameters for the VirtualMachinesClient.BeginDelete
 // method.
-func (client *VirtualMachinesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginDeleteOptions) (VirtualMachinesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineName, options)
-	if err != nil {
-		return VirtualMachinesClientDeletePollerResponse{}, err
+func (client *VirtualMachinesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginDeleteOptions) (*armruntime.Poller[VirtualMachinesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientDeleteResponse]("VirtualMachinesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientDeleteResponse]("VirtualMachinesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete virtual machine
@@ -246,16 +238,32 @@ func (client *VirtualMachinesClient) getHandleResponse(resp *http.Response) (Vir
 // resourceGroupName - The name of the resource group
 // options - VirtualMachinesClientListByResourceGroupOptions contains the optional parameters for the VirtualMachinesClient.ListByResourceGroup
 // method.
-func (client *VirtualMachinesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachinesClientListByResourceGroupOptions) *VirtualMachinesClientListByResourceGroupPager {
-	return &VirtualMachinesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VirtualMachinesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachinesClientListByResourceGroupOptions) *runtime.Pager[VirtualMachinesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListByResourceGroupResponse]{
+		More: func(page VirtualMachinesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachinesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualMachineListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachinesClientListByResourceGroupResponse) (VirtualMachinesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachinesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachinesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachinesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -302,16 +310,32 @@ func (client *VirtualMachinesClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualMachinesClientListBySubscriptionOptions contains the optional parameters for the VirtualMachinesClient.ListBySubscription
 // method.
-func (client *VirtualMachinesClient) ListBySubscription(options *VirtualMachinesClientListBySubscriptionOptions) *VirtualMachinesClientListBySubscriptionPager {
-	return &VirtualMachinesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *VirtualMachinesClient) ListBySubscription(options *VirtualMachinesClientListBySubscriptionOptions) *runtime.Pager[VirtualMachinesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListBySubscriptionResponse]{
+		More: func(page VirtualMachinesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachinesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualMachineListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachinesClientListBySubscriptionResponse) (VirtualMachinesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachinesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachinesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachinesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -356,20 +380,16 @@ func (client *VirtualMachinesClient) listBySubscriptionHandleResponse(resp *http
 // virtualMachineName - virtual machine name
 // options - VirtualMachinesClientBeginStartOptions contains the optional parameters for the VirtualMachinesClient.BeginStart
 // method.
-func (client *VirtualMachinesClient) BeginStart(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginStartOptions) (VirtualMachinesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, virtualMachineName, options)
-	if err != nil {
-		return VirtualMachinesClientStartPollerResponse{}, err
+func (client *VirtualMachinesClient) BeginStart(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginStartOptions) (*armruntime.Poller[VirtualMachinesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, virtualMachineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientStartResponse]("VirtualMachinesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientStartResponse]("VirtualMachinesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientStartPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Power on virtual machine
@@ -422,20 +442,16 @@ func (client *VirtualMachinesClient) startCreateRequest(ctx context.Context, res
 // virtualMachineName - virtual machine name
 // options - VirtualMachinesClientBeginStopOptions contains the optional parameters for the VirtualMachinesClient.BeginStop
 // method.
-func (client *VirtualMachinesClient) BeginStop(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginStopOptions) (VirtualMachinesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, virtualMachineName, options)
-	if err != nil {
-		return VirtualMachinesClientStopPollerResponse{}, err
+func (client *VirtualMachinesClient) BeginStop(ctx context.Context, resourceGroupName string, virtualMachineName string, options *VirtualMachinesClientBeginStopOptions) (*armruntime.Poller[VirtualMachinesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, virtualMachineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientStopResponse]("VirtualMachinesClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientStopResponse]("VirtualMachinesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientStopPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Power off virtual machine, options: shutdown, poweroff, and suspend
@@ -495,20 +511,16 @@ func (client *VirtualMachinesClient) stopCreateRequest(ctx context.Context, reso
 // virtualMachineRequest - Patch virtual machine request
 // options - VirtualMachinesClientBeginUpdateOptions contains the optional parameters for the VirtualMachinesClient.BeginUpdate
 // method.
-func (client *VirtualMachinesClient) BeginUpdate(ctx context.Context, resourceGroupName string, virtualMachineName string, virtualMachineRequest PatchPayload, options *VirtualMachinesClientBeginUpdateOptions) (VirtualMachinesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, virtualMachineName, virtualMachineRequest, options)
-	if err != nil {
-		return VirtualMachinesClientUpdatePollerResponse{}, err
+func (client *VirtualMachinesClient) BeginUpdate(ctx context.Context, resourceGroupName string, virtualMachineName string, virtualMachineRequest PatchPayload, options *VirtualMachinesClientBeginUpdateOptions) (*armruntime.Poller[VirtualMachinesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, virtualMachineName, virtualMachineRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientUpdateResponse]("VirtualMachinesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientUpdateResponse]("VirtualMachinesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch virtual machine properties

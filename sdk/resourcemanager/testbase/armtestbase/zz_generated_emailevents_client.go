@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *EmailEventsClient) getHandleResponse(resp *http.Response) (EmailEv
 // resourceGroupName - The name of the resource group that contains the resource.
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - EmailEventsClientListOptions contains the optional parameters for the EmailEventsClient.List method.
-func (client *EmailEventsClient) List(resourceGroupName string, testBaseAccountName string, options *EmailEventsClientListOptions) *EmailEventsClientListPager {
-	return &EmailEventsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+func (client *EmailEventsClient) List(resourceGroupName string, testBaseAccountName string, options *EmailEventsClientListOptions) *runtime.Pager[EmailEventsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EmailEventsClientListResponse]{
+		More: func(page EmailEventsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EmailEventsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EmailEventListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EmailEventsClientListResponse) (EmailEventsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EmailEventsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EmailEventsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EmailEventsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

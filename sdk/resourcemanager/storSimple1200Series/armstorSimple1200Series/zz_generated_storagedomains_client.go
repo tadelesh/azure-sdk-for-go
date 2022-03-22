@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewStorageDomainsClient(subscriptionID string, credential azcore.TokenCrede
 // storageDomain - The storageDomain.
 // options - StorageDomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the StorageDomainsClient.BeginCreateOrUpdate
 // method.
-func (client *StorageDomainsClient) BeginCreateOrUpdate(ctx context.Context, storageDomainName string, resourceGroupName string, managerName string, storageDomain StorageDomain, options *StorageDomainsClientBeginCreateOrUpdateOptions) (StorageDomainsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, storageDomainName, resourceGroupName, managerName, storageDomain, options)
-	if err != nil {
-		return StorageDomainsClientCreateOrUpdatePollerResponse{}, err
+func (client *StorageDomainsClient) BeginCreateOrUpdate(ctx context.Context, storageDomainName string, resourceGroupName string, managerName string, storageDomain StorageDomain, options *StorageDomainsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[StorageDomainsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, storageDomainName, resourceGroupName, managerName, storageDomain, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageDomainsClientCreateOrUpdateResponse]("StorageDomainsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageDomainsClientCreateOrUpdateResponse]("StorageDomainsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageDomainsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("StorageDomainsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return StorageDomainsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &StorageDomainsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the storage domain.
@@ -127,20 +123,16 @@ func (client *StorageDomainsClient) createOrUpdateCreateRequest(ctx context.Cont
 // managerName - The manager name
 // options - StorageDomainsClientBeginDeleteOptions contains the optional parameters for the StorageDomainsClient.BeginDelete
 // method.
-func (client *StorageDomainsClient) BeginDelete(ctx context.Context, storageDomainName string, resourceGroupName string, managerName string, options *StorageDomainsClientBeginDeleteOptions) (StorageDomainsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, storageDomainName, resourceGroupName, managerName, options)
-	if err != nil {
-		return StorageDomainsClientDeletePollerResponse{}, err
+func (client *StorageDomainsClient) BeginDelete(ctx context.Context, storageDomainName string, resourceGroupName string, managerName string, options *StorageDomainsClientBeginDeleteOptions) (*armruntime.Poller[StorageDomainsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, storageDomainName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StorageDomainsClientDeleteResponse]("StorageDomainsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StorageDomainsClientDeleteResponse]("StorageDomainsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := StorageDomainsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("StorageDomainsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return StorageDomainsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &StorageDomainsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the storage domain.
@@ -256,13 +248,26 @@ func (client *StorageDomainsClient) getHandleResponse(resp *http.Response) (Stor
 // managerName - The manager name
 // options - StorageDomainsClientListByManagerOptions contains the optional parameters for the StorageDomainsClient.ListByManager
 // method.
-func (client *StorageDomainsClient) ListByManager(resourceGroupName string, managerName string, options *StorageDomainsClientListByManagerOptions) *StorageDomainsClientListByManagerPager {
-	return &StorageDomainsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *StorageDomainsClient) ListByManager(resourceGroupName string, managerName string, options *StorageDomainsClientListByManagerOptions) *runtime.Pager[StorageDomainsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StorageDomainsClientListByManagerResponse]{
+		More: func(page StorageDomainsClientListByManagerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *StorageDomainsClientListByManagerResponse) (StorageDomainsClientListByManagerResponse, error) {
+			req, err := client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return StorageDomainsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StorageDomainsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StorageDomainsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
+		},
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

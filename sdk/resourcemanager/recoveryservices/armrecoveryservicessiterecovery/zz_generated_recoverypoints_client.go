@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -135,16 +135,32 @@ func (client *RecoveryPointsClient) getHandleResponse(resp *http.Response) (Reco
 // replicatedProtectedItemName - The replication protected item name.
 // options - RecoveryPointsClientListByReplicationProtectedItemsOptions contains the optional parameters for the RecoveryPointsClient.ListByReplicationProtectedItems
 // method.
-func (client *RecoveryPointsClient) ListByReplicationProtectedItems(fabricName string, protectionContainerName string, replicatedProtectedItemName string, options *RecoveryPointsClientListByReplicationProtectedItemsOptions) *RecoveryPointsClientListByReplicationProtectedItemsPager {
-	return &RecoveryPointsClientListByReplicationProtectedItemsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationProtectedItemsCreateRequest(ctx, fabricName, protectionContainerName, replicatedProtectedItemName, options)
+func (client *RecoveryPointsClient) ListByReplicationProtectedItems(fabricName string, protectionContainerName string, replicatedProtectedItemName string, options *RecoveryPointsClientListByReplicationProtectedItemsOptions) *runtime.Pager[RecoveryPointsClientListByReplicationProtectedItemsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecoveryPointsClientListByReplicationProtectedItemsResponse]{
+		More: func(page RecoveryPointsClientListByReplicationProtectedItemsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecoveryPointsClientListByReplicationProtectedItemsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecoveryPointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *RecoveryPointsClientListByReplicationProtectedItemsResponse) (RecoveryPointsClientListByReplicationProtectedItemsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationProtectedItemsCreateRequest(ctx, fabricName, protectionContainerName, replicatedProtectedItemName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecoveryPointsClientListByReplicationProtectedItemsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecoveryPointsClientListByReplicationProtectedItemsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecoveryPointsClientListByReplicationProtectedItemsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationProtectedItemsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationProtectedItemsCreateRequest creates the ListByReplicationProtectedItems request.

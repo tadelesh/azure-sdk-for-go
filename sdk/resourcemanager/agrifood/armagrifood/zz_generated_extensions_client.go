@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (Extensio
 // farmBeatsResourceName - FarmBeats resource name.
 // options - ExtensionsClientListByFarmBeatsOptions contains the optional parameters for the ExtensionsClient.ListByFarmBeats
 // method.
-func (client *ExtensionsClient) ListByFarmBeats(resourceGroupName string, farmBeatsResourceName string, options *ExtensionsClientListByFarmBeatsOptions) *ExtensionsClientListByFarmBeatsPager {
-	return &ExtensionsClientListByFarmBeatsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFarmBeatsCreateRequest(ctx, resourceGroupName, farmBeatsResourceName, options)
+func (client *ExtensionsClient) ListByFarmBeats(resourceGroupName string, farmBeatsResourceName string, options *ExtensionsClientListByFarmBeatsOptions) *runtime.Pager[ExtensionsClientListByFarmBeatsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExtensionsClientListByFarmBeatsResponse]{
+		More: func(page ExtensionsClientListByFarmBeatsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExtensionsClientListByFarmBeatsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExtensionListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *ExtensionsClientListByFarmBeatsResponse) (ExtensionsClientListByFarmBeatsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFarmBeatsCreateRequest(ctx, resourceGroupName, farmBeatsResourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExtensionsClientListByFarmBeatsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExtensionsClientListByFarmBeatsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExtensionsClientListByFarmBeatsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFarmBeatsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFarmBeatsCreateRequest creates the ListByFarmBeats request.

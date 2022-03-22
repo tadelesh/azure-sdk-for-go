@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewSQLPoolRestorePointsClient(subscriptionID string, credential azcore.Toke
 // parameters - The definition for creating the restore point of this Sql pool.
 // options - SQLPoolRestorePointsClientBeginCreateOptions contains the optional parameters for the SQLPoolRestorePointsClient.BeginCreate
 // method.
-func (client *SQLPoolRestorePointsClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, parameters CreateSQLPoolRestorePointDefinition, options *SQLPoolRestorePointsClientBeginCreateOptions) (SQLPoolRestorePointsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, workspaceName, sqlPoolName, parameters, options)
-	if err != nil {
-		return SQLPoolRestorePointsClientCreatePollerResponse{}, err
+func (client *SQLPoolRestorePointsClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, parameters CreateSQLPoolRestorePointDefinition, options *SQLPoolRestorePointsClientBeginCreateOptions) (*armruntime.Poller[SQLPoolRestorePointsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, workspaceName, sqlPoolName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolRestorePointsClientCreateResponse]("SQLPoolRestorePointsClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolRestorePointsClientCreateResponse]("SQLPoolRestorePointsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolRestorePointsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolRestorePointsClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return SQLPoolRestorePointsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolRestorePointsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a restore point for a data warehouse.
@@ -249,16 +245,32 @@ func (client *SQLPoolRestorePointsClient) getHandleResponse(resp *http.Response)
 // sqlPoolName - SQL pool name
 // options - SQLPoolRestorePointsClientListOptions contains the optional parameters for the SQLPoolRestorePointsClient.List
 // method.
-func (client *SQLPoolRestorePointsClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolRestorePointsClientListOptions) *SQLPoolRestorePointsClientListPager {
-	return &SQLPoolRestorePointsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *SQLPoolRestorePointsClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolRestorePointsClientListOptions) *runtime.Pager[SQLPoolRestorePointsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolRestorePointsClientListResponse]{
+		More: func(page SQLPoolRestorePointsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolRestorePointsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RestorePointListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolRestorePointsClientListResponse) (SQLPoolRestorePointsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolRestorePointsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolRestorePointsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolRestorePointsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

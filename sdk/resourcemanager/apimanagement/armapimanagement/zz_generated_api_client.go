@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAPIClient(subscriptionID string, credential azcore.TokenCredential, opti
 // ;rev=n as a suffix where n is the revision number.
 // parameters - Create or update parameters.
 // options - APIClientBeginCreateOrUpdateOptions contains the optional parameters for the APIClient.BeginCreateOrUpdate method.
-func (client *APIClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiID string, parameters APICreateOrUpdateParameter, options *APIClientBeginCreateOrUpdateOptions) (APIClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiID, parameters, options)
-	if err != nil {
-		return APIClientCreateOrUpdatePollerResponse{}, err
+func (client *APIClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiID string, parameters APICreateOrUpdateParameter, options *APIClientBeginCreateOrUpdateOptions) (*armruntime.Poller[APIClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiID, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[APIClientCreateOrUpdateResponse]("APIClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[APIClientCreateOrUpdateResponse]("APIClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := APIClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("APIClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return APIClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &APIClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates new or updates existing specified API of the API Management service instance.
@@ -312,16 +308,32 @@ func (client *APIClient) getEntityTagHandleResponse(resp *http.Response) (APICli
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - APIClientListByServiceOptions contains the optional parameters for the APIClient.ListByService method.
-func (client *APIClient) ListByService(resourceGroupName string, serviceName string, options *APIClientListByServiceOptions) *APIClientListByServicePager {
-	return &APIClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *APIClient) ListByService(resourceGroupName string, serviceName string, options *APIClientListByServiceOptions) *runtime.Pager[APIClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIClientListByServiceResponse]{
+		More: func(page APIClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.APICollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIClientListByServiceResponse) (APIClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.
@@ -379,16 +391,32 @@ func (client *APIClient) listByServiceHandleResponse(resp *http.Response) (APICl
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - APIClientListByTagsOptions contains the optional parameters for the APIClient.ListByTags method.
-func (client *APIClient) ListByTags(resourceGroupName string, serviceName string, options *APIClientListByTagsOptions) *APIClientListByTagsPager {
-	return &APIClientListByTagsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTagsCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *APIClient) ListByTags(resourceGroupName string, serviceName string, options *APIClientListByTagsOptions) *runtime.Pager[APIClientListByTagsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIClientListByTagsResponse]{
+		More: func(page APIClientListByTagsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIClientListByTagsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIClientListByTagsResponse) (APIClientListByTagsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTagsCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIClientListByTagsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIClientListByTagsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIClientListByTagsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTagsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTagsCreateRequest creates the ListByTags request.

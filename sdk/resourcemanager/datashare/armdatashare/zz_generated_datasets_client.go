@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -122,20 +122,16 @@ func (client *DataSetsClient) createHandleResponse(resp *http.Response) (DataSet
 // shareName - The name of the share.
 // dataSetName - The name of the dataSet.
 // options - DataSetsClientBeginDeleteOptions contains the optional parameters for the DataSetsClient.BeginDelete method.
-func (client *DataSetsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareName string, dataSetName string, options *DataSetsClientBeginDeleteOptions) (DataSetsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareName, dataSetName, options)
-	if err != nil {
-		return DataSetsClientDeletePollerResponse{}, err
+func (client *DataSetsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareName string, dataSetName string, options *DataSetsClientBeginDeleteOptions) (*armruntime.Poller[DataSetsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareName, dataSetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataSetsClientDeleteResponse]("DataSetsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataSetsClientDeleteResponse]("DataSetsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DataSetsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DataSetsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DataSetsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DataSetsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a DataSet in a share
@@ -260,16 +256,32 @@ func (client *DataSetsClient) getHandleResponse(resp *http.Response) (DataSetsCl
 // accountName - The name of the share account.
 // shareName - The name of the share.
 // options - DataSetsClientListByShareOptions contains the optional parameters for the DataSetsClient.ListByShare method.
-func (client *DataSetsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *DataSetsClientListByShareOptions) *DataSetsClientListBySharePager {
-	return &DataSetsClientListBySharePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+func (client *DataSetsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *DataSetsClientListByShareOptions) *runtime.Pager[DataSetsClientListByShareResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataSetsClientListByShareResponse]{
+		More: func(page DataSetsClientListByShareResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataSetsClientListByShareResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataSetList.NextLink)
+		Fetcher: func(ctx context.Context, page *DataSetsClientListByShareResponse) (DataSetsClientListByShareResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataSetsClientListByShareResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataSetsClientListByShareResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataSetsClientListByShareResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareCreateRequest creates the ListByShare request.

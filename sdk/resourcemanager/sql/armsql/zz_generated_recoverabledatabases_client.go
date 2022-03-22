@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,13 +118,26 @@ func (client *RecoverableDatabasesClient) getHandleResponse(resp *http.Response)
 // serverName - The name of the server.
 // options - RecoverableDatabasesClientListByServerOptions contains the optional parameters for the RecoverableDatabasesClient.ListByServer
 // method.
-func (client *RecoverableDatabasesClient) ListByServer(resourceGroupName string, serverName string, options *RecoverableDatabasesClientListByServerOptions) *RecoverableDatabasesClientListByServerPager {
-	return &RecoverableDatabasesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *RecoverableDatabasesClient) ListByServer(resourceGroupName string, serverName string, options *RecoverableDatabasesClientListByServerOptions) *runtime.Pager[RecoverableDatabasesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecoverableDatabasesClientListByServerResponse]{
+		More: func(page RecoverableDatabasesClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RecoverableDatabasesClientListByServerResponse) (RecoverableDatabasesClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return RecoverableDatabasesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecoverableDatabasesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecoverableDatabasesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

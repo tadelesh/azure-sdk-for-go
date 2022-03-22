@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armconfluent
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // MarketplaceAgreementsClientCreateResponse contains the response from method MarketplaceAgreementsClient.Create.
 type MarketplaceAgreementsClientCreateResponse struct {
@@ -24,79 +18,9 @@ type MarketplaceAgreementsClientListResponse struct {
 	AgreementResourceListResponse
 }
 
-// OrganizationClientCreatePollerResponse contains the response from method OrganizationClient.Create.
-type OrganizationClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OrganizationClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OrganizationClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OrganizationClientCreateResponse, error) {
-	respType := OrganizationClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrganizationResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OrganizationClientCreatePollerResponse from the provided client and resume token.
-func (l *OrganizationClientCreatePollerResponse) Resume(ctx context.Context, client *OrganizationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OrganizationClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OrganizationClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // OrganizationClientCreateResponse contains the response from method OrganizationClient.Create.
 type OrganizationClientCreateResponse struct {
 	OrganizationResource
-}
-
-// OrganizationClientDeletePollerResponse contains the response from method OrganizationClient.Delete.
-type OrganizationClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OrganizationClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OrganizationClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OrganizationClientDeleteResponse, error) {
-	respType := OrganizationClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OrganizationClientDeletePollerResponse from the provided client and resume token.
-func (l *OrganizationClientDeletePollerResponse) Resume(ctx context.Context, client *OrganizationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OrganizationClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OrganizationClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // OrganizationClientDeleteResponse contains the response from method OrganizationClient.Delete.

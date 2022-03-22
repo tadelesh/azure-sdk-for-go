@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -297,22 +297,26 @@ type ContainerGroupSubnetID struct {
 // ContainerGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the ContainerGroupsClient.BeginCreateOrUpdate
 // method.
 type ContainerGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerGroupsClientBeginDeleteOptions contains the optional parameters for the ContainerGroupsClient.BeginDelete method.
 type ContainerGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerGroupsClientBeginRestartOptions contains the optional parameters for the ContainerGroupsClient.BeginRestart method.
 type ContainerGroupsClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerGroupsClientBeginStartOptions contains the optional parameters for the ContainerGroupsClient.BeginStart method.
 type ContainerGroupsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerGroupsClientGetOptions contains the optional parameters for the ContainerGroupsClient.Get method.

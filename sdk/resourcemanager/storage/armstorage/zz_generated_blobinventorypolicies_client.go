@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -234,13 +234,26 @@ func (client *BlobInventoryPoliciesClient) getHandleResponse(resp *http.Response
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - BlobInventoryPoliciesClientListOptions contains the optional parameters for the BlobInventoryPoliciesClient.List
 // method.
-func (client *BlobInventoryPoliciesClient) List(resourceGroupName string, accountName string, options *BlobInventoryPoliciesClientListOptions) *BlobInventoryPoliciesClientListPager {
-	return &BlobInventoryPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *BlobInventoryPoliciesClient) List(resourceGroupName string, accountName string, options *BlobInventoryPoliciesClientListOptions) *runtime.Pager[BlobInventoryPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BlobInventoryPoliciesClientListResponse]{
+		More: func(page BlobInventoryPoliciesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BlobInventoryPoliciesClientListResponse) (BlobInventoryPoliciesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return BlobInventoryPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BlobInventoryPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BlobInventoryPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

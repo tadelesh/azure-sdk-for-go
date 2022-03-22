@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - The parameters required to create or update a workspace.
 // options - WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
-func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace, options *WorkspacesClientBeginCreateOrUpdateOptions) (WorkspacesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, parameters, options)
-	if err != nil {
-		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace, options *WorkspacesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspacesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientCreateOrUpdateResponse]("WorkspacesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientCreateOrUpdateResponse]("WorkspacesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a workspace.
@@ -123,20 +119,16 @@ func (client *WorkspacesClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
-func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDeleteOptions) (WorkspacesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspacesClientDeletePollerResponse{}, err
+func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDeleteOptions) (*armruntime.Poller[WorkspacesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientDeleteResponse]("WorkspacesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientDeleteResponse]("WorkspacesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a workspace resource. To recover the workspace, create it again with the same name, in the same subscription,
@@ -245,13 +237,26 @@ func (client *WorkspacesClient) getHandleResponse(resp *http.Response) (Workspac
 // List - Gets the workspaces in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkspacesClientListOptions contains the optional parameters for the WorkspacesClient.List method.
-func (client *WorkspacesClient) List(options *WorkspacesClientListOptions) *WorkspacesClientListPager {
-	return &WorkspacesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *WorkspacesClient) List(options *WorkspacesClientListOptions) *runtime.Pager[WorkspacesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspacesClientListResponse]{
+		More: func(page WorkspacesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspacesClientListResponse) (WorkspacesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return WorkspacesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspacesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspacesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -286,13 +291,26 @@ func (client *WorkspacesClient) listHandleResponse(resp *http.Response) (Workspa
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WorkspacesClientListByResourceGroupOptions contains the optional parameters for the WorkspacesClient.ListByResourceGroup
 // method.
-func (client *WorkspacesClient) ListByResourceGroup(resourceGroupName string, options *WorkspacesClientListByResourceGroupOptions) *WorkspacesClientListByResourceGroupPager {
-	return &WorkspacesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WorkspacesClient) ListByResourceGroup(resourceGroupName string, options *WorkspacesClientListByResourceGroupOptions) *runtime.Pager[WorkspacesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspacesClientListByResourceGroupResponse]{
+		More: func(page WorkspacesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspacesClientListByResourceGroupResponse) (WorkspacesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return WorkspacesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspacesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspacesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewGlobalReachConnectionsClient(subscriptionID string, credential azcore.To
 // globalReachConnection - A global reach connection in the private cloud
 // options - GlobalReachConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the GlobalReachConnectionsClient.BeginCreateOrUpdate
 // method.
-func (client *GlobalReachConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, globalReachConnectionName string, globalReachConnection GlobalReachConnection, options *GlobalReachConnectionsClientBeginCreateOrUpdateOptions) (GlobalReachConnectionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, globalReachConnectionName, globalReachConnection, options)
-	if err != nil {
-		return GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}, err
+func (client *GlobalReachConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, globalReachConnectionName string, globalReachConnection GlobalReachConnection, options *GlobalReachConnectionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GlobalReachConnectionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, globalReachConnectionName, globalReachConnection, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GlobalReachConnectionsClientCreateOrUpdateResponse]("GlobalReachConnectionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GlobalReachConnectionsClientCreateOrUpdateResponse]("GlobalReachConnectionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GlobalReachConnectionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GlobalReachConnectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a global reach connection in a private cloud
@@ -127,20 +123,16 @@ func (client *GlobalReachConnectionsClient) createOrUpdateCreateRequest(ctx cont
 // globalReachConnectionName - Name of the global reach connection in the private cloud
 // options - GlobalReachConnectionsClientBeginDeleteOptions contains the optional parameters for the GlobalReachConnectionsClient.BeginDelete
 // method.
-func (client *GlobalReachConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, globalReachConnectionName string, options *GlobalReachConnectionsClientBeginDeleteOptions) (GlobalReachConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, globalReachConnectionName, options)
-	if err != nil {
-		return GlobalReachConnectionsClientDeletePollerResponse{}, err
+func (client *GlobalReachConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, globalReachConnectionName string, options *GlobalReachConnectionsClientBeginDeleteOptions) (*armruntime.Poller[GlobalReachConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, globalReachConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GlobalReachConnectionsClientDeleteResponse]("GlobalReachConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GlobalReachConnectionsClientDeleteResponse]("GlobalReachConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GlobalReachConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GlobalReachConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return GlobalReachConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GlobalReachConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a global reach connection in a private cloud
@@ -257,16 +249,32 @@ func (client *GlobalReachConnectionsClient) getHandleResponse(resp *http.Respons
 // privateCloudName - Name of the private cloud
 // options - GlobalReachConnectionsClientListOptions contains the optional parameters for the GlobalReachConnectionsClient.List
 // method.
-func (client *GlobalReachConnectionsClient) List(resourceGroupName string, privateCloudName string, options *GlobalReachConnectionsClientListOptions) *GlobalReachConnectionsClientListPager {
-	return &GlobalReachConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+func (client *GlobalReachConnectionsClient) List(resourceGroupName string, privateCloudName string, options *GlobalReachConnectionsClientListOptions) *runtime.Pager[GlobalReachConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GlobalReachConnectionsClientListResponse]{
+		More: func(page GlobalReachConnectionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GlobalReachConnectionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GlobalReachConnectionList.NextLink)
+		Fetcher: func(ctx context.Context, page *GlobalReachConnectionsClientListResponse) (GlobalReachConnectionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GlobalReachConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GlobalReachConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GlobalReachConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

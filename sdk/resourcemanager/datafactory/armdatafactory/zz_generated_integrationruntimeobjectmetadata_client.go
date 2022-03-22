@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,20 +120,16 @@ func (client *IntegrationRuntimeObjectMetadataClient) getHandleResponse(resp *ht
 // integrationRuntimeName - The integration runtime name.
 // options - IntegrationRuntimeObjectMetadataClientBeginRefreshOptions contains the optional parameters for the IntegrationRuntimeObjectMetadataClient.BeginRefresh
 // method.
-func (client *IntegrationRuntimeObjectMetadataClient) BeginRefresh(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimeObjectMetadataClientBeginRefreshOptions) (IntegrationRuntimeObjectMetadataClientRefreshPollerResponse, error) {
-	resp, err := client.refresh(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimeObjectMetadataClientRefreshPollerResponse{}, err
+func (client *IntegrationRuntimeObjectMetadataClient) BeginRefresh(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimeObjectMetadataClientBeginRefreshOptions) (*armruntime.Poller[IntegrationRuntimeObjectMetadataClientRefreshResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.refresh(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimeObjectMetadataClientRefreshResponse]("IntegrationRuntimeObjectMetadataClient.Refresh", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimeObjectMetadataClientRefreshResponse]("IntegrationRuntimeObjectMetadataClient.Refresh", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimeObjectMetadataClientRefreshPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimeObjectMetadataClient.Refresh", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimeObjectMetadataClientRefreshPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimeObjectMetadataClientRefreshPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Refresh - Refresh a SSIS integration runtime object metadata.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -236,16 +236,32 @@ func (client *UserSessionsClient) getHandleResponse(resp *http.Response) (UserSe
 // hostPoolName - The name of the host pool within the specified resource group
 // sessionHostName - The name of the session host within the specified host pool
 // options - UserSessionsClientListOptions contains the optional parameters for the UserSessionsClient.List method.
-func (client *UserSessionsClient) List(resourceGroupName string, hostPoolName string, sessionHostName string, options *UserSessionsClientListOptions) *UserSessionsClientListPager {
-	return &UserSessionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, hostPoolName, sessionHostName, options)
+func (client *UserSessionsClient) List(resourceGroupName string, hostPoolName string, sessionHostName string, options *UserSessionsClientListOptions) *runtime.Pager[UserSessionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserSessionsClientListResponse]{
+		More: func(page UserSessionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserSessionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserSessionList.NextLink)
+		Fetcher: func(ctx context.Context, page *UserSessionsClientListResponse) (UserSessionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, hostPoolName, sessionHostName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserSessionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserSessionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserSessionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -293,16 +309,32 @@ func (client *UserSessionsClient) listHandleResponse(resp *http.Response) (UserS
 // hostPoolName - The name of the host pool within the specified resource group
 // options - UserSessionsClientListByHostPoolOptions contains the optional parameters for the UserSessionsClient.ListByHostPool
 // method.
-func (client *UserSessionsClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *UserSessionsClientListByHostPoolOptions) *UserSessionsClientListByHostPoolPager {
-	return &UserSessionsClientListByHostPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+func (client *UserSessionsClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *UserSessionsClientListByHostPoolOptions) *runtime.Pager[UserSessionsClientListByHostPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserSessionsClientListByHostPoolResponse]{
+		More: func(page UserSessionsClientListByHostPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserSessionsClientListByHostPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserSessionList.NextLink)
+		Fetcher: func(ctx context.Context, page *UserSessionsClientListByHostPoolResponse) (UserSessionsClientListByHostPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserSessionsClientListByHostPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserSessionsClientListByHostPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserSessionsClientListByHostPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHostPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHostPoolCreateRequest creates the ListByHostPool request.

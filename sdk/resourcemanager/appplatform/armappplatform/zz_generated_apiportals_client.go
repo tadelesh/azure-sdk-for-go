@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAPIPortalsClient(subscriptionID string, credential azcore.TokenCredentia
 // apiPortalResource - The API portal for the create or update operation
 // options - APIPortalsClientBeginCreateOrUpdateOptions contains the optional parameters for the APIPortalsClient.BeginCreateOrUpdate
 // method.
-func (client *APIPortalsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiPortalName string, apiPortalResource APIPortalResource, options *APIPortalsClientBeginCreateOrUpdateOptions) (APIPortalsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiPortalName, apiPortalResource, options)
-	if err != nil {
-		return APIPortalsClientCreateOrUpdatePollerResponse{}, err
+func (client *APIPortalsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiPortalName string, apiPortalResource APIPortalResource, options *APIPortalsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[APIPortalsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiPortalName, apiPortalResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[APIPortalsClientCreateOrUpdateResponse]("APIPortalsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[APIPortalsClientCreateOrUpdateResponse]("APIPortalsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := APIPortalsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("APIPortalsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return APIPortalsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &APIPortalsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create the default API portal or update the existing API portal.
@@ -129,20 +125,16 @@ func (client *APIPortalsClient) createOrUpdateCreateRequest(ctx context.Context,
 // serviceName - The name of the Service resource.
 // apiPortalName - The name of API portal.
 // options - APIPortalsClientBeginDeleteOptions contains the optional parameters for the APIPortalsClient.BeginDelete method.
-func (client *APIPortalsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, apiPortalName string, options *APIPortalsClientBeginDeleteOptions) (APIPortalsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, apiPortalName, options)
-	if err != nil {
-		return APIPortalsClientDeletePollerResponse{}, err
+func (client *APIPortalsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, apiPortalName string, options *APIPortalsClientBeginDeleteOptions) (*armruntime.Poller[APIPortalsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, apiPortalName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[APIPortalsClientDeleteResponse]("APIPortalsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[APIPortalsClientDeleteResponse]("APIPortalsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := APIPortalsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("APIPortalsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return APIPortalsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &APIPortalsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the default API portal.
@@ -259,16 +251,32 @@ func (client *APIPortalsClient) getHandleResponse(resp *http.Response) (APIPorta
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - APIPortalsClientListOptions contains the optional parameters for the APIPortalsClient.List method.
-func (client *APIPortalsClient) List(resourceGroupName string, serviceName string, options *APIPortalsClientListOptions) *APIPortalsClientListPager {
-	return &APIPortalsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *APIPortalsClient) List(resourceGroupName string, serviceName string, options *APIPortalsClientListOptions) *runtime.Pager[APIPortalsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIPortalsClientListResponse]{
+		More: func(page APIPortalsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIPortalsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.APIPortalResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIPortalsClientListResponse) (APIPortalsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIPortalsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIPortalsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIPortalsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

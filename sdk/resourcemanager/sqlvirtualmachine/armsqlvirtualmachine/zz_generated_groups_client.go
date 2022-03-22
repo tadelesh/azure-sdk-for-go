@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewGroupsClient(subscriptionID string, credential azcore.TokenCredential, o
 // parameters - The SQL virtual machine group.
 // options - GroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the GroupsClient.BeginCreateOrUpdate
 // method.
-func (client *GroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, parameters Group, options *GroupsClientBeginCreateOrUpdateOptions) (GroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineGroupName, parameters, options)
-	if err != nil {
-		return GroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *GroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, parameters Group, options *GroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GroupsClientCreateOrUpdateResponse]("GroupsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GroupsClientCreateOrUpdateResponse]("GroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GroupsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return GroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a SQL virtual machine group.
@@ -122,20 +118,16 @@ func (client *GroupsClient) createOrUpdateCreateRequest(ctx context.Context, res
 // Manager API or the portal.
 // sqlVirtualMachineGroupName - Name of the SQL virtual machine group.
 // options - GroupsClientBeginDeleteOptions contains the optional parameters for the GroupsClient.BeginDelete method.
-func (client *GroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, options *GroupsClientBeginDeleteOptions) (GroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sqlVirtualMachineGroupName, options)
-	if err != nil {
-		return GroupsClientDeletePollerResponse{}, err
+func (client *GroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, options *GroupsClientBeginDeleteOptions) (*armruntime.Poller[GroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sqlVirtualMachineGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GroupsClientDeleteResponse]("GroupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GroupsClientDeleteResponse]("GroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GroupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return GroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a SQL virtual machine group.
@@ -239,16 +231,32 @@ func (client *GroupsClient) getHandleResponse(resp *http.Response) (GroupsClient
 // List - Gets all SQL virtual machine groups in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - GroupsClientListOptions contains the optional parameters for the GroupsClient.List method.
-func (client *GroupsClient) List(options *GroupsClientListOptions) *GroupsClientListPager {
-	return &GroupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *GroupsClient) List(options *GroupsClientListOptions) *runtime.Pager[GroupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GroupsClientListResponse]{
+		More: func(page GroupsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GroupsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *GroupsClientListResponse) (GroupsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GroupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GroupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GroupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -284,16 +292,32 @@ func (client *GroupsClient) listHandleResponse(resp *http.Response) (GroupsClien
 // Manager API or the portal.
 // options - GroupsClientListByResourceGroupOptions contains the optional parameters for the GroupsClient.ListByResourceGroup
 // method.
-func (client *GroupsClient) ListByResourceGroup(resourceGroupName string, options *GroupsClientListByResourceGroupOptions) *GroupsClientListByResourceGroupPager {
-	return &GroupsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *GroupsClient) ListByResourceGroup(resourceGroupName string, options *GroupsClientListByResourceGroupOptions) *runtime.Pager[GroupsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GroupsClientListByResourceGroupResponse]{
+		More: func(page GroupsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GroupsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *GroupsClientListByResourceGroupResponse) (GroupsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GroupsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GroupsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -334,20 +358,16 @@ func (client *GroupsClient) listByResourceGroupHandleResponse(resp *http.Respons
 // sqlVirtualMachineGroupName - Name of the SQL virtual machine group.
 // parameters - The SQL virtual machine group.
 // options - GroupsClientBeginUpdateOptions contains the optional parameters for the GroupsClient.BeginUpdate method.
-func (client *GroupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, parameters GroupUpdate, options *GroupsClientBeginUpdateOptions) (GroupsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, sqlVirtualMachineGroupName, parameters, options)
-	if err != nil {
-		return GroupsClientUpdatePollerResponse{}, err
+func (client *GroupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineGroupName string, parameters GroupUpdate, options *GroupsClientBeginUpdateOptions) (*armruntime.Poller[GroupsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, sqlVirtualMachineGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GroupsClientUpdateResponse]("GroupsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GroupsClientUpdateResponse]("GroupsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := GroupsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GroupsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return GroupsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &GroupsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates SQL virtual machine group tags.

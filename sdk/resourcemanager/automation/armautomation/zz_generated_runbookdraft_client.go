@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -170,20 +170,16 @@ func (client *RunbookDraftClient) getContentCreateRequest(ctx context.Context, r
 // runbookContent - The runbook draft content.
 // options - RunbookDraftClientBeginReplaceContentOptions contains the optional parameters for the RunbookDraftClient.BeginReplaceContent
 // method.
-func (client *RunbookDraftClient) BeginReplaceContent(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string, runbookContent string, options *RunbookDraftClientBeginReplaceContentOptions) (RunbookDraftClientReplaceContentPollerResponse, error) {
-	resp, err := client.replaceContent(ctx, resourceGroupName, automationAccountName, runbookName, runbookContent, options)
-	if err != nil {
-		return RunbookDraftClientReplaceContentPollerResponse{}, err
+func (client *RunbookDraftClient) BeginReplaceContent(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string, runbookContent string, options *RunbookDraftClientBeginReplaceContentOptions) (*armruntime.Poller[RunbookDraftClientReplaceContentResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.replaceContent(ctx, resourceGroupName, automationAccountName, runbookName, runbookContent, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RunbookDraftClientReplaceContentResponse]("RunbookDraftClient.ReplaceContent", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RunbookDraftClientReplaceContentResponse]("RunbookDraftClient.ReplaceContent", options.ResumeToken, client.pl, nil)
 	}
-	result := RunbookDraftClientReplaceContentPollerResponse{}
-	pt, err := armruntime.NewPoller("RunbookDraftClient.ReplaceContent", "", resp, client.pl)
-	if err != nil {
-		return RunbookDraftClientReplaceContentPollerResponse{}, err
-	}
-	result.Poller = &RunbookDraftClientReplaceContentPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ReplaceContent - Replaces the runbook draft content.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewRestorableSQLDatabasesClient(subscriptionID string, credential azcore.To
 // instanceID - The instanceId GUID of a restorable database account.
 // options - RestorableSQLDatabasesClientListOptions contains the optional parameters for the RestorableSQLDatabasesClient.List
 // method.
-func (client *RestorableSQLDatabasesClient) List(location string, instanceID string, options *RestorableSQLDatabasesClientListOptions) *RestorableSQLDatabasesClientListPager {
-	return &RestorableSQLDatabasesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, instanceID, options)
+func (client *RestorableSQLDatabasesClient) List(location string, instanceID string, options *RestorableSQLDatabasesClientListOptions) *runtime.Pager[RestorableSQLDatabasesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RestorableSQLDatabasesClientListResponse]{
+		More: func(page RestorableSQLDatabasesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RestorableSQLDatabasesClientListResponse) (RestorableSQLDatabasesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, location, instanceID, options)
+			if err != nil {
+				return RestorableSQLDatabasesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RestorableSQLDatabasesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RestorableSQLDatabasesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

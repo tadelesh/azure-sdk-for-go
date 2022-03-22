@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -62,20 +62,16 @@ func NewFluxConfigurationsClient(subscriptionID string, credential azcore.TokenC
 // fluxConfiguration - Properties necessary to Create a FluxConfiguration.
 // options - FluxConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the FluxConfigurationsClient.BeginCreateOrUpdate
 // method.
-func (client *FluxConfigurationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, fluxConfiguration FluxConfiguration, options *FluxConfigurationsClientBeginCreateOrUpdateOptions) (FluxConfigurationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, fluxConfiguration, options)
-	if err != nil {
-		return FluxConfigurationsClientCreateOrUpdatePollerResponse{}, err
+func (client *FluxConfigurationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, fluxConfiguration FluxConfiguration, options *FluxConfigurationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[FluxConfigurationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, fluxConfiguration, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FluxConfigurationsClientCreateOrUpdateResponse]("FluxConfigurationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FluxConfigurationsClientCreateOrUpdateResponse]("FluxConfigurationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := FluxConfigurationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FluxConfigurationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FluxConfigurationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &FluxConfigurationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a new Kubernetes Flux Configuration.
@@ -145,20 +141,16 @@ func (client *FluxConfigurationsClient) createOrUpdateCreateRequest(ctx context.
 // fluxConfigurationName - Name of the Flux Configuration.
 // options - FluxConfigurationsClientBeginDeleteOptions contains the optional parameters for the FluxConfigurationsClient.BeginDelete
 // method.
-func (client *FluxConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, options *FluxConfigurationsClientBeginDeleteOptions) (FluxConfigurationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, options)
-	if err != nil {
-		return FluxConfigurationsClientDeletePollerResponse{}, err
+func (client *FluxConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, options *FluxConfigurationsClientBeginDeleteOptions) (*armruntime.Poller[FluxConfigurationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FluxConfigurationsClientDeleteResponse]("FluxConfigurationsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FluxConfigurationsClientDeleteResponse]("FluxConfigurationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := FluxConfigurationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("FluxConfigurationsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FluxConfigurationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &FluxConfigurationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - This will delete the YAML file used to set up the Flux Configuration, thus stopping future sync from the source
@@ -301,16 +293,32 @@ func (client *FluxConfigurationsClient) getHandleResponse(resp *http.Response) (
 // (for OnPrem K8S clusters).
 // clusterName - The name of the kubernetes cluster.
 // options - FluxConfigurationsClientListOptions contains the optional parameters for the FluxConfigurationsClient.List method.
-func (client *FluxConfigurationsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *FluxConfigurationsClientListOptions) *FluxConfigurationsClientListPager {
-	return &FluxConfigurationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+func (client *FluxConfigurationsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *FluxConfigurationsClientListOptions) *runtime.Pager[FluxConfigurationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FluxConfigurationsClientListResponse]{
+		More: func(page FluxConfigurationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FluxConfigurationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FluxConfigurationsList.NextLink)
+		Fetcher: func(ctx context.Context, page *FluxConfigurationsClientListResponse) (FluxConfigurationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FluxConfigurationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FluxConfigurationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FluxConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -368,20 +376,16 @@ func (client *FluxConfigurationsClient) listHandleResponse(resp *http.Response) 
 // fluxConfigurationPatch - Properties to Patch in an existing Flux Configuration.
 // options - FluxConfigurationsClientBeginUpdateOptions contains the optional parameters for the FluxConfigurationsClient.BeginUpdate
 // method.
-func (client *FluxConfigurationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, fluxConfigurationPatch FluxConfigurationPatch, options *FluxConfigurationsClientBeginUpdateOptions) (FluxConfigurationsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, fluxConfigurationPatch, options)
-	if err != nil {
-		return FluxConfigurationsClientUpdatePollerResponse{}, err
+func (client *FluxConfigurationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, fluxConfigurationName string, fluxConfigurationPatch FluxConfigurationPatch, options *FluxConfigurationsClientBeginUpdateOptions) (*armruntime.Poller[FluxConfigurationsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, fluxConfigurationName, fluxConfigurationPatch, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FluxConfigurationsClientUpdateResponse]("FluxConfigurationsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FluxConfigurationsClientUpdateResponse]("FluxConfigurationsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := FluxConfigurationsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FluxConfigurationsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FluxConfigurationsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &FluxConfigurationsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update an existing Kubernetes Flux Configuration.

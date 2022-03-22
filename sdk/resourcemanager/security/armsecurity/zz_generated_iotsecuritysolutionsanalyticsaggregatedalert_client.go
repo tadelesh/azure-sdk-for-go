@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -170,16 +170,32 @@ func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) getHandleRespo
 // solutionName - The name of the IoT Security solution.
 // options - IotSecuritySolutionsAnalyticsAggregatedAlertClientListOptions contains the optional parameters for the IotSecuritySolutionsAnalyticsAggregatedAlertClient.List
 // method.
-func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) List(resourceGroupName string, solutionName string, options *IotSecuritySolutionsAnalyticsAggregatedAlertClientListOptions) *IotSecuritySolutionsAnalyticsAggregatedAlertClientListPager {
-	return &IotSecuritySolutionsAnalyticsAggregatedAlertClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, solutionName, options)
+func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) List(resourceGroupName string, solutionName string, options *IotSecuritySolutionsAnalyticsAggregatedAlertClientListOptions) *runtime.Pager[IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse]{
+		More: func(page IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IoTSecurityAggregatedAlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse) (IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, solutionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

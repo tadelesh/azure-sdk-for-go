@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -266,12 +266,14 @@ type ContactProfileListResult struct {
 // ContactProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the ContactProfilesClient.BeginCreateOrUpdate
 // method.
 type ContactProfilesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContactProfilesClientBeginDeleteOptions contains the optional parameters for the ContactProfilesClient.BeginDelete method.
 type ContactProfilesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContactProfilesClientGetOptions contains the optional parameters for the ContactProfilesClient.Get method.
@@ -315,12 +317,14 @@ type ContactProfilesProperties struct {
 
 // ContactsClientBeginCreateOptions contains the optional parameters for the ContactsClient.BeginCreate method.
 type ContactsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContactsClientBeginDeleteOptions contains the optional parameters for the ContactsClient.BeginDelete method.
 type ContactsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContactsClientGetOptions contains the optional parameters for the ContactsClient.Get method.
@@ -556,18 +560,21 @@ type SpacecraftListResult struct {
 // SpacecraftsClientBeginCreateOrUpdateOptions contains the optional parameters for the SpacecraftsClient.BeginCreateOrUpdate
 // method.
 type SpacecraftsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SpacecraftsClientBeginDeleteOptions contains the optional parameters for the SpacecraftsClient.BeginDelete method.
 type SpacecraftsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SpacecraftsClientBeginListAvailableContactsOptions contains the optional parameters for the SpacecraftsClient.BeginListAvailableContacts
 // method.
 type SpacecraftsClientBeginListAvailableContactsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SpacecraftsClientGetOptions contains the optional parameters for the SpacecraftsClient.Get method.

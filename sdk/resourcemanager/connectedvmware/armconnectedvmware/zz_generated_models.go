@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,12 +105,16 @@ type ClusterProperties struct {
 type ClustersClientBeginCreateOptions struct {
 	// Request payload.
 	Body *Cluster
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
 type ClustersClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientGetOptions contains the optional parameters for the ClustersClient.Get method.
@@ -245,12 +249,16 @@ type DatastoreProperties struct {
 type DatastoresClientBeginCreateOptions struct {
 	// Request payload.
 	Body *Datastore
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatastoresClientBeginDeleteOptions contains the optional parameters for the DatastoresClient.BeginDelete method.
 type DatastoresClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatastoresClientGetOptions contains the optional parameters for the DatastoresClient.Get method.
@@ -402,11 +410,14 @@ type GuestAgentProperties struct {
 type GuestAgentsClientBeginCreateOptions struct {
 	// Request payload.
 	Body *GuestAgent
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GuestAgentsClientBeginDeleteOptions contains the optional parameters for the GuestAgentsClient.BeginDelete method.
 type GuestAgentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GuestAgentsClientGetOptions contains the optional parameters for the GuestAgentsClient.Get method.
@@ -539,12 +550,16 @@ type HostProperties struct {
 type HostsClientBeginCreateOptions struct {
 	// Request payload.
 	Body *Host
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HostsClientBeginDeleteOptions contains the optional parameters for the HostsClient.BeginDelete method.
 type HostsClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HostsClientGetOptions contains the optional parameters for the HostsClient.Get method.
@@ -887,19 +902,22 @@ type MachineExtensionUpdateProperties struct {
 // MachineExtensionsClientBeginCreateOrUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginCreateOrUpdate
 // method.
 type MachineExtensionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientBeginDeleteOptions contains the optional parameters for the MachineExtensionsClient.BeginDelete
 // method.
 type MachineExtensionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientBeginUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginUpdate
 // method.
 type MachineExtensionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MachineExtensionsClientGetOptions contains the optional parameters for the MachineExtensionsClient.Get method.
@@ -1249,12 +1267,16 @@ type ResourcePoolProperties struct {
 type ResourcePoolsClientBeginCreateOptions struct {
 	// Request payload.
 	Body *ResourcePool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ResourcePoolsClientBeginDeleteOptions contains the optional parameters for the ResourcePoolsClient.BeginDelete method.
 type ResourcePoolsClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ResourcePoolsClientGetOptions contains the optional parameters for the ResourcePoolsClient.Get method.
@@ -1421,12 +1443,16 @@ type VCenterProperties struct {
 type VCentersClientBeginCreateOptions struct {
 	// Request payload.
 	Body *VCenter
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VCentersClientBeginDeleteOptions contains the optional parameters for the VCentersClient.BeginDelete method.
 type VCentersClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VCentersClientGetOptions contains the optional parameters for the VCentersClient.Get method.
@@ -1819,6 +1845,8 @@ type VirtualMachineTemplateProperties struct {
 type VirtualMachineTemplatesClientBeginCreateOptions struct {
 	// Request payload.
 	Body *VirtualMachineTemplate
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineTemplatesClientBeginDeleteOptions contains the optional parameters for the VirtualMachineTemplatesClient.BeginDelete
@@ -1826,6 +1854,8 @@ type VirtualMachineTemplatesClientBeginCreateOptions struct {
 type VirtualMachineTemplatesClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineTemplatesClientGetOptions contains the optional parameters for the VirtualMachineTemplatesClient.Get method.
@@ -1888,34 +1918,44 @@ type VirtualMachineUpdateProperties struct {
 type VirtualMachinesClientBeginCreateOptions struct {
 	// Request payload.
 	Body *VirtualMachine
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginDeleteOptions contains the optional parameters for the VirtualMachinesClient.BeginDelete method.
 type VirtualMachinesClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginRestartOptions contains the optional parameters for the VirtualMachinesClient.BeginRestart method.
 type VirtualMachinesClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStartOptions contains the optional parameters for the VirtualMachinesClient.BeginStart method.
 type VirtualMachinesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStopOptions contains the optional parameters for the VirtualMachinesClient.BeginStop method.
 type VirtualMachinesClientBeginStopOptions struct {
 	// Virtualmachine stop action payload.
 	Body *StopVirtualMachineOptions
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginUpdateOptions contains the optional parameters for the VirtualMachinesClient.BeginUpdate method.
 type VirtualMachinesClientBeginUpdateOptions struct {
 	// Resource properties to update.
 	Body *VirtualMachineUpdate
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientGetOptions contains the optional parameters for the VirtualMachinesClient.Get method.
@@ -2024,12 +2064,16 @@ type VirtualNetworkProperties struct {
 type VirtualNetworksClientBeginCreateOptions struct {
 	// Request payload.
 	Body *VirtualNetwork
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworksClientBeginDeleteOptions contains the optional parameters for the VirtualNetworksClient.BeginDelete method.
 type VirtualNetworksClientBeginDeleteOptions struct {
 	// Whether force delete was specified.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworksClientGetOptions contains the optional parameters for the VirtualNetworksClient.Get method.

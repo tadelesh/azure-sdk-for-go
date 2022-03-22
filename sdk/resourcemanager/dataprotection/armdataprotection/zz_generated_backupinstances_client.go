@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewBackupInstancesClient(subscriptionID string, credential azcore.TokenCred
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginAdhocBackupOptions contains the optional parameters for the BackupInstancesClient.BeginAdhocBackup
 // method.
-func (client *BackupInstancesClient) BeginAdhocBackup(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters TriggerBackupRequest, options *BackupInstancesClientBeginAdhocBackupOptions) (BackupInstancesClientAdhocBackupPollerResponse, error) {
-	resp, err := client.adhocBackup(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientAdhocBackupPollerResponse{}, err
+func (client *BackupInstancesClient) BeginAdhocBackup(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters TriggerBackupRequest, options *BackupInstancesClientBeginAdhocBackupOptions) (*armruntime.Poller[BackupInstancesClientAdhocBackupResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.adhocBackup(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientAdhocBackupResponse]("BackupInstancesClient.AdhocBackup", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientAdhocBackupResponse]("BackupInstancesClient.AdhocBackup", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientAdhocBackupPollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.AdhocBackup", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientAdhocBackupPollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientAdhocBackupPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // AdhocBackup - Trigger adhoc backup
@@ -128,20 +124,16 @@ func (client *BackupInstancesClient) adhocBackupCreateRequest(ctx context.Contex
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupInstancesClient.BeginCreateOrUpdate
 // method.
-func (client *BackupInstancesClient) BeginCreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters BackupInstanceResource, options *BackupInstancesClientBeginCreateOrUpdateOptions) (BackupInstancesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientCreateOrUpdatePollerResponse{}, err
+func (client *BackupInstancesClient) BeginCreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters BackupInstanceResource, options *BackupInstancesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BackupInstancesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientCreateOrUpdateResponse]("BackupInstancesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientCreateOrUpdateResponse]("BackupInstancesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a backup instance in a backup vault
@@ -198,20 +190,16 @@ func (client *BackupInstancesClient) createOrUpdateCreateRequest(ctx context.Con
 // backupInstanceName - The name of the backup instance
 // options - BackupInstancesClientBeginDeleteOptions contains the optional parameters for the BackupInstancesClient.BeginDelete
 // method.
-func (client *BackupInstancesClient) BeginDelete(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, options *BackupInstancesClientBeginDeleteOptions) (BackupInstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, vaultName, resourceGroupName, backupInstanceName, options)
-	if err != nil {
-		return BackupInstancesClientDeletePollerResponse{}, err
+func (client *BackupInstancesClient) BeginDelete(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, options *BackupInstancesClientBeginDeleteOptions) (*armruntime.Poller[BackupInstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, vaultName, resourceGroupName, backupInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientDeleteResponse]("BackupInstancesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientDeleteResponse]("BackupInstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a backup instance in a backup vault
@@ -326,16 +314,32 @@ func (client *BackupInstancesClient) getHandleResponse(resp *http.Response) (Bac
 // vaultName - The name of the backup vault.
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - BackupInstancesClientListOptions contains the optional parameters for the BackupInstancesClient.List method.
-func (client *BackupInstancesClient) List(vaultName string, resourceGroupName string, options *BackupInstancesClientListOptions) *BackupInstancesClientListPager {
-	return &BackupInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+func (client *BackupInstancesClient) List(vaultName string, resourceGroupName string, options *BackupInstancesClientListOptions) *runtime.Pager[BackupInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupInstancesClientListResponse]{
+		More: func(page BackupInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BackupInstanceResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupInstancesClientListResponse) (BackupInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -380,20 +384,16 @@ func (client *BackupInstancesClient) listHandleResponse(resp *http.Response) (Ba
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginTriggerRehydrateOptions contains the optional parameters for the BackupInstancesClient.BeginTriggerRehydrate
 // method.
-func (client *BackupInstancesClient) BeginTriggerRehydrate(ctx context.Context, resourceGroupName string, vaultName string, backupInstanceName string, parameters AzureBackupRehydrationRequest, options *BackupInstancesClientBeginTriggerRehydrateOptions) (BackupInstancesClientTriggerRehydratePollerResponse, error) {
-	resp, err := client.triggerRehydrate(ctx, resourceGroupName, vaultName, backupInstanceName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientTriggerRehydratePollerResponse{}, err
+func (client *BackupInstancesClient) BeginTriggerRehydrate(ctx context.Context, resourceGroupName string, vaultName string, backupInstanceName string, parameters AzureBackupRehydrationRequest, options *BackupInstancesClientBeginTriggerRehydrateOptions) (*armruntime.Poller[BackupInstancesClientTriggerRehydrateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.triggerRehydrate(ctx, resourceGroupName, vaultName, backupInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientTriggerRehydrateResponse]("BackupInstancesClient.TriggerRehydrate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientTriggerRehydrateResponse]("BackupInstancesClient.TriggerRehydrate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientTriggerRehydratePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.TriggerRehydrate", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientTriggerRehydratePollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientTriggerRehydratePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TriggerRehydrate - rehydrate recovery point for restore for a BackupInstance
@@ -451,20 +451,16 @@ func (client *BackupInstancesClient) triggerRehydrateCreateRequest(ctx context.C
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginTriggerRestoreOptions contains the optional parameters for the BackupInstancesClient.BeginTriggerRestore
 // method.
-func (client *BackupInstancesClient) BeginTriggerRestore(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters AzureBackupRestoreRequestClassification, options *BackupInstancesClientBeginTriggerRestoreOptions) (BackupInstancesClientTriggerRestorePollerResponse, error) {
-	resp, err := client.triggerRestore(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientTriggerRestorePollerResponse{}, err
+func (client *BackupInstancesClient) BeginTriggerRestore(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters AzureBackupRestoreRequestClassification, options *BackupInstancesClientBeginTriggerRestoreOptions) (*armruntime.Poller[BackupInstancesClientTriggerRestoreResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.triggerRestore(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientTriggerRestoreResponse]("BackupInstancesClient.TriggerRestore", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientTriggerRestoreResponse]("BackupInstancesClient.TriggerRestore", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientTriggerRestorePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.TriggerRestore", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientTriggerRestorePollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientTriggerRestorePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TriggerRestore - Triggers restore for a BackupInstance
@@ -521,20 +517,16 @@ func (client *BackupInstancesClient) triggerRestoreCreateRequest(ctx context.Con
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginValidateForBackupOptions contains the optional parameters for the BackupInstancesClient.BeginValidateForBackup
 // method.
-func (client *BackupInstancesClient) BeginValidateForBackup(ctx context.Context, vaultName string, resourceGroupName string, parameters ValidateForBackupRequest, options *BackupInstancesClientBeginValidateForBackupOptions) (BackupInstancesClientValidateForBackupPollerResponse, error) {
-	resp, err := client.validateForBackup(ctx, vaultName, resourceGroupName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientValidateForBackupPollerResponse{}, err
+func (client *BackupInstancesClient) BeginValidateForBackup(ctx context.Context, vaultName string, resourceGroupName string, parameters ValidateForBackupRequest, options *BackupInstancesClientBeginValidateForBackupOptions) (*armruntime.Poller[BackupInstancesClientValidateForBackupResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validateForBackup(ctx, vaultName, resourceGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientValidateForBackupResponse]("BackupInstancesClient.ValidateForBackup", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientValidateForBackupResponse]("BackupInstancesClient.ValidateForBackup", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientValidateForBackupPollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.ValidateForBackup", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientValidateForBackupPollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientValidateForBackupPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ValidateForBackup - Validate whether adhoc backup will be successful or not
@@ -588,20 +580,16 @@ func (client *BackupInstancesClient) validateForBackupCreateRequest(ctx context.
 // parameters - Request body for operation
 // options - BackupInstancesClientBeginValidateForRestoreOptions contains the optional parameters for the BackupInstancesClient.BeginValidateForRestore
 // method.
-func (client *BackupInstancesClient) BeginValidateForRestore(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters ValidateRestoreRequestObject, options *BackupInstancesClientBeginValidateForRestoreOptions) (BackupInstancesClientValidateForRestorePollerResponse, error) {
-	resp, err := client.validateForRestore(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
-	if err != nil {
-		return BackupInstancesClientValidateForRestorePollerResponse{}, err
+func (client *BackupInstancesClient) BeginValidateForRestore(ctx context.Context, vaultName string, resourceGroupName string, backupInstanceName string, parameters ValidateRestoreRequestObject, options *BackupInstancesClientBeginValidateForRestoreOptions) (*armruntime.Poller[BackupInstancesClientValidateForRestoreResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validateForRestore(ctx, vaultName, resourceGroupName, backupInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupInstancesClientValidateForRestoreResponse]("BackupInstancesClient.ValidateForRestore", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupInstancesClientValidateForRestoreResponse]("BackupInstancesClient.ValidateForRestore", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupInstancesClientValidateForRestorePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupInstancesClient.ValidateForRestore", "", resp, client.pl)
-	if err != nil {
-		return BackupInstancesClientValidateForRestorePollerResponse{}, err
-	}
-	result.Poller = &BackupInstancesClientValidateForRestorePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ValidateForRestore - Validates if Restore can be triggered for a DataSource

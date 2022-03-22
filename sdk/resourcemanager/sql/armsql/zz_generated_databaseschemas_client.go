@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -123,16 +123,32 @@ func (client *DatabaseSchemasClient) getHandleResponse(resp *http.Response) (Dat
 // databaseName - The name of the database.
 // options - DatabaseSchemasClientListByDatabaseOptions contains the optional parameters for the DatabaseSchemasClient.ListByDatabase
 // method.
-func (client *DatabaseSchemasClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseSchemasClientListByDatabaseOptions) *DatabaseSchemasClientListByDatabasePager {
-	return &DatabaseSchemasClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DatabaseSchemasClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DatabaseSchemasClientListByDatabaseOptions) *runtime.Pager[DatabaseSchemasClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseSchemasClientListByDatabaseResponse]{
+		More: func(page DatabaseSchemasClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabaseSchemasClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseSchemaListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabaseSchemasClientListByDatabaseResponse) (DatabaseSchemasClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabaseSchemasClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseSchemasClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseSchemasClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -3759,17 +3759,20 @@ type BackupsClientTriggerOptions struct {
 
 // ClientBeginBMSPrepareDataMoveOptions contains the optional parameters for the Client.BeginBMSPrepareDataMove method.
 type ClientBeginBMSPrepareDataMoveOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginBMSTriggerDataMoveOptions contains the optional parameters for the Client.BeginBMSTriggerDataMove method.
 type ClientBeginBMSTriggerDataMoveOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginMoveRecoveryPointOptions contains the optional parameters for the Client.BeginMoveRecoveryPoint method.
 type ClientBeginMoveRecoveryPointOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientDiscoveryDisplay - Localized display information of an operation.
@@ -5725,13 +5728,15 @@ type PrivateEndpointConnection struct {
 // PrivateEndpointConnectionClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionClient.BeginDelete
 // method.
 type PrivateEndpointConnectionClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionClientBeginPutOptions contains the optional parameters for the PrivateEndpointConnectionClient.BeginPut
 // method.
 type PrivateEndpointConnectionClientBeginPutOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionClientGetOptions contains the optional parameters for the PrivateEndpointConnectionClient.Get
@@ -6215,7 +6220,8 @@ type ProtectionIntentResourceList struct {
 // ProtectionPoliciesClientBeginDeleteOptions contains the optional parameters for the ProtectionPoliciesClient.BeginDelete
 // method.
 type ProtectionPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProtectionPoliciesClientCreateOrUpdateOptions contains the optional parameters for the ProtectionPoliciesClient.CreateOrUpdate
@@ -6596,7 +6602,8 @@ type RestoreRequestResource struct {
 
 // RestoresClientBeginTriggerOptions contains the optional parameters for the RestoresClient.BeginTrigger method.
 type RestoresClientBeginTriggerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RetentionDuration - Retention duration.
@@ -6832,7 +6839,8 @@ type ValidateIaasVMRestoreOperationRequest struct {
 // ValidateOperationClientBeginTriggerOptions contains the optional parameters for the ValidateOperationClient.BeginTrigger
 // method.
 type ValidateOperationClientBeginTriggerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ValidateOperationRequestClassification provides polymorphic access to related types.

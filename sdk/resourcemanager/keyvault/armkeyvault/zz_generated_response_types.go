@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armkeyvault
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // KeysClientCreateIfNotExistResponse contains the response from method KeysClient.CreateIfNotExist.
 type KeysClientCreateIfNotExistResponse struct {
@@ -37,41 +31,6 @@ type KeysClientListResponse struct {
 // KeysClientListVersionsResponse contains the response from method KeysClient.ListVersions.
 type KeysClientListVersionsResponse struct {
 	KeyListResult
-}
-
-// MHSMPrivateEndpointConnectionsClientDeletePollerResponse contains the response from method MHSMPrivateEndpointConnectionsClient.Delete.
-type MHSMPrivateEndpointConnectionsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MHSMPrivateEndpointConnectionsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MHSMPrivateEndpointConnectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MHSMPrivateEndpointConnectionsClientDeleteResponse, error) {
-	respType := MHSMPrivateEndpointConnectionsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MHSMPrivateEndpointConnection)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MHSMPrivateEndpointConnectionsClientDeletePollerResponse from the provided client and resume token.
-func (l *MHSMPrivateEndpointConnectionsClientDeletePollerResponse) Resume(ctx context.Context, client *MHSMPrivateEndpointConnectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MHSMPrivateEndpointConnectionsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MHSMPrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // MHSMPrivateEndpointConnectionsClientDeleteResponse contains the response from method MHSMPrivateEndpointConnectionsClient.Delete.
@@ -104,79 +63,9 @@ type MHSMPrivateLinkResourcesClientListByMHSMResourceResponse struct {
 	MHSMPrivateLinkResourceListResult
 }
 
-// ManagedHsmsClientCreateOrUpdatePollerResponse contains the response from method ManagedHsmsClient.CreateOrUpdate.
-type ManagedHsmsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedHsmsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedHsmsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedHsmsClientCreateOrUpdateResponse, error) {
-	respType := ManagedHsmsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ManagedHsm)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedHsmsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ManagedHsmsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ManagedHsmsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedHsmsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedHsmsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagedHsmsClientCreateOrUpdateResponse contains the response from method ManagedHsmsClient.CreateOrUpdate.
 type ManagedHsmsClientCreateOrUpdateResponse struct {
 	ManagedHsm
-}
-
-// ManagedHsmsClientDeletePollerResponse contains the response from method ManagedHsmsClient.Delete.
-type ManagedHsmsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedHsmsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedHsmsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedHsmsClientDeleteResponse, error) {
-	respType := ManagedHsmsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedHsmsClientDeletePollerResponse from the provided client and resume token.
-func (l *ManagedHsmsClientDeletePollerResponse) Resume(ctx context.Context, client *ManagedHsmsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedHsmsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedHsmsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ManagedHsmsClientDeleteResponse contains the response from method ManagedHsmsClient.Delete.
@@ -209,79 +98,9 @@ type ManagedHsmsClientListDeletedResponse struct {
 	DeletedManagedHsmListResult
 }
 
-// ManagedHsmsClientPurgeDeletedPollerResponse contains the response from method ManagedHsmsClient.PurgeDeleted.
-type ManagedHsmsClientPurgeDeletedPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedHsmsClientPurgeDeletedPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedHsmsClientPurgeDeletedPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedHsmsClientPurgeDeletedResponse, error) {
-	respType := ManagedHsmsClientPurgeDeletedResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedHsmsClientPurgeDeletedPollerResponse from the provided client and resume token.
-func (l *ManagedHsmsClientPurgeDeletedPollerResponse) Resume(ctx context.Context, client *ManagedHsmsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedHsmsClient.PurgeDeleted", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedHsmsClientPurgeDeletedPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagedHsmsClientPurgeDeletedResponse contains the response from method ManagedHsmsClient.PurgeDeleted.
 type ManagedHsmsClientPurgeDeletedResponse struct {
 	// placeholder for future response values
-}
-
-// ManagedHsmsClientUpdatePollerResponse contains the response from method ManagedHsmsClient.Update.
-type ManagedHsmsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedHsmsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedHsmsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedHsmsClientUpdateResponse, error) {
-	respType := ManagedHsmsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ManagedHsm)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedHsmsClientUpdatePollerResponse from the provided client and resume token.
-func (l *ManagedHsmsClientUpdatePollerResponse) Resume(ctx context.Context, client *ManagedHsmsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedHsmsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedHsmsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ManagedHsmsClientUpdateResponse contains the response from method ManagedHsmsClient.Update.
@@ -292,41 +111,6 @@ type ManagedHsmsClientUpdateResponse struct {
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
 	OperationListResult
-}
-
-// PrivateEndpointConnectionsClientDeletePollerResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
-type PrivateEndpointConnectionsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PrivateEndpointConnectionsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PrivateEndpointConnectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionsClientDeleteResponse, error) {
-	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnection)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PrivateEndpointConnectionsClientDeletePollerResponse from the provided client and resume token.
-func (l *PrivateEndpointConnectionsClientDeletePollerResponse) Resume(ctx context.Context, client *PrivateEndpointConnectionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PrivateEndpointConnectionsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PrivateEndpointConnectionsClientDeleteResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
@@ -384,41 +168,6 @@ type VaultsClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityResult
 }
 
-// VaultsClientCreateOrUpdatePollerResponse contains the response from method VaultsClient.CreateOrUpdate.
-type VaultsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VaultsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VaultsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VaultsClientCreateOrUpdateResponse, error) {
-	respType := VaultsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Vault)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VaultsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *VaultsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *VaultsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VaultsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VaultsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // VaultsClientCreateOrUpdateResponse contains the response from method VaultsClient.CreateOrUpdate.
 type VaultsClientCreateOrUpdateResponse struct {
 	Vault
@@ -457,41 +206,6 @@ type VaultsClientListDeletedResponse struct {
 // VaultsClientListResponse contains the response from method VaultsClient.List.
 type VaultsClientListResponse struct {
 	ResourceListResult
-}
-
-// VaultsClientPurgeDeletedPollerResponse contains the response from method VaultsClient.PurgeDeleted.
-type VaultsClientPurgeDeletedPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VaultsClientPurgeDeletedPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VaultsClientPurgeDeletedPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VaultsClientPurgeDeletedResponse, error) {
-	respType := VaultsClientPurgeDeletedResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VaultsClientPurgeDeletedPollerResponse from the provided client and resume token.
-func (l *VaultsClientPurgeDeletedPollerResponse) Resume(ctx context.Context, client *VaultsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VaultsClient.PurgeDeleted", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VaultsClientPurgeDeletedPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VaultsClientPurgeDeletedResponse contains the response from method VaultsClient.PurgeDeleted.

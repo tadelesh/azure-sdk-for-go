@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDataStoresClient(subscriptionID string, credential azcore.TokenCredentia
 // dataStore - The data store/repository object to be created or updated.
 // options - DataStoresClientBeginCreateOrUpdateOptions contains the optional parameters for the DataStoresClient.BeginCreateOrUpdate
 // method.
-func (client *DataStoresClient) BeginCreateOrUpdate(ctx context.Context, dataStoreName string, resourceGroupName string, dataManagerName string, dataStore DataStore, options *DataStoresClientBeginCreateOrUpdateOptions) (DataStoresClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, dataStoreName, resourceGroupName, dataManagerName, dataStore, options)
-	if err != nil {
-		return DataStoresClientCreateOrUpdatePollerResponse{}, err
+func (client *DataStoresClient) BeginCreateOrUpdate(ctx context.Context, dataStoreName string, resourceGroupName string, dataManagerName string, dataStore DataStore, options *DataStoresClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DataStoresClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, dataStoreName, resourceGroupName, dataManagerName, dataStore, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataStoresClientCreateOrUpdateResponse]("DataStoresClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataStoresClientCreateOrUpdateResponse]("DataStoresClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DataStoresClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DataStoresClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DataStoresClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DataStoresClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the data store/repository in the data manager.
@@ -128,20 +124,16 @@ func (client *DataStoresClient) createOrUpdateCreateRequest(ctx context.Context,
 // dataManagerName - The name of the DataManager Resource within the specified resource group. DataManager names must be between
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - DataStoresClientBeginDeleteOptions contains the optional parameters for the DataStoresClient.BeginDelete method.
-func (client *DataStoresClient) BeginDelete(ctx context.Context, dataStoreName string, resourceGroupName string, dataManagerName string, options *DataStoresClientBeginDeleteOptions) (DataStoresClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, dataStoreName, resourceGroupName, dataManagerName, options)
-	if err != nil {
-		return DataStoresClientDeletePollerResponse{}, err
+func (client *DataStoresClient) BeginDelete(ctx context.Context, dataStoreName string, resourceGroupName string, dataManagerName string, options *DataStoresClientBeginDeleteOptions) (*armruntime.Poller[DataStoresClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, dataStoreName, resourceGroupName, dataManagerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataStoresClientDeleteResponse]("DataStoresClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataStoresClientDeleteResponse]("DataStoresClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DataStoresClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DataStoresClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DataStoresClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DataStoresClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - This method deletes the given data store/repository.
@@ -258,16 +250,32 @@ func (client *DataStoresClient) getHandleResponse(resp *http.Response) (DataStor
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - DataStoresClientListByDataManagerOptions contains the optional parameters for the DataStoresClient.ListByDataManager
 // method.
-func (client *DataStoresClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *DataStoresClientListByDataManagerOptions) *DataStoresClientListByDataManagerPager {
-	return &DataStoresClientListByDataManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+func (client *DataStoresClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *DataStoresClientListByDataManagerOptions) *runtime.Pager[DataStoresClientListByDataManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataStoresClientListByDataManagerResponse]{
+		More: func(page DataStoresClientListByDataManagerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataStoresClientListByDataManagerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataStoreList.NextLink)
+		Fetcher: func(ctx context.Context, page *DataStoresClientListByDataManagerResponse) (DataStoresClientListByDataManagerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataStoresClientListByDataManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataStoresClientListByDataManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataStoresClientListByDataManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDataManagerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDataManagerCreateRequest creates the ListByDataManager request.

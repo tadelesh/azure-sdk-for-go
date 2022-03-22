@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,16 +213,32 @@ func (client *AutoscaleSettingsClient) getHandleResponse(resp *http.Response) (A
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - AutoscaleSettingsClientListByResourceGroupOptions contains the optional parameters for the AutoscaleSettingsClient.ListByResourceGroup
 // method.
-func (client *AutoscaleSettingsClient) ListByResourceGroup(resourceGroupName string, options *AutoscaleSettingsClientListByResourceGroupOptions) *AutoscaleSettingsClientListByResourceGroupPager {
-	return &AutoscaleSettingsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AutoscaleSettingsClient) ListByResourceGroup(resourceGroupName string, options *AutoscaleSettingsClientListByResourceGroupOptions) *runtime.Pager[AutoscaleSettingsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutoscaleSettingsClientListByResourceGroupResponse]{
+		More: func(page AutoscaleSettingsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AutoscaleSettingsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AutoscaleSettingResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AutoscaleSettingsClientListByResourceGroupResponse) (AutoscaleSettingsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AutoscaleSettingsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutoscaleSettingsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutoscaleSettingsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -260,16 +276,32 @@ func (client *AutoscaleSettingsClient) listByResourceGroupHandleResponse(resp *h
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AutoscaleSettingsClientListBySubscriptionOptions contains the optional parameters for the AutoscaleSettingsClient.ListBySubscription
 // method.
-func (client *AutoscaleSettingsClient) ListBySubscription(options *AutoscaleSettingsClientListBySubscriptionOptions) *AutoscaleSettingsClientListBySubscriptionPager {
-	return &AutoscaleSettingsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AutoscaleSettingsClient) ListBySubscription(options *AutoscaleSettingsClientListBySubscriptionOptions) *runtime.Pager[AutoscaleSettingsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutoscaleSettingsClientListBySubscriptionResponse]{
+		More: func(page AutoscaleSettingsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AutoscaleSettingsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AutoscaleSettingResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AutoscaleSettingsClientListBySubscriptionResponse) (AutoscaleSettingsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AutoscaleSettingsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutoscaleSettingsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutoscaleSettingsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

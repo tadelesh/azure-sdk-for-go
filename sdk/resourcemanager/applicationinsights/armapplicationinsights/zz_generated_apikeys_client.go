@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,13 +230,26 @@ func (client *APIKeysClient) getHandleResponse(resp *http.Response) (APIKeysClie
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - The name of the Application Insights component resource.
 // options - APIKeysClientListOptions contains the optional parameters for the APIKeysClient.List method.
-func (client *APIKeysClient) List(resourceGroupName string, resourceName string, options *APIKeysClientListOptions) *APIKeysClientListPager {
-	return &APIKeysClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *APIKeysClient) List(resourceGroupName string, resourceName string, options *APIKeysClientListOptions) *runtime.Pager[APIKeysClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIKeysClientListResponse]{
+		More: func(page APIKeysClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *APIKeysClientListResponse) (APIKeysClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			if err != nil {
+				return APIKeysClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIKeysClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIKeysClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

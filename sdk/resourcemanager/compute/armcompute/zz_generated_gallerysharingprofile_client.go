@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewGallerySharingProfileClient(subscriptionID string, credential azcore.Tok
 // sharingUpdate - Parameters supplied to the update gallery sharing profile.
 // options - GallerySharingProfileClientBeginUpdateOptions contains the optional parameters for the GallerySharingProfileClient.BeginUpdate
 // method.
-func (client *GallerySharingProfileClient) BeginUpdate(ctx context.Context, resourceGroupName string, galleryName string, sharingUpdate SharingUpdate, options *GallerySharingProfileClientBeginUpdateOptions) (GallerySharingProfileClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, galleryName, sharingUpdate, options)
-	if err != nil {
-		return GallerySharingProfileClientUpdatePollerResponse{}, err
+func (client *GallerySharingProfileClient) BeginUpdate(ctx context.Context, resourceGroupName string, galleryName string, sharingUpdate SharingUpdate, options *GallerySharingProfileClientBeginUpdateOptions) (*armruntime.Poller[GallerySharingProfileClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, galleryName, sharingUpdate, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GallerySharingProfileClientUpdateResponse]("GallerySharingProfileClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GallerySharingProfileClientUpdateResponse]("GallerySharingProfileClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := GallerySharingProfileClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GallerySharingProfileClient.Update", "", resp, client.pl)
-	if err != nil {
-		return GallerySharingProfileClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &GallerySharingProfileClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update sharing profile of a gallery.

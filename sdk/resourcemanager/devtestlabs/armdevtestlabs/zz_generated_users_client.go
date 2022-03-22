@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewUsersClient(subscriptionID string, credential azcore.TokenCredential, op
 // userParam - Profile of a lab user.
 // options - UsersClientBeginCreateOrUpdateOptions contains the optional parameters for the UsersClient.BeginCreateOrUpdate
 // method.
-func (client *UsersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, userParam User, options *UsersClientBeginCreateOrUpdateOptions) (UsersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, userParam, options)
-	if err != nil {
-		return UsersClientCreateOrUpdatePollerResponse{}, err
+func (client *UsersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, userParam User, options *UsersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[UsersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, userParam, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[UsersClientCreateOrUpdateResponse]("UsersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[UsersClientCreateOrUpdateResponse]("UsersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := UsersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("UsersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return UsersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &UsersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing user profile. This operation can take a while to complete.
@@ -127,20 +123,16 @@ func (client *UsersClient) createOrUpdateCreateRequest(ctx context.Context, reso
 // labName - The name of the lab.
 // name - The name of the user profile.
 // options - UsersClientBeginDeleteOptions contains the optional parameters for the UsersClient.BeginDelete method.
-func (client *UsersClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, name string, options *UsersClientBeginDeleteOptions) (UsersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, name, options)
-	if err != nil {
-		return UsersClientDeletePollerResponse{}, err
+func (client *UsersClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, name string, options *UsersClientBeginDeleteOptions) (*armruntime.Poller[UsersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[UsersClientDeleteResponse]("UsersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[UsersClientDeleteResponse]("UsersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := UsersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("UsersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return UsersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &UsersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete user profile. This operation can take a while to complete.
@@ -258,16 +250,32 @@ func (client *UsersClient) getHandleResponse(resp *http.Response) (UsersClientGe
 // resourceGroupName - The name of the resource group.
 // labName - The name of the lab.
 // options - UsersClientListOptions contains the optional parameters for the UsersClient.List method.
-func (client *UsersClient) List(resourceGroupName string, labName string, options *UsersClientListOptions) *UsersClientListPager {
-	return &UsersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *UsersClient) List(resourceGroupName string, labName string, options *UsersClientListOptions) *runtime.Pager[UsersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UsersClientListResponse]{
+		More: func(page UsersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UsersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserList.NextLink)
+		Fetcher: func(ctx context.Context, page *UsersClientListResponse) (UsersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UsersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UsersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UsersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

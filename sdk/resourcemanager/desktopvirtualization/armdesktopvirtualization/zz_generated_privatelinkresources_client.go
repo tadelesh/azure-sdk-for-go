@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // hostPoolName - The name of the host pool within the specified resource group
 // options - PrivateLinkResourcesClientListByHostPoolOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByHostPool
 // method.
-func (client *PrivateLinkResourcesClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *PrivateLinkResourcesClientListByHostPoolOptions) *PrivateLinkResourcesClientListByHostPoolPager {
-	return &PrivateLinkResourcesClientListByHostPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+func (client *PrivateLinkResourcesClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *PrivateLinkResourcesClientListByHostPoolOptions) *runtime.Pager[PrivateLinkResourcesClientListByHostPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByHostPoolResponse]{
+		More: func(page PrivateLinkResourcesClientListByHostPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkResourcesClientListByHostPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByHostPoolResponse) (PrivateLinkResourcesClientListByHostPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkResourcesClientListByHostPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByHostPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByHostPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHostPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHostPoolCreateRequest creates the ListByHostPool request.
@@ -108,16 +124,32 @@ func (client *PrivateLinkResourcesClient) listByHostPoolHandleResponse(resp *htt
 // workspaceName - The name of the workspace
 // options - PrivateLinkResourcesClientListByWorkspaceOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByWorkspace
 // method.
-func (client *PrivateLinkResourcesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *PrivateLinkResourcesClientListByWorkspaceOptions) *PrivateLinkResourcesClientListByWorkspacePager {
-	return &PrivateLinkResourcesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *PrivateLinkResourcesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *PrivateLinkResourcesClientListByWorkspaceOptions) *runtime.Pager[PrivateLinkResourcesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByWorkspaceResponse]{
+		More: func(page PrivateLinkResourcesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkResourcesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByWorkspaceResponse) (PrivateLinkResourcesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkResourcesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

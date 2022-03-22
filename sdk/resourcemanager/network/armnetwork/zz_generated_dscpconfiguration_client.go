@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewDscpConfigurationClient(subscriptionID string, credential azcore.TokenCr
 // parameters - Parameters supplied to the create or update dscp configuration operation.
 // options - DscpConfigurationClientBeginCreateOrUpdateOptions contains the optional parameters for the DscpConfigurationClient.BeginCreateOrUpdate
 // method.
-func (client *DscpConfigurationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, dscpConfigurationName string, parameters DscpConfiguration, options *DscpConfigurationClientBeginCreateOrUpdateOptions) (DscpConfigurationClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, dscpConfigurationName, parameters, options)
-	if err != nil {
-		return DscpConfigurationClientCreateOrUpdatePollerResponse{}, err
+func (client *DscpConfigurationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, dscpConfigurationName string, parameters DscpConfiguration, options *DscpConfigurationClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DscpConfigurationClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, dscpConfigurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DscpConfigurationClientCreateOrUpdateResponse]("DscpConfigurationClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DscpConfigurationClientCreateOrUpdateResponse]("DscpConfigurationClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DscpConfigurationClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DscpConfigurationClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return DscpConfigurationClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DscpConfigurationClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a DSCP Configuration.
@@ -122,20 +118,16 @@ func (client *DscpConfigurationClient) createOrUpdateCreateRequest(ctx context.C
 // dscpConfigurationName - The name of the resource.
 // options - DscpConfigurationClientBeginDeleteOptions contains the optional parameters for the DscpConfigurationClient.BeginDelete
 // method.
-func (client *DscpConfigurationClient) BeginDelete(ctx context.Context, resourceGroupName string, dscpConfigurationName string, options *DscpConfigurationClientBeginDeleteOptions) (DscpConfigurationClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, dscpConfigurationName, options)
-	if err != nil {
-		return DscpConfigurationClientDeletePollerResponse{}, err
+func (client *DscpConfigurationClient) BeginDelete(ctx context.Context, resourceGroupName string, dscpConfigurationName string, options *DscpConfigurationClientBeginDeleteOptions) (*armruntime.Poller[DscpConfigurationClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, dscpConfigurationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DscpConfigurationClientDeleteResponse]("DscpConfigurationClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DscpConfigurationClientDeleteResponse]("DscpConfigurationClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DscpConfigurationClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DscpConfigurationClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return DscpConfigurationClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DscpConfigurationClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a DSCP Configuration.
@@ -240,16 +232,32 @@ func (client *DscpConfigurationClient) getHandleResponse(resp *http.Response) (D
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group.
 // options - DscpConfigurationClientListOptions contains the optional parameters for the DscpConfigurationClient.List method.
-func (client *DscpConfigurationClient) List(resourceGroupName string, options *DscpConfigurationClientListOptions) *DscpConfigurationClientListPager {
-	return &DscpConfigurationClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *DscpConfigurationClient) List(resourceGroupName string, options *DscpConfigurationClientListOptions) *runtime.Pager[DscpConfigurationClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DscpConfigurationClientListResponse]{
+		More: func(page DscpConfigurationClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DscpConfigurationClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DscpConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DscpConfigurationClientListResponse) (DscpConfigurationClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DscpConfigurationClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DscpConfigurationClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DscpConfigurationClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -287,16 +295,32 @@ func (client *DscpConfigurationClient) listHandleResponse(resp *http.Response) (
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DscpConfigurationClientListAllOptions contains the optional parameters for the DscpConfigurationClient.ListAll
 // method.
-func (client *DscpConfigurationClient) ListAll(options *DscpConfigurationClientListAllOptions) *DscpConfigurationClientListAllPager {
-	return &DscpConfigurationClientListAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAllCreateRequest(ctx, options)
+func (client *DscpConfigurationClient) ListAll(options *DscpConfigurationClientListAllOptions) *runtime.Pager[DscpConfigurationClientListAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DscpConfigurationClientListAllResponse]{
+		More: func(page DscpConfigurationClientListAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DscpConfigurationClientListAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DscpConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DscpConfigurationClientListAllResponse) (DscpConfigurationClientListAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAllCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DscpConfigurationClientListAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DscpConfigurationClientListAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DscpConfigurationClientListAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAllCreateRequest creates the ListAll request.

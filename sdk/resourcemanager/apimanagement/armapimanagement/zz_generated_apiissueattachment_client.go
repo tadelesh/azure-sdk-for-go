@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -345,16 +345,32 @@ func (client *APIIssueAttachmentClient) getEntityTagHandleResponse(resp *http.Re
 // issueID - Issue identifier. Must be unique in the current API Management service instance.
 // options - APIIssueAttachmentClientListByServiceOptions contains the optional parameters for the APIIssueAttachmentClient.ListByService
 // method.
-func (client *APIIssueAttachmentClient) ListByService(resourceGroupName string, serviceName string, apiID string, issueID string, options *APIIssueAttachmentClientListByServiceOptions) *APIIssueAttachmentClientListByServicePager {
-	return &APIIssueAttachmentClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, issueID, options)
+func (client *APIIssueAttachmentClient) ListByService(resourceGroupName string, serviceName string, apiID string, issueID string, options *APIIssueAttachmentClientListByServiceOptions) *runtime.Pager[APIIssueAttachmentClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIIssueAttachmentClientListByServiceResponse]{
+		More: func(page APIIssueAttachmentClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIIssueAttachmentClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IssueAttachmentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIIssueAttachmentClientListByServiceResponse) (APIIssueAttachmentClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, issueID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIIssueAttachmentClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIIssueAttachmentClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIIssueAttachmentClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

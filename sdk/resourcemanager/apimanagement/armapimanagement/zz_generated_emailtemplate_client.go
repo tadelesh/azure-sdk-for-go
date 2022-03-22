@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -299,16 +299,32 @@ func (client *EmailTemplateClient) getEntityTagHandleResponse(resp *http.Respons
 // serviceName - The name of the API Management service.
 // options - EmailTemplateClientListByServiceOptions contains the optional parameters for the EmailTemplateClient.ListByService
 // method.
-func (client *EmailTemplateClient) ListByService(resourceGroupName string, serviceName string, options *EmailTemplateClientListByServiceOptions) *EmailTemplateClientListByServicePager {
-	return &EmailTemplateClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *EmailTemplateClient) ListByService(resourceGroupName string, serviceName string, options *EmailTemplateClientListByServiceOptions) *runtime.Pager[EmailTemplateClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EmailTemplateClientListByServiceResponse]{
+		More: func(page EmailTemplateClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EmailTemplateClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EmailTemplateCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EmailTemplateClientListByServiceResponse) (EmailTemplateClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EmailTemplateClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EmailTemplateClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EmailTemplateClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

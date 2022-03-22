@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewTableResourcesClient(subscriptionID string, credential azcore.TokenCrede
 // createUpdateTableParameters - The parameters to provide for the current Table.
 // options - TableResourcesClientBeginCreateUpdateTableOptions contains the optional parameters for the TableResourcesClient.BeginCreateUpdateTable
 // method.
-func (client *TableResourcesClient) BeginCreateUpdateTable(ctx context.Context, resourceGroupName string, accountName string, tableName string, createUpdateTableParameters TableCreateUpdateParameters, options *TableResourcesClientBeginCreateUpdateTableOptions) (TableResourcesClientCreateUpdateTablePollerResponse, error) {
-	resp, err := client.createUpdateTable(ctx, resourceGroupName, accountName, tableName, createUpdateTableParameters, options)
-	if err != nil {
-		return TableResourcesClientCreateUpdateTablePollerResponse{}, err
+func (client *TableResourcesClient) BeginCreateUpdateTable(ctx context.Context, resourceGroupName string, accountName string, tableName string, createUpdateTableParameters TableCreateUpdateParameters, options *TableResourcesClientBeginCreateUpdateTableOptions) (*armruntime.Poller[TableResourcesClientCreateUpdateTableResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdateTable(ctx, resourceGroupName, accountName, tableName, createUpdateTableParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TableResourcesClientCreateUpdateTableResponse]("TableResourcesClient.CreateUpdateTable", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TableResourcesClientCreateUpdateTableResponse]("TableResourcesClient.CreateUpdateTable", options.ResumeToken, client.pl, nil)
 	}
-	result := TableResourcesClientCreateUpdateTablePollerResponse{}
-	pt, err := armruntime.NewPoller("TableResourcesClient.CreateUpdateTable", "", resp, client.pl)
-	if err != nil {
-		return TableResourcesClientCreateUpdateTablePollerResponse{}, err
-	}
-	result.Poller = &TableResourcesClientCreateUpdateTablePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdateTable - Create or update an Azure Cosmos DB Table
@@ -127,20 +123,16 @@ func (client *TableResourcesClient) createUpdateTableCreateRequest(ctx context.C
 // tableName - Cosmos DB table name.
 // options - TableResourcesClientBeginDeleteTableOptions contains the optional parameters for the TableResourcesClient.BeginDeleteTable
 // method.
-func (client *TableResourcesClient) BeginDeleteTable(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginDeleteTableOptions) (TableResourcesClientDeleteTablePollerResponse, error) {
-	resp, err := client.deleteTable(ctx, resourceGroupName, accountName, tableName, options)
-	if err != nil {
-		return TableResourcesClientDeleteTablePollerResponse{}, err
+func (client *TableResourcesClient) BeginDeleteTable(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginDeleteTableOptions) (*armruntime.Poller[TableResourcesClientDeleteTableResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteTable(ctx, resourceGroupName, accountName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TableResourcesClientDeleteTableResponse]("TableResourcesClient.DeleteTable", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TableResourcesClientDeleteTableResponse]("TableResourcesClient.DeleteTable", options.ResumeToken, client.pl, nil)
 	}
-	result := TableResourcesClientDeleteTablePollerResponse{}
-	pt, err := armruntime.NewPoller("TableResourcesClient.DeleteTable", "", resp, client.pl)
-	if err != nil {
-		return TableResourcesClientDeleteTablePollerResponse{}, err
-	}
-	result.Poller = &TableResourcesClientDeleteTablePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteTable - Deletes an existing Azure Cosmos DB Table.
@@ -317,13 +309,26 @@ func (client *TableResourcesClient) getTableThroughputHandleResponse(resp *http.
 // accountName - Cosmos DB database account name.
 // options - TableResourcesClientListTablesOptions contains the optional parameters for the TableResourcesClient.ListTables
 // method.
-func (client *TableResourcesClient) ListTables(resourceGroupName string, accountName string, options *TableResourcesClientListTablesOptions) *TableResourcesClientListTablesPager {
-	return &TableResourcesClientListTablesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listTablesCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *TableResourcesClient) ListTables(resourceGroupName string, accountName string, options *TableResourcesClientListTablesOptions) *runtime.Pager[TableResourcesClientListTablesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TableResourcesClientListTablesResponse]{
+		More: func(page TableResourcesClientListTablesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *TableResourcesClientListTablesResponse) (TableResourcesClientListTablesResponse, error) {
+			req, err := client.listTablesCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return TableResourcesClientListTablesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TableResourcesClientListTablesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TableResourcesClientListTablesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listTablesHandleResponse(resp)
+		},
+	})
 }
 
 // listTablesCreateRequest creates the ListTables request.
@@ -368,20 +373,16 @@ func (client *TableResourcesClient) listTablesHandleResponse(resp *http.Response
 // tableName - Cosmos DB table name.
 // options - TableResourcesClientBeginMigrateTableToAutoscaleOptions contains the optional parameters for the TableResourcesClient.BeginMigrateTableToAutoscale
 // method.
-func (client *TableResourcesClient) BeginMigrateTableToAutoscale(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginMigrateTableToAutoscaleOptions) (TableResourcesClientMigrateTableToAutoscalePollerResponse, error) {
-	resp, err := client.migrateTableToAutoscale(ctx, resourceGroupName, accountName, tableName, options)
-	if err != nil {
-		return TableResourcesClientMigrateTableToAutoscalePollerResponse{}, err
+func (client *TableResourcesClient) BeginMigrateTableToAutoscale(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginMigrateTableToAutoscaleOptions) (*armruntime.Poller[TableResourcesClientMigrateTableToAutoscaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateTableToAutoscale(ctx, resourceGroupName, accountName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TableResourcesClientMigrateTableToAutoscaleResponse]("TableResourcesClient.MigrateTableToAutoscale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TableResourcesClientMigrateTableToAutoscaleResponse]("TableResourcesClient.MigrateTableToAutoscale", options.ResumeToken, client.pl, nil)
 	}
-	result := TableResourcesClientMigrateTableToAutoscalePollerResponse{}
-	pt, err := armruntime.NewPoller("TableResourcesClient.MigrateTableToAutoscale", "", resp, client.pl)
-	if err != nil {
-		return TableResourcesClientMigrateTableToAutoscalePollerResponse{}, err
-	}
-	result.Poller = &TableResourcesClientMigrateTableToAutoscalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateTableToAutoscale - Migrate an Azure Cosmos DB Table from manual throughput to autoscale
@@ -438,20 +439,16 @@ func (client *TableResourcesClient) migrateTableToAutoscaleCreateRequest(ctx con
 // tableName - Cosmos DB table name.
 // options - TableResourcesClientBeginMigrateTableToManualThroughputOptions contains the optional parameters for the TableResourcesClient.BeginMigrateTableToManualThroughput
 // method.
-func (client *TableResourcesClient) BeginMigrateTableToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginMigrateTableToManualThroughputOptions) (TableResourcesClientMigrateTableToManualThroughputPollerResponse, error) {
-	resp, err := client.migrateTableToManualThroughput(ctx, resourceGroupName, accountName, tableName, options)
-	if err != nil {
-		return TableResourcesClientMigrateTableToManualThroughputPollerResponse{}, err
+func (client *TableResourcesClient) BeginMigrateTableToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, tableName string, options *TableResourcesClientBeginMigrateTableToManualThroughputOptions) (*armruntime.Poller[TableResourcesClientMigrateTableToManualThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateTableToManualThroughput(ctx, resourceGroupName, accountName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TableResourcesClientMigrateTableToManualThroughputResponse]("TableResourcesClient.MigrateTableToManualThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TableResourcesClientMigrateTableToManualThroughputResponse]("TableResourcesClient.MigrateTableToManualThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := TableResourcesClientMigrateTableToManualThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("TableResourcesClient.MigrateTableToManualThroughput", "", resp, client.pl)
-	if err != nil {
-		return TableResourcesClientMigrateTableToManualThroughputPollerResponse{}, err
-	}
-	result.Poller = &TableResourcesClientMigrateTableToManualThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateTableToManualThroughput - Migrate an Azure Cosmos DB Table from autoscale to manual throughput
@@ -509,20 +506,16 @@ func (client *TableResourcesClient) migrateTableToManualThroughputCreateRequest(
 // updateThroughputParameters - The parameters to provide for the RUs per second of the current Table.
 // options - TableResourcesClientBeginUpdateTableThroughputOptions contains the optional parameters for the TableResourcesClient.BeginUpdateTableThroughput
 // method.
-func (client *TableResourcesClient) BeginUpdateTableThroughput(ctx context.Context, resourceGroupName string, accountName string, tableName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *TableResourcesClientBeginUpdateTableThroughputOptions) (TableResourcesClientUpdateTableThroughputPollerResponse, error) {
-	resp, err := client.updateTableThroughput(ctx, resourceGroupName, accountName, tableName, updateThroughputParameters, options)
-	if err != nil {
-		return TableResourcesClientUpdateTableThroughputPollerResponse{}, err
+func (client *TableResourcesClient) BeginUpdateTableThroughput(ctx context.Context, resourceGroupName string, accountName string, tableName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *TableResourcesClientBeginUpdateTableThroughputOptions) (*armruntime.Poller[TableResourcesClientUpdateTableThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateTableThroughput(ctx, resourceGroupName, accountName, tableName, updateThroughputParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TableResourcesClientUpdateTableThroughputResponse]("TableResourcesClient.UpdateTableThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TableResourcesClientUpdateTableThroughputResponse]("TableResourcesClient.UpdateTableThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := TableResourcesClientUpdateTableThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("TableResourcesClient.UpdateTableThroughput", "", resp, client.pl)
-	if err != nil {
-		return TableResourcesClientUpdateTableThroughputPollerResponse{}, err
-	}
-	result.Poller = &TableResourcesClientUpdateTableThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateTableThroughput - Update RUs per second of an Azure Cosmos DB Table

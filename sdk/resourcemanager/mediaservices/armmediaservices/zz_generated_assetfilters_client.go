@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -243,16 +243,32 @@ func (client *AssetFiltersClient) getHandleResponse(resp *http.Response) (AssetF
 // accountName - The Media Services account name.
 // assetName - The Asset name.
 // options - AssetFiltersClientListOptions contains the optional parameters for the AssetFiltersClient.List method.
-func (client *AssetFiltersClient) List(resourceGroupName string, accountName string, assetName string, options *AssetFiltersClientListOptions) *AssetFiltersClientListPager {
-	return &AssetFiltersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, assetName, options)
+func (client *AssetFiltersClient) List(resourceGroupName string, accountName string, assetName string, options *AssetFiltersClientListOptions) *runtime.Pager[AssetFiltersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssetFiltersClientListResponse]{
+		More: func(page AssetFiltersClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AssetFiltersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AssetFilterCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *AssetFiltersClientListResponse) (AssetFiltersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, assetName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return AssetFiltersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssetFiltersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssetFiltersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

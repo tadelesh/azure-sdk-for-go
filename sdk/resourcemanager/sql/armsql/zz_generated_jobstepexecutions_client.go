@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -134,16 +134,32 @@ func (client *JobStepExecutionsClient) getHandleResponse(resp *http.Response) (J
 // jobExecutionID - The id of the job execution
 // options - JobStepExecutionsClientListByJobExecutionOptions contains the optional parameters for the JobStepExecutionsClient.ListByJobExecution
 // method.
-func (client *JobStepExecutionsClient) ListByJobExecution(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, options *JobStepExecutionsClientListByJobExecutionOptions) *JobStepExecutionsClientListByJobExecutionPager {
-	return &JobStepExecutionsClientListByJobExecutionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByJobExecutionCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, options)
+func (client *JobStepExecutionsClient) ListByJobExecution(resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID string, options *JobStepExecutionsClientListByJobExecutionOptions) *runtime.Pager[JobStepExecutionsClientListByJobExecutionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobStepExecutionsClientListByJobExecutionResponse]{
+		More: func(page JobStepExecutionsClientListByJobExecutionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobStepExecutionsClientListByJobExecutionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobExecutionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobStepExecutionsClientListByJobExecutionResponse) (JobStepExecutionsClientListByJobExecutionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByJobExecutionCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobStepExecutionsClientListByJobExecutionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobStepExecutionsClientListByJobExecutionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobStepExecutionsClientListByJobExecutionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByJobExecutionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByJobExecutionCreateRequest creates the ListByJobExecution request.

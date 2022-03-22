@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewLabPlansClient(subscriptionID string, credential azcore.TokenCredential,
 // body - The request body.
 // options - LabPlansClientBeginCreateOrUpdateOptions contains the optional parameters for the LabPlansClient.BeginCreateOrUpdate
 // method.
-func (client *LabPlansClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labPlanName string, body LabPlan, options *LabPlansClientBeginCreateOrUpdateOptions) (LabPlansClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labPlanName, body, options)
-	if err != nil {
-		return LabPlansClientCreateOrUpdatePollerResponse{}, err
+func (client *LabPlansClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labPlanName string, body LabPlan, options *LabPlansClientBeginCreateOrUpdateOptions) (*armruntime.Poller[LabPlansClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labPlanName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabPlansClientCreateOrUpdateResponse]("LabPlansClient.CreateOrUpdate", "original-uri", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabPlansClientCreateOrUpdateResponse]("LabPlansClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := LabPlansClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LabPlansClient.CreateOrUpdate", "original-uri", resp, client.pl)
-	if err != nil {
-		return LabPlansClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &LabPlansClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Operation to create or update a Lab Plan resource.
@@ -123,20 +119,16 @@ func (client *LabPlansClient) createOrUpdateCreateRequest(ctx context.Context, r
 // labPlanName - The name of the lab plan that uniquely identifies it within containing resource group. Used in resource URIs
 // and in UI.
 // options - LabPlansClientBeginDeleteOptions contains the optional parameters for the LabPlansClient.BeginDelete method.
-func (client *LabPlansClient) BeginDelete(ctx context.Context, resourceGroupName string, labPlanName string, options *LabPlansClientBeginDeleteOptions) (LabPlansClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labPlanName, options)
-	if err != nil {
-		return LabPlansClientDeletePollerResponse{}, err
+func (client *LabPlansClient) BeginDelete(ctx context.Context, resourceGroupName string, labPlanName string, options *LabPlansClientBeginDeleteOptions) (*armruntime.Poller[LabPlansClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labPlanName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabPlansClientDeleteResponse]("LabPlansClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabPlansClientDeleteResponse]("LabPlansClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := LabPlansClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("LabPlansClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return LabPlansClientDeletePollerResponse{}, err
-	}
-	result.Poller = &LabPlansClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete a Lab Plan resource. Deleting a lab plan does not delete labs associated with a lab plan,
@@ -244,16 +236,32 @@ func (client *LabPlansClient) getHandleResponse(resp *http.Response) (LabPlansCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - LabPlansClientListByResourceGroupOptions contains the optional parameters for the LabPlansClient.ListByResourceGroup
 // method.
-func (client *LabPlansClient) ListByResourceGroup(resourceGroupName string, options *LabPlansClientListByResourceGroupOptions) *LabPlansClientListByResourceGroupPager {
-	return &LabPlansClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *LabPlansClient) ListByResourceGroup(resourceGroupName string, options *LabPlansClientListByResourceGroupOptions) *runtime.Pager[LabPlansClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabPlansClientListByResourceGroupResponse]{
+		More: func(page LabPlansClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabPlansClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedLabPlans.NextLink)
+		Fetcher: func(ctx context.Context, page *LabPlansClientListByResourceGroupResponse) (LabPlansClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabPlansClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabPlansClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabPlansClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -291,16 +299,32 @@ func (client *LabPlansClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LabPlansClientListBySubscriptionOptions contains the optional parameters for the LabPlansClient.ListBySubscription
 // method.
-func (client *LabPlansClient) ListBySubscription(options *LabPlansClientListBySubscriptionOptions) *LabPlansClientListBySubscriptionPager {
-	return &LabPlansClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *LabPlansClient) ListBySubscription(options *LabPlansClientListBySubscriptionOptions) *runtime.Pager[LabPlansClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabPlansClientListBySubscriptionResponse]{
+		More: func(page LabPlansClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabPlansClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedLabPlans.NextLink)
+		Fetcher: func(ctx context.Context, page *LabPlansClientListBySubscriptionResponse) (LabPlansClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabPlansClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabPlansClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabPlansClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -340,20 +364,16 @@ func (client *LabPlansClient) listBySubscriptionHandleResponse(resp *http.Respon
 // and in UI.
 // body - The request body.
 // options - LabPlansClientBeginSaveImageOptions contains the optional parameters for the LabPlansClient.BeginSaveImage method.
-func (client *LabPlansClient) BeginSaveImage(ctx context.Context, resourceGroupName string, labPlanName string, body SaveImageBody, options *LabPlansClientBeginSaveImageOptions) (LabPlansClientSaveImagePollerResponse, error) {
-	resp, err := client.saveImage(ctx, resourceGroupName, labPlanName, body, options)
-	if err != nil {
-		return LabPlansClientSaveImagePollerResponse{}, err
+func (client *LabPlansClient) BeginSaveImage(ctx context.Context, resourceGroupName string, labPlanName string, body SaveImageBody, options *LabPlansClientBeginSaveImageOptions) (*armruntime.Poller[LabPlansClientSaveImageResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.saveImage(ctx, resourceGroupName, labPlanName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabPlansClientSaveImageResponse]("LabPlansClient.SaveImage", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabPlansClientSaveImageResponse]("LabPlansClient.SaveImage", options.ResumeToken, client.pl, nil)
 	}
-	result := LabPlansClientSaveImagePollerResponse{}
-	pt, err := armruntime.NewPoller("LabPlansClient.SaveImage", "location", resp, client.pl)
-	if err != nil {
-		return LabPlansClientSaveImagePollerResponse{}, err
-	}
-	result.Poller = &LabPlansClientSaveImagePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // SaveImage - Saves an image from a lab VM to the attached shared image gallery.
@@ -406,20 +426,16 @@ func (client *LabPlansClient) saveImageCreateRequest(ctx context.Context, resour
 // and in UI.
 // body - The request body.
 // options - LabPlansClientBeginUpdateOptions contains the optional parameters for the LabPlansClient.BeginUpdate method.
-func (client *LabPlansClient) BeginUpdate(ctx context.Context, resourceGroupName string, labPlanName string, body LabPlanUpdate, options *LabPlansClientBeginUpdateOptions) (LabPlansClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, labPlanName, body, options)
-	if err != nil {
-		return LabPlansClientUpdatePollerResponse{}, err
+func (client *LabPlansClient) BeginUpdate(ctx context.Context, resourceGroupName string, labPlanName string, body LabPlanUpdate, options *LabPlansClientBeginUpdateOptions) (*armruntime.Poller[LabPlansClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, labPlanName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabPlansClientUpdateResponse]("LabPlansClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabPlansClientUpdateResponse]("LabPlansClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := LabPlansClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LabPlansClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return LabPlansClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &LabPlansClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update a Lab Plan resource.

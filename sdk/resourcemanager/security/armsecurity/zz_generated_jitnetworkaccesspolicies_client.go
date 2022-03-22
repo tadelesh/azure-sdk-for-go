@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -292,16 +292,32 @@ func (client *JitNetworkAccessPoliciesClient) initiateHandleResponse(resp *http.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - JitNetworkAccessPoliciesClientListOptions contains the optional parameters for the JitNetworkAccessPoliciesClient.List
 // method.
-func (client *JitNetworkAccessPoliciesClient) List(options *JitNetworkAccessPoliciesClientListOptions) *JitNetworkAccessPoliciesClientListPager {
-	return &JitNetworkAccessPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *JitNetworkAccessPoliciesClient) List(options *JitNetworkAccessPoliciesClientListOptions) *runtime.Pager[JitNetworkAccessPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JitNetworkAccessPoliciesClientListResponse]{
+		More: func(page JitNetworkAccessPoliciesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JitNetworkAccessPoliciesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JitNetworkAccessPoliciesList.NextLink)
+		Fetcher: func(ctx context.Context, page *JitNetworkAccessPoliciesClientListResponse) (JitNetworkAccessPoliciesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JitNetworkAccessPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -335,16 +351,32 @@ func (client *JitNetworkAccessPoliciesClient) listHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - JitNetworkAccessPoliciesClientListByRegionOptions contains the optional parameters for the JitNetworkAccessPoliciesClient.ListByRegion
 // method.
-func (client *JitNetworkAccessPoliciesClient) ListByRegion(options *JitNetworkAccessPoliciesClientListByRegionOptions) *JitNetworkAccessPoliciesClientListByRegionPager {
-	return &JitNetworkAccessPoliciesClientListByRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRegionCreateRequest(ctx, options)
+func (client *JitNetworkAccessPoliciesClient) ListByRegion(options *JitNetworkAccessPoliciesClientListByRegionOptions) *runtime.Pager[JitNetworkAccessPoliciesClientListByRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JitNetworkAccessPoliciesClientListByRegionResponse]{
+		More: func(page JitNetworkAccessPoliciesClientListByRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JitNetworkAccessPoliciesClientListByRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JitNetworkAccessPoliciesList.NextLink)
+		Fetcher: func(ctx context.Context, page *JitNetworkAccessPoliciesClientListByRegionResponse) (JitNetworkAccessPoliciesClientListByRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByRegionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JitNetworkAccessPoliciesClientListByRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByRegionCreateRequest creates the ListByRegion request.
@@ -383,16 +415,32 @@ func (client *JitNetworkAccessPoliciesClient) listByRegionHandleResponse(resp *h
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - JitNetworkAccessPoliciesClientListByResourceGroupOptions contains the optional parameters for the JitNetworkAccessPoliciesClient.ListByResourceGroup
 // method.
-func (client *JitNetworkAccessPoliciesClient) ListByResourceGroup(resourceGroupName string, options *JitNetworkAccessPoliciesClientListByResourceGroupOptions) *JitNetworkAccessPoliciesClientListByResourceGroupPager {
-	return &JitNetworkAccessPoliciesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *JitNetworkAccessPoliciesClient) ListByResourceGroup(resourceGroupName string, options *JitNetworkAccessPoliciesClientListByResourceGroupOptions) *runtime.Pager[JitNetworkAccessPoliciesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JitNetworkAccessPoliciesClientListByResourceGroupResponse]{
+		More: func(page JitNetworkAccessPoliciesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JitNetworkAccessPoliciesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JitNetworkAccessPoliciesList.NextLink)
+		Fetcher: func(ctx context.Context, page *JitNetworkAccessPoliciesClientListByResourceGroupResponse) (JitNetworkAccessPoliciesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JitNetworkAccessPoliciesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -432,16 +480,32 @@ func (client *JitNetworkAccessPoliciesClient) listByResourceGroupHandleResponse(
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - JitNetworkAccessPoliciesClientListByResourceGroupAndRegionOptions contains the optional parameters for the JitNetworkAccessPoliciesClient.ListByResourceGroupAndRegion
 // method.
-func (client *JitNetworkAccessPoliciesClient) ListByResourceGroupAndRegion(resourceGroupName string, options *JitNetworkAccessPoliciesClientListByResourceGroupAndRegionOptions) *JitNetworkAccessPoliciesClientListByResourceGroupAndRegionPager {
-	return &JitNetworkAccessPoliciesClientListByResourceGroupAndRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupAndRegionCreateRequest(ctx, resourceGroupName, options)
+func (client *JitNetworkAccessPoliciesClient) ListByResourceGroupAndRegion(resourceGroupName string, options *JitNetworkAccessPoliciesClientListByResourceGroupAndRegionOptions) *runtime.Pager[JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse]{
+		More: func(page JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JitNetworkAccessPoliciesList.NextLink)
+		Fetcher: func(ctx context.Context, page *JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse) (JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupAndRegionCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JitNetworkAccessPoliciesClientListByResourceGroupAndRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupAndRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupAndRegionCreateRequest creates the ListByResourceGroupAndRegion request.

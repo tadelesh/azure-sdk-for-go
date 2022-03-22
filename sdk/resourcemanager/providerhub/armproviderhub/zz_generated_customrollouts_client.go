@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -166,16 +166,32 @@ func (client *CustomRolloutsClient) getHandleResponse(resp *http.Response) (Cust
 // providerNamespace - The name of the resource provider hosted within ProviderHub.
 // options - CustomRolloutsClientListByProviderRegistrationOptions contains the optional parameters for the CustomRolloutsClient.ListByProviderRegistration
 // method.
-func (client *CustomRolloutsClient) ListByProviderRegistration(providerNamespace string, options *CustomRolloutsClientListByProviderRegistrationOptions) *CustomRolloutsClientListByProviderRegistrationPager {
-	return &CustomRolloutsClientListByProviderRegistrationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+func (client *CustomRolloutsClient) ListByProviderRegistration(providerNamespace string, options *CustomRolloutsClientListByProviderRegistrationOptions) *runtime.Pager[CustomRolloutsClientListByProviderRegistrationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomRolloutsClientListByProviderRegistrationResponse]{
+		More: func(page CustomRolloutsClientListByProviderRegistrationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomRolloutsClientListByProviderRegistrationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomRolloutArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomRolloutsClientListByProviderRegistrationResponse) (CustomRolloutsClientListByProviderRegistrationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomRolloutsClientListByProviderRegistrationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomRolloutsClientListByProviderRegistrationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomRolloutsClientListByProviderRegistrationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProviderRegistrationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProviderRegistrationCreateRequest creates the ListByProviderRegistration request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -128,13 +128,26 @@ func (client *WorkflowRunActionRepetitionsClient) getHandleResponse(resp *http.R
 // actionName - The workflow action name.
 // options - WorkflowRunActionRepetitionsClientListOptions contains the optional parameters for the WorkflowRunActionRepetitionsClient.List
 // method.
-func (client *WorkflowRunActionRepetitionsClient) List(resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionRepetitionsClientListOptions) *WorkflowRunActionRepetitionsClientListPager {
-	return &WorkflowRunActionRepetitionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
+func (client *WorkflowRunActionRepetitionsClient) List(resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionRepetitionsClientListOptions) *runtime.Pager[WorkflowRunActionRepetitionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowRunActionRepetitionsClientListResponse]{
+		More: func(page WorkflowRunActionRepetitionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkflowRunActionRepetitionsClientListResponse) (WorkflowRunActionRepetitionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
+			if err != nil {
+				return WorkflowRunActionRepetitionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowRunActionRepetitionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowRunActionRepetitionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -189,13 +202,26 @@ func (client *WorkflowRunActionRepetitionsClient) listHandleResponse(resp *http.
 // repetitionName - The workflow repetition.
 // options - WorkflowRunActionRepetitionsClientListExpressionTracesOptions contains the optional parameters for the WorkflowRunActionRepetitionsClient.ListExpressionTraces
 // method.
-func (client *WorkflowRunActionRepetitionsClient) ListExpressionTraces(resourceGroupName string, workflowName string, runName string, actionName string, repetitionName string, options *WorkflowRunActionRepetitionsClientListExpressionTracesOptions) *WorkflowRunActionRepetitionsClientListExpressionTracesPager {
-	return &WorkflowRunActionRepetitionsClientListExpressionTracesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listExpressionTracesCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, repetitionName, options)
+func (client *WorkflowRunActionRepetitionsClient) ListExpressionTraces(resourceGroupName string, workflowName string, runName string, actionName string, repetitionName string, options *WorkflowRunActionRepetitionsClientListExpressionTracesOptions) *runtime.Pager[WorkflowRunActionRepetitionsClientListExpressionTracesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowRunActionRepetitionsClientListExpressionTracesResponse]{
+		More: func(page WorkflowRunActionRepetitionsClientListExpressionTracesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkflowRunActionRepetitionsClientListExpressionTracesResponse) (WorkflowRunActionRepetitionsClientListExpressionTracesResponse, error) {
+			req, err := client.listExpressionTracesCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, repetitionName, options)
+			if err != nil {
+				return WorkflowRunActionRepetitionsClientListExpressionTracesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowRunActionRepetitionsClientListExpressionTracesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowRunActionRepetitionsClientListExpressionTracesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listExpressionTracesHandleResponse(resp)
+		},
+	})
 }
 
 // listExpressionTracesCreateRequest creates the ListExpressionTraces request.

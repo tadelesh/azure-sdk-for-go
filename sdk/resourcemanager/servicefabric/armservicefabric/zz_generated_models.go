@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -291,13 +291,15 @@ type ApplicationTypeVersionsCleanupPolicy struct {
 // ApplicationTypeVersionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationTypeVersionsClient.BeginCreateOrUpdate
 // method.
 type ApplicationTypeVersionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationTypeVersionsClientBeginDeleteOptions contains the optional parameters for the ApplicationTypeVersionsClient.BeginDelete
 // method.
 type ApplicationTypeVersionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationTypeVersionsClientGetOptions contains the optional parameters for the ApplicationTypeVersionsClient.Get method.
@@ -312,7 +314,8 @@ type ApplicationTypeVersionsClientListOptions struct {
 
 // ApplicationTypesClientBeginDeleteOptions contains the optional parameters for the ApplicationTypesClient.BeginDelete method.
 type ApplicationTypesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationTypesClientCreateOrUpdateOptions contains the optional parameters for the ApplicationTypesClient.CreateOrUpdate
@@ -368,17 +371,20 @@ type ApplicationUserAssignedIdentity struct {
 // ApplicationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationsClient.BeginCreateOrUpdate
 // method.
 type ApplicationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientBeginDeleteOptions contains the optional parameters for the ApplicationsClient.BeginDelete method.
 type ApplicationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientBeginUpdateOptions contains the optional parameters for the ApplicationsClient.BeginUpdate method.
 type ApplicationsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientGetOptions contains the optional parameters for the ApplicationsClient.Get method.
@@ -925,12 +931,14 @@ type ClusterVersionsClientListOptions struct {
 
 // ClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ClustersClient.BeginCreateOrUpdate method.
 type ClustersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
 type ClustersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientDeleteOptions contains the optional parameters for the ClustersClient.Delete method.
@@ -1452,17 +1460,20 @@ type ServiceTypeHealthPolicy struct {
 
 // ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate method.
 type ServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
 type ServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
 type ServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientGetOptions contains the optional parameters for the ServicesClient.Get method.

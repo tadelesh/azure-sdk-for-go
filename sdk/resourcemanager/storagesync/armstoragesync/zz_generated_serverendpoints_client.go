@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServerEndpointsClient(subscriptionID string, credential azcore.TokenCred
 // parameters - Body of Server Endpoint object.
 // options - ServerEndpointsClientBeginCreateOptions contains the optional parameters for the ServerEndpointsClient.BeginCreate
 // method.
-func (client *ServerEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, parameters ServerEndpointCreateParameters, options *ServerEndpointsClientBeginCreateOptions) (ServerEndpointsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, parameters, options)
-	if err != nil {
-		return ServerEndpointsClientCreatePollerResponse{}, err
+func (client *ServerEndpointsClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, parameters ServerEndpointCreateParameters, options *ServerEndpointsClientBeginCreateOptions) (*armruntime.Poller[ServerEndpointsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerEndpointsClientCreateResponse]("ServerEndpointsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerEndpointsClientCreateResponse]("ServerEndpointsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerEndpointsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerEndpointsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ServerEndpointsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ServerEndpointsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a new ServerEndpoint.
@@ -133,20 +129,16 @@ func (client *ServerEndpointsClient) createCreateRequest(ctx context.Context, re
 // serverEndpointName - Name of Server Endpoint object.
 // options - ServerEndpointsClientBeginDeleteOptions contains the optional parameters for the ServerEndpointsClient.BeginDelete
 // method.
-func (client *ServerEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, options *ServerEndpointsClientBeginDeleteOptions) (ServerEndpointsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, options)
-	if err != nil {
-		return ServerEndpointsClientDeletePollerResponse{}, err
+func (client *ServerEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, options *ServerEndpointsClientBeginDeleteOptions) (*armruntime.Poller[ServerEndpointsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerEndpointsClientDeleteResponse]("ServerEndpointsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerEndpointsClientDeleteResponse]("ServerEndpointsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerEndpointsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerEndpointsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServerEndpointsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServerEndpointsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a given ServerEndpoint.
@@ -278,13 +270,26 @@ func (client *ServerEndpointsClient) getHandleResponse(resp *http.Response) (Ser
 // syncGroupName - Name of Sync Group resource.
 // options - ServerEndpointsClientListBySyncGroupOptions contains the optional parameters for the ServerEndpointsClient.ListBySyncGroup
 // method.
-func (client *ServerEndpointsClient) ListBySyncGroup(resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *ServerEndpointsClientListBySyncGroupOptions) *ServerEndpointsClientListBySyncGroupPager {
-	return &ServerEndpointsClientListBySyncGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
+func (client *ServerEndpointsClient) ListBySyncGroup(resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *ServerEndpointsClientListBySyncGroupOptions) *runtime.Pager[ServerEndpointsClientListBySyncGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerEndpointsClientListBySyncGroupResponse]{
+		More: func(page ServerEndpointsClientListBySyncGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServerEndpointsClientListBySyncGroupResponse) (ServerEndpointsClientListBySyncGroupResponse, error) {
+			req, err := client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
+			if err != nil {
+				return ServerEndpointsClientListBySyncGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerEndpointsClientListBySyncGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerEndpointsClientListBySyncGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySyncGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listBySyncGroupCreateRequest creates the ListBySyncGroup request.
@@ -344,20 +349,16 @@ func (client *ServerEndpointsClient) listBySyncGroupHandleResponse(resp *http.Re
 // parameters - Body of Recall Action object.
 // options - ServerEndpointsClientBeginRecallActionOptions contains the optional parameters for the ServerEndpointsClient.BeginRecallAction
 // method.
-func (client *ServerEndpointsClient) BeginRecallAction(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, parameters RecallActionParameters, options *ServerEndpointsClientBeginRecallActionOptions) (ServerEndpointsClientRecallActionPollerResponse, error) {
-	resp, err := client.recallAction(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, parameters, options)
-	if err != nil {
-		return ServerEndpointsClientRecallActionPollerResponse{}, err
+func (client *ServerEndpointsClient) BeginRecallAction(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, parameters RecallActionParameters, options *ServerEndpointsClientBeginRecallActionOptions) (*armruntime.Poller[ServerEndpointsClientRecallActionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.recallAction(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerEndpointsClientRecallActionResponse]("ServerEndpointsClient.RecallAction", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerEndpointsClientRecallActionResponse]("ServerEndpointsClient.RecallAction", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerEndpointsClientRecallActionPollerResponse{}
-	pt, err := armruntime.NewPoller("ServerEndpointsClient.RecallAction", "", resp, client.pl)
-	if err != nil {
-		return ServerEndpointsClientRecallActionPollerResponse{}, err
-	}
-	result.Poller = &ServerEndpointsClientRecallActionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RecallAction - Recall a server endpoint.
@@ -419,20 +420,16 @@ func (client *ServerEndpointsClient) recallActionCreateRequest(ctx context.Conte
 // serverEndpointName - Name of Server Endpoint object.
 // options - ServerEndpointsClientBeginUpdateOptions contains the optional parameters for the ServerEndpointsClient.BeginUpdate
 // method.
-func (client *ServerEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, options *ServerEndpointsClientBeginUpdateOptions) (ServerEndpointsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, options)
-	if err != nil {
-		return ServerEndpointsClientUpdatePollerResponse{}, err
+func (client *ServerEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, options *ServerEndpointsClientBeginUpdateOptions) (*armruntime.Poller[ServerEndpointsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, serverEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerEndpointsClientUpdateResponse]("ServerEndpointsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerEndpointsClientUpdateResponse]("ServerEndpointsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerEndpointsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerEndpointsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServerEndpointsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerEndpointsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch a given ServerEndpoint.

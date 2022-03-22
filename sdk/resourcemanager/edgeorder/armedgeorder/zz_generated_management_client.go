@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -105,20 +105,16 @@ func (client *ManagementClient) cancelOrderItemCreateRequest(ctx context.Context
 // addressResource - Address details from request body.
 // options - ManagementClientBeginCreateAddressOptions contains the optional parameters for the ManagementClient.BeginCreateAddress
 // method.
-func (client *ManagementClient) BeginCreateAddress(ctx context.Context, addressName string, resourceGroupName string, addressResource AddressResource, options *ManagementClientBeginCreateAddressOptions) (ManagementClientCreateAddressPollerResponse, error) {
-	resp, err := client.createAddress(ctx, addressName, resourceGroupName, addressResource, options)
-	if err != nil {
-		return ManagementClientCreateAddressPollerResponse{}, err
+func (client *ManagementClient) BeginCreateAddress(ctx context.Context, addressName string, resourceGroupName string, addressResource AddressResource, options *ManagementClientBeginCreateAddressOptions) (*armruntime.Poller[ManagementClientCreateAddressResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createAddress(ctx, addressName, resourceGroupName, addressResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientCreateAddressResponse]("ManagementClient.CreateAddress", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientCreateAddressResponse]("ManagementClient.CreateAddress", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientCreateAddressPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.CreateAddress", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientCreateAddressPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientCreateAddressPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateAddress - Creates a new address with the specified parameters. Existing address can be updated with this API
@@ -172,20 +168,16 @@ func (client *ManagementClient) createAddressCreateRequest(ctx context.Context, 
 // orderItemResource - Order item details from request body.
 // options - ManagementClientBeginCreateOrderItemOptions contains the optional parameters for the ManagementClient.BeginCreateOrderItem
 // method.
-func (client *ManagementClient) BeginCreateOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, orderItemResource OrderItemResource, options *ManagementClientBeginCreateOrderItemOptions) (ManagementClientCreateOrderItemPollerResponse, error) {
-	resp, err := client.createOrderItem(ctx, orderItemName, resourceGroupName, orderItemResource, options)
-	if err != nil {
-		return ManagementClientCreateOrderItemPollerResponse{}, err
+func (client *ManagementClient) BeginCreateOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, orderItemResource OrderItemResource, options *ManagementClientBeginCreateOrderItemOptions) (*armruntime.Poller[ManagementClientCreateOrderItemResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrderItem(ctx, orderItemName, resourceGroupName, orderItemResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientCreateOrderItemResponse]("ManagementClient.CreateOrderItem", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientCreateOrderItemResponse]("ManagementClient.CreateOrderItem", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientCreateOrderItemPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.CreateOrderItem", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientCreateOrderItemPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientCreateOrderItemPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrderItem - Creates an order item. Existing order item cannot be updated with this api and should instead be updated
@@ -239,20 +231,16 @@ func (client *ManagementClient) createOrderItemCreateRequest(ctx context.Context
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ManagementClientBeginDeleteAddressByNameOptions contains the optional parameters for the ManagementClient.BeginDeleteAddressByName
 // method.
-func (client *ManagementClient) BeginDeleteAddressByName(ctx context.Context, addressName string, resourceGroupName string, options *ManagementClientBeginDeleteAddressByNameOptions) (ManagementClientDeleteAddressByNamePollerResponse, error) {
-	resp, err := client.deleteAddressByName(ctx, addressName, resourceGroupName, options)
-	if err != nil {
-		return ManagementClientDeleteAddressByNamePollerResponse{}, err
+func (client *ManagementClient) BeginDeleteAddressByName(ctx context.Context, addressName string, resourceGroupName string, options *ManagementClientBeginDeleteAddressByNameOptions) (*armruntime.Poller[ManagementClientDeleteAddressByNameResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteAddressByName(ctx, addressName, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientDeleteAddressByNameResponse]("ManagementClient.DeleteAddressByName", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientDeleteAddressByNameResponse]("ManagementClient.DeleteAddressByName", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientDeleteAddressByNamePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.DeleteAddressByName", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientDeleteAddressByNamePollerResponse{}, err
-	}
-	result.Poller = &ManagementClientDeleteAddressByNamePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteAddressByName - Deletes an address.
@@ -304,20 +292,16 @@ func (client *ManagementClient) deleteAddressByNameCreateRequest(ctx context.Con
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ManagementClientBeginDeleteOrderItemByNameOptions contains the optional parameters for the ManagementClient.BeginDeleteOrderItemByName
 // method.
-func (client *ManagementClient) BeginDeleteOrderItemByName(ctx context.Context, orderItemName string, resourceGroupName string, options *ManagementClientBeginDeleteOrderItemByNameOptions) (ManagementClientDeleteOrderItemByNamePollerResponse, error) {
-	resp, err := client.deleteOrderItemByName(ctx, orderItemName, resourceGroupName, options)
-	if err != nil {
-		return ManagementClientDeleteOrderItemByNamePollerResponse{}, err
+func (client *ManagementClient) BeginDeleteOrderItemByName(ctx context.Context, orderItemName string, resourceGroupName string, options *ManagementClientBeginDeleteOrderItemByNameOptions) (*armruntime.Poller[ManagementClientDeleteOrderItemByNameResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOrderItemByName(ctx, orderItemName, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientDeleteOrderItemByNameResponse]("ManagementClient.DeleteOrderItemByName", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientDeleteOrderItemByNameResponse]("ManagementClient.DeleteOrderItemByName", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientDeleteOrderItemByNamePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.DeleteOrderItemByName", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientDeleteOrderItemByNamePollerResponse{}, err
-	}
-	result.Poller = &ManagementClientDeleteOrderItemByNamePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteOrderItemByName - Deletes an order item.
@@ -545,16 +529,32 @@ func (client *ManagementClient) getOrderItemByNameHandleResponse(resp *http.Resp
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ManagementClientListAddressesAtResourceGroupLevelOptions contains the optional parameters for the ManagementClient.ListAddressesAtResourceGroupLevel
 // method.
-func (client *ManagementClient) ListAddressesAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListAddressesAtResourceGroupLevelOptions) *ManagementClientListAddressesAtResourceGroupLevelPager {
-	return &ManagementClientListAddressesAtResourceGroupLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAddressesAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagementClient) ListAddressesAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListAddressesAtResourceGroupLevelOptions) *runtime.Pager[ManagementClientListAddressesAtResourceGroupLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListAddressesAtResourceGroupLevelResponse]{
+		More: func(page ManagementClientListAddressesAtResourceGroupLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListAddressesAtResourceGroupLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AddressResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListAddressesAtResourceGroupLevelResponse) (ManagementClientListAddressesAtResourceGroupLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAddressesAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListAddressesAtResourceGroupLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListAddressesAtResourceGroupLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListAddressesAtResourceGroupLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAddressesAtResourceGroupLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAddressesAtResourceGroupLevelCreateRequest creates the ListAddressesAtResourceGroupLevel request.
@@ -598,16 +598,32 @@ func (client *ManagementClient) listAddressesAtResourceGroupLevelHandleResponse(
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagementClientListAddressesAtSubscriptionLevelOptions contains the optional parameters for the ManagementClient.ListAddressesAtSubscriptionLevel
 // method.
-func (client *ManagementClient) ListAddressesAtSubscriptionLevel(options *ManagementClientListAddressesAtSubscriptionLevelOptions) *ManagementClientListAddressesAtSubscriptionLevelPager {
-	return &ManagementClientListAddressesAtSubscriptionLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAddressesAtSubscriptionLevelCreateRequest(ctx, options)
+func (client *ManagementClient) ListAddressesAtSubscriptionLevel(options *ManagementClientListAddressesAtSubscriptionLevelOptions) *runtime.Pager[ManagementClientListAddressesAtSubscriptionLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListAddressesAtSubscriptionLevelResponse]{
+		More: func(page ManagementClientListAddressesAtSubscriptionLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListAddressesAtSubscriptionLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AddressResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListAddressesAtSubscriptionLevelResponse) (ManagementClientListAddressesAtSubscriptionLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAddressesAtSubscriptionLevelCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListAddressesAtSubscriptionLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListAddressesAtSubscriptionLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListAddressesAtSubscriptionLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAddressesAtSubscriptionLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAddressesAtSubscriptionLevelCreateRequest creates the ListAddressesAtSubscriptionLevel request.
@@ -649,16 +665,32 @@ func (client *ManagementClient) listAddressesAtSubscriptionLevelHandleResponse(r
 // configurationsRequest - Filters for showing the configurations.
 // options - ManagementClientListConfigurationsOptions contains the optional parameters for the ManagementClient.ListConfigurations
 // method.
-func (client *ManagementClient) ListConfigurations(configurationsRequest ConfigurationsRequest, options *ManagementClientListConfigurationsOptions) *ManagementClientListConfigurationsPager {
-	return &ManagementClientListConfigurationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listConfigurationsCreateRequest(ctx, configurationsRequest, options)
+func (client *ManagementClient) ListConfigurations(configurationsRequest ConfigurationsRequest, options *ManagementClientListConfigurationsOptions) *runtime.Pager[ManagementClientListConfigurationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListConfigurationsResponse]{
+		More: func(page ManagementClientListConfigurationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListConfigurationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Configurations.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListConfigurationsResponse) (ManagementClientListConfigurationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listConfigurationsCreateRequest(ctx, configurationsRequest, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListConfigurationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListConfigurationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListConfigurationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listConfigurationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listConfigurationsCreateRequest creates the ListConfigurations request.
@@ -695,16 +727,32 @@ func (client *ManagementClient) listConfigurationsHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagementClientListOperationsOptions contains the optional parameters for the ManagementClient.ListOperations
 // method.
-func (client *ManagementClient) ListOperations(options *ManagementClientListOperationsOptions) *ManagementClientListOperationsPager {
-	return &ManagementClientListOperationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOperationsCreateRequest(ctx, options)
+func (client *ManagementClient) ListOperations(options *ManagementClientListOperationsOptions) *runtime.Pager[ManagementClientListOperationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListOperationsResponse]{
+		More: func(page ManagementClientListOperationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListOperationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OperationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListOperationsResponse) (ManagementClientListOperationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOperationsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListOperationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListOperationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListOperationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOperationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.
@@ -735,16 +783,32 @@ func (client *ManagementClient) listOperationsHandleResponse(resp *http.Response
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ManagementClientListOrderAtResourceGroupLevelOptions contains the optional parameters for the ManagementClient.ListOrderAtResourceGroupLevel
 // method.
-func (client *ManagementClient) ListOrderAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListOrderAtResourceGroupLevelOptions) *ManagementClientListOrderAtResourceGroupLevelPager {
-	return &ManagementClientListOrderAtResourceGroupLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOrderAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagementClient) ListOrderAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListOrderAtResourceGroupLevelOptions) *runtime.Pager[ManagementClientListOrderAtResourceGroupLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListOrderAtResourceGroupLevelResponse]{
+		More: func(page ManagementClientListOrderAtResourceGroupLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListOrderAtResourceGroupLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrderResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListOrderAtResourceGroupLevelResponse) (ManagementClientListOrderAtResourceGroupLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOrderAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListOrderAtResourceGroupLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListOrderAtResourceGroupLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListOrderAtResourceGroupLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOrderAtResourceGroupLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOrderAtResourceGroupLevelCreateRequest creates the ListOrderAtResourceGroupLevel request.
@@ -785,16 +849,32 @@ func (client *ManagementClient) listOrderAtResourceGroupLevelHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagementClientListOrderAtSubscriptionLevelOptions contains the optional parameters for the ManagementClient.ListOrderAtSubscriptionLevel
 // method.
-func (client *ManagementClient) ListOrderAtSubscriptionLevel(options *ManagementClientListOrderAtSubscriptionLevelOptions) *ManagementClientListOrderAtSubscriptionLevelPager {
-	return &ManagementClientListOrderAtSubscriptionLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOrderAtSubscriptionLevelCreateRequest(ctx, options)
+func (client *ManagementClient) ListOrderAtSubscriptionLevel(options *ManagementClientListOrderAtSubscriptionLevelOptions) *runtime.Pager[ManagementClientListOrderAtSubscriptionLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListOrderAtSubscriptionLevelResponse]{
+		More: func(page ManagementClientListOrderAtSubscriptionLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListOrderAtSubscriptionLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrderResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListOrderAtSubscriptionLevelResponse) (ManagementClientListOrderAtSubscriptionLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOrderAtSubscriptionLevelCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListOrderAtSubscriptionLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListOrderAtSubscriptionLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListOrderAtSubscriptionLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOrderAtSubscriptionLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOrderAtSubscriptionLevelCreateRequest creates the ListOrderAtSubscriptionLevel request.
@@ -832,16 +912,32 @@ func (client *ManagementClient) listOrderAtSubscriptionLevelHandleResponse(resp 
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ManagementClientListOrderItemsAtResourceGroupLevelOptions contains the optional parameters for the ManagementClient.ListOrderItemsAtResourceGroupLevel
 // method.
-func (client *ManagementClient) ListOrderItemsAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListOrderItemsAtResourceGroupLevelOptions) *ManagementClientListOrderItemsAtResourceGroupLevelPager {
-	return &ManagementClientListOrderItemsAtResourceGroupLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOrderItemsAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagementClient) ListOrderItemsAtResourceGroupLevel(resourceGroupName string, options *ManagementClientListOrderItemsAtResourceGroupLevelOptions) *runtime.Pager[ManagementClientListOrderItemsAtResourceGroupLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListOrderItemsAtResourceGroupLevelResponse]{
+		More: func(page ManagementClientListOrderItemsAtResourceGroupLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListOrderItemsAtResourceGroupLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrderItemResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListOrderItemsAtResourceGroupLevelResponse) (ManagementClientListOrderItemsAtResourceGroupLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOrderItemsAtResourceGroupLevelCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListOrderItemsAtResourceGroupLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListOrderItemsAtResourceGroupLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListOrderItemsAtResourceGroupLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOrderItemsAtResourceGroupLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOrderItemsAtResourceGroupLevelCreateRequest creates the ListOrderItemsAtResourceGroupLevel request.
@@ -888,16 +984,32 @@ func (client *ManagementClient) listOrderItemsAtResourceGroupLevelHandleResponse
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagementClientListOrderItemsAtSubscriptionLevelOptions contains the optional parameters for the ManagementClient.ListOrderItemsAtSubscriptionLevel
 // method.
-func (client *ManagementClient) ListOrderItemsAtSubscriptionLevel(options *ManagementClientListOrderItemsAtSubscriptionLevelOptions) *ManagementClientListOrderItemsAtSubscriptionLevelPager {
-	return &ManagementClientListOrderItemsAtSubscriptionLevelPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOrderItemsAtSubscriptionLevelCreateRequest(ctx, options)
+func (client *ManagementClient) ListOrderItemsAtSubscriptionLevel(options *ManagementClientListOrderItemsAtSubscriptionLevelOptions) *runtime.Pager[ManagementClientListOrderItemsAtSubscriptionLevelResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListOrderItemsAtSubscriptionLevelResponse]{
+		More: func(page ManagementClientListOrderItemsAtSubscriptionLevelResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListOrderItemsAtSubscriptionLevelResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrderItemResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListOrderItemsAtSubscriptionLevelResponse) (ManagementClientListOrderItemsAtSubscriptionLevelResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOrderItemsAtSubscriptionLevelCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListOrderItemsAtSubscriptionLevelResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListOrderItemsAtSubscriptionLevelResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListOrderItemsAtSubscriptionLevelResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOrderItemsAtSubscriptionLevelHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOrderItemsAtSubscriptionLevelCreateRequest creates the ListOrderItemsAtSubscriptionLevel request.
@@ -941,16 +1053,32 @@ func (client *ManagementClient) listOrderItemsAtSubscriptionLevelHandleResponse(
 // productFamiliesRequest - Filters for showing the product families.
 // options - ManagementClientListProductFamiliesOptions contains the optional parameters for the ManagementClient.ListProductFamilies
 // method.
-func (client *ManagementClient) ListProductFamilies(productFamiliesRequest ProductFamiliesRequest, options *ManagementClientListProductFamiliesOptions) *ManagementClientListProductFamiliesPager {
-	return &ManagementClientListProductFamiliesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listProductFamiliesCreateRequest(ctx, productFamiliesRequest, options)
+func (client *ManagementClient) ListProductFamilies(productFamiliesRequest ProductFamiliesRequest, options *ManagementClientListProductFamiliesOptions) *runtime.Pager[ManagementClientListProductFamiliesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListProductFamiliesResponse]{
+		More: func(page ManagementClientListProductFamiliesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListProductFamiliesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProductFamilies.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListProductFamiliesResponse) (ManagementClientListProductFamiliesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listProductFamiliesCreateRequest(ctx, productFamiliesRequest, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListProductFamiliesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListProductFamiliesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListProductFamiliesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listProductFamiliesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listProductFamiliesCreateRequest creates the ListProductFamilies request.
@@ -990,16 +1118,32 @@ func (client *ManagementClient) listProductFamiliesHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagementClientListProductFamiliesMetadataOptions contains the optional parameters for the ManagementClient.ListProductFamiliesMetadata
 // method.
-func (client *ManagementClient) ListProductFamiliesMetadata(options *ManagementClientListProductFamiliesMetadataOptions) *ManagementClientListProductFamiliesMetadataPager {
-	return &ManagementClientListProductFamiliesMetadataPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listProductFamiliesMetadataCreateRequest(ctx, options)
+func (client *ManagementClient) ListProductFamiliesMetadata(options *ManagementClientListProductFamiliesMetadataOptions) *runtime.Pager[ManagementClientListProductFamiliesMetadataResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementClientListProductFamiliesMetadataResponse]{
+		More: func(page ManagementClientListProductFamiliesMetadataResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementClientListProductFamiliesMetadataResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProductFamiliesMetadata.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementClientListProductFamiliesMetadataResponse) (ManagementClientListProductFamiliesMetadataResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listProductFamiliesMetadataCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementClientListProductFamiliesMetadataResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementClientListProductFamiliesMetadataResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementClientListProductFamiliesMetadataResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listProductFamiliesMetadataHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listProductFamiliesMetadataCreateRequest creates the ListProductFamiliesMetadata request.
@@ -1039,20 +1183,16 @@ func (client *ManagementClient) listProductFamiliesMetadataHandleResponse(resp *
 // returnOrderItemDetails - Return order item CurrentStatus.
 // options - ManagementClientBeginReturnOrderItemOptions contains the optional parameters for the ManagementClient.BeginReturnOrderItem
 // method.
-func (client *ManagementClient) BeginReturnOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, returnOrderItemDetails ReturnOrderItemDetails, options *ManagementClientBeginReturnOrderItemOptions) (ManagementClientReturnOrderItemPollerResponse, error) {
-	resp, err := client.returnOrderItem(ctx, orderItemName, resourceGroupName, returnOrderItemDetails, options)
-	if err != nil {
-		return ManagementClientReturnOrderItemPollerResponse{}, err
+func (client *ManagementClient) BeginReturnOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, returnOrderItemDetails ReturnOrderItemDetails, options *ManagementClientBeginReturnOrderItemOptions) (*armruntime.Poller[ManagementClientReturnOrderItemResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.returnOrderItem(ctx, orderItemName, resourceGroupName, returnOrderItemDetails, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientReturnOrderItemResponse]("ManagementClient.ReturnOrderItem", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientReturnOrderItemResponse]("ManagementClient.ReturnOrderItem", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientReturnOrderItemPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.ReturnOrderItem", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientReturnOrderItemPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientReturnOrderItemPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ReturnOrderItem - Return order item.
@@ -1106,20 +1246,16 @@ func (client *ManagementClient) returnOrderItemCreateRequest(ctx context.Context
 // addressUpdateParameter - Address update parameters from request body.
 // options - ManagementClientBeginUpdateAddressOptions contains the optional parameters for the ManagementClient.BeginUpdateAddress
 // method.
-func (client *ManagementClient) BeginUpdateAddress(ctx context.Context, addressName string, resourceGroupName string, addressUpdateParameter AddressUpdateParameter, options *ManagementClientBeginUpdateAddressOptions) (ManagementClientUpdateAddressPollerResponse, error) {
-	resp, err := client.updateAddress(ctx, addressName, resourceGroupName, addressUpdateParameter, options)
-	if err != nil {
-		return ManagementClientUpdateAddressPollerResponse{}, err
+func (client *ManagementClient) BeginUpdateAddress(ctx context.Context, addressName string, resourceGroupName string, addressUpdateParameter AddressUpdateParameter, options *ManagementClientBeginUpdateAddressOptions) (*armruntime.Poller[ManagementClientUpdateAddressResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateAddress(ctx, addressName, resourceGroupName, addressUpdateParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientUpdateAddressResponse]("ManagementClient.UpdateAddress", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientUpdateAddressResponse]("ManagementClient.UpdateAddress", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientUpdateAddressPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.UpdateAddress", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientUpdateAddressPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientUpdateAddressPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateAddress - Updates the properties of an existing address.
@@ -1175,20 +1311,16 @@ func (client *ManagementClient) updateAddressCreateRequest(ctx context.Context, 
 // orderItemUpdateParameter - order item update parameters from request body.
 // options - ManagementClientBeginUpdateOrderItemOptions contains the optional parameters for the ManagementClient.BeginUpdateOrderItem
 // method.
-func (client *ManagementClient) BeginUpdateOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, orderItemUpdateParameter OrderItemUpdateParameter, options *ManagementClientBeginUpdateOrderItemOptions) (ManagementClientUpdateOrderItemPollerResponse, error) {
-	resp, err := client.updateOrderItem(ctx, orderItemName, resourceGroupName, orderItemUpdateParameter, options)
-	if err != nil {
-		return ManagementClientUpdateOrderItemPollerResponse{}, err
+func (client *ManagementClient) BeginUpdateOrderItem(ctx context.Context, orderItemName string, resourceGroupName string, orderItemUpdateParameter OrderItemUpdateParameter, options *ManagementClientBeginUpdateOrderItemOptions) (*armruntime.Poller[ManagementClientUpdateOrderItemResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateOrderItem(ctx, orderItemName, resourceGroupName, orderItemUpdateParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientUpdateOrderItemResponse]("ManagementClient.UpdateOrderItem", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientUpdateOrderItemResponse]("ManagementClient.UpdateOrderItem", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientUpdateOrderItemPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.UpdateOrderItem", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientUpdateOrderItemPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientUpdateOrderItemPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateOrderItem - Updates the properties of an existing order item.

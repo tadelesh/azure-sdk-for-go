@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -193,20 +193,16 @@ func (client *ServiceFabricSchedulesClient) deleteCreateRequest(ctx context.Cont
 // name - The name of the schedule.
 // options - ServiceFabricSchedulesClientBeginExecuteOptions contains the optional parameters for the ServiceFabricSchedulesClient.BeginExecute
 // method.
-func (client *ServiceFabricSchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, userName string, serviceFabricName string, name string, options *ServiceFabricSchedulesClientBeginExecuteOptions) (ServiceFabricSchedulesClientExecutePollerResponse, error) {
-	resp, err := client.execute(ctx, resourceGroupName, labName, userName, serviceFabricName, name, options)
-	if err != nil {
-		return ServiceFabricSchedulesClientExecutePollerResponse{}, err
+func (client *ServiceFabricSchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, userName string, serviceFabricName string, name string, options *ServiceFabricSchedulesClientBeginExecuteOptions) (*armruntime.Poller[ServiceFabricSchedulesClientExecuteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.execute(ctx, resourceGroupName, labName, userName, serviceFabricName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceFabricSchedulesClientExecuteResponse]("ServiceFabricSchedulesClient.Execute", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceFabricSchedulesClientExecuteResponse]("ServiceFabricSchedulesClient.Execute", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceFabricSchedulesClientExecutePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceFabricSchedulesClient.Execute", "", resp, client.pl)
-	if err != nil {
-		return ServiceFabricSchedulesClientExecutePollerResponse{}, err
-	}
-	result.Poller = &ServiceFabricSchedulesClientExecutePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Execute - Execute a schedule. This operation can take a while to complete.
@@ -346,16 +342,32 @@ func (client *ServiceFabricSchedulesClient) getHandleResponse(resp *http.Respons
 // serviceFabricName - The name of the service fabric.
 // options - ServiceFabricSchedulesClientListOptions contains the optional parameters for the ServiceFabricSchedulesClient.List
 // method.
-func (client *ServiceFabricSchedulesClient) List(resourceGroupName string, labName string, userName string, serviceFabricName string, options *ServiceFabricSchedulesClientListOptions) *ServiceFabricSchedulesClientListPager {
-	return &ServiceFabricSchedulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, userName, serviceFabricName, options)
+func (client *ServiceFabricSchedulesClient) List(resourceGroupName string, labName string, userName string, serviceFabricName string, options *ServiceFabricSchedulesClientListOptions) *runtime.Pager[ServiceFabricSchedulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceFabricSchedulesClientListResponse]{
+		More: func(page ServiceFabricSchedulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServiceFabricSchedulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScheduleList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServiceFabricSchedulesClientListResponse) (ServiceFabricSchedulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, userName, serviceFabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServiceFabricSchedulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceFabricSchedulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceFabricSchedulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

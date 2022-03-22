@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,20 +61,16 @@ func NewSystemTopicEventSubscriptionsClient(subscriptionID string, credential az
 // eventSubscriptionInfo - Event subscription properties containing the destination and filter information.
 // options - SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginCreateOrUpdate
 // method.
-func (client *SystemTopicEventSubscriptionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, options *SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions) (SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, eventSubscriptionInfo, options)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
+func (client *SystemTopicEventSubscriptionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, options *SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SystemTopicEventSubscriptionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, eventSubscriptionInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SystemTopicEventSubscriptionsClientCreateOrUpdateResponse]("SystemTopicEventSubscriptionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SystemTopicEventSubscriptionsClientCreateOrUpdateResponse]("SystemTopicEventSubscriptionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SystemTopicEventSubscriptionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Asynchronously creates or updates an event subscription with the specified parameters. Existing event
@@ -133,20 +129,16 @@ func (client *SystemTopicEventSubscriptionsClient) createOrUpdateCreateRequest(c
 // characters in length and use alphanumeric letters only.
 // options - SystemTopicEventSubscriptionsClientBeginDeleteOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginDelete
 // method.
-func (client *SystemTopicEventSubscriptionsClient) BeginDelete(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, options *SystemTopicEventSubscriptionsClientBeginDeleteOptions) (SystemTopicEventSubscriptionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, options)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientDeletePollerResponse{}, err
+func (client *SystemTopicEventSubscriptionsClient) BeginDelete(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, options *SystemTopicEventSubscriptionsClientBeginDeleteOptions) (*armruntime.Poller[SystemTopicEventSubscriptionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SystemTopicEventSubscriptionsClientDeleteResponse]("SystemTopicEventSubscriptionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SystemTopicEventSubscriptionsClientDeleteResponse]("SystemTopicEventSubscriptionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SystemTopicEventSubscriptionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SystemTopicEventSubscriptionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete an event subscription of a system topic.
@@ -387,16 +379,32 @@ func (client *SystemTopicEventSubscriptionsClient) getFullURLHandleResponse(resp
 // systemTopicName - Name of the system topic.
 // options - SystemTopicEventSubscriptionsClientListBySystemTopicOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.ListBySystemTopic
 // method.
-func (client *SystemTopicEventSubscriptionsClient) ListBySystemTopic(resourceGroupName string, systemTopicName string, options *SystemTopicEventSubscriptionsClientListBySystemTopicOptions) *SystemTopicEventSubscriptionsClientListBySystemTopicPager {
-	return &SystemTopicEventSubscriptionsClientListBySystemTopicPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySystemTopicCreateRequest(ctx, resourceGroupName, systemTopicName, options)
+func (client *SystemTopicEventSubscriptionsClient) ListBySystemTopic(resourceGroupName string, systemTopicName string, options *SystemTopicEventSubscriptionsClientListBySystemTopicOptions) *runtime.Pager[SystemTopicEventSubscriptionsClientListBySystemTopicResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SystemTopicEventSubscriptionsClientListBySystemTopicResponse]{
+		More: func(page SystemTopicEventSubscriptionsClientListBySystemTopicResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SystemTopicEventSubscriptionsClientListBySystemTopicResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EventSubscriptionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SystemTopicEventSubscriptionsClientListBySystemTopicResponse) (SystemTopicEventSubscriptionsClientListBySystemTopicResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySystemTopicCreateRequest(ctx, resourceGroupName, systemTopicName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SystemTopicEventSubscriptionsClientListBySystemTopicResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SystemTopicEventSubscriptionsClientListBySystemTopicResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SystemTopicEventSubscriptionsClientListBySystemTopicResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySystemTopicHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySystemTopicCreateRequest creates the ListBySystemTopic request.
@@ -449,20 +457,16 @@ func (client *SystemTopicEventSubscriptionsClient) listBySystemTopicHandleRespon
 // eventSubscriptionUpdateParameters - Updated event subscription information.
 // options - SystemTopicEventSubscriptionsClientBeginUpdateOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginUpdate
 // method.
-func (client *SystemTopicEventSubscriptionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, options *SystemTopicEventSubscriptionsClientBeginUpdateOptions) (SystemTopicEventSubscriptionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, eventSubscriptionUpdateParameters, options)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientUpdatePollerResponse{}, err
+func (client *SystemTopicEventSubscriptionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, systemTopicName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, options *SystemTopicEventSubscriptionsClientBeginUpdateOptions) (*armruntime.Poller[SystemTopicEventSubscriptionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, systemTopicName, eventSubscriptionName, eventSubscriptionUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SystemTopicEventSubscriptionsClientUpdateResponse]("SystemTopicEventSubscriptionsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SystemTopicEventSubscriptionsClientUpdateResponse]("SystemTopicEventSubscriptionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := SystemTopicEventSubscriptionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return SystemTopicEventSubscriptionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &SystemTopicEventSubscriptionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update event subscription of a system topic.

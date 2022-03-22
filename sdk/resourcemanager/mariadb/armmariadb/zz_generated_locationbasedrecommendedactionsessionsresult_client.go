@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewLocationBasedRecommendedActionSessionsResultClient(subscriptionID string
 // operationID - The operation identifier.
 // options - LocationBasedRecommendedActionSessionsResultClientListOptions contains the optional parameters for the LocationBasedRecommendedActionSessionsResultClient.List
 // method.
-func (client *LocationBasedRecommendedActionSessionsResultClient) List(locationName string, operationID string, options *LocationBasedRecommendedActionSessionsResultClientListOptions) *LocationBasedRecommendedActionSessionsResultClientListPager {
-	return &LocationBasedRecommendedActionSessionsResultClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, locationName, operationID, options)
+func (client *LocationBasedRecommendedActionSessionsResultClient) List(locationName string, operationID string, options *LocationBasedRecommendedActionSessionsResultClientListOptions) *runtime.Pager[LocationBasedRecommendedActionSessionsResultClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationBasedRecommendedActionSessionsResultClientListResponse]{
+		More: func(page LocationBasedRecommendedActionSessionsResultClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LocationBasedRecommendedActionSessionsResultClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationActionsResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *LocationBasedRecommendedActionSessionsResultClientListResponse) (LocationBasedRecommendedActionSessionsResultClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, locationName, operationID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LocationBasedRecommendedActionSessionsResultClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationBasedRecommendedActionSessionsResultClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationBasedRecommendedActionSessionsResultClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

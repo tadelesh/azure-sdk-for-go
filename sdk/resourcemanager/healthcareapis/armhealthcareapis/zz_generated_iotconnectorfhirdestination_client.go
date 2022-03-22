@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewIotConnectorFhirDestinationClient(subscriptionID string, credential azco
 // iotFhirDestination - The parameters for creating or updating an IoT Connector FHIR destination resource.
 // options - IotConnectorFhirDestinationClientBeginCreateOrUpdateOptions contains the optional parameters for the IotConnectorFhirDestinationClient.BeginCreateOrUpdate
 // method.
-func (client *IotConnectorFhirDestinationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, fhirDestinationName string, iotFhirDestination IotFhirDestination, options *IotConnectorFhirDestinationClientBeginCreateOrUpdateOptions) (IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, iotConnectorName, fhirDestinationName, iotFhirDestination, options)
-	if err != nil {
-		return IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}, err
+func (client *IotConnectorFhirDestinationClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, fhirDestinationName string, iotFhirDestination IotFhirDestination, options *IotConnectorFhirDestinationClientBeginCreateOrUpdateOptions) (*armruntime.Poller[IotConnectorFhirDestinationClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, iotConnectorName, fhirDestinationName, iotFhirDestination, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IotConnectorFhirDestinationClientCreateOrUpdateResponse]("IotConnectorFhirDestinationClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IotConnectorFhirDestinationClientCreateOrUpdateResponse]("IotConnectorFhirDestinationClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IotConnectorFhirDestinationClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &IotConnectorFhirDestinationClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an IoT Connector FHIR destination resource with the specified parameters.
@@ -133,20 +129,16 @@ func (client *IotConnectorFhirDestinationClient) createOrUpdateCreateRequest(ctx
 // fhirDestinationName - The name of IoT Connector FHIR destination resource.
 // options - IotConnectorFhirDestinationClientBeginDeleteOptions contains the optional parameters for the IotConnectorFhirDestinationClient.BeginDelete
 // method.
-func (client *IotConnectorFhirDestinationClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, fhirDestinationName string, options *IotConnectorFhirDestinationClientBeginDeleteOptions) (IotConnectorFhirDestinationClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, iotConnectorName, fhirDestinationName, options)
-	if err != nil {
-		return IotConnectorFhirDestinationClientDeletePollerResponse{}, err
+func (client *IotConnectorFhirDestinationClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, fhirDestinationName string, options *IotConnectorFhirDestinationClientBeginDeleteOptions) (*armruntime.Poller[IotConnectorFhirDestinationClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, iotConnectorName, fhirDestinationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IotConnectorFhirDestinationClientDeleteResponse]("IotConnectorFhirDestinationClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IotConnectorFhirDestinationClientDeleteResponse]("IotConnectorFhirDestinationClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IotConnectorFhirDestinationClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IotConnectorFhirDestinationClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return IotConnectorFhirDestinationClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IotConnectorFhirDestinationClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an IoT Connector FHIR destination.

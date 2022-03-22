@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewJobsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - JobsClientBeginCancelOptions contains the optional parameters for the JobsClient.BeginCancel method.
-func (client *JobsClient) BeginCancel(ctx context.Context, deviceName string, jobName string, resourceGroupName string, managerName string, options *JobsClientBeginCancelOptions) (JobsClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, deviceName, jobName, resourceGroupName, managerName, options)
-	if err != nil {
-		return JobsClientCancelPollerResponse{}, err
+func (client *JobsClient) BeginCancel(ctx context.Context, deviceName string, jobName string, resourceGroupName string, managerName string, options *JobsClientBeginCancelOptions) (*armruntime.Poller[JobsClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, deviceName, jobName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobsClientCancelResponse]("JobsClient.Cancel", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobsClientCancelResponse]("JobsClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := JobsClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("JobsClient.Cancel", "", resp, client.pl)
-	if err != nil {
-		return JobsClientCancelPollerResponse{}, err
-	}
-	result.Poller = &JobsClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - Cancels a job on the device.
@@ -162,16 +158,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - JobsClientListByDeviceOptions contains the optional parameters for the JobsClient.ListByDevice method.
-func (client *JobsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *JobsClientListByDeviceOptions) *JobsClientListByDevicePager {
-	return &JobsClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *JobsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *JobsClientListByDeviceOptions) *runtime.Pager[JobsClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListByDeviceResponse]{
+		More: func(page JobsClientListByDeviceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListByDeviceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListByDeviceResponse) (JobsClientListByDeviceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -210,16 +222,32 @@ func (client *JobsClient) listByDeviceHandleResponse(resp *http.Response) (JobsC
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - JobsClientListByManagerOptions contains the optional parameters for the JobsClient.ListByManager method.
-func (client *JobsClient) ListByManager(resourceGroupName string, managerName string, options *JobsClientListByManagerOptions) *JobsClientListByManagerPager {
-	return &JobsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *JobsClient) ListByManager(resourceGroupName string, managerName string, options *JobsClientListByManagerOptions) *runtime.Pager[JobsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListByManagerResponse]{
+		More: func(page JobsClientListByManagerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListByManagerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListByManagerResponse) (JobsClientListByManagerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewPeeringPoliciesClient(subscriptionID string, credential azcore.TokenCred
 // managedNetworkPolicy - Parameters supplied to create/update a Managed Network Peering Policy
 // options - PeeringPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PeeringPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *PeeringPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkPeeringPolicyName string, managedNetworkPolicy PeeringPolicy, options *PeeringPoliciesClientBeginCreateOrUpdateOptions) (PeeringPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedNetworkName, managedNetworkPeeringPolicyName, managedNetworkPolicy, options)
-	if err != nil {
-		return PeeringPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *PeeringPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkPeeringPolicyName string, managedNetworkPolicy PeeringPolicy, options *PeeringPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PeeringPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedNetworkName, managedNetworkPeeringPolicyName, managedNetworkPolicy, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PeeringPoliciesClientCreateOrUpdateResponse]("PeeringPoliciesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PeeringPoliciesClientCreateOrUpdateResponse]("PeeringPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PeeringPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PeeringPoliciesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PeeringPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PeeringPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The Put ManagedNetworkPeeringPolicies operation creates/updates a new Managed Network Peering Policy
@@ -130,20 +126,16 @@ func (client *PeeringPoliciesClient) createOrUpdateCreateRequest(ctx context.Con
 // managedNetworkPeeringPolicyName - The name of the Managed Network Peering Policy.
 // options - PeeringPoliciesClientBeginDeleteOptions contains the optional parameters for the PeeringPoliciesClient.BeginDelete
 // method.
-func (client *PeeringPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkPeeringPolicyName string, options *PeeringPoliciesClientBeginDeleteOptions) (PeeringPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, managedNetworkPeeringPolicyName, options)
-	if err != nil {
-		return PeeringPoliciesClientDeletePollerResponse{}, err
+func (client *PeeringPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkPeeringPolicyName string, options *PeeringPoliciesClientBeginDeleteOptions) (*armruntime.Poller[PeeringPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, managedNetworkPeeringPolicyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PeeringPoliciesClientDeleteResponse]("PeeringPoliciesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PeeringPoliciesClientDeleteResponse]("PeeringPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PeeringPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PeeringPoliciesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PeeringPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PeeringPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The Delete ManagedNetworkPeeringPolicies operation deletes a Managed Network Peering Policy, specified by the
@@ -262,16 +254,32 @@ func (client *PeeringPoliciesClient) getHandleResponse(resp *http.Response) (Pee
 // managedNetworkName - The name of the Managed Network.
 // options - PeeringPoliciesClientListByManagedNetworkOptions contains the optional parameters for the PeeringPoliciesClient.ListByManagedNetwork
 // method.
-func (client *PeeringPoliciesClient) ListByManagedNetwork(resourceGroupName string, managedNetworkName string, options *PeeringPoliciesClientListByManagedNetworkOptions) *PeeringPoliciesClientListByManagedNetworkPager {
-	return &PeeringPoliciesClientListByManagedNetworkPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagedNetworkCreateRequest(ctx, resourceGroupName, managedNetworkName, options)
+func (client *PeeringPoliciesClient) ListByManagedNetwork(resourceGroupName string, managedNetworkName string, options *PeeringPoliciesClientListByManagedNetworkOptions) *runtime.Pager[PeeringPoliciesClientListByManagedNetworkResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PeeringPoliciesClientListByManagedNetworkResponse]{
+		More: func(page PeeringPoliciesClientListByManagedNetworkResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PeeringPoliciesClientListByManagedNetworkResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PeeringPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PeeringPoliciesClientListByManagedNetworkResponse) (PeeringPoliciesClientListByManagedNetworkResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagedNetworkCreateRequest(ctx, resourceGroupName, managedNetworkName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PeeringPoliciesClientListByManagedNetworkResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PeeringPoliciesClientListByManagedNetworkResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PeeringPoliciesClientListByManagedNetworkResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagedNetworkHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagedNetworkCreateRequest creates the ListByManagedNetwork request.

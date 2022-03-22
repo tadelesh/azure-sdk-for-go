@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,16 +56,32 @@ func NewPolicyStatesClient(credential azcore.TokenCredential, options *arm.Clien
 // managementGroupName - Management group name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForManagementGroup(policyStatesResource PolicyStatesResource, managementGroupsNamespace Enum0, managementGroupName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForManagementGroupPager {
-	return &PolicyStatesClientListQueryResultsForManagementGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForManagementGroupCreateRequest(ctx, policyStatesResource, managementGroupsNamespace, managementGroupName, options)
+func (client *PolicyStatesClient) ListQueryResultsForManagementGroup(policyStatesResource PolicyStatesResource, managementGroupsNamespace Enum0, managementGroupName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForManagementGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForManagementGroupResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForManagementGroupResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForManagementGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForManagementGroupResponse) (PolicyStatesClientListQueryResultsForManagementGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForManagementGroupCreateRequest(ctx, policyStatesResource, managementGroupsNamespace, managementGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForManagementGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForManagementGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForManagementGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForManagementGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForManagementGroupCreateRequest creates the ListQueryResultsForManagementGroup request.
@@ -137,16 +153,32 @@ func (client *PolicyStatesClient) listQueryResultsForManagementGroupHandleRespon
 // policyDefinitionName - Policy definition name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForPolicyDefinition(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policyDefinitionName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForPolicyDefinitionPager {
-	return &PolicyStatesClientListQueryResultsForPolicyDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForPolicyDefinitionCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policyDefinitionName, options)
+func (client *PolicyStatesClient) ListQueryResultsForPolicyDefinition(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policyDefinitionName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForPolicyDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForPolicyDefinitionResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForPolicyDefinitionResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForPolicyDefinitionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForPolicyDefinitionResponse) (PolicyStatesClientListQueryResultsForPolicyDefinitionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForPolicyDefinitionCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policyDefinitionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForPolicyDefinitionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForPolicyDefinitionCreateRequest creates the ListQueryResultsForPolicyDefinition request.
@@ -222,16 +254,32 @@ func (client *PolicyStatesClient) listQueryResultsForPolicyDefinitionHandleRespo
 // policySetDefinitionName - Policy set definition name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForPolicySetDefinition(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policySetDefinitionName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForPolicySetDefinitionPager {
-	return &PolicyStatesClientListQueryResultsForPolicySetDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForPolicySetDefinitionCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policySetDefinitionName, options)
+func (client *PolicyStatesClient) ListQueryResultsForPolicySetDefinition(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policySetDefinitionName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse) (PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForPolicySetDefinitionCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policySetDefinitionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForPolicySetDefinitionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForPolicySetDefinitionCreateRequest creates the ListQueryResultsForPolicySetDefinition request.
@@ -304,16 +352,32 @@ func (client *PolicyStatesClient) listQueryResultsForPolicySetDefinitionHandleRe
 // resourceID - Resource ID.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForResource(policyStatesResource PolicyStatesResource, resourceID string, options *QueryOptions) *PolicyStatesClientListQueryResultsForResourcePager {
-	return &PolicyStatesClientListQueryResultsForResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForResourceCreateRequest(ctx, policyStatesResource, resourceID, options)
+func (client *PolicyStatesClient) ListQueryResultsForResource(policyStatesResource PolicyStatesResource, resourceID string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForResourceResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForResourceResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForResourceResponse) (PolicyStatesClientListQueryResultsForResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForResourceCreateRequest(ctx, policyStatesResource, resourceID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForResourceCreateRequest creates the ListQueryResultsForResource request.
@@ -379,16 +443,32 @@ func (client *PolicyStatesClient) listQueryResultsForResourceHandleResponse(resp
 // resourceGroupName - Resource group name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForResourceGroup(policyStatesResource PolicyStatesResource, subscriptionID string, resourceGroupName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForResourceGroupPager {
-	return &PolicyStatesClientListQueryResultsForResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForResourceGroupCreateRequest(ctx, policyStatesResource, subscriptionID, resourceGroupName, options)
+func (client *PolicyStatesClient) ListQueryResultsForResourceGroup(policyStatesResource PolicyStatesResource, subscriptionID string, resourceGroupName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForResourceGroupResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForResourceGroupResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForResourceGroupResponse) (PolicyStatesClientListQueryResultsForResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForResourceGroupCreateRequest(ctx, policyStatesResource, subscriptionID, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForResourceGroupCreateRequest creates the ListQueryResultsForResourceGroup request.
@@ -461,16 +541,32 @@ func (client *PolicyStatesClient) listQueryResultsForResourceGroupHandleResponse
 // policyAssignmentName - Policy assignment name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssignment(policyStatesResource PolicyStatesResource, subscriptionID string, resourceGroupName string, authorizationNamespace Enum4, policyAssignmentName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentPager {
-	return &PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForResourceGroupLevelPolicyAssignmentCreateRequest(ctx, policyStatesResource, subscriptionID, resourceGroupName, authorizationNamespace, policyAssignmentName, options)
+func (client *PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssignment(policyStatesResource PolicyStatesResource, subscriptionID string, resourceGroupName string, authorizationNamespace Enum4, policyAssignmentName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse) (PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForResourceGroupLevelPolicyAssignmentCreateRequest(ctx, policyStatesResource, subscriptionID, resourceGroupName, authorizationNamespace, policyAssignmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForResourceGroupLevelPolicyAssignmentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForResourceGroupLevelPolicyAssignmentCreateRequest creates the ListQueryResultsForResourceGroupLevelPolicyAssignment request.
@@ -547,16 +643,32 @@ func (client *PolicyStatesClient) listQueryResultsForResourceGroupLevelPolicyAss
 // subscriptionID - Microsoft Azure subscription ID.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForSubscription(policyStatesResource PolicyStatesResource, subscriptionID string, options *QueryOptions) *PolicyStatesClientListQueryResultsForSubscriptionPager {
-	return &PolicyStatesClientListQueryResultsForSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForSubscriptionCreateRequest(ctx, policyStatesResource, subscriptionID, options)
+func (client *PolicyStatesClient) ListQueryResultsForSubscription(policyStatesResource PolicyStatesResource, subscriptionID string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForSubscriptionResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForSubscriptionResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForSubscriptionResponse) (PolicyStatesClientListQueryResultsForSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForSubscriptionCreateRequest(ctx, policyStatesResource, subscriptionID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForSubscriptionCreateRequest creates the ListQueryResultsForSubscription request.
@@ -624,16 +736,32 @@ func (client *PolicyStatesClient) listQueryResultsForSubscriptionHandleResponse(
 // policyAssignmentName - Policy assignment name.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssignment(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policyAssignmentName string, options *QueryOptions) *PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentPager {
-	return &PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForSubscriptionLevelPolicyAssignmentCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policyAssignmentName, options)
+func (client *PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssignment(policyStatesResource PolicyStatesResource, subscriptionID string, authorizationNamespace Enum4, policyAssignmentName string, options *QueryOptions) *runtime.Pager[PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse]{
+		More: func(page PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyStatesQueryResults.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse) (PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForSubscriptionLevelPolicyAssignmentCreateRequest(ctx, policyStatesResource, subscriptionID, authorizationNamespace, policyAssignmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForSubscriptionLevelPolicyAssignmentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForSubscriptionLevelPolicyAssignmentCreateRequest creates the ListQueryResultsForSubscriptionLevelPolicyAssignment request.
@@ -1281,20 +1409,16 @@ func (client *PolicyStatesClient) summarizeForSubscriptionLevelPolicyAssignmentH
 // resourceGroupName - Resource group name.
 // options - PolicyStatesClientBeginTriggerResourceGroupEvaluationOptions contains the optional parameters for the PolicyStatesClient.BeginTriggerResourceGroupEvaluation
 // method.
-func (client *PolicyStatesClient) BeginTriggerResourceGroupEvaluation(ctx context.Context, subscriptionID string, resourceGroupName string, options *PolicyStatesClientBeginTriggerResourceGroupEvaluationOptions) (PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse, error) {
-	resp, err := client.triggerResourceGroupEvaluation(ctx, subscriptionID, resourceGroupName, options)
-	if err != nil {
-		return PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}, err
+func (client *PolicyStatesClient) BeginTriggerResourceGroupEvaluation(ctx context.Context, subscriptionID string, resourceGroupName string, options *PolicyStatesClientBeginTriggerResourceGroupEvaluationOptions) (*armruntime.Poller[PolicyStatesClientTriggerResourceGroupEvaluationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.triggerResourceGroupEvaluation(ctx, subscriptionID, resourceGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PolicyStatesClientTriggerResourceGroupEvaluationResponse]("PolicyStatesClient.TriggerResourceGroupEvaluation", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PolicyStatesClientTriggerResourceGroupEvaluationResponse]("PolicyStatesClient.TriggerResourceGroupEvaluation", options.ResumeToken, client.pl, nil)
 	}
-	result := PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}
-	pt, err := armruntime.NewPoller("PolicyStatesClient.TriggerResourceGroupEvaluation", "location", resp, client.pl)
-	if err != nil {
-		return PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}, err
-	}
-	result.Poller = &PolicyStatesClientTriggerResourceGroupEvaluationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TriggerResourceGroupEvaluation - Triggers a policy evaluation scan for all the resources under the resource group.
@@ -1341,20 +1465,16 @@ func (client *PolicyStatesClient) triggerResourceGroupEvaluationCreateRequest(ct
 // subscriptionID - Microsoft Azure subscription ID.
 // options - PolicyStatesClientBeginTriggerSubscriptionEvaluationOptions contains the optional parameters for the PolicyStatesClient.BeginTriggerSubscriptionEvaluation
 // method.
-func (client *PolicyStatesClient) BeginTriggerSubscriptionEvaluation(ctx context.Context, subscriptionID string, options *PolicyStatesClientBeginTriggerSubscriptionEvaluationOptions) (PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse, error) {
-	resp, err := client.triggerSubscriptionEvaluation(ctx, subscriptionID, options)
-	if err != nil {
-		return PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}, err
+func (client *PolicyStatesClient) BeginTriggerSubscriptionEvaluation(ctx context.Context, subscriptionID string, options *PolicyStatesClientBeginTriggerSubscriptionEvaluationOptions) (*armruntime.Poller[PolicyStatesClientTriggerSubscriptionEvaluationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.triggerSubscriptionEvaluation(ctx, subscriptionID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PolicyStatesClientTriggerSubscriptionEvaluationResponse]("PolicyStatesClient.TriggerSubscriptionEvaluation", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PolicyStatesClientTriggerSubscriptionEvaluationResponse]("PolicyStatesClient.TriggerSubscriptionEvaluation", options.ResumeToken, client.pl, nil)
 	}
-	result := PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}
-	pt, err := armruntime.NewPoller("PolicyStatesClient.TriggerSubscriptionEvaluation", "location", resp, client.pl)
-	if err != nil {
-		return PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}, err
-	}
-	result.Poller = &PolicyStatesClientTriggerSubscriptionEvaluationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TriggerSubscriptionEvaluation - Triggers a policy evaluation scan for all the resources under the subscription

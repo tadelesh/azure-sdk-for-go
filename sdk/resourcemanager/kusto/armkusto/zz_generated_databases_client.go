@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -176,20 +176,16 @@ func (client *DatabasesClient) checkNameAvailabilityHandleResponse(resp *http.Re
 // parameters - The database parameters supplied to the CreateOrUpdate operation.
 // options - DatabasesClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasesClient.BeginCreateOrUpdate
 // method.
-func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseClassification, options *DatabasesClientBeginCreateOrUpdateOptions) (DatabasesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseClassification, options *DatabasesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabasesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientCreateOrUpdateResponse]("DatabasesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientCreateOrUpdateResponse]("DatabasesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a database.
@@ -245,20 +241,16 @@ func (client *DatabasesClient) createOrUpdateCreateRequest(ctx context.Context, 
 // clusterName - The name of the Kusto cluster.
 // databaseName - The name of the database in the Kusto cluster.
 // options - DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
-func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (DatabasesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
+func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (*armruntime.Poller[DatabasesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientDeleteResponse]("DatabasesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientDeleteResponse]("DatabasesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the database with the given name.
@@ -373,13 +365,26 @@ func (client *DatabasesClient) getHandleResponse(resp *http.Response) (Databases
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // clusterName - The name of the Kusto cluster.
 // options - DatabasesClientListByClusterOptions contains the optional parameters for the DatabasesClient.ListByCluster method.
-func (client *DatabasesClient) ListByCluster(resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) *DatabasesClientListByClusterPager {
-	return &DatabasesClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *DatabasesClient) ListByCluster(resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) *runtime.Pager[DatabasesClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListByClusterResponse]{
+		More: func(page DatabasesClientListByClusterResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabasesClientListByClusterResponse) (DatabasesClientListByClusterResponse, error) {
+			req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return DatabasesClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
+		},
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
@@ -424,13 +429,26 @@ func (client *DatabasesClient) listByClusterHandleResponse(resp *http.Response) 
 // databaseName - The name of the database in the Kusto cluster.
 // options - DatabasesClientListPrincipalsOptions contains the optional parameters for the DatabasesClient.ListPrincipals
 // method.
-func (client *DatabasesClient) ListPrincipals(resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientListPrincipalsOptions) *DatabasesClientListPrincipalsPager {
-	return &DatabasesClientListPrincipalsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listPrincipalsCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+func (client *DatabasesClient) ListPrincipals(resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientListPrincipalsOptions) *runtime.Pager[DatabasesClientListPrincipalsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListPrincipalsResponse]{
+		More: func(page DatabasesClientListPrincipalsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabasesClientListPrincipalsResponse) (DatabasesClientListPrincipalsResponse, error) {
+			req, err := client.listPrincipalsCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+			if err != nil {
+				return DatabasesClientListPrincipalsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListPrincipalsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListPrincipalsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listPrincipalsHandleResponse(resp)
+		},
+	})
 }
 
 // listPrincipalsCreateRequest creates the ListPrincipals request.
@@ -541,20 +559,16 @@ func (client *DatabasesClient) removePrincipalsHandleResponse(resp *http.Respons
 // databaseName - The name of the database in the Kusto cluster.
 // parameters - The database parameters supplied to the Update operation.
 // options - DatabasesClientBeginUpdateOptions contains the optional parameters for the DatabasesClient.BeginUpdate method.
-func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseClassification, options *DatabasesClientBeginUpdateOptions) (DatabasesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
+func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseClassification, options *DatabasesClientBeginUpdateOptions) (*armruntime.Poller[DatabasesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientUpdateResponse]("DatabasesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientUpdateResponse]("DatabasesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a database.

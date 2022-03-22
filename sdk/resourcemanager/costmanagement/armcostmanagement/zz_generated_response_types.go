@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armcostmanagement
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AlertsClientDismissResponse contains the response from method AlertsClient.Dismiss.
 type AlertsClientDismissResponse struct {
@@ -82,41 +76,6 @@ type ForecastClientExternalCloudProviderUsageResponse struct {
 // ForecastClientUsageResponse contains the response from method ForecastClient.Usage.
 type ForecastClientUsageResponse struct {
 	QueryResult
-}
-
-// GenerateDetailedCostReportClientCreateOperationPollerResponse contains the response from method GenerateDetailedCostReportClient.CreateOperation.
-type GenerateDetailedCostReportClientCreateOperationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *GenerateDetailedCostReportClientCreateOperationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l GenerateDetailedCostReportClientCreateOperationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (GenerateDetailedCostReportClientCreateOperationResponse, error) {
-	respType := GenerateDetailedCostReportClientCreateOperationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.GenerateDetailedCostReportOperationResult)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a GenerateDetailedCostReportClientCreateOperationPollerResponse from the provided client and resume token.
-func (l *GenerateDetailedCostReportClientCreateOperationPollerResponse) Resume(ctx context.Context, client *GenerateDetailedCostReportClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("GenerateDetailedCostReportClient.CreateOperation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &GenerateDetailedCostReportClientCreateOperationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // GenerateDetailedCostReportClientCreateOperationResponse contains the response from method GenerateDetailedCostReportClient.CreateOperation.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,20 +111,16 @@ func (client *LoadTestsClient) createOrUpdateHandleResponse(resp *http.Response)
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // loadTestName - Load Test name.
 // options - LoadTestsClientBeginDeleteOptions contains the optional parameters for the LoadTestsClient.BeginDelete method.
-func (client *LoadTestsClient) BeginDelete(ctx context.Context, resourceGroupName string, loadTestName string, options *LoadTestsClientBeginDeleteOptions) (LoadTestsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, loadTestName, options)
-	if err != nil {
-		return LoadTestsClientDeletePollerResponse{}, err
+func (client *LoadTestsClient) BeginDelete(ctx context.Context, resourceGroupName string, loadTestName string, options *LoadTestsClientBeginDeleteOptions) (*armruntime.Poller[LoadTestsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, loadTestName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LoadTestsClientDeleteResponse]("LoadTestsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LoadTestsClientDeleteResponse]("LoadTestsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := LoadTestsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("LoadTestsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return LoadTestsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &LoadTestsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a LoadTest resource.
@@ -230,16 +226,32 @@ func (client *LoadTestsClient) getHandleResponse(resp *http.Response) (LoadTests
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - LoadTestsClientListByResourceGroupOptions contains the optional parameters for the LoadTestsClient.ListByResourceGroup
 // method.
-func (client *LoadTestsClient) ListByResourceGroup(resourceGroupName string, options *LoadTestsClientListByResourceGroupOptions) *LoadTestsClientListByResourceGroupPager {
-	return &LoadTestsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *LoadTestsClient) ListByResourceGroup(resourceGroupName string, options *LoadTestsClientListByResourceGroupOptions) *runtime.Pager[LoadTestsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LoadTestsClientListByResourceGroupResponse]{
+		More: func(page LoadTestsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LoadTestsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LoadTestResourcePageList.NextLink)
+		Fetcher: func(ctx context.Context, page *LoadTestsClientListByResourceGroupResponse) (LoadTestsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LoadTestsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LoadTestsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LoadTestsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -277,16 +289,32 @@ func (client *LoadTestsClient) listByResourceGroupHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LoadTestsClientListBySubscriptionOptions contains the optional parameters for the LoadTestsClient.ListBySubscription
 // method.
-func (client *LoadTestsClient) ListBySubscription(options *LoadTestsClientListBySubscriptionOptions) *LoadTestsClientListBySubscriptionPager {
-	return &LoadTestsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *LoadTestsClient) ListBySubscription(options *LoadTestsClientListBySubscriptionOptions) *runtime.Pager[LoadTestsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LoadTestsClientListBySubscriptionResponse]{
+		More: func(page LoadTestsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LoadTestsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LoadTestResourcePageList.NextLink)
+		Fetcher: func(ctx context.Context, page *LoadTestsClientListBySubscriptionResponse) (LoadTestsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LoadTestsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LoadTestsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LoadTestsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

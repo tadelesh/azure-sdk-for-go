@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAccountClient(subscriptionID string, credential azcore.TokenCredential, 
 // example: http://accountname.region.batch.azure.com/.
 // parameters - Additional parameters for account creation.
 // options - AccountClientBeginCreateOptions contains the optional parameters for the AccountClient.BeginCreate method.
-func (client *AccountClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, parameters AccountCreateParameters, options *AccountClientBeginCreateOptions) (AccountClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, parameters, options)
-	if err != nil {
-		return AccountClientCreatePollerResponse{}, err
+func (client *AccountClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, parameters AccountCreateParameters, options *AccountClientBeginCreateOptions) (*armruntime.Poller[AccountClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountClientCreateResponse]("AccountClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountClientCreateResponse]("AccountClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return AccountClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AccountClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new Batch account with the specified parameters. Existing accounts cannot be updated with this API and
@@ -124,20 +120,16 @@ func (client *AccountClient) createCreateRequest(ctx context.Context, resourceGr
 // resourceGroupName - The name of the resource group that contains the Batch account.
 // accountName - The name of the Batch account.
 // options - AccountClientBeginDeleteOptions contains the optional parameters for the AccountClient.BeginDelete method.
-func (client *AccountClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, options *AccountClientBeginDeleteOptions) (AccountClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return AccountClientDeletePollerResponse{}, err
+func (client *AccountClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, options *AccountClientBeginDeleteOptions) (*armruntime.Poller[AccountClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountClientDeleteResponse]("AccountClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountClientDeleteResponse]("AccountClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return AccountClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AccountClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified Batch account.
@@ -299,16 +291,32 @@ func (client *AccountClient) getKeysHandleResponse(resp *http.Response) (Account
 // List - Gets information about the Batch accounts associated with the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountClientListOptions contains the optional parameters for the AccountClient.List method.
-func (client *AccountClient) List(options *AccountClientListOptions) *AccountClientListPager {
-	return &AccountClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AccountClient) List(options *AccountClientListOptions) *runtime.Pager[AccountClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountClientListResponse]{
+		More: func(page AccountClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountClientListResponse) (AccountClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -343,16 +351,32 @@ func (client *AccountClient) listHandleResponse(resp *http.Response) (AccountCli
 // resourceGroupName - The name of the resource group that contains the Batch account.
 // options - AccountClientListByResourceGroupOptions contains the optional parameters for the AccountClient.ListByResourceGroup
 // method.
-func (client *AccountClient) ListByResourceGroup(resourceGroupName string, options *AccountClientListByResourceGroupOptions) *AccountClientListByResourceGroupPager {
-	return &AccountClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AccountClient) ListByResourceGroup(resourceGroupName string, options *AccountClientListByResourceGroupOptions) *runtime.Pager[AccountClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountClientListByResourceGroupResponse]{
+		More: func(page AccountClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountClientListByResourceGroupResponse) (AccountClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -396,16 +420,32 @@ func (client *AccountClient) listByResourceGroupHandleResponse(resp *http.Respon
 // accountName - The name of the Batch account.
 // options - AccountClientListOutboundNetworkDependenciesEndpointsOptions contains the optional parameters for the AccountClient.ListOutboundNetworkDependenciesEndpoints
 // method.
-func (client *AccountClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, accountName string, options *AccountClientListOutboundNetworkDependenciesEndpointsOptions) *AccountClientListOutboundNetworkDependenciesEndpointsPager {
-	return &AccountClientListOutboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *AccountClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, accountName string, options *AccountClientListOutboundNetworkDependenciesEndpointsOptions) *runtime.Pager[AccountClientListOutboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountClientListOutboundNetworkDependenciesEndpointsResponse]{
+		More: func(page AccountClientListOutboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountClientListOutboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundEnvironmentEndpointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountClientListOutboundNetworkDependenciesEndpointsResponse) (AccountClientListOutboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountClientListOutboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOutboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOutboundNetworkDependenciesEndpointsCreateRequest creates the ListOutboundNetworkDependenciesEndpoints request.

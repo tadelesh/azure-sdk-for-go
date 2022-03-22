@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -47,20 +47,16 @@ func NewExchangeClient(credential azcore.TokenCredential, options *arm.ClientOpt
 // If the operation fails it returns an *azcore.ResponseError type.
 // body - Request containing the refunds and purchases that need to be executed.
 // options - ExchangeClientBeginPostOptions contains the optional parameters for the ExchangeClient.BeginPost method.
-func (client *ExchangeClient) BeginPost(ctx context.Context, body ExchangeRequest, options *ExchangeClientBeginPostOptions) (ExchangeClientPostPollerResponse, error) {
-	resp, err := client.post(ctx, body, options)
-	if err != nil {
-		return ExchangeClientPostPollerResponse{}, err
+func (client *ExchangeClient) BeginPost(ctx context.Context, body ExchangeRequest, options *ExchangeClientBeginPostOptions) (*armruntime.Poller[ExchangeClientPostResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.post(ctx, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExchangeClientPostResponse]("ExchangeClient.Post", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExchangeClientPostResponse]("ExchangeClient.Post", options.ResumeToken, client.pl, nil)
 	}
-	result := ExchangeClientPostPollerResponse{}
-	pt, err := armruntime.NewPoller("ExchangeClient.Post", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExchangeClientPostPollerResponse{}, err
-	}
-	result.Poller = &ExchangeClientPostPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Post - Returns one or more Reservations in exchange for one or more Reservation purchases.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewUnresolvedDependenciesClient(subscriptionID string, credential azcore.To
 // moveCollectionName - The Move Collection Name.
 // options - UnresolvedDependenciesClientGetOptions contains the optional parameters for the UnresolvedDependenciesClient.Get
 // method.
-func (client *UnresolvedDependenciesClient) Get(resourceGroupName string, moveCollectionName string, options *UnresolvedDependenciesClientGetOptions) *UnresolvedDependenciesClientGetPager {
-	return &UnresolvedDependenciesClientGetPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getCreateRequest(ctx, resourceGroupName, moveCollectionName, options)
+func (client *UnresolvedDependenciesClient) Get(resourceGroupName string, moveCollectionName string, options *UnresolvedDependenciesClientGetOptions) *runtime.Pager[UnresolvedDependenciesClientGetResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UnresolvedDependenciesClientGetResponse]{
+		More: func(page UnresolvedDependenciesClientGetResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UnresolvedDependenciesClientGetResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UnresolvedDependencyCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *UnresolvedDependenciesClientGetResponse) (UnresolvedDependenciesClientGetResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getCreateRequest(ctx, resourceGroupName, moveCollectionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UnresolvedDependenciesClientGetResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UnresolvedDependenciesClientGetResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UnresolvedDependenciesClientGetResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getCreateRequest creates the Get request.

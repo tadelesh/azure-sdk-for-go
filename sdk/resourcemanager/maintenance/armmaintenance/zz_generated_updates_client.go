@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewUpdatesClient(subscriptionID string, credential azcore.TokenCredential, 
 // resourceType - Resource type
 // resourceName - Resource identifier
 // options - UpdatesClientListOptions contains the optional parameters for the UpdatesClient.List method.
-func (client *UpdatesClient) List(resourceGroupName string, providerName string, resourceType string, resourceName string, options *UpdatesClientListOptions) *UpdatesClientListPager {
-	return &UpdatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
+func (client *UpdatesClient) List(resourceGroupName string, providerName string, resourceType string, resourceName string, options *UpdatesClientListOptions) *runtime.Pager[UpdatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UpdatesClientListResponse]{
+		More: func(page UpdatesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *UpdatesClientListResponse) (UpdatesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
+			if err != nil {
+				return UpdatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UpdatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UpdatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -118,13 +131,26 @@ func (client *UpdatesClient) listHandleResponse(resp *http.Response) (UpdatesCli
 // resourceType - Resource type
 // resourceName - Resource identifier
 // options - UpdatesClientListParentOptions contains the optional parameters for the UpdatesClient.ListParent method.
-func (client *UpdatesClient) ListParent(resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *UpdatesClientListParentOptions) *UpdatesClientListParentPager {
-	return &UpdatesClientListParentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
+func (client *UpdatesClient) ListParent(resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *UpdatesClientListParentOptions) *runtime.Pager[UpdatesClientListParentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UpdatesClientListParentResponse]{
+		More: func(page UpdatesClientListParentResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *UpdatesClientListParentResponse) (UpdatesClientListParentResponse, error) {
+			req, err := client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
+			if err != nil {
+				return UpdatesClientListParentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UpdatesClientListParentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UpdatesClientListParentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listParentHandleResponse(resp)
+		},
+	})
 }
 
 // listParentCreateRequest creates the ListParent request.

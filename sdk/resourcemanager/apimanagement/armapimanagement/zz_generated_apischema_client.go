@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,20 +61,16 @@ func NewAPISchemaClient(subscriptionID string, credential azcore.TokenCredential
 // parameters - The schema contents to apply.
 // options - APISchemaClientBeginCreateOrUpdateOptions contains the optional parameters for the APISchemaClient.BeginCreateOrUpdate
 // method.
-func (client *APISchemaClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiID string, schemaID string, parameters SchemaContract, options *APISchemaClientBeginCreateOrUpdateOptions) (APISchemaClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiID, schemaID, parameters, options)
-	if err != nil {
-		return APISchemaClientCreateOrUpdatePollerResponse{}, err
+func (client *APISchemaClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiID string, schemaID string, parameters SchemaContract, options *APISchemaClientBeginCreateOrUpdateOptions) (*armruntime.Poller[APISchemaClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, apiID, schemaID, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[APISchemaClientCreateOrUpdateResponse]("APISchemaClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[APISchemaClientCreateOrUpdateResponse]("APISchemaClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := APISchemaClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("APISchemaClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return APISchemaClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &APISchemaClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates schema configuration for the API.
@@ -335,16 +331,32 @@ func (client *APISchemaClient) getEntityTagHandleResponse(resp *http.Response) (
 // apiID - API revision identifier. Must be unique in the current API Management service instance. Non-current revision has
 // ;rev=n as a suffix where n is the revision number.
 // options - APISchemaClientListByAPIOptions contains the optional parameters for the APISchemaClient.ListByAPI method.
-func (client *APISchemaClient) ListByAPI(resourceGroupName string, serviceName string, apiID string, options *APISchemaClientListByAPIOptions) *APISchemaClientListByAPIPager {
-	return &APISchemaClientListByAPIPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAPICreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+func (client *APISchemaClient) ListByAPI(resourceGroupName string, serviceName string, apiID string, options *APISchemaClientListByAPIOptions) *runtime.Pager[APISchemaClientListByAPIResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APISchemaClientListByAPIResponse]{
+		More: func(page APISchemaClientListByAPIResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APISchemaClientListByAPIResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SchemaCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APISchemaClientListByAPIResponse) (APISchemaClientListByAPIResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAPICreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APISchemaClientListByAPIResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APISchemaClientListByAPIResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APISchemaClientListByAPIResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAPIHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAPICreateRequest creates the ListByAPI request.

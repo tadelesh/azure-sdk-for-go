@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewNatRulesClient(subscriptionID string, credential azcore.TokenCredential,
 // natRuleParameters - Parameters supplied to create or Update a Nat Rule.
 // options - NatRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the NatRulesClient.BeginCreateOrUpdate
 // method.
-func (client *NatRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, gatewayName string, natRuleName string, natRuleParameters VPNGatewayNatRule, options *NatRulesClientBeginCreateOrUpdateOptions) (NatRulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, gatewayName, natRuleName, natRuleParameters, options)
-	if err != nil {
-		return NatRulesClientCreateOrUpdatePollerResponse{}, err
+func (client *NatRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, gatewayName string, natRuleName string, natRuleParameters VPNGatewayNatRule, options *NatRulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NatRulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, gatewayName, natRuleName, natRuleParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NatRulesClientCreateOrUpdateResponse]("NatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NatRulesClientCreateOrUpdateResponse]("NatRulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NatRulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return NatRulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NatRulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a nat rule to a scalable vpn gateway if it doesn't exist else updates the existing nat rules.
@@ -127,20 +123,16 @@ func (client *NatRulesClient) createOrUpdateCreateRequest(ctx context.Context, r
 // gatewayName - The name of the gateway.
 // natRuleName - The name of the nat rule.
 // options - NatRulesClientBeginDeleteOptions contains the optional parameters for the NatRulesClient.BeginDelete method.
-func (client *NatRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, gatewayName string, natRuleName string, options *NatRulesClientBeginDeleteOptions) (NatRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, gatewayName, natRuleName, options)
-	if err != nil {
-		return NatRulesClientDeletePollerResponse{}, err
+func (client *NatRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, gatewayName string, natRuleName string, options *NatRulesClientBeginDeleteOptions) (*armruntime.Poller[NatRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, gatewayName, natRuleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NatRulesClientDeleteResponse]("NatRulesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NatRulesClientDeleteResponse]("NatRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := NatRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("NatRulesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return NatRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &NatRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a nat rule.
@@ -256,16 +248,32 @@ func (client *NatRulesClient) getHandleResponse(resp *http.Response) (NatRulesCl
 // gatewayName - The name of the gateway.
 // options - NatRulesClientListByVPNGatewayOptions contains the optional parameters for the NatRulesClient.ListByVPNGateway
 // method.
-func (client *NatRulesClient) ListByVPNGateway(resourceGroupName string, gatewayName string, options *NatRulesClientListByVPNGatewayOptions) *NatRulesClientListByVPNGatewayPager {
-	return &NatRulesClientListByVPNGatewayPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVPNGatewayCreateRequest(ctx, resourceGroupName, gatewayName, options)
+func (client *NatRulesClient) ListByVPNGateway(resourceGroupName string, gatewayName string, options *NatRulesClientListByVPNGatewayOptions) *runtime.Pager[NatRulesClientListByVPNGatewayResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NatRulesClientListByVPNGatewayResponse]{
+		More: func(page NatRulesClientListByVPNGatewayResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NatRulesClientListByVPNGatewayResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListVPNGatewayNatRulesResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NatRulesClientListByVPNGatewayResponse) (NatRulesClientListByVPNGatewayResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVPNGatewayCreateRequest(ctx, resourceGroupName, gatewayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NatRulesClientListByVPNGatewayResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NatRulesClientListByVPNGatewayResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NatRulesClientListByVPNGatewayResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVPNGatewayHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVPNGatewayCreateRequest creates the ListByVPNGateway request.

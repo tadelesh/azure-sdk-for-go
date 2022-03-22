@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -112,16 +112,32 @@ func (client *DeletedAccountsClient) getHandleResponse(resp *http.Response) (Del
 // List - Returns all the resources of a particular type belonging to a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DeletedAccountsClientListOptions contains the optional parameters for the DeletedAccountsClient.List method.
-func (client *DeletedAccountsClient) List(options *DeletedAccountsClientListOptions) *DeletedAccountsClientListPager {
-	return &DeletedAccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DeletedAccountsClient) List(options *DeletedAccountsClientListOptions) *runtime.Pager[DeletedAccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedAccountsClientListResponse]{
+		More: func(page DeletedAccountsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedAccountsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedAccountsClientListResponse) (DeletedAccountsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedAccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedAccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedAccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -158,20 +174,16 @@ func (client *DeletedAccountsClient) listHandleResponse(resp *http.Response) (De
 // accountName - The name of Cognitive Services account.
 // options - DeletedAccountsClientBeginPurgeOptions contains the optional parameters for the DeletedAccountsClient.BeginPurge
 // method.
-func (client *DeletedAccountsClient) BeginPurge(ctx context.Context, location string, resourceGroupName string, accountName string, options *DeletedAccountsClientBeginPurgeOptions) (DeletedAccountsClientPurgePollerResponse, error) {
-	resp, err := client.purge(ctx, location, resourceGroupName, accountName, options)
-	if err != nil {
-		return DeletedAccountsClientPurgePollerResponse{}, err
+func (client *DeletedAccountsClient) BeginPurge(ctx context.Context, location string, resourceGroupName string, accountName string, options *DeletedAccountsClientBeginPurgeOptions) (*armruntime.Poller[DeletedAccountsClientPurgeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purge(ctx, location, resourceGroupName, accountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeletedAccountsClientPurgeResponse]("DeletedAccountsClient.Purge", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeletedAccountsClientPurgeResponse]("DeletedAccountsClient.Purge", options.ResumeToken, client.pl, nil)
 	}
-	result := DeletedAccountsClientPurgePollerResponse{}
-	pt, err := armruntime.NewPoller("DeletedAccountsClient.Purge", "", resp, client.pl)
-	if err != nil {
-		return DeletedAccountsClientPurgePollerResponse{}, err
-	}
-	result.Poller = &DeletedAccountsClientPurgePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Purge - Deletes a Cognitive Services account from the resource group.

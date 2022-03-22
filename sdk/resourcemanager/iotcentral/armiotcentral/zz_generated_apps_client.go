@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -154,20 +154,16 @@ func (client *AppsClient) checkSubdomainAvailabilityHandleResponse(resp *http.Re
 // app - The IoT Central application metadata and security metadata.
 // options - AppsClientBeginCreateOrUpdateOptions contains the optional parameters for the AppsClient.BeginCreateOrUpdate
 // method.
-func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, app App, options *AppsClientBeginCreateOrUpdateOptions) (AppsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, app, options)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
+func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, app App, options *AppsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AppsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, app, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientCreateOrUpdateResponse]("AppsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientCreateOrUpdateResponse]("AppsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update the metadata of an IoT Central application. The usual pattern to modify a property is
@@ -220,20 +216,16 @@ func (client *AppsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 // resourceGroupName - The name of the resource group that contains the IoT Central application.
 // resourceName - The ARM resource name of the IoT Central application.
 // options - AppsClientBeginDeleteOptions contains the optional parameters for the AppsClient.BeginDelete method.
-func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *AppsClientBeginDeleteOptions) (AppsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
+func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *AppsClientBeginDeleteOptions) (*armruntime.Poller[AppsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientDeleteResponse]("AppsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientDeleteResponse]("AppsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AppsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete an IoT Central application.
@@ -339,16 +331,32 @@ func (client *AppsClient) getHandleResponse(resp *http.Response) (AppsClientGetR
 // resourceGroupName - The name of the resource group that contains the IoT Central application.
 // options - AppsClientListByResourceGroupOptions contains the optional parameters for the AppsClient.ListByResourceGroup
 // method.
-func (client *AppsClient) ListByResourceGroup(resourceGroupName string, options *AppsClientListByResourceGroupOptions) *AppsClientListByResourceGroupPager {
-	return &AppsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AppsClient) ListByResourceGroup(resourceGroupName string, options *AppsClientListByResourceGroupOptions) *runtime.Pager[AppsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppsClientListByResourceGroupResponse]{
+		More: func(page AppsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AppsClientListByResourceGroupResponse) (AppsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -385,16 +393,32 @@ func (client *AppsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // ListBySubscription - Get all IoT Central Applications in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AppsClientListBySubscriptionOptions contains the optional parameters for the AppsClient.ListBySubscription method.
-func (client *AppsClient) ListBySubscription(options *AppsClientListBySubscriptionOptions) *AppsClientListBySubscriptionPager {
-	return &AppsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AppsClient) ListBySubscription(options *AppsClientListBySubscriptionOptions) *runtime.Pager[AppsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppsClientListBySubscriptionResponse]{
+		More: func(page AppsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AppsClientListBySubscriptionResponse) (AppsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -427,16 +451,32 @@ func (client *AppsClient) listBySubscriptionHandleResponse(resp *http.Response) 
 // ListTemplates - Get all available application templates.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AppsClientListTemplatesOptions contains the optional parameters for the AppsClient.ListTemplates method.
-func (client *AppsClient) ListTemplates(options *AppsClientListTemplatesOptions) *AppsClientListTemplatesPager {
-	return &AppsClientListTemplatesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listTemplatesCreateRequest(ctx, options)
+func (client *AppsClient) ListTemplates(options *AppsClientListTemplatesOptions) *runtime.Pager[AppsClientListTemplatesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppsClientListTemplatesResponse]{
+		More: func(page AppsClientListTemplatesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppsClientListTemplatesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppTemplatesResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AppsClientListTemplatesResponse) (AppsClientListTemplatesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listTemplatesCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppsClientListTemplatesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppsClientListTemplatesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppsClientListTemplatesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listTemplatesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listTemplatesCreateRequest creates the ListTemplates request.
@@ -472,20 +512,16 @@ func (client *AppsClient) listTemplatesHandleResponse(resp *http.Response) (Apps
 // resourceName - The ARM resource name of the IoT Central application.
 // appPatch - The IoT Central application metadata and security metadata.
 // options - AppsClientBeginUpdateOptions contains the optional parameters for the AppsClient.BeginUpdate method.
-func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, appPatch AppPatch, options *AppsClientBeginUpdateOptions) (AppsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, resourceName, appPatch, options)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
+func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, appPatch AppPatch, options *AppsClientBeginUpdateOptions) (*armruntime.Poller[AppsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, resourceName, appPatch, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppsClientUpdateResponse]("AppsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientUpdateResponse]("AppsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AppsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update the metadata of an IoT Central application.

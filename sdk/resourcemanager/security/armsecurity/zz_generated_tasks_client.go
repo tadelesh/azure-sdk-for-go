@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -170,16 +170,32 @@ func (client *TasksClient) getSubscriptionLevelTaskHandleResponse(resp *http.Res
 // List - Recommended tasks that will help improve the security of the subscription proactively
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TasksClientListOptions contains the optional parameters for the TasksClient.List method.
-func (client *TasksClient) List(options *TasksClientListOptions) *TasksClientListPager {
-	return &TasksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *TasksClient) List(options *TasksClientListOptions) *runtime.Pager[TasksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TasksClientListResponse]{
+		More: func(page TasksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TasksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TaskList.NextLink)
+		Fetcher: func(ctx context.Context, page *TasksClientListResponse) (TasksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TasksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TasksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TasksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -215,16 +231,32 @@ func (client *TasksClient) listHandleResponse(resp *http.Response) (TasksClientL
 // ListByHomeRegion - Recommended tasks that will help improve the security of the subscription proactively
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TasksClientListByHomeRegionOptions contains the optional parameters for the TasksClient.ListByHomeRegion method.
-func (client *TasksClient) ListByHomeRegion(options *TasksClientListByHomeRegionOptions) *TasksClientListByHomeRegionPager {
-	return &TasksClientListByHomeRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHomeRegionCreateRequest(ctx, options)
+func (client *TasksClient) ListByHomeRegion(options *TasksClientListByHomeRegionOptions) *runtime.Pager[TasksClientListByHomeRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TasksClientListByHomeRegionResponse]{
+		More: func(page TasksClientListByHomeRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TasksClientListByHomeRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TaskList.NextLink)
+		Fetcher: func(ctx context.Context, page *TasksClientListByHomeRegionResponse) (TasksClientListByHomeRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHomeRegionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TasksClientListByHomeRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TasksClientListByHomeRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TasksClientListByHomeRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHomeRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHomeRegionCreateRequest creates the ListByHomeRegion request.
@@ -266,16 +298,32 @@ func (client *TasksClient) listByHomeRegionHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - TasksClientListByResourceGroupOptions contains the optional parameters for the TasksClient.ListByResourceGroup
 // method.
-func (client *TasksClient) ListByResourceGroup(resourceGroupName string, options *TasksClientListByResourceGroupOptions) *TasksClientListByResourceGroupPager {
-	return &TasksClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *TasksClient) ListByResourceGroup(resourceGroupName string, options *TasksClientListByResourceGroupOptions) *runtime.Pager[TasksClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TasksClientListByResourceGroupResponse]{
+		More: func(page TasksClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TasksClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TaskList.NextLink)
+		Fetcher: func(ctx context.Context, page *TasksClientListByResourceGroupResponse) (TasksClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TasksClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TasksClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TasksClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

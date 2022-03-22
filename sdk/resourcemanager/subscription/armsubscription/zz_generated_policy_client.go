@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -131,16 +131,32 @@ func (client *PolicyClient) getPolicyForTenantHandleResponse(resp *http.Response
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PolicyClientListPolicyForTenantOptions contains the optional parameters for the PolicyClient.ListPolicyForTenant
 // method.
-func (client *PolicyClient) ListPolicyForTenant(options *PolicyClientListPolicyForTenantOptions) *PolicyClientListPolicyForTenantPager {
-	return &PolicyClientListPolicyForTenantPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listPolicyForTenantCreateRequest(ctx, options)
+func (client *PolicyClient) ListPolicyForTenant(options *PolicyClientListPolicyForTenantOptions) *runtime.Pager[PolicyClientListPolicyForTenantResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyClientListPolicyForTenantResponse]{
+		More: func(page PolicyClientListPolicyForTenantResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyClientListPolicyForTenantResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GetTenantPolicyListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *PolicyClientListPolicyForTenantResponse) (PolicyClientListPolicyForTenantResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listPolicyForTenantCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PolicyClientListPolicyForTenantResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyClientListPolicyForTenantResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyClientListPolicyForTenantResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listPolicyForTenantHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listPolicyForTenantCreateRequest creates the ListPolicyForTenant request.

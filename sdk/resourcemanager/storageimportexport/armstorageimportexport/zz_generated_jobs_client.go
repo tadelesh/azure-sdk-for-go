@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // resourceGroupName - The resource group name uniquely identifies the resource group within the user subscription.
 // options - JobsClientListByResourceGroupOptions contains the optional parameters for the JobsClient.ListByResourceGroup
 // method.
-func (client *JobsClient) ListByResourceGroup(resourceGroupName string, options *JobsClientListByResourceGroupOptions) *JobsClientListByResourceGroupPager {
-	return &JobsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *JobsClient) ListByResourceGroup(resourceGroupName string, options *JobsClientListByResourceGroupOptions) *runtime.Pager[JobsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListByResourceGroupResponse]{
+		More: func(page JobsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListJobsResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListByResourceGroupResponse) (JobsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -282,16 +298,32 @@ func (client *JobsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // ListBySubscription - Returns all active and completed jobs in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - JobsClientListBySubscriptionOptions contains the optional parameters for the JobsClient.ListBySubscription method.
-func (client *JobsClient) ListBySubscription(options *JobsClientListBySubscriptionOptions) *JobsClientListBySubscriptionPager {
-	return &JobsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *JobsClient) ListBySubscription(options *JobsClientListBySubscriptionOptions) *runtime.Pager[JobsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListBySubscriptionResponse]{
+		More: func(page JobsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListJobsResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListBySubscriptionResponse) (JobsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

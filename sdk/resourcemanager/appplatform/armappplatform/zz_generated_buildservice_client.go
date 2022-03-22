@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -595,16 +595,32 @@ func (client *BuildServiceClient) getSupportedStackHandleResponse(resp *http.Res
 // buildName - The name of the build resource.
 // options - BuildServiceClientListBuildResultsOptions contains the optional parameters for the BuildServiceClient.ListBuildResults
 // method.
-func (client *BuildServiceClient) ListBuildResults(resourceGroupName string, serviceName string, buildServiceName string, buildName string, options *BuildServiceClientListBuildResultsOptions) *BuildServiceClientListBuildResultsPager {
-	return &BuildServiceClientListBuildResultsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBuildResultsCreateRequest(ctx, resourceGroupName, serviceName, buildServiceName, buildName, options)
+func (client *BuildServiceClient) ListBuildResults(resourceGroupName string, serviceName string, buildServiceName string, buildName string, options *BuildServiceClientListBuildResultsOptions) *runtime.Pager[BuildServiceClientListBuildResultsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BuildServiceClientListBuildResultsResponse]{
+		More: func(page BuildServiceClientListBuildResultsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BuildServiceClientListBuildResultsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BuildResultCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *BuildServiceClientListBuildResultsResponse) (BuildServiceClientListBuildResultsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBuildResultsCreateRequest(ctx, resourceGroupName, serviceName, buildServiceName, buildName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BuildServiceClientListBuildResultsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BuildServiceClientListBuildResultsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BuildServiceClientListBuildResultsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBuildResultsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBuildResultsCreateRequest creates the ListBuildResults request.
@@ -657,16 +673,32 @@ func (client *BuildServiceClient) listBuildResultsHandleResponse(resp *http.Resp
 // serviceName - The name of the Service resource.
 // options - BuildServiceClientListBuildServicesOptions contains the optional parameters for the BuildServiceClient.ListBuildServices
 // method.
-func (client *BuildServiceClient) ListBuildServices(resourceGroupName string, serviceName string, options *BuildServiceClientListBuildServicesOptions) *BuildServiceClientListBuildServicesPager {
-	return &BuildServiceClientListBuildServicesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBuildServicesCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *BuildServiceClient) ListBuildServices(resourceGroupName string, serviceName string, options *BuildServiceClientListBuildServicesOptions) *runtime.Pager[BuildServiceClientListBuildServicesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BuildServiceClientListBuildServicesResponse]{
+		More: func(page BuildServiceClientListBuildServicesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BuildServiceClientListBuildServicesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BuildServiceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *BuildServiceClientListBuildServicesResponse) (BuildServiceClientListBuildServicesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBuildServicesCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BuildServiceClientListBuildServicesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BuildServiceClientListBuildServicesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BuildServiceClientListBuildServicesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBuildServicesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBuildServicesCreateRequest creates the ListBuildServices request.
@@ -711,16 +743,32 @@ func (client *BuildServiceClient) listBuildServicesHandleResponse(resp *http.Res
 // serviceName - The name of the Service resource.
 // buildServiceName - The name of the build service resource.
 // options - BuildServiceClientListBuildsOptions contains the optional parameters for the BuildServiceClient.ListBuilds method.
-func (client *BuildServiceClient) ListBuilds(resourceGroupName string, serviceName string, buildServiceName string, options *BuildServiceClientListBuildsOptions) *BuildServiceClientListBuildsPager {
-	return &BuildServiceClientListBuildsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBuildsCreateRequest(ctx, resourceGroupName, serviceName, buildServiceName, options)
+func (client *BuildServiceClient) ListBuilds(resourceGroupName string, serviceName string, buildServiceName string, options *BuildServiceClientListBuildsOptions) *runtime.Pager[BuildServiceClientListBuildsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BuildServiceClientListBuildsResponse]{
+		More: func(page BuildServiceClientListBuildsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BuildServiceClientListBuildsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BuildCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *BuildServiceClientListBuildsResponse) (BuildServiceClientListBuildsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBuildsCreateRequest(ctx, resourceGroupName, serviceName, buildServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BuildServiceClientListBuildsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BuildServiceClientListBuildsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BuildServiceClientListBuildsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBuildsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBuildsCreateRequest creates the ListBuilds request.

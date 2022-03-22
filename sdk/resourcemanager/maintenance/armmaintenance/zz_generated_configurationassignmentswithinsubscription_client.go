@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewConfigurationAssignmentsWithinSubscriptionClient(subscriptionID string, 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationAssignmentsWithinSubscriptionClientListOptions contains the optional parameters for the ConfigurationAssignmentsWithinSubscriptionClient.List
 // method.
-func (client *ConfigurationAssignmentsWithinSubscriptionClient) List(options *ConfigurationAssignmentsWithinSubscriptionClientListOptions) *ConfigurationAssignmentsWithinSubscriptionClientListPager {
-	return &ConfigurationAssignmentsWithinSubscriptionClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ConfigurationAssignmentsWithinSubscriptionClient) List(options *ConfigurationAssignmentsWithinSubscriptionClientListOptions) *runtime.Pager[ConfigurationAssignmentsWithinSubscriptionClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationAssignmentsWithinSubscriptionClientListResponse]{
+		More: func(page ConfigurationAssignmentsWithinSubscriptionClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationAssignmentsWithinSubscriptionClientListResponse) (ConfigurationAssignmentsWithinSubscriptionClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewVirtualNetworkGatewayNatRulesClient(subscriptionID string, credential az
 // natRuleParameters - Parameters supplied to create or Update a Nat Rule.
 // options - VirtualNetworkGatewayNatRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkGatewayNatRulesClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualNetworkGatewayNatRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, natRuleName string, natRuleParameters VirtualNetworkGatewayNatRule, options *VirtualNetworkGatewayNatRulesClientBeginCreateOrUpdateOptions) (VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualNetworkGatewayName, natRuleName, natRuleParameters, options)
-	if err != nil {
-		return VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualNetworkGatewayNatRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, natRuleName string, natRuleParameters VirtualNetworkGatewayNatRule, options *VirtualNetworkGatewayNatRulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualNetworkGatewayNatRulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualNetworkGatewayName, natRuleName, natRuleParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworkGatewayNatRulesClientCreateOrUpdateResponse]("VirtualNetworkGatewayNatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworkGatewayNatRulesClientCreateOrUpdateResponse]("VirtualNetworkGatewayNatRulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworkGatewayNatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworkGatewayNatRulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a nat rule to a scalable virtual network gateway if it doesn't exist else updates the existing
@@ -130,20 +126,16 @@ func (client *VirtualNetworkGatewayNatRulesClient) createOrUpdateCreateRequest(c
 // natRuleName - The name of the nat rule.
 // options - VirtualNetworkGatewayNatRulesClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkGatewayNatRulesClient.BeginDelete
 // method.
-func (client *VirtualNetworkGatewayNatRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, natRuleName string, options *VirtualNetworkGatewayNatRulesClientBeginDeleteOptions) (VirtualNetworkGatewayNatRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualNetworkGatewayName, natRuleName, options)
-	if err != nil {
-		return VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}, err
+func (client *VirtualNetworkGatewayNatRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, natRuleName string, options *VirtualNetworkGatewayNatRulesClientBeginDeleteOptions) (*armruntime.Poller[VirtualNetworkGatewayNatRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualNetworkGatewayName, natRuleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworkGatewayNatRulesClientDeleteResponse]("VirtualNetworkGatewayNatRulesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworkGatewayNatRulesClientDeleteResponse]("VirtualNetworkGatewayNatRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworkGatewayNatRulesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworkGatewayNatRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a nat rule.
@@ -260,16 +252,32 @@ func (client *VirtualNetworkGatewayNatRulesClient) getHandleResponse(resp *http.
 // virtualNetworkGatewayName - The name of the gateway.
 // options - VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayOptions contains the optional parameters for the
 // VirtualNetworkGatewayNatRulesClient.ListByVirtualNetworkGateway method.
-func (client *VirtualNetworkGatewayNatRulesClient) ListByVirtualNetworkGateway(resourceGroupName string, virtualNetworkGatewayName string, options *VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayOptions) *VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayPager {
-	return &VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVirtualNetworkGatewayCreateRequest(ctx, resourceGroupName, virtualNetworkGatewayName, options)
+func (client *VirtualNetworkGatewayNatRulesClient) ListByVirtualNetworkGateway(resourceGroupName string, virtualNetworkGatewayName string, options *VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayOptions) *runtime.Pager[VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse]{
+		More: func(page VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListVirtualNetworkGatewayNatRulesResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse) (VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVirtualNetworkGatewayCreateRequest(ctx, resourceGroupName, virtualNetworkGatewayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVirtualNetworkGatewayHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVirtualNetworkGatewayCreateRequest creates the ListByVirtualNetworkGateway request.

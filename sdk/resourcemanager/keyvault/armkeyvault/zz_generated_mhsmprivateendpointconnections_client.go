@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewMHSMPrivateEndpointConnectionsClient(subscriptionID string, credential a
 // privateEndpointConnectionName - Name of the private endpoint connection associated with the managed hsm pool.
 // options - MHSMPrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the MHSMPrivateEndpointConnectionsClient.BeginDelete
 // method.
-func (client *MHSMPrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *MHSMPrivateEndpointConnectionsClientBeginDeleteOptions) (MHSMPrivateEndpointConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
-	if err != nil {
-		return MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}, err
+func (client *MHSMPrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *MHSMPrivateEndpointConnectionsClientBeginDeleteOptions) (*armruntime.Poller[MHSMPrivateEndpointConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MHSMPrivateEndpointConnectionsClientDeleteResponse]("MHSMPrivateEndpointConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MHSMPrivateEndpointConnectionsClientDeleteResponse]("MHSMPrivateEndpointConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("MHSMPrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &MHSMPrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified private endpoint connection associated with the managed hsm pool.
@@ -189,16 +185,32 @@ func (client *MHSMPrivateEndpointConnectionsClient) getHandleResponse(resp *http
 // name - Name of the managed HSM Pool
 // options - MHSMPrivateEndpointConnectionsClientListByResourceOptions contains the optional parameters for the MHSMPrivateEndpointConnectionsClient.ListByResource
 // method.
-func (client *MHSMPrivateEndpointConnectionsClient) ListByResource(resourceGroupName string, name string, options *MHSMPrivateEndpointConnectionsClientListByResourceOptions) *MHSMPrivateEndpointConnectionsClientListByResourcePager {
-	return &MHSMPrivateEndpointConnectionsClientListByResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceCreateRequest(ctx, resourceGroupName, name, options)
+func (client *MHSMPrivateEndpointConnectionsClient) ListByResource(resourceGroupName string, name string, options *MHSMPrivateEndpointConnectionsClientListByResourceOptions) *runtime.Pager[MHSMPrivateEndpointConnectionsClientListByResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MHSMPrivateEndpointConnectionsClientListByResourceResponse]{
+		More: func(page MHSMPrivateEndpointConnectionsClientListByResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MHSMPrivateEndpointConnectionsClientListByResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MHSMPrivateEndpointConnectionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MHSMPrivateEndpointConnectionsClientListByResourceResponse) (MHSMPrivateEndpointConnectionsClientListByResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MHSMPrivateEndpointConnectionsClientListByResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MHSMPrivateEndpointConnectionsClientListByResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MHSMPrivateEndpointConnectionsClientListByResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceCreateRequest creates the ListByResource request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,13 +213,26 @@ func (client *ScheduledQueryRulesClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ScheduledQueryRulesClientListByResourceGroupOptions contains the optional parameters for the ScheduledQueryRulesClient.ListByResourceGroup
 // method.
-func (client *ScheduledQueryRulesClient) ListByResourceGroup(resourceGroupName string, options *ScheduledQueryRulesClientListByResourceGroupOptions) *ScheduledQueryRulesClientListByResourceGroupPager {
-	return &ScheduledQueryRulesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ScheduledQueryRulesClient) ListByResourceGroup(resourceGroupName string, options *ScheduledQueryRulesClientListByResourceGroupOptions) *runtime.Pager[ScheduledQueryRulesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScheduledQueryRulesClientListByResourceGroupResponse]{
+		More: func(page ScheduledQueryRulesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ScheduledQueryRulesClientListByResourceGroupResponse) (ScheduledQueryRulesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ScheduledQueryRulesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScheduledQueryRulesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScheduledQueryRulesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -260,13 +273,26 @@ func (client *ScheduledQueryRulesClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ScheduledQueryRulesClientListBySubscriptionOptions contains the optional parameters for the ScheduledQueryRulesClient.ListBySubscription
 // method.
-func (client *ScheduledQueryRulesClient) ListBySubscription(options *ScheduledQueryRulesClientListBySubscriptionOptions) *ScheduledQueryRulesClientListBySubscriptionPager {
-	return &ScheduledQueryRulesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ScheduledQueryRulesClient) ListBySubscription(options *ScheduledQueryRulesClientListBySubscriptionOptions) *runtime.Pager[ScheduledQueryRulesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScheduledQueryRulesClientListBySubscriptionResponse]{
+		More: func(page ScheduledQueryRulesClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ScheduledQueryRulesClientListBySubscriptionResponse) (ScheduledQueryRulesClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return ScheduledQueryRulesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScheduledQueryRulesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScheduledQueryRulesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

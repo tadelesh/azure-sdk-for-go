@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -110,16 +110,32 @@ func (client *DeletedServicesClient) getByNameHandleResponse(resp *http.Response
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DeletedServicesClientListBySubscriptionOptions contains the optional parameters for the DeletedServicesClient.ListBySubscription
 // method.
-func (client *DeletedServicesClient) ListBySubscription(options *DeletedServicesClientListBySubscriptionOptions) *DeletedServicesClientListBySubscriptionPager {
-	return &DeletedServicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DeletedServicesClient) ListBySubscription(options *DeletedServicesClientListBySubscriptionOptions) *runtime.Pager[DeletedServicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedServicesClientListBySubscriptionResponse]{
+		More: func(page DeletedServicesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedServicesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeletedServicesCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedServicesClientListBySubscriptionResponse) (DeletedServicesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedServicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedServicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -155,20 +171,16 @@ func (client *DeletedServicesClient) listBySubscriptionHandleResponse(resp *http
 // location - The location of the deleted API Management service.
 // options - DeletedServicesClientBeginPurgeOptions contains the optional parameters for the DeletedServicesClient.BeginPurge
 // method.
-func (client *DeletedServicesClient) BeginPurge(ctx context.Context, serviceName string, location string, options *DeletedServicesClientBeginPurgeOptions) (DeletedServicesClientPurgePollerResponse, error) {
-	resp, err := client.purge(ctx, serviceName, location, options)
-	if err != nil {
-		return DeletedServicesClientPurgePollerResponse{}, err
+func (client *DeletedServicesClient) BeginPurge(ctx context.Context, serviceName string, location string, options *DeletedServicesClientBeginPurgeOptions) (*armruntime.Poller[DeletedServicesClientPurgeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purge(ctx, serviceName, location, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeletedServicesClientPurgeResponse]("DeletedServicesClient.Purge", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeletedServicesClientPurgeResponse]("DeletedServicesClient.Purge", options.ResumeToken, client.pl, nil)
 	}
-	result := DeletedServicesClientPurgePollerResponse{}
-	pt, err := armruntime.NewPoller("DeletedServicesClient.Purge", "location", resp, client.pl)
-	if err != nil {
-		return DeletedServicesClientPurgePollerResponse{}, err
-	}
-	result.Poller = &DeletedServicesClientPurgePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Purge - Purges Api Management Service (deletes it with no option to undelete).

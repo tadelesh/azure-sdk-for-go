@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewCassandraResourcesClient(subscriptionID string, credential azcore.TokenC
 // createUpdateCassandraKeyspaceParameters - The parameters to provide for the current Cassandra keyspace.
 // options - CassandraResourcesClientBeginCreateUpdateCassandraKeyspaceOptions contains the optional parameters for the CassandraResourcesClient.BeginCreateUpdateCassandraKeyspace
 // method.
-func (client *CassandraResourcesClient) BeginCreateUpdateCassandraKeyspace(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, createUpdateCassandraKeyspaceParameters CassandraKeyspaceCreateUpdateParameters, options *CassandraResourcesClientBeginCreateUpdateCassandraKeyspaceOptions) (CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse, error) {
-	resp, err := client.createUpdateCassandraKeyspace(ctx, resourceGroupName, accountName, keyspaceName, createUpdateCassandraKeyspaceParameters, options)
-	if err != nil {
-		return CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginCreateUpdateCassandraKeyspace(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, createUpdateCassandraKeyspaceParameters CassandraKeyspaceCreateUpdateParameters, options *CassandraResourcesClientBeginCreateUpdateCassandraKeyspaceOptions) (*armruntime.Poller[CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdateCassandraKeyspace(ctx, resourceGroupName, accountName, keyspaceName, createUpdateCassandraKeyspaceParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse]("CassandraResourcesClient.CreateUpdateCassandraKeyspace", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse]("CassandraResourcesClient.CreateUpdateCassandraKeyspace", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.CreateUpdateCassandraKeyspace", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientCreateUpdateCassandraKeyspacePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdateCassandraKeyspace - Create or update an Azure Cosmos DB Cassandra keyspace
@@ -129,20 +125,16 @@ func (client *CassandraResourcesClient) createUpdateCassandraKeyspaceCreateReque
 // createUpdateCassandraTableParameters - The parameters to provide for the current Cassandra Table.
 // options - CassandraResourcesClientBeginCreateUpdateCassandraTableOptions contains the optional parameters for the CassandraResourcesClient.BeginCreateUpdateCassandraTable
 // method.
-func (client *CassandraResourcesClient) BeginCreateUpdateCassandraTable(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, createUpdateCassandraTableParameters CassandraTableCreateUpdateParameters, options *CassandraResourcesClientBeginCreateUpdateCassandraTableOptions) (CassandraResourcesClientCreateUpdateCassandraTablePollerResponse, error) {
-	resp, err := client.createUpdateCassandraTable(ctx, resourceGroupName, accountName, keyspaceName, tableName, createUpdateCassandraTableParameters, options)
-	if err != nil {
-		return CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginCreateUpdateCassandraTable(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, createUpdateCassandraTableParameters CassandraTableCreateUpdateParameters, options *CassandraResourcesClientBeginCreateUpdateCassandraTableOptions) (*armruntime.Poller[CassandraResourcesClientCreateUpdateCassandraTableResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdateCassandraTable(ctx, resourceGroupName, accountName, keyspaceName, tableName, createUpdateCassandraTableParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientCreateUpdateCassandraTableResponse]("CassandraResourcesClient.CreateUpdateCassandraTable", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientCreateUpdateCassandraTableResponse]("CassandraResourcesClient.CreateUpdateCassandraTable", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.CreateUpdateCassandraTable", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientCreateUpdateCassandraTablePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdateCassandraTable - Create or update an Azure Cosmos DB Cassandra Table
@@ -203,20 +195,16 @@ func (client *CassandraResourcesClient) createUpdateCassandraTableCreateRequest(
 // keyspaceName - Cosmos DB keyspace name.
 // options - CassandraResourcesClientBeginDeleteCassandraKeyspaceOptions contains the optional parameters for the CassandraResourcesClient.BeginDeleteCassandraKeyspace
 // method.
-func (client *CassandraResourcesClient) BeginDeleteCassandraKeyspace(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginDeleteCassandraKeyspaceOptions) (CassandraResourcesClientDeleteCassandraKeyspacePollerResponse, error) {
-	resp, err := client.deleteCassandraKeyspace(ctx, resourceGroupName, accountName, keyspaceName, options)
-	if err != nil {
-		return CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginDeleteCassandraKeyspace(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginDeleteCassandraKeyspaceOptions) (*armruntime.Poller[CassandraResourcesClientDeleteCassandraKeyspaceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteCassandraKeyspace(ctx, resourceGroupName, accountName, keyspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientDeleteCassandraKeyspaceResponse]("CassandraResourcesClient.DeleteCassandraKeyspace", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientDeleteCassandraKeyspaceResponse]("CassandraResourcesClient.DeleteCassandraKeyspace", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.DeleteCassandraKeyspace", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientDeleteCassandraKeyspacePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteCassandraKeyspace - Deletes an existing Azure Cosmos DB Cassandra keyspace.
@@ -273,20 +261,16 @@ func (client *CassandraResourcesClient) deleteCassandraKeyspaceCreateRequest(ctx
 // tableName - Cosmos DB table name.
 // options - CassandraResourcesClientBeginDeleteCassandraTableOptions contains the optional parameters for the CassandraResourcesClient.BeginDeleteCassandraTable
 // method.
-func (client *CassandraResourcesClient) BeginDeleteCassandraTable(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginDeleteCassandraTableOptions) (CassandraResourcesClientDeleteCassandraTablePollerResponse, error) {
-	resp, err := client.deleteCassandraTable(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
-	if err != nil {
-		return CassandraResourcesClientDeleteCassandraTablePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginDeleteCassandraTable(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginDeleteCassandraTableOptions) (*armruntime.Poller[CassandraResourcesClientDeleteCassandraTableResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteCassandraTable(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientDeleteCassandraTableResponse]("CassandraResourcesClient.DeleteCassandraTable", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientDeleteCassandraTableResponse]("CassandraResourcesClient.DeleteCassandraTable", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientDeleteCassandraTablePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.DeleteCassandraTable", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientDeleteCassandraTablePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientDeleteCassandraTablePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteCassandraTable - Deletes an existing Azure Cosmos DB Cassandra table.
@@ -602,13 +586,26 @@ func (client *CassandraResourcesClient) getCassandraTableThroughputHandleRespons
 // accountName - Cosmos DB database account name.
 // options - CassandraResourcesClientListCassandraKeyspacesOptions contains the optional parameters for the CassandraResourcesClient.ListCassandraKeyspaces
 // method.
-func (client *CassandraResourcesClient) ListCassandraKeyspaces(resourceGroupName string, accountName string, options *CassandraResourcesClientListCassandraKeyspacesOptions) *CassandraResourcesClientListCassandraKeyspacesPager {
-	return &CassandraResourcesClientListCassandraKeyspacesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCassandraKeyspacesCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *CassandraResourcesClient) ListCassandraKeyspaces(resourceGroupName string, accountName string, options *CassandraResourcesClientListCassandraKeyspacesOptions) *runtime.Pager[CassandraResourcesClientListCassandraKeyspacesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CassandraResourcesClientListCassandraKeyspacesResponse]{
+		More: func(page CassandraResourcesClientListCassandraKeyspacesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CassandraResourcesClientListCassandraKeyspacesResponse) (CassandraResourcesClientListCassandraKeyspacesResponse, error) {
+			req, err := client.listCassandraKeyspacesCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return CassandraResourcesClientListCassandraKeyspacesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CassandraResourcesClientListCassandraKeyspacesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CassandraResourcesClientListCassandraKeyspacesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCassandraKeyspacesHandleResponse(resp)
+		},
+	})
 }
 
 // listCassandraKeyspacesCreateRequest creates the ListCassandraKeyspaces request.
@@ -653,13 +650,26 @@ func (client *CassandraResourcesClient) listCassandraKeyspacesHandleResponse(res
 // keyspaceName - Cosmos DB keyspace name.
 // options - CassandraResourcesClientListCassandraTablesOptions contains the optional parameters for the CassandraResourcesClient.ListCassandraTables
 // method.
-func (client *CassandraResourcesClient) ListCassandraTables(resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientListCassandraTablesOptions) *CassandraResourcesClientListCassandraTablesPager {
-	return &CassandraResourcesClientListCassandraTablesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCassandraTablesCreateRequest(ctx, resourceGroupName, accountName, keyspaceName, options)
+func (client *CassandraResourcesClient) ListCassandraTables(resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientListCassandraTablesOptions) *runtime.Pager[CassandraResourcesClientListCassandraTablesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CassandraResourcesClientListCassandraTablesResponse]{
+		More: func(page CassandraResourcesClientListCassandraTablesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CassandraResourcesClientListCassandraTablesResponse) (CassandraResourcesClientListCassandraTablesResponse, error) {
+			req, err := client.listCassandraTablesCreateRequest(ctx, resourceGroupName, accountName, keyspaceName, options)
+			if err != nil {
+				return CassandraResourcesClientListCassandraTablesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CassandraResourcesClientListCassandraTablesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CassandraResourcesClientListCassandraTablesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCassandraTablesHandleResponse(resp)
+		},
+	})
 }
 
 // listCassandraTablesCreateRequest creates the ListCassandraTables request.
@@ -708,20 +718,16 @@ func (client *CassandraResourcesClient) listCassandraTablesHandleResponse(resp *
 // keyspaceName - Cosmos DB keyspace name.
 // options - CassandraResourcesClientBeginMigrateCassandraKeyspaceToAutoscaleOptions contains the optional parameters for
 // the CassandraResourcesClient.BeginMigrateCassandraKeyspaceToAutoscale method.
-func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToAutoscale(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginMigrateCassandraKeyspaceToAutoscaleOptions) (CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse, error) {
-	resp, err := client.migrateCassandraKeyspaceToAutoscale(ctx, resourceGroupName, accountName, keyspaceName, options)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToAutoscale(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginMigrateCassandraKeyspaceToAutoscaleOptions) (*armruntime.Poller[CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateCassandraKeyspaceToAutoscale(ctx, resourceGroupName, accountName, keyspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse]("CassandraResourcesClient.MigrateCassandraKeyspaceToAutoscale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse]("CassandraResourcesClient.MigrateCassandraKeyspaceToAutoscale", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraKeyspaceToAutoscale", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateCassandraKeyspaceToAutoscale - Migrate an Azure Cosmos DB Cassandra Keyspace from manual throughput to autoscale
@@ -779,20 +785,16 @@ func (client *CassandraResourcesClient) migrateCassandraKeyspaceToAutoscaleCreat
 // keyspaceName - Cosmos DB keyspace name.
 // options - CassandraResourcesClientBeginMigrateCassandraKeyspaceToManualThroughputOptions contains the optional parameters
 // for the CassandraResourcesClient.BeginMigrateCassandraKeyspaceToManualThroughput method.
-func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginMigrateCassandraKeyspaceToManualThroughputOptions) (CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse, error) {
-	resp, err := client.migrateCassandraKeyspaceToManualThroughput(ctx, resourceGroupName, accountName, keyspaceName, options)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}, err
+func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientBeginMigrateCassandraKeyspaceToManualThroughputOptions) (*armruntime.Poller[CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateCassandraKeyspaceToManualThroughput(ctx, resourceGroupName, accountName, keyspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse]("CassandraResourcesClient.MigrateCassandraKeyspaceToManualThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse]("CassandraResourcesClient.MigrateCassandraKeyspaceToManualThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraKeyspaceToManualThroughput", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateCassandraKeyspaceToManualThroughput - Migrate an Azure Cosmos DB Cassandra Keyspace from autoscale to manual throughput
@@ -850,20 +852,16 @@ func (client *CassandraResourcesClient) migrateCassandraKeyspaceToManualThroughp
 // tableName - Cosmos DB table name.
 // options - CassandraResourcesClientBeginMigrateCassandraTableToAutoscaleOptions contains the optional parameters for the
 // CassandraResourcesClient.BeginMigrateCassandraTableToAutoscale method.
-func (client *CassandraResourcesClient) BeginMigrateCassandraTableToAutoscale(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginMigrateCassandraTableToAutoscaleOptions) (CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse, error) {
-	resp, err := client.migrateCassandraTableToAutoscale(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}, err
+func (client *CassandraResourcesClient) BeginMigrateCassandraTableToAutoscale(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginMigrateCassandraTableToAutoscaleOptions) (*armruntime.Poller[CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateCassandraTableToAutoscale(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse]("CassandraResourcesClient.MigrateCassandraTableToAutoscale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse]("CassandraResourcesClient.MigrateCassandraTableToAutoscale", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraTableToAutoscale", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientMigrateCassandraTableToAutoscalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateCassandraTableToAutoscale - Migrate an Azure Cosmos DB Cassandra table from manual throughput to autoscale
@@ -925,20 +923,16 @@ func (client *CassandraResourcesClient) migrateCassandraTableToAutoscaleCreateRe
 // tableName - Cosmos DB table name.
 // options - CassandraResourcesClientBeginMigrateCassandraTableToManualThroughputOptions contains the optional parameters
 // for the CassandraResourcesClient.BeginMigrateCassandraTableToManualThroughput method.
-func (client *CassandraResourcesClient) BeginMigrateCassandraTableToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginMigrateCassandraTableToManualThroughputOptions) (CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse, error) {
-	resp, err := client.migrateCassandraTableToManualThroughput(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}, err
+func (client *CassandraResourcesClient) BeginMigrateCassandraTableToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, options *CassandraResourcesClientBeginMigrateCassandraTableToManualThroughputOptions) (*armruntime.Poller[CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateCassandraTableToManualThroughput(ctx, resourceGroupName, accountName, keyspaceName, tableName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse]("CassandraResourcesClient.MigrateCassandraTableToManualThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse]("CassandraResourcesClient.MigrateCassandraTableToManualThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraTableToManualThroughput", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientMigrateCassandraTableToManualThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateCassandraTableToManualThroughput - Migrate an Azure Cosmos DB Cassandra table from autoscale to manual throughput
@@ -1000,20 +994,16 @@ func (client *CassandraResourcesClient) migrateCassandraTableToManualThroughputC
 // updateThroughputParameters - The RUs per second of the parameters to provide for the current Cassandra Keyspace.
 // options - CassandraResourcesClientBeginUpdateCassandraKeyspaceThroughputOptions contains the optional parameters for the
 // CassandraResourcesClient.BeginUpdateCassandraKeyspaceThroughput method.
-func (client *CassandraResourcesClient) BeginUpdateCassandraKeyspaceThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *CassandraResourcesClientBeginUpdateCassandraKeyspaceThroughputOptions) (CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse, error) {
-	resp, err := client.updateCassandraKeyspaceThroughput(ctx, resourceGroupName, accountName, keyspaceName, updateThroughputParameters, options)
-	if err != nil {
-		return CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}, err
+func (client *CassandraResourcesClient) BeginUpdateCassandraKeyspaceThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *CassandraResourcesClientBeginUpdateCassandraKeyspaceThroughputOptions) (*armruntime.Poller[CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateCassandraKeyspaceThroughput(ctx, resourceGroupName, accountName, keyspaceName, updateThroughputParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse]("CassandraResourcesClient.UpdateCassandraKeyspaceThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse]("CassandraResourcesClient.UpdateCassandraKeyspaceThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.UpdateCassandraKeyspaceThroughput", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientUpdateCassandraKeyspaceThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateCassandraKeyspaceThroughput - Update RUs per second of an Azure Cosmos DB Cassandra Keyspace
@@ -1072,20 +1062,16 @@ func (client *CassandraResourcesClient) updateCassandraKeyspaceThroughputCreateR
 // updateThroughputParameters - The RUs per second of the parameters to provide for the current Cassandra table.
 // options - CassandraResourcesClientBeginUpdateCassandraTableThroughputOptions contains the optional parameters for the CassandraResourcesClient.BeginUpdateCassandraTableThroughput
 // method.
-func (client *CassandraResourcesClient) BeginUpdateCassandraTableThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *CassandraResourcesClientBeginUpdateCassandraTableThroughputOptions) (CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse, error) {
-	resp, err := client.updateCassandraTableThroughput(ctx, resourceGroupName, accountName, keyspaceName, tableName, updateThroughputParameters, options)
-	if err != nil {
-		return CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}, err
+func (client *CassandraResourcesClient) BeginUpdateCassandraTableThroughput(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, tableName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *CassandraResourcesClientBeginUpdateCassandraTableThroughputOptions) (*armruntime.Poller[CassandraResourcesClientUpdateCassandraTableThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateCassandraTableThroughput(ctx, resourceGroupName, accountName, keyspaceName, tableName, updateThroughputParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraResourcesClientUpdateCassandraTableThroughputResponse]("CassandraResourcesClient.UpdateCassandraTableThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraResourcesClientUpdateCassandraTableThroughputResponse]("CassandraResourcesClient.UpdateCassandraTableThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraResourcesClient.UpdateCassandraTableThroughput", "", resp, client.pl)
-	if err != nil {
-		return CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}, err
-	}
-	result.Poller = &CassandraResourcesClientUpdateCassandraTableThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateCassandraTableThroughput - Update RUs per second of an Azure Cosmos DB Cassandra table

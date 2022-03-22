@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -107,16 +107,32 @@ func (client *DeletedServersClient) getHandleResponse(resp *http.Response) (Dele
 // List - Gets a list of all deleted servers in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DeletedServersClientListOptions contains the optional parameters for the DeletedServersClient.List method.
-func (client *DeletedServersClient) List(options *DeletedServersClientListOptions) *DeletedServersClientListPager {
-	return &DeletedServersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DeletedServersClient) List(options *DeletedServersClientListOptions) *runtime.Pager[DeletedServersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedServersClientListResponse]{
+		More: func(page DeletedServersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedServersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeletedServerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedServersClientListResponse) (DeletedServersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedServersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedServersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedServersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -151,16 +167,32 @@ func (client *DeletedServersClient) listHandleResponse(resp *http.Response) (Del
 // locationName - The name of the region where the resource is located.
 // options - DeletedServersClientListByLocationOptions contains the optional parameters for the DeletedServersClient.ListByLocation
 // method.
-func (client *DeletedServersClient) ListByLocation(locationName string, options *DeletedServersClientListByLocationOptions) *DeletedServersClientListByLocationPager {
-	return &DeletedServersClientListByLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLocationCreateRequest(ctx, locationName, options)
+func (client *DeletedServersClient) ListByLocation(locationName string, options *DeletedServersClientListByLocationOptions) *runtime.Pager[DeletedServersClientListByLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedServersClientListByLocationResponse]{
+		More: func(page DeletedServersClientListByLocationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedServersClientListByLocationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeletedServerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedServersClientListByLocationResponse) (DeletedServersClientListByLocationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByLocationCreateRequest(ctx, locationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedServersClientListByLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedServersClientListByLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedServersClientListByLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLocationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.
@@ -200,20 +232,16 @@ func (client *DeletedServersClient) listByLocationHandleResponse(resp *http.Resp
 // deletedServerName - The name of the deleted server.
 // options - DeletedServersClientBeginRecoverOptions contains the optional parameters for the DeletedServersClient.BeginRecover
 // method.
-func (client *DeletedServersClient) BeginRecover(ctx context.Context, locationName string, deletedServerName string, options *DeletedServersClientBeginRecoverOptions) (DeletedServersClientRecoverPollerResponse, error) {
-	resp, err := client.recoverOperation(ctx, locationName, deletedServerName, options)
-	if err != nil {
-		return DeletedServersClientRecoverPollerResponse{}, err
+func (client *DeletedServersClient) BeginRecover(ctx context.Context, locationName string, deletedServerName string, options *DeletedServersClientBeginRecoverOptions) (*armruntime.Poller[DeletedServersClientRecoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.recoverOperation(ctx, locationName, deletedServerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeletedServersClientRecoverResponse]("DeletedServersClient.Recover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeletedServersClientRecoverResponse]("DeletedServersClient.Recover", options.ResumeToken, client.pl, nil)
 	}
-	result := DeletedServersClientRecoverPollerResponse{}
-	pt, err := armruntime.NewPoller("DeletedServersClient.Recover", "", resp, client.pl)
-	if err != nil {
-		return DeletedServersClientRecoverPollerResponse{}, err
-	}
-	result.Poller = &DeletedServersClientRecoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Recover - Recovers a deleted server.

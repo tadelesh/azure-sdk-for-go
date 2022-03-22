@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServicesClient(subscriptionID string, credential azcore.TokenCredential,
 // parameters - The service resource.
 // options - ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate
 // method.
-func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResource, options *ServicesClientBeginCreateOrUpdateOptions) (ServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationName, serviceName, parameters, options)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResource, options *ServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationName, serviceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Service Fabric service resource with the specified name.
@@ -132,20 +128,16 @@ func (client *ServicesClient) createOrUpdateCreateRequest(ctx context.Context, r
 // applicationName - The name of the application resource.
 // serviceName - The name of the service resource in the format of {applicationName}~{serviceName}.
 // options - ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
-func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, options *ServicesClientBeginDeleteOptions) (ServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationName, serviceName, options)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
+func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, options *ServicesClientBeginDeleteOptions) (*armruntime.Poller[ServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientDeleteResponse]("ServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientDeleteResponse]("ServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Service Fabric service resource with the specified name.
@@ -333,20 +325,16 @@ func (client *ServicesClient) listHandleResponse(resp *http.Response) (ServicesC
 // serviceName - The name of the service resource in the format of {applicationName}~{serviceName}.
 // parameters - The service resource for patch operations.
 // options - ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
-func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResourceUpdate, options *ServicesClientBeginUpdateOptions) (ServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, applicationName, serviceName, parameters, options)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResourceUpdate, options *ServicesClientBeginUpdateOptions) (*armruntime.Poller[ServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, applicationName, serviceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientUpdateResponse]("ServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientUpdateResponse]("ServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a Service Fabric service resource with the specified name.

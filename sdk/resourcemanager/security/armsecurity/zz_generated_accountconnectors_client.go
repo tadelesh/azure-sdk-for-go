@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -198,16 +198,32 @@ func (client *AccountConnectorsClient) getHandleResponse(resp *http.Response) (A
 // List - Cloud accounts connectors of a subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountConnectorsClientListOptions contains the optional parameters for the AccountConnectorsClient.List method.
-func (client *AccountConnectorsClient) List(options *AccountConnectorsClientListOptions) *AccountConnectorsClientListPager {
-	return &AccountConnectorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AccountConnectorsClient) List(options *AccountConnectorsClientListOptions) *runtime.Pager[AccountConnectorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountConnectorsClientListResponse]{
+		More: func(page AccountConnectorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountConnectorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectorSettingList.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountConnectorsClientListResponse) (AccountConnectorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountConnectorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountConnectorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountConnectorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

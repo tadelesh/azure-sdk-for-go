@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewDatabaseMigrationsSQLMiClient(subscriptionID string, credential azcore.T
 // parameters - Required migration operation ID for which cancel will be initiated.
 // options - DatabaseMigrationsSQLMiClientBeginCancelOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCancel
 // method.
-func (client *DatabaseMigrationsSQLMiClient) BeginCancel(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLMiClientBeginCancelOptions) (DatabaseMigrationsSQLMiClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCancelPollerResponse{}, err
+func (client *DatabaseMigrationsSQLMiClient) BeginCancel(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLMiClientBeginCancelOptions) (*armruntime.Poller[DatabaseMigrationsSQLMiClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLMiClientCancelResponse]("DatabaseMigrationsSQLMiClient.Cancel", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLMiClientCancelResponse]("DatabaseMigrationsSQLMiClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLMiClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLMiClient.Cancel", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCancelPollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLMiClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - Stop migrations in progress for the database
@@ -127,20 +123,16 @@ func (client *DatabaseMigrationsSQLMiClient) cancelCreateRequest(ctx context.Con
 // parameters - Details of SqlMigrationService resource.
 // options - DatabaseMigrationsSQLMiClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCreateOrUpdate
 // method.
-func (client *DatabaseMigrationsSQLMiClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters DatabaseMigrationSQLMi, options *DatabaseMigrationsSQLMiClientBeginCreateOrUpdateOptions) (DatabaseMigrationsSQLMiClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabaseMigrationsSQLMiClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters DatabaseMigrationSQLMi, options *DatabaseMigrationsSQLMiClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabaseMigrationsSQLMiClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLMiClientCreateOrUpdateResponse]("DatabaseMigrationsSQLMiClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLMiClientCreateOrUpdateResponse]("DatabaseMigrationsSQLMiClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLMiClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLMiClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLMiClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or Update Database Migration resource.
@@ -198,20 +190,16 @@ func (client *DatabaseMigrationsSQLMiClient) createOrUpdateCreateRequest(ctx con
 // parameters - Required migration operation ID for which cutover will be initiated.
 // options - DatabaseMigrationsSQLMiClientBeginCutoverOptions contains the optional parameters for the DatabaseMigrationsSQLMiClient.BeginCutover
 // method.
-func (client *DatabaseMigrationsSQLMiClient) BeginCutover(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLMiClientBeginCutoverOptions) (DatabaseMigrationsSQLMiClientCutoverPollerResponse, error) {
-	resp, err := client.cutover(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCutoverPollerResponse{}, err
+func (client *DatabaseMigrationsSQLMiClient) BeginCutover(ctx context.Context, resourceGroupName string, managedInstanceName string, targetDbName string, parameters MigrationOperationInput, options *DatabaseMigrationsSQLMiClientBeginCutoverOptions) (*armruntime.Poller[DatabaseMigrationsSQLMiClientCutoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cutover(ctx, resourceGroupName, managedInstanceName, targetDbName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseMigrationsSQLMiClientCutoverResponse]("DatabaseMigrationsSQLMiClient.Cutover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseMigrationsSQLMiClientCutoverResponse]("DatabaseMigrationsSQLMiClient.Cutover", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseMigrationsSQLMiClientCutoverPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseMigrationsSQLMiClient.Cutover", "", resp, client.pl)
-	if err != nil {
-		return DatabaseMigrationsSQLMiClientCutoverPollerResponse{}, err
-	}
-	result.Poller = &DatabaseMigrationsSQLMiClientCutoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cutover - Initiate cutover for online migration in progress for the database.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewSparkConfigurationsClient(subscriptionID string, credential azcore.Token
 // workspaceName - The name of the workspace.
 // options - SparkConfigurationsClientListByWorkspaceOptions contains the optional parameters for the SparkConfigurationsClient.ListByWorkspace
 // method.
-func (client *SparkConfigurationsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *SparkConfigurationsClientListByWorkspaceOptions) *SparkConfigurationsClientListByWorkspacePager {
-	return &SparkConfigurationsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *SparkConfigurationsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *SparkConfigurationsClientListByWorkspaceOptions) *runtime.Pager[SparkConfigurationsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SparkConfigurationsClientListByWorkspaceResponse]{
+		More: func(page SparkConfigurationsClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SparkConfigurationsClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SparkConfigurationListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SparkConfigurationsClientListByWorkspaceResponse) (SparkConfigurationsClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SparkConfigurationsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SparkConfigurationsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SparkConfigurationsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

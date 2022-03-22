@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -12,23 +12,27 @@ import "time"
 
 // AFDCustomDomainsClientBeginCreateOptions contains the optional parameters for the AFDCustomDomainsClient.BeginCreate method.
 type AFDCustomDomainsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDCustomDomainsClientBeginDeleteOptions contains the optional parameters for the AFDCustomDomainsClient.BeginDelete method.
 type AFDCustomDomainsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDCustomDomainsClientBeginRefreshValidationTokenOptions contains the optional parameters for the AFDCustomDomainsClient.BeginRefreshValidationToken
 // method.
 type AFDCustomDomainsClientBeginRefreshValidationTokenOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDCustomDomainsClientBeginUpdateOptions contains the optional parameters for the AFDCustomDomainsClient.BeginUpdate method.
 type AFDCustomDomainsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDCustomDomainsClientGetOptions contains the optional parameters for the AFDCustomDomainsClient.Get method.
@@ -213,23 +217,27 @@ type AFDEndpointUpdateParameters struct {
 
 // AFDEndpointsClientBeginCreateOptions contains the optional parameters for the AFDEndpointsClient.BeginCreate method.
 type AFDEndpointsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDEndpointsClientBeginDeleteOptions contains the optional parameters for the AFDEndpointsClient.BeginDelete method.
 type AFDEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDEndpointsClientBeginPurgeContentOptions contains the optional parameters for the AFDEndpointsClient.BeginPurgeContent
 // method.
 type AFDEndpointsClientBeginPurgeContentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDEndpointsClientBeginUpdateOptions contains the optional parameters for the AFDEndpointsClient.BeginUpdate method.
 type AFDEndpointsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDEndpointsClientGetOptions contains the optional parameters for the AFDEndpointsClient.Get method.
@@ -363,17 +371,20 @@ type AFDOriginGroupUpdatePropertiesParameters struct {
 
 // AFDOriginGroupsClientBeginCreateOptions contains the optional parameters for the AFDOriginGroupsClient.BeginCreate method.
 type AFDOriginGroupsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginGroupsClientBeginDeleteOptions contains the optional parameters for the AFDOriginGroupsClient.BeginDelete method.
 type AFDOriginGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginGroupsClientBeginUpdateOptions contains the optional parameters for the AFDOriginGroupsClient.BeginUpdate method.
 type AFDOriginGroupsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginGroupsClientGetOptions contains the optional parameters for the AFDOriginGroupsClient.Get method.
@@ -499,17 +510,20 @@ type AFDOriginUpdatePropertiesParameters struct {
 
 // AFDOriginsClientBeginCreateOptions contains the optional parameters for the AFDOriginsClient.BeginCreate method.
 type AFDOriginsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginsClientBeginDeleteOptions contains the optional parameters for the AFDOriginsClient.BeginDelete method.
 type AFDOriginsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginsClientBeginUpdateOptions contains the optional parameters for the AFDOriginsClient.BeginUpdate method.
 type AFDOriginsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AFDOriginsClientGetOptions contains the optional parameters for the AFDOriginsClient.Get method.
@@ -880,12 +894,14 @@ type CustomDomainPropertiesParameters struct {
 
 // CustomDomainsClientBeginCreateOptions contains the optional parameters for the CustomDomainsClient.BeginCreate method.
 type CustomDomainsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomDomainsClientBeginDeleteOptions contains the optional parameters for the CustomDomainsClient.BeginDelete method.
 type CustomDomainsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomDomainsClientDisableCustomHTTPSOptions contains the optional parameters for the CustomDomainsClient.DisableCustomHTTPS
@@ -1607,37 +1623,44 @@ type EndpointUpdateParameters struct {
 
 // EndpointsClientBeginCreateOptions contains the optional parameters for the EndpointsClient.BeginCreate method.
 type EndpointsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginDeleteOptions contains the optional parameters for the EndpointsClient.BeginDelete method.
 type EndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginLoadContentOptions contains the optional parameters for the EndpointsClient.BeginLoadContent method.
 type EndpointsClientBeginLoadContentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginPurgeContentOptions contains the optional parameters for the EndpointsClient.BeginPurgeContent method.
 type EndpointsClientBeginPurgeContentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginStartOptions contains the optional parameters for the EndpointsClient.BeginStart method.
 type EndpointsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginStopOptions contains the optional parameters for the EndpointsClient.BeginStop method.
 type EndpointsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientBeginUpdateOptions contains the optional parameters for the EndpointsClient.BeginUpdate method.
 type EndpointsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EndpointsClientGetOptions contains the optional parameters for the EndpointsClient.Get method.
@@ -2388,17 +2411,20 @@ type OriginGroupUpdatePropertiesParameters struct {
 
 // OriginGroupsClientBeginCreateOptions contains the optional parameters for the OriginGroupsClient.BeginCreate method.
 type OriginGroupsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginGroupsClientBeginDeleteOptions contains the optional parameters for the OriginGroupsClient.BeginDelete method.
 type OriginGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginGroupsClientBeginUpdateOptions contains the optional parameters for the OriginGroupsClient.BeginUpdate method.
 type OriginGroupsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginGroupsClientGetOptions contains the optional parameters for the OriginGroupsClient.Get method.
@@ -2518,17 +2544,20 @@ type OriginUpdatePropertiesParameters struct {
 
 // OriginsClientBeginCreateOptions contains the optional parameters for the OriginsClient.BeginCreate method.
 type OriginsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginsClientBeginDeleteOptions contains the optional parameters for the OriginsClient.BeginDelete method.
 type OriginsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginsClientBeginUpdateOptions contains the optional parameters for the OriginsClient.BeginUpdate method.
 type OriginsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OriginsClientGetOptions contains the optional parameters for the OriginsClient.Get method.
@@ -2543,12 +2572,14 @@ type OriginsClientListByEndpointOptions struct {
 
 // PoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PoliciesClient.BeginCreateOrUpdate method.
 type PoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoliciesClientBeginUpdateOptions contains the optional parameters for the PoliciesClient.BeginUpdate method.
 type PoliciesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoliciesClientDeleteOptions contains the optional parameters for the PoliciesClient.Delete method.
@@ -2672,17 +2703,20 @@ type ProfileUpdateParameters struct {
 
 // ProfilesClientBeginCreateOptions contains the optional parameters for the ProfilesClient.BeginCreate method.
 type ProfilesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientBeginDeleteOptions contains the optional parameters for the ProfilesClient.BeginDelete method.
 type ProfilesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientBeginUpdateOptions contains the optional parameters for the ProfilesClient.BeginUpdate method.
 type ProfilesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientGenerateSsoURIOptions contains the optional parameters for the ProfilesClient.GenerateSsoURI method.
@@ -3145,17 +3179,20 @@ type RouteUpdatePropertiesParameters struct {
 
 // RoutesClientBeginCreateOptions contains the optional parameters for the RoutesClient.BeginCreate method.
 type RoutesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutesClientBeginDeleteOptions contains the optional parameters for the RoutesClient.BeginDelete method.
 type RoutesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutesClientBeginUpdateOptions contains the optional parameters for the RoutesClient.BeginUpdate method.
 type RoutesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutesClientGetOptions contains the optional parameters for the RoutesClient.Get method.
@@ -3265,7 +3302,8 @@ type RuleSetProperties struct {
 
 // RuleSetsClientBeginDeleteOptions contains the optional parameters for the RuleSetsClient.BeginDelete method.
 type RuleSetsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RuleSetsClientCreateOptions contains the optional parameters for the RuleSetsClient.Create method.
@@ -3317,17 +3355,20 @@ type RuleUpdatePropertiesParameters struct {
 
 // RulesClientBeginCreateOptions contains the optional parameters for the RulesClient.BeginCreate method.
 type RulesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RulesClientBeginDeleteOptions contains the optional parameters for the RulesClient.BeginDelete method.
 type RulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RulesClientBeginUpdateOptions contains the optional parameters for the RulesClient.BeginUpdate method.
 type RulesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RulesClientGetOptions contains the optional parameters for the RulesClient.Get method.
@@ -3437,12 +3478,14 @@ type SecretProperties struct {
 
 // SecretsClientBeginCreateOptions contains the optional parameters for the SecretsClient.BeginCreate method.
 type SecretsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecretsClientBeginDeleteOptions contains the optional parameters for the SecretsClient.BeginDelete method.
 type SecretsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecretsClientGetOptions contains the optional parameters for the SecretsClient.Get method.
@@ -3457,17 +3500,20 @@ type SecretsClientListByProfileOptions struct {
 
 // SecurityPoliciesClientBeginCreateOptions contains the optional parameters for the SecurityPoliciesClient.BeginCreate method.
 type SecurityPoliciesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityPoliciesClientBeginDeleteOptions contains the optional parameters for the SecurityPoliciesClient.BeginDelete method.
 type SecurityPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityPoliciesClientBeginPatchOptions contains the optional parameters for the SecurityPoliciesClient.BeginPatch method.
 type SecurityPoliciesClientBeginPatchOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityPoliciesClientGetOptions contains the optional parameters for the SecurityPoliciesClient.Get method.

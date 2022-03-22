@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,20 +64,16 @@ func NewResourcePoolsClient(subscriptionID string, credential azcore.TokenCreden
 // resourcePoolName - Name of the resourcePool.
 // options - ResourcePoolsClientBeginCreateOptions contains the optional parameters for the ResourcePoolsClient.BeginCreate
 // method.
-func (client *ResourcePoolsClient) BeginCreate(ctx context.Context, resourceGroupName string, resourcePoolName string, options *ResourcePoolsClientBeginCreateOptions) (ResourcePoolsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, resourcePoolName, options)
-	if err != nil {
-		return ResourcePoolsClientCreatePollerResponse{}, err
+func (client *ResourcePoolsClient) BeginCreate(ctx context.Context, resourceGroupName string, resourcePoolName string, options *ResourcePoolsClientBeginCreateOptions) (*armruntime.Poller[ResourcePoolsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, resourcePoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ResourcePoolsClientCreateResponse]("ResourcePoolsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ResourcePoolsClientCreateResponse]("ResourcePoolsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ResourcePoolsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ResourcePoolsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ResourcePoolsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ResourcePoolsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update resourcePool.
@@ -132,20 +128,16 @@ func (client *ResourcePoolsClient) createCreateRequest(ctx context.Context, reso
 // resourcePoolName - Name of the resourcePool.
 // options - ResourcePoolsClientBeginDeleteOptions contains the optional parameters for the ResourcePoolsClient.BeginDelete
 // method.
-func (client *ResourcePoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourcePoolName string, options *ResourcePoolsClientBeginDeleteOptions) (ResourcePoolsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourcePoolName, options)
-	if err != nil {
-		return ResourcePoolsClientDeletePollerResponse{}, err
+func (client *ResourcePoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourcePoolName string, options *ResourcePoolsClientBeginDeleteOptions) (*armruntime.Poller[ResourcePoolsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourcePoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ResourcePoolsClientDeleteResponse]("ResourcePoolsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ResourcePoolsClientDeleteResponse]("ResourcePoolsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ResourcePoolsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ResourcePoolsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ResourcePoolsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ResourcePoolsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements resourcePool DELETE method.
@@ -252,16 +244,32 @@ func (client *ResourcePoolsClient) getHandleResponse(resp *http.Response) (Resou
 // List - List of resourcePools in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourcePoolsClientListOptions contains the optional parameters for the ResourcePoolsClient.List method.
-func (client *ResourcePoolsClient) List(options *ResourcePoolsClientListOptions) *ResourcePoolsClientListPager {
-	return &ResourcePoolsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ResourcePoolsClient) List(options *ResourcePoolsClientListOptions) *runtime.Pager[ResourcePoolsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourcePoolsClientListResponse]{
+		More: func(page ResourcePoolsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourcePoolsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourcePoolsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourcePoolsClientListResponse) (ResourcePoolsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourcePoolsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourcePoolsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourcePoolsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -296,16 +304,32 @@ func (client *ResourcePoolsClient) listHandleResponse(resp *http.Response) (Reso
 // resourceGroupName - The Resource Group Name.
 // options - ResourcePoolsClientListByResourceGroupOptions contains the optional parameters for the ResourcePoolsClient.ListByResourceGroup
 // method.
-func (client *ResourcePoolsClient) ListByResourceGroup(resourceGroupName string, options *ResourcePoolsClientListByResourceGroupOptions) *ResourcePoolsClientListByResourceGroupPager {
-	return &ResourcePoolsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ResourcePoolsClient) ListByResourceGroup(resourceGroupName string, options *ResourcePoolsClientListByResourceGroupOptions) *runtime.Pager[ResourcePoolsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourcePoolsClientListByResourceGroupResponse]{
+		More: func(page ResourcePoolsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourcePoolsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourcePoolsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourcePoolsClientListByResourceGroupResponse) (ResourcePoolsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourcePoolsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourcePoolsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourcePoolsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -12,17 +12,20 @@ import "time"
 
 // ClientBeginCreateOrUpdateOptions contains the optional parameters for the Client.BeginCreateOrUpdate method.
 type ClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 type ClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginUpdateOptions contains the optional parameters for the Client.BeginUpdate method.
 type ClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientGetOptions contains the optional parameters for the Client.Get method.
@@ -399,17 +402,20 @@ type OuContainer struct {
 
 // OuContainerClientBeginCreateOptions contains the optional parameters for the OuContainerClient.BeginCreate method.
 type OuContainerClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OuContainerClientBeginDeleteOptions contains the optional parameters for the OuContainerClient.BeginDelete method.
 type OuContainerClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OuContainerClientBeginUpdateOptions contains the optional parameters for the OuContainerClient.BeginUpdate method.
 type OuContainerClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OuContainerClientGetOptions contains the optional parameters for the OuContainerClient.Get method.

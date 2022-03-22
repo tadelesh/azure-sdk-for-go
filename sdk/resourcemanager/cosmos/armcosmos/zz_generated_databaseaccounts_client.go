@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -95,20 +95,16 @@ func (client *DatabaseAccountsClient) checkNameExistsCreateRequest(ctx context.C
 // createUpdateParameters - The parameters to provide for the current database account.
 // options - DatabaseAccountsClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabaseAccountsClient.BeginCreateOrUpdate
 // method.
-func (client *DatabaseAccountsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, createUpdateParameters DatabaseAccountCreateUpdateParameters, options *DatabaseAccountsClientBeginCreateOrUpdateOptions) (DatabaseAccountsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, createUpdateParameters, options)
-	if err != nil {
-		return DatabaseAccountsClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, createUpdateParameters DatabaseAccountCreateUpdateParameters, options *DatabaseAccountsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabaseAccountsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, createUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientCreateOrUpdateResponse]("DatabaseAccountsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientCreateOrUpdateResponse]("DatabaseAccountsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an Azure Cosmos DB database account. The "Update" method is preferred when performing
@@ -161,20 +157,16 @@ func (client *DatabaseAccountsClient) createOrUpdateCreateRequest(ctx context.Co
 // accountName - Cosmos DB database account name.
 // options - DatabaseAccountsClientBeginDeleteOptions contains the optional parameters for the DatabaseAccountsClient.BeginDelete
 // method.
-func (client *DatabaseAccountsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, options *DatabaseAccountsClientBeginDeleteOptions) (DatabaseAccountsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return DatabaseAccountsClientDeletePollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, options *DatabaseAccountsClientBeginDeleteOptions) (*armruntime.Poller[DatabaseAccountsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientDeleteResponse]("DatabaseAccountsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientDeleteResponse]("DatabaseAccountsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing Azure Cosmos DB database account.
@@ -228,20 +220,16 @@ func (client *DatabaseAccountsClient) deleteCreateRequest(ctx context.Context, r
 // failoverParameters - The new failover policies for the database account.
 // options - DatabaseAccountsClientBeginFailoverPriorityChangeOptions contains the optional parameters for the DatabaseAccountsClient.BeginFailoverPriorityChange
 // method.
-func (client *DatabaseAccountsClient) BeginFailoverPriorityChange(ctx context.Context, resourceGroupName string, accountName string, failoverParameters FailoverPolicies, options *DatabaseAccountsClientBeginFailoverPriorityChangeOptions) (DatabaseAccountsClientFailoverPriorityChangePollerResponse, error) {
-	resp, err := client.failoverPriorityChange(ctx, resourceGroupName, accountName, failoverParameters, options)
-	if err != nil {
-		return DatabaseAccountsClientFailoverPriorityChangePollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginFailoverPriorityChange(ctx context.Context, resourceGroupName string, accountName string, failoverParameters FailoverPolicies, options *DatabaseAccountsClientBeginFailoverPriorityChangeOptions) (*armruntime.Poller[DatabaseAccountsClientFailoverPriorityChangeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failoverPriorityChange(ctx, resourceGroupName, accountName, failoverParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientFailoverPriorityChangeResponse]("DatabaseAccountsClient.FailoverPriorityChange", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientFailoverPriorityChangeResponse]("DatabaseAccountsClient.FailoverPriorityChange", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientFailoverPriorityChangePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.FailoverPriorityChange", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientFailoverPriorityChangePollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientFailoverPriorityChangePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // FailoverPriorityChange - Changes the failover priority for the Azure Cosmos DB database account. A failover priority of
@@ -402,13 +390,26 @@ func (client *DatabaseAccountsClient) getReadOnlyKeysHandleResponse(resp *http.R
 // List - Lists all the Azure Cosmos DB database accounts available under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DatabaseAccountsClientListOptions contains the optional parameters for the DatabaseAccountsClient.List method.
-func (client *DatabaseAccountsClient) List(options *DatabaseAccountsClientListOptions) *DatabaseAccountsClientListPager {
-	return &DatabaseAccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DatabaseAccountsClient) List(options *DatabaseAccountsClientListOptions) *runtime.Pager[DatabaseAccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountsClientListResponse]{
+		More: func(page DatabaseAccountsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountsClientListResponse) (DatabaseAccountsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return DatabaseAccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -443,13 +444,26 @@ func (client *DatabaseAccountsClient) listHandleResponse(resp *http.Response) (D
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DatabaseAccountsClientListByResourceGroupOptions contains the optional parameters for the DatabaseAccountsClient.ListByResourceGroup
 // method.
-func (client *DatabaseAccountsClient) ListByResourceGroup(resourceGroupName string, options *DatabaseAccountsClientListByResourceGroupOptions) *DatabaseAccountsClientListByResourceGroupPager {
-	return &DatabaseAccountsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DatabaseAccountsClient) ListByResourceGroup(resourceGroupName string, options *DatabaseAccountsClientListByResourceGroupOptions) *runtime.Pager[DatabaseAccountsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountsClientListByResourceGroupResponse]{
+		More: func(page DatabaseAccountsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountsClientListByResourceGroupResponse) (DatabaseAccountsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return DatabaseAccountsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -601,13 +615,26 @@ func (client *DatabaseAccountsClient) listKeysHandleResponse(resp *http.Response
 // accountName - Cosmos DB database account name.
 // options - DatabaseAccountsClientListMetricDefinitionsOptions contains the optional parameters for the DatabaseAccountsClient.ListMetricDefinitions
 // method.
-func (client *DatabaseAccountsClient) ListMetricDefinitions(resourceGroupName string, accountName string, options *DatabaseAccountsClientListMetricDefinitionsOptions) *DatabaseAccountsClientListMetricDefinitionsPager {
-	return &DatabaseAccountsClientListMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *DatabaseAccountsClient) ListMetricDefinitions(resourceGroupName string, accountName string, options *DatabaseAccountsClientListMetricDefinitionsOptions) *runtime.Pager[DatabaseAccountsClientListMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountsClientListMetricDefinitionsResponse]{
+		More: func(page DatabaseAccountsClientListMetricDefinitionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountsClientListMetricDefinitionsResponse) (DatabaseAccountsClientListMetricDefinitionsResponse, error) {
+			req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return DatabaseAccountsClientListMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountsClientListMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountsClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -654,13 +681,26 @@ func (client *DatabaseAccountsClient) listMetricDefinitionsHandleResponse(resp *
 // and timeGrain. The supported operator is eq.
 // options - DatabaseAccountsClientListMetricsOptions contains the optional parameters for the DatabaseAccountsClient.ListMetrics
 // method.
-func (client *DatabaseAccountsClient) ListMetrics(resourceGroupName string, accountName string, filter string, options *DatabaseAccountsClientListMetricsOptions) *DatabaseAccountsClientListMetricsPager {
-	return &DatabaseAccountsClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
+func (client *DatabaseAccountsClient) ListMetrics(resourceGroupName string, accountName string, filter string, options *DatabaseAccountsClientListMetricsOptions) *runtime.Pager[DatabaseAccountsClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountsClientListMetricsResponse]{
+		More: func(page DatabaseAccountsClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountsClientListMetricsResponse) (DatabaseAccountsClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
+			if err != nil {
+				return DatabaseAccountsClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountsClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountsClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -761,13 +801,26 @@ func (client *DatabaseAccountsClient) listReadOnlyKeysHandleResponse(resp *http.
 // accountName - Cosmos DB database account name.
 // options - DatabaseAccountsClientListUsagesOptions contains the optional parameters for the DatabaseAccountsClient.ListUsages
 // method.
-func (client *DatabaseAccountsClient) ListUsages(resourceGroupName string, accountName string, options *DatabaseAccountsClientListUsagesOptions) *DatabaseAccountsClientListUsagesPager {
-	return &DatabaseAccountsClientListUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *DatabaseAccountsClient) ListUsages(resourceGroupName string, accountName string, options *DatabaseAccountsClientListUsagesOptions) *runtime.Pager[DatabaseAccountsClientListUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabaseAccountsClientListUsagesResponse]{
+		More: func(page DatabaseAccountsClientListUsagesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabaseAccountsClientListUsagesResponse) (DatabaseAccountsClientListUsagesResponse, error) {
+			req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return DatabaseAccountsClientListUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabaseAccountsClientListUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabaseAccountsClientListUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUsagesHandleResponse(resp)
+		},
+	})
 }
 
 // listUsagesCreateRequest creates the ListUsages request.
@@ -815,20 +868,16 @@ func (client *DatabaseAccountsClient) listUsagesHandleResponse(resp *http.Respon
 // regionParameterForOffline - Cosmos DB region to offline for the database account.
 // options - DatabaseAccountsClientBeginOfflineRegionOptions contains the optional parameters for the DatabaseAccountsClient.BeginOfflineRegion
 // method.
-func (client *DatabaseAccountsClient) BeginOfflineRegion(ctx context.Context, resourceGroupName string, accountName string, regionParameterForOffline RegionForOnlineOffline, options *DatabaseAccountsClientBeginOfflineRegionOptions) (DatabaseAccountsClientOfflineRegionPollerResponse, error) {
-	resp, err := client.offlineRegion(ctx, resourceGroupName, accountName, regionParameterForOffline, options)
-	if err != nil {
-		return DatabaseAccountsClientOfflineRegionPollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginOfflineRegion(ctx context.Context, resourceGroupName string, accountName string, regionParameterForOffline RegionForOnlineOffline, options *DatabaseAccountsClientBeginOfflineRegionOptions) (*armruntime.Poller[DatabaseAccountsClientOfflineRegionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.offlineRegion(ctx, resourceGroupName, accountName, regionParameterForOffline, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientOfflineRegionResponse]("DatabaseAccountsClient.OfflineRegion", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientOfflineRegionResponse]("DatabaseAccountsClient.OfflineRegion", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientOfflineRegionPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.OfflineRegion", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientOfflineRegionPollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientOfflineRegionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // OfflineRegion - Offline the specified region for the specified Azure Cosmos DB database account.
@@ -881,20 +930,16 @@ func (client *DatabaseAccountsClient) offlineRegionCreateRequest(ctx context.Con
 // regionParameterForOnline - Cosmos DB region to online for the database account.
 // options - DatabaseAccountsClientBeginOnlineRegionOptions contains the optional parameters for the DatabaseAccountsClient.BeginOnlineRegion
 // method.
-func (client *DatabaseAccountsClient) BeginOnlineRegion(ctx context.Context, resourceGroupName string, accountName string, regionParameterForOnline RegionForOnlineOffline, options *DatabaseAccountsClientBeginOnlineRegionOptions) (DatabaseAccountsClientOnlineRegionPollerResponse, error) {
-	resp, err := client.onlineRegion(ctx, resourceGroupName, accountName, regionParameterForOnline, options)
-	if err != nil {
-		return DatabaseAccountsClientOnlineRegionPollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginOnlineRegion(ctx context.Context, resourceGroupName string, accountName string, regionParameterForOnline RegionForOnlineOffline, options *DatabaseAccountsClientBeginOnlineRegionOptions) (*armruntime.Poller[DatabaseAccountsClientOnlineRegionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.onlineRegion(ctx, resourceGroupName, accountName, regionParameterForOnline, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientOnlineRegionResponse]("DatabaseAccountsClient.OnlineRegion", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientOnlineRegionResponse]("DatabaseAccountsClient.OnlineRegion", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientOnlineRegionPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.OnlineRegion", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientOnlineRegionPollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientOnlineRegionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // OnlineRegion - Online the specified region for the specified Azure Cosmos DB database account.
@@ -947,20 +992,16 @@ func (client *DatabaseAccountsClient) onlineRegionCreateRequest(ctx context.Cont
 // keyToRegenerate - The name of the key to regenerate.
 // options - DatabaseAccountsClientBeginRegenerateKeyOptions contains the optional parameters for the DatabaseAccountsClient.BeginRegenerateKey
 // method.
-func (client *DatabaseAccountsClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, accountName string, keyToRegenerate DatabaseAccountRegenerateKeyParameters, options *DatabaseAccountsClientBeginRegenerateKeyOptions) (DatabaseAccountsClientRegenerateKeyPollerResponse, error) {
-	resp, err := client.regenerateKey(ctx, resourceGroupName, accountName, keyToRegenerate, options)
-	if err != nil {
-		return DatabaseAccountsClientRegenerateKeyPollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, accountName string, keyToRegenerate DatabaseAccountRegenerateKeyParameters, options *DatabaseAccountsClientBeginRegenerateKeyOptions) (*armruntime.Poller[DatabaseAccountsClientRegenerateKeyResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.regenerateKey(ctx, resourceGroupName, accountName, keyToRegenerate, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientRegenerateKeyResponse]("DatabaseAccountsClient.RegenerateKey", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientRegenerateKeyResponse]("DatabaseAccountsClient.RegenerateKey", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientRegenerateKeyPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.RegenerateKey", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientRegenerateKeyPollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientRegenerateKeyPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegenerateKey - Regenerates an access key for the specified Azure Cosmos DB database account.
@@ -1012,20 +1053,16 @@ func (client *DatabaseAccountsClient) regenerateKeyCreateRequest(ctx context.Con
 // updateParameters - The parameters to provide for the current database account.
 // options - DatabaseAccountsClientBeginUpdateOptions contains the optional parameters for the DatabaseAccountsClient.BeginUpdate
 // method.
-func (client *DatabaseAccountsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, updateParameters DatabaseAccountUpdateParameters, options *DatabaseAccountsClientBeginUpdateOptions) (DatabaseAccountsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, updateParameters, options)
-	if err != nil {
-		return DatabaseAccountsClientUpdatePollerResponse{}, err
+func (client *DatabaseAccountsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, updateParameters DatabaseAccountUpdateParameters, options *DatabaseAccountsClientBeginUpdateOptions) (*armruntime.Poller[DatabaseAccountsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, updateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabaseAccountsClientUpdateResponse]("DatabaseAccountsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabaseAccountsClientUpdateResponse]("DatabaseAccountsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabaseAccountsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabaseAccountsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DatabaseAccountsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabaseAccountsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the properties of an existing Azure Cosmos DB database account.

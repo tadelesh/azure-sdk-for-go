@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -441,31 +441,36 @@ type Link struct {
 // ManagementClientBeginCreateAddressOptions contains the optional parameters for the ManagementClient.BeginCreateAddress
 // method.
 type ManagementClientBeginCreateAddressOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginCreateOrderItemOptions contains the optional parameters for the ManagementClient.BeginCreateOrderItem
 // method.
 type ManagementClientBeginCreateOrderItemOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginDeleteAddressByNameOptions contains the optional parameters for the ManagementClient.BeginDeleteAddressByName
 // method.
 type ManagementClientBeginDeleteAddressByNameOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginDeleteOrderItemByNameOptions contains the optional parameters for the ManagementClient.BeginDeleteOrderItemByName
 // method.
 type ManagementClientBeginDeleteOrderItemByNameOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginReturnOrderItemOptions contains the optional parameters for the ManagementClient.BeginReturnOrderItem
 // method.
 type ManagementClientBeginReturnOrderItemOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginUpdateAddressOptions contains the optional parameters for the ManagementClient.BeginUpdateAddress
@@ -473,6 +478,8 @@ type ManagementClientBeginReturnOrderItemOptions struct {
 type ManagementClientBeginUpdateAddressOptions struct {
 	// Defines the If-Match condition. The patch will be performed only if the ETag of the job on the server matches this value.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginUpdateOrderItemOptions contains the optional parameters for the ManagementClient.BeginUpdateOrderItem
@@ -480,6 +487,8 @@ type ManagementClientBeginUpdateAddressOptions struct {
 type ManagementClientBeginUpdateOrderItemOptions struct {
 	// Defines the If-Match condition. The patch will be performed only if the ETag of the order on the server matches this value.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientCancelOrderItemOptions contains the optional parameters for the ManagementClient.CancelOrderItem method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,20 +114,16 @@ func (client *ReplicationLinksClient) deleteCreateRequest(ctx context.Context, r
 // linkID - The ID of the replication link to be failed over.
 // options - ReplicationLinksClientBeginFailoverOptions contains the optional parameters for the ReplicationLinksClient.BeginFailover
 // method.
-func (client *ReplicationLinksClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, options *ReplicationLinksClientBeginFailoverOptions) (ReplicationLinksClientFailoverPollerResponse, error) {
-	resp, err := client.failover(ctx, resourceGroupName, serverName, databaseName, linkID, options)
-	if err != nil {
-		return ReplicationLinksClientFailoverPollerResponse{}, err
+func (client *ReplicationLinksClient) BeginFailover(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, options *ReplicationLinksClientBeginFailoverOptions) (*armruntime.Poller[ReplicationLinksClientFailoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failover(ctx, resourceGroupName, serverName, databaseName, linkID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationLinksClientFailoverResponse]("ReplicationLinksClient.Failover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationLinksClientFailoverResponse]("ReplicationLinksClient.Failover", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationLinksClientFailoverPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationLinksClient.Failover", "", resp, client.pl)
-	if err != nil {
-		return ReplicationLinksClientFailoverPollerResponse{}, err
-	}
-	result.Poller = &ReplicationLinksClientFailoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Failover - Sets which replica database is primary by failing over from the current primary replica database.
@@ -190,20 +186,16 @@ func (client *ReplicationLinksClient) failoverCreateRequest(ctx context.Context,
 // linkID - The ID of the replication link to be failed over.
 // options - ReplicationLinksClientBeginFailoverAllowDataLossOptions contains the optional parameters for the ReplicationLinksClient.BeginFailoverAllowDataLoss
 // method.
-func (client *ReplicationLinksClient) BeginFailoverAllowDataLoss(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, options *ReplicationLinksClientBeginFailoverAllowDataLossOptions) (ReplicationLinksClientFailoverAllowDataLossPollerResponse, error) {
-	resp, err := client.failoverAllowDataLoss(ctx, resourceGroupName, serverName, databaseName, linkID, options)
-	if err != nil {
-		return ReplicationLinksClientFailoverAllowDataLossPollerResponse{}, err
+func (client *ReplicationLinksClient) BeginFailoverAllowDataLoss(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, options *ReplicationLinksClientBeginFailoverAllowDataLossOptions) (*armruntime.Poller[ReplicationLinksClientFailoverAllowDataLossResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failoverAllowDataLoss(ctx, resourceGroupName, serverName, databaseName, linkID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationLinksClientFailoverAllowDataLossResponse]("ReplicationLinksClient.FailoverAllowDataLoss", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationLinksClientFailoverAllowDataLossResponse]("ReplicationLinksClient.FailoverAllowDataLoss", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationLinksClientFailoverAllowDataLossPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationLinksClient.FailoverAllowDataLoss", "", resp, client.pl)
-	if err != nil {
-		return ReplicationLinksClientFailoverAllowDataLossPollerResponse{}, err
-	}
-	result.Poller = &ReplicationLinksClientFailoverAllowDataLossPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // FailoverAllowDataLoss - Sets which replica database is primary by failing over from the current primary replica database.
@@ -331,16 +323,32 @@ func (client *ReplicationLinksClient) getHandleResponse(resp *http.Response) (Re
 // databaseName - The name of the database.
 // options - ReplicationLinksClientListByDatabaseOptions contains the optional parameters for the ReplicationLinksClient.ListByDatabase
 // method.
-func (client *ReplicationLinksClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *ReplicationLinksClientListByDatabaseOptions) *ReplicationLinksClientListByDatabasePager {
-	return &ReplicationLinksClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *ReplicationLinksClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *ReplicationLinksClientListByDatabaseOptions) *runtime.Pager[ReplicationLinksClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationLinksClientListByDatabaseResponse]{
+		More: func(page ReplicationLinksClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationLinksClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ReplicationLinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationLinksClientListByDatabaseResponse) (ReplicationLinksClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationLinksClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationLinksClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationLinksClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -389,16 +397,32 @@ func (client *ReplicationLinksClient) listByDatabaseHandleResponse(resp *http.Re
 // serverName - The name of the server.
 // options - ReplicationLinksClientListByServerOptions contains the optional parameters for the ReplicationLinksClient.ListByServer
 // method.
-func (client *ReplicationLinksClient) ListByServer(resourceGroupName string, serverName string, options *ReplicationLinksClientListByServerOptions) *ReplicationLinksClientListByServerPager {
-	return &ReplicationLinksClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ReplicationLinksClient) ListByServer(resourceGroupName string, serverName string, options *ReplicationLinksClientListByServerOptions) *runtime.Pager[ReplicationLinksClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationLinksClientListByServerResponse]{
+		More: func(page ReplicationLinksClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationLinksClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ReplicationLinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationLinksClientListByServerResponse) (ReplicationLinksClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationLinksClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationLinksClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationLinksClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -446,20 +470,16 @@ func (client *ReplicationLinksClient) listByServerHandleResponse(resp *http.Resp
 // parameters - The required parameters for unlinking replication link.
 // options - ReplicationLinksClientBeginUnlinkOptions contains the optional parameters for the ReplicationLinksClient.BeginUnlink
 // method.
-func (client *ReplicationLinksClient) BeginUnlink(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, parameters UnlinkParameters, options *ReplicationLinksClientBeginUnlinkOptions) (ReplicationLinksClientUnlinkPollerResponse, error) {
-	resp, err := client.unlink(ctx, resourceGroupName, serverName, databaseName, linkID, parameters, options)
-	if err != nil {
-		return ReplicationLinksClientUnlinkPollerResponse{}, err
+func (client *ReplicationLinksClient) BeginUnlink(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string, parameters UnlinkParameters, options *ReplicationLinksClientBeginUnlinkOptions) (*armruntime.Poller[ReplicationLinksClientUnlinkResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.unlink(ctx, resourceGroupName, serverName, databaseName, linkID, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationLinksClientUnlinkResponse]("ReplicationLinksClient.Unlink", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationLinksClientUnlinkResponse]("ReplicationLinksClient.Unlink", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationLinksClientUnlinkPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationLinksClient.Unlink", "", resp, client.pl)
-	if err != nil {
-		return ReplicationLinksClientUnlinkPollerResponse{}, err
-	}
-	result.Poller = &ReplicationLinksClientUnlinkPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Unlink - Deletes a database replication link in forced or friendly way.

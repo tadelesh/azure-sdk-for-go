@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,85 +16,9 @@
 
 package armresourceconnector
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// AppliancesClientCreateOrUpdatePollerResponse contains the response from method AppliancesClient.CreateOrUpdate.
-type AppliancesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AppliancesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AppliancesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AppliancesClientCreateOrUpdateResponse, error) {
-	respType := AppliancesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Appliance)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AppliancesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *AppliancesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *AppliancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AppliancesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AppliancesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // AppliancesClientCreateOrUpdateResponse contains the response from method AppliancesClient.CreateOrUpdate.
 type AppliancesClientCreateOrUpdateResponse struct {
 	Appliance
-}
-
-// AppliancesClientDeletePollerResponse contains the response from method AppliancesClient.Delete.
-type AppliancesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AppliancesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AppliancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AppliancesClientDeleteResponse, error) {
-	respType := AppliancesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AppliancesClientDeletePollerResponse from the provided client and resume token.
-func (l *AppliancesClientDeletePollerResponse) Resume(ctx context.Context, client *AppliancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AppliancesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AppliancesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AppliancesClientDeleteResponse contains the response from method AppliancesClient.Delete.

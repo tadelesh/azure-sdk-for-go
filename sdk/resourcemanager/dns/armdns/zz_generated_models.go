@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -398,6 +398,8 @@ type ZonesClientBeginDeleteOptions struct {
 	// The etag of the DNS zone. Omit this value to always delete the current zone. Specify the last-seen etag value to prevent
 	// accidentally deleting any concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ZonesClientCreateOrUpdateOptions contains the optional parameters for the ZonesClient.CreateOrUpdate method.

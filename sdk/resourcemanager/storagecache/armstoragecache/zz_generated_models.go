@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -359,36 +359,44 @@ type CachesClientBeginCreateOrUpdateOptions struct {
 	// Object containing the user-selectable properties of the new Cache. If read-only properties are included, they must match
 	// the existing values of those properties.
 	Cache *Cache
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginDebugInfoOptions contains the optional parameters for the CachesClient.BeginDebugInfo method.
 type CachesClientBeginDebugInfoOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginDeleteOptions contains the optional parameters for the CachesClient.BeginDelete method.
 type CachesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginFlushOptions contains the optional parameters for the CachesClient.BeginFlush method.
 type CachesClientBeginFlushOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginStartOptions contains the optional parameters for the CachesClient.BeginStart method.
 type CachesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginStopOptions contains the optional parameters for the CachesClient.BeginStop method.
 type CachesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientBeginUpgradeFirmwareOptions contains the optional parameters for the CachesClient.BeginUpgradeFirmware method.
 type CachesClientBeginUpgradeFirmwareOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CachesClientGetOptions contains the optional parameters for the CachesClient.Get method.
@@ -686,17 +694,20 @@ type StorageTarget struct {
 
 // StorageTargetClientBeginFlushOptions contains the optional parameters for the StorageTargetClient.BeginFlush method.
 type StorageTargetClientBeginFlushOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageTargetClientBeginResumeOptions contains the optional parameters for the StorageTargetClient.BeginResume method.
 type StorageTargetClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageTargetClientBeginSuspendOptions contains the optional parameters for the StorageTargetClient.BeginSuspend method.
 type StorageTargetClientBeginSuspendOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageTargetProperties - Properties of the Storage Target.
@@ -747,6 +758,8 @@ type StorageTargetResource struct {
 // StorageTargetsClientBeginCreateOrUpdateOptions contains the optional parameters for the StorageTargetsClient.BeginCreateOrUpdate
 // method.
 type StorageTargetsClientBeginCreateOrUpdateOptions struct {
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// Object containing the definition of a Storage Target.
 	Storagetarget *StorageTarget
 }
@@ -754,7 +767,8 @@ type StorageTargetsClientBeginCreateOrUpdateOptions struct {
 // StorageTargetsClientBeginDNSRefreshOptions contains the optional parameters for the StorageTargetsClient.BeginDNSRefresh
 // method.
 type StorageTargetsClientBeginDNSRefreshOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageTargetsClientBeginDeleteOptions contains the optional parameters for the StorageTargetsClient.BeginDelete method.
@@ -762,6 +776,8 @@ type StorageTargetsClientBeginDeleteOptions struct {
 	// Boolean value requesting the force delete operation for a storage target. Force delete discards unwritten-data in the cache
 	// instead of flushing it to back-end storage.
 	Force *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageTargetsClientGetOptions contains the optional parameters for the StorageTargetsClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -193,16 +193,32 @@ func (client *DeviceSecurityGroupsClient) getHandleResponse(resp *http.Response)
 // resourceID - The identifier of the resource.
 // options - DeviceSecurityGroupsClientListOptions contains the optional parameters for the DeviceSecurityGroupsClient.List
 // method.
-func (client *DeviceSecurityGroupsClient) List(resourceID string, options *DeviceSecurityGroupsClientListOptions) *DeviceSecurityGroupsClientListPager {
-	return &DeviceSecurityGroupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceID, options)
+func (client *DeviceSecurityGroupsClient) List(resourceID string, options *DeviceSecurityGroupsClientListOptions) *runtime.Pager[DeviceSecurityGroupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeviceSecurityGroupsClientListResponse]{
+		More: func(page DeviceSecurityGroupsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeviceSecurityGroupsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeviceSecurityGroupList.NextLink)
+		Fetcher: func(ctx context.Context, page *DeviceSecurityGroupsClientListResponse) (DeviceSecurityGroupsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeviceSecurityGroupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeviceSecurityGroupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeviceSecurityGroupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

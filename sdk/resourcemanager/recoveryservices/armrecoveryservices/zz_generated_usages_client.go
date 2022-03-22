@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // vaultName - The name of the recovery services vault.
 // options - UsagesClientListByVaultsOptions contains the optional parameters for the UsagesClient.ListByVaults method.
-func (client *UsagesClient) ListByVaults(resourceGroupName string, vaultName string, options *UsagesClientListByVaultsOptions) *UsagesClientListByVaultsPager {
-	return &UsagesClientListByVaultsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVaultsCreateRequest(ctx, resourceGroupName, vaultName, options)
+func (client *UsagesClient) ListByVaults(resourceGroupName string, vaultName string, options *UsagesClientListByVaultsOptions) *runtime.Pager[UsagesClientListByVaultsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UsagesClientListByVaultsResponse]{
+		More: func(page UsagesClientListByVaultsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *UsagesClientListByVaultsResponse) (UsagesClientListByVaultsResponse, error) {
+			req, err := client.listByVaultsCreateRequest(ctx, resourceGroupName, vaultName, options)
+			if err != nil {
+				return UsagesClientListByVaultsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UsagesClientListByVaultsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UsagesClientListByVaultsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVaultsHandleResponse(resp)
+		},
+	})
 }
 
 // listByVaultsCreateRequest creates the ListByVaults request.

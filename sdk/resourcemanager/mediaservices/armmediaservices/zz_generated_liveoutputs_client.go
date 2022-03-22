@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewLiveOutputsClient(subscriptionID string, credential azcore.TokenCredenti
 // liveOutputName - The name of the live output.
 // parameters - Live Output properties needed for creation.
 // options - LiveOutputsClientBeginCreateOptions contains the optional parameters for the LiveOutputsClient.BeginCreate method.
-func (client *LiveOutputsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string, parameters LiveOutput, options *LiveOutputsClientBeginCreateOptions) (LiveOutputsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, liveEventName, liveOutputName, parameters, options)
-	if err != nil {
-		return LiveOutputsClientCreatePollerResponse{}, err
+func (client *LiveOutputsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string, parameters LiveOutput, options *LiveOutputsClientBeginCreateOptions) (*armruntime.Poller[LiveOutputsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, liveEventName, liveOutputName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LiveOutputsClientCreateResponse]("LiveOutputsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LiveOutputsClientCreateResponse]("LiveOutputsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := LiveOutputsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("LiveOutputsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return LiveOutputsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &LiveOutputsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new live output.
@@ -131,20 +127,16 @@ func (client *LiveOutputsClient) createCreateRequest(ctx context.Context, resour
 // liveEventName - The name of the live event, maximum length is 32.
 // liveOutputName - The name of the live output.
 // options - LiveOutputsClientBeginDeleteOptions contains the optional parameters for the LiveOutputsClient.BeginDelete method.
-func (client *LiveOutputsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string, options *LiveOutputsClientBeginDeleteOptions) (LiveOutputsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, liveEventName, liveOutputName, options)
-	if err != nil {
-		return LiveOutputsClientDeletePollerResponse{}, err
+func (client *LiveOutputsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string, options *LiveOutputsClientBeginDeleteOptions) (*armruntime.Poller[LiveOutputsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, liveEventName, liveOutputName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LiveOutputsClientDeleteResponse]("LiveOutputsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LiveOutputsClientDeleteResponse]("LiveOutputsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := LiveOutputsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("LiveOutputsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return LiveOutputsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &LiveOutputsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a live output. Deleting a live output does not delete the asset the live output is writing to.
@@ -269,16 +261,32 @@ func (client *LiveOutputsClient) getHandleResponse(resp *http.Response) (LiveOut
 // accountName - The Media Services account name.
 // liveEventName - The name of the live event, maximum length is 32.
 // options - LiveOutputsClientListOptions contains the optional parameters for the LiveOutputsClient.List method.
-func (client *LiveOutputsClient) List(resourceGroupName string, accountName string, liveEventName string, options *LiveOutputsClientListOptions) *LiveOutputsClientListPager {
-	return &LiveOutputsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, liveEventName, options)
+func (client *LiveOutputsClient) List(resourceGroupName string, accountName string, liveEventName string, options *LiveOutputsClientListOptions) *runtime.Pager[LiveOutputsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LiveOutputsClientListResponse]{
+		More: func(page LiveOutputsClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LiveOutputsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LiveOutputListResult.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *LiveOutputsClientListResponse) (LiveOutputsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, liveEventName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return LiveOutputsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LiveOutputsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LiveOutputsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

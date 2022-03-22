@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -435,7 +435,8 @@ type MHSMPrivateEndpointConnectionProperties struct {
 // MHSMPrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the MHSMPrivateEndpointConnectionsClient.BeginDelete
 // method.
 type MHSMPrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MHSMPrivateEndpointConnectionsClientGetOptions contains the optional parameters for the MHSMPrivateEndpointConnectionsClient.Get
@@ -659,23 +660,27 @@ type ManagedHsmSKU struct {
 // ManagedHsmsClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedHsmsClient.BeginCreateOrUpdate
 // method.
 type ManagedHsmsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedHsmsClientBeginDeleteOptions contains the optional parameters for the ManagedHsmsClient.BeginDelete method.
 type ManagedHsmsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedHsmsClientBeginPurgeDeletedOptions contains the optional parameters for the ManagedHsmsClient.BeginPurgeDeleted
 // method.
 type ManagedHsmsClientBeginPurgeDeletedOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedHsmsClientBeginUpdateOptions contains the optional parameters for the ManagedHsmsClient.BeginUpdate method.
 type ManagedHsmsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedHsmsClientGetDeletedOptions contains the optional parameters for the ManagedHsmsClient.GetDeleted method.
@@ -894,7 +899,8 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -1391,12 +1397,14 @@ type VaultProperties struct {
 
 // VaultsClientBeginCreateOrUpdateOptions contains the optional parameters for the VaultsClient.BeginCreateOrUpdate method.
 type VaultsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VaultsClientBeginPurgeDeletedOptions contains the optional parameters for the VaultsClient.BeginPurgeDeleted method.
 type VaultsClientBeginPurgeDeletedOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VaultsClientCheckNameAvailabilityOptions contains the optional parameters for the VaultsClient.CheckNameAvailability method.

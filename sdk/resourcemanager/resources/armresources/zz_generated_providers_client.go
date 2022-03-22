@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -155,16 +155,32 @@ func (client *ProvidersClient) getAtTenantScopeHandleResponse(resp *http.Respons
 // List - Gets all resource providers for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProvidersClientListOptions contains the optional parameters for the ProvidersClient.List method.
-func (client *ProvidersClient) List(options *ProvidersClientListOptions) *ProvidersClientListPager {
-	return &ProvidersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ProvidersClient) List(options *ProvidersClientListOptions) *runtime.Pager[ProvidersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProvidersClientListResponse]{
+		More: func(page ProvidersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProvidersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProviderListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProvidersClientListResponse) (ProvidersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProvidersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProvidersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProvidersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -201,16 +217,32 @@ func (client *ProvidersClient) listHandleResponse(resp *http.Response) (Provider
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProvidersClientListAtTenantScopeOptions contains the optional parameters for the ProvidersClient.ListAtTenantScope
 // method.
-func (client *ProvidersClient) ListAtTenantScope(options *ProvidersClientListAtTenantScopeOptions) *ProvidersClientListAtTenantScopePager {
-	return &ProvidersClientListAtTenantScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAtTenantScopeCreateRequest(ctx, options)
+func (client *ProvidersClient) ListAtTenantScope(options *ProvidersClientListAtTenantScopeOptions) *runtime.Pager[ProvidersClientListAtTenantScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProvidersClientListAtTenantScopeResponse]{
+		More: func(page ProvidersClientListAtTenantScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProvidersClientListAtTenantScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProviderListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProvidersClientListAtTenantScopeResponse) (ProvidersClientListAtTenantScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAtTenantScopeCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProvidersClientListAtTenantScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProvidersClientListAtTenantScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProvidersClientListAtTenantScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAtTenantScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAtTenantScopeCreateRequest creates the ListAtTenantScope request.

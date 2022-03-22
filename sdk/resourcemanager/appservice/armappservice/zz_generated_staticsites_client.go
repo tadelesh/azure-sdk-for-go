@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewStaticSitesClient(subscriptionID string, credential azcore.TokenCredenti
 // privateEndpointWrapper - Request body.
 // options - StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions contains the optional parameters for the
 // StaticSitesClient.BeginApproveOrRejectPrivateEndpointConnection method.
-func (client *StaticSitesClient) BeginApproveOrRejectPrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper PrivateLinkConnectionApprovalRequestResource, options *StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.approveOrRejectPrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, privateEndpointWrapper, options)
-	if err != nil {
-		return StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
+func (client *StaticSitesClient) BeginApproveOrRejectPrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper PrivateLinkConnectionApprovalRequestResource, options *StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (*armruntime.Poller[StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.approveOrRejectPrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, privateEndpointWrapper, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse]("StaticSitesClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse]("StaticSitesClient.ApproveOrRejectPrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientApproveOrRejectPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ApproveOrRejectPrivateEndpointConnection - Description for Approves or rejects a private endpoint connection
@@ -129,20 +125,16 @@ func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnectionCreateR
 // staticSiteEnvelope - A JSON representation of the staticsite properties. See example.
 // options - StaticSitesClientBeginCreateOrUpdateStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginCreateOrUpdateStaticSite
 // method.
-func (client *StaticSitesClient) BeginCreateOrUpdateStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteEnvelope StaticSiteARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteOptions) (StaticSitesClientCreateOrUpdateStaticSitePollerResponse, error) {
-	resp, err := client.createOrUpdateStaticSite(ctx, resourceGroupName, name, staticSiteEnvelope, options)
-	if err != nil {
-		return StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginCreateOrUpdateStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteEnvelope StaticSiteARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteOptions) (*armruntime.Poller[StaticSitesClientCreateOrUpdateStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateStaticSite(ctx, resourceGroupName, name, staticSiteEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientCreateOrUpdateStaticSiteResponse]("StaticSitesClient.CreateOrUpdateStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientCreateOrUpdateStaticSiteResponse]("StaticSitesClient.CreateOrUpdateStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.CreateOrUpdateStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientCreateOrUpdateStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateStaticSite - Description for Creates a new static site in an existing resource group, or updates an existing
@@ -381,20 +373,16 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSetting
 // See example.
 // options - StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions contains the optional parameters for the StaticSitesClient.BeginCreateOrUpdateStaticSiteCustomDomain
 // method.
-func (client *StaticSitesClient) BeginCreateOrUpdateStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions) (StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse, error) {
-	resp, err := client.createOrUpdateStaticSiteCustomDomain(ctx, resourceGroupName, name, domainName, staticSiteCustomDomainRequestPropertiesEnvelope, options)
-	if err != nil {
-		return StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}, err
+func (client *StaticSitesClient) BeginCreateOrUpdateStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions) (*armruntime.Poller[StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateStaticSiteCustomDomain(ctx, resourceGroupName, name, domainName, staticSiteCustomDomainRequestPropertiesEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse]("StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse]("StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateStaticSiteCustomDomain - Description for Creates a new static site custom domain in an existing resource
@@ -566,20 +554,16 @@ func (client *StaticSitesClient) createUserRolesInvitationLinkHandleResponse(res
 // staticSiteZipDeploymentEnvelope - A JSON representation of the StaticSiteZipDeployment properties. See example.
 // options - StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginCreateZipDeploymentForStaticSite
 // method.
-func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions) (StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse, error) {
-	resp, err := client.createZipDeploymentForStaticSite(ctx, resourceGroupName, name, staticSiteZipDeploymentEnvelope, options)
-	if err != nil {
-		return StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions) (*armruntime.Poller[StaticSitesClientCreateZipDeploymentForStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createZipDeploymentForStaticSite(ctx, resourceGroupName, name, staticSiteZipDeploymentEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientCreateZipDeploymentForStaticSiteResponse]("StaticSitesClient.CreateZipDeploymentForStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientCreateZipDeploymentForStaticSiteResponse]("StaticSitesClient.CreateZipDeploymentForStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.CreateZipDeploymentForStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientCreateZipDeploymentForStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateZipDeploymentForStaticSite - Description for Deploys zipped content to a static site.
@@ -634,20 +618,16 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteCreateRequest(c
 // staticSiteZipDeploymentEnvelope - A JSON representation of the StaticSiteZipDeployment properties. See example.
 // options - StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions contains the optional parameters for the StaticSitesClient.BeginCreateZipDeploymentForStaticSiteBuild
 // method.
-func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions) (StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse, error) {
-	resp, err := client.createZipDeploymentForStaticSiteBuild(ctx, resourceGroupName, name, environmentName, staticSiteZipDeploymentEnvelope, options)
-	if err != nil {
-		return StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}, err
+func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions) (*armruntime.Poller[StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createZipDeploymentForStaticSiteBuild(ctx, resourceGroupName, name, environmentName, staticSiteZipDeploymentEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse]("StaticSitesClient.CreateZipDeploymentForStaticSiteBuild", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse]("StaticSitesClient.CreateZipDeploymentForStaticSiteBuild", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.CreateZipDeploymentForStaticSiteBuild", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientCreateZipDeploymentForStaticSiteBuildPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateZipDeploymentForStaticSiteBuild - Description for Deploys zipped content to a specific environment of a static site.
@@ -704,20 +684,16 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuildCreateRequ
 // privateEndpointConnectionName - Name of the private endpoint connection.
 // options - StaticSitesClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the StaticSitesClient.BeginDeletePrivateEndpointConnection
 // method.
-func (client *StaticSitesClient) BeginDeletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *StaticSitesClientBeginDeletePrivateEndpointConnectionOptions) (StaticSitesClientDeletePrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.deletePrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
-	if err != nil {
-		return StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}, err
+func (client *StaticSitesClient) BeginDeletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *StaticSitesClientBeginDeletePrivateEndpointConnectionOptions) (*armruntime.Poller[StaticSitesClientDeletePrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deletePrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientDeletePrivateEndpointConnectionResponse]("StaticSitesClient.DeletePrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientDeletePrivateEndpointConnectionResponse]("StaticSitesClient.DeletePrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.DeletePrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeletePrivateEndpointConnection - Description for Deletes a private endpoint connection
@@ -773,20 +749,16 @@ func (client *StaticSitesClient) deletePrivateEndpointConnectionCreateRequest(ct
 // name - Name of the static site to delete.
 // options - StaticSitesClientBeginDeleteStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSite
 // method.
-func (client *StaticSitesClient) BeginDeleteStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDeleteStaticSiteOptions) (StaticSitesClientDeleteStaticSitePollerResponse, error) {
-	resp, err := client.deleteStaticSite(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginDeleteStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDeleteStaticSiteOptions) (*armruntime.Poller[StaticSitesClientDeleteStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteStaticSite(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientDeleteStaticSiteResponse]("StaticSitesClient.DeleteStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientDeleteStaticSiteResponse]("StaticSitesClient.DeleteStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientDeleteStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientDeleteStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteStaticSite - Description for Deletes a static site.
@@ -839,20 +811,16 @@ func (client *StaticSitesClient) deleteStaticSiteCreateRequest(ctx context.Conte
 // environmentName - The stage site identifier.
 // options - StaticSitesClientBeginDeleteStaticSiteBuildOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSiteBuild
 // method.
-func (client *StaticSitesClient) BeginDeleteStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, options *StaticSitesClientBeginDeleteStaticSiteBuildOptions) (StaticSitesClientDeleteStaticSiteBuildPollerResponse, error) {
-	resp, err := client.deleteStaticSiteBuild(ctx, resourceGroupName, name, environmentName, options)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSiteBuildPollerResponse{}, err
+func (client *StaticSitesClient) BeginDeleteStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, options *StaticSitesClientBeginDeleteStaticSiteBuildOptions) (*armruntime.Poller[StaticSitesClientDeleteStaticSiteBuildResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteStaticSiteBuild(ctx, resourceGroupName, name, environmentName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientDeleteStaticSiteBuildResponse]("StaticSitesClient.DeleteStaticSiteBuild", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientDeleteStaticSiteBuildResponse]("StaticSitesClient.DeleteStaticSiteBuild", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientDeleteStaticSiteBuildPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSiteBuild", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSiteBuildPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientDeleteStaticSiteBuildPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteStaticSiteBuild - Description for Deletes a static site build.
@@ -909,20 +877,16 @@ func (client *StaticSitesClient) deleteStaticSiteBuildCreateRequest(ctx context.
 // domainName - The custom domain to delete.
 // options - StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSiteCustomDomain
 // method.
-func (client *StaticSitesClient) BeginDeleteStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, options *StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions) (StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse, error) {
-	resp, err := client.deleteStaticSiteCustomDomain(ctx, resourceGroupName, name, domainName, options)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}, err
+func (client *StaticSitesClient) BeginDeleteStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, options *StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions) (*armruntime.Poller[StaticSitesClientDeleteStaticSiteCustomDomainResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteStaticSiteCustomDomain(ctx, resourceGroupName, name, domainName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientDeleteStaticSiteCustomDomainResponse]("StaticSitesClient.DeleteStaticSiteCustomDomain", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientDeleteStaticSiteCustomDomainResponse]("StaticSitesClient.DeleteStaticSiteCustomDomain", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSiteCustomDomain", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientDeleteStaticSiteCustomDomainPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteStaticSiteCustomDomain - Description for Deletes a custom domain.
@@ -1035,20 +999,16 @@ func (client *StaticSitesClient) deleteStaticSiteUserCreateRequest(ctx context.C
 // name - Name of the static site to detach.
 // options - StaticSitesClientBeginDetachStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDetachStaticSite
 // method.
-func (client *StaticSitesClient) BeginDetachStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDetachStaticSiteOptions) (StaticSitesClientDetachStaticSitePollerResponse, error) {
-	resp, err := client.detachStaticSite(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return StaticSitesClientDetachStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginDetachStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDetachStaticSiteOptions) (*armruntime.Poller[StaticSitesClientDetachStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.detachStaticSite(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientDetachStaticSiteResponse]("StaticSitesClient.DetachStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientDetachStaticSiteResponse]("StaticSitesClient.DetachStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientDetachStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.DetachStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientDetachStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientDetachStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DetachStaticSite - Description for Detaches a static site.
@@ -1272,16 +1232,32 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionHandleResponse(resp
 // name - Name of the static site.
 // options - StaticSitesClientGetPrivateEndpointConnectionListOptions contains the optional parameters for the StaticSitesClient.GetPrivateEndpointConnectionList
 // method.
-func (client *StaticSitesClient) GetPrivateEndpointConnectionList(resourceGroupName string, name string, options *StaticSitesClientGetPrivateEndpointConnectionListOptions) *StaticSitesClientGetPrivateEndpointConnectionListPager {
-	return &StaticSitesClientGetPrivateEndpointConnectionListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, options)
+func (client *StaticSitesClient) GetPrivateEndpointConnectionList(resourceGroupName string, name string, options *StaticSitesClientGetPrivateEndpointConnectionListOptions) *runtime.Pager[StaticSitesClientGetPrivateEndpointConnectionListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientGetPrivateEndpointConnectionListResponse]{
+		More: func(page StaticSitesClientGetPrivateEndpointConnectionListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientGetPrivateEndpointConnectionListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientGetPrivateEndpointConnectionListResponse) (StaticSitesClientGetPrivateEndpointConnectionListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getPrivateEndpointConnectionListHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getPrivateEndpointConnectionListCreateRequest creates the GetPrivateEndpointConnectionList request.
@@ -1498,16 +1474,32 @@ func (client *StaticSitesClient) getStaticSiteBuildHandleResponse(resp *http.Res
 // name - Name of the static site.
 // options - StaticSitesClientGetStaticSiteBuildsOptions contains the optional parameters for the StaticSitesClient.GetStaticSiteBuilds
 // method.
-func (client *StaticSitesClient) GetStaticSiteBuilds(resourceGroupName string, name string, options *StaticSitesClientGetStaticSiteBuildsOptions) *StaticSitesClientGetStaticSiteBuildsPager {
-	return &StaticSitesClientGetStaticSiteBuildsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getStaticSiteBuildsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *StaticSitesClient) GetStaticSiteBuilds(resourceGroupName string, name string, options *StaticSitesClientGetStaticSiteBuildsOptions) *runtime.Pager[StaticSitesClientGetStaticSiteBuildsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientGetStaticSiteBuildsResponse]{
+		More: func(page StaticSitesClientGetStaticSiteBuildsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientGetStaticSiteBuildsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteBuildCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientGetStaticSiteBuildsResponse) (StaticSitesClientGetStaticSiteBuildsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getStaticSiteBuildsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientGetStaticSiteBuildsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientGetStaticSiteBuildsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientGetStaticSiteBuildsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getStaticSiteBuildsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getStaticSiteBuildsCreateRequest creates the GetStaticSiteBuilds request.
@@ -1611,16 +1603,32 @@ func (client *StaticSitesClient) getStaticSiteCustomDomainHandleResponse(resp *h
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - StaticSitesClientGetStaticSitesByResourceGroupOptions contains the optional parameters for the StaticSitesClient.GetStaticSitesByResourceGroup
 // method.
-func (client *StaticSitesClient) GetStaticSitesByResourceGroup(resourceGroupName string, options *StaticSitesClientGetStaticSitesByResourceGroupOptions) *StaticSitesClientGetStaticSitesByResourceGroupPager {
-	return &StaticSitesClientGetStaticSitesByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getStaticSitesByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *StaticSitesClient) GetStaticSitesByResourceGroup(resourceGroupName string, options *StaticSitesClientGetStaticSitesByResourceGroupOptions) *runtime.Pager[StaticSitesClientGetStaticSitesByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientGetStaticSitesByResourceGroupResponse]{
+		More: func(page StaticSitesClientGetStaticSitesByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientGetStaticSitesByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientGetStaticSitesByResourceGroupResponse) (StaticSitesClientGetStaticSitesByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getStaticSitesByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getStaticSitesByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getStaticSitesByResourceGroupCreateRequest creates the GetStaticSitesByResourceGroup request.
@@ -1790,16 +1798,32 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildHan
 // name - Name of the static site.
 // options - StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions contains the optional parameters for the StaticSitesClient.GetUserProvidedFunctionAppsForStaticSite
 // method.
-func (client *StaticSitesClient) GetUserProvidedFunctionAppsForStaticSite(resourceGroupName string, name string, options *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions) *StaticSitesClientGetUserProvidedFunctionAppsForStaticSitePager {
-	return &StaticSitesClientGetUserProvidedFunctionAppsForStaticSitePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx, resourceGroupName, name, options)
+func (client *StaticSitesClient) GetUserProvidedFunctionAppsForStaticSite(resourceGroupName string, name string, options *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions) *runtime.Pager[StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse]{
+		More: func(page StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteUserProvidedFunctionAppsCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getUserProvidedFunctionAppsForStaticSiteCreateRequest creates the GetUserProvidedFunctionAppsForStaticSite request.
@@ -1845,16 +1869,32 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteHandleR
 // environmentName - The stage site identifier.
 // options - StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildOptions contains the optional parameters for the
 // StaticSitesClient.GetUserProvidedFunctionAppsForStaticSiteBuild method.
-func (client *StaticSitesClient) GetUserProvidedFunctionAppsForStaticSiteBuild(resourceGroupName string, name string, environmentName string, options *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildOptions) *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildPager {
-	return &StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx, resourceGroupName, name, environmentName, options)
+func (client *StaticSitesClient) GetUserProvidedFunctionAppsForStaticSiteBuild(resourceGroupName string, name string, environmentName string, options *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildOptions) *runtime.Pager[StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse]{
+		More: func(page StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteUserProvidedFunctionAppsCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx, resourceGroupName, name, environmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest creates the GetUserProvidedFunctionAppsForStaticSiteBuild request.
@@ -1899,16 +1939,32 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildHa
 // List - Description for Get all Static Sites for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - StaticSitesClientListOptions contains the optional parameters for the StaticSitesClient.List method.
-func (client *StaticSitesClient) List(options *StaticSitesClientListOptions) *StaticSitesClientListPager {
-	return &StaticSitesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *StaticSitesClient) List(options *StaticSitesClientListOptions) *runtime.Pager[StaticSitesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientListResponse]{
+		More: func(page StaticSitesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientListResponse) (StaticSitesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -2123,16 +2179,32 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsHandleRes
 // environmentName - The stage site identifier.
 // options - StaticSitesClientListStaticSiteBuildFunctionsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteBuildFunctions
 // method.
-func (client *StaticSitesClient) ListStaticSiteBuildFunctions(resourceGroupName string, name string, environmentName string, options *StaticSitesClientListStaticSiteBuildFunctionsOptions) *StaticSitesClientListStaticSiteBuildFunctionsPager {
-	return &StaticSitesClientListStaticSiteBuildFunctionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listStaticSiteBuildFunctionsCreateRequest(ctx, resourceGroupName, name, environmentName, options)
+func (client *StaticSitesClient) ListStaticSiteBuildFunctions(resourceGroupName string, name string, environmentName string, options *StaticSitesClientListStaticSiteBuildFunctionsOptions) *runtime.Pager[StaticSitesClientListStaticSiteBuildFunctionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientListStaticSiteBuildFunctionsResponse]{
+		More: func(page StaticSitesClientListStaticSiteBuildFunctionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientListStaticSiteBuildFunctionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteFunctionOverviewCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientListStaticSiteBuildFunctionsResponse) (StaticSitesClientListStaticSiteBuildFunctionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listStaticSiteBuildFunctionsCreateRequest(ctx, resourceGroupName, name, environmentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listStaticSiteBuildFunctionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listStaticSiteBuildFunctionsCreateRequest creates the ListStaticSiteBuildFunctions request.
@@ -2236,16 +2308,32 @@ func (client *StaticSitesClient) listStaticSiteConfiguredRolesHandleResponse(res
 // name - Name of the static site resource to search in.
 // options - StaticSitesClientListStaticSiteCustomDomainsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteCustomDomains
 // method.
-func (client *StaticSitesClient) ListStaticSiteCustomDomains(resourceGroupName string, name string, options *StaticSitesClientListStaticSiteCustomDomainsOptions) *StaticSitesClientListStaticSiteCustomDomainsPager {
-	return &StaticSitesClientListStaticSiteCustomDomainsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listStaticSiteCustomDomainsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *StaticSitesClient) ListStaticSiteCustomDomains(resourceGroupName string, name string, options *StaticSitesClientListStaticSiteCustomDomainsOptions) *runtime.Pager[StaticSitesClientListStaticSiteCustomDomainsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientListStaticSiteCustomDomainsResponse]{
+		More: func(page StaticSitesClientListStaticSiteCustomDomainsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientListStaticSiteCustomDomainsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteCustomDomainOverviewCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientListStaticSiteCustomDomainsResponse) (StaticSitesClientListStaticSiteCustomDomainsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listStaticSiteCustomDomainsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientListStaticSiteCustomDomainsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listStaticSiteCustomDomainsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listStaticSiteCustomDomainsCreateRequest creates the ListStaticSiteCustomDomains request.
@@ -2345,16 +2433,32 @@ func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsHandleResponse
 // name - Name of the static site.
 // options - StaticSitesClientListStaticSiteFunctionsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteFunctions
 // method.
-func (client *StaticSitesClient) ListStaticSiteFunctions(resourceGroupName string, name string, options *StaticSitesClientListStaticSiteFunctionsOptions) *StaticSitesClientListStaticSiteFunctionsPager {
-	return &StaticSitesClientListStaticSiteFunctionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listStaticSiteFunctionsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *StaticSitesClient) ListStaticSiteFunctions(resourceGroupName string, name string, options *StaticSitesClientListStaticSiteFunctionsOptions) *runtime.Pager[StaticSitesClientListStaticSiteFunctionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientListStaticSiteFunctionsResponse]{
+		More: func(page StaticSitesClientListStaticSiteFunctionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientListStaticSiteFunctionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteFunctionOverviewCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientListStaticSiteFunctionsResponse) (StaticSitesClientListStaticSiteFunctionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listStaticSiteFunctionsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientListStaticSiteFunctionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteFunctionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientListStaticSiteFunctionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listStaticSiteFunctionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listStaticSiteFunctionsCreateRequest creates the ListStaticSiteFunctions request.
@@ -2455,16 +2559,32 @@ func (client *StaticSitesClient) listStaticSiteSecretsHandleResponse(resp *http.
 // authprovider - The auth provider for the users.
 // options - StaticSitesClientListStaticSiteUsersOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteUsers
 // method.
-func (client *StaticSitesClient) ListStaticSiteUsers(resourceGroupName string, name string, authprovider string, options *StaticSitesClientListStaticSiteUsersOptions) *StaticSitesClientListStaticSiteUsersPager {
-	return &StaticSitesClientListStaticSiteUsersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listStaticSiteUsersCreateRequest(ctx, resourceGroupName, name, authprovider, options)
+func (client *StaticSitesClient) ListStaticSiteUsers(resourceGroupName string, name string, authprovider string, options *StaticSitesClientListStaticSiteUsersOptions) *runtime.Pager[StaticSitesClientListStaticSiteUsersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StaticSitesClientListStaticSiteUsersResponse]{
+		More: func(page StaticSitesClientListStaticSiteUsersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StaticSitesClientListStaticSiteUsersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StaticSiteUserCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *StaticSitesClientListStaticSiteUsersResponse) (StaticSitesClientListStaticSiteUsersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listStaticSiteUsersCreateRequest(ctx, resourceGroupName, name, authprovider, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StaticSitesClientListStaticSiteUsersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteUsersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StaticSitesClientListStaticSiteUsersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listStaticSiteUsersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listStaticSiteUsersCreateRequest creates the ListStaticSiteUsers request.
@@ -2567,20 +2687,16 @@ func (client *StaticSitesClient) previewWorkflowHandleResponse(resp *http.Respon
 // staticSiteUserProvidedFunctionEnvelope - A JSON representation of the user provided function app properties. See example.
 // options - StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions contains the optional parameters for
 // the StaticSitesClient.BeginRegisterUserProvidedFunctionAppWithStaticSite method.
-func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticSite(ctx context.Context, resourceGroupName string, name string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse, error) {
-	resp, err := client.registerUserProvidedFunctionAppWithStaticSite(ctx, resourceGroupName, name, functionAppName, staticSiteUserProvidedFunctionEnvelope, options)
-	if err != nil {
-		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticSite(ctx context.Context, resourceGroupName string, name string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions) (*armruntime.Poller[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.registerUserProvidedFunctionAppWithStaticSite(ctx, resourceGroupName, name, functionAppName, staticSiteUserProvidedFunctionEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse]("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse]("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegisterUserProvidedFunctionAppWithStaticSite - Description for Register a user provided function app with a static site
@@ -2643,20 +2759,16 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteCr
 // staticSiteUserProvidedFunctionEnvelope - A JSON representation of the user provided function app properties. See example.
 // options - StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions contains the optional parameters
 // for the StaticSitesClient.BeginRegisterUserProvidedFunctionAppWithStaticSiteBuild method.
-func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse, error) {
-	resp, err := client.registerUserProvidedFunctionAppWithStaticSiteBuild(ctx, resourceGroupName, name, environmentName, functionAppName, staticSiteUserProvidedFunctionEnvelope, options)
-	if err != nil {
-		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}, err
+func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions) (*armruntime.Poller[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.registerUserProvidedFunctionAppWithStaticSiteBuild(ctx, resourceGroupName, name, environmentName, functionAppName, staticSiteUserProvidedFunctionEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse]("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse]("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegisterUserProvidedFunctionAppWithStaticSiteBuild - Description for Register a user provided function app with a static
@@ -2896,20 +3008,16 @@ func (client *StaticSitesClient) updateStaticSiteUserHandleResponse(resp *http.R
 // See example.
 // options - StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions contains the optional parameters for
 // the StaticSitesClient.BeginValidateCustomDomainCanBeAddedToStaticSite method.
-func (client *StaticSitesClient) BeginValidateCustomDomainCanBeAddedToStaticSite(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions) (StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse, error) {
-	resp, err := client.validateCustomDomainCanBeAddedToStaticSite(ctx, resourceGroupName, name, domainName, staticSiteCustomDomainRequestPropertiesEnvelope, options)
-	if err != nil {
-		return StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}, err
+func (client *StaticSitesClient) BeginValidateCustomDomainCanBeAddedToStaticSite(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions) (*armruntime.Poller[StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validateCustomDomainCanBeAddedToStaticSite(ctx, resourceGroupName, name, domainName, staticSiteCustomDomainRequestPropertiesEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse]("StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse]("StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite", options.ResumeToken, client.pl, nil)
 	}
-	result := StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}
-	pt, err := armruntime.NewPoller("StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite", "", resp, client.pl)
-	if err != nil {
-		return StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}, err
-	}
-	result.Poller = &StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ValidateCustomDomainCanBeAddedToStaticSite - Description for Validates a particular custom domain can be added to a static

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -95,7 +95,8 @@ type MultipleActivationKeyUpdate struct {
 // MultipleActivationKeysClientBeginCreateOptions contains the optional parameters for the MultipleActivationKeysClient.BeginCreate
 // method.
 type MultipleActivationKeysClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MultipleActivationKeysClientDeleteOptions contains the optional parameters for the MultipleActivationKeysClient.Delete

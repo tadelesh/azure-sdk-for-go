@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewManagedBackupShortTermRetentionPoliciesClient(subscriptionID string, cre
 // parameters - The short term retention policy info.
 // options - ManagedBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the ManagedBackupShortTermRetentionPoliciesClient.BeginCreateOrUpdate method.
-func (client *ManagedBackupShortTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, databaseName string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, databaseName, policyName, parameters, options)
-	if err != nil {
-		return ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedBackupShortTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, databaseName string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, databaseName, policyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse]("ManagedBackupShortTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse]("ManagedBackupShortTermRetentionPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedBackupShortTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedBackupShortTermRetentionPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Updates a managed database's short term retention policy.
@@ -201,16 +197,32 @@ func (client *ManagedBackupShortTermRetentionPoliciesClient) getHandleResponse(r
 // databaseName - The name of the database.
 // options - ManagedBackupShortTermRetentionPoliciesClientListByDatabaseOptions contains the optional parameters for the ManagedBackupShortTermRetentionPoliciesClient.ListByDatabase
 // method.
-func (client *ManagedBackupShortTermRetentionPoliciesClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedBackupShortTermRetentionPoliciesClientListByDatabaseOptions) *ManagedBackupShortTermRetentionPoliciesClientListByDatabasePager {
-	return &ManagedBackupShortTermRetentionPoliciesClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+func (client *ManagedBackupShortTermRetentionPoliciesClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedBackupShortTermRetentionPoliciesClientListByDatabaseOptions) *runtime.Pager[ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse]{
+		More: func(page ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedBackupShortTermRetentionPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse) (ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedBackupShortTermRetentionPoliciesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -262,20 +274,16 @@ func (client *ManagedBackupShortTermRetentionPoliciesClient) listByDatabaseHandl
 // parameters - The short term retention policy info.
 // options - ManagedBackupShortTermRetentionPoliciesClientBeginUpdateOptions contains the optional parameters for the ManagedBackupShortTermRetentionPoliciesClient.BeginUpdate
 // method.
-func (client *ManagedBackupShortTermRetentionPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, databaseName string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedBackupShortTermRetentionPoliciesClientBeginUpdateOptions) (ManagedBackupShortTermRetentionPoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, managedInstanceName, databaseName, policyName, parameters, options)
-	if err != nil {
-		return ManagedBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err
+func (client *ManagedBackupShortTermRetentionPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, databaseName string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedBackupShortTermRetentionPoliciesClientBeginUpdateOptions) (*armruntime.Poller[ManagedBackupShortTermRetentionPoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, managedInstanceName, databaseName, policyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedBackupShortTermRetentionPoliciesClientUpdateResponse]("ManagedBackupShortTermRetentionPoliciesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedBackupShortTermRetentionPoliciesClientUpdateResponse]("ManagedBackupShortTermRetentionPoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedBackupShortTermRetentionPoliciesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ManagedBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedBackupShortTermRetentionPoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a managed database's short term retention policy.

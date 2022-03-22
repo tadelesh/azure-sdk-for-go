@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,20 +117,16 @@ func (client *SchedulesClient) createOrUpdateHandleResponse(resp *http.Response)
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // scheduleName - The name of the schedule that uniquely identifies it within containing lab. Used in resource URIs.
 // options - SchedulesClientBeginDeleteOptions contains the optional parameters for the SchedulesClient.BeginDelete method.
-func (client *SchedulesClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, scheduleName string, options *SchedulesClientBeginDeleteOptions) (SchedulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, scheduleName, options)
-	if err != nil {
-		return SchedulesClientDeletePollerResponse{}, err
+func (client *SchedulesClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, scheduleName string, options *SchedulesClientBeginDeleteOptions) (*armruntime.Poller[SchedulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, scheduleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SchedulesClientDeleteResponse]("SchedulesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SchedulesClientDeleteResponse]("SchedulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SchedulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SchedulesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return SchedulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SchedulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete a schedule resource.
@@ -245,16 +241,32 @@ func (client *SchedulesClient) getHandleResponse(resp *http.Response) (Schedules
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // options - SchedulesClientListByLabOptions contains the optional parameters for the SchedulesClient.ListByLab method.
-func (client *SchedulesClient) ListByLab(resourceGroupName string, labName string, options *SchedulesClientListByLabOptions) *SchedulesClientListByLabPager {
-	return &SchedulesClientListByLabPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLabCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *SchedulesClient) ListByLab(resourceGroupName string, labName string, options *SchedulesClientListByLabOptions) *runtime.Pager[SchedulesClientListByLabResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SchedulesClientListByLabResponse]{
+		More: func(page SchedulesClientListByLabResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SchedulesClientListByLabResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedSchedules.NextLink)
+		Fetcher: func(ctx context.Context, page *SchedulesClientListByLabResponse) (SchedulesClientListByLabResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByLabCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SchedulesClientListByLabResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SchedulesClientListByLabResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SchedulesClientListByLabResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLabHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByLabCreateRequest creates the ListByLab request.

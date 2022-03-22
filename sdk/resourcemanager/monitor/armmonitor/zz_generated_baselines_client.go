@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -48,13 +48,26 @@ func NewBaselinesClient(credential azcore.TokenCredential, options *arm.ClientOp
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceURI - The identifier of the resource.
 // options - BaselinesClientListOptions contains the optional parameters for the BaselinesClient.List method.
-func (client *BaselinesClient) List(resourceURI string, options *BaselinesClientListOptions) *BaselinesClientListPager {
-	return &BaselinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceURI, options)
+func (client *BaselinesClient) List(resourceURI string, options *BaselinesClientListOptions) *runtime.Pager[BaselinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BaselinesClientListResponse]{
+		More: func(page BaselinesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BaselinesClientListResponse) (BaselinesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceURI, options)
+			if err != nil {
+				return BaselinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BaselinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BaselinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

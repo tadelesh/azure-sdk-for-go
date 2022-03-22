@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armoep
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// EnergyServicesClientCreatePollerResponse contains the response from method EnergyServicesClient.Create.
-type EnergyServicesClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnergyServicesClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnergyServicesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnergyServicesClientCreateResponse, error) {
-	respType := EnergyServicesClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.EnergyService)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnergyServicesClientCreatePollerResponse from the provided client and resume token.
-func (l *EnergyServicesClientCreatePollerResponse) Resume(ctx context.Context, client *EnergyServicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnergyServicesClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnergyServicesClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // EnergyServicesClientCreateResponse contains the response from method EnergyServicesClient.Create.
 type EnergyServicesClientCreateResponse struct {
 	EnergyService
-}
-
-// EnergyServicesClientDeletePollerResponse contains the response from method EnergyServicesClient.Delete.
-type EnergyServicesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnergyServicesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnergyServicesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnergyServicesClientDeleteResponse, error) {
-	respType := EnergyServicesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnergyServicesClientDeletePollerResponse from the provided client and resume token.
-func (l *EnergyServicesClientDeletePollerResponse) Resume(ctx context.Context, client *EnergyServicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnergyServicesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnergyServicesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnergyServicesClientDeleteResponse contains the response from method EnergyServicesClient.Delete.

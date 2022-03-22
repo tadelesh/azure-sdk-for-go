@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -237,16 +237,32 @@ func (client *InventoryItemsClient) getHandleResponse(resp *http.Response) (Inve
 // vcenterName - Name of the vCenter.
 // options - InventoryItemsClientListByVCenterOptions contains the optional parameters for the InventoryItemsClient.ListByVCenter
 // method.
-func (client *InventoryItemsClient) ListByVCenter(resourceGroupName string, vcenterName string, options *InventoryItemsClientListByVCenterOptions) *InventoryItemsClientListByVCenterPager {
-	return &InventoryItemsClientListByVCenterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVCenterCreateRequest(ctx, resourceGroupName, vcenterName, options)
+func (client *InventoryItemsClient) ListByVCenter(resourceGroupName string, vcenterName string, options *InventoryItemsClientListByVCenterOptions) *runtime.Pager[InventoryItemsClientListByVCenterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InventoryItemsClientListByVCenterResponse]{
+		More: func(page InventoryItemsClientListByVCenterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InventoryItemsClientListByVCenterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InventoryItemsList.NextLink)
+		Fetcher: func(ctx context.Context, page *InventoryItemsClientListByVCenterResponse) (InventoryItemsClientListByVCenterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVCenterCreateRequest(ctx, resourceGroupName, vcenterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InventoryItemsClientListByVCenterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InventoryItemsClientListByVCenterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InventoryItemsClientListByVCenterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVCenterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVCenterCreateRequest creates the ListByVCenter request.

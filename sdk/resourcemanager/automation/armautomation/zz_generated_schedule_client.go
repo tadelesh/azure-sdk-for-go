@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,16 +228,32 @@ func (client *ScheduleClient) getHandleResponse(resp *http.Response) (ScheduleCl
 // automationAccountName - The name of the automation account.
 // options - ScheduleClientListByAutomationAccountOptions contains the optional parameters for the ScheduleClient.ListByAutomationAccount
 // method.
-func (client *ScheduleClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *ScheduleClientListByAutomationAccountOptions) *ScheduleClientListByAutomationAccountPager {
-	return &ScheduleClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *ScheduleClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *ScheduleClientListByAutomationAccountOptions) *runtime.Pager[ScheduleClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScheduleClientListByAutomationAccountResponse]{
+		More: func(page ScheduleClientListByAutomationAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScheduleClientListByAutomationAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScheduleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ScheduleClientListByAutomationAccountResponse) (ScheduleClientListByAutomationAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScheduleClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScheduleClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScheduleClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

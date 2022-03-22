@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServerSecurityAlertPoliciesClient(subscriptionID string, credential azco
 // parameters - The server security alert policy.
 // options - ServerSecurityAlertPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerSecurityAlertPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *ServerSecurityAlertPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, securityAlertPolicyName SecurityAlertPolicyName, parameters ServerSecurityAlertPolicy, options *ServerSecurityAlertPoliciesClientBeginCreateOrUpdateOptions) (ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, securityAlertPolicyName, parameters, options)
-	if err != nil {
-		return ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerSecurityAlertPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, securityAlertPolicyName SecurityAlertPolicyName, parameters ServerSecurityAlertPolicy, options *ServerSecurityAlertPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerSecurityAlertPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, securityAlertPolicyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerSecurityAlertPoliciesClientCreateOrUpdateResponse]("ServerSecurityAlertPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerSecurityAlertPoliciesClientCreateOrUpdateResponse]("ServerSecurityAlertPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerSecurityAlertPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerSecurityAlertPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a threat detection policy.
@@ -190,16 +186,32 @@ func (client *ServerSecurityAlertPoliciesClient) getHandleResponse(resp *http.Re
 // serverName - The name of the server.
 // options - ServerSecurityAlertPoliciesClientListByServerOptions contains the optional parameters for the ServerSecurityAlertPoliciesClient.ListByServer
 // method.
-func (client *ServerSecurityAlertPoliciesClient) ListByServer(resourceGroupName string, serverName string, options *ServerSecurityAlertPoliciesClientListByServerOptions) *ServerSecurityAlertPoliciesClientListByServerPager {
-	return &ServerSecurityAlertPoliciesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerSecurityAlertPoliciesClient) ListByServer(resourceGroupName string, serverName string, options *ServerSecurityAlertPoliciesClientListByServerOptions) *runtime.Pager[ServerSecurityAlertPoliciesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerSecurityAlertPoliciesClientListByServerResponse]{
+		More: func(page ServerSecurityAlertPoliciesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServerSecurityAlertPoliciesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LogicalServerSecurityAlertPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServerSecurityAlertPoliciesClientListByServerResponse) (ServerSecurityAlertPoliciesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServerSecurityAlertPoliciesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerSecurityAlertPoliciesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerSecurityAlertPoliciesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

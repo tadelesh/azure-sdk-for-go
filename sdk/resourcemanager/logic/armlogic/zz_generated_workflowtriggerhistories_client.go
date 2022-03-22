@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -123,16 +123,32 @@ func (client *WorkflowTriggerHistoriesClient) getHandleResponse(resp *http.Respo
 // triggerName - The workflow trigger name.
 // options - WorkflowTriggerHistoriesClientListOptions contains the optional parameters for the WorkflowTriggerHistoriesClient.List
 // method.
-func (client *WorkflowTriggerHistoriesClient) List(resourceGroupName string, workflowName string, triggerName string, options *WorkflowTriggerHistoriesClientListOptions) *WorkflowTriggerHistoriesClientListPager {
-	return &WorkflowTriggerHistoriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workflowName, triggerName, options)
+func (client *WorkflowTriggerHistoriesClient) List(resourceGroupName string, workflowName string, triggerName string, options *WorkflowTriggerHistoriesClientListOptions) *runtime.Pager[WorkflowTriggerHistoriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowTriggerHistoriesClientListResponse]{
+		More: func(page WorkflowTriggerHistoriesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkflowTriggerHistoriesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkflowTriggerHistoryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkflowTriggerHistoriesClientListResponse) (WorkflowTriggerHistoriesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workflowName, triggerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkflowTriggerHistoriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowTriggerHistoriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowTriggerHistoriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

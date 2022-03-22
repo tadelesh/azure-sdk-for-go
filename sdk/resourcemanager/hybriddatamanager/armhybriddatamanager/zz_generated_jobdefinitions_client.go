@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewJobDefinitionsClient(subscriptionID string, credential azcore.TokenCrede
 // jobDefinition - Job Definition object to be created or updated.
 // options - JobDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the JobDefinitionsClient.BeginCreateOrUpdate
 // method.
-func (client *JobDefinitionsClient) BeginCreateOrUpdate(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, jobDefinition JobDefinition, options *JobDefinitionsClientBeginCreateOrUpdateOptions) (JobDefinitionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, jobDefinition, options)
-	if err != nil {
-		return JobDefinitionsClientCreateOrUpdatePollerResponse{}, err
+func (client *JobDefinitionsClient) BeginCreateOrUpdate(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, jobDefinition JobDefinition, options *JobDefinitionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[JobDefinitionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, jobDefinition, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobDefinitionsClientCreateOrUpdateResponse]("JobDefinitionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobDefinitionsClientCreateOrUpdateResponse]("JobDefinitionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := JobDefinitionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("JobDefinitionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return JobDefinitionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &JobDefinitionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a job definition.
@@ -135,20 +131,16 @@ func (client *JobDefinitionsClient) createOrUpdateCreateRequest(ctx context.Cont
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - JobDefinitionsClientBeginDeleteOptions contains the optional parameters for the JobDefinitionsClient.BeginDelete
 // method.
-func (client *JobDefinitionsClient) BeginDelete(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, options *JobDefinitionsClientBeginDeleteOptions) (JobDefinitionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, options)
-	if err != nil {
-		return JobDefinitionsClientDeletePollerResponse{}, err
+func (client *JobDefinitionsClient) BeginDelete(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, options *JobDefinitionsClientBeginDeleteOptions) (*armruntime.Poller[JobDefinitionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobDefinitionsClientDeleteResponse]("JobDefinitionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobDefinitionsClientDeleteResponse]("JobDefinitionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := JobDefinitionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("JobDefinitionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return JobDefinitionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &JobDefinitionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - This method deletes the given job definition.
@@ -274,16 +266,32 @@ func (client *JobDefinitionsClient) getHandleResponse(resp *http.Response) (JobD
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - JobDefinitionsClientListByDataManagerOptions contains the optional parameters for the JobDefinitionsClient.ListByDataManager
 // method.
-func (client *JobDefinitionsClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *JobDefinitionsClientListByDataManagerOptions) *JobDefinitionsClientListByDataManagerPager {
-	return &JobDefinitionsClientListByDataManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+func (client *JobDefinitionsClient) ListByDataManager(resourceGroupName string, dataManagerName string, options *JobDefinitionsClientListByDataManagerOptions) *runtime.Pager[JobDefinitionsClientListByDataManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobDefinitionsClientListByDataManagerResponse]{
+		More: func(page JobDefinitionsClientListByDataManagerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobDefinitionsClientListByDataManagerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobDefinitionsClientListByDataManagerResponse) (JobDefinitionsClientListByDataManagerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDataManagerCreateRequest(ctx, resourceGroupName, dataManagerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobDefinitionsClientListByDataManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobDefinitionsClientListByDataManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobDefinitionsClientListByDataManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDataManagerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDataManagerCreateRequest creates the ListByDataManager request.
@@ -332,16 +340,32 @@ func (client *JobDefinitionsClient) listByDataManagerHandleResponse(resp *http.R
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - JobDefinitionsClientListByDataServiceOptions contains the optional parameters for the JobDefinitionsClient.ListByDataService
 // method.
-func (client *JobDefinitionsClient) ListByDataService(dataServiceName string, resourceGroupName string, dataManagerName string, options *JobDefinitionsClientListByDataServiceOptions) *JobDefinitionsClientListByDataServicePager {
-	return &JobDefinitionsClientListByDataServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDataServiceCreateRequest(ctx, dataServiceName, resourceGroupName, dataManagerName, options)
+func (client *JobDefinitionsClient) ListByDataService(dataServiceName string, resourceGroupName string, dataManagerName string, options *JobDefinitionsClientListByDataServiceOptions) *runtime.Pager[JobDefinitionsClientListByDataServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobDefinitionsClientListByDataServiceResponse]{
+		More: func(page JobDefinitionsClientListByDataServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobDefinitionsClientListByDataServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobDefinitionsClientListByDataServiceResponse) (JobDefinitionsClientListByDataServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDataServiceCreateRequest(ctx, dataServiceName, resourceGroupName, dataManagerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobDefinitionsClientListByDataServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobDefinitionsClientListByDataServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobDefinitionsClientListByDataServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDataServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDataServiceCreateRequest creates the ListByDataService request.
@@ -395,20 +419,16 @@ func (client *JobDefinitionsClient) listByDataServiceHandleResponse(resp *http.R
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // runParameters - Run time parameters for the job definition.
 // options - JobDefinitionsClientBeginRunOptions contains the optional parameters for the JobDefinitionsClient.BeginRun method.
-func (client *JobDefinitionsClient) BeginRun(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, runParameters RunParameters, options *JobDefinitionsClientBeginRunOptions) (JobDefinitionsClientRunPollerResponse, error) {
-	resp, err := client.run(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, runParameters, options)
-	if err != nil {
-		return JobDefinitionsClientRunPollerResponse{}, err
+func (client *JobDefinitionsClient) BeginRun(ctx context.Context, dataServiceName string, jobDefinitionName string, resourceGroupName string, dataManagerName string, runParameters RunParameters, options *JobDefinitionsClientBeginRunOptions) (*armruntime.Poller[JobDefinitionsClientRunResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.run(ctx, dataServiceName, jobDefinitionName, resourceGroupName, dataManagerName, runParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobDefinitionsClientRunResponse]("JobDefinitionsClient.Run", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobDefinitionsClientRunResponse]("JobDefinitionsClient.Run", options.ResumeToken, client.pl, nil)
 	}
-	result := JobDefinitionsClientRunPollerResponse{}
-	pt, err := armruntime.NewPoller("JobDefinitionsClient.Run", "", resp, client.pl)
-	if err != nil {
-		return JobDefinitionsClientRunPollerResponse{}, err
-	}
-	result.Poller = &JobDefinitionsClientRunPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Run - This method runs a job instance of the given job definition.

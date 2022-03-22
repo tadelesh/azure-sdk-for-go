@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armsearch
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AdminKeysClientGetResponse contains the response from method AdminKeysClient.Get.
 type AdminKeysClientGetResponse struct {
@@ -74,41 +68,6 @@ type ServicesClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityOutput
 }
 
-// ServicesClientCreateOrUpdatePollerResponse contains the response from method ServicesClient.CreateOrUpdate.
-type ServicesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ServicesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ServicesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServicesClientCreateOrUpdateResponse, error) {
-	respType := ServicesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Service)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ServicesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ServicesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ServicesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ServicesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ServicesClientCreateOrUpdateResponse contains the response from method ServicesClient.CreateOrUpdate.
 type ServicesClientCreateOrUpdateResponse struct {
 	Service
@@ -139,79 +98,9 @@ type ServicesClientUpdateResponse struct {
 	Service
 }
 
-// SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse contains the response from method SharedPrivateLinkResourcesClient.CreateOrUpdate.
-type SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SharedPrivateLinkResourcesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SharedPrivateLinkResourcesClientCreateOrUpdateResponse, error) {
-	respType := SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SharedPrivateLinkResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *SharedPrivateLinkResourcesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SharedPrivateLinkResourcesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SharedPrivateLinkResourcesClientCreateOrUpdateResponse contains the response from method SharedPrivateLinkResourcesClient.CreateOrUpdate.
 type SharedPrivateLinkResourcesClientCreateOrUpdateResponse struct {
 	SharedPrivateLinkResource
-}
-
-// SharedPrivateLinkResourcesClientDeletePollerResponse contains the response from method SharedPrivateLinkResourcesClient.Delete.
-type SharedPrivateLinkResourcesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SharedPrivateLinkResourcesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SharedPrivateLinkResourcesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SharedPrivateLinkResourcesClientDeleteResponse, error) {
-	respType := SharedPrivateLinkResourcesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SharedPrivateLinkResourcesClientDeletePollerResponse from the provided client and resume token.
-func (l *SharedPrivateLinkResourcesClientDeletePollerResponse) Resume(ctx context.Context, client *SharedPrivateLinkResourcesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SharedPrivateLinkResourcesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SharedPrivateLinkResourcesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SharedPrivateLinkResourcesClientDeleteResponse contains the response from method SharedPrivateLinkResourcesClient.Delete.

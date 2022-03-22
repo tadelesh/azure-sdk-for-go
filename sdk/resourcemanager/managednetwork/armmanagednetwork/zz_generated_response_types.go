@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armmanagednetwork
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// GroupsClientCreateOrUpdatePollerResponse contains the response from method GroupsClient.CreateOrUpdate.
-type GroupsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *GroupsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l GroupsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (GroupsClientCreateOrUpdateResponse, error) {
-	respType := GroupsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Group)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a GroupsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *GroupsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *GroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("GroupsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &GroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // GroupsClientCreateOrUpdateResponse contains the response from method GroupsClient.CreateOrUpdate.
 type GroupsClientCreateOrUpdateResponse struct {
 	Group
-}
-
-// GroupsClientDeletePollerResponse contains the response from method GroupsClient.Delete.
-type GroupsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *GroupsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l GroupsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (GroupsClientDeleteResponse, error) {
-	respType := GroupsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a GroupsClientDeletePollerResponse from the provided client and resume token.
-func (l *GroupsClientDeletePollerResponse) Resume(ctx context.Context, client *GroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("GroupsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &GroupsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // GroupsClientDeleteResponse contains the response from method GroupsClient.Delete.
@@ -109,41 +33,6 @@ type ManagedNetworksClientCreateOrUpdateResponse struct {
 	ManagedNetwork
 }
 
-// ManagedNetworksClientDeletePollerResponse contains the response from method ManagedNetworksClient.Delete.
-type ManagedNetworksClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedNetworksClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedNetworksClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedNetworksClientDeleteResponse, error) {
-	respType := ManagedNetworksClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedNetworksClientDeletePollerResponse from the provided client and resume token.
-func (l *ManagedNetworksClientDeletePollerResponse) Resume(ctx context.Context, client *ManagedNetworksClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedNetworksClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedNetworksClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagedNetworksClientDeleteResponse contains the response from method ManagedNetworksClient.Delete.
 type ManagedNetworksClientDeleteResponse struct {
 	// placeholder for future response values
@@ -164,41 +53,6 @@ type ManagedNetworksClientListBySubscriptionResponse struct {
 	ListResult
 }
 
-// ManagedNetworksClientUpdatePollerResponse contains the response from method ManagedNetworksClient.Update.
-type ManagedNetworksClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagedNetworksClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagedNetworksClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagedNetworksClientUpdateResponse, error) {
-	respType := ManagedNetworksClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ManagedNetwork)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagedNetworksClientUpdatePollerResponse from the provided client and resume token.
-func (l *ManagedNetworksClientUpdatePollerResponse) Resume(ctx context.Context, client *ManagedNetworksClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagedNetworksClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagedNetworksClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagedNetworksClientUpdateResponse contains the response from method ManagedNetworksClient.Update.
 type ManagedNetworksClientUpdateResponse struct {
 	ManagedNetwork
@@ -209,79 +63,9 @@ type OperationsClientListResponse struct {
 	OperationListResult
 }
 
-// PeeringPoliciesClientCreateOrUpdatePollerResponse contains the response from method PeeringPoliciesClient.CreateOrUpdate.
-type PeeringPoliciesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PeeringPoliciesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PeeringPoliciesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PeeringPoliciesClientCreateOrUpdateResponse, error) {
-	respType := PeeringPoliciesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PeeringPolicy)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PeeringPoliciesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *PeeringPoliciesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *PeeringPoliciesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PeeringPoliciesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PeeringPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // PeeringPoliciesClientCreateOrUpdateResponse contains the response from method PeeringPoliciesClient.CreateOrUpdate.
 type PeeringPoliciesClientCreateOrUpdateResponse struct {
 	PeeringPolicy
-}
-
-// PeeringPoliciesClientDeletePollerResponse contains the response from method PeeringPoliciesClient.Delete.
-type PeeringPoliciesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PeeringPoliciesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PeeringPoliciesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PeeringPoliciesClientDeleteResponse, error) {
-	respType := PeeringPoliciesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PeeringPoliciesClientDeletePollerResponse from the provided client and resume token.
-func (l *PeeringPoliciesClientDeletePollerResponse) Resume(ctx context.Context, client *PeeringPoliciesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PeeringPoliciesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PeeringPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PeeringPoliciesClientDeleteResponse contains the response from method PeeringPoliciesClient.Delete.

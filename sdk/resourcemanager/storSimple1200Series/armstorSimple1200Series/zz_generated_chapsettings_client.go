@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewChapSettingsClient(subscriptionID string, credential azcore.TokenCredent
 // chapSetting - The chap setting to be added or updated.
 // options - ChapSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for the ChapSettingsClient.BeginCreateOrUpdate
 // method.
-func (client *ChapSettingsClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, chapUserName string, resourceGroupName string, managerName string, chapSetting ChapSettings, options *ChapSettingsClientBeginCreateOrUpdateOptions) (ChapSettingsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, chapUserName, resourceGroupName, managerName, chapSetting, options)
-	if err != nil {
-		return ChapSettingsClientCreateOrUpdatePollerResponse{}, err
+func (client *ChapSettingsClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, chapUserName string, resourceGroupName string, managerName string, chapSetting ChapSettings, options *ChapSettingsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ChapSettingsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, chapUserName, resourceGroupName, managerName, chapSetting, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ChapSettingsClientCreateOrUpdateResponse]("ChapSettingsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ChapSettingsClientCreateOrUpdateResponse]("ChapSettingsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ChapSettingsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ChapSettingsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ChapSettingsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ChapSettingsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the chap setting.
@@ -133,20 +129,16 @@ func (client *ChapSettingsClient) createOrUpdateCreateRequest(ctx context.Contex
 // managerName - The manager name
 // options - ChapSettingsClientBeginDeleteOptions contains the optional parameters for the ChapSettingsClient.BeginDelete
 // method.
-func (client *ChapSettingsClient) BeginDelete(ctx context.Context, deviceName string, chapUserName string, resourceGroupName string, managerName string, options *ChapSettingsClientBeginDeleteOptions) (ChapSettingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, chapUserName, resourceGroupName, managerName, options)
-	if err != nil {
-		return ChapSettingsClientDeletePollerResponse{}, err
+func (client *ChapSettingsClient) BeginDelete(ctx context.Context, deviceName string, chapUserName string, resourceGroupName string, managerName string, options *ChapSettingsClientBeginDeleteOptions) (*armruntime.Poller[ChapSettingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, chapUserName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ChapSettingsClientDeleteResponse]("ChapSettingsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ChapSettingsClientDeleteResponse]("ChapSettingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ChapSettingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ChapSettingsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ChapSettingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ChapSettingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the chap setting.
@@ -272,13 +264,26 @@ func (client *ChapSettingsClient) getHandleResponse(resp *http.Response) (ChapSe
 // managerName - The manager name
 // options - ChapSettingsClientListByDeviceOptions contains the optional parameters for the ChapSettingsClient.ListByDevice
 // method.
-func (client *ChapSettingsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *ChapSettingsClientListByDeviceOptions) *ChapSettingsClientListByDevicePager {
-	return &ChapSettingsClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *ChapSettingsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *ChapSettingsClientListByDeviceOptions) *runtime.Pager[ChapSettingsClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ChapSettingsClientListByDeviceResponse]{
+		More: func(page ChapSettingsClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ChapSettingsClientListByDeviceResponse) (ChapSettingsClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return ChapSettingsClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ChapSettingsClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ChapSettingsClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.

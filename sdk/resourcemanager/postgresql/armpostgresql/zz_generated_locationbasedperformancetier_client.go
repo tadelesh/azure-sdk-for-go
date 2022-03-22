@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewLocationBasedPerformanceTierClient(subscriptionID string, credential azc
 // locationName - The name of the location.
 // options - LocationBasedPerformanceTierClientListOptions contains the optional parameters for the LocationBasedPerformanceTierClient.List
 // method.
-func (client *LocationBasedPerformanceTierClient) List(locationName string, options *LocationBasedPerformanceTierClientListOptions) *LocationBasedPerformanceTierClientListPager {
-	return &LocationBasedPerformanceTierClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, locationName, options)
+func (client *LocationBasedPerformanceTierClient) List(locationName string, options *LocationBasedPerformanceTierClientListOptions) *runtime.Pager[LocationBasedPerformanceTierClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationBasedPerformanceTierClientListResponse]{
+		More: func(page LocationBasedPerformanceTierClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *LocationBasedPerformanceTierClientListResponse) (LocationBasedPerformanceTierClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, locationName, options)
+			if err != nil {
+				return LocationBasedPerformanceTierClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationBasedPerformanceTierClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationBasedPerformanceTierClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

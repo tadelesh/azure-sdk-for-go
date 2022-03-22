@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,13 +230,26 @@ func (client *IntegrationAccountAssembliesClient) getHandleResponse(resp *http.R
 // integrationAccountName - The integration account name.
 // options - IntegrationAccountAssembliesClientListOptions contains the optional parameters for the IntegrationAccountAssembliesClient.List
 // method.
-func (client *IntegrationAccountAssembliesClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountAssembliesClientListOptions) *IntegrationAccountAssembliesClientListPager {
-	return &IntegrationAccountAssembliesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+func (client *IntegrationAccountAssembliesClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountAssembliesClientListOptions) *runtime.Pager[IntegrationAccountAssembliesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountAssembliesClientListResponse]{
+		More: func(page IntegrationAccountAssembliesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IntegrationAccountAssembliesClientListResponse) (IntegrationAccountAssembliesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+			if err != nil {
+				return IntegrationAccountAssembliesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountAssembliesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountAssembliesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

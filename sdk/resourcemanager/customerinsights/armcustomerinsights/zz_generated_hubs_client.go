@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,20 +111,16 @@ func (client *HubsClient) createOrUpdateHandleResponse(resp *http.Response) (Hub
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - HubsClientBeginDeleteOptions contains the optional parameters for the HubsClient.BeginDelete method.
-func (client *HubsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, options *HubsClientBeginDeleteOptions) (HubsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, options)
-	if err != nil {
-		return HubsClientDeletePollerResponse{}, err
+func (client *HubsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, options *HubsClientBeginDeleteOptions) (*armruntime.Poller[HubsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[HubsClientDeleteResponse]("HubsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[HubsClientDeleteResponse]("HubsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := HubsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("HubsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return HubsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &HubsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified hub.
@@ -227,16 +223,32 @@ func (client *HubsClient) getHandleResponse(resp *http.Response) (HubsClientGetR
 // List - Gets all hubs in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - HubsClientListOptions contains the optional parameters for the HubsClient.List method.
-func (client *HubsClient) List(options *HubsClientListOptions) *HubsClientListPager {
-	return &HubsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *HubsClient) List(options *HubsClientListOptions) *runtime.Pager[HubsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HubsClientListResponse]{
+		More: func(page HubsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HubsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HubListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HubsClientListResponse) (HubsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HubsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HubsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HubsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -271,16 +283,32 @@ func (client *HubsClient) listHandleResponse(resp *http.Response) (HubsClientLis
 // resourceGroupName - The name of the resource group.
 // options - HubsClientListByResourceGroupOptions contains the optional parameters for the HubsClient.ListByResourceGroup
 // method.
-func (client *HubsClient) ListByResourceGroup(resourceGroupName string, options *HubsClientListByResourceGroupOptions) *HubsClientListByResourceGroupPager {
-	return &HubsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *HubsClient) ListByResourceGroup(resourceGroupName string, options *HubsClientListByResourceGroupOptions) *runtime.Pager[HubsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HubsClientListByResourceGroupResponse]{
+		More: func(page HubsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HubsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HubListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HubsClientListByResourceGroupResponse) (HubsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HubsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HubsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HubsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

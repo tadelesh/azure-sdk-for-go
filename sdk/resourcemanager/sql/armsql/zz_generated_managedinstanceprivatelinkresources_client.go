@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,16 +118,32 @@ func (client *ManagedInstancePrivateLinkResourcesClient) getHandleResponse(resp 
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstancePrivateLinkResourcesClientListByManagedInstanceOptions contains the optional parameters for the
 // ManagedInstancePrivateLinkResourcesClient.ListByManagedInstance method.
-func (client *ManagedInstancePrivateLinkResourcesClient) ListByManagedInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstancePrivateLinkResourcesClientListByManagedInstanceOptions) *ManagedInstancePrivateLinkResourcesClientListByManagedInstancePager {
-	return &ManagedInstancePrivateLinkResourcesClientListByManagedInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagedInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstancePrivateLinkResourcesClient) ListByManagedInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstancePrivateLinkResourcesClientListByManagedInstanceOptions) *runtime.Pager[ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse]{
+		More: func(page ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstancePrivateLinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse) (ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagedInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagedInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagedInstanceCreateRequest creates the ListByManagedInstance request.

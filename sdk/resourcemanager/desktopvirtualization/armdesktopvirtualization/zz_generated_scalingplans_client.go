@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,16 +212,32 @@ func (client *ScalingPlansClient) getHandleResponse(resp *http.Response) (Scalin
 // hostPoolName - The name of the host pool within the specified resource group
 // options - ScalingPlansClientListByHostPoolOptions contains the optional parameters for the ScalingPlansClient.ListByHostPool
 // method.
-func (client *ScalingPlansClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *ScalingPlansClientListByHostPoolOptions) *ScalingPlansClientListByHostPoolPager {
-	return &ScalingPlansClientListByHostPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+func (client *ScalingPlansClient) ListByHostPool(resourceGroupName string, hostPoolName string, options *ScalingPlansClientListByHostPoolOptions) *runtime.Pager[ScalingPlansClientListByHostPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScalingPlansClientListByHostPoolResponse]{
+		More: func(page ScalingPlansClientListByHostPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScalingPlansClientListByHostPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScalingPlanList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScalingPlansClientListByHostPoolResponse) (ScalingPlansClientListByHostPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHostPoolCreateRequest(ctx, resourceGroupName, hostPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScalingPlansClientListByHostPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScalingPlansClientListByHostPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScalingPlansClientListByHostPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHostPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHostPoolCreateRequest creates the ListByHostPool request.
@@ -264,16 +280,32 @@ func (client *ScalingPlansClient) listByHostPoolHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ScalingPlansClientListByResourceGroupOptions contains the optional parameters for the ScalingPlansClient.ListByResourceGroup
 // method.
-func (client *ScalingPlansClient) ListByResourceGroup(resourceGroupName string, options *ScalingPlansClientListByResourceGroupOptions) *ScalingPlansClientListByResourceGroupPager {
-	return &ScalingPlansClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ScalingPlansClient) ListByResourceGroup(resourceGroupName string, options *ScalingPlansClientListByResourceGroupOptions) *runtime.Pager[ScalingPlansClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScalingPlansClientListByResourceGroupResponse]{
+		More: func(page ScalingPlansClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScalingPlansClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScalingPlanList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScalingPlansClientListByResourceGroupResponse) (ScalingPlansClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScalingPlansClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScalingPlansClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScalingPlansClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -311,16 +343,32 @@ func (client *ScalingPlansClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ScalingPlansClientListBySubscriptionOptions contains the optional parameters for the ScalingPlansClient.ListBySubscription
 // method.
-func (client *ScalingPlansClient) ListBySubscription(options *ScalingPlansClientListBySubscriptionOptions) *ScalingPlansClientListBySubscriptionPager {
-	return &ScalingPlansClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ScalingPlansClient) ListBySubscription(options *ScalingPlansClientListBySubscriptionOptions) *runtime.Pager[ScalingPlansClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScalingPlansClientListBySubscriptionResponse]{
+		More: func(page ScalingPlansClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScalingPlansClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScalingPlanList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScalingPlansClientListBySubscriptionResponse) (ScalingPlansClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScalingPlansClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScalingPlansClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScalingPlansClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewCollectionClient(subscriptionID string, credential azcore.TokenCredentia
 // collectionRid - Cosmos DB collection rid.
 // options - CollectionClientListMetricDefinitionsOptions contains the optional parameters for the CollectionClient.ListMetricDefinitions
 // method.
-func (client *CollectionClient) ListMetricDefinitions(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListMetricDefinitionsOptions) *CollectionClientListMetricDefinitionsPager {
-	return &CollectionClientListMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+func (client *CollectionClient) ListMetricDefinitions(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListMetricDefinitionsOptions) *runtime.Pager[CollectionClientListMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CollectionClientListMetricDefinitionsResponse]{
+		More: func(page CollectionClientListMetricDefinitionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CollectionClientListMetricDefinitionsResponse) (CollectionClientListMetricDefinitionsResponse, error) {
+			req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+			if err != nil {
+				return CollectionClientListMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CollectionClientListMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CollectionClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -119,13 +132,26 @@ func (client *CollectionClient) listMetricDefinitionsHandleResponse(resp *http.R
 // name.value (name of the metric, can have an or of multiple names), startTime, endTime,
 // and timeGrain. The supported operator is eq.
 // options - CollectionClientListMetricsOptions contains the optional parameters for the CollectionClient.ListMetrics method.
-func (client *CollectionClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionClientListMetricsOptions) *CollectionClientListMetricsPager {
-	return &CollectionClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
+func (client *CollectionClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionClientListMetricsOptions) *runtime.Pager[CollectionClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CollectionClientListMetricsResponse]{
+		More: func(page CollectionClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CollectionClientListMetricsResponse) (CollectionClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
+			if err != nil {
+				return CollectionClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CollectionClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CollectionClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -179,13 +205,26 @@ func (client *CollectionClient) listMetricsHandleResponse(resp *http.Response) (
 // databaseRid - Cosmos DB database rid.
 // collectionRid - Cosmos DB collection rid.
 // options - CollectionClientListUsagesOptions contains the optional parameters for the CollectionClient.ListUsages method.
-func (client *CollectionClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListUsagesOptions) *CollectionClientListUsagesPager {
-	return &CollectionClientListUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+func (client *CollectionClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListUsagesOptions) *runtime.Pager[CollectionClientListUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CollectionClientListUsagesResponse]{
+		More: func(page CollectionClientListUsagesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CollectionClientListUsagesResponse) (CollectionClientListUsagesResponse, error) {
+			req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+			if err != nil {
+				return CollectionClientListUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CollectionClientListUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CollectionClientListUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUsagesHandleResponse(resp)
+		},
+	})
 }
 
 // listUsagesCreateRequest creates the ListUsages request.

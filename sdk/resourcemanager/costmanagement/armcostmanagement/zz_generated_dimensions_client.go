@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewDimensionsClient(credential azcore.TokenCredential, options *arm.ClientO
 // consolidated account used with dimension/query operations.
 // options - DimensionsClientByExternalCloudProviderTypeOptions contains the optional parameters for the DimensionsClient.ByExternalCloudProviderType
 // method.
-func (client *DimensionsClient) ByExternalCloudProviderType(externalCloudProviderType ExternalCloudProviderType, externalCloudProviderID string, options *DimensionsClientByExternalCloudProviderTypeOptions) *DimensionsClientByExternalCloudProviderTypePager {
-	return &DimensionsClientByExternalCloudProviderTypePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.byExternalCloudProviderTypeCreateRequest(ctx, externalCloudProviderType, externalCloudProviderID, options)
+func (client *DimensionsClient) ByExternalCloudProviderType(externalCloudProviderType ExternalCloudProviderType, externalCloudProviderID string, options *DimensionsClientByExternalCloudProviderTypeOptions) *runtime.Pager[DimensionsClientByExternalCloudProviderTypeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DimensionsClientByExternalCloudProviderTypeResponse]{
+		More: func(page DimensionsClientByExternalCloudProviderTypeResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DimensionsClientByExternalCloudProviderTypeResponse) (DimensionsClientByExternalCloudProviderTypeResponse, error) {
+			req, err := client.byExternalCloudProviderTypeCreateRequest(ctx, externalCloudProviderType, externalCloudProviderID, options)
+			if err != nil {
+				return DimensionsClientByExternalCloudProviderTypeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DimensionsClientByExternalCloudProviderTypeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DimensionsClientByExternalCloudProviderTypeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.byExternalCloudProviderTypeHandleResponse(resp)
+		},
+	})
 }
 
 // byExternalCloudProviderTypeCreateRequest creates the ByExternalCloudProviderType request.
@@ -120,13 +133,26 @@ func (client *DimensionsClient) byExternalCloudProviderTypeHandleResponse(resp *
 // for invoiceSection scope, and
 // 'providers/Microsoft.Billing/billingAccounts/{billingAccountId}/customers/{customerId}' specific for partners.
 // options - DimensionsClientListOptions contains the optional parameters for the DimensionsClient.List method.
-func (client *DimensionsClient) List(scope string, options *DimensionsClientListOptions) *DimensionsClientListPager {
-	return &DimensionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *DimensionsClient) List(scope string, options *DimensionsClientListOptions) *runtime.Pager[DimensionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DimensionsClientListResponse]{
+		More: func(page DimensionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DimensionsClientListResponse) (DimensionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, scope, options)
+			if err != nil {
+				return DimensionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DimensionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DimensionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

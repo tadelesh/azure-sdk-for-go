@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,16 +124,32 @@ func (client *JobStreamClient) getHandleResponse(resp *http.Response) (JobStream
 // automationAccountName - The name of the automation account.
 // jobName - The job name.
 // options - JobStreamClientListByJobOptions contains the optional parameters for the JobStreamClient.ListByJob method.
-func (client *JobStreamClient) ListByJob(resourceGroupName string, automationAccountName string, jobName string, options *JobStreamClientListByJobOptions) *JobStreamClientListByJobPager {
-	return &JobStreamClientListByJobPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByJobCreateRequest(ctx, resourceGroupName, automationAccountName, jobName, options)
+func (client *JobStreamClient) ListByJob(resourceGroupName string, automationAccountName string, jobName string, options *JobStreamClientListByJobOptions) *runtime.Pager[JobStreamClientListByJobResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobStreamClientListByJobResponse]{
+		More: func(page JobStreamClientListByJobResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobStreamClientListByJobResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobStreamListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobStreamClientListByJobResponse) (JobStreamClientListByJobResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByJobCreateRequest(ctx, resourceGroupName, automationAccountName, jobName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobStreamClientListByJobResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobStreamClientListByJobResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobStreamClientListByJobResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByJobHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByJobCreateRequest creates the ListByJob request.

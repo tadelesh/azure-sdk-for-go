@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewSharedPrivateLinkResourcesClient(subscriptionID string, credential azcor
 // within the specified resource group.
 // sharedPrivateLinkResource - The definition of the shared private link resource to create or update.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, searchServiceName string, sharedPrivateLinkResourceName string, sharedPrivateLinkResource SharedPrivateLinkResource, options *SearchManagementRequestOptions) (SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, searchServiceName, sharedPrivateLinkResourceName, sharedPrivateLinkResource, options)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
+func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, searchServiceName string, sharedPrivateLinkResourceName string, sharedPrivateLinkResource SharedPrivateLinkResource, options *SearchManagementRequestOptions) (*armruntime.Poller[SharedPrivateLinkResourcesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, searchServiceName, sharedPrivateLinkResourceName, sharedPrivateLinkResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SharedPrivateLinkResourcesClientCreateOrUpdateResponse]("SharedPrivateLinkResourcesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SharedPrivateLinkResourcesClientCreateOrUpdateResponse]("SharedPrivateLinkResourcesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Initiates the creation or update of a shared private link resource managed by the search service in the
@@ -135,20 +131,16 @@ func (client *SharedPrivateLinkResourcesClient) createOrUpdateCreateRequest(ctx 
 // sharedPrivateLinkResourceName - The name of the shared private link resource managed by the Azure Cognitive Search service
 // within the specified resource group.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context, resourceGroupName string, searchServiceName string, sharedPrivateLinkResourceName string, options *SearchManagementRequestOptions) (SharedPrivateLinkResourcesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, searchServiceName, sharedPrivateLinkResourceName, options)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
+func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context, resourceGroupName string, searchServiceName string, sharedPrivateLinkResourceName string, options *SearchManagementRequestOptions) (*armruntime.Poller[SharedPrivateLinkResourcesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, searchServiceName, sharedPrivateLinkResourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SharedPrivateLinkResourcesClientDeleteResponse]("SharedPrivateLinkResourcesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SharedPrivateLinkResourcesClientDeleteResponse]("SharedPrivateLinkResourcesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SharedPrivateLinkResourcesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SharedPrivateLinkResourcesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Initiates the deletion of the shared private link resource from the search service.
@@ -272,16 +264,32 @@ func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Res
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *SharedPrivateLinkResourcesClient) ListByService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *SharedPrivateLinkResourcesClientListByServicePager {
-	return &SharedPrivateLinkResourcesClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+func (client *SharedPrivateLinkResourcesClient) ListByService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *runtime.Pager[SharedPrivateLinkResourcesClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SharedPrivateLinkResourcesClientListByServiceResponse]{
+		More: func(page SharedPrivateLinkResourcesClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SharedPrivateLinkResourcesClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SharedPrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SharedPrivateLinkResourcesClientListByServiceResponse) (SharedPrivateLinkResourcesClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SharedPrivateLinkResourcesClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SharedPrivateLinkResourcesClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SharedPrivateLinkResourcesClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewApplicationTypeVersionsClient(subscriptionID string, credential azcore.T
 // parameters - The application type version resource.
 // options - ApplicationTypeVersionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationTypeVersionsClient.BeginCreateOrUpdate
 // method.
-func (client *ApplicationTypeVersionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, version string, parameters ApplicationTypeVersionResource, options *ApplicationTypeVersionsClientBeginCreateOrUpdateOptions) (ApplicationTypeVersionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationTypeName, version, parameters, options)
-	if err != nil {
-		return ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}, err
+func (client *ApplicationTypeVersionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, version string, parameters ApplicationTypeVersionResource, options *ApplicationTypeVersionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ApplicationTypeVersionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationTypeName, version, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationTypeVersionsClientCreateOrUpdateResponse]("ApplicationTypeVersionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationTypeVersionsClientCreateOrUpdateResponse]("ApplicationTypeVersionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationTypeVersionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ApplicationTypeVersionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Service Fabric application type version resource with the specified name.
@@ -133,20 +129,16 @@ func (client *ApplicationTypeVersionsClient) createOrUpdateCreateRequest(ctx con
 // version - The application type version.
 // options - ApplicationTypeVersionsClientBeginDeleteOptions contains the optional parameters for the ApplicationTypeVersionsClient.BeginDelete
 // method.
-func (client *ApplicationTypeVersionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, version string, options *ApplicationTypeVersionsClientBeginDeleteOptions) (ApplicationTypeVersionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationTypeName, version, options)
-	if err != nil {
-		return ApplicationTypeVersionsClientDeletePollerResponse{}, err
+func (client *ApplicationTypeVersionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, version string, options *ApplicationTypeVersionsClientBeginDeleteOptions) (*armruntime.Poller[ApplicationTypeVersionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationTypeName, version, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationTypeVersionsClientDeleteResponse]("ApplicationTypeVersionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationTypeVersionsClientDeleteResponse]("ApplicationTypeVersionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationTypeVersionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationTypeVersionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ApplicationTypeVersionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ApplicationTypeVersionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Service Fabric application type version resource with the specified name.

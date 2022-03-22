@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewSingleSignOnClient(subscriptionID string, credential azcore.TokenCredent
 // monitorName - Monitor resource name
 // options - SingleSignOnClientBeginCreateOrUpdateOptions contains the optional parameters for the SingleSignOnClient.BeginCreateOrUpdate
 // method.
-func (client *SingleSignOnClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, monitorName string, configurationName string, options *SingleSignOnClientBeginCreateOrUpdateOptions) (SingleSignOnClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, monitorName, configurationName, options)
-	if err != nil {
-		return SingleSignOnClientCreateOrUpdatePollerResponse{}, err
+func (client *SingleSignOnClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, monitorName string, configurationName string, options *SingleSignOnClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SingleSignOnClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, monitorName, configurationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SingleSignOnClientCreateOrUpdateResponse]("SingleSignOnClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SingleSignOnClientCreateOrUpdateResponse]("SingleSignOnClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SingleSignOnClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SingleSignOnClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SingleSignOnClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SingleSignOnClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Configures single-sign-on for this resource. This operation can take upto 10 minutes to complete.
@@ -185,16 +181,32 @@ func (client *SingleSignOnClient) getHandleResponse(resp *http.Response) (Single
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - SingleSignOnClientListOptions contains the optional parameters for the SingleSignOnClient.List method.
-func (client *SingleSignOnClient) List(resourceGroupName string, monitorName string, options *SingleSignOnClientListOptions) *SingleSignOnClientListPager {
-	return &SingleSignOnClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *SingleSignOnClient) List(resourceGroupName string, monitorName string, options *SingleSignOnClientListOptions) *runtime.Pager[SingleSignOnClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SingleSignOnClientListResponse]{
+		More: func(page SingleSignOnClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SingleSignOnClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SingleSignOnResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SingleSignOnClientListResponse) (SingleSignOnClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SingleSignOnClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SingleSignOnClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SingleSignOnClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

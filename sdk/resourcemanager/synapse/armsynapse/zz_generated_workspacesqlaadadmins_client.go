@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewWorkspaceSQLAADAdminsClient(subscriptionID string, credential azcore.Tok
 // aadAdminInfo - Workspace active directory administrator properties
 // options - WorkspaceSQLAADAdminsClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceSQLAADAdminsClient.BeginCreateOrUpdate
 // method.
-func (client *WorkspaceSQLAADAdminsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, aadAdminInfo WorkspaceAADAdminInfo, options *WorkspaceSQLAADAdminsClientBeginCreateOrUpdateOptions) (WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, aadAdminInfo, options)
-	if err != nil {
-		return WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspaceSQLAADAdminsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, aadAdminInfo WorkspaceAADAdminInfo, options *WorkspaceSQLAADAdminsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspaceSQLAADAdminsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, aadAdminInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceSQLAADAdminsClientCreateOrUpdateResponse]("WorkspaceSQLAADAdminsClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceSQLAADAdminsClientCreateOrUpdateResponse]("WorkspaceSQLAADAdminsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceSQLAADAdminsClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceSQLAADAdminsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a workspace SQL active directory admin
@@ -121,20 +117,16 @@ func (client *WorkspaceSQLAADAdminsClient) createOrUpdateCreateRequest(ctx conte
 // workspaceName - The name of the workspace.
 // options - WorkspaceSQLAADAdminsClientBeginDeleteOptions contains the optional parameters for the WorkspaceSQLAADAdminsClient.BeginDelete
 // method.
-func (client *WorkspaceSQLAADAdminsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspaceSQLAADAdminsClientBeginDeleteOptions) (WorkspaceSQLAADAdminsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspaceSQLAADAdminsClientDeletePollerResponse{}, err
+func (client *WorkspaceSQLAADAdminsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspaceSQLAADAdminsClientBeginDeleteOptions) (*armruntime.Poller[WorkspaceSQLAADAdminsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceSQLAADAdminsClientDeleteResponse]("WorkspaceSQLAADAdminsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceSQLAADAdminsClientDeleteResponse]("WorkspaceSQLAADAdminsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceSQLAADAdminsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceSQLAADAdminsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return WorkspaceSQLAADAdminsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceSQLAADAdminsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a workspace SQL active directory admin

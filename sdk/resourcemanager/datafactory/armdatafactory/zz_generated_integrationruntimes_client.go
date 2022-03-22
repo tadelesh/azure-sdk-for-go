@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -543,16 +543,32 @@ func (client *IntegrationRuntimesClient) listAuthKeysHandleResponse(resp *http.R
 // factoryName - The factory name.
 // options - IntegrationRuntimesClientListByFactoryOptions contains the optional parameters for the IntegrationRuntimesClient.ListByFactory
 // method.
-func (client *IntegrationRuntimesClient) ListByFactory(resourceGroupName string, factoryName string, options *IntegrationRuntimesClientListByFactoryOptions) *IntegrationRuntimesClientListByFactoryPager {
-	return &IntegrationRuntimesClientListByFactoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+func (client *IntegrationRuntimesClient) ListByFactory(resourceGroupName string, factoryName string, options *IntegrationRuntimesClientListByFactoryOptions) *runtime.Pager[IntegrationRuntimesClientListByFactoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationRuntimesClientListByFactoryResponse]{
+		More: func(page IntegrationRuntimesClientListByFactoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationRuntimesClientListByFactoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationRuntimeListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationRuntimesClientListByFactoryResponse) (IntegrationRuntimesClientListByFactoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationRuntimesClientListByFactoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationRuntimesClientListByFactoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationRuntimesClientListByFactoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFactoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.
@@ -774,20 +790,16 @@ func (client *IntegrationRuntimesClient) removeLinksCreateRequest(ctx context.Co
 // integrationRuntimeName - The integration runtime name.
 // options - IntegrationRuntimesClientBeginStartOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStart
 // method.
-func (client *IntegrationRuntimesClient) BeginStart(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStartOptions) (IntegrationRuntimesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientStartPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginStart(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStartOptions) (*armruntime.Poller[IntegrationRuntimesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientStartResponse]("IntegrationRuntimesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientStartResponse]("IntegrationRuntimesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientStartPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts a ManagedReserved type integration runtime.
@@ -844,20 +856,16 @@ func (client *IntegrationRuntimesClient) startCreateRequest(ctx context.Context,
 // integrationRuntimeName - The integration runtime name.
 // options - IntegrationRuntimesClientBeginStopOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStop
 // method.
-func (client *IntegrationRuntimesClient) BeginStop(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStopOptions) (IntegrationRuntimesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientStopPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginStop(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStopOptions) (*armruntime.Poller[IntegrationRuntimesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, factoryName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientStopResponse]("IntegrationRuntimesClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientStopResponse]("IntegrationRuntimesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientStopPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stops a ManagedReserved type integration runtime.

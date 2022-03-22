@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -189,13 +189,26 @@ func (client *SQLPoolGeoBackupPoliciesClient) getHandleResponse(resp *http.Respo
 // sqlPoolName - SQL pool name
 // options - SQLPoolGeoBackupPoliciesClientListOptions contains the optional parameters for the SQLPoolGeoBackupPoliciesClient.List
 // method.
-func (client *SQLPoolGeoBackupPoliciesClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolGeoBackupPoliciesClientListOptions) *SQLPoolGeoBackupPoliciesClientListPager {
-	return &SQLPoolGeoBackupPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *SQLPoolGeoBackupPoliciesClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolGeoBackupPoliciesClientListOptions) *runtime.Pager[SQLPoolGeoBackupPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolGeoBackupPoliciesClientListResponse]{
+		More: func(page SQLPoolGeoBackupPoliciesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *SQLPoolGeoBackupPoliciesClientListResponse) (SQLPoolGeoBackupPoliciesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			if err != nil {
+				return SQLPoolGeoBackupPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolGeoBackupPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolGeoBackupPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

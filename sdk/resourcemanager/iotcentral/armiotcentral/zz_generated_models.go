@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -144,17 +144,20 @@ type AppTemplatesResult struct {
 
 // AppsClientBeginCreateOrUpdateOptions contains the optional parameters for the AppsClient.BeginCreateOrUpdate method.
 type AppsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AppsClientBeginDeleteOptions contains the optional parameters for the AppsClient.BeginDelete method.
 type AppsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AppsClientBeginUpdateOptions contains the optional parameters for the AppsClient.BeginUpdate method.
 type AppsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AppsClientCheckNameAvailabilityOptions contains the optional parameters for the AppsClient.CheckNameAvailability method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -157,16 +157,32 @@ func (client *LocationClient) getQuotasHandleResponse(resp *http.Response) (Loca
 // locationName - The region for which to retrieve Batch service supported SKUs.
 // options - LocationClientListSupportedCloudServiceSKUsOptions contains the optional parameters for the LocationClient.ListSupportedCloudServiceSKUs
 // method.
-func (client *LocationClient) ListSupportedCloudServiceSKUs(locationName string, options *LocationClientListSupportedCloudServiceSKUsOptions) *LocationClientListSupportedCloudServiceSKUsPager {
-	return &LocationClientListSupportedCloudServiceSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSupportedCloudServiceSKUsCreateRequest(ctx, locationName, options)
+func (client *LocationClient) ListSupportedCloudServiceSKUs(locationName string, options *LocationClientListSupportedCloudServiceSKUsOptions) *runtime.Pager[LocationClientListSupportedCloudServiceSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationClientListSupportedCloudServiceSKUsResponse]{
+		More: func(page LocationClientListSupportedCloudServiceSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LocationClientListSupportedCloudServiceSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SupportedSKUsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LocationClientListSupportedCloudServiceSKUsResponse) (LocationClientListSupportedCloudServiceSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSupportedCloudServiceSKUsCreateRequest(ctx, locationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LocationClientListSupportedCloudServiceSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationClientListSupportedCloudServiceSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationClientListSupportedCloudServiceSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSupportedCloudServiceSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSupportedCloudServiceSKUsCreateRequest creates the ListSupportedCloudServiceSKUs request.
@@ -211,16 +227,32 @@ func (client *LocationClient) listSupportedCloudServiceSKUsHandleResponse(resp *
 // locationName - The region for which to retrieve Batch service supported SKUs.
 // options - LocationClientListSupportedVirtualMachineSKUsOptions contains the optional parameters for the LocationClient.ListSupportedVirtualMachineSKUs
 // method.
-func (client *LocationClient) ListSupportedVirtualMachineSKUs(locationName string, options *LocationClientListSupportedVirtualMachineSKUsOptions) *LocationClientListSupportedVirtualMachineSKUsPager {
-	return &LocationClientListSupportedVirtualMachineSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSupportedVirtualMachineSKUsCreateRequest(ctx, locationName, options)
+func (client *LocationClient) ListSupportedVirtualMachineSKUs(locationName string, options *LocationClientListSupportedVirtualMachineSKUsOptions) *runtime.Pager[LocationClientListSupportedVirtualMachineSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationClientListSupportedVirtualMachineSKUsResponse]{
+		More: func(page LocationClientListSupportedVirtualMachineSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LocationClientListSupportedVirtualMachineSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SupportedSKUsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LocationClientListSupportedVirtualMachineSKUsResponse) (LocationClientListSupportedVirtualMachineSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSupportedVirtualMachineSKUsCreateRequest(ctx, locationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LocationClientListSupportedVirtualMachineSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationClientListSupportedVirtualMachineSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationClientListSupportedVirtualMachineSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSupportedVirtualMachineSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSupportedVirtualMachineSKUsCreateRequest creates the ListSupportedVirtualMachineSKUs request.

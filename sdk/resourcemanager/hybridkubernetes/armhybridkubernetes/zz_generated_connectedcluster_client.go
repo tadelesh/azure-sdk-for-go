@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewConnectedClusterClient(subscriptionID string, credential azcore.TokenCre
 // connectedCluster - Parameters supplied to Create a Connected Cluster.
 // options - ConnectedClusterClientBeginCreateOptions contains the optional parameters for the ConnectedClusterClient.BeginCreate
 // method.
-func (client *ConnectedClusterClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, connectedCluster ConnectedCluster, options *ConnectedClusterClientBeginCreateOptions) (ConnectedClusterClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, connectedCluster, options)
-	if err != nil {
-		return ConnectedClusterClientCreatePollerResponse{}, err
+func (client *ConnectedClusterClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, connectedCluster ConnectedCluster, options *ConnectedClusterClientBeginCreateOptions) (*armruntime.Poller[ConnectedClusterClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, connectedCluster, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedClusterClientCreateResponse]("ConnectedClusterClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedClusterClientCreateResponse]("ConnectedClusterClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedClusterClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedClusterClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ConnectedClusterClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ConnectedClusterClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - API to register a new Kubernetes cluster and create a tracked resource in Azure Resource Manager (ARM).
@@ -121,20 +117,16 @@ func (client *ConnectedClusterClient) createCreateRequest(ctx context.Context, r
 // clusterName - The name of the Kubernetes cluster on which get is called.
 // options - ConnectedClusterClientBeginDeleteOptions contains the optional parameters for the ConnectedClusterClient.BeginDelete
 // method.
-func (client *ConnectedClusterClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ConnectedClusterClientBeginDeleteOptions) (ConnectedClusterClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ConnectedClusterClientDeletePollerResponse{}, err
+func (client *ConnectedClusterClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ConnectedClusterClientBeginDeleteOptions) (*armruntime.Poller[ConnectedClusterClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedClusterClientDeleteResponse]("ConnectedClusterClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedClusterClientDeleteResponse]("ConnectedClusterClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedClusterClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedClusterClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ConnectedClusterClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ConnectedClusterClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a connected cluster, removing the tracked resource in Azure Resource Manager (ARM).
@@ -241,16 +233,32 @@ func (client *ConnectedClusterClient) getHandleResponse(resp *http.Response) (Co
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ConnectedClusterClientListByResourceGroupOptions contains the optional parameters for the ConnectedClusterClient.ListByResourceGroup
 // method.
-func (client *ConnectedClusterClient) ListByResourceGroup(resourceGroupName string, options *ConnectedClusterClientListByResourceGroupOptions) *ConnectedClusterClientListByResourceGroupPager {
-	return &ConnectedClusterClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ConnectedClusterClient) ListByResourceGroup(resourceGroupName string, options *ConnectedClusterClientListByResourceGroupOptions) *runtime.Pager[ConnectedClusterClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectedClusterClientListByResourceGroupResponse]{
+		More: func(page ConnectedClusterClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectedClusterClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectedClusterList.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectedClusterClientListByResourceGroupResponse) (ConnectedClusterClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectedClusterClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectedClusterClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectedClusterClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -288,16 +296,32 @@ func (client *ConnectedClusterClient) listByResourceGroupHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConnectedClusterClientListBySubscriptionOptions contains the optional parameters for the ConnectedClusterClient.ListBySubscription
 // method.
-func (client *ConnectedClusterClient) ListBySubscription(options *ConnectedClusterClientListBySubscriptionOptions) *ConnectedClusterClientListBySubscriptionPager {
-	return &ConnectedClusterClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ConnectedClusterClient) ListBySubscription(options *ConnectedClusterClientListBySubscriptionOptions) *runtime.Pager[ConnectedClusterClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectedClusterClientListBySubscriptionResponse]{
+		More: func(page ConnectedClusterClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectedClusterClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectedClusterList.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectedClusterClientListBySubscriptionResponse) (ConnectedClusterClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectedClusterClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectedClusterClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectedClusterClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

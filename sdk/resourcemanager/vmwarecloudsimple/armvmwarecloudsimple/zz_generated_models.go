@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -310,7 +310,8 @@ type DedicatedCloudNodeProperties struct {
 // DedicatedCloudNodesClientBeginCreateOrUpdateOptions contains the optional parameters for the DedicatedCloudNodesClient.BeginCreateOrUpdate
 // method.
 type DedicatedCloudNodesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DedicatedCloudNodesClientDeleteOptions contains the optional parameters for the DedicatedCloudNodesClient.Delete method.
@@ -398,7 +399,8 @@ type DedicatedCloudServiceProperties struct {
 // DedicatedCloudServicesClientBeginDeleteOptions contains the optional parameters for the DedicatedCloudServicesClient.BeginDelete
 // method.
 type DedicatedCloudServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DedicatedCloudServicesClientCreateOrUpdateOptions contains the optional parameters for the DedicatedCloudServicesClient.CreateOrUpdate
@@ -1019,17 +1021,20 @@ type VirtualMachineTemplatesClientListOptions struct {
 // VirtualMachinesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachinesClient.BeginCreateOrUpdate
 // method.
 type VirtualMachinesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginDeleteOptions contains the optional parameters for the VirtualMachinesClient.BeginDelete method.
 type VirtualMachinesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStartOptions contains the optional parameters for the VirtualMachinesClient.BeginStart method.
 type VirtualMachinesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStopOptions contains the optional parameters for the VirtualMachinesClient.BeginStop method.
@@ -1038,11 +1043,14 @@ type VirtualMachinesClientBeginStopOptions struct {
 	M *VirtualMachineStopMode
 	// query stop mode parameter (reboot, shutdown, etc…)
 	Mode *StopMode
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginUpdateOptions contains the optional parameters for the VirtualMachinesClient.BeginUpdate method.
 type VirtualMachinesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientGetOptions contains the optional parameters for the VirtualMachinesClient.Get method.

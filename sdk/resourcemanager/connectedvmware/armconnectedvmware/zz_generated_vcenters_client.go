@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,20 +63,16 @@ func NewVCentersClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The Resource Group Name.
 // vcenterName - Name of the vCenter.
 // options - VCentersClientBeginCreateOptions contains the optional parameters for the VCentersClient.BeginCreate method.
-func (client *VCentersClient) BeginCreate(ctx context.Context, resourceGroupName string, vcenterName string, options *VCentersClientBeginCreateOptions) (VCentersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, vcenterName, options)
-	if err != nil {
-		return VCentersClientCreatePollerResponse{}, err
+func (client *VCentersClient) BeginCreate(ctx context.Context, resourceGroupName string, vcenterName string, options *VCentersClientBeginCreateOptions) (*armruntime.Poller[VCentersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, vcenterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VCentersClientCreateResponse]("VCentersClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VCentersClientCreateResponse]("VCentersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := VCentersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("VCentersClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VCentersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &VCentersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update vCenter.
@@ -130,20 +126,16 @@ func (client *VCentersClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The Resource Group Name.
 // vcenterName - Name of the vCenter.
 // options - VCentersClientBeginDeleteOptions contains the optional parameters for the VCentersClient.BeginDelete method.
-func (client *VCentersClient) BeginDelete(ctx context.Context, resourceGroupName string, vcenterName string, options *VCentersClientBeginDeleteOptions) (VCentersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, vcenterName, options)
-	if err != nil {
-		return VCentersClientDeletePollerResponse{}, err
+func (client *VCentersClient) BeginDelete(ctx context.Context, resourceGroupName string, vcenterName string, options *VCentersClientBeginDeleteOptions) (*armruntime.Poller[VCentersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, vcenterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VCentersClientDeleteResponse]("VCentersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VCentersClientDeleteResponse]("VCentersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VCentersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VCentersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VCentersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VCentersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements vCenter DELETE method.
@@ -250,16 +242,32 @@ func (client *VCentersClient) getHandleResponse(resp *http.Response) (VCentersCl
 // List - List of vCenters in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VCentersClientListOptions contains the optional parameters for the VCentersClient.List method.
-func (client *VCentersClient) List(options *VCentersClientListOptions) *VCentersClientListPager {
-	return &VCentersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VCentersClient) List(options *VCentersClientListOptions) *runtime.Pager[VCentersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VCentersClientListResponse]{
+		More: func(page VCentersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VCentersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VCentersList.NextLink)
+		Fetcher: func(ctx context.Context, page *VCentersClientListResponse) (VCentersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VCentersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VCentersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VCentersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -294,16 +302,32 @@ func (client *VCentersClient) listHandleResponse(resp *http.Response) (VCentersC
 // resourceGroupName - The Resource Group Name.
 // options - VCentersClientListByResourceGroupOptions contains the optional parameters for the VCentersClient.ListByResourceGroup
 // method.
-func (client *VCentersClient) ListByResourceGroup(resourceGroupName string, options *VCentersClientListByResourceGroupOptions) *VCentersClientListByResourceGroupPager {
-	return &VCentersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VCentersClient) ListByResourceGroup(resourceGroupName string, options *VCentersClientListByResourceGroupOptions) *runtime.Pager[VCentersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VCentersClientListByResourceGroupResponse]{
+		More: func(page VCentersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VCentersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VCentersList.NextLink)
+		Fetcher: func(ctx context.Context, page *VCentersClientListByResourceGroupResponse) (VCentersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VCentersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VCentersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VCentersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

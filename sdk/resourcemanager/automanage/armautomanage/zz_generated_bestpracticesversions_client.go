@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -103,13 +103,26 @@ func (client *BestPracticesVersionsClient) getHandleResponse(resp *http.Response
 // bestPracticeName - The Automanage best practice name.
 // options - BestPracticesVersionsClientListByTenantOptions contains the optional parameters for the BestPracticesVersionsClient.ListByTenant
 // method.
-func (client *BestPracticesVersionsClient) ListByTenant(bestPracticeName string, options *BestPracticesVersionsClientListByTenantOptions) *BestPracticesVersionsClientListByTenantPager {
-	return &BestPracticesVersionsClientListByTenantPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTenantCreateRequest(ctx, bestPracticeName, options)
+func (client *BestPracticesVersionsClient) ListByTenant(bestPracticeName string, options *BestPracticesVersionsClientListByTenantOptions) *runtime.Pager[BestPracticesVersionsClientListByTenantResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BestPracticesVersionsClientListByTenantResponse]{
+		More: func(page BestPracticesVersionsClientListByTenantResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BestPracticesVersionsClientListByTenantResponse) (BestPracticesVersionsClientListByTenantResponse, error) {
+			req, err := client.listByTenantCreateRequest(ctx, bestPracticeName, options)
+			if err != nil {
+				return BestPracticesVersionsClientListByTenantResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BestPracticesVersionsClientListByTenantResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BestPracticesVersionsClientListByTenantResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTenantHandleResponse(resp)
+		},
+	})
 }
 
 // listByTenantCreateRequest creates the ListByTenant request.

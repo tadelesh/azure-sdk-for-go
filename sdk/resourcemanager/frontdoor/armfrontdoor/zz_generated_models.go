@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,7 +230,8 @@ type Endpoint struct {
 
 // EndpointsClientBeginPurgeContentOptions contains the optional parameters for the EndpointsClient.BeginPurgeContent method.
 type EndpointsClientBeginPurgeContentOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 type Error struct {
@@ -333,17 +334,20 @@ type ExperimentUpdateProperties struct {
 // ExperimentsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExperimentsClient.BeginCreateOrUpdate
 // method.
 type ExperimentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExperimentsClientBeginDeleteOptions contains the optional parameters for the ExperimentsClient.BeginDelete method.
 type ExperimentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExperimentsClientBeginUpdateOptions contains the optional parameters for the ExperimentsClient.BeginUpdate method.
 type ExperimentsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExperimentsClientGetOptions contains the optional parameters for the ExperimentsClient.Get method.
@@ -399,12 +403,14 @@ type FrontDoor struct {
 // FrontDoorsClientBeginCreateOrUpdateOptions contains the optional parameters for the FrontDoorsClient.BeginCreateOrUpdate
 // method.
 type FrontDoorsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FrontDoorsClientBeginDeleteOptions contains the optional parameters for the FrontDoorsClient.BeginDelete method.
 type FrontDoorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FrontDoorsClientGetOptions contains the optional parameters for the FrontDoorsClient.Get method.
@@ -502,13 +508,15 @@ type FrontendEndpointUpdateParametersWebApplicationFirewallPolicyLink struct {
 // FrontendEndpointsClientBeginDisableHTTPSOptions contains the optional parameters for the FrontendEndpointsClient.BeginDisableHTTPS
 // method.
 type FrontendEndpointsClientBeginDisableHTTPSOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FrontendEndpointsClientBeginEnableHTTPSOptions contains the optional parameters for the FrontendEndpointsClient.BeginEnableHTTPS
 // method.
 type FrontendEndpointsClientBeginEnableHTTPSOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FrontendEndpointsClientGetOptions contains the optional parameters for the FrontendEndpointsClient.Get method.
@@ -953,19 +961,22 @@ type NameAvailabilityWithSubscriptionClientCheckOptions struct {
 // NetworkExperimentProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginCreateOrUpdate
 // method.
 type NetworkExperimentProfilesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NetworkExperimentProfilesClientBeginDeleteOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginDelete
 // method.
 type NetworkExperimentProfilesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NetworkExperimentProfilesClientBeginUpdateOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginUpdate
 // method.
 type NetworkExperimentProfilesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NetworkExperimentProfilesClientGetOptions contains the optional parameters for the NetworkExperimentProfilesClient.Get
@@ -988,12 +999,14 @@ type NetworkExperimentProfilesClientListOptions struct {
 
 // PoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the PoliciesClient.BeginCreateOrUpdate method.
 type PoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoliciesClientBeginDeleteOptions contains the optional parameters for the PoliciesClient.BeginDelete method.
 type PoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoliciesClientGetOptions contains the optional parameters for the PoliciesClient.Get method.
@@ -1449,12 +1462,14 @@ type RulesEngineUpdateParameters struct {
 // RulesEnginesClientBeginCreateOrUpdateOptions contains the optional parameters for the RulesEnginesClient.BeginCreateOrUpdate
 // method.
 type RulesEnginesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RulesEnginesClientBeginDeleteOptions contains the optional parameters for the RulesEnginesClient.BeginDelete method.
 type RulesEnginesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RulesEnginesClientGetOptions contains the optional parameters for the RulesEnginesClient.Get method.

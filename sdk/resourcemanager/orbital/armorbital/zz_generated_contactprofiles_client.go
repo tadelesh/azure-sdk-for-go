@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewContactProfilesClient(subscriptionID string, credential azcore.TokenCred
 // parameters - The parameters to provide for the created Contact Profile.
 // options - ContactProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the ContactProfilesClient.BeginCreateOrUpdate
 // method.
-func (client *ContactProfilesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, contactProfileName string, parameters ContactProfile, options *ContactProfilesClientBeginCreateOrUpdateOptions) (ContactProfilesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, contactProfileName, parameters, options)
-	if err != nil {
-		return ContactProfilesClientCreateOrUpdatePollerResponse{}, err
+func (client *ContactProfilesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, contactProfileName string, parameters ContactProfile, options *ContactProfilesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ContactProfilesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, contactProfileName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContactProfilesClientCreateOrUpdateResponse]("ContactProfilesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContactProfilesClientCreateOrUpdateResponse]("ContactProfilesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ContactProfilesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ContactProfilesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ContactProfilesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ContactProfilesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a contact profile
@@ -121,20 +117,16 @@ func (client *ContactProfilesClient) createOrUpdateCreateRequest(ctx context.Con
 // contactProfileName - Contact Profile Name
 // options - ContactProfilesClientBeginDeleteOptions contains the optional parameters for the ContactProfilesClient.BeginDelete
 // method.
-func (client *ContactProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, contactProfileName string, options *ContactProfilesClientBeginDeleteOptions) (ContactProfilesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, contactProfileName, options)
-	if err != nil {
-		return ContactProfilesClientDeletePollerResponse{}, err
+func (client *ContactProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, contactProfileName string, options *ContactProfilesClientBeginDeleteOptions) (*armruntime.Poller[ContactProfilesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, contactProfileName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContactProfilesClientDeleteResponse]("ContactProfilesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContactProfilesClientDeleteResponse]("ContactProfilesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ContactProfilesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ContactProfilesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ContactProfilesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ContactProfilesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a specified contact profile resource.
@@ -239,13 +231,26 @@ func (client *ContactProfilesClient) getHandleResponse(resp *http.Response) (Con
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ContactProfilesClientListOptions contains the optional parameters for the ContactProfilesClient.List method.
-func (client *ContactProfilesClient) List(resourceGroupName string, options *ContactProfilesClientListOptions) *ContactProfilesClientListPager {
-	return &ContactProfilesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *ContactProfilesClient) List(resourceGroupName string, options *ContactProfilesClientListOptions) *runtime.Pager[ContactProfilesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ContactProfilesClientListResponse]{
+		More: func(page ContactProfilesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ContactProfilesClientListResponse) (ContactProfilesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ContactProfilesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ContactProfilesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ContactProfilesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -283,13 +288,26 @@ func (client *ContactProfilesClient) listHandleResponse(resp *http.Response) (Co
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ContactProfilesClientListBySubscriptionOptions contains the optional parameters for the ContactProfilesClient.ListBySubscription
 // method.
-func (client *ContactProfilesClient) ListBySubscription(options *ContactProfilesClientListBySubscriptionOptions) *ContactProfilesClientListBySubscriptionPager {
-	return &ContactProfilesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ContactProfilesClient) ListBySubscription(options *ContactProfilesClientListBySubscriptionOptions) *runtime.Pager[ContactProfilesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ContactProfilesClientListBySubscriptionResponse]{
+		More: func(page ContactProfilesClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ContactProfilesClientListBySubscriptionResponse) (ContactProfilesClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return ContactProfilesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ContactProfilesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ContactProfilesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

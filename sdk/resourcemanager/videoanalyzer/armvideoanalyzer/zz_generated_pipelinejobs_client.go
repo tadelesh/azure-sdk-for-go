@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewPipelineJobsClient(subscriptionID string, credential azcore.TokenCredent
 // pipelineJobName - The pipeline job name.
 // options - PipelineJobsClientBeginCancelOptions contains the optional parameters for the PipelineJobsClient.BeginCancel
 // method.
-func (client *PipelineJobsClient) BeginCancel(ctx context.Context, resourceGroupName string, accountName string, pipelineJobName string, options *PipelineJobsClientBeginCancelOptions) (PipelineJobsClientCancelPollerResponse, error) {
-	resp, err := client.cancel(ctx, resourceGroupName, accountName, pipelineJobName, options)
-	if err != nil {
-		return PipelineJobsClientCancelPollerResponse{}, err
+func (client *PipelineJobsClient) BeginCancel(ctx context.Context, resourceGroupName string, accountName string, pipelineJobName string, options *PipelineJobsClientBeginCancelOptions) (*armruntime.Poller[PipelineJobsClientCancelResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.cancel(ctx, resourceGroupName, accountName, pipelineJobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PipelineJobsClientCancelResponse]("PipelineJobsClient.Cancel", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PipelineJobsClientCancelResponse]("PipelineJobsClient.Cancel", options.ResumeToken, client.pl, nil)
 	}
-	result := PipelineJobsClientCancelPollerResponse{}
-	pt, err := armruntime.NewPoller("PipelineJobsClient.Cancel", "", resp, client.pl)
-	if err != nil {
-		return PipelineJobsClientCancelPollerResponse{}, err
-	}
-	result.Poller = &PipelineJobsClientCancelPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Cancel - Cancels a pipeline job with the given name.
@@ -299,16 +295,32 @@ func (client *PipelineJobsClient) getHandleResponse(resp *http.Response) (Pipeli
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // accountName - The Azure Video Analyzer account name.
 // options - PipelineJobsClientListOptions contains the optional parameters for the PipelineJobsClient.List method.
-func (client *PipelineJobsClient) List(resourceGroupName string, accountName string, options *PipelineJobsClientListOptions) *PipelineJobsClientListPager {
-	return &PipelineJobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PipelineJobsClient) List(resourceGroupName string, accountName string, options *PipelineJobsClientListOptions) *runtime.Pager[PipelineJobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PipelineJobsClientListResponse]{
+		More: func(page PipelineJobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PipelineJobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PipelineJobCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *PipelineJobsClientListResponse) (PipelineJobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PipelineJobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PipelineJobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PipelineJobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

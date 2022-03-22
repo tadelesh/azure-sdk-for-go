@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewCapacityReservationsClient(subscriptionID string, credential azcore.Toke
 // parameters - Parameters supplied to the Create capacity reservation.
 // options - CapacityReservationsClientBeginCreateOrUpdateOptions contains the optional parameters for the CapacityReservationsClient.BeginCreateOrUpdate
 // method.
-func (client *CapacityReservationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, parameters CapacityReservation, options *CapacityReservationsClientBeginCreateOrUpdateOptions) (CapacityReservationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, parameters, options)
-	if err != nil {
-		return CapacityReservationsClientCreateOrUpdatePollerResponse{}, err
+func (client *CapacityReservationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, parameters CapacityReservation, options *CapacityReservationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CapacityReservationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacityReservationsClientCreateOrUpdateResponse]("CapacityReservationsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacityReservationsClientCreateOrUpdateResponse]("CapacityReservationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacityReservationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacityReservationsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return CapacityReservationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CapacityReservationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The operation to create or update a capacity reservation. Please note some properties can be set only
@@ -134,20 +130,16 @@ func (client *CapacityReservationsClient) createOrUpdateCreateRequest(ctx contex
 // capacityReservationName - The name of the capacity reservation.
 // options - CapacityReservationsClientBeginDeleteOptions contains the optional parameters for the CapacityReservationsClient.BeginDelete
 // method.
-func (client *CapacityReservationsClient) BeginDelete(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, options *CapacityReservationsClientBeginDeleteOptions) (CapacityReservationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, options)
-	if err != nil {
-		return CapacityReservationsClientDeletePollerResponse{}, err
+func (client *CapacityReservationsClient) BeginDelete(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, options *CapacityReservationsClientBeginDeleteOptions) (*armruntime.Poller[CapacityReservationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacityReservationsClientDeleteResponse]("CapacityReservationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacityReservationsClientDeleteResponse]("CapacityReservationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacityReservationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacityReservationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CapacityReservationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CapacityReservationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to delete a capacity reservation. This operation is allowed only when all the associated resources
@@ -270,16 +262,32 @@ func (client *CapacityReservationsClient) getHandleResponse(resp *http.Response)
 // capacityReservationGroupName - The name of the capacity reservation group.
 // options - CapacityReservationsClientListByCapacityReservationGroupOptions contains the optional parameters for the CapacityReservationsClient.ListByCapacityReservationGroup
 // method.
-func (client *CapacityReservationsClient) ListByCapacityReservationGroup(resourceGroupName string, capacityReservationGroupName string, options *CapacityReservationsClientListByCapacityReservationGroupOptions) *CapacityReservationsClientListByCapacityReservationGroupPager {
-	return &CapacityReservationsClientListByCapacityReservationGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByCapacityReservationGroupCreateRequest(ctx, resourceGroupName, capacityReservationGroupName, options)
+func (client *CapacityReservationsClient) ListByCapacityReservationGroup(resourceGroupName string, capacityReservationGroupName string, options *CapacityReservationsClientListByCapacityReservationGroupOptions) *runtime.Pager[CapacityReservationsClientListByCapacityReservationGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapacityReservationsClientListByCapacityReservationGroupResponse]{
+		More: func(page CapacityReservationsClientListByCapacityReservationGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CapacityReservationsClientListByCapacityReservationGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CapacityReservationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CapacityReservationsClientListByCapacityReservationGroupResponse) (CapacityReservationsClientListByCapacityReservationGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByCapacityReservationGroupCreateRequest(ctx, resourceGroupName, capacityReservationGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CapacityReservationsClientListByCapacityReservationGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapacityReservationsClientListByCapacityReservationGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapacityReservationsClientListByCapacityReservationGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByCapacityReservationGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByCapacityReservationGroupCreateRequest creates the ListByCapacityReservationGroup request.
@@ -325,20 +333,16 @@ func (client *CapacityReservationsClient) listByCapacityReservationGroupHandleRe
 // parameters - Parameters supplied to the Update capacity reservation operation.
 // options - CapacityReservationsClientBeginUpdateOptions contains the optional parameters for the CapacityReservationsClient.BeginUpdate
 // method.
-func (client *CapacityReservationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, parameters CapacityReservationUpdate, options *CapacityReservationsClientBeginUpdateOptions) (CapacityReservationsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, parameters, options)
-	if err != nil {
-		return CapacityReservationsClientUpdatePollerResponse{}, err
+func (client *CapacityReservationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, capacityReservationGroupName string, capacityReservationName string, parameters CapacityReservationUpdate, options *CapacityReservationsClientBeginUpdateOptions) (*armruntime.Poller[CapacityReservationsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, capacityReservationGroupName, capacityReservationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CapacityReservationsClientUpdateResponse]("CapacityReservationsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CapacityReservationsClientUpdateResponse]("CapacityReservationsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := CapacityReservationsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CapacityReservationsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return CapacityReservationsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &CapacityReservationsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation to update a capacity reservation.

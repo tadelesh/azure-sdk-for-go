@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,13 +121,26 @@ func (client *ReportsClient) getHandleResponse(resp *http.Response) (ReportsClie
 // vmName - The name of the virtual machine.
 // options - ReportsClientListByConfigurationProfileAssignmentsOptions contains the optional parameters for the ReportsClient.ListByConfigurationProfileAssignments
 // method.
-func (client *ReportsClient) ListByConfigurationProfileAssignments(resourceGroupName string, configurationProfileAssignmentName string, vmName string, options *ReportsClientListByConfigurationProfileAssignmentsOptions) *ReportsClientListByConfigurationProfileAssignmentsPager {
-	return &ReportsClientListByConfigurationProfileAssignmentsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByConfigurationProfileAssignmentsCreateRequest(ctx, resourceGroupName, configurationProfileAssignmentName, vmName, options)
+func (client *ReportsClient) ListByConfigurationProfileAssignments(resourceGroupName string, configurationProfileAssignmentName string, vmName string, options *ReportsClientListByConfigurationProfileAssignmentsOptions) *runtime.Pager[ReportsClientListByConfigurationProfileAssignmentsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReportsClientListByConfigurationProfileAssignmentsResponse]{
+		More: func(page ReportsClientListByConfigurationProfileAssignmentsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ReportsClientListByConfigurationProfileAssignmentsResponse) (ReportsClientListByConfigurationProfileAssignmentsResponse, error) {
+			req, err := client.listByConfigurationProfileAssignmentsCreateRequest(ctx, resourceGroupName, configurationProfileAssignmentName, vmName, options)
+			if err != nil {
+				return ReportsClientListByConfigurationProfileAssignmentsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReportsClientListByConfigurationProfileAssignmentsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReportsClientListByConfigurationProfileAssignmentsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByConfigurationProfileAssignmentsHandleResponse(resp)
+		},
+	})
 }
 
 // listByConfigurationProfileAssignmentsCreateRequest creates the ListByConfigurationProfileAssignments request.

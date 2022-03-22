@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,20 +116,16 @@ func (client *ArcSettingsClient) createHandleResponse(resp *http.Response) (ArcS
 // clusterName - The name of the cluster.
 // arcSettingName - The name of the proxy resource holding details of HCI ArcSetting information.
 // options - ArcSettingsClientBeginDeleteOptions contains the optional parameters for the ArcSettingsClient.BeginDelete method.
-func (client *ArcSettingsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, options *ArcSettingsClientBeginDeleteOptions) (ArcSettingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, arcSettingName, options)
-	if err != nil {
-		return ArcSettingsClientDeletePollerResponse{}, err
+func (client *ArcSettingsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, options *ArcSettingsClientBeginDeleteOptions) (*armruntime.Poller[ArcSettingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, arcSettingName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ArcSettingsClientDeleteResponse]("ArcSettingsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ArcSettingsClientDeleteResponse]("ArcSettingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ArcSettingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ArcSettingsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ArcSettingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ArcSettingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete ArcSetting resource details of HCI Cluster.
@@ -245,16 +241,32 @@ func (client *ArcSettingsClient) getHandleResponse(resp *http.Response) (ArcSett
 // clusterName - The name of the cluster.
 // options - ArcSettingsClientListByClusterOptions contains the optional parameters for the ArcSettingsClient.ListByCluster
 // method.
-func (client *ArcSettingsClient) ListByCluster(resourceGroupName string, clusterName string, options *ArcSettingsClientListByClusterOptions) *ArcSettingsClientListByClusterPager {
-	return &ArcSettingsClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ArcSettingsClient) ListByCluster(resourceGroupName string, clusterName string, options *ArcSettingsClientListByClusterOptions) *runtime.Pager[ArcSettingsClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ArcSettingsClientListByClusterResponse]{
+		More: func(page ArcSettingsClientListByClusterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ArcSettingsClientListByClusterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ArcSettingList.NextLink)
+		Fetcher: func(ctx context.Context, page *ArcSettingsClientListByClusterResponse) (ArcSettingsClientListByClusterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ArcSettingsClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ArcSettingsClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ArcSettingsClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.

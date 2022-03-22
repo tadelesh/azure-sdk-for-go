@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -365,16 +365,32 @@ func (client *ViewsClient) getByScopeHandleResponse(resp *http.Response) (ViewsC
 // List - Lists all views by tenant and object.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ViewsClientListOptions contains the optional parameters for the ViewsClient.List method.
-func (client *ViewsClient) List(options *ViewsClientListOptions) *ViewsClientListPager {
-	return &ViewsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ViewsClient) List(options *ViewsClientListOptions) *runtime.Pager[ViewsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ViewsClientListResponse]{
+		More: func(page ViewsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ViewsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ViewListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ViewsClientListResponse) (ViewsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ViewsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ViewsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ViewsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -416,16 +432,32 @@ func (client *ViewsClient) listHandleResponse(resp *http.Response) (ViewsClientL
 // Billing Account scope and
 // 'providers/Microsoft.CostManagement/externalSubscriptions/{externalSubscriptionName}' for External Subscription scope.
 // options - ViewsClientListByScopeOptions contains the optional parameters for the ViewsClient.ListByScope method.
-func (client *ViewsClient) ListByScope(scope string, options *ViewsClientListByScopeOptions) *ViewsClientListByScopePager {
-	return &ViewsClientListByScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByScopeCreateRequest(ctx, scope, options)
+func (client *ViewsClient) ListByScope(scope string, options *ViewsClientListByScopeOptions) *runtime.Pager[ViewsClientListByScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ViewsClientListByScopeResponse]{
+		More: func(page ViewsClientListByScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ViewsClientListByScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ViewListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ViewsClientListByScopeResponse) (ViewsClientListByScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByScopeCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ViewsClientListByScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ViewsClientListByScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ViewsClientListByScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByScopeCreateRequest creates the ListByScope request.

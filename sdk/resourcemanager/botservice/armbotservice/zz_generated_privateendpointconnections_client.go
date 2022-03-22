@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,13 +230,26 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // resourceName - The name of the Bot resource.
 // options - PrivateEndpointConnectionsClientListOptions contains the optional parameters for the PrivateEndpointConnectionsClient.List
 // method.
-func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsClientListOptions) *PrivateEndpointConnectionsClientListPager {
-	return &PrivateEndpointConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsClientListOptions) *runtime.Pager[PrivateEndpointConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsClientListResponse]{
+		More: func(page PrivateEndpointConnectionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsClientListResponse) (PrivateEndpointConnectionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

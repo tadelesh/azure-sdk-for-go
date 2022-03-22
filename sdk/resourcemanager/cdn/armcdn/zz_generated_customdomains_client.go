@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewCustomDomainsClient(subscriptionID string, credential azcore.TokenCreden
 // customDomainProperties - Properties required to create a new custom domain.
 // options - CustomDomainsClientBeginCreateOptions contains the optional parameters for the CustomDomainsClient.BeginCreate
 // method.
-func (client *CustomDomainsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string, customDomainProperties CustomDomainParameters, options *CustomDomainsClientBeginCreateOptions) (CustomDomainsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, customDomainName, customDomainProperties, options)
-	if err != nil {
-		return CustomDomainsClientCreatePollerResponse{}, err
+func (client *CustomDomainsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string, customDomainProperties CustomDomainParameters, options *CustomDomainsClientBeginCreateOptions) (*armruntime.Poller[CustomDomainsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, customDomainName, customDomainProperties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomDomainsClientCreateResponse]("CustomDomainsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomDomainsClientCreateResponse]("CustomDomainsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomDomainsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomDomainsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return CustomDomainsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &CustomDomainsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new custom domain within an endpoint.
@@ -133,20 +129,16 @@ func (client *CustomDomainsClient) createCreateRequest(ctx context.Context, reso
 // customDomainName - Name of the custom domain within an endpoint.
 // options - CustomDomainsClientBeginDeleteOptions contains the optional parameters for the CustomDomainsClient.BeginDelete
 // method.
-func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string, options *CustomDomainsClientBeginDeleteOptions) (CustomDomainsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, customDomainName, options)
-	if err != nil {
-		return CustomDomainsClientDeletePollerResponse{}, err
+func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string, options *CustomDomainsClientBeginDeleteOptions) (*armruntime.Poller[CustomDomainsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, customDomainName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomDomainsClientDeleteResponse]("CustomDomainsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomDomainsClientDeleteResponse]("CustomDomainsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomDomainsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomDomainsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CustomDomainsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomDomainsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing custom domain within an endpoint.
@@ -407,16 +399,32 @@ func (client *CustomDomainsClient) getHandleResponse(resp *http.Response) (Custo
 // endpointName - Name of the endpoint under the profile which is unique globally.
 // options - CustomDomainsClientListByEndpointOptions contains the optional parameters for the CustomDomainsClient.ListByEndpoint
 // method.
-func (client *CustomDomainsClient) ListByEndpoint(resourceGroupName string, profileName string, endpointName string, options *CustomDomainsClientListByEndpointOptions) *CustomDomainsClientListByEndpointPager {
-	return &CustomDomainsClientListByEndpointPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByEndpointCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+func (client *CustomDomainsClient) ListByEndpoint(resourceGroupName string, profileName string, endpointName string, options *CustomDomainsClientListByEndpointOptions) *runtime.Pager[CustomDomainsClientListByEndpointResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomDomainsClientListByEndpointResponse]{
+		More: func(page CustomDomainsClientListByEndpointResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomDomainsClientListByEndpointResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomDomainListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomDomainsClientListByEndpointResponse) (CustomDomainsClientListByEndpointResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByEndpointCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomDomainsClientListByEndpointResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomDomainsClientListByEndpointResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomDomainsClientListByEndpointResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByEndpointHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByEndpointCreateRequest creates the ListByEndpoint request.

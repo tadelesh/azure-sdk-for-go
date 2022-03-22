@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,16 +121,32 @@ func (client *RecommendedActionsClient) getHandleResponse(resp *http.Response) (
 // advisorName - The advisor name for recommendation action.
 // options - RecommendedActionsClientListByServerOptions contains the optional parameters for the RecommendedActionsClient.ListByServer
 // method.
-func (client *RecommendedActionsClient) ListByServer(resourceGroupName string, serverName string, advisorName string, options *RecommendedActionsClientListByServerOptions) *RecommendedActionsClientListByServerPager {
-	return &RecommendedActionsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, advisorName, options)
+func (client *RecommendedActionsClient) ListByServer(resourceGroupName string, serverName string, advisorName string, options *RecommendedActionsClientListByServerOptions) *runtime.Pager[RecommendedActionsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendedActionsClientListByServerResponse]{
+		More: func(page RecommendedActionsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendedActionsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecommendationActionsResultList.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendedActionsClientListByServerResponse) (RecommendedActionsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, advisorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendedActionsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendedActionsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendedActionsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -51,16 +51,32 @@ func NewUserClassicAccountsClient(credential azcore.TokenCredential, options *ar
 // location - The name of Azure region.
 // options - UserClassicAccountsClientListOptions contains the optional parameters for the UserClassicAccountsClient.List
 // method.
-func (client *UserClassicAccountsClient) List(location string, options *UserClassicAccountsClientListOptions) *UserClassicAccountsClientListPager {
-	return &UserClassicAccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, options)
+func (client *UserClassicAccountsClient) List(location string, options *UserClassicAccountsClientListOptions) *runtime.Pager[UserClassicAccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserClassicAccountsClientListResponse]{
+		More: func(page UserClassicAccountsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserClassicAccountsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserClassicAccountList.NextLink)
+		Fetcher: func(ctx context.Context, page *UserClassicAccountsClientListResponse) (UserClassicAccountsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserClassicAccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserClassicAccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserClassicAccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

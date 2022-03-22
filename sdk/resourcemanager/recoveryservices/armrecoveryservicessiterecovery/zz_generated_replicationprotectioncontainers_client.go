@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -62,20 +62,16 @@ func NewReplicationProtectionContainersClient(resourceName string, resourceGroup
 // creationInput - Creation input.
 // options - ReplicationProtectionContainersClientBeginCreateOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginCreate
 // method.
-func (client *ReplicationProtectionContainersClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, creationInput CreateProtectionContainerInput, options *ReplicationProtectionContainersClientBeginCreateOptions) (ReplicationProtectionContainersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, fabricName, protectionContainerName, creationInput, options)
-	if err != nil {
-		return ReplicationProtectionContainersClientCreatePollerResponse{}, err
+func (client *ReplicationProtectionContainersClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, creationInput CreateProtectionContainerInput, options *ReplicationProtectionContainersClientBeginCreateOptions) (*armruntime.Poller[ReplicationProtectionContainersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, fabricName, protectionContainerName, creationInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainersClientCreateResponse]("ReplicationProtectionContainersClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainersClientCreateResponse]("ReplicationProtectionContainersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Operation to create a protection container.
@@ -135,20 +131,16 @@ func (client *ReplicationProtectionContainersClient) createCreateRequest(ctx con
 // protectionContainerName - Unique protection container ARM name.
 // options - ReplicationProtectionContainersClientBeginDeleteOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginDelete
 // method.
-func (client *ReplicationProtectionContainersClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, options *ReplicationProtectionContainersClientBeginDeleteOptions) (ReplicationProtectionContainersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, options)
-	if err != nil {
-		return ReplicationProtectionContainersClientDeletePollerResponse{}, err
+func (client *ReplicationProtectionContainersClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, options *ReplicationProtectionContainersClientBeginDeleteOptions) (*armruntime.Poller[ReplicationProtectionContainersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainersClientDeleteResponse]("ReplicationProtectionContainersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainersClientDeleteResponse]("ReplicationProtectionContainersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to remove a protection container.
@@ -208,20 +200,16 @@ func (client *ReplicationProtectionContainersClient) deleteCreateRequest(ctx con
 // discoverProtectableItemRequest - The request object to add a protectable item.
 // options - ReplicationProtectionContainersClientBeginDiscoverProtectableItemOptions contains the optional parameters for
 // the ReplicationProtectionContainersClient.BeginDiscoverProtectableItem method.
-func (client *ReplicationProtectionContainersClient) BeginDiscoverProtectableItem(ctx context.Context, fabricName string, protectionContainerName string, discoverProtectableItemRequest DiscoverProtectableItemRequest, options *ReplicationProtectionContainersClientBeginDiscoverProtectableItemOptions) (ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse, error) {
-	resp, err := client.discoverProtectableItem(ctx, fabricName, protectionContainerName, discoverProtectableItemRequest, options)
-	if err != nil {
-		return ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}, err
+func (client *ReplicationProtectionContainersClient) BeginDiscoverProtectableItem(ctx context.Context, fabricName string, protectionContainerName string, discoverProtectableItemRequest DiscoverProtectableItemRequest, options *ReplicationProtectionContainersClientBeginDiscoverProtectableItemOptions) (*armruntime.Poller[ReplicationProtectionContainersClientDiscoverProtectableItemResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.discoverProtectableItem(ctx, fabricName, protectionContainerName, discoverProtectableItemRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainersClientDiscoverProtectableItemResponse]("ReplicationProtectionContainersClient.DiscoverProtectableItem", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainersClientDiscoverProtectableItemResponse]("ReplicationProtectionContainersClient.DiscoverProtectableItem", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.DiscoverProtectableItem", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainersClientDiscoverProtectableItemPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DiscoverProtectableItem - The operation to a add a protectable item to a protection container(Add physical server).
@@ -343,16 +331,32 @@ func (client *ReplicationProtectionContainersClient) getHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationProtectionContainersClientListOptions contains the optional parameters for the ReplicationProtectionContainersClient.List
 // method.
-func (client *ReplicationProtectionContainersClient) List(options *ReplicationProtectionContainersClientListOptions) *ReplicationProtectionContainersClientListPager {
-	return &ReplicationProtectionContainersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationProtectionContainersClient) List(options *ReplicationProtectionContainersClientListOptions) *runtime.Pager[ReplicationProtectionContainersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationProtectionContainersClientListResponse]{
+		More: func(page ReplicationProtectionContainersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationProtectionContainersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectionContainerCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationProtectionContainersClientListResponse) (ReplicationProtectionContainersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationProtectionContainersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationProtectionContainersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationProtectionContainersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -395,16 +399,32 @@ func (client *ReplicationProtectionContainersClient) listHandleResponse(resp *ht
 // fabricName - Fabric name.
 // options - ReplicationProtectionContainersClientListByReplicationFabricsOptions contains the optional parameters for the
 // ReplicationProtectionContainersClient.ListByReplicationFabrics method.
-func (client *ReplicationProtectionContainersClient) ListByReplicationFabrics(fabricName string, options *ReplicationProtectionContainersClientListByReplicationFabricsOptions) *ReplicationProtectionContainersClientListByReplicationFabricsPager {
-	return &ReplicationProtectionContainersClientListByReplicationFabricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+func (client *ReplicationProtectionContainersClient) ListByReplicationFabrics(fabricName string, options *ReplicationProtectionContainersClientListByReplicationFabricsOptions) *runtime.Pager[ReplicationProtectionContainersClientListByReplicationFabricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationProtectionContainersClientListByReplicationFabricsResponse]{
+		More: func(page ReplicationProtectionContainersClientListByReplicationFabricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationProtectionContainersClientListByReplicationFabricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectionContainerCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationProtectionContainersClientListByReplicationFabricsResponse) (ReplicationProtectionContainersClientListByReplicationFabricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationProtectionContainersClientListByReplicationFabricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationProtectionContainersClientListByReplicationFabricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationProtectionContainersClientListByReplicationFabricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationFabricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.
@@ -453,20 +473,16 @@ func (client *ReplicationProtectionContainersClient) listByReplicationFabricsHan
 // switchInput - Switch protection input.
 // options - ReplicationProtectionContainersClientBeginSwitchProtectionOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginSwitchProtection
 // method.
-func (client *ReplicationProtectionContainersClient) BeginSwitchProtection(ctx context.Context, fabricName string, protectionContainerName string, switchInput SwitchProtectionInput, options *ReplicationProtectionContainersClientBeginSwitchProtectionOptions) (ReplicationProtectionContainersClientSwitchProtectionPollerResponse, error) {
-	resp, err := client.switchProtection(ctx, fabricName, protectionContainerName, switchInput, options)
-	if err != nil {
-		return ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}, err
+func (client *ReplicationProtectionContainersClient) BeginSwitchProtection(ctx context.Context, fabricName string, protectionContainerName string, switchInput SwitchProtectionInput, options *ReplicationProtectionContainersClientBeginSwitchProtectionOptions) (*armruntime.Poller[ReplicationProtectionContainersClientSwitchProtectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.switchProtection(ctx, fabricName, protectionContainerName, switchInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationProtectionContainersClientSwitchProtectionResponse]("ReplicationProtectionContainersClient.SwitchProtection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationProtectionContainersClientSwitchProtectionResponse]("ReplicationProtectionContainersClient.SwitchProtection", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.SwitchProtection", "", resp, client.pl)
-	if err != nil {
-		return ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}, err
-	}
-	result.Poller = &ReplicationProtectionContainersClientSwitchProtectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // SwitchProtection - Operation to switch protection from one container to another or one replication provider to another.

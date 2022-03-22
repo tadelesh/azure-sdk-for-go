@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewLocationClient(subscriptionID string, credential azcore.TokenCredential,
 // location - The identifier for the physical azure location.
 // options - LocationClientListCachedImagesOptions contains the optional parameters for the LocationClient.ListCachedImages
 // method.
-func (client *LocationClient) ListCachedImages(location string, options *LocationClientListCachedImagesOptions) *LocationClientListCachedImagesPager {
-	return &LocationClientListCachedImagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCachedImagesCreateRequest(ctx, location, options)
+func (client *LocationClient) ListCachedImages(location string, options *LocationClientListCachedImagesOptions) *runtime.Pager[LocationClientListCachedImagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationClientListCachedImagesResponse]{
+		More: func(page LocationClientListCachedImagesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LocationClientListCachedImagesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CachedImagesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LocationClientListCachedImagesResponse) (LocationClientListCachedImagesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCachedImagesCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LocationClientListCachedImagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationClientListCachedImagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationClientListCachedImagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCachedImagesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCachedImagesCreateRequest creates the ListCachedImages request.
@@ -103,16 +119,32 @@ func (client *LocationClient) listCachedImagesHandleResponse(resp *http.Response
 // location - The identifier for the physical azure location.
 // options - LocationClientListCapabilitiesOptions contains the optional parameters for the LocationClient.ListCapabilities
 // method.
-func (client *LocationClient) ListCapabilities(location string, options *LocationClientListCapabilitiesOptions) *LocationClientListCapabilitiesPager {
-	return &LocationClientListCapabilitiesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCapabilitiesCreateRequest(ctx, location, options)
+func (client *LocationClient) ListCapabilities(location string, options *LocationClientListCapabilitiesOptions) *runtime.Pager[LocationClientListCapabilitiesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationClientListCapabilitiesResponse]{
+		More: func(page LocationClientListCapabilitiesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LocationClientListCapabilitiesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CapabilitiesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LocationClientListCapabilitiesResponse) (LocationClientListCapabilitiesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCapabilitiesCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LocationClientListCapabilitiesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationClientListCapabilitiesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationClientListCapabilitiesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCapabilitiesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCapabilitiesCreateRequest creates the ListCapabilities request.
@@ -150,13 +182,26 @@ func (client *LocationClient) listCapabilitiesHandleResponse(resp *http.Response
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The identifier for the physical azure location.
 // options - LocationClientListUsageOptions contains the optional parameters for the LocationClient.ListUsage method.
-func (client *LocationClient) ListUsage(location string, options *LocationClientListUsageOptions) *LocationClientListUsagePager {
-	return &LocationClientListUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUsageCreateRequest(ctx, location, options)
+func (client *LocationClient) ListUsage(location string, options *LocationClientListUsageOptions) *runtime.Pager[LocationClientListUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationClientListUsageResponse]{
+		More: func(page LocationClientListUsageResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *LocationClientListUsageResponse) (LocationClientListUsageResponse, error) {
+			req, err := client.listUsageCreateRequest(ctx, location, options)
+			if err != nil {
+				return LocationClientListUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationClientListUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationClientListUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUsageHandleResponse(resp)
+		},
+	})
 }
 
 // listUsageCreateRequest creates the ListUsage request.

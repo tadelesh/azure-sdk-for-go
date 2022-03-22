@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -298,16 +298,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // accountName - The Media Services account name.
 // transformName - The Transform name.
 // options - JobsClientListOptions contains the optional parameters for the JobsClient.List method.
-func (client *JobsClient) List(resourceGroupName string, accountName string, transformName string, options *JobsClientListOptions) *JobsClientListPager {
-	return &JobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, transformName, options)
+func (client *JobsClient) List(resourceGroupName string, accountName string, transformName string, options *JobsClientListOptions) *runtime.Pager[JobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListResponse]{
+		More: func(page JobsClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListResponse) (JobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, transformName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

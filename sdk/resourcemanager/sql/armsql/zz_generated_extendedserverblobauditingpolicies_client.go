@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewExtendedServerBlobAuditingPoliciesClient(subscriptionID string, credenti
 // parameters - Properties of extended blob auditing policy
 // options - ExtendedServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the ExtendedServerBlobAuditingPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *ExtendedServerBlobAuditingPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ExtendedServerBlobAuditingPolicy, options *ExtendedServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions) (ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, parameters, options)
-	if err != nil {
-		return ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *ExtendedServerBlobAuditingPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ExtendedServerBlobAuditingPolicy, options *ExtendedServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ExtendedServerBlobAuditingPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtendedServerBlobAuditingPoliciesClientCreateOrUpdateResponse]("ExtendedServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtendedServerBlobAuditingPoliciesClientCreateOrUpdateResponse]("ExtendedServerBlobAuditingPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtendedServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an extended server's blob auditing policy.
@@ -182,16 +178,32 @@ func (client *ExtendedServerBlobAuditingPoliciesClient) getHandleResponse(resp *
 // serverName - The name of the server.
 // options - ExtendedServerBlobAuditingPoliciesClientListByServerOptions contains the optional parameters for the ExtendedServerBlobAuditingPoliciesClient.ListByServer
 // method.
-func (client *ExtendedServerBlobAuditingPoliciesClient) ListByServer(resourceGroupName string, serverName string, options *ExtendedServerBlobAuditingPoliciesClientListByServerOptions) *ExtendedServerBlobAuditingPoliciesClientListByServerPager {
-	return &ExtendedServerBlobAuditingPoliciesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ExtendedServerBlobAuditingPoliciesClient) ListByServer(resourceGroupName string, serverName string, options *ExtendedServerBlobAuditingPoliciesClientListByServerOptions) *runtime.Pager[ExtendedServerBlobAuditingPoliciesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExtendedServerBlobAuditingPoliciesClientListByServerResponse]{
+		More: func(page ExtendedServerBlobAuditingPoliciesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExtendedServerBlobAuditingPoliciesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExtendedServerBlobAuditingPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ExtendedServerBlobAuditingPoliciesClientListByServerResponse) (ExtendedServerBlobAuditingPoliciesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExtendedServerBlobAuditingPoliciesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExtendedServerBlobAuditingPoliciesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExtendedServerBlobAuditingPoliciesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

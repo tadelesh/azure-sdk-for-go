@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -370,12 +370,14 @@ type ConnectorResourceFormat struct {
 // ConnectorsClientBeginCreateOrUpdateOptions contains the optional parameters for the ConnectorsClient.BeginCreateOrUpdate
 // method.
 type ConnectorsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectorsClientBeginDeleteOptions contains the optional parameters for the ConnectorsClient.BeginDelete method.
 type ConnectorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectorsClientGetOptions contains the optional parameters for the ConnectorsClient.Get method.
@@ -636,7 +638,8 @@ type HubPropertiesFormat struct {
 
 // HubsClientBeginDeleteOptions contains the optional parameters for the HubsClient.BeginDelete method.
 type HubsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HubsClientCreateOrUpdateOptions contains the optional parameters for the HubsClient.CreateOrUpdate method.
@@ -790,7 +793,8 @@ type InteractionTypeDefinition struct {
 // InteractionsClientBeginCreateOrUpdateOptions contains the optional parameters for the InteractionsClient.BeginCreateOrUpdate
 // method.
 type InteractionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InteractionsClientGetOptions contains the optional parameters for the InteractionsClient.Get method.
@@ -822,12 +826,14 @@ type KpiAlias struct {
 
 // KpiClientBeginCreateOrUpdateOptions contains the optional parameters for the KpiClient.BeginCreateOrUpdate method.
 type KpiClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KpiClientBeginDeleteOptions contains the optional parameters for the KpiClient.BeginDelete method.
 type KpiClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KpiClientGetOptions contains the optional parameters for the KpiClient.Get method.
@@ -1038,7 +1044,8 @@ type LinkResourceFormat struct {
 
 // LinksClientBeginCreateOrUpdateOptions contains the optional parameters for the LinksClient.BeginCreateOrUpdate method.
 type LinksClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinksClientDeleteOptions contains the optional parameters for the LinksClient.Delete method.
@@ -1357,12 +1364,14 @@ type PredictionTrainingResults struct {
 // PredictionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PredictionsClient.BeginCreateOrUpdate
 // method.
 type PredictionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PredictionsClientBeginDeleteOptions contains the optional parameters for the PredictionsClient.BeginDelete method.
 type PredictionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PredictionsClientGetModelStatusOptions contains the optional parameters for the PredictionsClient.GetModelStatus method.
@@ -1483,13 +1492,16 @@ type ProfileTypeDefinition struct {
 
 // ProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the ProfilesClient.BeginCreateOrUpdate method.
 type ProfilesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientBeginDeleteOptions contains the optional parameters for the ProfilesClient.BeginDelete method.
 type ProfilesClientBeginDeleteOptions struct {
 	// Locale of profile to retrieve, default is en-us.
 	LocaleCode *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientGetEnrichingKpisOptions contains the optional parameters for the ProfilesClient.GetEnrichingKpis method.
@@ -1688,13 +1700,15 @@ type RelationshipLinkResourceFormat struct {
 // RelationshipLinksClientBeginCreateOrUpdateOptions contains the optional parameters for the RelationshipLinksClient.BeginCreateOrUpdate
 // method.
 type RelationshipLinksClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RelationshipLinksClientBeginDeleteOptions contains the optional parameters for the RelationshipLinksClient.BeginDelete
 // method.
 type RelationshipLinksClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RelationshipLinksClientGetOptions contains the optional parameters for the RelationshipLinksClient.Get method.
@@ -1750,12 +1764,14 @@ type RelationshipTypeMapping struct {
 // RelationshipsClientBeginCreateOrUpdateOptions contains the optional parameters for the RelationshipsClient.BeginCreateOrUpdate
 // method.
 type RelationshipsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RelationshipsClientBeginDeleteOptions contains the optional parameters for the RelationshipsClient.BeginDelete method.
 type RelationshipsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RelationshipsClientGetOptions contains the optional parameters for the RelationshipsClient.Get method.
@@ -1912,7 +1928,8 @@ type RoleAssignmentResourceFormat struct {
 // RoleAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the RoleAssignmentsClient.BeginCreateOrUpdate
 // method.
 type RoleAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoleAssignmentsClientDeleteOptions contains the optional parameters for the RoleAssignmentsClient.Delete method.

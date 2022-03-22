@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,13 +52,26 @@ func NewSKUsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // List - Lists the available SKUs supported by Microsoft.Storage for given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SKUsClientListOptions contains the optional parameters for the SKUsClient.List method.
-func (client *SKUsClient) List(options *SKUsClientListOptions) *SKUsClientListPager {
-	return &SKUsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SKUsClient) List(options *SKUsClientListOptions) *runtime.Pager[SKUsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SKUsClientListResponse]{
+		More: func(page SKUsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *SKUsClientListResponse) (SKUsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return SKUsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SKUsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SKUsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

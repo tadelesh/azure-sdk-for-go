@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -72,7 +72,8 @@ type BillingInformation struct {
 
 // CalculateExchangeClientBeginPostOptions contains the optional parameters for the CalculateExchangeClient.BeginPost method.
 type CalculateExchangeClientBeginPostOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CalculateExchangeOperationResultResponse - CalculateExchange operation result
@@ -303,7 +304,8 @@ type ExceptionResponse struct {
 
 // ExchangeClientBeginPostOptions contains the optional parameters for the ExchangeClient.BeginPost method.
 type ExchangeClientBeginPostOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExchangeOperationResultResponse - Exchange operation result
@@ -645,12 +647,14 @@ type PurchaseRequestPropertiesReservedResourceProperties struct {
 
 // QuotaClientBeginCreateOrUpdateOptions contains the optional parameters for the QuotaClient.BeginCreateOrUpdate method.
 type QuotaClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // QuotaClientBeginUpdateOptions contains the optional parameters for the QuotaClient.BeginUpdate method.
 type QuotaClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // QuotaClientGetOptions contains the optional parameters for the QuotaClient.Get method.
@@ -866,22 +870,26 @@ type RenewPropertiesResponsePricingCurrencyTotal struct {
 // ReservationClientBeginAvailableScopesOptions contains the optional parameters for the ReservationClient.BeginAvailableScopes
 // method.
 type ReservationClientBeginAvailableScopesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReservationClientBeginMergeOptions contains the optional parameters for the ReservationClient.BeginMerge method.
 type ReservationClientBeginMergeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReservationClientBeginSplitOptions contains the optional parameters for the ReservationClient.BeginSplit method.
 type ReservationClientBeginSplitOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReservationClientBeginUpdateOptions contains the optional parameters for the ReservationClient.BeginUpdate method.
 type ReservationClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReservationClientGetOptions contains the optional parameters for the ReservationClient.Get method.
@@ -950,7 +958,8 @@ type ReservationOrderBillingPlanInformation struct {
 // ReservationOrderClientBeginPurchaseOptions contains the optional parameters for the ReservationOrderClient.BeginPurchase
 // method.
 type ReservationOrderClientBeginPurchaseOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReservationOrderClientCalculateOptions contains the optional parameters for the ReservationOrderClient.Calculate method.

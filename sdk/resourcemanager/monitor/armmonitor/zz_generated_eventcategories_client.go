@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -47,13 +47,26 @@ func NewEventCategoriesClient(credential azcore.TokenCredential, options *arm.Cl
 // following: Administrative, Security, ServiceHealth, Alert, Recommendation, Policy.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EventCategoriesClientListOptions contains the optional parameters for the EventCategoriesClient.List method.
-func (client *EventCategoriesClient) List(options *EventCategoriesClientListOptions) *EventCategoriesClientListPager {
-	return &EventCategoriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *EventCategoriesClient) List(options *EventCategoriesClientListOptions) *runtime.Pager[EventCategoriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EventCategoriesClientListResponse]{
+		More: func(page EventCategoriesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *EventCategoriesClientListResponse) (EventCategoriesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return EventCategoriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EventCategoriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EventCategoriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

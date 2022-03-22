@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -10,12 +10,14 @@ package armdnc
 
 // ControllerClientBeginCreateOptions contains the optional parameters for the ControllerClient.BeginCreate method.
 type ControllerClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ControllerClientBeginDeleteOptions contains the optional parameters for the ControllerClient.BeginDelete method.
 type ControllerClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ControllerClientGetDetailsOptions contains the optional parameters for the ControllerClient.GetDetails method.
@@ -177,18 +179,22 @@ type DelegatedSubnetResource struct {
 type DelegatedSubnetServiceClientBeginDeleteDetailsOptions struct {
 	// Force delete resource
 	ForceDelete *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DelegatedSubnetServiceClientBeginPatchDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.BeginPatchDetails
 // method.
 type DelegatedSubnetServiceClientBeginPatchDetailsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DelegatedSubnetServiceClientBeginPutDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.BeginPutDetails
 // method.
 type DelegatedSubnetServiceClientBeginPutDetailsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DelegatedSubnetServiceClientGetDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.GetDetails
@@ -348,7 +354,8 @@ type OrchestratorIdentity struct {
 // OrchestratorInstanceServiceClientBeginCreateOptions contains the optional parameters for the OrchestratorInstanceServiceClient.BeginCreate
 // method.
 type OrchestratorInstanceServiceClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OrchestratorInstanceServiceClientBeginDeleteOptions contains the optional parameters for the OrchestratorInstanceServiceClient.BeginDelete
@@ -356,6 +363,8 @@ type OrchestratorInstanceServiceClientBeginCreateOptions struct {
 type OrchestratorInstanceServiceClientBeginDeleteOptions struct {
 	// Force delete resource
 	ForceDelete *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OrchestratorInstanceServiceClientGetDetailsOptions contains the optional parameters for the OrchestratorInstanceServiceClient.GetDetails

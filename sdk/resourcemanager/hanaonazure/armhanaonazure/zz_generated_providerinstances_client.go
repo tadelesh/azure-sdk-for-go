@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewProviderInstancesClient(subscriptionID string, credential azcore.TokenCr
 // providerInstanceParameter - Request body representing a provider instance
 // options - ProviderInstancesClientBeginCreateOptions contains the optional parameters for the ProviderInstancesClient.BeginCreate
 // method.
-func (client *ProviderInstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, sapMonitorName string, providerInstanceName string, providerInstanceParameter ProviderInstance, options *ProviderInstancesClientBeginCreateOptions) (ProviderInstancesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, sapMonitorName, providerInstanceName, providerInstanceParameter, options)
-	if err != nil {
-		return ProviderInstancesClientCreatePollerResponse{}, err
+func (client *ProviderInstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, sapMonitorName string, providerInstanceName string, providerInstanceParameter ProviderInstance, options *ProviderInstancesClientBeginCreateOptions) (*armruntime.Poller[ProviderInstancesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, sapMonitorName, providerInstanceName, providerInstanceParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProviderInstancesClientCreateResponse]("ProviderInstancesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProviderInstancesClientCreateResponse]("ProviderInstancesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ProviderInstancesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ProviderInstancesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ProviderInstancesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ProviderInstancesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a provider instance for the specified subscription, resource group, SapMonitor name, and resource name.
@@ -130,20 +126,16 @@ func (client *ProviderInstancesClient) createCreateRequest(ctx context.Context, 
 // providerInstanceName - Name of the provider instance.
 // options - ProviderInstancesClientBeginDeleteOptions contains the optional parameters for the ProviderInstancesClient.BeginDelete
 // method.
-func (client *ProviderInstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, sapMonitorName string, providerInstanceName string, options *ProviderInstancesClientBeginDeleteOptions) (ProviderInstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sapMonitorName, providerInstanceName, options)
-	if err != nil {
-		return ProviderInstancesClientDeletePollerResponse{}, err
+func (client *ProviderInstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, sapMonitorName string, providerInstanceName string, options *ProviderInstancesClientBeginDeleteOptions) (*armruntime.Poller[ProviderInstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sapMonitorName, providerInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProviderInstancesClientDeleteResponse]("ProviderInstancesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProviderInstancesClientDeleteResponse]("ProviderInstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ProviderInstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ProviderInstancesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ProviderInstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ProviderInstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a provider instance for the specified subscription, resource group, SapMonitor name, and resource name.
@@ -260,16 +252,32 @@ func (client *ProviderInstancesClient) getHandleResponse(resp *http.Response) (P
 // resourceGroupName - Name of the resource group.
 // sapMonitorName - Name of the SAP monitor resource.
 // options - ProviderInstancesClientListOptions contains the optional parameters for the ProviderInstancesClient.List method.
-func (client *ProviderInstancesClient) List(resourceGroupName string, sapMonitorName string, options *ProviderInstancesClientListOptions) *ProviderInstancesClientListPager {
-	return &ProviderInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, sapMonitorName, options)
+func (client *ProviderInstancesClient) List(resourceGroupName string, sapMonitorName string, options *ProviderInstancesClientListOptions) *runtime.Pager[ProviderInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderInstancesClientListResponse]{
+		More: func(page ProviderInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProviderInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderInstancesClientListResponse) (ProviderInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, sapMonitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

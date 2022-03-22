@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -110,20 +110,16 @@ func (client *ServicesClient) checkNameAvailabilityHandleResponse(resp *http.Res
 // resource - Parameters for the create or update operation
 // options - ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate
 // method.
-func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, resource ServiceResource, options *ServicesClientBeginCreateOrUpdateOptions) (ServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, resource, options)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, resource ServiceResource, options *ServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, resource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a new Service or update an exiting Service.
@@ -175,20 +171,16 @@ func (client *ServicesClient) createOrUpdateCreateRequest(ctx context.Context, r
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
-func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginDeleteOptions) (ServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, options)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
+func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginDeleteOptions) (*armruntime.Poller[ServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientDeleteResponse]("ServicesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientDeleteResponse]("ServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete a Service.
@@ -400,16 +392,32 @@ func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesCl
 // resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
 // Resource Manager API or the portal.
 // options - ServicesClientListOptions contains the optional parameters for the ServicesClient.List method.
-func (client *ServicesClient) List(resourceGroupName string, options *ServicesClientListOptions) *ServicesClientListPager {
-	return &ServicesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *ServicesClient) List(resourceGroupName string, options *ServicesClientListOptions) *runtime.Pager[ServicesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListResponse]{
+		More: func(page ServicesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListResponse) (ServicesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -447,16 +455,32 @@ func (client *ServicesClient) listHandleResponse(resp *http.Response) (ServicesC
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServicesClientListBySubscriptionOptions contains the optional parameters for the ServicesClient.ListBySubscription
 // method.
-func (client *ServicesClient) ListBySubscription(options *ServicesClientListBySubscriptionOptions) *ServicesClientListBySubscriptionPager {
-	return &ServicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ServicesClient) ListBySubscription(options *ServicesClientListBySubscriptionOptions) *runtime.Pager[ServicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListBySubscriptionResponse]{
+		More: func(page ServicesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListBySubscriptionResponse) (ServicesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -606,20 +630,16 @@ func (client *ServicesClient) regenerateTestKeyHandleResponse(resp *http.Respons
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - ServicesClientBeginStartOptions contains the optional parameters for the ServicesClient.BeginStart method.
-func (client *ServicesClient) BeginStart(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginStartOptions) (ServicesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, serviceName, options)
-	if err != nil {
-		return ServicesClientStartPollerResponse{}, err
+func (client *ServicesClient) BeginStart(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginStartOptions) (*armruntime.Poller[ServicesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientStartResponse]("ServicesClient.Start", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientStartResponse]("ServicesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Start", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServicesClientStartPollerResponse{}, err
-	}
-	result.Poller = &ServicesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Start a Service.
@@ -671,20 +691,16 @@ func (client *ServicesClient) startCreateRequest(ctx context.Context, resourceGr
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - ServicesClientBeginStopOptions contains the optional parameters for the ServicesClient.BeginStop method.
-func (client *ServicesClient) BeginStop(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginStopOptions) (ServicesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, serviceName, options)
-	if err != nil {
-		return ServicesClientStopPollerResponse{}, err
+func (client *ServicesClient) BeginStop(ctx context.Context, resourceGroupName string, serviceName string, options *ServicesClientBeginStopOptions) (*armruntime.Poller[ServicesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientStopResponse]("ServicesClient.Stop", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientStopResponse]("ServicesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Stop", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServicesClientStopPollerResponse{}, err
-	}
-	result.Poller = &ServicesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stop a Service.
@@ -737,20 +753,16 @@ func (client *ServicesClient) stopCreateRequest(ctx context.Context, resourceGro
 // serviceName - The name of the Service resource.
 // resource - Parameters for the update operation
 // options - ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
-func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, resource ServiceResource, options *ServicesClientBeginUpdateOptions) (ServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serviceName, resource, options)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, resource ServiceResource, options *ServicesClientBeginUpdateOptions) (*armruntime.Poller[ServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serviceName, resource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientUpdateResponse]("ServicesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientUpdateResponse]("ServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update an exiting Service.

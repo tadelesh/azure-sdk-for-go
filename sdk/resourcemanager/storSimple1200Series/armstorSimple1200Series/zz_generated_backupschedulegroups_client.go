@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewBackupScheduleGroupsClient(subscriptionID string, credential azcore.Toke
 // scheduleGroup - The schedule group to be created
 // options - BackupScheduleGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupScheduleGroupsClient.BeginCreateOrUpdate
 // method.
-func (client *BackupScheduleGroupsClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, scheduleGroupName string, resourceGroupName string, managerName string, scheduleGroup BackupScheduleGroup, options *BackupScheduleGroupsClientBeginCreateOrUpdateOptions) (BackupScheduleGroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, scheduleGroupName, resourceGroupName, managerName, scheduleGroup, options)
-	if err != nil {
-		return BackupScheduleGroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *BackupScheduleGroupsClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, scheduleGroupName string, resourceGroupName string, managerName string, scheduleGroup BackupScheduleGroup, options *BackupScheduleGroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BackupScheduleGroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, scheduleGroupName, resourceGroupName, managerName, scheduleGroup, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupScheduleGroupsClientCreateOrUpdateResponse]("BackupScheduleGroupsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupScheduleGroupsClientCreateOrUpdateResponse]("BackupScheduleGroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupScheduleGroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupScheduleGroupsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BackupScheduleGroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupScheduleGroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or Updates the backup schedule Group.
@@ -133,20 +129,16 @@ func (client *BackupScheduleGroupsClient) createOrUpdateCreateRequest(ctx contex
 // managerName - The manager name
 // options - BackupScheduleGroupsClientBeginDeleteOptions contains the optional parameters for the BackupScheduleGroupsClient.BeginDelete
 // method.
-func (client *BackupScheduleGroupsClient) BeginDelete(ctx context.Context, deviceName string, scheduleGroupName string, resourceGroupName string, managerName string, options *BackupScheduleGroupsClientBeginDeleteOptions) (BackupScheduleGroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, scheduleGroupName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupScheduleGroupsClientDeletePollerResponse{}, err
+func (client *BackupScheduleGroupsClient) BeginDelete(ctx context.Context, deviceName string, scheduleGroupName string, resourceGroupName string, managerName string, options *BackupScheduleGroupsClientBeginDeleteOptions) (*armruntime.Poller[BackupScheduleGroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, scheduleGroupName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupScheduleGroupsClientDeleteResponse]("BackupScheduleGroupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupScheduleGroupsClientDeleteResponse]("BackupScheduleGroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupScheduleGroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupScheduleGroupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BackupScheduleGroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupScheduleGroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the backup schedule group.
@@ -273,13 +265,26 @@ func (client *BackupScheduleGroupsClient) getHandleResponse(resp *http.Response)
 // managerName - The manager name
 // options - BackupScheduleGroupsClientListByDeviceOptions contains the optional parameters for the BackupScheduleGroupsClient.ListByDevice
 // method.
-func (client *BackupScheduleGroupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupScheduleGroupsClientListByDeviceOptions) *BackupScheduleGroupsClientListByDevicePager {
-	return &BackupScheduleGroupsClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *BackupScheduleGroupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupScheduleGroupsClientListByDeviceOptions) *runtime.Pager[BackupScheduleGroupsClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupScheduleGroupsClientListByDeviceResponse]{
+		More: func(page BackupScheduleGroupsClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupScheduleGroupsClientListByDeviceResponse) (BackupScheduleGroupsClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return BackupScheduleGroupsClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupScheduleGroupsClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupScheduleGroupsClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDataManagersClient(subscriptionID string, credential azcore.TokenCredent
 // dataManager - Data manager resource details from request body.
 // options - DataManagersClientBeginCreateOptions contains the optional parameters for the DataManagersClient.BeginCreate
 // method.
-func (client *DataManagersClient) BeginCreate(ctx context.Context, resourceGroupName string, dataManagerName string, dataManager DataManager, options *DataManagersClientBeginCreateOptions) (DataManagersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, dataManagerName, dataManager, options)
-	if err != nil {
-		return DataManagersClientCreatePollerResponse{}, err
+func (client *DataManagersClient) BeginCreate(ctx context.Context, resourceGroupName string, dataManagerName string, dataManager DataManager, options *DataManagersClientBeginCreateOptions) (*armruntime.Poller[DataManagersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, dataManagerName, dataManager, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataManagersClientCreateResponse]("DataManagersClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataManagersClientCreateResponse]("DataManagersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := DataManagersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("DataManagersClient.Create", "", resp, client.pl)
-	if err != nil {
-		return DataManagersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &DataManagersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new data manager resource with the specified parameters. Existing resources cannot be updated with this
@@ -125,20 +121,16 @@ func (client *DataManagersClient) createCreateRequest(ctx context.Context, resou
 // 3 and 24 characters in length and use any alphanumeric and underscore only
 // options - DataManagersClientBeginDeleteOptions contains the optional parameters for the DataManagersClient.BeginDelete
 // method.
-func (client *DataManagersClient) BeginDelete(ctx context.Context, resourceGroupName string, dataManagerName string, options *DataManagersClientBeginDeleteOptions) (DataManagersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, dataManagerName, options)
-	if err != nil {
-		return DataManagersClientDeletePollerResponse{}, err
+func (client *DataManagersClient) BeginDelete(ctx context.Context, resourceGroupName string, dataManagerName string, options *DataManagersClientBeginDeleteOptions) (*armruntime.Poller[DataManagersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, dataManagerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataManagersClientDeleteResponse]("DataManagersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataManagersClientDeleteResponse]("DataManagersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DataManagersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DataManagersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DataManagersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DataManagersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a data manager resource in Microsoft Azure.
@@ -242,13 +234,26 @@ func (client *DataManagersClient) getHandleResponse(resp *http.Response) (DataMa
 // List - Lists all the data manager resources available under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DataManagersClientListOptions contains the optional parameters for the DataManagersClient.List method.
-func (client *DataManagersClient) List(options *DataManagersClientListOptions) *DataManagersClientListPager {
-	return &DataManagersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DataManagersClient) List(options *DataManagersClientListOptions) *runtime.Pager[DataManagersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataManagersClientListResponse]{
+		More: func(page DataManagersClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataManagersClientListResponse) (DataManagersClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return DataManagersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataManagersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataManagersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -283,13 +288,26 @@ func (client *DataManagersClient) listHandleResponse(resp *http.Response) (DataM
 // resourceGroupName - The Resource Group Name
 // options - DataManagersClientListByResourceGroupOptions contains the optional parameters for the DataManagersClient.ListByResourceGroup
 // method.
-func (client *DataManagersClient) ListByResourceGroup(resourceGroupName string, options *DataManagersClientListByResourceGroupOptions) *DataManagersClientListByResourceGroupPager {
-	return &DataManagersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DataManagersClient) ListByResourceGroup(resourceGroupName string, options *DataManagersClientListByResourceGroupOptions) *runtime.Pager[DataManagersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataManagersClientListByResourceGroupResponse]{
+		More: func(page DataManagersClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataManagersClientListByResourceGroupResponse) (DataManagersClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return DataManagersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataManagersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataManagersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -331,20 +349,16 @@ func (client *DataManagersClient) listByResourceGroupHandleResponse(resp *http.R
 // dataManagerUpdateParameter - Data manager resource details from request body.
 // options - DataManagersClientBeginUpdateOptions contains the optional parameters for the DataManagersClient.BeginUpdate
 // method.
-func (client *DataManagersClient) BeginUpdate(ctx context.Context, resourceGroupName string, dataManagerName string, dataManagerUpdateParameter DataManagerUpdateParameter, options *DataManagersClientBeginUpdateOptions) (DataManagersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, dataManagerName, dataManagerUpdateParameter, options)
-	if err != nil {
-		return DataManagersClientUpdatePollerResponse{}, err
+func (client *DataManagersClient) BeginUpdate(ctx context.Context, resourceGroupName string, dataManagerName string, dataManagerUpdateParameter DataManagerUpdateParameter, options *DataManagersClientBeginUpdateOptions) (*armruntime.Poller[DataManagersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, dataManagerName, dataManagerUpdateParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DataManagersClientUpdateResponse]("DataManagersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DataManagersClientUpdateResponse]("DataManagersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DataManagersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DataManagersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DataManagersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DataManagersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the properties of an existing data manager resource.

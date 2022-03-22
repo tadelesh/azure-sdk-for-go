@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -348,32 +348,38 @@ type Compute struct {
 
 // ComputeClientBeginCreateOrUpdateOptions contains the optional parameters for the ComputeClient.BeginCreateOrUpdate method.
 type ComputeClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientBeginDeleteOptions contains the optional parameters for the ComputeClient.BeginDelete method.
 type ComputeClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientBeginRestartOptions contains the optional parameters for the ComputeClient.BeginRestart method.
 type ComputeClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientBeginStartOptions contains the optional parameters for the ComputeClient.BeginStart method.
 type ComputeClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientBeginStopOptions contains the optional parameters for the ComputeClient.BeginStop method.
 type ComputeClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientBeginUpdateOptions contains the optional parameters for the ComputeClient.BeginUpdate method.
 type ComputeClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ComputeClientGetOptions contains the optional parameters for the ComputeClient.Get method.
@@ -2224,29 +2230,35 @@ type WorkspaceUpdateParameters struct {
 // WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
 type WorkspacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
 type WorkspacesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginDiagnoseOptions contains the optional parameters for the WorkspacesClient.BeginDiagnose method.
 type WorkspacesClientBeginDiagnoseOptions struct {
 	// The parameter of diagnosing workspace health
 	Parameters *DiagnoseWorkspaceParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginPrepareNotebookOptions contains the optional parameters for the WorkspacesClient.BeginPrepareNotebook
 // method.
 type WorkspacesClientBeginPrepareNotebookOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginResyncKeysOptions contains the optional parameters for the WorkspacesClient.BeginResyncKeys method.
 type WorkspacesClientBeginResyncKeysOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientGetOptions contains the optional parameters for the WorkspacesClient.Get method.

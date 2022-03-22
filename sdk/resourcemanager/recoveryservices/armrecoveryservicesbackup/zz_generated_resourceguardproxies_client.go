@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewResourceGuardProxiesClient(subscriptionID string, credential azcore.Toke
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // options - ResourceGuardProxiesClientGetOptions contains the optional parameters for the ResourceGuardProxiesClient.Get
 // method.
-func (client *ResourceGuardProxiesClient) Get(vaultName string, resourceGroupName string, options *ResourceGuardProxiesClientGetOptions) *ResourceGuardProxiesClientGetPager {
-	return &ResourceGuardProxiesClientGetPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getCreateRequest(ctx, vaultName, resourceGroupName, options)
+func (client *ResourceGuardProxiesClient) Get(vaultName string, resourceGroupName string, options *ResourceGuardProxiesClientGetOptions) *runtime.Pager[ResourceGuardProxiesClientGetResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardProxiesClientGetResponse]{
+		More: func(page ResourceGuardProxiesClientGetResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardProxiesClientGetResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceGuardProxyBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardProxiesClientGetResponse) (ResourceGuardProxiesClientGetResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getCreateRequest(ctx, vaultName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardProxiesClientGetResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardProxiesClientGetResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardProxiesClientGetResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getCreateRequest creates the Get request.

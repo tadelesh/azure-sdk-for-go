@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -102,16 +102,32 @@ func (client *SettingsClient) getHandleResponse(resp *http.Response) (SettingsCl
 // List - Settings about different configurations in security center
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SettingsClientListOptions contains the optional parameters for the SettingsClient.List method.
-func (client *SettingsClient) List(options *SettingsClientListOptions) *SettingsClientListPager {
-	return &SettingsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SettingsClient) List(options *SettingsClientListOptions) *runtime.Pager[SettingsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SettingsClientListResponse]{
+		More: func(page SettingsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SettingsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SettingsList.NextLink)
+		Fetcher: func(ctx context.Context, page *SettingsClientListResponse) (SettingsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SettingsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SettingsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SettingsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

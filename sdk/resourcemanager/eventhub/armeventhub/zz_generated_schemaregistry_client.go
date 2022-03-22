@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,16 +230,32 @@ func (client *SchemaRegistryClient) getHandleResponse(resp *http.Response) (Sche
 // namespaceName - The Namespace name
 // options - SchemaRegistryClientListByNamespaceOptions contains the optional parameters for the SchemaRegistryClient.ListByNamespace
 // method.
-func (client *SchemaRegistryClient) ListByNamespace(resourceGroupName string, namespaceName string, options *SchemaRegistryClientListByNamespaceOptions) *SchemaRegistryClientListByNamespacePager {
-	return &SchemaRegistryClientListByNamespacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *SchemaRegistryClient) ListByNamespace(resourceGroupName string, namespaceName string, options *SchemaRegistryClientListByNamespaceOptions) *runtime.Pager[SchemaRegistryClientListByNamespaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SchemaRegistryClientListByNamespaceResponse]{
+		More: func(page SchemaRegistryClientListByNamespaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SchemaRegistryClientListByNamespaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SchemaGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SchemaRegistryClientListByNamespaceResponse) (SchemaRegistryClientListByNamespaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SchemaRegistryClientListByNamespaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SchemaRegistryClientListByNamespaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SchemaRegistryClientListByNamespaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNamespaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByNamespaceCreateRequest creates the ListByNamespace request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -235,16 +235,32 @@ func (client *EdgeModulesClient) getHandleResponse(resp *http.Response) (EdgeMod
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // accountName - The Azure Video Analyzer account name.
 // options - EdgeModulesClientListOptions contains the optional parameters for the EdgeModulesClient.List method.
-func (client *EdgeModulesClient) List(resourceGroupName string, accountName string, options *EdgeModulesClientListOptions) *EdgeModulesClientListPager {
-	return &EdgeModulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *EdgeModulesClient) List(resourceGroupName string, accountName string, options *EdgeModulesClientListOptions) *runtime.Pager[EdgeModulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EdgeModulesClientListResponse]{
+		More: func(page EdgeModulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EdgeModulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EdgeModuleEntityCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EdgeModulesClientListResponse) (EdgeModulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EdgeModulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EdgeModulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EdgeModulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

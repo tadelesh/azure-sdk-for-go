@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *IntegrationAccountCertificatesClient) getHandleResponse(resp *http
 // integrationAccountName - The integration account name.
 // options - IntegrationAccountCertificatesClientListOptions contains the optional parameters for the IntegrationAccountCertificatesClient.List
 // method.
-func (client *IntegrationAccountCertificatesClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountCertificatesClientListOptions) *IntegrationAccountCertificatesClientListPager {
-	return &IntegrationAccountCertificatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+func (client *IntegrationAccountCertificatesClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountCertificatesClientListOptions) *runtime.Pager[IntegrationAccountCertificatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountCertificatesClientListResponse]{
+		More: func(page IntegrationAccountCertificatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationAccountCertificatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationAccountCertificateListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationAccountCertificatesClientListResponse) (IntegrationAccountCertificatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationAccountCertificatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountCertificatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountCertificatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

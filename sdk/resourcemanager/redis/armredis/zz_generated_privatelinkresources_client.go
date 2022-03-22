@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,13 +56,26 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // cacheName - The name of the Redis cache.
 // options - PrivateLinkResourcesClientListByRedisCacheOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByRedisCache
 // method.
-func (client *PrivateLinkResourcesClient) ListByRedisCache(resourceGroupName string, cacheName string, options *PrivateLinkResourcesClientListByRedisCacheOptions) *PrivateLinkResourcesClientListByRedisCachePager {
-	return &PrivateLinkResourcesClientListByRedisCachePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRedisCacheCreateRequest(ctx, resourceGroupName, cacheName, options)
+func (client *PrivateLinkResourcesClient) ListByRedisCache(resourceGroupName string, cacheName string, options *PrivateLinkResourcesClientListByRedisCacheOptions) *runtime.Pager[PrivateLinkResourcesClientListByRedisCacheResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByRedisCacheResponse]{
+		More: func(page PrivateLinkResourcesClientListByRedisCacheResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByRedisCacheResponse) (PrivateLinkResourcesClientListByRedisCacheResponse, error) {
+			req, err := client.listByRedisCacheCreateRequest(ctx, resourceGroupName, cacheName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListByRedisCacheResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByRedisCacheResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByRedisCacheResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRedisCacheHandleResponse(resp)
+		},
+	})
 }
 
 // listByRedisCacheCreateRequest creates the ListByRedisCache request.

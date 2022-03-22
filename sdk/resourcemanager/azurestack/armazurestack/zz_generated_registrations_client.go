@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -312,16 +312,32 @@ func (client *RegistrationsClient) getActivationKeyHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroup - Name of the resource group.
 // options - RegistrationsClientListOptions contains the optional parameters for the RegistrationsClient.List method.
-func (client *RegistrationsClient) List(resourceGroup string, options *RegistrationsClientListOptions) *RegistrationsClientListPager {
-	return &RegistrationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroup, options)
+func (client *RegistrationsClient) List(resourceGroup string, options *RegistrationsClientListOptions) *runtime.Pager[RegistrationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistrationsClientListResponse]{
+		More: func(page RegistrationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistrationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistrationList.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistrationsClientListResponse) (RegistrationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroup, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistrationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistrationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistrationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -359,16 +375,32 @@ func (client *RegistrationsClient) listHandleResponse(resp *http.Response) (Regi
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RegistrationsClientListBySubscriptionOptions contains the optional parameters for the RegistrationsClient.ListBySubscription
 // method.
-func (client *RegistrationsClient) ListBySubscription(options *RegistrationsClientListBySubscriptionOptions) *RegistrationsClientListBySubscriptionPager {
-	return &RegistrationsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *RegistrationsClient) ListBySubscription(options *RegistrationsClientListBySubscriptionOptions) *runtime.Pager[RegistrationsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistrationsClientListBySubscriptionResponse]{
+		More: func(page RegistrationsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistrationsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistrationList.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistrationsClientListBySubscriptionResponse) (RegistrationsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistrationsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistrationsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistrationsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

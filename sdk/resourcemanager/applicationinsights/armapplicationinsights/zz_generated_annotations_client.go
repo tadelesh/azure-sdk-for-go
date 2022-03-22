@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -222,13 +222,26 @@ func (client *AnnotationsClient) getHandleResponse(resp *http.Response) (Annotat
 // start - The start time to query from for annotations, cannot be older than 90 days from current date.
 // end - The end time to query for annotations.
 // options - AnnotationsClientListOptions contains the optional parameters for the AnnotationsClient.List method.
-func (client *AnnotationsClient) List(resourceGroupName string, resourceName string, start string, end string, options *AnnotationsClientListOptions) *AnnotationsClientListPager {
-	return &AnnotationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, start, end, options)
+func (client *AnnotationsClient) List(resourceGroupName string, resourceName string, start string, end string, options *AnnotationsClientListOptions) *runtime.Pager[AnnotationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AnnotationsClientListResponse]{
+		More: func(page AnnotationsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AnnotationsClientListResponse) (AnnotationsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, start, end, options)
+			if err != nil {
+				return AnnotationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AnnotationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AnnotationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

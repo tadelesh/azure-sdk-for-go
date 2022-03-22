@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -102,16 +102,32 @@ func (client *TopLevelDomainsClient) getHandleResponse(resp *http.Response) (Top
 // List - Description for Get all top-level domains supported for registration.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TopLevelDomainsClientListOptions contains the optional parameters for the TopLevelDomainsClient.List method.
-func (client *TopLevelDomainsClient) List(options *TopLevelDomainsClientListOptions) *TopLevelDomainsClientListPager {
-	return &TopLevelDomainsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *TopLevelDomainsClient) List(options *TopLevelDomainsClientListOptions) *runtime.Pager[TopLevelDomainsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopLevelDomainsClientListResponse]{
+		More: func(page TopLevelDomainsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TopLevelDomainsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TopLevelDomainCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TopLevelDomainsClientListResponse) (TopLevelDomainsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TopLevelDomainsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopLevelDomainsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopLevelDomainsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -147,16 +163,32 @@ func (client *TopLevelDomainsClient) listHandleResponse(resp *http.Response) (To
 // agreementOption - Domain agreement options.
 // options - TopLevelDomainsClientListAgreementsOptions contains the optional parameters for the TopLevelDomainsClient.ListAgreements
 // method.
-func (client *TopLevelDomainsClient) ListAgreements(name string, agreementOption TopLevelDomainAgreementOption, options *TopLevelDomainsClientListAgreementsOptions) *TopLevelDomainsClientListAgreementsPager {
-	return &TopLevelDomainsClientListAgreementsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAgreementsCreateRequest(ctx, name, agreementOption, options)
+func (client *TopLevelDomainsClient) ListAgreements(name string, agreementOption TopLevelDomainAgreementOption, options *TopLevelDomainsClientListAgreementsOptions) *runtime.Pager[TopLevelDomainsClientListAgreementsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TopLevelDomainsClientListAgreementsResponse]{
+		More: func(page TopLevelDomainsClientListAgreementsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TopLevelDomainsClientListAgreementsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TldLegalAgreementCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TopLevelDomainsClientListAgreementsResponse) (TopLevelDomainsClientListAgreementsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAgreementsCreateRequest(ctx, name, agreementOption, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TopLevelDomainsClientListAgreementsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TopLevelDomainsClientListAgreementsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TopLevelDomainsClientListAgreementsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAgreementsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAgreementsCreateRequest creates the ListAgreements request.

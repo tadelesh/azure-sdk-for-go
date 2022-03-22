@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *ViewsClient) getHandleResponse(resp *http.Response) (ViewsClientGe
 // hubName - The name of the hub.
 // userID - The user ID. Use * to retrieve hub level views.
 // options - ViewsClientListByHubOptions contains the optional parameters for the ViewsClient.ListByHub method.
-func (client *ViewsClient) ListByHub(resourceGroupName string, hubName string, userID string, options *ViewsClientListByHubOptions) *ViewsClientListByHubPager {
-	return &ViewsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, userID, options)
+func (client *ViewsClient) ListByHub(resourceGroupName string, hubName string, userID string, options *ViewsClientListByHubOptions) *runtime.Pager[ViewsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ViewsClientListByHubResponse]{
+		More: func(page ViewsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ViewsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ViewListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ViewsClientListByHubResponse) (ViewsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, userID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ViewsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ViewsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ViewsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

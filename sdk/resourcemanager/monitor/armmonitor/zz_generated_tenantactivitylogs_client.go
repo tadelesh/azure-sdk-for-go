@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -49,16 +49,32 @@ func NewTenantActivityLogsClient(credential azcore.TokenCredential, options *arm
 // the logs that were generated at the tenant level.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TenantActivityLogsClientListOptions contains the optional parameters for the TenantActivityLogsClient.List method.
-func (client *TenantActivityLogsClient) List(options *TenantActivityLogsClientListOptions) *TenantActivityLogsClientListPager {
-	return &TenantActivityLogsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *TenantActivityLogsClient) List(options *TenantActivityLogsClientListOptions) *runtime.Pager[TenantActivityLogsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TenantActivityLogsClientListResponse]{
+		More: func(page TenantActivityLogsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TenantActivityLogsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EventDataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TenantActivityLogsClientListResponse) (TenantActivityLogsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TenantActivityLogsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TenantActivityLogsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TenantActivityLogsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

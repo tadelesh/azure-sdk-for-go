@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -51,16 +51,32 @@ func NewPermissionsClient(credential azcore.TokenCredential, options *arm.Client
 // billingAccountName - The ID that uniquely identifies a billing account.
 // options - PermissionsClientListByBillingAccountOptions contains the optional parameters for the PermissionsClient.ListByBillingAccount
 // method.
-func (client *PermissionsClient) ListByBillingAccount(billingAccountName string, options *PermissionsClientListByBillingAccountOptions) *PermissionsClientListByBillingAccountPager {
-	return &PermissionsClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+func (client *PermissionsClient) ListByBillingAccount(billingAccountName string, options *PermissionsClientListByBillingAccountOptions) *runtime.Pager[PermissionsClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PermissionsClientListByBillingAccountResponse]{
+		More: func(page PermissionsClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PermissionsClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PermissionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PermissionsClientListByBillingAccountResponse) (PermissionsClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PermissionsClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PermissionsClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PermissionsClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
@@ -96,16 +112,32 @@ func (client *PermissionsClient) listByBillingAccountHandleResponse(resp *http.R
 // billingProfileName - The ID that uniquely identifies a billing profile.
 // options - PermissionsClientListByBillingProfileOptions contains the optional parameters for the PermissionsClient.ListByBillingProfile
 // method.
-func (client *PermissionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *PermissionsClientListByBillingProfileOptions) *PermissionsClientListByBillingProfilePager {
-	return &PermissionsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+func (client *PermissionsClient) ListByBillingProfile(billingAccountName string, billingProfileName string, options *PermissionsClientListByBillingProfileOptions) *runtime.Pager[PermissionsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PermissionsClientListByBillingProfileResponse]{
+		More: func(page PermissionsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PermissionsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PermissionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PermissionsClientListByBillingProfileResponse) (PermissionsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PermissionsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PermissionsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PermissionsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.
@@ -145,16 +177,32 @@ func (client *PermissionsClient) listByBillingProfileHandleResponse(resp *http.R
 // customerName - The ID that uniquely identifies a customer.
 // options - PermissionsClientListByCustomerOptions contains the optional parameters for the PermissionsClient.ListByCustomer
 // method.
-func (client *PermissionsClient) ListByCustomer(billingAccountName string, customerName string, options *PermissionsClientListByCustomerOptions) *PermissionsClientListByCustomerPager {
-	return &PermissionsClientListByCustomerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByCustomerCreateRequest(ctx, billingAccountName, customerName, options)
+func (client *PermissionsClient) ListByCustomer(billingAccountName string, customerName string, options *PermissionsClientListByCustomerOptions) *runtime.Pager[PermissionsClientListByCustomerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PermissionsClientListByCustomerResponse]{
+		More: func(page PermissionsClientListByCustomerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PermissionsClientListByCustomerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PermissionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PermissionsClientListByCustomerResponse) (PermissionsClientListByCustomerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByCustomerCreateRequest(ctx, billingAccountName, customerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PermissionsClientListByCustomerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PermissionsClientListByCustomerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PermissionsClientListByCustomerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByCustomerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByCustomerCreateRequest creates the ListByCustomer request.
@@ -195,16 +243,32 @@ func (client *PermissionsClient) listByCustomerHandleResponse(resp *http.Respons
 // invoiceSectionName - The ID that uniquely identifies an invoice section.
 // options - PermissionsClientListByInvoiceSectionsOptions contains the optional parameters for the PermissionsClient.ListByInvoiceSections
 // method.
-func (client *PermissionsClient) ListByInvoiceSections(billingAccountName string, billingProfileName string, invoiceSectionName string, options *PermissionsClientListByInvoiceSectionsOptions) *PermissionsClientListByInvoiceSectionsPager {
-	return &PermissionsClientListByInvoiceSectionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInvoiceSectionsCreateRequest(ctx, billingAccountName, billingProfileName, invoiceSectionName, options)
+func (client *PermissionsClient) ListByInvoiceSections(billingAccountName string, billingProfileName string, invoiceSectionName string, options *PermissionsClientListByInvoiceSectionsOptions) *runtime.Pager[PermissionsClientListByInvoiceSectionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PermissionsClientListByInvoiceSectionsResponse]{
+		More: func(page PermissionsClientListByInvoiceSectionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PermissionsClientListByInvoiceSectionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PermissionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PermissionsClientListByInvoiceSectionsResponse) (PermissionsClientListByInvoiceSectionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInvoiceSectionsCreateRequest(ctx, billingAccountName, billingProfileName, invoiceSectionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PermissionsClientListByInvoiceSectionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PermissionsClientListByInvoiceSectionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PermissionsClientListByInvoiceSectionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInvoiceSectionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInvoiceSectionsCreateRequest creates the ListByInvoiceSections request.

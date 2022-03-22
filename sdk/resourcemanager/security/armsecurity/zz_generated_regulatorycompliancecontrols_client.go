@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -110,16 +110,32 @@ func (client *RegulatoryComplianceControlsClient) getHandleResponse(resp *http.R
 // regulatoryComplianceStandardName - Name of the regulatory compliance standard object
 // options - RegulatoryComplianceControlsClientListOptions contains the optional parameters for the RegulatoryComplianceControlsClient.List
 // method.
-func (client *RegulatoryComplianceControlsClient) List(regulatoryComplianceStandardName string, options *RegulatoryComplianceControlsClientListOptions) *RegulatoryComplianceControlsClientListPager {
-	return &RegulatoryComplianceControlsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, regulatoryComplianceStandardName, options)
+func (client *RegulatoryComplianceControlsClient) List(regulatoryComplianceStandardName string, options *RegulatoryComplianceControlsClientListOptions) *runtime.Pager[RegulatoryComplianceControlsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegulatoryComplianceControlsClientListResponse]{
+		More: func(page RegulatoryComplianceControlsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegulatoryComplianceControlsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegulatoryComplianceControlList.NextLink)
+		Fetcher: func(ctx context.Context, page *RegulatoryComplianceControlsClientListResponse) (RegulatoryComplianceControlsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, regulatoryComplianceStandardName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegulatoryComplianceControlsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegulatoryComplianceControlsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegulatoryComplianceControlsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

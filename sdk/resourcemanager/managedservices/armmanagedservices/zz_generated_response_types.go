@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armmanagedservices
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // MarketplaceRegistrationDefinitionsClientGetResponse contains the response from method MarketplaceRegistrationDefinitionsClient.Get.
 type MarketplaceRegistrationDefinitionsClientGetResponse struct {
@@ -39,79 +33,9 @@ type OperationsClientListResponse struct {
 	OperationList
 }
 
-// RegistrationAssignmentsClientCreateOrUpdatePollerResponse contains the response from method RegistrationAssignmentsClient.CreateOrUpdate.
-type RegistrationAssignmentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *RegistrationAssignmentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l RegistrationAssignmentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RegistrationAssignmentsClientCreateOrUpdateResponse, error) {
-	respType := RegistrationAssignmentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RegistrationAssignment)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a RegistrationAssignmentsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *RegistrationAssignmentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *RegistrationAssignmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("RegistrationAssignmentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &RegistrationAssignmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // RegistrationAssignmentsClientCreateOrUpdateResponse contains the response from method RegistrationAssignmentsClient.CreateOrUpdate.
 type RegistrationAssignmentsClientCreateOrUpdateResponse struct {
 	RegistrationAssignment
-}
-
-// RegistrationAssignmentsClientDeletePollerResponse contains the response from method RegistrationAssignmentsClient.Delete.
-type RegistrationAssignmentsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *RegistrationAssignmentsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l RegistrationAssignmentsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RegistrationAssignmentsClientDeleteResponse, error) {
-	respType := RegistrationAssignmentsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a RegistrationAssignmentsClientDeletePollerResponse from the provided client and resume token.
-func (l *RegistrationAssignmentsClientDeletePollerResponse) Resume(ctx context.Context, client *RegistrationAssignmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("RegistrationAssignmentsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &RegistrationAssignmentsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // RegistrationAssignmentsClientDeleteResponse contains the response from method RegistrationAssignmentsClient.Delete.
@@ -127,41 +51,6 @@ type RegistrationAssignmentsClientGetResponse struct {
 // RegistrationAssignmentsClientListResponse contains the response from method RegistrationAssignmentsClient.List.
 type RegistrationAssignmentsClientListResponse struct {
 	RegistrationAssignmentList
-}
-
-// RegistrationDefinitionsClientCreateOrUpdatePollerResponse contains the response from method RegistrationDefinitionsClient.CreateOrUpdate.
-type RegistrationDefinitionsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *RegistrationDefinitionsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l RegistrationDefinitionsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RegistrationDefinitionsClientCreateOrUpdateResponse, error) {
-	respType := RegistrationDefinitionsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RegistrationDefinition)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a RegistrationDefinitionsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *RegistrationDefinitionsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *RegistrationDefinitionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("RegistrationDefinitionsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &RegistrationDefinitionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // RegistrationDefinitionsClientCreateOrUpdateResponse contains the response from method RegistrationDefinitionsClient.CreateOrUpdate.

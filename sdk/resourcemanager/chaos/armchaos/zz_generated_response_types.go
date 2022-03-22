@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armchaos
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // CapabilitiesClientCreateOrUpdateResponse contains the response from method CapabilitiesClient.CreateOrUpdate.
 type CapabilitiesClientCreateOrUpdateResponse struct {
@@ -44,79 +38,9 @@ type CapabilityTypesClientListResponse struct {
 	CapabilityTypeListResult
 }
 
-// ExperimentsClientCancelPollerResponse contains the response from method ExperimentsClient.Cancel.
-type ExperimentsClientCancelPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExperimentsClientCancelPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExperimentsClientCancelPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExperimentsClientCancelResponse, error) {
-	respType := ExperimentsClientCancelResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ExperimentCancelOperationResult)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExperimentsClientCancelPollerResponse from the provided client and resume token.
-func (l *ExperimentsClientCancelPollerResponse) Resume(ctx context.Context, client *ExperimentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExperimentsClient.Cancel", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExperimentsClientCancelPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ExperimentsClientCancelResponse contains the response from method ExperimentsClient.Cancel.
 type ExperimentsClientCancelResponse struct {
 	ExperimentCancelOperationResult
-}
-
-// ExperimentsClientCreateOrUpdatePollerResponse contains the response from method ExperimentsClient.CreateOrUpdate.
-type ExperimentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExperimentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExperimentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExperimentsClientCreateOrUpdateResponse, error) {
-	respType := ExperimentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Experiment)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExperimentsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ExperimentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ExperimentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExperimentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExperimentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ExperimentsClientCreateOrUpdateResponse contains the response from method ExperimentsClient.CreateOrUpdate.

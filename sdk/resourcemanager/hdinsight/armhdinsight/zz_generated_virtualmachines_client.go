@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -174,20 +174,16 @@ func (client *VirtualMachinesClient) listHostsHandleResponse(resp *http.Response
 // hosts - The list of hosts to restart
 // options - VirtualMachinesClientBeginRestartHostsOptions contains the optional parameters for the VirtualMachinesClient.BeginRestartHosts
 // method.
-func (client *VirtualMachinesClient) BeginRestartHosts(ctx context.Context, resourceGroupName string, clusterName string, hosts []*string, options *VirtualMachinesClientBeginRestartHostsOptions) (VirtualMachinesClientRestartHostsPollerResponse, error) {
-	resp, err := client.restartHosts(ctx, resourceGroupName, clusterName, hosts, options)
-	if err != nil {
-		return VirtualMachinesClientRestartHostsPollerResponse{}, err
+func (client *VirtualMachinesClient) BeginRestartHosts(ctx context.Context, resourceGroupName string, clusterName string, hosts []*string, options *VirtualMachinesClientBeginRestartHostsOptions) (*armruntime.Poller[VirtualMachinesClientRestartHostsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restartHosts(ctx, resourceGroupName, clusterName, hosts, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachinesClientRestartHostsResponse]("VirtualMachinesClient.RestartHosts", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachinesClientRestartHostsResponse]("VirtualMachinesClient.RestartHosts", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachinesClientRestartHostsPollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachinesClient.RestartHosts", "location", resp, client.pl)
-	if err != nil {
-		return VirtualMachinesClientRestartHostsPollerResponse{}, err
-	}
-	result.Poller = &VirtualMachinesClientRestartHostsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RestartHosts - Restarts the specified HDInsight cluster hosts.

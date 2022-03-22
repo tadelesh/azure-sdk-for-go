@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -123,16 +123,32 @@ func (client *ReplicationStorageClassificationsClient) getHandleResponse(resp *h
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationStorageClassificationsClientListOptions contains the optional parameters for the ReplicationStorageClassificationsClient.List
 // method.
-func (client *ReplicationStorageClassificationsClient) List(options *ReplicationStorageClassificationsClientListOptions) *ReplicationStorageClassificationsClientListPager {
-	return &ReplicationStorageClassificationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationStorageClassificationsClient) List(options *ReplicationStorageClassificationsClientListOptions) *runtime.Pager[ReplicationStorageClassificationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationStorageClassificationsClientListResponse]{
+		More: func(page ReplicationStorageClassificationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationStorageClassificationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageClassificationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationStorageClassificationsClientListResponse) (ReplicationStorageClassificationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationStorageClassificationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationStorageClassificationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationStorageClassificationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -175,16 +191,32 @@ func (client *ReplicationStorageClassificationsClient) listHandleResponse(resp *
 // fabricName - Site name of interest.
 // options - ReplicationStorageClassificationsClientListByReplicationFabricsOptions contains the optional parameters for the
 // ReplicationStorageClassificationsClient.ListByReplicationFabrics method.
-func (client *ReplicationStorageClassificationsClient) ListByReplicationFabrics(fabricName string, options *ReplicationStorageClassificationsClientListByReplicationFabricsOptions) *ReplicationStorageClassificationsClientListByReplicationFabricsPager {
-	return &ReplicationStorageClassificationsClientListByReplicationFabricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+func (client *ReplicationStorageClassificationsClient) ListByReplicationFabrics(fabricName string, options *ReplicationStorageClassificationsClientListByReplicationFabricsOptions) *runtime.Pager[ReplicationStorageClassificationsClientListByReplicationFabricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationStorageClassificationsClientListByReplicationFabricsResponse]{
+		More: func(page ReplicationStorageClassificationsClientListByReplicationFabricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationStorageClassificationsClientListByReplicationFabricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageClassificationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationStorageClassificationsClientListByReplicationFabricsResponse) (ReplicationStorageClassificationsClientListByReplicationFabricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationStorageClassificationsClientListByReplicationFabricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationStorageClassificationsClientListByReplicationFabricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationStorageClassificationsClientListByReplicationFabricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationFabricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.

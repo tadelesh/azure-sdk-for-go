@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,27 +120,32 @@ type AutoScaleVCoresClientUpdateOptions struct {
 
 // CapacitiesClientBeginCreateOptions contains the optional parameters for the CapacitiesClient.BeginCreate method.
 type CapacitiesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CapacitiesClientBeginDeleteOptions contains the optional parameters for the CapacitiesClient.BeginDelete method.
 type CapacitiesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CapacitiesClientBeginResumeOptions contains the optional parameters for the CapacitiesClient.BeginResume method.
 type CapacitiesClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CapacitiesClientBeginSuspendOptions contains the optional parameters for the CapacitiesClient.BeginSuspend method.
 type CapacitiesClientBeginSuspendOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CapacitiesClientBeginUpdateOptions contains the optional parameters for the CapacitiesClient.BeginUpdate method.
 type CapacitiesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CapacitiesClientCheckNameAvailabilityOptions contains the optional parameters for the CapacitiesClient.CheckNameAvailability

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewVolumesClient(subscriptionID string, credential azcore.TokenCredential, 
 // body - Authorize request object supplied in the body of the operation.
 // options - VolumesClientBeginAuthorizeReplicationOptions contains the optional parameters for the VolumesClient.BeginAuthorizeReplication
 // method.
-func (client *VolumesClient) BeginAuthorizeReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body AuthorizeRequest, options *VolumesClientBeginAuthorizeReplicationOptions) (VolumesClientAuthorizeReplicationPollerResponse, error) {
-	resp, err := client.authorizeReplication(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
-	if err != nil {
-		return VolumesClientAuthorizeReplicationPollerResponse{}, err
+func (client *VolumesClient) BeginAuthorizeReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body AuthorizeRequest, options *VolumesClientBeginAuthorizeReplicationOptions) (*armruntime.Poller[VolumesClientAuthorizeReplicationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.authorizeReplication(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientAuthorizeReplicationResponse]("VolumesClient.AuthorizeReplication", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientAuthorizeReplicationResponse]("VolumesClient.AuthorizeReplication", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientAuthorizeReplicationPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.AuthorizeReplication", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientAuthorizeReplicationPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientAuthorizeReplicationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // AuthorizeReplication - Authorize the replication connection on the source volume
@@ -133,20 +129,16 @@ func (client *VolumesClient) authorizeReplicationCreateRequest(ctx context.Conte
 // volumeName - The name of the volume
 // options - VolumesClientBeginBreakReplicationOptions contains the optional parameters for the VolumesClient.BeginBreakReplication
 // method.
-func (client *VolumesClient) BeginBreakReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginBreakReplicationOptions) (VolumesClientBreakReplicationPollerResponse, error) {
-	resp, err := client.breakReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return VolumesClientBreakReplicationPollerResponse{}, err
+func (client *VolumesClient) BeginBreakReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginBreakReplicationOptions) (*armruntime.Poller[VolumesClientBreakReplicationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.breakReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientBreakReplicationResponse]("VolumesClient.BreakReplication", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientBreakReplicationResponse]("VolumesClient.BreakReplication", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientBreakReplicationPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.BreakReplication", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientBreakReplicationPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientBreakReplicationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // BreakReplication - Break the replication connection on the destination volume
@@ -211,20 +203,16 @@ func (client *VolumesClient) breakReplicationCreateRequest(ctx context.Context, 
 // body - Volume object supplied in the body of the operation.
 // options - VolumesClientBeginCreateOrUpdateOptions contains the optional parameters for the VolumesClient.BeginCreateOrUpdate
 // method.
-func (client *VolumesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body Volume, options *VolumesClientBeginCreateOrUpdateOptions) (VolumesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
-	if err != nil {
-		return VolumesClientCreateOrUpdatePollerResponse{}, err
+func (client *VolumesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body Volume, options *VolumesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VolumesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientCreateOrUpdateResponse]("VolumesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientCreateOrUpdateResponse]("VolumesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VolumesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VolumesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update the specified volume within the capacity pool
@@ -285,20 +273,16 @@ func (client *VolumesClient) createOrUpdateCreateRequest(ctx context.Context, re
 // poolName - The name of the capacity pool
 // volumeName - The name of the volume
 // options - VolumesClientBeginDeleteOptions contains the optional parameters for the VolumesClient.BeginDelete method.
-func (client *VolumesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginDeleteOptions) (VolumesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return VolumesClientDeletePollerResponse{}, err
+func (client *VolumesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginDeleteOptions) (*armruntime.Poller[VolumesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientDeleteResponse]("VolumesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientDeleteResponse]("VolumesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VolumesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified volume
@@ -359,20 +343,16 @@ func (client *VolumesClient) deleteCreateRequest(ctx context.Context, resourceGr
 // volumeName - The name of the volume
 // options - VolumesClientBeginDeleteReplicationOptions contains the optional parameters for the VolumesClient.BeginDeleteReplication
 // method.
-func (client *VolumesClient) BeginDeleteReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginDeleteReplicationOptions) (VolumesClientDeleteReplicationPollerResponse, error) {
-	resp, err := client.deleteReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return VolumesClientDeleteReplicationPollerResponse{}, err
+func (client *VolumesClient) BeginDeleteReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginDeleteReplicationOptions) (*armruntime.Poller[VolumesClientDeleteReplicationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientDeleteReplicationResponse]("VolumesClient.DeleteReplication", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientDeleteReplicationResponse]("VolumesClient.DeleteReplication", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientDeleteReplicationPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.DeleteReplication", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientDeleteReplicationPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientDeleteReplicationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteReplication - Delete the replication connection on the destination volume, and send release to the source replication
@@ -496,16 +476,32 @@ func (client *VolumesClient) getHandleResponse(resp *http.Response) (VolumesClie
 // accountName - The name of the NetApp account
 // poolName - The name of the capacity pool
 // options - VolumesClientListOptions contains the optional parameters for the VolumesClient.List method.
-func (client *VolumesClient) List(resourceGroupName string, accountName string, poolName string, options *VolumesClientListOptions) *VolumesClientListPager {
-	return &VolumesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, options)
+func (client *VolumesClient) List(resourceGroupName string, accountName string, poolName string, options *VolumesClientListOptions) *runtime.Pager[VolumesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumesClientListResponse]{
+		More: func(page VolumesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VolumesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VolumeList.NextLink)
+		Fetcher: func(ctx context.Context, page *VolumesClientListResponse) (VolumesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VolumesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -555,20 +551,16 @@ func (client *VolumesClient) listHandleResponse(resp *http.Response) (VolumesCli
 // volumeName - The name of the volume
 // body - Move volume to the pool supplied in the body of the operation.
 // options - VolumesClientBeginPoolChangeOptions contains the optional parameters for the VolumesClient.BeginPoolChange method.
-func (client *VolumesClient) BeginPoolChange(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body PoolChangeRequest, options *VolumesClientBeginPoolChangeOptions) (VolumesClientPoolChangePollerResponse, error) {
-	resp, err := client.poolChange(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
-	if err != nil {
-		return VolumesClientPoolChangePollerResponse{}, err
+func (client *VolumesClient) BeginPoolChange(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body PoolChangeRequest, options *VolumesClientBeginPoolChangeOptions) (*armruntime.Poller[VolumesClientPoolChangeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.poolChange(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientPoolChangeResponse]("VolumesClient.PoolChange", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientPoolChangeResponse]("VolumesClient.PoolChange", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientPoolChangePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.PoolChange", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientPoolChangePollerResponse{}, err
-	}
-	result.Poller = &VolumesClientPoolChangePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PoolChange - Moves volume to another pool
@@ -629,20 +621,16 @@ func (client *VolumesClient) poolChangeCreateRequest(ctx context.Context, resour
 // volumeName - The name of the volume
 // options - VolumesClientBeginReInitializeReplicationOptions contains the optional parameters for the VolumesClient.BeginReInitializeReplication
 // method.
-func (client *VolumesClient) BeginReInitializeReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginReInitializeReplicationOptions) (VolumesClientReInitializeReplicationPollerResponse, error) {
-	resp, err := client.reInitializeReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return VolumesClientReInitializeReplicationPollerResponse{}, err
+func (client *VolumesClient) BeginReInitializeReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginReInitializeReplicationOptions) (*armruntime.Poller[VolumesClientReInitializeReplicationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.reInitializeReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientReInitializeReplicationResponse]("VolumesClient.ReInitializeReplication", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientReInitializeReplicationResponse]("VolumesClient.ReInitializeReplication", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientReInitializeReplicationPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.ReInitializeReplication", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientReInitializeReplicationPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientReInitializeReplicationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ReInitializeReplication - Re-Initializes the replication connection on the destination volume
@@ -770,20 +758,16 @@ func (client *VolumesClient) replicationStatusHandleResponse(resp *http.Response
 // volumeName - The name of the volume
 // options - VolumesClientBeginResyncReplicationOptions contains the optional parameters for the VolumesClient.BeginResyncReplication
 // method.
-func (client *VolumesClient) BeginResyncReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginResyncReplicationOptions) (VolumesClientResyncReplicationPollerResponse, error) {
-	resp, err := client.resyncReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return VolumesClientResyncReplicationPollerResponse{}, err
+func (client *VolumesClient) BeginResyncReplication(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *VolumesClientBeginResyncReplicationOptions) (*armruntime.Poller[VolumesClientResyncReplicationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resyncReplication(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientResyncReplicationResponse]("VolumesClient.ResyncReplication", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientResyncReplicationResponse]("VolumesClient.ResyncReplication", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientResyncReplicationPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.ResyncReplication", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientResyncReplicationPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientResyncReplicationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ResyncReplication - Resync the connection on the destination volume. If the operation is ran on the source volume it will
@@ -845,20 +829,16 @@ func (client *VolumesClient) resyncReplicationCreateRequest(ctx context.Context,
 // volumeName - The name of the volume
 // body - Object for snapshot to revert supplied in the body of the operation.
 // options - VolumesClientBeginRevertOptions contains the optional parameters for the VolumesClient.BeginRevert method.
-func (client *VolumesClient) BeginRevert(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body VolumeRevert, options *VolumesClientBeginRevertOptions) (VolumesClientRevertPollerResponse, error) {
-	resp, err := client.revert(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
-	if err != nil {
-		return VolumesClientRevertPollerResponse{}, err
+func (client *VolumesClient) BeginRevert(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body VolumeRevert, options *VolumesClientBeginRevertOptions) (*armruntime.Poller[VolumesClientRevertResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.revert(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientRevertResponse]("VolumesClient.Revert", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientRevertResponse]("VolumesClient.Revert", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientRevertPollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.Revert", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientRevertPollerResponse{}, err
-	}
-	result.Poller = &VolumesClientRevertPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Revert - Revert a volume to the snapshot specified in the body
@@ -919,20 +899,16 @@ func (client *VolumesClient) revertCreateRequest(ctx context.Context, resourceGr
 // volumeName - The name of the volume
 // body - Volume object supplied in the body of the operation.
 // options - VolumesClientBeginUpdateOptions contains the optional parameters for the VolumesClient.BeginUpdate method.
-func (client *VolumesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body VolumePatch, options *VolumesClientBeginUpdateOptions) (VolumesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
-	if err != nil {
-		return VolumesClientUpdatePollerResponse{}, err
+func (client *VolumesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, body VolumePatch, options *VolumesClientBeginUpdateOptions) (*armruntime.Poller[VolumesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, poolName, volumeName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumesClientUpdateResponse]("VolumesClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumesClientUpdateResponse]("VolumesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumesClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return VolumesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VolumesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch the specified volume

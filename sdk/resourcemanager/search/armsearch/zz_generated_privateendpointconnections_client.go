@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -186,16 +186,32 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *PrivateEndpointConnectionsClient) ListByService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *PrivateEndpointConnectionsClientListByServicePager {
-	return &PrivateEndpointConnectionsClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+func (client *PrivateEndpointConnectionsClient) ListByService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *runtime.Pager[PrivateEndpointConnectionsClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsClientListByServiceResponse]{
+		More: func(page PrivateEndpointConnectionsClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointConnectionsClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsClientListByServiceResponse) (PrivateEndpointConnectionsClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointConnectionsClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

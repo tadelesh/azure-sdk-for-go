@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -591,31 +591,36 @@ type TrackedResource struct {
 // VirtualMachineImageTemplatesClientBeginCancelOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginCancel
 // method.
 type VirtualMachineImageTemplatesClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineImageTemplatesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginCreateOrUpdate
 // method.
 type VirtualMachineImageTemplatesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineImageTemplatesClientBeginDeleteOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginDelete
 // method.
 type VirtualMachineImageTemplatesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineImageTemplatesClientBeginRunOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginRun
 // method.
 type VirtualMachineImageTemplatesClientBeginRunOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineImageTemplatesClientBeginUpdateOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.BeginUpdate
 // method.
 type VirtualMachineImageTemplatesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachineImageTemplatesClientGetOptions contains the optional parameters for the VirtualMachineImageTemplatesClient.Get

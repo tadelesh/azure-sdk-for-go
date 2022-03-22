@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,20 +120,16 @@ func (client *ProtectionPoliciesClient) createOrUpdateHandleResponse(resp *http.
 // policyName - Backup policy to be deleted.
 // options - ProtectionPoliciesClientBeginDeleteOptions contains the optional parameters for the ProtectionPoliciesClient.BeginDelete
 // method.
-func (client *ProtectionPoliciesClient) BeginDelete(ctx context.Context, vaultName string, resourceGroupName string, policyName string, options *ProtectionPoliciesClientBeginDeleteOptions) (ProtectionPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, vaultName, resourceGroupName, policyName, options)
-	if err != nil {
-		return ProtectionPoliciesClientDeletePollerResponse{}, err
+func (client *ProtectionPoliciesClient) BeginDelete(ctx context.Context, vaultName string, resourceGroupName string, policyName string, options *ProtectionPoliciesClientBeginDeleteOptions) (*armruntime.Poller[ProtectionPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, vaultName, resourceGroupName, policyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProtectionPoliciesClientDeleteResponse]("ProtectionPoliciesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProtectionPoliciesClientDeleteResponse]("ProtectionPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ProtectionPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ProtectionPoliciesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ProtectionPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ProtectionPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes specified backup policy from your Recovery Services Vault. This is an asynchronous operation. Status of

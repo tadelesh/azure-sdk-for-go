@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,16 +115,32 @@ func (client *VirtualNetworksClient) getHandleResponse(resp *http.Response) (Vir
 // pcName - The private cloud name
 // resourcePoolName - Resource pool used to derive vSphere cluster which contains virtual networks
 // options - VirtualNetworksClientListOptions contains the optional parameters for the VirtualNetworksClient.List method.
-func (client *VirtualNetworksClient) List(regionID string, pcName string, resourcePoolName string, options *VirtualNetworksClientListOptions) *VirtualNetworksClientListPager {
-	return &VirtualNetworksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, regionID, pcName, resourcePoolName, options)
+func (client *VirtualNetworksClient) List(regionID string, pcName string, resourcePoolName string, options *VirtualNetworksClientListOptions) *runtime.Pager[VirtualNetworksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualNetworksClientListResponse]{
+		More: func(page VirtualNetworksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualNetworksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualNetworkListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualNetworksClientListResponse) (VirtualNetworksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, regionID, pcName, resourcePoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualNetworksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualNetworksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualNetworksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

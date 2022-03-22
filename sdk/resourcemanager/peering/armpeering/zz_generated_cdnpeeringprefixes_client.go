@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewCdnPeeringPrefixesClient(subscriptionID string, credential azcore.TokenC
 // If the operation fails it returns an *azcore.ResponseError type.
 // peeringLocation - The peering location.
 // options - CdnPeeringPrefixesClientListOptions contains the optional parameters for the CdnPeeringPrefixesClient.List method.
-func (client *CdnPeeringPrefixesClient) List(peeringLocation string, options *CdnPeeringPrefixesClientListOptions) *CdnPeeringPrefixesClientListPager {
-	return &CdnPeeringPrefixesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, peeringLocation, options)
+func (client *CdnPeeringPrefixesClient) List(peeringLocation string, options *CdnPeeringPrefixesClientListOptions) *runtime.Pager[CdnPeeringPrefixesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CdnPeeringPrefixesClientListResponse]{
+		More: func(page CdnPeeringPrefixesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CdnPeeringPrefixesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CdnPeeringPrefixListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CdnPeeringPrefixesClientListResponse) (CdnPeeringPrefixesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, peeringLocation, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CdnPeeringPrefixesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CdnPeeringPrefixesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CdnPeeringPrefixesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

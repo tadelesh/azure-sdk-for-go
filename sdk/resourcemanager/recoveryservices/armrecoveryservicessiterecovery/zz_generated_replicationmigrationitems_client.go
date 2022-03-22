@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -63,20 +63,16 @@ func NewReplicationMigrationItemsClient(resourceName string, resourceGroupName s
 // input - Enable migration input.
 // options - ReplicationMigrationItemsClientBeginCreateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginCreate
 // method.
-func (client *ReplicationMigrationItemsClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input EnableMigrationInput, options *ReplicationMigrationItemsClientBeginCreateOptions) (ReplicationMigrationItemsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientCreatePollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginCreate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input EnableMigrationInput, options *ReplicationMigrationItemsClientBeginCreateOptions) (*armruntime.Poller[ReplicationMigrationItemsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientCreateResponse]("ReplicationMigrationItemsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientCreateResponse]("ReplicationMigrationItemsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - The operation to create an ASR migration item (enable migration).
@@ -141,20 +137,16 @@ func (client *ReplicationMigrationItemsClient) createCreateRequest(ctx context.C
 // migrationItemName - Migration item name.
 // options - ReplicationMigrationItemsClientBeginDeleteOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginDelete
 // method.
-func (client *ReplicationMigrationItemsClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, options *ReplicationMigrationItemsClientBeginDeleteOptions) (ReplicationMigrationItemsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, migrationItemName, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientDeletePollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginDelete(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, options *ReplicationMigrationItemsClientBeginDeleteOptions) (*armruntime.Poller[ReplicationMigrationItemsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, fabricName, protectionContainerName, migrationItemName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientDeleteResponse]("ReplicationMigrationItemsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientDeleteResponse]("ReplicationMigrationItemsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to delete an ASR migration item.
@@ -287,16 +279,32 @@ func (client *ReplicationMigrationItemsClient) getHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationMigrationItemsClientListOptions contains the optional parameters for the ReplicationMigrationItemsClient.List
 // method.
-func (client *ReplicationMigrationItemsClient) List(options *ReplicationMigrationItemsClientListOptions) *ReplicationMigrationItemsClientListPager {
-	return &ReplicationMigrationItemsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationMigrationItemsClient) List(options *ReplicationMigrationItemsClientListOptions) *runtime.Pager[ReplicationMigrationItemsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationMigrationItemsClientListResponse]{
+		More: func(page ReplicationMigrationItemsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationMigrationItemsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MigrationItemCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationMigrationItemsClientListResponse) (ReplicationMigrationItemsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationMigrationItemsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationMigrationItemsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationMigrationItemsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -349,16 +357,32 @@ func (client *ReplicationMigrationItemsClient) listHandleResponse(resp *http.Res
 // protectionContainerName - Protection container name.
 // options - ReplicationMigrationItemsClientListByReplicationProtectionContainersOptions contains the optional parameters
 // for the ReplicationMigrationItemsClient.ListByReplicationProtectionContainers method.
-func (client *ReplicationMigrationItemsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationMigrationItemsClientListByReplicationProtectionContainersOptions) *ReplicationMigrationItemsClientListByReplicationProtectionContainersPager {
-	return &ReplicationMigrationItemsClientListByReplicationProtectionContainersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+func (client *ReplicationMigrationItemsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationMigrationItemsClientListByReplicationProtectionContainersOptions) *runtime.Pager[ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse]{
+		More: func(page ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MigrationItemCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse) (ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationProtectionContainersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationProtectionContainersCreateRequest creates the ListByReplicationProtectionContainers request.
@@ -421,20 +445,16 @@ func (client *ReplicationMigrationItemsClient) listByReplicationProtectionContai
 // migrateInput - Migrate input.
 // options - ReplicationMigrationItemsClientBeginMigrateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginMigrate
 // method.
-func (client *ReplicationMigrationItemsClient) BeginMigrate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, migrateInput MigrateInput, options *ReplicationMigrationItemsClientBeginMigrateOptions) (ReplicationMigrationItemsClientMigratePollerResponse, error) {
-	resp, err := client.migrate(ctx, fabricName, protectionContainerName, migrationItemName, migrateInput, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientMigratePollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginMigrate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, migrateInput MigrateInput, options *ReplicationMigrationItemsClientBeginMigrateOptions) (*armruntime.Poller[ReplicationMigrationItemsClientMigrateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrate(ctx, fabricName, protectionContainerName, migrationItemName, migrateInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientMigrateResponse]("ReplicationMigrationItemsClient.Migrate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientMigrateResponse]("ReplicationMigrationItemsClient.Migrate", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientMigratePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Migrate", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientMigratePollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientMigratePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Migrate - The operation to initiate migration of the item.
@@ -500,20 +520,16 @@ func (client *ReplicationMigrationItemsClient) migrateCreateRequest(ctx context.
 // input - Resync input.
 // options - ReplicationMigrationItemsClientBeginResyncOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginResync
 // method.
-func (client *ReplicationMigrationItemsClient) BeginResync(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input ResyncInput, options *ReplicationMigrationItemsClientBeginResyncOptions) (ReplicationMigrationItemsClientResyncPollerResponse, error) {
-	resp, err := client.resync(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientResyncPollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginResync(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input ResyncInput, options *ReplicationMigrationItemsClientBeginResyncOptions) (*armruntime.Poller[ReplicationMigrationItemsClientResyncResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resync(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientResyncResponse]("ReplicationMigrationItemsClient.Resync", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientResyncResponse]("ReplicationMigrationItemsClient.Resync", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientResyncPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Resync", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientResyncPollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientResyncPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resync - The operation to resynchronize replication of an ASR migration item.
@@ -579,20 +595,16 @@ func (client *ReplicationMigrationItemsClient) resyncCreateRequest(ctx context.C
 // testMigrateInput - Test migrate input.
 // options - ReplicationMigrationItemsClientBeginTestMigrateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginTestMigrate
 // method.
-func (client *ReplicationMigrationItemsClient) BeginTestMigrate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, testMigrateInput TestMigrateInput, options *ReplicationMigrationItemsClientBeginTestMigrateOptions) (ReplicationMigrationItemsClientTestMigratePollerResponse, error) {
-	resp, err := client.testMigrate(ctx, fabricName, protectionContainerName, migrationItemName, testMigrateInput, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientTestMigratePollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginTestMigrate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, testMigrateInput TestMigrateInput, options *ReplicationMigrationItemsClientBeginTestMigrateOptions) (*armruntime.Poller[ReplicationMigrationItemsClientTestMigrateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.testMigrate(ctx, fabricName, protectionContainerName, migrationItemName, testMigrateInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientTestMigrateResponse]("ReplicationMigrationItemsClient.TestMigrate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientTestMigrateResponse]("ReplicationMigrationItemsClient.TestMigrate", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientTestMigratePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.TestMigrate", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientTestMigratePollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientTestMigratePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TestMigrate - The operation to initiate test migration of the item.
@@ -658,20 +670,16 @@ func (client *ReplicationMigrationItemsClient) testMigrateCreateRequest(ctx cont
 // testMigrateCleanupInput - Test migrate cleanup input.
 // options - ReplicationMigrationItemsClientBeginTestMigrateCleanupOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginTestMigrateCleanup
 // method.
-func (client *ReplicationMigrationItemsClient) BeginTestMigrateCleanup(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, testMigrateCleanupInput TestMigrateCleanupInput, options *ReplicationMigrationItemsClientBeginTestMigrateCleanupOptions) (ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse, error) {
-	resp, err := client.testMigrateCleanup(ctx, fabricName, protectionContainerName, migrationItemName, testMigrateCleanupInput, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginTestMigrateCleanup(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, testMigrateCleanupInput TestMigrateCleanupInput, options *ReplicationMigrationItemsClientBeginTestMigrateCleanupOptions) (*armruntime.Poller[ReplicationMigrationItemsClientTestMigrateCleanupResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.testMigrateCleanup(ctx, fabricName, protectionContainerName, migrationItemName, testMigrateCleanupInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientTestMigrateCleanupResponse]("ReplicationMigrationItemsClient.TestMigrateCleanup", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientTestMigrateCleanupResponse]("ReplicationMigrationItemsClient.TestMigrateCleanup", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.TestMigrateCleanup", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientTestMigrateCleanupPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // TestMigrateCleanup - The operation to initiate test migrate cleanup.
@@ -737,20 +745,16 @@ func (client *ReplicationMigrationItemsClient) testMigrateCleanupCreateRequest(c
 // input - Update migration item input.
 // options - ReplicationMigrationItemsClientBeginUpdateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginUpdate
 // method.
-func (client *ReplicationMigrationItemsClient) BeginUpdate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input UpdateMigrationItemInput, options *ReplicationMigrationItemsClientBeginUpdateOptions) (ReplicationMigrationItemsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
-	if err != nil {
-		return ReplicationMigrationItemsClientUpdatePollerResponse{}, err
+func (client *ReplicationMigrationItemsClient) BeginUpdate(ctx context.Context, fabricName string, protectionContainerName string, migrationItemName string, input UpdateMigrationItemInput, options *ReplicationMigrationItemsClientBeginUpdateOptions) (*armruntime.Poller[ReplicationMigrationItemsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, fabricName, protectionContainerName, migrationItemName, input, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationMigrationItemsClientUpdateResponse]("ReplicationMigrationItemsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationMigrationItemsClientUpdateResponse]("ReplicationMigrationItemsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationMigrationItemsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ReplicationMigrationItemsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationMigrationItemsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation to update the recovery settings of an ASR migration item.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -210,16 +210,32 @@ func (client *CertificatesClient) getHandleResponse(resp *http.Response) (Certif
 // List - Description for Get all certificates for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CertificatesClientListOptions contains the optional parameters for the CertificatesClient.List method.
-func (client *CertificatesClient) List(options *CertificatesClientListOptions) *CertificatesClientListPager {
-	return &CertificatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *CertificatesClient) List(options *CertificatesClientListOptions) *runtime.Pager[CertificatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CertificatesClientListResponse]{
+		More: func(page CertificatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CertificatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppCertificateCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CertificatesClientListResponse) (CertificatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CertificatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CertificatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CertificatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -259,16 +275,32 @@ func (client *CertificatesClient) listHandleResponse(resp *http.Response) (Certi
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - CertificatesClientListByResourceGroupOptions contains the optional parameters for the CertificatesClient.ListByResourceGroup
 // method.
-func (client *CertificatesClient) ListByResourceGroup(resourceGroupName string, options *CertificatesClientListByResourceGroupOptions) *CertificatesClientListByResourceGroupPager {
-	return &CertificatesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CertificatesClient) ListByResourceGroup(resourceGroupName string, options *CertificatesClientListByResourceGroupOptions) *runtime.Pager[CertificatesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CertificatesClientListByResourceGroupResponse]{
+		More: func(page CertificatesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CertificatesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppCertificateCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CertificatesClientListByResourceGroupResponse) (CertificatesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CertificatesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CertificatesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CertificatesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

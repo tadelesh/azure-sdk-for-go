@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,16 +52,32 @@ func NewEventsClient(credential azcore.TokenCredential, options *arm.ClientOptio
 // billingAccountID - BillingAccount ID
 // options - EventsClientListByBillingAccountOptions contains the optional parameters for the EventsClient.ListByBillingAccount
 // method.
-func (client *EventsClient) ListByBillingAccount(billingAccountID string, options *EventsClientListByBillingAccountOptions) *EventsClientListByBillingAccountPager {
-	return &EventsClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountID, options)
+func (client *EventsClient) ListByBillingAccount(billingAccountID string, options *EventsClientListByBillingAccountOptions) *runtime.Pager[EventsClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EventsClientListByBillingAccountResponse]{
+		More: func(page EventsClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EventsClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Events.NextLink)
+		Fetcher: func(ctx context.Context, page *EventsClientListByBillingAccountResponse) (EventsClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EventsClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EventsClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EventsClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
@@ -103,16 +119,32 @@ func (client *EventsClient) listByBillingAccountHandleResponse(resp *http.Respon
 // endDate - End date
 // options - EventsClientListByBillingProfileOptions contains the optional parameters for the EventsClient.ListByBillingProfile
 // method.
-func (client *EventsClient) ListByBillingProfile(billingAccountID string, billingProfileID string, startDate string, endDate string, options *EventsClientListByBillingProfileOptions) *EventsClientListByBillingProfilePager {
-	return &EventsClientListByBillingProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingProfileCreateRequest(ctx, billingAccountID, billingProfileID, startDate, endDate, options)
+func (client *EventsClient) ListByBillingProfile(billingAccountID string, billingProfileID string, startDate string, endDate string, options *EventsClientListByBillingProfileOptions) *runtime.Pager[EventsClientListByBillingProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EventsClientListByBillingProfileResponse]{
+		More: func(page EventsClientListByBillingProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EventsClientListByBillingProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Events.NextLink)
+		Fetcher: func(ctx context.Context, page *EventsClientListByBillingProfileResponse) (EventsClientListByBillingProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingProfileCreateRequest(ctx, billingAccountID, billingProfileID, startDate, endDate, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EventsClientListByBillingProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EventsClientListByBillingProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EventsClientListByBillingProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.

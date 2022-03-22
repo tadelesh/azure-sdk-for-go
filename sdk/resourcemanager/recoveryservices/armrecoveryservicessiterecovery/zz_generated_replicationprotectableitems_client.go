@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -130,16 +130,32 @@ func (client *ReplicationProtectableItemsClient) getHandleResponse(resp *http.Re
 // protectionContainerName - Protection container name.
 // options - ReplicationProtectableItemsClientListByReplicationProtectionContainersOptions contains the optional parameters
 // for the ReplicationProtectableItemsClient.ListByReplicationProtectionContainers method.
-func (client *ReplicationProtectableItemsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationProtectableItemsClientListByReplicationProtectionContainersOptions) *ReplicationProtectableItemsClientListByReplicationProtectionContainersPager {
-	return &ReplicationProtectableItemsClientListByReplicationProtectionContainersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+func (client *ReplicationProtectableItemsClient) ListByReplicationProtectionContainers(fabricName string, protectionContainerName string, options *ReplicationProtectableItemsClientListByReplicationProtectionContainersOptions) *runtime.Pager[ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse]{
+		More: func(page ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectableItemCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse) (ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationProtectionContainersCreateRequest(ctx, fabricName, protectionContainerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationProtectionContainersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationProtectionContainersCreateRequest creates the ListByReplicationProtectionContainers request.

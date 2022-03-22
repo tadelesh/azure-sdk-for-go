@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,16 +213,32 @@ func (client *ActivityLogAlertsClient) getHandleResponse(resp *http.Response) (A
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ActivityLogAlertsClientListByResourceGroupOptions contains the optional parameters for the ActivityLogAlertsClient.ListByResourceGroup
 // method.
-func (client *ActivityLogAlertsClient) ListByResourceGroup(resourceGroupName string, options *ActivityLogAlertsClientListByResourceGroupOptions) *ActivityLogAlertsClientListByResourceGroupPager {
-	return &ActivityLogAlertsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ActivityLogAlertsClient) ListByResourceGroup(resourceGroupName string, options *ActivityLogAlertsClientListByResourceGroupOptions) *runtime.Pager[ActivityLogAlertsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActivityLogAlertsClientListByResourceGroupResponse]{
+		More: func(page ActivityLogAlertsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ActivityLogAlertsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertRuleList.NextLink)
+		Fetcher: func(ctx context.Context, page *ActivityLogAlertsClientListByResourceGroupResponse) (ActivityLogAlertsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ActivityLogAlertsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActivityLogAlertsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActivityLogAlertsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -260,16 +276,32 @@ func (client *ActivityLogAlertsClient) listByResourceGroupHandleResponse(resp *h
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ActivityLogAlertsClientListBySubscriptionIDOptions contains the optional parameters for the ActivityLogAlertsClient.ListBySubscriptionID
 // method.
-func (client *ActivityLogAlertsClient) ListBySubscriptionID(options *ActivityLogAlertsClientListBySubscriptionIDOptions) *ActivityLogAlertsClientListBySubscriptionIDPager {
-	return &ActivityLogAlertsClientListBySubscriptionIDPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionIDCreateRequest(ctx, options)
+func (client *ActivityLogAlertsClient) ListBySubscriptionID(options *ActivityLogAlertsClientListBySubscriptionIDOptions) *runtime.Pager[ActivityLogAlertsClientListBySubscriptionIDResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActivityLogAlertsClientListBySubscriptionIDResponse]{
+		More: func(page ActivityLogAlertsClientListBySubscriptionIDResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ActivityLogAlertsClientListBySubscriptionIDResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertRuleList.NextLink)
+		Fetcher: func(ctx context.Context, page *ActivityLogAlertsClientListBySubscriptionIDResponse) (ActivityLogAlertsClientListBySubscriptionIDResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionIDCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ActivityLogAlertsClientListBySubscriptionIDResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActivityLogAlertsClientListBySubscriptionIDResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActivityLogAlertsClientListBySubscriptionIDResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionIDHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionIDCreateRequest creates the ListBySubscriptionID request.

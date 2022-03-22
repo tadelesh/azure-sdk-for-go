@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -122,16 +122,32 @@ func (client *ReplicationNetworksClient) getHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationNetworksClientListOptions contains the optional parameters for the ReplicationNetworksClient.List
 // method.
-func (client *ReplicationNetworksClient) List(options *ReplicationNetworksClientListOptions) *ReplicationNetworksClientListPager {
-	return &ReplicationNetworksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationNetworksClient) List(options *ReplicationNetworksClientListOptions) *runtime.Pager[ReplicationNetworksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationNetworksClientListResponse]{
+		More: func(page ReplicationNetworksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationNetworksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationNetworksClientListResponse) (ReplicationNetworksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationNetworksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationNetworksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationNetworksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -174,16 +190,32 @@ func (client *ReplicationNetworksClient) listHandleResponse(resp *http.Response)
 // fabricName - Fabric name.
 // options - ReplicationNetworksClientListByReplicationFabricsOptions contains the optional parameters for the ReplicationNetworksClient.ListByReplicationFabrics
 // method.
-func (client *ReplicationNetworksClient) ListByReplicationFabrics(fabricName string, options *ReplicationNetworksClientListByReplicationFabricsOptions) *ReplicationNetworksClientListByReplicationFabricsPager {
-	return &ReplicationNetworksClientListByReplicationFabricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+func (client *ReplicationNetworksClient) ListByReplicationFabrics(fabricName string, options *ReplicationNetworksClientListByReplicationFabricsOptions) *runtime.Pager[ReplicationNetworksClientListByReplicationFabricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationNetworksClientListByReplicationFabricsResponse]{
+		More: func(page ReplicationNetworksClientListByReplicationFabricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationNetworksClientListByReplicationFabricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationNetworksClientListByReplicationFabricsResponse) (ReplicationNetworksClientListByReplicationFabricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationNetworksClientListByReplicationFabricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationNetworksClientListByReplicationFabricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationNetworksClientListByReplicationFabricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationFabricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.

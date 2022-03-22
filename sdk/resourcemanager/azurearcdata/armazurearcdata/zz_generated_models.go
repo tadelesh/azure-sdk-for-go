@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -98,13 +98,15 @@ type DataControllerUpdate struct {
 // DataControllersClientBeginDeleteDataControllerOptions contains the optional parameters for the DataControllersClient.BeginDeleteDataController
 // method.
 type DataControllersClientBeginDeleteDataControllerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataControllersClientBeginPutDataControllerOptions contains the optional parameters for the DataControllersClient.BeginPutDataController
 // method.
 type DataControllersClientBeginPutDataControllerOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataControllersClientGetDataControllerOptions contains the optional parameters for the DataControllersClient.GetDataController
@@ -409,13 +411,15 @@ type SQLManagedInstanceUpdate struct {
 // SQLManagedInstancesClientBeginCreateOptions contains the optional parameters for the SQLManagedInstancesClient.BeginCreate
 // method.
 type SQLManagedInstancesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLManagedInstancesClientBeginDeleteOptions contains the optional parameters for the SQLManagedInstancesClient.BeginDelete
 // method.
 type SQLManagedInstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLManagedInstancesClientGetOptions contains the optional parameters for the SQLManagedInstancesClient.Get method.
@@ -535,13 +539,15 @@ type SQLServerInstanceUpdate struct {
 // SQLServerInstancesClientBeginCreateOptions contains the optional parameters for the SQLServerInstancesClient.BeginCreate
 // method.
 type SQLServerInstancesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLServerInstancesClientBeginDeleteOptions contains the optional parameters for the SQLServerInstancesClient.BeginDelete
 // method.
 type SQLServerInstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLServerInstancesClientGetOptions contains the optional parameters for the SQLServerInstancesClient.Get method.

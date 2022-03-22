@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -186,32 +186,38 @@ type DiskPoolZonesClientListOptions struct {
 // DiskPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the DiskPoolsClient.BeginCreateOrUpdate
 // method.
 type DiskPoolsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientBeginDeallocateOptions contains the optional parameters for the DiskPoolsClient.BeginDeallocate method.
 type DiskPoolsClientBeginDeallocateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientBeginDeleteOptions contains the optional parameters for the DiskPoolsClient.BeginDelete method.
 type DiskPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientBeginStartOptions contains the optional parameters for the DiskPoolsClient.BeginStart method.
 type DiskPoolsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientBeginUpdateOptions contains the optional parameters for the DiskPoolsClient.BeginUpdate method.
 type DiskPoolsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientBeginUpgradeOptions contains the optional parameters for the DiskPoolsClient.BeginUpgrade method.
 type DiskPoolsClientBeginUpgradeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DiskPoolsClientGetOptions contains the optional parameters for the DiskPoolsClient.Get method.
@@ -438,17 +444,20 @@ type IscsiTargetUpdateProperties struct {
 // IscsiTargetsClientBeginCreateOrUpdateOptions contains the optional parameters for the IscsiTargetsClient.BeginCreateOrUpdate
 // method.
 type IscsiTargetsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IscsiTargetsClientBeginDeleteOptions contains the optional parameters for the IscsiTargetsClient.BeginDelete method.
 type IscsiTargetsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IscsiTargetsClientBeginUpdateOptions contains the optional parameters for the IscsiTargetsClient.BeginUpdate method.
 type IscsiTargetsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IscsiTargetsClientGetOptions contains the optional parameters for the IscsiTargetsClient.Get method.

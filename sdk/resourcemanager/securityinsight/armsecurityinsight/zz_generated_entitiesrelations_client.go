@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,16 +56,32 @@ func NewEntitiesRelationsClient(subscriptionID string, credential azcore.TokenCr
 // workspaceName - The name of the workspace.
 // entityID - entity ID
 // options - EntitiesRelationsClientListOptions contains the optional parameters for the EntitiesRelationsClient.List method.
-func (client *EntitiesRelationsClient) List(resourceGroupName string, workspaceName string, entityID string, options *EntitiesRelationsClientListOptions) *EntitiesRelationsClientListPager {
-	return &EntitiesRelationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, entityID, options)
+func (client *EntitiesRelationsClient) List(resourceGroupName string, workspaceName string, entityID string, options *EntitiesRelationsClientListOptions) *runtime.Pager[EntitiesRelationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EntitiesRelationsClientListResponse]{
+		More: func(page EntitiesRelationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EntitiesRelationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RelationList.NextLink)
+		Fetcher: func(ctx context.Context, page *EntitiesRelationsClientListResponse) (EntitiesRelationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, entityID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EntitiesRelationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EntitiesRelationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EntitiesRelationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

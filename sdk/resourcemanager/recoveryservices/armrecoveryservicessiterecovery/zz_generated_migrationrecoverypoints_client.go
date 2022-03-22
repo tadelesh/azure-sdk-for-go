@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -136,16 +136,32 @@ func (client *MigrationRecoveryPointsClient) getHandleResponse(resp *http.Respon
 // migrationItemName - Migration item name.
 // options - MigrationRecoveryPointsClientListByReplicationMigrationItemsOptions contains the optional parameters for the
 // MigrationRecoveryPointsClient.ListByReplicationMigrationItems method.
-func (client *MigrationRecoveryPointsClient) ListByReplicationMigrationItems(fabricName string, protectionContainerName string, migrationItemName string, options *MigrationRecoveryPointsClientListByReplicationMigrationItemsOptions) *MigrationRecoveryPointsClientListByReplicationMigrationItemsPager {
-	return &MigrationRecoveryPointsClientListByReplicationMigrationItemsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationMigrationItemsCreateRequest(ctx, fabricName, protectionContainerName, migrationItemName, options)
+func (client *MigrationRecoveryPointsClient) ListByReplicationMigrationItems(fabricName string, protectionContainerName string, migrationItemName string, options *MigrationRecoveryPointsClientListByReplicationMigrationItemsOptions) *runtime.Pager[MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse]{
+		More: func(page MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MigrationRecoveryPointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse) (MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationMigrationItemsCreateRequest(ctx, fabricName, protectionContainerName, migrationItemName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MigrationRecoveryPointsClientListByReplicationMigrationItemsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationMigrationItemsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationMigrationItemsCreateRequest creates the ListByReplicationMigrationItems request.

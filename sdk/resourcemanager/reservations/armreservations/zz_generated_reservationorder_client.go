@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -189,16 +189,32 @@ func (client *ReservationOrderClient) getHandleResponse(resp *http.Response) (Re
 // List - List of all the ReservationOrders that the user has access to in the current tenant.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReservationOrderClientListOptions contains the optional parameters for the ReservationOrderClient.List method.
-func (client *ReservationOrderClient) List(options *ReservationOrderClientListOptions) *ReservationOrderClientListPager {
-	return &ReservationOrderClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReservationOrderClient) List(options *ReservationOrderClientListOptions) *runtime.Pager[ReservationOrderClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReservationOrderClientListResponse]{
+		More: func(page ReservationOrderClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReservationOrderClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ReservationOrderList.NextLink)
+		Fetcher: func(ctx context.Context, page *ReservationOrderClientListResponse) (ReservationOrderClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReservationOrderClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReservationOrderClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReservationOrderClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -230,20 +246,16 @@ func (client *ReservationOrderClient) listHandleResponse(resp *http.Response) (R
 // body - Information needed for calculate or purchase reservation
 // options - ReservationOrderClientBeginPurchaseOptions contains the optional parameters for the ReservationOrderClient.BeginPurchase
 // method.
-func (client *ReservationOrderClient) BeginPurchase(ctx context.Context, reservationOrderID string, body PurchaseRequest, options *ReservationOrderClientBeginPurchaseOptions) (ReservationOrderClientPurchasePollerResponse, error) {
-	resp, err := client.purchase(ctx, reservationOrderID, body, options)
-	if err != nil {
-		return ReservationOrderClientPurchasePollerResponse{}, err
+func (client *ReservationOrderClient) BeginPurchase(ctx context.Context, reservationOrderID string, body PurchaseRequest, options *ReservationOrderClientBeginPurchaseOptions) (*armruntime.Poller[ReservationOrderClientPurchaseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.purchase(ctx, reservationOrderID, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReservationOrderClientPurchaseResponse]("ReservationOrderClient.Purchase", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReservationOrderClientPurchaseResponse]("ReservationOrderClient.Purchase", options.ResumeToken, client.pl, nil)
 	}
-	result := ReservationOrderClientPurchasePollerResponse{}
-	pt, err := armruntime.NewPoller("ReservationOrderClient.Purchase", "location", resp, client.pl)
-	if err != nil {
-		return ReservationOrderClientPurchasePollerResponse{}, err
-	}
-	result.Poller = &ReservationOrderClientPurchasePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Purchase - Purchase ReservationOrder and create resource under the specified URI.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -186,17 +186,20 @@ type ClusterSKU struct {
 
 // ClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ClustersClient.BeginCreateOrUpdate method.
 type ClustersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
 type ClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
 type ClustersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientGetOptions contains the optional parameters for the ClustersClient.Get method.
@@ -537,12 +540,14 @@ type LinkedServiceProperties struct {
 // LinkedServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the LinkedServicesClient.BeginCreateOrUpdate
 // method.
 type LinkedServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkedServicesClientBeginDeleteOptions contains the optional parameters for the LinkedServicesClient.BeginDelete method.
 type LinkedServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkedServicesClientGetOptions contains the optional parameters for the LinkedServicesClient.Get method.
@@ -1198,17 +1203,20 @@ type TableProperties struct {
 
 // TablesClientBeginCreateOrUpdateOptions contains the optional parameters for the TablesClient.BeginCreateOrUpdate method.
 type TablesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TablesClientBeginDeleteOptions contains the optional parameters for the TablesClient.BeginDelete method.
 type TablesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TablesClientBeginUpdateOptions contains the optional parameters for the TablesClient.BeginUpdate method.
 type TablesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TablesClientGetOptions contains the optional parameters for the TablesClient.Get method.
@@ -1496,13 +1504,16 @@ type WorkspaceSKU struct {
 // WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
 type WorkspacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
 type WorkspacesClientBeginDeleteOptions struct {
 	// Deletes the workspace without the recovery option. A workspace that was deleted with this flag cannot be recovered.
 	Force *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientGetOptions contains the optional parameters for the WorkspacesClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -2403,38 +2403,46 @@ type LiveEventTranscription struct {
 
 // LiveEventsClientBeginAllocateOptions contains the optional parameters for the LiveEventsClient.BeginAllocate method.
 type LiveEventsClientBeginAllocateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginCreateOptions contains the optional parameters for the LiveEventsClient.BeginCreate method.
 type LiveEventsClientBeginCreateOptions struct {
 	// The flag indicates if the resource should be automatically started on creation.
 	AutoStart *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginDeleteOptions contains the optional parameters for the LiveEventsClient.BeginDelete method.
 type LiveEventsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginResetOptions contains the optional parameters for the LiveEventsClient.BeginReset method.
 type LiveEventsClientBeginResetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginStartOptions contains the optional parameters for the LiveEventsClient.BeginStart method.
 type LiveEventsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginStopOptions contains the optional parameters for the LiveEventsClient.BeginStop method.
 type LiveEventsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientBeginUpdateOptions contains the optional parameters for the LiveEventsClient.BeginUpdate method.
 type LiveEventsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveEventsClientGetOptions contains the optional parameters for the LiveEventsClient.Get method.
@@ -2514,12 +2522,14 @@ type LiveOutputProperties struct {
 
 // LiveOutputsClientBeginCreateOptions contains the optional parameters for the LiveOutputsClient.BeginCreate method.
 type LiveOutputsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveOutputsClientBeginDeleteOptions contains the optional parameters for the LiveOutputsClient.BeginDelete method.
 type LiveOutputsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LiveOutputsClientGetOptions contains the optional parameters for the LiveOutputsClient.Get method.
@@ -3397,35 +3407,42 @@ type StreamingEndpointProperties struct {
 type StreamingEndpointsClientBeginCreateOptions struct {
 	// The flag indicates if the resource should be automatically started on creation.
 	AutoStart *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientBeginDeleteOptions contains the optional parameters for the StreamingEndpointsClient.BeginDelete
 // method.
 type StreamingEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientBeginScaleOptions contains the optional parameters for the StreamingEndpointsClient.BeginScale
 // method.
 type StreamingEndpointsClientBeginScaleOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientBeginStartOptions contains the optional parameters for the StreamingEndpointsClient.BeginStart
 // method.
 type StreamingEndpointsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientBeginStopOptions contains the optional parameters for the StreamingEndpointsClient.BeginStop method.
 type StreamingEndpointsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientBeginUpdateOptions contains the optional parameters for the StreamingEndpointsClient.BeginUpdate
 // method.
 type StreamingEndpointsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingEndpointsClientGetOptions contains the optional parameters for the StreamingEndpointsClient.Get method.

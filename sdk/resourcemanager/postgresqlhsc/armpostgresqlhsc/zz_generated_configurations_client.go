@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (Conf
 // serverName - The name of the server.
 // options - ConfigurationsClientListByServerOptions contains the optional parameters for the ConfigurationsClient.ListByServer
 // method.
-func (client *ConfigurationsClient) ListByServer(resourceGroupName string, serverGroupName string, serverName string, options *ConfigurationsClientListByServerOptions) *ConfigurationsClientListByServerPager {
-	return &ConfigurationsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverGroupName, serverName, options)
+func (client *ConfigurationsClient) ListByServer(resourceGroupName string, serverGroupName string, serverName string, options *ConfigurationsClientListByServerOptions) *runtime.Pager[ConfigurationsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationsClientListByServerResponse]{
+		More: func(page ConfigurationsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConfigurationsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConfigurationsClientListByServerResponse) (ConfigurationsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConfigurationsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -173,16 +189,32 @@ func (client *ConfigurationsClient) listByServerHandleResponse(resp *http.Respon
 // serverGroupName - The name of the server group.
 // options - ConfigurationsClientListByServerGroupOptions contains the optional parameters for the ConfigurationsClient.ListByServerGroup
 // method.
-func (client *ConfigurationsClient) ListByServerGroup(resourceGroupName string, serverGroupName string, options *ConfigurationsClientListByServerGroupOptions) *ConfigurationsClientListByServerGroupPager {
-	return &ConfigurationsClientListByServerGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
+func (client *ConfigurationsClient) ListByServerGroup(resourceGroupName string, serverGroupName string, options *ConfigurationsClientListByServerGroupOptions) *runtime.Pager[ConfigurationsClientListByServerGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationsClientListByServerGroupResponse]{
+		More: func(page ConfigurationsClientListByServerGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConfigurationsClientListByServerGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerGroupConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConfigurationsClientListByServerGroupResponse) (ConfigurationsClientListByServerGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConfigurationsClientListByServerGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationsClientListByServerGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationsClientListByServerGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerGroupCreateRequest creates the ListByServerGroup request.
@@ -228,20 +260,16 @@ func (client *ConfigurationsClient) listByServerGroupHandleResponse(resp *http.R
 // parameters - The required parameters for updating a server group configuration.
 // options - ConfigurationsClientBeginUpdateOptions contains the optional parameters for the ConfigurationsClient.BeginUpdate
 // method.
-func (client *ConfigurationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverGroupName string, configurationName string, parameters ServerGroupConfiguration, options *ConfigurationsClientBeginUpdateOptions) (ConfigurationsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverGroupName, configurationName, parameters, options)
-	if err != nil {
-		return ConfigurationsClientUpdatePollerResponse{}, err
+func (client *ConfigurationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverGroupName string, configurationName string, parameters ServerGroupConfiguration, options *ConfigurationsClientBeginUpdateOptions) (*armruntime.Poller[ConfigurationsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverGroupName, configurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigurationsClientUpdateResponse]("ConfigurationsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigurationsClientUpdateResponse]("ConfigurationsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigurationsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigurationsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ConfigurationsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ConfigurationsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates configuration of server role groups in a server group

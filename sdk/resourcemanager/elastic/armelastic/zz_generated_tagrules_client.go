@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,20 +126,16 @@ func (client *TagRulesClient) createOrUpdateHandleResponse(resp *http.Response) 
 // monitorName - Monitor resource name
 // ruleSetName - Tag Rule Set resource name
 // options - TagRulesClientBeginDeleteOptions contains the optional parameters for the TagRulesClient.BeginDelete method.
-func (client *TagRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, ruleSetName string, options *TagRulesClientBeginDeleteOptions) (TagRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, ruleSetName, options)
-	if err != nil {
-		return TagRulesClientDeletePollerResponse{}, err
+func (client *TagRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, ruleSetName string, options *TagRulesClientBeginDeleteOptions) (*armruntime.Poller[TagRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, ruleSetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TagRulesClientDeleteResponse]("TagRulesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TagRulesClientDeleteResponse]("TagRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TagRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TagRulesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TagRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TagRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a tag rule set for a given monitor resource.
@@ -254,16 +250,32 @@ func (client *TagRulesClient) getHandleResponse(resp *http.Response) (TagRulesCl
 // resourceGroupName - The name of the resource group to which the Elastic resource belongs.
 // monitorName - Monitor resource name
 // options - TagRulesClientListOptions contains the optional parameters for the TagRulesClient.List method.
-func (client *TagRulesClient) List(resourceGroupName string, monitorName string, options *TagRulesClientListOptions) *TagRulesClientListPager {
-	return &TagRulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *TagRulesClient) List(resourceGroupName string, monitorName string, options *TagRulesClientListOptions) *runtime.Pager[TagRulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagRulesClientListResponse]{
+		More: func(page TagRulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagRulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitoringTagRulesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *TagRulesClientListResponse) (TagRulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagRulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagRulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagRulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

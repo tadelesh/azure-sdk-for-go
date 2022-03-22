@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,13 +116,26 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // accountName - Cosmos DB database account name.
 // options - PrivateLinkResourcesClientListByDatabaseAccountOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByDatabaseAccount
 // method.
-func (client *PrivateLinkResourcesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByDatabaseAccountOptions) *PrivateLinkResourcesClientListByDatabaseAccountPager {
-	return &PrivateLinkResourcesClientListByDatabaseAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PrivateLinkResourcesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByDatabaseAccountOptions) *runtime.Pager[PrivateLinkResourcesClientListByDatabaseAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByDatabaseAccountResponse]{
+		More: func(page PrivateLinkResourcesClientListByDatabaseAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByDatabaseAccountResponse) (PrivateLinkResourcesClientListByDatabaseAccountResponse, error) {
+			req, err := client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseAccountCreateRequest creates the ListByDatabaseAccount request.

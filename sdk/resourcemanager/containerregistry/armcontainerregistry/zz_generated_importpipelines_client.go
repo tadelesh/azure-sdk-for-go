@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewImportPipelinesClient(subscriptionID string, credential azcore.TokenCred
 // importPipelineCreateParameters - The parameters for creating an import pipeline.
 // options - ImportPipelinesClientBeginCreateOptions contains the optional parameters for the ImportPipelinesClient.BeginCreate
 // method.
-func (client *ImportPipelinesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, importPipelineName string, importPipelineCreateParameters ImportPipeline, options *ImportPipelinesClientBeginCreateOptions) (ImportPipelinesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, importPipelineName, importPipelineCreateParameters, options)
-	if err != nil {
-		return ImportPipelinesClientCreatePollerResponse{}, err
+func (client *ImportPipelinesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, importPipelineName string, importPipelineCreateParameters ImportPipeline, options *ImportPipelinesClientBeginCreateOptions) (*armruntime.Poller[ImportPipelinesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, importPipelineName, importPipelineCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ImportPipelinesClientCreateResponse]("ImportPipelinesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ImportPipelinesClientCreateResponse]("ImportPipelinesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ImportPipelinesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ImportPipelinesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ImportPipelinesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ImportPipelinesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates an import pipeline for a container registry with the specified parameters.
@@ -127,20 +123,16 @@ func (client *ImportPipelinesClient) createCreateRequest(ctx context.Context, re
 // importPipelineName - The name of the import pipeline.
 // options - ImportPipelinesClientBeginDeleteOptions contains the optional parameters for the ImportPipelinesClient.BeginDelete
 // method.
-func (client *ImportPipelinesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, importPipelineName string, options *ImportPipelinesClientBeginDeleteOptions) (ImportPipelinesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, importPipelineName, options)
-	if err != nil {
-		return ImportPipelinesClientDeletePollerResponse{}, err
+func (client *ImportPipelinesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, importPipelineName string, options *ImportPipelinesClientBeginDeleteOptions) (*armruntime.Poller[ImportPipelinesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, importPipelineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ImportPipelinesClientDeleteResponse]("ImportPipelinesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ImportPipelinesClientDeleteResponse]("ImportPipelinesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ImportPipelinesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ImportPipelinesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ImportPipelinesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ImportPipelinesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an import pipeline from a container registry.
@@ -255,16 +247,32 @@ func (client *ImportPipelinesClient) getHandleResponse(resp *http.Response) (Imp
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - ImportPipelinesClientListOptions contains the optional parameters for the ImportPipelinesClient.List method.
-func (client *ImportPipelinesClient) List(resourceGroupName string, registryName string, options *ImportPipelinesClientListOptions) *ImportPipelinesClientListPager {
-	return &ImportPipelinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *ImportPipelinesClient) List(resourceGroupName string, registryName string, options *ImportPipelinesClientListOptions) *runtime.Pager[ImportPipelinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ImportPipelinesClientListResponse]{
+		More: func(page ImportPipelinesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ImportPipelinesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ImportPipelineListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ImportPipelinesClientListResponse) (ImportPipelinesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ImportPipelinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ImportPipelinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ImportPipelinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

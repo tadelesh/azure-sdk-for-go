@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *HybridRunbookWorkerGroupClient) getHandleResponse(resp *http.Respo
 // automationAccountName - The name of the automation account.
 // options - HybridRunbookWorkerGroupClientListByAutomationAccountOptions contains the optional parameters for the HybridRunbookWorkerGroupClient.ListByAutomationAccount
 // method.
-func (client *HybridRunbookWorkerGroupClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *HybridRunbookWorkerGroupClientListByAutomationAccountOptions) *HybridRunbookWorkerGroupClientListByAutomationAccountPager {
-	return &HybridRunbookWorkerGroupClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *HybridRunbookWorkerGroupClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *HybridRunbookWorkerGroupClientListByAutomationAccountOptions) *runtime.Pager[HybridRunbookWorkerGroupClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HybridRunbookWorkerGroupClientListByAutomationAccountResponse]{
+		More: func(page HybridRunbookWorkerGroupClientListByAutomationAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HybridRunbookWorkerGroupClientListByAutomationAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HybridRunbookWorkerGroupsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HybridRunbookWorkerGroupClientListByAutomationAccountResponse) (HybridRunbookWorkerGroupClientListByAutomationAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HybridRunbookWorkerGroupClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HybridRunbookWorkerGroupClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HybridRunbookWorkerGroupClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

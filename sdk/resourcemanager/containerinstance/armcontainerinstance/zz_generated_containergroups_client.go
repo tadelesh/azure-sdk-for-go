@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewContainerGroupsClient(subscriptionID string, credential azcore.TokenCred
 // containerGroup - The properties of the container group to be created or updated.
 // options - ContainerGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the ContainerGroupsClient.BeginCreateOrUpdate
 // method.
-func (client *ContainerGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, containerGroupName string, containerGroup ContainerGroup, options *ContainerGroupsClientBeginCreateOrUpdateOptions) (ContainerGroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, containerGroupName, containerGroup, options)
-	if err != nil {
-		return ContainerGroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *ContainerGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, containerGroupName string, containerGroup ContainerGroup, options *ContainerGroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ContainerGroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, containerGroupName, containerGroup, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContainerGroupsClientCreateOrUpdateResponse]("ContainerGroupsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContainerGroupsClientCreateOrUpdateResponse]("ContainerGroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ContainerGroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ContainerGroupsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ContainerGroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ContainerGroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update container groups with specified configurations.
@@ -123,20 +119,16 @@ func (client *ContainerGroupsClient) createOrUpdateCreateRequest(ctx context.Con
 // containerGroupName - The name of the container group.
 // options - ContainerGroupsClientBeginDeleteOptions contains the optional parameters for the ContainerGroupsClient.BeginDelete
 // method.
-func (client *ContainerGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginDeleteOptions) (ContainerGroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, containerGroupName, options)
-	if err != nil {
-		return ContainerGroupsClientDeletePollerResponse{}, err
+func (client *ContainerGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginDeleteOptions) (*armruntime.Poller[ContainerGroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, containerGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContainerGroupsClientDeleteResponse]("ContainerGroupsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContainerGroupsClientDeleteResponse]("ContainerGroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ContainerGroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ContainerGroupsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ContainerGroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ContainerGroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified container group in the specified subscription and resource group. The operation does not
@@ -302,16 +294,32 @@ func (client *ContainerGroupsClient) getOutboundNetworkDependenciesEndpointsHand
 // type, OS type, state, and volumes.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ContainerGroupsClientListOptions contains the optional parameters for the ContainerGroupsClient.List method.
-func (client *ContainerGroupsClient) List(options *ContainerGroupsClientListOptions) *ContainerGroupsClientListPager {
-	return &ContainerGroupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ContainerGroupsClient) List(options *ContainerGroupsClientListOptions) *runtime.Pager[ContainerGroupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ContainerGroupsClientListResponse]{
+		More: func(page ContainerGroupsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ContainerGroupsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ContainerGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ContainerGroupsClientListResponse) (ContainerGroupsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ContainerGroupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ContainerGroupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ContainerGroupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -348,16 +356,32 @@ func (client *ContainerGroupsClient) listHandleResponse(resp *http.Response) (Co
 // resourceGroupName - The name of the resource group.
 // options - ContainerGroupsClientListByResourceGroupOptions contains the optional parameters for the ContainerGroupsClient.ListByResourceGroup
 // method.
-func (client *ContainerGroupsClient) ListByResourceGroup(resourceGroupName string, options *ContainerGroupsClientListByResourceGroupOptions) *ContainerGroupsClientListByResourceGroupPager {
-	return &ContainerGroupsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ContainerGroupsClient) ListByResourceGroup(resourceGroupName string, options *ContainerGroupsClientListByResourceGroupOptions) *runtime.Pager[ContainerGroupsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ContainerGroupsClientListByResourceGroupResponse]{
+		More: func(page ContainerGroupsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ContainerGroupsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ContainerGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ContainerGroupsClientListByResourceGroupResponse) (ContainerGroupsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ContainerGroupsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ContainerGroupsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ContainerGroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -398,20 +422,16 @@ func (client *ContainerGroupsClient) listByResourceGroupHandleResponse(resp *htt
 // containerGroupName - The name of the container group.
 // options - ContainerGroupsClientBeginRestartOptions contains the optional parameters for the ContainerGroupsClient.BeginRestart
 // method.
-func (client *ContainerGroupsClient) BeginRestart(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginRestartOptions) (ContainerGroupsClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, resourceGroupName, containerGroupName, options)
-	if err != nil {
-		return ContainerGroupsClientRestartPollerResponse{}, err
+func (client *ContainerGroupsClient) BeginRestart(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginRestartOptions) (*armruntime.Poller[ContainerGroupsClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, resourceGroupName, containerGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContainerGroupsClientRestartResponse]("ContainerGroupsClient.Restart", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContainerGroupsClientRestartResponse]("ContainerGroupsClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := ContainerGroupsClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("ContainerGroupsClient.Restart", "", resp, client.pl)
-	if err != nil {
-		return ContainerGroupsClientRestartPollerResponse{}, err
-	}
-	result.Poller = &ContainerGroupsClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - Restarts all containers in a container group in place. If container image has updates, new image will be downloaded.
@@ -463,20 +483,16 @@ func (client *ContainerGroupsClient) restartCreateRequest(ctx context.Context, r
 // containerGroupName - The name of the container group.
 // options - ContainerGroupsClientBeginStartOptions contains the optional parameters for the ContainerGroupsClient.BeginStart
 // method.
-func (client *ContainerGroupsClient) BeginStart(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginStartOptions) (ContainerGroupsClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, containerGroupName, options)
-	if err != nil {
-		return ContainerGroupsClientStartPollerResponse{}, err
+func (client *ContainerGroupsClient) BeginStart(ctx context.Context, resourceGroupName string, containerGroupName string, options *ContainerGroupsClientBeginStartOptions) (*armruntime.Poller[ContainerGroupsClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, containerGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContainerGroupsClientStartResponse]("ContainerGroupsClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContainerGroupsClientStartResponse]("ContainerGroupsClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ContainerGroupsClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ContainerGroupsClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ContainerGroupsClientStartPollerResponse{}, err
-	}
-	result.Poller = &ContainerGroupsClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts all containers in a container group. Compute resources will be allocated and billing will start.

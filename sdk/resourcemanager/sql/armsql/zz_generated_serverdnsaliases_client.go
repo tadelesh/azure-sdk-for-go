@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewServerDNSAliasesClient(subscriptionID string, credential azcore.TokenCre
 // dnsAliasName - The name of the server dns alias.
 // options - ServerDNSAliasesClientBeginAcquireOptions contains the optional parameters for the ServerDNSAliasesClient.BeginAcquire
 // method.
-func (client *ServerDNSAliasesClient) BeginAcquire(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, parameters ServerDNSAliasAcquisition, options *ServerDNSAliasesClientBeginAcquireOptions) (ServerDNSAliasesClientAcquirePollerResponse, error) {
-	resp, err := client.acquire(ctx, resourceGroupName, serverName, dnsAliasName, parameters, options)
-	if err != nil {
-		return ServerDNSAliasesClientAcquirePollerResponse{}, err
+func (client *ServerDNSAliasesClient) BeginAcquire(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, parameters ServerDNSAliasAcquisition, options *ServerDNSAliasesClientBeginAcquireOptions) (*armruntime.Poller[ServerDNSAliasesClientAcquireResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.acquire(ctx, resourceGroupName, serverName, dnsAliasName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerDNSAliasesClientAcquireResponse]("ServerDNSAliasesClient.Acquire", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerDNSAliasesClientAcquireResponse]("ServerDNSAliasesClient.Acquire", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerDNSAliasesClientAcquirePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.Acquire", "", resp, client.pl)
-	if err != nil {
-		return ServerDNSAliasesClientAcquirePollerResponse{}, err
-	}
-	result.Poller = &ServerDNSAliasesClientAcquirePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Acquire - Acquires server DNS alias from another server.
@@ -128,20 +124,16 @@ func (client *ServerDNSAliasesClient) acquireCreateRequest(ctx context.Context, 
 // dnsAliasName - The name of the server dns alias.
 // options - ServerDNSAliasesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerDNSAliasesClient.BeginCreateOrUpdate
 // method.
-func (client *ServerDNSAliasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, options *ServerDNSAliasesClientBeginCreateOrUpdateOptions) (ServerDNSAliasesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, dnsAliasName, options)
-	if err != nil {
-		return ServerDNSAliasesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerDNSAliasesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, options *ServerDNSAliasesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerDNSAliasesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, dnsAliasName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerDNSAliasesClientCreateOrUpdateResponse]("ServerDNSAliasesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerDNSAliasesClientCreateOrUpdateResponse]("ServerDNSAliasesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerDNSAliasesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServerDNSAliasesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerDNSAliasesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a server DNS alias.
@@ -199,20 +191,16 @@ func (client *ServerDNSAliasesClient) createOrUpdateCreateRequest(ctx context.Co
 // dnsAliasName - The name of the server dns alias.
 // options - ServerDNSAliasesClientBeginDeleteOptions contains the optional parameters for the ServerDNSAliasesClient.BeginDelete
 // method.
-func (client *ServerDNSAliasesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, options *ServerDNSAliasesClientBeginDeleteOptions) (ServerDNSAliasesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, dnsAliasName, options)
-	if err != nil {
-		return ServerDNSAliasesClientDeletePollerResponse{}, err
+func (client *ServerDNSAliasesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, dnsAliasName string, options *ServerDNSAliasesClientBeginDeleteOptions) (*armruntime.Poller[ServerDNSAliasesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, dnsAliasName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerDNSAliasesClientDeleteResponse]("ServerDNSAliasesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerDNSAliasesClientDeleteResponse]("ServerDNSAliasesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerDNSAliasesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServerDNSAliasesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServerDNSAliasesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the server DNS alias with the given name.
@@ -329,16 +317,32 @@ func (client *ServerDNSAliasesClient) getHandleResponse(resp *http.Response) (Se
 // serverName - The name of the server that the alias is pointing to.
 // options - ServerDNSAliasesClientListByServerOptions contains the optional parameters for the ServerDNSAliasesClient.ListByServer
 // method.
-func (client *ServerDNSAliasesClient) ListByServer(resourceGroupName string, serverName string, options *ServerDNSAliasesClientListByServerOptions) *ServerDNSAliasesClientListByServerPager {
-	return &ServerDNSAliasesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerDNSAliasesClient) ListByServer(resourceGroupName string, serverName string, options *ServerDNSAliasesClientListByServerOptions) *runtime.Pager[ServerDNSAliasesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerDNSAliasesClientListByServerResponse]{
+		More: func(page ServerDNSAliasesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServerDNSAliasesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerDNSAliasListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServerDNSAliasesClientListByServerResponse) (ServerDNSAliasesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServerDNSAliasesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerDNSAliasesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerDNSAliasesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

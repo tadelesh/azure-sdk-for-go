@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,20 +121,16 @@ func (client *DatabasePrincipalAssignmentsClient) checkNameAvailabilityHandleRes
 // parameters - The Kusto principalAssignments parameters supplied for the operation.
 // options - DatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
-func (client *DatabasePrincipalAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, principalAssignmentName string, parameters DatabasePrincipalAssignment, options *DatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions) (DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, principalAssignmentName, parameters, options)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *DatabasePrincipalAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, principalAssignmentName string, parameters DatabasePrincipalAssignment, options *DatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DatabasePrincipalAssignmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, principalAssignmentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasePrincipalAssignmentsClientCreateOrUpdateResponse]("DatabasePrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasePrincipalAssignmentsClientCreateOrUpdateResponse]("DatabasePrincipalAssignmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasePrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasePrincipalAssignmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a Kusto cluster database principalAssignment.
@@ -196,20 +192,16 @@ func (client *DatabasePrincipalAssignmentsClient) createOrUpdateCreateRequest(ct
 // principalAssignmentName - The name of the Kusto principalAssignment.
 // options - DatabasePrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.BeginDelete
 // method.
-func (client *DatabasePrincipalAssignmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, principalAssignmentName string, options *DatabasePrincipalAssignmentsClientBeginDeleteOptions) (DatabasePrincipalAssignmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, principalAssignmentName, options)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
+func (client *DatabasePrincipalAssignmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, principalAssignmentName string, options *DatabasePrincipalAssignmentsClientBeginDeleteOptions) (*armruntime.Poller[DatabasePrincipalAssignmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, principalAssignmentName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasePrincipalAssignmentsClientDeleteResponse]("DatabasePrincipalAssignmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasePrincipalAssignmentsClientDeleteResponse]("DatabasePrincipalAssignmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasePrincipalAssignmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasePrincipalAssignmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatabasePrincipalAssignmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Kusto principalAssignment.
@@ -336,13 +328,26 @@ func (client *DatabasePrincipalAssignmentsClient) getHandleResponse(resp *http.R
 // databaseName - The name of the database in the Kusto cluster.
 // options - DatabasePrincipalAssignmentsClientListOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.List
 // method.
-func (client *DatabasePrincipalAssignmentsClient) List(resourceGroupName string, clusterName string, databaseName string, options *DatabasePrincipalAssignmentsClientListOptions) *DatabasePrincipalAssignmentsClientListPager {
-	return &DatabasePrincipalAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+func (client *DatabasePrincipalAssignmentsClient) List(resourceGroupName string, clusterName string, databaseName string, options *DatabasePrincipalAssignmentsClientListOptions) *runtime.Pager[DatabasePrincipalAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasePrincipalAssignmentsClientListResponse]{
+		More: func(page DatabasePrincipalAssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DatabasePrincipalAssignmentsClientListResponse) (DatabasePrincipalAssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+			if err != nil {
+				return DatabasePrincipalAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasePrincipalAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasePrincipalAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -283,16 +283,32 @@ func (client *WebhookClient) getHandleResponse(resp *http.Response) (WebhookClie
 // automationAccountName - The name of the automation account.
 // options - WebhookClientListByAutomationAccountOptions contains the optional parameters for the WebhookClient.ListByAutomationAccount
 // method.
-func (client *WebhookClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *WebhookClientListByAutomationAccountOptions) *WebhookClientListByAutomationAccountPager {
-	return &WebhookClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *WebhookClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *WebhookClientListByAutomationAccountOptions) *runtime.Pager[WebhookClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebhookClientListByAutomationAccountResponse]{
+		More: func(page WebhookClientListByAutomationAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebhookClientListByAutomationAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebhookListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WebhookClientListByAutomationAccountResponse) (WebhookClientListByAutomationAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebhookClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebhookClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebhookClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

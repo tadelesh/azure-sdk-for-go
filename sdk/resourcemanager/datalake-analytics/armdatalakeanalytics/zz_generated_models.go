@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -187,18 +187,22 @@ type AccountPropertiesBasic struct {
 
 // AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
 type AccountsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
 type AccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
 type AccountsClientBeginUpdateOptions struct {
 	// Parameters supplied to the update Data Lake Analytics account operation.
 	Parameters *UpdateDataLakeAnalyticsAccountParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientCheckNameAvailabilityOptions contains the optional parameters for the AccountsClient.CheckNameAvailability

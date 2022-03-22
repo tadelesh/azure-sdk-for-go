@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewCassandraDataCentersClient(subscriptionID string, credential azcore.Toke
 // body - Parameters specifying the managed Cassandra data center.
 // options - CassandraDataCentersClientBeginCreateUpdateOptions contains the optional parameters for the CassandraDataCentersClient.BeginCreateUpdate
 // method.
-func (client *CassandraDataCentersClient) BeginCreateUpdate(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, body DataCenterResource, options *CassandraDataCentersClientBeginCreateUpdateOptions) (CassandraDataCentersClientCreateUpdatePollerResponse, error) {
-	resp, err := client.createUpdate(ctx, resourceGroupName, clusterName, dataCenterName, body, options)
-	if err != nil {
-		return CassandraDataCentersClientCreateUpdatePollerResponse{}, err
+func (client *CassandraDataCentersClient) BeginCreateUpdate(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, body DataCenterResource, options *CassandraDataCentersClientBeginCreateUpdateOptions) (*armruntime.Poller[CassandraDataCentersClientCreateUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdate(ctx, resourceGroupName, clusterName, dataCenterName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraDataCentersClientCreateUpdateResponse]("CassandraDataCentersClient.CreateUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraDataCentersClientCreateUpdateResponse]("CassandraDataCentersClient.CreateUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraDataCentersClientCreateUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraDataCentersClient.CreateUpdate", "", resp, client.pl)
-	if err != nil {
-		return CassandraDataCentersClientCreateUpdatePollerResponse{}, err
-	}
-	result.Poller = &CassandraDataCentersClientCreateUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdate - Create or update a managed Cassandra data center. When updating, overwrite all properties. To update only
@@ -129,20 +125,16 @@ func (client *CassandraDataCentersClient) createUpdateCreateRequest(ctx context.
 // dataCenterName - Data center name in a managed Cassandra cluster.
 // options - CassandraDataCentersClientBeginDeleteOptions contains the optional parameters for the CassandraDataCentersClient.BeginDelete
 // method.
-func (client *CassandraDataCentersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, options *CassandraDataCentersClientBeginDeleteOptions) (CassandraDataCentersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, dataCenterName, options)
-	if err != nil {
-		return CassandraDataCentersClientDeletePollerResponse{}, err
+func (client *CassandraDataCentersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, options *CassandraDataCentersClientBeginDeleteOptions) (*armruntime.Poller[CassandraDataCentersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, dataCenterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraDataCentersClientDeleteResponse]("CassandraDataCentersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraDataCentersClientDeleteResponse]("CassandraDataCentersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraDataCentersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraDataCentersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CassandraDataCentersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CassandraDataCentersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a managed Cassandra data center.
@@ -259,13 +251,26 @@ func (client *CassandraDataCentersClient) getHandleResponse(resp *http.Response)
 // clusterName - Managed Cassandra cluster name.
 // options - CassandraDataCentersClientListOptions contains the optional parameters for the CassandraDataCentersClient.List
 // method.
-func (client *CassandraDataCentersClient) List(resourceGroupName string, clusterName string, options *CassandraDataCentersClientListOptions) *CassandraDataCentersClientListPager {
-	return &CassandraDataCentersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *CassandraDataCentersClient) List(resourceGroupName string, clusterName string, options *CassandraDataCentersClientListOptions) *runtime.Pager[CassandraDataCentersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CassandraDataCentersClientListResponse]{
+		More: func(page CassandraDataCentersClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CassandraDataCentersClientListResponse) (CassandraDataCentersClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return CassandraDataCentersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CassandraDataCentersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CassandraDataCentersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -311,20 +316,16 @@ func (client *CassandraDataCentersClient) listHandleResponse(resp *http.Response
 // body - Parameters to provide for specifying the managed Cassandra data center.
 // options - CassandraDataCentersClientBeginUpdateOptions contains the optional parameters for the CassandraDataCentersClient.BeginUpdate
 // method.
-func (client *CassandraDataCentersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, body DataCenterResource, options *CassandraDataCentersClientBeginUpdateOptions) (CassandraDataCentersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, dataCenterName, body, options)
-	if err != nil {
-		return CassandraDataCentersClientUpdatePollerResponse{}, err
+func (client *CassandraDataCentersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, dataCenterName string, body DataCenterResource, options *CassandraDataCentersClientBeginUpdateOptions) (*armruntime.Poller[CassandraDataCentersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, dataCenterName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CassandraDataCentersClientUpdateResponse]("CassandraDataCentersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CassandraDataCentersClientUpdateResponse]("CassandraDataCentersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := CassandraDataCentersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CassandraDataCentersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return CassandraDataCentersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &CassandraDataCentersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update some of the properties of a managed Cassandra data center.

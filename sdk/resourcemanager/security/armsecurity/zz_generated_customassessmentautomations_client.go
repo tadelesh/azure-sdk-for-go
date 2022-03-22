@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -215,16 +215,32 @@ func (client *CustomAssessmentAutomationsClient) getHandleResponse(resp *http.Re
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - CustomAssessmentAutomationsClientListByResourceGroupOptions contains the optional parameters for the CustomAssessmentAutomationsClient.ListByResourceGroup
 // method.
-func (client *CustomAssessmentAutomationsClient) ListByResourceGroup(resourceGroupName string, options *CustomAssessmentAutomationsClientListByResourceGroupOptions) *CustomAssessmentAutomationsClientListByResourceGroupPager {
-	return &CustomAssessmentAutomationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CustomAssessmentAutomationsClient) ListByResourceGroup(resourceGroupName string, options *CustomAssessmentAutomationsClientListByResourceGroupOptions) *runtime.Pager[CustomAssessmentAutomationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomAssessmentAutomationsClientListByResourceGroupResponse]{
+		More: func(page CustomAssessmentAutomationsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomAssessmentAutomationsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomAssessmentAutomationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomAssessmentAutomationsClientListByResourceGroupResponse) (CustomAssessmentAutomationsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomAssessmentAutomationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomAssessmentAutomationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomAssessmentAutomationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -262,16 +278,32 @@ func (client *CustomAssessmentAutomationsClient) listByResourceGroupHandleRespon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CustomAssessmentAutomationsClientListBySubscriptionOptions contains the optional parameters for the CustomAssessmentAutomationsClient.ListBySubscription
 // method.
-func (client *CustomAssessmentAutomationsClient) ListBySubscription(options *CustomAssessmentAutomationsClientListBySubscriptionOptions) *CustomAssessmentAutomationsClientListBySubscriptionPager {
-	return &CustomAssessmentAutomationsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *CustomAssessmentAutomationsClient) ListBySubscription(options *CustomAssessmentAutomationsClientListBySubscriptionOptions) *runtime.Pager[CustomAssessmentAutomationsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomAssessmentAutomationsClientListBySubscriptionResponse]{
+		More: func(page CustomAssessmentAutomationsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomAssessmentAutomationsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomAssessmentAutomationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomAssessmentAutomationsClientListBySubscriptionResponse) (CustomAssessmentAutomationsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomAssessmentAutomationsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomAssessmentAutomationsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomAssessmentAutomationsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,16 +212,32 @@ func (client *SecretValueClient) getHandleResponse(resp *http.Response) (SecretV
 // resourceGroupName - Azure resource group name
 // secretResourceName - The name of the secret resource.
 // options - SecretValueClientListOptions contains the optional parameters for the SecretValueClient.List method.
-func (client *SecretValueClient) List(resourceGroupName string, secretResourceName string, options *SecretValueClientListOptions) *SecretValueClientListPager {
-	return &SecretValueClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, secretResourceName, options)
+func (client *SecretValueClient) List(resourceGroupName string, secretResourceName string, options *SecretValueClientListOptions) *runtime.Pager[SecretValueClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecretValueClientListResponse]{
+		More: func(page SecretValueClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecretValueClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecretValueResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SecretValueClientListResponse) (SecretValueClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, secretResourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecretValueClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecretValueClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecretValueClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

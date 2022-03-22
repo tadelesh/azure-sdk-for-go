@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -232,16 +232,32 @@ func (client *TableClient) getHandleResponse(resp *http.Response) (TableClientGe
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - TableClientListOptions contains the optional parameters for the TableClient.List method.
-func (client *TableClient) List(resourceGroupName string, accountName string, options *TableClientListOptions) *TableClientListPager {
-	return &TableClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *TableClient) List(resourceGroupName string, accountName string, options *TableClientListOptions) *runtime.Pager[TableClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TableClientListResponse]{
+		More: func(page TableClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TableClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListTableResource.NextLink)
+		Fetcher: func(ctx context.Context, page *TableClientListResponse) (TableClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TableClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TableClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TableClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

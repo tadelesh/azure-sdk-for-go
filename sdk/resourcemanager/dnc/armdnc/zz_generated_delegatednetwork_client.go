@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,16 +54,32 @@ func NewDelegatedNetworkClient(subscriptionID string, credential azcore.TokenCre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DelegatedNetworkClientListByResourceGroupOptions contains the optional parameters for the DelegatedNetworkClient.ListByResourceGroup
 // method.
-func (client *DelegatedNetworkClient) ListByResourceGroup(resourceGroupName string, options *DelegatedNetworkClientListByResourceGroupOptions) *DelegatedNetworkClientListByResourceGroupPager {
-	return &DelegatedNetworkClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DelegatedNetworkClient) ListByResourceGroup(resourceGroupName string, options *DelegatedNetworkClientListByResourceGroupOptions) *runtime.Pager[DelegatedNetworkClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DelegatedNetworkClientListByResourceGroupResponse]{
+		More: func(page DelegatedNetworkClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DelegatedNetworkClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DelegatedControllers.NextLink)
+		Fetcher: func(ctx context.Context, page *DelegatedNetworkClientListByResourceGroupResponse) (DelegatedNetworkClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DelegatedNetworkClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DelegatedNetworkClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DelegatedNetworkClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -101,16 +117,32 @@ func (client *DelegatedNetworkClient) listByResourceGroupHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DelegatedNetworkClientListBySubscriptionOptions contains the optional parameters for the DelegatedNetworkClient.ListBySubscription
 // method.
-func (client *DelegatedNetworkClient) ListBySubscription(options *DelegatedNetworkClientListBySubscriptionOptions) *DelegatedNetworkClientListBySubscriptionPager {
-	return &DelegatedNetworkClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DelegatedNetworkClient) ListBySubscription(options *DelegatedNetworkClientListBySubscriptionOptions) *runtime.Pager[DelegatedNetworkClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DelegatedNetworkClientListBySubscriptionResponse]{
+		More: func(page DelegatedNetworkClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DelegatedNetworkClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DelegatedControllers.NextLink)
+		Fetcher: func(ctx context.Context, page *DelegatedNetworkClientListBySubscriptionResponse) (DelegatedNetworkClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DelegatedNetworkClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DelegatedNetworkClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DelegatedNetworkClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

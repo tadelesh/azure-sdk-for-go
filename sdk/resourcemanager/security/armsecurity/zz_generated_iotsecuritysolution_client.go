@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,16 +213,32 @@ func (client *IotSecuritySolutionClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - IotSecuritySolutionClientListByResourceGroupOptions contains the optional parameters for the IotSecuritySolutionClient.ListByResourceGroup
 // method.
-func (client *IotSecuritySolutionClient) ListByResourceGroup(resourceGroupName string, options *IotSecuritySolutionClientListByResourceGroupOptions) *IotSecuritySolutionClientListByResourceGroupPager {
-	return &IotSecuritySolutionClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *IotSecuritySolutionClient) ListByResourceGroup(resourceGroupName string, options *IotSecuritySolutionClientListByResourceGroupOptions) *runtime.Pager[IotSecuritySolutionClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IotSecuritySolutionClientListByResourceGroupResponse]{
+		More: func(page IotSecuritySolutionClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IotSecuritySolutionClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IoTSecuritySolutionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *IotSecuritySolutionClientListByResourceGroupResponse) (IotSecuritySolutionClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IotSecuritySolutionClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IotSecuritySolutionClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IotSecuritySolutionClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -263,16 +279,32 @@ func (client *IotSecuritySolutionClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - IotSecuritySolutionClientListBySubscriptionOptions contains the optional parameters for the IotSecuritySolutionClient.ListBySubscription
 // method.
-func (client *IotSecuritySolutionClient) ListBySubscription(options *IotSecuritySolutionClientListBySubscriptionOptions) *IotSecuritySolutionClientListBySubscriptionPager {
-	return &IotSecuritySolutionClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *IotSecuritySolutionClient) ListBySubscription(options *IotSecuritySolutionClientListBySubscriptionOptions) *runtime.Pager[IotSecuritySolutionClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IotSecuritySolutionClientListBySubscriptionResponse]{
+		More: func(page IotSecuritySolutionClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IotSecuritySolutionClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IoTSecuritySolutionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *IotSecuritySolutionClientListBySubscriptionResponse) (IotSecuritySolutionClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IotSecuritySolutionClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IotSecuritySolutionClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IotSecuritySolutionClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,13 +111,15 @@ type ProviderInstanceProperties struct {
 // ProviderInstancesClientBeginCreateOptions contains the optional parameters for the ProviderInstancesClient.BeginCreate
 // method.
 type ProviderInstancesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProviderInstancesClientBeginDeleteOptions contains the optional parameters for the ProviderInstancesClient.BeginDelete
 // method.
 type ProviderInstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProviderInstancesClientGetOptions contains the optional parameters for the ProviderInstancesClient.Get method.
@@ -214,12 +216,14 @@ type SapMonitorProperties struct {
 
 // SapMonitorsClientBeginCreateOptions contains the optional parameters for the SapMonitorsClient.BeginCreate method.
 type SapMonitorsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SapMonitorsClientBeginDeleteOptions contains the optional parameters for the SapMonitorsClient.BeginDelete method.
 type SapMonitorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SapMonitorsClientGetOptions contains the optional parameters for the SapMonitorsClient.Get method.

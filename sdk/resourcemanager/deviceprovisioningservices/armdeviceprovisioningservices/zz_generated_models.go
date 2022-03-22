@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -271,29 +271,34 @@ type IotDpsPropertiesDescription struct {
 // IotDpsResourceClientBeginCreateOrUpdateOptions contains the optional parameters for the IotDpsResourceClient.BeginCreateOrUpdate
 // method.
 type IotDpsResourceClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotDpsResourceClientBeginCreateOrUpdatePrivateEndpointConnectionOptions contains the optional parameters for the IotDpsResourceClient.BeginCreateOrUpdatePrivateEndpointConnection
 // method.
 type IotDpsResourceClientBeginCreateOrUpdatePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotDpsResourceClientBeginDeleteOptions contains the optional parameters for the IotDpsResourceClient.BeginDelete method.
 type IotDpsResourceClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotDpsResourceClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the IotDpsResourceClient.BeginDeletePrivateEndpointConnection
 // method.
 type IotDpsResourceClientBeginDeletePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotDpsResourceClientBeginUpdateOptions contains the optional parameters for the IotDpsResourceClient.BeginUpdate method.
 type IotDpsResourceClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotDpsResourceClientCheckProvisioningServiceNameAvailabilityOptions contains the optional parameters for the IotDpsResourceClient.CheckProvisioningServiceNameAvailability

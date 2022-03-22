@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,16 +58,32 @@ func NewServiceTagInformationClient(subscriptionID string, credential azcore.Tok
 // your subscription belongs to).
 // options - ServiceTagInformationClientListOptions contains the optional parameters for the ServiceTagInformationClient.List
 // method.
-func (client *ServiceTagInformationClient) List(location string, options *ServiceTagInformationClientListOptions) *ServiceTagInformationClientListPager {
-	return &ServiceTagInformationClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, options)
+func (client *ServiceTagInformationClient) List(location string, options *ServiceTagInformationClientListOptions) *runtime.Pager[ServiceTagInformationClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceTagInformationClientListResponse]{
+		More: func(page ServiceTagInformationClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServiceTagInformationClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceTagInformationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServiceTagInformationClientListResponse) (ServiceTagInformationClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServiceTagInformationClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceTagInformationClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceTagInformationClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

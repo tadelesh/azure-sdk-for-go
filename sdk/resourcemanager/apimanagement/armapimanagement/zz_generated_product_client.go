@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -302,16 +302,32 @@ func (client *ProductClient) getEntityTagHandleResponse(resp *http.Response) (Pr
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - ProductClientListByServiceOptions contains the optional parameters for the ProductClient.ListByService method.
-func (client *ProductClient) ListByService(resourceGroupName string, serviceName string, options *ProductClientListByServiceOptions) *ProductClientListByServicePager {
-	return &ProductClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *ProductClient) ListByService(resourceGroupName string, serviceName string, options *ProductClientListByServiceOptions) *runtime.Pager[ProductClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProductClientListByServiceResponse]{
+		More: func(page ProductClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProductClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProductCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProductClientListByServiceResponse) (ProductClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProductClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProductClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProductClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.
@@ -369,16 +385,32 @@ func (client *ProductClient) listByServiceHandleResponse(resp *http.Response) (P
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - ProductClientListByTagsOptions contains the optional parameters for the ProductClient.ListByTags method.
-func (client *ProductClient) ListByTags(resourceGroupName string, serviceName string, options *ProductClientListByTagsOptions) *ProductClientListByTagsPager {
-	return &ProductClientListByTagsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTagsCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *ProductClient) ListByTags(resourceGroupName string, serviceName string, options *ProductClientListByTagsOptions) *runtime.Pager[ProductClientListByTagsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProductClientListByTagsResponse]{
+		More: func(page ProductClientListByTagsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProductClientListByTagsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProductClientListByTagsResponse) (ProductClientListByTagsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTagsCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProductClientListByTagsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProductClientListByTagsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProductClientListByTagsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTagsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTagsCreateRequest creates the ListByTags request.

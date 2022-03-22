@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -167,20 +167,16 @@ func (client *WorkspaceCollectionsClient) createHandleResponse(resp *http.Respon
 // workspaceCollectionName - Power BI Embedded Workspace Collection name
 // options - WorkspaceCollectionsClientBeginDeleteOptions contains the optional parameters for the WorkspaceCollectionsClient.BeginDelete
 // method.
-func (client *WorkspaceCollectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceCollectionName string, options *WorkspaceCollectionsClientBeginDeleteOptions) (WorkspaceCollectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceCollectionName, options)
-	if err != nil {
-		return WorkspaceCollectionsClientDeletePollerResponse{}, err
+func (client *WorkspaceCollectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceCollectionName string, options *WorkspaceCollectionsClientBeginDeleteOptions) (*armruntime.Poller[WorkspaceCollectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceCollectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceCollectionsClientDeleteResponse]("WorkspaceCollectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceCollectionsClientDeleteResponse]("WorkspaceCollectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceCollectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceCollectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return WorkspaceCollectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceCollectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Power BI Workspace Collection.
@@ -343,13 +339,26 @@ func (client *WorkspaceCollectionsClient) getByNameHandleResponse(resp *http.Res
 // resourceGroupName - Azure resource group
 // options - WorkspaceCollectionsClientListByResourceGroupOptions contains the optional parameters for the WorkspaceCollectionsClient.ListByResourceGroup
 // method.
-func (client *WorkspaceCollectionsClient) ListByResourceGroup(resourceGroupName string, options *WorkspaceCollectionsClientListByResourceGroupOptions) *WorkspaceCollectionsClientListByResourceGroupPager {
-	return &WorkspaceCollectionsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WorkspaceCollectionsClient) ListByResourceGroup(resourceGroupName string, options *WorkspaceCollectionsClientListByResourceGroupOptions) *runtime.Pager[WorkspaceCollectionsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspaceCollectionsClientListByResourceGroupResponse]{
+		More: func(page WorkspaceCollectionsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspaceCollectionsClientListByResourceGroupResponse) (WorkspaceCollectionsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return WorkspaceCollectionsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspaceCollectionsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspaceCollectionsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -387,13 +396,26 @@ func (client *WorkspaceCollectionsClient) listByResourceGroupHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkspaceCollectionsClientListBySubscriptionOptions contains the optional parameters for the WorkspaceCollectionsClient.ListBySubscription
 // method.
-func (client *WorkspaceCollectionsClient) ListBySubscription(options *WorkspaceCollectionsClientListBySubscriptionOptions) *WorkspaceCollectionsClientListBySubscriptionPager {
-	return &WorkspaceCollectionsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *WorkspaceCollectionsClient) ListBySubscription(options *WorkspaceCollectionsClientListBySubscriptionOptions) *runtime.Pager[WorkspaceCollectionsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspaceCollectionsClientListBySubscriptionResponse]{
+		More: func(page WorkspaceCollectionsClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspaceCollectionsClientListBySubscriptionResponse) (WorkspaceCollectionsClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return WorkspaceCollectionsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspaceCollectionsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspaceCollectionsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

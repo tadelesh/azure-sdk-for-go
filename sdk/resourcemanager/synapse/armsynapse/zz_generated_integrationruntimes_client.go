@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewIntegrationRuntimesClient(subscriptionID string, credential azcore.Token
 // integrationRuntime - Integration runtime resource definition.
 // options - IntegrationRuntimesClientBeginCreateOptions contains the optional parameters for the IntegrationRuntimesClient.BeginCreate
 // method.
-func (client *IntegrationRuntimesClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, integrationRuntime IntegrationRuntimeResource, options *IntegrationRuntimesClientBeginCreateOptions) (IntegrationRuntimesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, workspaceName, integrationRuntimeName, integrationRuntime, options)
-	if err != nil {
-		return IntegrationRuntimesClientCreatePollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, integrationRuntime IntegrationRuntimeResource, options *IntegrationRuntimesClientBeginCreateOptions) (*armruntime.Poller[IntegrationRuntimesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, workspaceName, integrationRuntimeName, integrationRuntime, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientCreateResponse]("IntegrationRuntimesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientCreateResponse]("IntegrationRuntimesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create an integration runtime
@@ -130,20 +126,16 @@ func (client *IntegrationRuntimesClient) createCreateRequest(ctx context.Context
 // integrationRuntimeName - Integration runtime name
 // options - IntegrationRuntimesClientBeginDeleteOptions contains the optional parameters for the IntegrationRuntimesClient.BeginDelete
 // method.
-func (client *IntegrationRuntimesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginDeleteOptions) (IntegrationRuntimesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientDeletePollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginDeleteOptions) (*armruntime.Poller[IntegrationRuntimesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientDeleteResponse]("IntegrationRuntimesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientDeleteResponse]("IntegrationRuntimesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete an integration runtime
@@ -200,20 +192,16 @@ func (client *IntegrationRuntimesClient) deleteCreateRequest(ctx context.Context
 // integrationRuntimeName - Integration runtime name
 // options - IntegrationRuntimesClientBeginDisableInteractiveQueryOptions contains the optional parameters for the IntegrationRuntimesClient.BeginDisableInteractiveQuery
 // method.
-func (client *IntegrationRuntimesClient) BeginDisableInteractiveQuery(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginDisableInteractiveQueryOptions) (IntegrationRuntimesClientDisableInteractiveQueryPollerResponse, error) {
-	resp, err := client.disableInteractiveQuery(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginDisableInteractiveQuery(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginDisableInteractiveQueryOptions) (*armruntime.Poller[IntegrationRuntimesClientDisableInteractiveQueryResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.disableInteractiveQuery(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientDisableInteractiveQueryResponse]("IntegrationRuntimesClient.DisableInteractiveQuery", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientDisableInteractiveQueryResponse]("IntegrationRuntimesClient.DisableInteractiveQuery", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.DisableInteractiveQuery", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientDisableInteractiveQueryPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DisableInteractiveQuery - Disable interactive query in integration runtime
@@ -270,20 +258,16 @@ func (client *IntegrationRuntimesClient) disableInteractiveQueryCreateRequest(ct
 // integrationRuntimeName - Integration runtime name
 // options - IntegrationRuntimesClientBeginEnableInteractiveQueryOptions contains the optional parameters for the IntegrationRuntimesClient.BeginEnableInteractiveQuery
 // method.
-func (client *IntegrationRuntimesClient) BeginEnableInteractiveQuery(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginEnableInteractiveQueryOptions) (IntegrationRuntimesClientEnableInteractiveQueryPollerResponse, error) {
-	resp, err := client.enableInteractiveQuery(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginEnableInteractiveQuery(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginEnableInteractiveQueryOptions) (*armruntime.Poller[IntegrationRuntimesClientEnableInteractiveQueryResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.enableInteractiveQuery(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientEnableInteractiveQueryResponse]("IntegrationRuntimesClient.EnableInteractiveQuery", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientEnableInteractiveQueryResponse]("IntegrationRuntimesClient.EnableInteractiveQuery", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.EnableInteractiveQuery", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientEnableInteractiveQueryPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // EnableInteractiveQuery - Enable interactive query in integration runtime
@@ -402,16 +386,32 @@ func (client *IntegrationRuntimesClient) getHandleResponse(resp *http.Response) 
 // workspaceName - The name of the workspace.
 // options - IntegrationRuntimesClientListByWorkspaceOptions contains the optional parameters for the IntegrationRuntimesClient.ListByWorkspace
 // method.
-func (client *IntegrationRuntimesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IntegrationRuntimesClientListByWorkspaceOptions) *IntegrationRuntimesClientListByWorkspacePager {
-	return &IntegrationRuntimesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *IntegrationRuntimesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IntegrationRuntimesClientListByWorkspaceOptions) *runtime.Pager[IntegrationRuntimesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationRuntimesClientListByWorkspaceResponse]{
+		More: func(page IntegrationRuntimesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationRuntimesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationRuntimeListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationRuntimesClientListByWorkspaceResponse) (IntegrationRuntimesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationRuntimesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationRuntimesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationRuntimesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -518,20 +518,16 @@ func (client *IntegrationRuntimesClient) listOutboundNetworkDependenciesEndpoint
 // integrationRuntimeName - Integration runtime name
 // options - IntegrationRuntimesClientBeginStartOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStart
 // method.
-func (client *IntegrationRuntimesClient) BeginStart(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStartOptions) (IntegrationRuntimesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientStartPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginStart(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStartOptions) (*armruntime.Poller[IntegrationRuntimesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientStartResponse]("IntegrationRuntimesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientStartResponse]("IntegrationRuntimesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientStartPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Start an integration runtime
@@ -588,20 +584,16 @@ func (client *IntegrationRuntimesClient) startCreateRequest(ctx context.Context,
 // integrationRuntimeName - Integration runtime name
 // options - IntegrationRuntimesClientBeginStopOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStop
 // method.
-func (client *IntegrationRuntimesClient) BeginStop(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStopOptions) (IntegrationRuntimesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
-	if err != nil {
-		return IntegrationRuntimesClientStopPollerResponse{}, err
+func (client *IntegrationRuntimesClient) BeginStop(ctx context.Context, resourceGroupName string, workspaceName string, integrationRuntimeName string, options *IntegrationRuntimesClientBeginStopOptions) (*armruntime.Poller[IntegrationRuntimesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, workspaceName, integrationRuntimeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IntegrationRuntimesClientStopResponse]("IntegrationRuntimesClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IntegrationRuntimesClientStopResponse]("IntegrationRuntimesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := IntegrationRuntimesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return IntegrationRuntimesClientStopPollerResponse{}, err
-	}
-	result.Poller = &IntegrationRuntimesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stop an integration runtime

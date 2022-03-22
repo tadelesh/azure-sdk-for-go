@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -509,29 +509,34 @@ type AccountUpdateParameters struct {
 // AccountsClientBeginAbortHierarchicalNamespaceMigrationOptions contains the optional parameters for the AccountsClient.BeginAbortHierarchicalNamespaceMigration
 // method.
 type AccountsClientBeginAbortHierarchicalNamespaceMigrationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
 type AccountsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginFailoverOptions contains the optional parameters for the AccountsClient.BeginFailover method.
 type AccountsClientBeginFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginHierarchicalNamespaceMigrationOptions contains the optional parameters for the AccountsClient.BeginHierarchicalNamespaceMigration
 // method.
 type AccountsClientBeginHierarchicalNamespaceMigrationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginRestoreBlobRangesOptions contains the optional parameters for the AccountsClient.BeginRestoreBlobRanges
 // method.
 type AccountsClientBeginRestoreBlobRangesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientCheckNameAvailabilityOptions contains the optional parameters for the AccountsClient.CheckNameAvailability
@@ -669,7 +674,8 @@ type BlobContainer struct {
 // BlobContainersClientBeginObjectLevelWormOptions contains the optional parameters for the BlobContainersClient.BeginObjectLevelWorm
 // method.
 type BlobContainersClientBeginObjectLevelWormOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BlobContainersClientClearLegalHoldOptions contains the optional parameters for the BlobContainersClient.ClearLegalHold

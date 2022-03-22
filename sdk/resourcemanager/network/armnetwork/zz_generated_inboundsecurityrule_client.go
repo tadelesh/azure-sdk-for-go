@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewInboundSecurityRuleClient(subscriptionID string, credential azcore.Token
 // parameters - Parameters supplied to the create or update Network Virtual Appliance Inbound Security Rules operation.
 // options - InboundSecurityRuleClientBeginCreateOrUpdateOptions contains the optional parameters for the InboundSecurityRuleClient.BeginCreateOrUpdate
 // method.
-func (client *InboundSecurityRuleClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, ruleCollectionName string, parameters InboundSecurityRule, options *InboundSecurityRuleClientBeginCreateOrUpdateOptions) (InboundSecurityRuleClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, networkVirtualApplianceName, ruleCollectionName, parameters, options)
-	if err != nil {
-		return InboundSecurityRuleClientCreateOrUpdatePollerResponse{}, err
+func (client *InboundSecurityRuleClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, ruleCollectionName string, parameters InboundSecurityRule, options *InboundSecurityRuleClientBeginCreateOrUpdateOptions) (*armruntime.Poller[InboundSecurityRuleClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, networkVirtualApplianceName, ruleCollectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InboundSecurityRuleClientCreateOrUpdateResponse]("InboundSecurityRuleClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InboundSecurityRuleClientCreateOrUpdateResponse]("InboundSecurityRuleClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := InboundSecurityRuleClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("InboundSecurityRuleClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return InboundSecurityRuleClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &InboundSecurityRuleClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the specified Network Virtual Appliance Inbound Security Rules.

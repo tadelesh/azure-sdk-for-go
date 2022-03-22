@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -30,12 +30,14 @@ type BotResponseList struct {
 
 // BotsClientBeginCreateOptions contains the optional parameters for the BotsClient.BeginCreate method.
 type BotsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BotsClientBeginDeleteOptions contains the optional parameters for the BotsClient.BeginDelete method.
 type BotsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BotsClientGetOptions contains the optional parameters for the BotsClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -216,13 +216,26 @@ func (client *AutoScaleVCoresClient) getHandleResponse(resp *http.Response) (Aut
 // must be at least 1 character in length, and no more than 90.
 // options - AutoScaleVCoresClientListByResourceGroupOptions contains the optional parameters for the AutoScaleVCoresClient.ListByResourceGroup
 // method.
-func (client *AutoScaleVCoresClient) ListByResourceGroup(resourceGroupName string, options *AutoScaleVCoresClientListByResourceGroupOptions) *AutoScaleVCoresClientListByResourceGroupPager {
-	return &AutoScaleVCoresClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AutoScaleVCoresClient) ListByResourceGroup(resourceGroupName string, options *AutoScaleVCoresClientListByResourceGroupOptions) *runtime.Pager[AutoScaleVCoresClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutoScaleVCoresClientListByResourceGroupResponse]{
+		More: func(page AutoScaleVCoresClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AutoScaleVCoresClientListByResourceGroupResponse) (AutoScaleVCoresClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return AutoScaleVCoresClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutoScaleVCoresClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutoScaleVCoresClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -260,13 +273,26 @@ func (client *AutoScaleVCoresClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AutoScaleVCoresClientListBySubscriptionOptions contains the optional parameters for the AutoScaleVCoresClient.ListBySubscription
 // method.
-func (client *AutoScaleVCoresClient) ListBySubscription(options *AutoScaleVCoresClientListBySubscriptionOptions) *AutoScaleVCoresClientListBySubscriptionPager {
-	return &AutoScaleVCoresClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AutoScaleVCoresClient) ListBySubscription(options *AutoScaleVCoresClientListBySubscriptionOptions) *runtime.Pager[AutoScaleVCoresClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutoScaleVCoresClientListBySubscriptionResponse]{
+		More: func(page AutoScaleVCoresClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AutoScaleVCoresClientListBySubscriptionResponse) (AutoScaleVCoresClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return AutoScaleVCoresClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutoScaleVCoresClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutoScaleVCoresClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

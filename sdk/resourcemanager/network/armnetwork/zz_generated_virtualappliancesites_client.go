@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewVirtualApplianceSitesClient(subscriptionID string, credential azcore.Tok
 // parameters - Parameters supplied to the create or update Network Virtual Appliance Site operation.
 // options - VirtualApplianceSitesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualApplianceSitesClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualApplianceSitesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, siteName string, parameters VirtualApplianceSite, options *VirtualApplianceSitesClientBeginCreateOrUpdateOptions) (VirtualApplianceSitesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, networkVirtualApplianceName, siteName, parameters, options)
-	if err != nil {
-		return VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualApplianceSitesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, siteName string, parameters VirtualApplianceSite, options *VirtualApplianceSitesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualApplianceSitesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, networkVirtualApplianceName, siteName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualApplianceSitesClientCreateOrUpdateResponse]("VirtualApplianceSitesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualApplianceSitesClientCreateOrUpdateResponse]("VirtualApplianceSitesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualApplianceSitesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualApplianceSitesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the specified Network Virtual Appliance Site.
@@ -128,20 +124,16 @@ func (client *VirtualApplianceSitesClient) createOrUpdateCreateRequest(ctx conte
 // siteName - The name of the site.
 // options - VirtualApplianceSitesClientBeginDeleteOptions contains the optional parameters for the VirtualApplianceSitesClient.BeginDelete
 // method.
-func (client *VirtualApplianceSitesClient) BeginDelete(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, siteName string, options *VirtualApplianceSitesClientBeginDeleteOptions) (VirtualApplianceSitesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, networkVirtualApplianceName, siteName, options)
-	if err != nil {
-		return VirtualApplianceSitesClientDeletePollerResponse{}, err
+func (client *VirtualApplianceSitesClient) BeginDelete(ctx context.Context, resourceGroupName string, networkVirtualApplianceName string, siteName string, options *VirtualApplianceSitesClientBeginDeleteOptions) (*armruntime.Poller[VirtualApplianceSitesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, networkVirtualApplianceName, siteName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualApplianceSitesClientDeleteResponse]("VirtualApplianceSitesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualApplianceSitesClientDeleteResponse]("VirtualApplianceSitesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualApplianceSitesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualApplianceSitesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VirtualApplianceSitesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualApplianceSitesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified site from a Virtual Appliance.
@@ -258,16 +250,32 @@ func (client *VirtualApplianceSitesClient) getHandleResponse(resp *http.Response
 // networkVirtualApplianceName - The name of the Network Virtual Appliance.
 // options - VirtualApplianceSitesClientListOptions contains the optional parameters for the VirtualApplianceSitesClient.List
 // method.
-func (client *VirtualApplianceSitesClient) List(resourceGroupName string, networkVirtualApplianceName string, options *VirtualApplianceSitesClientListOptions) *VirtualApplianceSitesClientListPager {
-	return &VirtualApplianceSitesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, networkVirtualApplianceName, options)
+func (client *VirtualApplianceSitesClient) List(resourceGroupName string, networkVirtualApplianceName string, options *VirtualApplianceSitesClientListOptions) *runtime.Pager[VirtualApplianceSitesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualApplianceSitesClientListResponse]{
+		More: func(page VirtualApplianceSitesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualApplianceSitesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualApplianceSiteListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualApplianceSitesClientListResponse) (VirtualApplianceSitesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, networkVirtualApplianceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualApplianceSitesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualApplianceSitesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualApplianceSitesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

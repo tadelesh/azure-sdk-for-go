@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -14,6 +14,8 @@ import "time"
 type APIClientBeginCreateOrUpdateOptions struct {
 	// ETag of the Entity. Not required when creating an entity, but required when updating an entity.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // APIClientDeleteOptions contains the optional parameters for the APIClient.Delete method.
@@ -847,6 +849,8 @@ type APIRevisionInfoContract struct {
 type APISchemaClientBeginCreateOrUpdateOptions struct {
 	// ETag of the Entity. Not required when creating an entity, but required when updating an entity.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // APISchemaClientDeleteOptions contains the optional parameters for the APISchemaClient.Delete method.
@@ -2082,7 +2086,8 @@ type CertificateInformation struct {
 // ClientBeginPerformConnectivityCheckAsyncOptions contains the optional parameters for the Client.BeginPerformConnectivityCheckAsync
 // method.
 type ClientBeginPerformConnectivityCheckAsyncOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientSecretContract - Client or app secret used in IdentityProviders, Aad, OpenID or OAuth.
@@ -2426,7 +2431,8 @@ type DeletedServiceContractProperties struct {
 
 // DeletedServicesClientBeginPurgeOptions contains the optional parameters for the DeletedServicesClient.BeginPurge method.
 type DeletedServicesClientBeginPurgeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeletedServicesClientGetByNameOptions contains the optional parameters for the DeletedServicesClient.GetByName method.
@@ -3041,6 +3047,8 @@ type GenerateSsoURLResult struct {
 type GlobalSchemaClientBeginCreateOrUpdateOptions struct {
 	// ETag of the Entity. Not required when creating an entity, but required when updating an entity.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GlobalSchemaClientDeleteOptions contains the optional parameters for the GlobalSchemaClient.Delete method.
@@ -3903,17 +3911,21 @@ type LoggerUpdateParameters struct {
 type NamedValueClientBeginCreateOrUpdateOptions struct {
 	// ETag of the Entity. Not required when creating an entity, but required when updating an entity.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NamedValueClientBeginRefreshSecretOptions contains the optional parameters for the NamedValueClient.BeginRefreshSecret
 // method.
 type NamedValueClientBeginRefreshSecretOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NamedValueClientBeginUpdateOptions contains the optional parameters for the NamedValueClient.BeginUpdate method.
 type NamedValueClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NamedValueClientDeleteOptions contains the optional parameters for the NamedValueClient.Delete method.
@@ -4807,12 +4819,14 @@ type PortalDelegationSettingsProperties struct {
 // PortalRevisionClientBeginCreateOrUpdateOptions contains the optional parameters for the PortalRevisionClient.BeginCreateOrUpdate
 // method.
 type PortalRevisionClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PortalRevisionClientBeginUpdateOptions contains the optional parameters for the PortalRevisionClient.BeginUpdate method.
 type PortalRevisionClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PortalRevisionClientGetEntityTagOptions contains the optional parameters for the PortalRevisionClient.GetEntityTag method.
@@ -5006,13 +5020,15 @@ type PrivateEndpointConnection struct {
 // PrivateEndpointConnectionClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionClient.BeginDelete
 // method.
 type PrivateEndpointConnectionClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionClientGetByNameOptions contains the optional parameters for the PrivateEndpointConnectionClient.GetByName
@@ -6421,31 +6437,38 @@ type ServiceClientBeginApplyNetworkConfigurationUpdatesOptions struct {
 	// the Api Management service is deployed will be updated sequentially without
 	// incurring downtime in the region.
 	Parameters *ServiceApplyNetworkConfigurationParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginBackupOptions contains the optional parameters for the ServiceClient.BeginBackup method.
 type ServiceClientBeginBackupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceClient.BeginCreateOrUpdate method.
 type ServiceClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginDeleteOptions contains the optional parameters for the ServiceClient.BeginDelete method.
 type ServiceClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginRestoreOptions contains the optional parameters for the ServiceClient.BeginRestore method.
 type ServiceClientBeginRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientBeginUpdateOptions contains the optional parameters for the ServiceClient.BeginUpdate method.
 type ServiceClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceClientCheckNameAvailabilityOptions contains the optional parameters for the ServiceClient.CheckNameAvailability
@@ -7558,19 +7581,22 @@ type TenantAccessGitClientRegenerateSecondaryKeyOptions struct {
 // TenantConfigurationClientBeginDeployOptions contains the optional parameters for the TenantConfigurationClient.BeginDeploy
 // method.
 type TenantConfigurationClientBeginDeployOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TenantConfigurationClientBeginSaveOptions contains the optional parameters for the TenantConfigurationClient.BeginSave
 // method.
 type TenantConfigurationClientBeginSaveOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TenantConfigurationClientBeginValidateOptions contains the optional parameters for the TenantConfigurationClient.BeginValidate
 // method.
 type TenantConfigurationClientBeginValidateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TenantConfigurationClientGetSyncStateOptions contains the optional parameters for the TenantConfigurationClient.GetSyncState

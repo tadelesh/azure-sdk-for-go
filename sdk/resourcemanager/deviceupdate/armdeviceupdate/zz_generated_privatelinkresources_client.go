@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,13 +116,26 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // accountName - Account name.
 // options - PrivateLinkResourcesClientListByAccountOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByAccount
 // method.
-func (client *PrivateLinkResourcesClient) ListByAccount(resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByAccountOptions) *PrivateLinkResourcesClientListByAccountPager {
-	return &PrivateLinkResourcesClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PrivateLinkResourcesClient) ListByAccount(resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByAccountOptions) *runtime.Pager[PrivateLinkResourcesClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByAccountResponse]{
+		More: func(page PrivateLinkResourcesClientListByAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByAccountResponse) (PrivateLinkResourcesClientListByAccountResponse, error) {
+			req, err := client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

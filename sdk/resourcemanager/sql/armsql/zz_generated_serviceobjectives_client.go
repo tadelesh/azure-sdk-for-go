@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,13 +117,26 @@ func (client *ServiceObjectivesClient) getHandleResponse(resp *http.Response) (S
 // serverName - The name of the server.
 // options - ServiceObjectivesClientListByServerOptions contains the optional parameters for the ServiceObjectivesClient.ListByServer
 // method.
-func (client *ServiceObjectivesClient) ListByServer(resourceGroupName string, serverName string, options *ServiceObjectivesClientListByServerOptions) *ServiceObjectivesClientListByServerPager {
-	return &ServiceObjectivesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServiceObjectivesClient) ListByServer(resourceGroupName string, serverName string, options *ServiceObjectivesClientListByServerOptions) *runtime.Pager[ServiceObjectivesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceObjectivesClientListByServerResponse]{
+		More: func(page ServiceObjectivesClientListByServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServiceObjectivesClientListByServerResponse) (ServiceObjectivesClientListByServerResponse, error) {
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ServiceObjectivesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceObjectivesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceObjectivesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

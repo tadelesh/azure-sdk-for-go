@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *RegisteredAsnsClient) getHandleResponse(resp *http.Response) (Regi
 // peeringName - The name of the peering.
 // options - RegisteredAsnsClientListByPeeringOptions contains the optional parameters for the RegisteredAsnsClient.ListByPeering
 // method.
-func (client *RegisteredAsnsClient) ListByPeering(resourceGroupName string, peeringName string, options *RegisteredAsnsClientListByPeeringOptions) *RegisteredAsnsClientListByPeeringPager {
-	return &RegisteredAsnsClientListByPeeringPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByPeeringCreateRequest(ctx, resourceGroupName, peeringName, options)
+func (client *RegisteredAsnsClient) ListByPeering(resourceGroupName string, peeringName string, options *RegisteredAsnsClientListByPeeringOptions) *runtime.Pager[RegisteredAsnsClientListByPeeringResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegisteredAsnsClientListByPeeringResponse]{
+		More: func(page RegisteredAsnsClientListByPeeringResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegisteredAsnsClientListByPeeringResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegisteredAsnListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegisteredAsnsClientListByPeeringResponse) (RegisteredAsnsClientListByPeeringResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByPeeringCreateRequest(ctx, resourceGroupName, peeringName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegisteredAsnsClientListByPeeringResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegisteredAsnsClientListByPeeringResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegisteredAsnsClientListByPeeringResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByPeeringHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByPeeringCreateRequest creates the ListByPeering request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,20 +116,16 @@ func (client *ManagedNetworksClient) createOrUpdateHandleResponse(resp *http.Res
 // managedNetworkName - The name of the Managed Network.
 // options - ManagedNetworksClientBeginDeleteOptions contains the optional parameters for the ManagedNetworksClient.BeginDelete
 // method.
-func (client *ManagedNetworksClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, options *ManagedNetworksClientBeginDeleteOptions) (ManagedNetworksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, options)
-	if err != nil {
-		return ManagedNetworksClientDeletePollerResponse{}, err
+func (client *ManagedNetworksClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, options *ManagedNetworksClientBeginDeleteOptions) (*armruntime.Poller[ManagedNetworksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedNetworksClientDeleteResponse]("ManagedNetworksClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedNetworksClientDeleteResponse]("ManagedNetworksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedNetworksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedNetworksClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ManagedNetworksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedNetworksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The Delete ManagedNetworks operation deletes a Managed Network Resource, specified by the resource group and Managed
@@ -238,16 +234,32 @@ func (client *ManagedNetworksClient) getHandleResponse(resp *http.Response) (Man
 // resourceGroupName - The name of the resource group.
 // options - ManagedNetworksClientListByResourceGroupOptions contains the optional parameters for the ManagedNetworksClient.ListByResourceGroup
 // method.
-func (client *ManagedNetworksClient) ListByResourceGroup(resourceGroupName string, options *ManagedNetworksClientListByResourceGroupOptions) *ManagedNetworksClientListByResourceGroupPager {
-	return &ManagedNetworksClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagedNetworksClient) ListByResourceGroup(resourceGroupName string, options *ManagedNetworksClientListByResourceGroupOptions) *runtime.Pager[ManagedNetworksClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedNetworksClientListByResourceGroupResponse]{
+		More: func(page ManagedNetworksClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedNetworksClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedNetworksClientListByResourceGroupResponse) (ManagedNetworksClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedNetworksClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedNetworksClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedNetworksClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -292,16 +304,32 @@ func (client *ManagedNetworksClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagedNetworksClientListBySubscriptionOptions contains the optional parameters for the ManagedNetworksClient.ListBySubscription
 // method.
-func (client *ManagedNetworksClient) ListBySubscription(options *ManagedNetworksClientListBySubscriptionOptions) *ManagedNetworksClientListBySubscriptionPager {
-	return &ManagedNetworksClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ManagedNetworksClient) ListBySubscription(options *ManagedNetworksClientListBySubscriptionOptions) *runtime.Pager[ManagedNetworksClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedNetworksClientListBySubscriptionResponse]{
+		More: func(page ManagedNetworksClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedNetworksClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedNetworksClientListBySubscriptionResponse) (ManagedNetworksClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedNetworksClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedNetworksClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedNetworksClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -344,20 +372,16 @@ func (client *ManagedNetworksClient) listBySubscriptionHandleResponse(resp *http
 // parameters - Parameters supplied to update application gateway tags and/or scope.
 // options - ManagedNetworksClientBeginUpdateOptions contains the optional parameters for the ManagedNetworksClient.BeginUpdate
 // method.
-func (client *ManagedNetworksClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, parameters Update, options *ManagedNetworksClientBeginUpdateOptions) (ManagedNetworksClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, managedNetworkName, parameters, options)
-	if err != nil {
-		return ManagedNetworksClientUpdatePollerResponse{}, err
+func (client *ManagedNetworksClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, parameters Update, options *ManagedNetworksClientBeginUpdateOptions) (*armruntime.Poller[ManagedNetworksClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, managedNetworkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedNetworksClientUpdateResponse]("ManagedNetworksClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedNetworksClientUpdateResponse]("ManagedNetworksClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedNetworksClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedNetworksClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ManagedNetworksClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedNetworksClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the specified Managed Network resource tags.

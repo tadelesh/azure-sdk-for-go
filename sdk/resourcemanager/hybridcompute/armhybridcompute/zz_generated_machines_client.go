@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -215,16 +215,32 @@ func (client *MachinesClient) getHandleResponse(resp *http.Response) (MachinesCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - MachinesClientListByResourceGroupOptions contains the optional parameters for the MachinesClient.ListByResourceGroup
 // method.
-func (client *MachinesClient) ListByResourceGroup(resourceGroupName string, options *MachinesClientListByResourceGroupOptions) *MachinesClientListByResourceGroupPager {
-	return &MachinesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *MachinesClient) ListByResourceGroup(resourceGroupName string, options *MachinesClientListByResourceGroupOptions) *runtime.Pager[MachinesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MachinesClientListByResourceGroupResponse]{
+		More: func(page MachinesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MachinesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MachineListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MachinesClientListByResourceGroupResponse) (MachinesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MachinesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MachinesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MachinesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -263,16 +279,32 @@ func (client *MachinesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - MachinesClientListBySubscriptionOptions contains the optional parameters for the MachinesClient.ListBySubscription
 // method.
-func (client *MachinesClient) ListBySubscription(options *MachinesClientListBySubscriptionOptions) *MachinesClientListBySubscriptionPager {
-	return &MachinesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *MachinesClient) ListBySubscription(options *MachinesClientListBySubscriptionOptions) *runtime.Pager[MachinesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MachinesClientListBySubscriptionResponse]{
+		More: func(page MachinesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MachinesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MachineListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MachinesClientListBySubscriptionResponse) (MachinesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MachinesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MachinesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MachinesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

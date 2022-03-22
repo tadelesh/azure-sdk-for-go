@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -135,20 +135,16 @@ func (client *SourceControlConfigurationsClient) createOrUpdateHandleResponse(re
 // sourceControlConfigurationName - Name of the Source Control Configuration.
 // options - SourceControlConfigurationsClientBeginDeleteOptions contains the optional parameters for the SourceControlConfigurationsClient.BeginDelete
 // method.
-func (client *SourceControlConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, sourceControlConfigurationName string, options *SourceControlConfigurationsClientBeginDeleteOptions) (SourceControlConfigurationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, sourceControlConfigurationName, options)
-	if err != nil {
-		return SourceControlConfigurationsClientDeletePollerResponse{}, err
+func (client *SourceControlConfigurationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, sourceControlConfigurationName string, options *SourceControlConfigurationsClientBeginDeleteOptions) (*armruntime.Poller[SourceControlConfigurationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, sourceControlConfigurationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SourceControlConfigurationsClientDeleteResponse]("SourceControlConfigurationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SourceControlConfigurationsClientDeleteResponse]("SourceControlConfigurationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SourceControlConfigurationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SourceControlConfigurationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SourceControlConfigurationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SourceControlConfigurationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - This will delete the YAML file used to set up the Source control configuration, thus stopping future sync from
@@ -290,16 +286,32 @@ func (client *SourceControlConfigurationsClient) getHandleResponse(resp *http.Re
 // clusterName - The name of the kubernetes cluster.
 // options - SourceControlConfigurationsClientListOptions contains the optional parameters for the SourceControlConfigurationsClient.List
 // method.
-func (client *SourceControlConfigurationsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *SourceControlConfigurationsClientListOptions) *SourceControlConfigurationsClientListPager {
-	return &SourceControlConfigurationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+func (client *SourceControlConfigurationsClient) List(resourceGroupName string, clusterRp ExtensionsClusterRp, clusterResourceName ExtensionsClusterResourceName, clusterName string, options *SourceControlConfigurationsClientListOptions) *runtime.Pager[SourceControlConfigurationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SourceControlConfigurationsClientListResponse]{
+		More: func(page SourceControlConfigurationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SourceControlConfigurationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SourceControlConfigurationList.NextLink)
+		Fetcher: func(ctx context.Context, page *SourceControlConfigurationsClientListResponse) (SourceControlConfigurationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, clusterRp, clusterResourceName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SourceControlConfigurationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SourceControlConfigurationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SourceControlConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

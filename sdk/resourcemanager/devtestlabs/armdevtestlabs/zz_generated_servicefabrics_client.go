@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewServiceFabricsClient(subscriptionID string, credential azcore.TokenCrede
 // serviceFabric - A Service Fabric.
 // options - ServiceFabricsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceFabricsClient.BeginCreateOrUpdate
 // method.
-func (client *ServiceFabricsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, userName string, name string, serviceFabric ServiceFabric, options *ServiceFabricsClientBeginCreateOrUpdateOptions) (ServiceFabricsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, userName, name, serviceFabric, options)
-	if err != nil {
-		return ServiceFabricsClientCreateOrUpdatePollerResponse{}, err
+func (client *ServiceFabricsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, userName string, name string, serviceFabric ServiceFabric, options *ServiceFabricsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServiceFabricsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, userName, name, serviceFabric, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceFabricsClientCreateOrUpdateResponse]("ServiceFabricsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceFabricsClientCreateOrUpdateResponse]("ServiceFabricsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceFabricsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceFabricsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServiceFabricsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServiceFabricsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing service fabric. This operation can take a while to complete.
@@ -134,20 +130,16 @@ func (client *ServiceFabricsClient) createOrUpdateCreateRequest(ctx context.Cont
 // name - The name of the service fabric.
 // options - ServiceFabricsClientBeginDeleteOptions contains the optional parameters for the ServiceFabricsClient.BeginDelete
 // method.
-func (client *ServiceFabricsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginDeleteOptions) (ServiceFabricsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, userName, name, options)
-	if err != nil {
-		return ServiceFabricsClientDeletePollerResponse{}, err
+func (client *ServiceFabricsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginDeleteOptions) (*armruntime.Poller[ServiceFabricsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, userName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceFabricsClientDeleteResponse]("ServiceFabricsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceFabricsClientDeleteResponse]("ServiceFabricsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceFabricsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceFabricsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServiceFabricsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServiceFabricsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete service fabric. This operation can take a while to complete.
@@ -275,16 +267,32 @@ func (client *ServiceFabricsClient) getHandleResponse(resp *http.Response) (Serv
 // labName - The name of the lab.
 // userName - The name of the user profile.
 // options - ServiceFabricsClientListOptions contains the optional parameters for the ServiceFabricsClient.List method.
-func (client *ServiceFabricsClient) List(resourceGroupName string, labName string, userName string, options *ServiceFabricsClientListOptions) *ServiceFabricsClientListPager {
-	return &ServiceFabricsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, userName, options)
+func (client *ServiceFabricsClient) List(resourceGroupName string, labName string, userName string, options *ServiceFabricsClientListOptions) *runtime.Pager[ServiceFabricsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceFabricsClientListResponse]{
+		More: func(page ServiceFabricsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServiceFabricsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceFabricList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServiceFabricsClientListResponse) (ServiceFabricsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, userName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServiceFabricsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceFabricsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceFabricsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -412,20 +420,16 @@ func (client *ServiceFabricsClient) listApplicableSchedulesHandleResponse(resp *
 // name - The name of the service fabric.
 // options - ServiceFabricsClientBeginStartOptions contains the optional parameters for the ServiceFabricsClient.BeginStart
 // method.
-func (client *ServiceFabricsClient) BeginStart(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginStartOptions) (ServiceFabricsClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, labName, userName, name, options)
-	if err != nil {
-		return ServiceFabricsClientStartPollerResponse{}, err
+func (client *ServiceFabricsClient) BeginStart(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginStartOptions) (*armruntime.Poller[ServiceFabricsClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, labName, userName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceFabricsClientStartResponse]("ServiceFabricsClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceFabricsClientStartResponse]("ServiceFabricsClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceFabricsClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceFabricsClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ServiceFabricsClientStartPollerResponse{}, err
-	}
-	result.Poller = &ServiceFabricsClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Start a service fabric. This operation can take a while to complete.
@@ -487,20 +491,16 @@ func (client *ServiceFabricsClient) startCreateRequest(ctx context.Context, reso
 // name - The name of the service fabric.
 // options - ServiceFabricsClientBeginStopOptions contains the optional parameters for the ServiceFabricsClient.BeginStop
 // method.
-func (client *ServiceFabricsClient) BeginStop(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginStopOptions) (ServiceFabricsClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, labName, userName, name, options)
-	if err != nil {
-		return ServiceFabricsClientStopPollerResponse{}, err
+func (client *ServiceFabricsClient) BeginStop(ctx context.Context, resourceGroupName string, labName string, userName string, name string, options *ServiceFabricsClientBeginStopOptions) (*armruntime.Poller[ServiceFabricsClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, labName, userName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceFabricsClientStopResponse]("ServiceFabricsClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceFabricsClientStopResponse]("ServiceFabricsClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceFabricsClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceFabricsClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return ServiceFabricsClientStopPollerResponse{}, err
-	}
-	result.Poller = &ServiceFabricsClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stop a service fabric This operation can take a while to complete.

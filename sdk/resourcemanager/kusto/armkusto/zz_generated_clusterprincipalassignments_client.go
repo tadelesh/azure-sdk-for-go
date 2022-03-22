@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,20 +115,16 @@ func (client *ClusterPrincipalAssignmentsClient) checkNameAvailabilityHandleResp
 // parameters - The Kusto cluster principalAssignment's parameters supplied for the operation.
 // options - ClusterPrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
-func (client *ClusterPrincipalAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, principalAssignmentName string, parameters ClusterPrincipalAssignment, options *ClusterPrincipalAssignmentsClientBeginCreateOrUpdateOptions) (ClusterPrincipalAssignmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, principalAssignmentName, parameters, options)
-	if err != nil {
-		return ClusterPrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *ClusterPrincipalAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, principalAssignmentName string, parameters ClusterPrincipalAssignment, options *ClusterPrincipalAssignmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ClusterPrincipalAssignmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, principalAssignmentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClusterPrincipalAssignmentsClientCreateOrUpdateResponse]("ClusterPrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClusterPrincipalAssignmentsClientCreateOrUpdateResponse]("ClusterPrincipalAssignmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClusterPrincipalAssignmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClusterPrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ClusterPrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClusterPrincipalAssignmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a Kusto cluster principalAssignment.
@@ -185,20 +181,16 @@ func (client *ClusterPrincipalAssignmentsClient) createOrUpdateCreateRequest(ctx
 // principalAssignmentName - The name of the Kusto principalAssignment.
 // options - ClusterPrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.BeginDelete
 // method.
-func (client *ClusterPrincipalAssignmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, principalAssignmentName string, options *ClusterPrincipalAssignmentsClientBeginDeleteOptions) (ClusterPrincipalAssignmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, principalAssignmentName, options)
-	if err != nil {
-		return ClusterPrincipalAssignmentsClientDeletePollerResponse{}, err
+func (client *ClusterPrincipalAssignmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, principalAssignmentName string, options *ClusterPrincipalAssignmentsClientBeginDeleteOptions) (*armruntime.Poller[ClusterPrincipalAssignmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, principalAssignmentName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClusterPrincipalAssignmentsClientDeleteResponse]("ClusterPrincipalAssignmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClusterPrincipalAssignmentsClientDeleteResponse]("ClusterPrincipalAssignmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClusterPrincipalAssignmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ClusterPrincipalAssignmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ClusterPrincipalAssignmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClusterPrincipalAssignmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Kusto cluster principalAssignment.
@@ -315,13 +307,26 @@ func (client *ClusterPrincipalAssignmentsClient) getHandleResponse(resp *http.Re
 // clusterName - The name of the Kusto cluster.
 // options - ClusterPrincipalAssignmentsClientListOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.List
 // method.
-func (client *ClusterPrincipalAssignmentsClient) List(resourceGroupName string, clusterName string, options *ClusterPrincipalAssignmentsClientListOptions) *ClusterPrincipalAssignmentsClientListPager {
-	return &ClusterPrincipalAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ClusterPrincipalAssignmentsClient) List(resourceGroupName string, clusterName string, options *ClusterPrincipalAssignmentsClientListOptions) *runtime.Pager[ClusterPrincipalAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClusterPrincipalAssignmentsClientListResponse]{
+		More: func(page ClusterPrincipalAssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClusterPrincipalAssignmentsClientListResponse) (ClusterPrincipalAssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return ClusterPrincipalAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClusterPrincipalAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClusterPrincipalAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

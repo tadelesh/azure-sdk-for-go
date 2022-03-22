@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewFirewallPolicyRuleCollectionGroupsClient(subscriptionID string, credenti
 // parameters - Parameters supplied to the create or update FirewallPolicyRuleCollectionGroup operation.
 // options - FirewallPolicyRuleCollectionGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.BeginCreateOrUpdate
 // method.
-func (client *FirewallPolicyRuleCollectionGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, firewallPolicyName string, ruleCollectionGroupName string, parameters FirewallPolicyRuleCollectionGroup, options *FirewallPolicyRuleCollectionGroupsClientBeginCreateOrUpdateOptions) (FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, firewallPolicyName, ruleCollectionGroupName, parameters, options)
-	if err != nil {
-		return FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *FirewallPolicyRuleCollectionGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, firewallPolicyName string, ruleCollectionGroupName string, parameters FirewallPolicyRuleCollectionGroup, options *FirewallPolicyRuleCollectionGroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[FirewallPolicyRuleCollectionGroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, firewallPolicyName, ruleCollectionGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FirewallPolicyRuleCollectionGroupsClientCreateOrUpdateResponse]("FirewallPolicyRuleCollectionGroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FirewallPolicyRuleCollectionGroupsClientCreateOrUpdateResponse]("FirewallPolicyRuleCollectionGroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FirewallPolicyRuleCollectionGroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the specified FirewallPolicyRuleCollectionGroup.
@@ -128,20 +124,16 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) createOrUpdateCreateRequ
 // ruleCollectionGroupName - The name of the FirewallPolicyRuleCollectionGroup.
 // options - FirewallPolicyRuleCollectionGroupsClientBeginDeleteOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.BeginDelete
 // method.
-func (client *FirewallPolicyRuleCollectionGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, firewallPolicyName string, ruleCollectionGroupName string, options *FirewallPolicyRuleCollectionGroupsClientBeginDeleteOptions) (FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, firewallPolicyName, ruleCollectionGroupName, options)
-	if err != nil {
-		return FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}, err
+func (client *FirewallPolicyRuleCollectionGroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, firewallPolicyName string, ruleCollectionGroupName string, options *FirewallPolicyRuleCollectionGroupsClientBeginDeleteOptions) (*armruntime.Poller[FirewallPolicyRuleCollectionGroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, firewallPolicyName, ruleCollectionGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FirewallPolicyRuleCollectionGroupsClientDeleteResponse]("FirewallPolicyRuleCollectionGroupsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FirewallPolicyRuleCollectionGroupsClientDeleteResponse]("FirewallPolicyRuleCollectionGroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("FirewallPolicyRuleCollectionGroupsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &FirewallPolicyRuleCollectionGroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified FirewallPolicyRuleCollectionGroup.
@@ -258,16 +250,32 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) getHandleResponse(resp *
 // firewallPolicyName - The name of the Firewall Policy.
 // options - FirewallPolicyRuleCollectionGroupsClientListOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.List
 // method.
-func (client *FirewallPolicyRuleCollectionGroupsClient) List(resourceGroupName string, firewallPolicyName string, options *FirewallPolicyRuleCollectionGroupsClientListOptions) *FirewallPolicyRuleCollectionGroupsClientListPager {
-	return &FirewallPolicyRuleCollectionGroupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, firewallPolicyName, options)
+func (client *FirewallPolicyRuleCollectionGroupsClient) List(resourceGroupName string, firewallPolicyName string, options *FirewallPolicyRuleCollectionGroupsClientListOptions) *runtime.Pager[FirewallPolicyRuleCollectionGroupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FirewallPolicyRuleCollectionGroupsClientListResponse]{
+		More: func(page FirewallPolicyRuleCollectionGroupsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FirewallPolicyRuleCollectionGroupsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FirewallPolicyRuleCollectionGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *FirewallPolicyRuleCollectionGroupsClientListResponse) (FirewallPolicyRuleCollectionGroupsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, firewallPolicyName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FirewallPolicyRuleCollectionGroupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FirewallPolicyRuleCollectionGroupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FirewallPolicyRuleCollectionGroupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

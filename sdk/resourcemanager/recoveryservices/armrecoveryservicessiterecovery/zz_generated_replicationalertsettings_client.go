@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -178,16 +178,32 @@ func (client *ReplicationAlertSettingsClient) getHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationAlertSettingsClientListOptions contains the optional parameters for the ReplicationAlertSettingsClient.List
 // method.
-func (client *ReplicationAlertSettingsClient) List(options *ReplicationAlertSettingsClientListOptions) *ReplicationAlertSettingsClientListPager {
-	return &ReplicationAlertSettingsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationAlertSettingsClient) List(options *ReplicationAlertSettingsClientListOptions) *runtime.Pager[ReplicationAlertSettingsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationAlertSettingsClientListResponse]{
+		More: func(page ReplicationAlertSettingsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationAlertSettingsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationAlertSettingsClientListResponse) (ReplicationAlertSettingsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationAlertSettingsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationAlertSettingsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationAlertSettingsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

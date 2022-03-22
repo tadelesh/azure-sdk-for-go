@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,16 +52,32 @@ func NewResourceSKUsClient(subscriptionID string, credential azcore.TokenCredent
 // ListSKUs - The skus action returns the list of SKUs that DMS supports.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceSKUsClientListSKUsOptions contains the optional parameters for the ResourceSKUsClient.ListSKUs method.
-func (client *ResourceSKUsClient) ListSKUs(options *ResourceSKUsClientListSKUsOptions) *ResourceSKUsClientListSKUsPager {
-	return &ResourceSKUsClientListSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSKUsCreateRequest(ctx, options)
+func (client *ResourceSKUsClient) ListSKUs(options *ResourceSKUsClientListSKUsOptions) *runtime.Pager[ResourceSKUsClientListSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceSKUsClientListSKUsResponse]{
+		More: func(page ResourceSKUsClientListSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceSKUsClientListSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceSKUsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceSKUsClientListSKUsResponse) (ResourceSKUsClientListSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSKUsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceSKUsClientListSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceSKUsClientListSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceSKUsClientListSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSKUsCreateRequest creates the ListSKUs request.

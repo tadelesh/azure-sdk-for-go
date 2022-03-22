@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -6095,13 +6095,15 @@ type DataFlowDebugSessionClientAddDataFlowOptions struct {
 // DataFlowDebugSessionClientBeginCreateOptions contains the optional parameters for the DataFlowDebugSessionClient.BeginCreate
 // method.
 type DataFlowDebugSessionClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataFlowDebugSessionClientBeginExecuteCommandOptions contains the optional parameters for the DataFlowDebugSessionClient.BeginExecuteCommand
 // method.
 type DataFlowDebugSessionClientBeginExecuteCommandOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataFlowDebugSessionClientDeleteOptions contains the optional parameters for the DataFlowDebugSessionClient.Delete method.
@@ -11597,7 +11599,8 @@ type IntegrationRuntimeNodesClientUpdateOptions struct {
 // IntegrationRuntimeObjectMetadataClientBeginRefreshOptions contains the optional parameters for the IntegrationRuntimeObjectMetadataClient.BeginRefresh
 // method.
 type IntegrationRuntimeObjectMetadataClientBeginRefreshOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimeObjectMetadataClientGetOptions contains the optional parameters for the IntegrationRuntimeObjectMetadataClient.Get
@@ -11791,13 +11794,15 @@ type IntegrationRuntimeVNetProperties struct {
 // IntegrationRuntimesClientBeginStartOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStart
 // method.
 type IntegrationRuntimesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientBeginStopOptions contains the optional parameters for the IntegrationRuntimesClient.BeginStop
 // method.
 type IntegrationRuntimesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationRuntimesClientCreateLinkedIntegrationRuntimeOptions contains the optional parameters for the IntegrationRuntimesClient.CreateLinkedIntegrationRuntime
@@ -21229,24 +21234,28 @@ type TriggerSubscriptionOperationStatus struct {
 
 // TriggersClientBeginStartOptions contains the optional parameters for the TriggersClient.BeginStart method.
 type TriggersClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientBeginStopOptions contains the optional parameters for the TriggersClient.BeginStop method.
 type TriggersClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientBeginSubscribeToEventsOptions contains the optional parameters for the TriggersClient.BeginSubscribeToEvents
 // method.
 type TriggersClientBeginSubscribeToEventsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientBeginUnsubscribeFromEventsOptions contains the optional parameters for the TriggersClient.BeginUnsubscribeFromEvents
 // method.
 type TriggersClientBeginUnsubscribeFromEventsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientCreateOrUpdateOptions contains the optional parameters for the TriggersClient.CreateOrUpdate method.

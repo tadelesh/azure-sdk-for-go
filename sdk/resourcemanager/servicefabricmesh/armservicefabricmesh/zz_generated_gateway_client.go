@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -206,16 +206,32 @@ func (client *GatewayClient) getHandleResponse(resp *http.Response) (GatewayClie
 // resourceGroupName - Azure resource group name
 // options - GatewayClientListByResourceGroupOptions contains the optional parameters for the GatewayClient.ListByResourceGroup
 // method.
-func (client *GatewayClient) ListByResourceGroup(resourceGroupName string, options *GatewayClientListByResourceGroupOptions) *GatewayClientListByResourceGroupPager {
-	return &GatewayClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *GatewayClient) ListByResourceGroup(resourceGroupName string, options *GatewayClientListByResourceGroupOptions) *runtime.Pager[GatewayClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewayClientListByResourceGroupResponse]{
+		More: func(page GatewayClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewayClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewayClientListByResourceGroupResponse) (GatewayClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewayClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewayClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewayClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -254,16 +270,32 @@ func (client *GatewayClient) listByResourceGroupHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - GatewayClientListBySubscriptionOptions contains the optional parameters for the GatewayClient.ListBySubscription
 // method.
-func (client *GatewayClient) ListBySubscription(options *GatewayClientListBySubscriptionOptions) *GatewayClientListBySubscriptionPager {
-	return &GatewayClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *GatewayClient) ListBySubscription(options *GatewayClientListBySubscriptionOptions) *runtime.Pager[GatewayClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewayClientListBySubscriptionResponse]{
+		More: func(page GatewayClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewayClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewayClientListBySubscriptionResponse) (GatewayClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewayClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewayClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewayClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

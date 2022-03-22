@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential
 // databaseName - The name of the database.
 // parameters - Parameters supplied to the create or update database operation.
 // options - DatabasesClientBeginCreateOptions contains the optional parameters for the DatabasesClient.BeginCreate method.
-func (client *DatabasesClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters Database, options *DatabasesClientBeginCreateOptions) (DatabasesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientCreatePollerResponse{}, err
+func (client *DatabasesClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters Database, options *DatabasesClientBeginCreateOptions) (*armruntime.Poller[DatabasesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientCreateResponse]("DatabasesClient.Create", "original-uri", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientCreateResponse]("DatabasesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Create", "original-uri", resp, client.pl)
-	if err != nil {
-		return DatabasesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a database
@@ -125,20 +121,16 @@ func (client *DatabasesClient) createCreateRequest(ctx context.Context, resource
 // clusterName - The name of the RedisEnterprise cluster.
 // databaseName - The name of the database.
 // options - DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
-func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (DatabasesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
+func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientBeginDeleteOptions) (*armruntime.Poller[DatabasesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientDeleteResponse]("DatabasesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientDeleteResponse]("DatabasesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a single database
@@ -195,20 +187,16 @@ func (client *DatabasesClient) deleteCreateRequest(ctx context.Context, resource
 // databaseName - The name of the database.
 // parameters - Storage information for exporting into the cluster
 // options - DatabasesClientBeginExportOptions contains the optional parameters for the DatabasesClient.BeginExport method.
-func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ExportClusterParameters, options *DatabasesClientBeginExportOptions) (DatabasesClientExportPollerResponse, error) {
-	resp, err := client.export(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientExportPollerResponse{}, err
+func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ExportClusterParameters, options *DatabasesClientBeginExportOptions) (*armruntime.Poller[DatabasesClientExportResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.export(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientExportResponse]("DatabasesClient.Export", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientExportResponse]("DatabasesClient.Export", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientExportPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Export", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientExportPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientExportPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Export - Exports a database file from target database.
@@ -266,20 +254,16 @@ func (client *DatabasesClient) exportCreateRequest(ctx context.Context, resource
 // parameters - Information identifying the database to be unlinked.
 // options - DatabasesClientBeginForceUnlinkOptions contains the optional parameters for the DatabasesClient.BeginForceUnlink
 // method.
-func (client *DatabasesClient) BeginForceUnlink(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ForceUnlinkParameters, options *DatabasesClientBeginForceUnlinkOptions) (DatabasesClientForceUnlinkPollerResponse, error) {
-	resp, err := client.forceUnlink(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientForceUnlinkPollerResponse{}, err
+func (client *DatabasesClient) BeginForceUnlink(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ForceUnlinkParameters, options *DatabasesClientBeginForceUnlinkOptions) (*armruntime.Poller[DatabasesClientForceUnlinkResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.forceUnlink(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientForceUnlinkResponse]("DatabasesClient.ForceUnlink", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientForceUnlinkResponse]("DatabasesClient.ForceUnlink", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientForceUnlinkPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.ForceUnlink", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientForceUnlinkPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientForceUnlinkPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ForceUnlink - Forcibly removes the link to the specified database resource.
@@ -396,20 +380,16 @@ func (client *DatabasesClient) getHandleResponse(resp *http.Response) (Databases
 // databaseName - The name of the database.
 // parameters - Storage information for importing into the cluster
 // options - DatabasesClientBeginImportOptions contains the optional parameters for the DatabasesClient.BeginImport method.
-func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ImportClusterParameters, options *DatabasesClientBeginImportOptions) (DatabasesClientImportPollerResponse, error) {
-	resp, err := client.importOperation(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientImportPollerResponse{}, err
+func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ImportClusterParameters, options *DatabasesClientBeginImportOptions) (*armruntime.Poller[DatabasesClientImportResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.importOperation(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientImportResponse]("DatabasesClient.Import", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientImportResponse]("DatabasesClient.Import", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientImportPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Import", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientImportPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientImportPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Import - Imports database files to target database.
@@ -464,16 +444,32 @@ func (client *DatabasesClient) importCreateRequest(ctx context.Context, resource
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // clusterName - The name of the RedisEnterprise cluster.
 // options - DatabasesClientListByClusterOptions contains the optional parameters for the DatabasesClient.ListByCluster method.
-func (client *DatabasesClient) ListByCluster(resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) *DatabasesClientListByClusterPager {
-	return &DatabasesClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *DatabasesClient) ListByCluster(resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) *runtime.Pager[DatabasesClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatabasesClientListByClusterResponse]{
+		More: func(page DatabasesClientListByClusterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatabasesClientListByClusterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseList.NextLink)
+		Fetcher: func(ctx context.Context, page *DatabasesClientListByClusterResponse) (DatabasesClientListByClusterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatabasesClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatabasesClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatabasesClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
@@ -579,20 +575,16 @@ func (client *DatabasesClient) listKeysHandleResponse(resp *http.Response) (Data
 // parameters - Specifies which key to regenerate.
 // options - DatabasesClientBeginRegenerateKeyOptions contains the optional parameters for the DatabasesClient.BeginRegenerateKey
 // method.
-func (client *DatabasesClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters RegenerateKeyParameters, options *DatabasesClientBeginRegenerateKeyOptions) (DatabasesClientRegenerateKeyPollerResponse, error) {
-	resp, err := client.regenerateKey(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientRegenerateKeyPollerResponse{}, err
+func (client *DatabasesClient) BeginRegenerateKey(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters RegenerateKeyParameters, options *DatabasesClientBeginRegenerateKeyOptions) (*armruntime.Poller[DatabasesClientRegenerateKeyResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.regenerateKey(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientRegenerateKeyResponse]("DatabasesClient.RegenerateKey", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientRegenerateKeyResponse]("DatabasesClient.RegenerateKey", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientRegenerateKeyPollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.RegenerateKey", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientRegenerateKeyPollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientRegenerateKeyPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegenerateKey - Regenerates the RedisEnterprise database's access keys.
@@ -649,20 +641,16 @@ func (client *DatabasesClient) regenerateKeyCreateRequest(ctx context.Context, r
 // databaseName - The name of the database.
 // parameters - Parameters supplied to the create or update database operation.
 // options - DatabasesClientBeginUpdateOptions contains the optional parameters for the DatabasesClient.BeginUpdate method.
-func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseUpdate, options *DatabasesClientBeginUpdateOptions) (DatabasesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
+func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters DatabaseUpdate, options *DatabasesClientBeginUpdateOptions) (*armruntime.Poller[DatabasesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatabasesClientUpdateResponse]("DatabasesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatabasesClientUpdateResponse]("DatabasesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DatabasesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatabasesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatabasesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DatabasesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a database

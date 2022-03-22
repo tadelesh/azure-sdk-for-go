@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armtimeseriesinsights
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AccessPoliciesClientCreateOrUpdateResponse contains the response from method AccessPoliciesClient.CreateOrUpdate.
 type AccessPoliciesClientCreateOrUpdateResponse struct {
@@ -37,41 +31,6 @@ type AccessPoliciesClientListByEnvironmentResponse struct {
 // AccessPoliciesClientUpdateResponse contains the response from method AccessPoliciesClient.Update.
 type AccessPoliciesClientUpdateResponse struct {
 	AccessPolicyResource
-}
-
-// EnvironmentsClientCreateOrUpdatePollerResponse contains the response from method EnvironmentsClient.CreateOrUpdate.
-type EnvironmentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientCreateOrUpdateResponse, error) {
-	respType := EnvironmentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientCreateOrUpdateResponse contains the response from method EnvironmentsClient.CreateOrUpdate.
@@ -117,41 +76,6 @@ type EnvironmentsClientListByResourceGroupResponse struct {
 // EnvironmentsClientListBySubscriptionResponse contains the response from method EnvironmentsClient.ListBySubscription.
 type EnvironmentsClientListBySubscriptionResponse struct {
 	EnvironmentListResponse
-}
-
-// EnvironmentsClientUpdatePollerResponse contains the response from method EnvironmentsClient.Update.
-type EnvironmentsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientUpdateResponse, error) {
-	respType := EnvironmentsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientUpdatePollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientUpdatePollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientUpdateResponse contains the response from method EnvironmentsClient.Update.

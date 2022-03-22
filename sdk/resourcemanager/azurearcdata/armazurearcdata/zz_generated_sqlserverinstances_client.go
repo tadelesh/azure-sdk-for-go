@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewSQLServerInstancesClient(subscriptionID string, credential azcore.TokenC
 // sqlServerInstance - The SQL Server Instance to be created or updated.
 // options - SQLServerInstancesClientBeginCreateOptions contains the optional parameters for the SQLServerInstancesClient.BeginCreate
 // method.
-func (client *SQLServerInstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, sqlServerInstanceName string, sqlServerInstance SQLServerInstance, options *SQLServerInstancesClientBeginCreateOptions) (SQLServerInstancesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, sqlServerInstanceName, sqlServerInstance, options)
-	if err != nil {
-		return SQLServerInstancesClientCreatePollerResponse{}, err
+func (client *SQLServerInstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, sqlServerInstanceName string, sqlServerInstance SQLServerInstance, options *SQLServerInstancesClientBeginCreateOptions) (*armruntime.Poller[SQLServerInstancesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, sqlServerInstanceName, sqlServerInstance, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLServerInstancesClientCreateResponse]("SQLServerInstancesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLServerInstancesClientCreateResponse]("SQLServerInstancesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLServerInstancesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLServerInstancesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return SQLServerInstancesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SQLServerInstancesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates or replaces a SQL Server Instance resource
@@ -121,20 +117,16 @@ func (client *SQLServerInstancesClient) createCreateRequest(ctx context.Context,
 // sqlServerInstanceName - The name of SQL Server Instance
 // options - SQLServerInstancesClientBeginDeleteOptions contains the optional parameters for the SQLServerInstancesClient.BeginDelete
 // method.
-func (client *SQLServerInstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlServerInstanceName string, options *SQLServerInstancesClientBeginDeleteOptions) (SQLServerInstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sqlServerInstanceName, options)
-	if err != nil {
-		return SQLServerInstancesClientDeletePollerResponse{}, err
+func (client *SQLServerInstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlServerInstanceName string, options *SQLServerInstancesClientBeginDeleteOptions) (*armruntime.Poller[SQLServerInstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sqlServerInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLServerInstancesClientDeleteResponse]("SQLServerInstancesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLServerInstancesClientDeleteResponse]("SQLServerInstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLServerInstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLServerInstancesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SQLServerInstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SQLServerInstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a SQL Server Instance resource
@@ -238,16 +230,32 @@ func (client *SQLServerInstancesClient) getHandleResponse(resp *http.Response) (
 // List - List sqlServerInstance resources in the subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SQLServerInstancesClientListOptions contains the optional parameters for the SQLServerInstancesClient.List method.
-func (client *SQLServerInstancesClient) List(options *SQLServerInstancesClientListOptions) *SQLServerInstancesClientListPager {
-	return &SQLServerInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SQLServerInstancesClient) List(options *SQLServerInstancesClientListOptions) *runtime.Pager[SQLServerInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLServerInstancesClientListResponse]{
+		More: func(page SQLServerInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLServerInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLServerInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLServerInstancesClientListResponse) (SQLServerInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLServerInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLServerInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLServerInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -282,16 +290,32 @@ func (client *SQLServerInstancesClient) listHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the Azure resource group
 // options - SQLServerInstancesClientListByResourceGroupOptions contains the optional parameters for the SQLServerInstancesClient.ListByResourceGroup
 // method.
-func (client *SQLServerInstancesClient) ListByResourceGroup(resourceGroupName string, options *SQLServerInstancesClientListByResourceGroupOptions) *SQLServerInstancesClientListByResourceGroupPager {
-	return &SQLServerInstancesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SQLServerInstancesClient) ListByResourceGroup(resourceGroupName string, options *SQLServerInstancesClientListByResourceGroupOptions) *runtime.Pager[SQLServerInstancesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLServerInstancesClientListByResourceGroupResponse]{
+		More: func(page SQLServerInstancesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLServerInstancesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLServerInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLServerInstancesClientListByResourceGroupResponse) (SQLServerInstancesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLServerInstancesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLServerInstancesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLServerInstancesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

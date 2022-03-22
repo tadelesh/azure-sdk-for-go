@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // clusterName - The name of the RedisEnterprise cluster.
 // options - PrivateLinkResourcesClientListByClusterOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByCluster
 // method.
-func (client *PrivateLinkResourcesClient) ListByCluster(resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListByClusterOptions) *PrivateLinkResourcesClientListByClusterPager {
-	return &PrivateLinkResourcesClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *PrivateLinkResourcesClient) ListByCluster(resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListByClusterOptions) *runtime.Pager[PrivateLinkResourcesClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByClusterResponse]{
+		More: func(page PrivateLinkResourcesClientListByClusterResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByClusterResponse) (PrivateLinkResourcesClientListByClusterResponse, error) {
+			req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
+		},
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.

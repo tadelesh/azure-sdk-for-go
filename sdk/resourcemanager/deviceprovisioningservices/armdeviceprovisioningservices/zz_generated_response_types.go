@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armdeviceprovisioningservices
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // DpsCertificateClientCreateOrUpdateResponse contains the response from method DpsCertificateClient.CreateOrUpdate.
 type DpsCertificateClientCreateOrUpdateResponse struct {
@@ -49,77 +43,6 @@ type IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse struct
 	NameAvailabilityInfo
 }
 
-// IotDpsResourceClientCreateOrUpdatePollerResponse contains the response from method IotDpsResourceClient.CreateOrUpdate.
-type IotDpsResourceClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IotDpsResourceClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IotDpsResourceClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IotDpsResourceClientCreateOrUpdateResponse, error) {
-	respType := IotDpsResourceClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProvisioningServiceDescription)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IotDpsResourceClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *IotDpsResourceClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *IotDpsResourceClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IotDpsResourceClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IotDpsResourceClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
-// IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse contains the response from method IotDpsResourceClient.CreateOrUpdatePrivateEndpointConnection.
-type IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse, error) {
-	respType := IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnection)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse from the provided client
-// and resume token.
-func (l *IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *IotDpsResourceClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IotDpsResourceClient.CreateOrUpdatePrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse contains the response from method IotDpsResourceClient.CreateOrUpdatePrivateEndpointConnection.
 type IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse struct {
 	PrivateEndpointConnection
@@ -128,77 +51,6 @@ type IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse struct 
 // IotDpsResourceClientCreateOrUpdateResponse contains the response from method IotDpsResourceClient.CreateOrUpdate.
 type IotDpsResourceClientCreateOrUpdateResponse struct {
 	ProvisioningServiceDescription
-}
-
-// IotDpsResourceClientDeletePollerResponse contains the response from method IotDpsResourceClient.Delete.
-type IotDpsResourceClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IotDpsResourceClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IotDpsResourceClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IotDpsResourceClientDeleteResponse, error) {
-	respType := IotDpsResourceClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IotDpsResourceClientDeletePollerResponse from the provided client and resume token.
-func (l *IotDpsResourceClientDeletePollerResponse) Resume(ctx context.Context, client *IotDpsResourceClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IotDpsResourceClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IotDpsResourceClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
-// IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse contains the response from method IotDpsResourceClient.DeletePrivateEndpointConnection.
-type IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IotDpsResourceClientDeletePrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IotDpsResourceClientDeletePrivateEndpointConnectionResponse, error) {
-	respType := IotDpsResourceClientDeletePrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnection)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse from the provided client and resume
-// token.
-func (l *IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *IotDpsResourceClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IotDpsResourceClient.DeletePrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IotDpsResourceClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // IotDpsResourceClientDeletePrivateEndpointConnectionResponse contains the response from method IotDpsResourceClient.DeletePrivateEndpointConnection.
@@ -265,41 +117,6 @@ type IotDpsResourceClientListPrivateLinkResourcesResponse struct {
 // IotDpsResourceClientListValidSKUsResponse contains the response from method IotDpsResourceClient.ListValidSKUs.
 type IotDpsResourceClientListValidSKUsResponse struct {
 	IotDpsSKUDefinitionListResult
-}
-
-// IotDpsResourceClientUpdatePollerResponse contains the response from method IotDpsResourceClient.Update.
-type IotDpsResourceClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IotDpsResourceClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IotDpsResourceClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IotDpsResourceClientUpdateResponse, error) {
-	respType := IotDpsResourceClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProvisioningServiceDescription)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IotDpsResourceClientUpdatePollerResponse from the provided client and resume token.
-func (l *IotDpsResourceClientUpdatePollerResponse) Resume(ctx context.Context, client *IotDpsResourceClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IotDpsResourceClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IotDpsResourceClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // IotDpsResourceClientUpdateResponse contains the response from method IotDpsResourceClient.Update.

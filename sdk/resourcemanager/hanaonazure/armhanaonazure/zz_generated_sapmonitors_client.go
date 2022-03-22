@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewSapMonitorsClient(subscriptionID string, credential azcore.TokenCredenti
 // sapMonitorName - Name of the SAP monitor resource.
 // sapMonitorParameter - Request body representing a SAP Monitor
 // options - SapMonitorsClientBeginCreateOptions contains the optional parameters for the SapMonitorsClient.BeginCreate method.
-func (client *SapMonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, sapMonitorName string, sapMonitorParameter SapMonitor, options *SapMonitorsClientBeginCreateOptions) (SapMonitorsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, sapMonitorName, sapMonitorParameter, options)
-	if err != nil {
-		return SapMonitorsClientCreatePollerResponse{}, err
+func (client *SapMonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, sapMonitorName string, sapMonitorParameter SapMonitor, options *SapMonitorsClientBeginCreateOptions) (*armruntime.Poller[SapMonitorsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, sapMonitorName, sapMonitorParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SapMonitorsClientCreateResponse]("SapMonitorsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SapMonitorsClientCreateResponse]("SapMonitorsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SapMonitorsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SapMonitorsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return SapMonitorsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SapMonitorsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a SAP monitor for the specified subscription, resource group, and resource name.
@@ -120,20 +116,16 @@ func (client *SapMonitorsClient) createCreateRequest(ctx context.Context, resour
 // resourceGroupName - Name of the resource group.
 // sapMonitorName - Name of the SAP monitor resource.
 // options - SapMonitorsClientBeginDeleteOptions contains the optional parameters for the SapMonitorsClient.BeginDelete method.
-func (client *SapMonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, sapMonitorName string, options *SapMonitorsClientBeginDeleteOptions) (SapMonitorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sapMonitorName, options)
-	if err != nil {
-		return SapMonitorsClientDeletePollerResponse{}, err
+func (client *SapMonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, sapMonitorName string, options *SapMonitorsClientBeginDeleteOptions) (*armruntime.Poller[SapMonitorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sapMonitorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SapMonitorsClientDeleteResponse]("SapMonitorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SapMonitorsClientDeleteResponse]("SapMonitorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SapMonitorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SapMonitorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SapMonitorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SapMonitorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a SAP monitor with the specified subscription, resource group, and monitor name.
@@ -238,16 +230,32 @@ func (client *SapMonitorsClient) getHandleResponse(resp *http.Response) (SapMoni
 // monitor.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SapMonitorsClientListOptions contains the optional parameters for the SapMonitorsClient.List method.
-func (client *SapMonitorsClient) List(options *SapMonitorsClientListOptions) *SapMonitorsClientListPager {
-	return &SapMonitorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SapMonitorsClient) List(options *SapMonitorsClientListOptions) *runtime.Pager[SapMonitorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SapMonitorsClientListResponse]{
+		More: func(page SapMonitorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SapMonitorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SapMonitorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SapMonitorsClientListResponse) (SapMonitorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SapMonitorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SapMonitorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SapMonitorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

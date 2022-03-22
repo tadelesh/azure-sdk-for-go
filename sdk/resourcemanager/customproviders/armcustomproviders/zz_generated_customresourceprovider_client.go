@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewCustomResourceProviderClient(subscriptionID string, credential azcore.To
 // resourceProvider - The parameters required to create or update a custom resource provider definition.
 // options - CustomResourceProviderClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomResourceProviderClient.BeginCreateOrUpdate
 // method.
-func (client *CustomResourceProviderClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceProviderName string, resourceProvider CustomRPManifest, options *CustomResourceProviderClientBeginCreateOrUpdateOptions) (CustomResourceProviderClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceProviderName, resourceProvider, options)
-	if err != nil {
-		return CustomResourceProviderClientCreateOrUpdatePollerResponse{}, err
+func (client *CustomResourceProviderClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceProviderName string, resourceProvider CustomRPManifest, options *CustomResourceProviderClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CustomResourceProviderClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceProviderName, resourceProvider, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomResourceProviderClientCreateOrUpdateResponse]("CustomResourceProviderClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomResourceProviderClientCreateOrUpdateResponse]("CustomResourceProviderClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomResourceProviderClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomResourceProviderClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return CustomResourceProviderClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomResourceProviderClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the custom resource provider.
@@ -121,20 +117,16 @@ func (client *CustomResourceProviderClient) createOrUpdateCreateRequest(ctx cont
 // resourceProviderName - The name of the resource provider.
 // options - CustomResourceProviderClientBeginDeleteOptions contains the optional parameters for the CustomResourceProviderClient.BeginDelete
 // method.
-func (client *CustomResourceProviderClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceProviderName string, options *CustomResourceProviderClientBeginDeleteOptions) (CustomResourceProviderClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceProviderName, options)
-	if err != nil {
-		return CustomResourceProviderClientDeletePollerResponse{}, err
+func (client *CustomResourceProviderClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceProviderName string, options *CustomResourceProviderClientBeginDeleteOptions) (*armruntime.Poller[CustomResourceProviderClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceProviderName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomResourceProviderClientDeleteResponse]("CustomResourceProviderClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomResourceProviderClientDeleteResponse]("CustomResourceProviderClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomResourceProviderClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomResourceProviderClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CustomResourceProviderClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomResourceProviderClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the custom resource provider.
@@ -241,16 +233,32 @@ func (client *CustomResourceProviderClient) getHandleResponse(resp *http.Respons
 // resourceGroupName - The name of the resource group.
 // options - CustomResourceProviderClientListByResourceGroupOptions contains the optional parameters for the CustomResourceProviderClient.ListByResourceGroup
 // method.
-func (client *CustomResourceProviderClient) ListByResourceGroup(resourceGroupName string, options *CustomResourceProviderClientListByResourceGroupOptions) *CustomResourceProviderClientListByResourceGroupPager {
-	return &CustomResourceProviderClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CustomResourceProviderClient) ListByResourceGroup(resourceGroupName string, options *CustomResourceProviderClientListByResourceGroupOptions) *runtime.Pager[CustomResourceProviderClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomResourceProviderClientListByResourceGroupResponse]{
+		More: func(page CustomResourceProviderClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomResourceProviderClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListByCustomRPManifest.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomResourceProviderClientListByResourceGroupResponse) (CustomResourceProviderClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomResourceProviderClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomResourceProviderClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomResourceProviderClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -288,16 +296,32 @@ func (client *CustomResourceProviderClient) listByResourceGroupHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CustomResourceProviderClientListBySubscriptionOptions contains the optional parameters for the CustomResourceProviderClient.ListBySubscription
 // method.
-func (client *CustomResourceProviderClient) ListBySubscription(options *CustomResourceProviderClientListBySubscriptionOptions) *CustomResourceProviderClientListBySubscriptionPager {
-	return &CustomResourceProviderClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *CustomResourceProviderClient) ListBySubscription(options *CustomResourceProviderClientListBySubscriptionOptions) *runtime.Pager[CustomResourceProviderClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomResourceProviderClientListBySubscriptionResponse]{
+		More: func(page CustomResourceProviderClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomResourceProviderClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListByCustomRPManifest.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomResourceProviderClientListBySubscriptionResponse) (CustomResourceProviderClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomResourceProviderClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomResourceProviderClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomResourceProviderClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

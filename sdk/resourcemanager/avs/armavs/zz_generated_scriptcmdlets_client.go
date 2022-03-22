@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,16 +120,32 @@ func (client *ScriptCmdletsClient) getHandleResponse(resp *http.Response) (Scrip
 // privateCloudName - Name of the private cloud
 // scriptPackageName - Name of the script package in the private cloud
 // options - ScriptCmdletsClientListOptions contains the optional parameters for the ScriptCmdletsClient.List method.
-func (client *ScriptCmdletsClient) List(resourceGroupName string, privateCloudName string, scriptPackageName string, options *ScriptCmdletsClientListOptions) *ScriptCmdletsClientListPager {
-	return &ScriptCmdletsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, scriptPackageName, options)
+func (client *ScriptCmdletsClient) List(resourceGroupName string, privateCloudName string, scriptPackageName string, options *ScriptCmdletsClientListOptions) *runtime.Pager[ScriptCmdletsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScriptCmdletsClientListResponse]{
+		More: func(page ScriptCmdletsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScriptCmdletsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScriptCmdletsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScriptCmdletsClientListResponse) (ScriptCmdletsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, scriptPackageName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScriptCmdletsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScriptCmdletsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScriptCmdletsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

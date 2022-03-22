@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,20 +118,16 @@ func (client *RuleSetsClient) createHandleResponse(resp *http.Response) (RuleSet
 // group.
 // ruleSetName - Name of the rule set under the profile which is unique globally.
 // options - RuleSetsClientBeginDeleteOptions contains the optional parameters for the RuleSetsClient.BeginDelete method.
-func (client *RuleSetsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, options *RuleSetsClientBeginDeleteOptions) (RuleSetsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, ruleSetName, options)
-	if err != nil {
-		return RuleSetsClientDeletePollerResponse{}, err
+func (client *RuleSetsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, ruleSetName string, options *RuleSetsClientBeginDeleteOptions) (*armruntime.Poller[RuleSetsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, ruleSetName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RuleSetsClientDeleteResponse]("RuleSetsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RuleSetsClientDeleteResponse]("RuleSetsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RuleSetsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RuleSetsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return RuleSetsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RuleSetsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing AzureFrontDoor rule set with the specified rule set name under the specified subscription,
@@ -250,16 +246,32 @@ func (client *RuleSetsClient) getHandleResponse(resp *http.Response) (RuleSetsCl
 // profileName - Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource
 // group.
 // options - RuleSetsClientListByProfileOptions contains the optional parameters for the RuleSetsClient.ListByProfile method.
-func (client *RuleSetsClient) ListByProfile(resourceGroupName string, profileName string, options *RuleSetsClientListByProfileOptions) *RuleSetsClientListByProfilePager {
-	return &RuleSetsClientListByProfilePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+func (client *RuleSetsClient) ListByProfile(resourceGroupName string, profileName string, options *RuleSetsClientListByProfileOptions) *runtime.Pager[RuleSetsClientListByProfileResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RuleSetsClientListByProfileResponse]{
+		More: func(page RuleSetsClientListByProfileResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RuleSetsClientListByProfileResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RuleSetListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RuleSetsClientListByProfileResponse) (RuleSetsClientListByProfileResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProfileCreateRequest(ctx, resourceGroupName, profileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RuleSetsClientListByProfileResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RuleSetsClientListByProfileResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RuleSetsClientListByProfileResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProfileHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProfileCreateRequest creates the ListByProfile request.
@@ -305,16 +317,32 @@ func (client *RuleSetsClient) listByProfileHandleResponse(resp *http.Response) (
 // ruleSetName - Name of the rule set under the profile which is unique globally.
 // options - RuleSetsClientListResourceUsageOptions contains the optional parameters for the RuleSetsClient.ListResourceUsage
 // method.
-func (client *RuleSetsClient) ListResourceUsage(resourceGroupName string, profileName string, ruleSetName string, options *RuleSetsClientListResourceUsageOptions) *RuleSetsClientListResourceUsagePager {
-	return &RuleSetsClientListResourceUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, ruleSetName, options)
+func (client *RuleSetsClient) ListResourceUsage(resourceGroupName string, profileName string, ruleSetName string, options *RuleSetsClientListResourceUsageOptions) *runtime.Pager[RuleSetsClientListResourceUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RuleSetsClientListResourceUsageResponse]{
+		More: func(page RuleSetsClientListResourceUsageResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RuleSetsClientListResourceUsageResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsagesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RuleSetsClientListResourceUsageResponse) (RuleSetsClientListResourceUsageResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, ruleSetName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RuleSetsClientListResourceUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RuleSetsClientListResourceUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RuleSetsClientListResourceUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listResourceUsageHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listResourceUsageCreateRequest creates the ListResourceUsage request.

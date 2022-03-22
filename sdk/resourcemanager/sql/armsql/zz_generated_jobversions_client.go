@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -126,16 +126,32 @@ func (client *JobVersionsClient) getHandleResponse(resp *http.Response) (JobVers
 // jobAgentName - The name of the job agent.
 // jobName - The name of the job to get.
 // options - JobVersionsClientListByJobOptions contains the optional parameters for the JobVersionsClient.ListByJob method.
-func (client *JobVersionsClient) ListByJob(resourceGroupName string, serverName string, jobAgentName string, jobName string, options *JobVersionsClientListByJobOptions) *JobVersionsClientListByJobPager {
-	return &JobVersionsClientListByJobPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByJobCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, options)
+func (client *JobVersionsClient) ListByJob(resourceGroupName string, serverName string, jobAgentName string, jobName string, options *JobVersionsClientListByJobOptions) *runtime.Pager[JobVersionsClientListByJobResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobVersionsClientListByJobResponse]{
+		More: func(page JobVersionsClientListByJobResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobVersionsClientListByJobResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobVersionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobVersionsClientListByJobResponse) (JobVersionsClientListByJobResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByJobCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, jobName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobVersionsClientListByJobResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobVersionsClientListByJobResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobVersionsClientListByJobResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByJobHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByJobCreateRequest creates the ListByJob request.

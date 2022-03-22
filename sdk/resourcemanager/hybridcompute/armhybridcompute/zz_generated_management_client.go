@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewManagementClient(subscriptionID string, credential azcore.TokenCredentia
 // extensionUpgradeParameters - Parameters supplied to the Upgrade Extensions operation.
 // options - ManagementClientBeginUpgradeExtensionsOptions contains the optional parameters for the ManagementClient.BeginUpgradeExtensions
 // method.
-func (client *ManagementClient) BeginUpgradeExtensions(ctx context.Context, resourceGroupName string, machineName string, extensionUpgradeParameters MachineExtensionUpgrade, options *ManagementClientBeginUpgradeExtensionsOptions) (ManagementClientUpgradeExtensionsPollerResponse, error) {
-	resp, err := client.upgradeExtensions(ctx, resourceGroupName, machineName, extensionUpgradeParameters, options)
-	if err != nil {
-		return ManagementClientUpgradeExtensionsPollerResponse{}, err
+func (client *ManagementClient) BeginUpgradeExtensions(ctx context.Context, resourceGroupName string, machineName string, extensionUpgradeParameters MachineExtensionUpgrade, options *ManagementClientBeginUpgradeExtensionsOptions) (*armruntime.Poller[ManagementClientUpgradeExtensionsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.upgradeExtensions(ctx, resourceGroupName, machineName, extensionUpgradeParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagementClientUpgradeExtensionsResponse]("ManagementClient.UpgradeExtensions", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagementClientUpgradeExtensionsResponse]("ManagementClient.UpgradeExtensions", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagementClientUpgradeExtensionsPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagementClient.UpgradeExtensions", "", resp, client.pl)
-	if err != nil {
-		return ManagementClientUpgradeExtensionsPollerResponse{}, err
-	}
-	result.Poller = &ManagementClientUpgradeExtensionsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpgradeExtensions - The operation to Upgrade Machine Extensions.

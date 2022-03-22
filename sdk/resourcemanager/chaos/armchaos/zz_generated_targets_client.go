@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -258,16 +258,32 @@ func (client *TargetsClient) getHandleResponse(resp *http.Response) (TargetsClie
 // parentResourceType - String that represents a resource type.
 // parentResourceName - String that represents a resource name.
 // options - TargetsClientListOptions contains the optional parameters for the TargetsClient.List method.
-func (client *TargetsClient) List(resourceGroupName string, parentProviderNamespace string, parentResourceType string, parentResourceName string, options *TargetsClientListOptions) *TargetsClientListPager {
-	return &TargetsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, parentProviderNamespace, parentResourceType, parentResourceName, options)
+func (client *TargetsClient) List(resourceGroupName string, parentProviderNamespace string, parentResourceType string, parentResourceName string, options *TargetsClientListOptions) *runtime.Pager[TargetsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TargetsClientListResponse]{
+		More: func(page TargetsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TargetsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TargetListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TargetsClientListResponse) (TargetsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, parentProviderNamespace, parentResourceType, parentResourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TargetsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TargetsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TargetsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

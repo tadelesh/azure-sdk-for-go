@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -301,16 +301,32 @@ func (client *DiagnosticClient) getEntityTagHandleResponse(resp *http.Response) 
 // serviceName - The name of the API Management service.
 // options - DiagnosticClientListByServiceOptions contains the optional parameters for the DiagnosticClient.ListByService
 // method.
-func (client *DiagnosticClient) ListByService(resourceGroupName string, serviceName string, options *DiagnosticClientListByServiceOptions) *DiagnosticClientListByServicePager {
-	return &DiagnosticClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *DiagnosticClient) ListByService(resourceGroupName string, serviceName string, options *DiagnosticClientListByServiceOptions) *runtime.Pager[DiagnosticClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticClientListByServiceResponse]{
+		More: func(page DiagnosticClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticClientListByServiceResponse) (DiagnosticClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

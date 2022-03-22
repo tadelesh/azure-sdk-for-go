@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -73,12 +73,16 @@ type CheckNameAvailabilityResult struct {
 type ClientBeginCreateOrUpdateOptions struct {
 	// Indicates whether the request should utilize any caches. Populate the header with 'no-cache' value to bypass existing caches.
 	CacheControl *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 type ClientBeginDeleteOptions struct {
 	// Indicates whether the request should utilize any caches. Populate the header with 'no-cache' value to bypass existing caches.
 	CacheControl *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientGetDescendantsOptions contains the optional parameters for the Client.GetDescendants method.

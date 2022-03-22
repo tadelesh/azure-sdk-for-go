@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -252,16 +252,32 @@ func (client *ManagedPrivateEndpointsClient) getHandleResponse(resp *http.Respon
 // managedVirtualNetworkName - Managed virtual network name
 // options - ManagedPrivateEndpointsClientListByFactoryOptions contains the optional parameters for the ManagedPrivateEndpointsClient.ListByFactory
 // method.
-func (client *ManagedPrivateEndpointsClient) ListByFactory(resourceGroupName string, factoryName string, managedVirtualNetworkName string, options *ManagedPrivateEndpointsClientListByFactoryOptions) *ManagedPrivateEndpointsClientListByFactoryPager {
-	return &ManagedPrivateEndpointsClientListByFactoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, managedVirtualNetworkName, options)
+func (client *ManagedPrivateEndpointsClient) ListByFactory(resourceGroupName string, factoryName string, managedVirtualNetworkName string, options *ManagedPrivateEndpointsClientListByFactoryOptions) *runtime.Pager[ManagedPrivateEndpointsClientListByFactoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedPrivateEndpointsClientListByFactoryResponse]{
+		More: func(page ManagedPrivateEndpointsClientListByFactoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedPrivateEndpointsClientListByFactoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedPrivateEndpointListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedPrivateEndpointsClientListByFactoryResponse) (ManagedPrivateEndpointsClientListByFactoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, managedVirtualNetworkName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedPrivateEndpointsClientListByFactoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedPrivateEndpointsClientListByFactoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedPrivateEndpointsClientListByFactoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFactoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.

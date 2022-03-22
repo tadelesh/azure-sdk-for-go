@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,16 +228,32 @@ func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (Firew
 // resourceGroupName - The name of the resource group.
 // cacheName - The name of the Redis cache.
 // options - FirewallRulesClientListOptions contains the optional parameters for the FirewallRulesClient.List method.
-func (client *FirewallRulesClient) List(resourceGroupName string, cacheName string, options *FirewallRulesClientListOptions) *FirewallRulesClientListPager {
-	return &FirewallRulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, cacheName, options)
+func (client *FirewallRulesClient) List(resourceGroupName string, cacheName string, options *FirewallRulesClientListOptions) *runtime.Pager[FirewallRulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FirewallRulesClientListResponse]{
+		More: func(page FirewallRulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FirewallRulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FirewallRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *FirewallRulesClientListResponse) (FirewallRulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, cacheName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FirewallRulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FirewallRulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FirewallRulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

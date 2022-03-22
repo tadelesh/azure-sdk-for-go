@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewConnectedRegistriesClient(subscriptionID string, credential azcore.Token
 // connectedRegistryCreateParameters - The parameters for creating a connectedRegistry.
 // options - ConnectedRegistriesClientBeginCreateOptions contains the optional parameters for the ConnectedRegistriesClient.BeginCreate
 // method.
-func (client *ConnectedRegistriesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, connectedRegistryCreateParameters ConnectedRegistry, options *ConnectedRegistriesClientBeginCreateOptions) (ConnectedRegistriesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, connectedRegistryName, connectedRegistryCreateParameters, options)
-	if err != nil {
-		return ConnectedRegistriesClientCreatePollerResponse{}, err
+func (client *ConnectedRegistriesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, connectedRegistryCreateParameters ConnectedRegistry, options *ConnectedRegistriesClientBeginCreateOptions) (*armruntime.Poller[ConnectedRegistriesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, connectedRegistryName, connectedRegistryCreateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedRegistriesClientCreateResponse]("ConnectedRegistriesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedRegistriesClientCreateResponse]("ConnectedRegistriesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedRegistriesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedRegistriesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ConnectedRegistriesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ConnectedRegistriesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a connected registry for a container registry with the specified parameters.
@@ -127,20 +123,16 @@ func (client *ConnectedRegistriesClient) createCreateRequest(ctx context.Context
 // connectedRegistryName - The name of the connected registry.
 // options - ConnectedRegistriesClientBeginDeactivateOptions contains the optional parameters for the ConnectedRegistriesClient.BeginDeactivate
 // method.
-func (client *ConnectedRegistriesClient) BeginDeactivate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, options *ConnectedRegistriesClientBeginDeactivateOptions) (ConnectedRegistriesClientDeactivatePollerResponse, error) {
-	resp, err := client.deactivate(ctx, resourceGroupName, registryName, connectedRegistryName, options)
-	if err != nil {
-		return ConnectedRegistriesClientDeactivatePollerResponse{}, err
+func (client *ConnectedRegistriesClient) BeginDeactivate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, options *ConnectedRegistriesClientBeginDeactivateOptions) (*armruntime.Poller[ConnectedRegistriesClientDeactivateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deactivate(ctx, resourceGroupName, registryName, connectedRegistryName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedRegistriesClientDeactivateResponse]("ConnectedRegistriesClient.Deactivate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedRegistriesClientDeactivateResponse]("ConnectedRegistriesClient.Deactivate", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedRegistriesClientDeactivatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedRegistriesClient.Deactivate", "", resp, client.pl)
-	if err != nil {
-		return ConnectedRegistriesClientDeactivatePollerResponse{}, err
-	}
-	result.Poller = &ConnectedRegistriesClientDeactivatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Deactivate - Deactivates the connected registry instance.
@@ -197,20 +189,16 @@ func (client *ConnectedRegistriesClient) deactivateCreateRequest(ctx context.Con
 // connectedRegistryName - The name of the connected registry.
 // options - ConnectedRegistriesClientBeginDeleteOptions contains the optional parameters for the ConnectedRegistriesClient.BeginDelete
 // method.
-func (client *ConnectedRegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, options *ConnectedRegistriesClientBeginDeleteOptions) (ConnectedRegistriesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, connectedRegistryName, options)
-	if err != nil {
-		return ConnectedRegistriesClientDeletePollerResponse{}, err
+func (client *ConnectedRegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, options *ConnectedRegistriesClientBeginDeleteOptions) (*armruntime.Poller[ConnectedRegistriesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, connectedRegistryName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedRegistriesClientDeleteResponse]("ConnectedRegistriesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedRegistriesClientDeleteResponse]("ConnectedRegistriesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedRegistriesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedRegistriesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ConnectedRegistriesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ConnectedRegistriesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a connected registry from a container registry.
@@ -326,16 +314,32 @@ func (client *ConnectedRegistriesClient) getHandleResponse(resp *http.Response) 
 // registryName - The name of the container registry.
 // options - ConnectedRegistriesClientListOptions contains the optional parameters for the ConnectedRegistriesClient.List
 // method.
-func (client *ConnectedRegistriesClient) List(resourceGroupName string, registryName string, options *ConnectedRegistriesClientListOptions) *ConnectedRegistriesClientListPager {
-	return &ConnectedRegistriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *ConnectedRegistriesClient) List(resourceGroupName string, registryName string, options *ConnectedRegistriesClientListOptions) *runtime.Pager[ConnectedRegistriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectedRegistriesClientListResponse]{
+		More: func(page ConnectedRegistriesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectedRegistriesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectedRegistryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectedRegistriesClientListResponse) (ConnectedRegistriesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectedRegistriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectedRegistriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectedRegistriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -384,20 +388,16 @@ func (client *ConnectedRegistriesClient) listHandleResponse(resp *http.Response)
 // connectedRegistryUpdateParameters - The parameters for updating a connectedRegistry.
 // options - ConnectedRegistriesClientBeginUpdateOptions contains the optional parameters for the ConnectedRegistriesClient.BeginUpdate
 // method.
-func (client *ConnectedRegistriesClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, connectedRegistryUpdateParameters ConnectedRegistryUpdateParameters, options *ConnectedRegistriesClientBeginUpdateOptions) (ConnectedRegistriesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, registryName, connectedRegistryName, connectedRegistryUpdateParameters, options)
-	if err != nil {
-		return ConnectedRegistriesClientUpdatePollerResponse{}, err
+func (client *ConnectedRegistriesClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, connectedRegistryName string, connectedRegistryUpdateParameters ConnectedRegistryUpdateParameters, options *ConnectedRegistriesClientBeginUpdateOptions) (*armruntime.Poller[ConnectedRegistriesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, registryName, connectedRegistryName, connectedRegistryUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectedRegistriesClientUpdateResponse]("ConnectedRegistriesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectedRegistriesClientUpdateResponse]("ConnectedRegistriesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectedRegistriesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectedRegistriesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ConnectedRegistriesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ConnectedRegistriesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a connected registry with the specified parameters.

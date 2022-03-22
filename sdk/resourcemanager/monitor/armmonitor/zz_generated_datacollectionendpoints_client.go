@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -216,16 +216,32 @@ func (client *DataCollectionEndpointsClient) getHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DataCollectionEndpointsClientListByResourceGroupOptions contains the optional parameters for the DataCollectionEndpointsClient.ListByResourceGroup
 // method.
-func (client *DataCollectionEndpointsClient) ListByResourceGroup(resourceGroupName string, options *DataCollectionEndpointsClientListByResourceGroupOptions) *DataCollectionEndpointsClientListByResourceGroupPager {
-	return &DataCollectionEndpointsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DataCollectionEndpointsClient) ListByResourceGroup(resourceGroupName string, options *DataCollectionEndpointsClientListByResourceGroupOptions) *runtime.Pager[DataCollectionEndpointsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataCollectionEndpointsClientListByResourceGroupResponse]{
+		More: func(page DataCollectionEndpointsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataCollectionEndpointsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataCollectionEndpointResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataCollectionEndpointsClientListByResourceGroupResponse) (DataCollectionEndpointsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataCollectionEndpointsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataCollectionEndpointsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataCollectionEndpointsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -263,16 +279,32 @@ func (client *DataCollectionEndpointsClient) listByResourceGroupHandleResponse(r
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DataCollectionEndpointsClientListBySubscriptionOptions contains the optional parameters for the DataCollectionEndpointsClient.ListBySubscription
 // method.
-func (client *DataCollectionEndpointsClient) ListBySubscription(options *DataCollectionEndpointsClientListBySubscriptionOptions) *DataCollectionEndpointsClientListBySubscriptionPager {
-	return &DataCollectionEndpointsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DataCollectionEndpointsClient) ListBySubscription(options *DataCollectionEndpointsClientListBySubscriptionOptions) *runtime.Pager[DataCollectionEndpointsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataCollectionEndpointsClientListBySubscriptionResponse]{
+		More: func(page DataCollectionEndpointsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataCollectionEndpointsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataCollectionEndpointResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataCollectionEndpointsClientListBySubscriptionResponse) (DataCollectionEndpointsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataCollectionEndpointsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataCollectionEndpointsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataCollectionEndpointsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

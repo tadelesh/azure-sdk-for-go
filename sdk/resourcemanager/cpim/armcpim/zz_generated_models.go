@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,11 +120,14 @@ type B2CTenantUpdateRequest struct {
 // B2CTenantsClientBeginCreateOptions contains the optional parameters for the B2CTenantsClient.BeginCreate method.
 type B2CTenantsClientBeginCreateOptions struct {
 	CreateTenantRequestBody *CreateTenantRequestBody
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // B2CTenantsClientBeginDeleteOptions contains the optional parameters for the B2CTenantsClient.BeginDelete method.
 type B2CTenantsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // B2CTenantsClientCheckNameAvailabilityOptions contains the optional parameters for the B2CTenantsClient.CheckNameAvailability

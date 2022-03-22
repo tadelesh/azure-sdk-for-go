@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -95,16 +95,32 @@ func (client *SubscriptionsClient) getHandleResponse(resp *http.Response) (Subsc
 // List - Gets all subscriptions for a tenant.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SubscriptionsClientListOptions contains the optional parameters for the SubscriptionsClient.List method.
-func (client *SubscriptionsClient) List(options *SubscriptionsClientListOptions) *SubscriptionsClientListPager {
-	return &SubscriptionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SubscriptionsClient) List(options *SubscriptionsClientListOptions) *runtime.Pager[SubscriptionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubscriptionsClientListResponse]{
+		More: func(page SubscriptionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubscriptionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SubscriptionsClientListResponse) (SubscriptionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubscriptionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubscriptionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubscriptionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -136,13 +152,26 @@ func (client *SubscriptionsClient) listHandleResponse(resp *http.Response) (Subs
 // subscriptionID - The ID of the target subscription.
 // options - SubscriptionsClientListLocationsOptions contains the optional parameters for the SubscriptionsClient.ListLocations
 // method.
-func (client *SubscriptionsClient) ListLocations(subscriptionID string, options *SubscriptionsClientListLocationsOptions) *SubscriptionsClientListLocationsPager {
-	return &SubscriptionsClientListLocationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listLocationsCreateRequest(ctx, subscriptionID, options)
+func (client *SubscriptionsClient) ListLocations(subscriptionID string, options *SubscriptionsClientListLocationsOptions) *runtime.Pager[SubscriptionsClientListLocationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubscriptionsClientListLocationsResponse]{
+		More: func(page SubscriptionsClientListLocationsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *SubscriptionsClientListLocationsResponse) (SubscriptionsClientListLocationsResponse, error) {
+			req, err := client.listLocationsCreateRequest(ctx, subscriptionID, options)
+			if err != nil {
+				return SubscriptionsClientListLocationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubscriptionsClientListLocationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubscriptionsClientListLocationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listLocationsHandleResponse(resp)
+		},
+	})
 }
 
 // listLocationsCreateRequest creates the ListLocations request.

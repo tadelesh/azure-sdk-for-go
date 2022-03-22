@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewRoleAssignmentsClient(subscriptionID string, credential azcore.TokenCred
 // parameters - Parameters supplied to the CreateOrUpdate RoleAssignment operation.
 // options - RoleAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the RoleAssignmentsClient.BeginCreateOrUpdate
 // method.
-func (client *RoleAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, assignmentName string, parameters RoleAssignmentResourceFormat, options *RoleAssignmentsClientBeginCreateOrUpdateOptions) (RoleAssignmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, assignmentName, parameters, options)
-	if err != nil {
-		return RoleAssignmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *RoleAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, assignmentName string, parameters RoleAssignmentResourceFormat, options *RoleAssignmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[RoleAssignmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, assignmentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RoleAssignmentsClientCreateOrUpdateResponse]("RoleAssignmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RoleAssignmentsClientCreateOrUpdateResponse]("RoleAssignmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := RoleAssignmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RoleAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return RoleAssignmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &RoleAssignmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a role assignment in the hub.
@@ -237,16 +233,32 @@ func (client *RoleAssignmentsClient) getHandleResponse(resp *http.Response) (Rol
 // hubName - The name of the hub.
 // options - RoleAssignmentsClientListByHubOptions contains the optional parameters for the RoleAssignmentsClient.ListByHub
 // method.
-func (client *RoleAssignmentsClient) ListByHub(resourceGroupName string, hubName string, options *RoleAssignmentsClientListByHubOptions) *RoleAssignmentsClientListByHubPager {
-	return &RoleAssignmentsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *RoleAssignmentsClient) ListByHub(resourceGroupName string, hubName string, options *RoleAssignmentsClientListByHubOptions) *runtime.Pager[RoleAssignmentsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RoleAssignmentsClientListByHubResponse]{
+		More: func(page RoleAssignmentsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RoleAssignmentsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleAssignmentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RoleAssignmentsClientListByHubResponse) (RoleAssignmentsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RoleAssignmentsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RoleAssignmentsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RoleAssignmentsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

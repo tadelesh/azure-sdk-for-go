@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -220,13 +220,26 @@ func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (Conf
 // List - Get Configuration records within a subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationsClientListOptions contains the optional parameters for the ConfigurationsClient.List method.
-func (client *ConfigurationsClient) List(options *ConfigurationsClientListOptions) *ConfigurationsClientListPager {
-	return &ConfigurationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ConfigurationsClient) List(options *ConfigurationsClientListOptions) *runtime.Pager[ConfigurationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationsClientListResponse]{
+		More: func(page ConfigurationsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationsClientListResponse) (ConfigurationsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return ConfigurationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

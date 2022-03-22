@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -9,86 +9,13 @@
 package armappservice
 
 import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
+	"encoding/json"
 	"io"
-	"time"
 )
-
-// CertificateOrdersClientCreateOrUpdateCertificatePollerResponse contains the response from method CertificateOrdersClient.CreateOrUpdateCertificate.
-type CertificateOrdersClientCreateOrUpdateCertificatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CertificateOrdersClientCreateOrUpdateCertificatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CertificateOrdersClientCreateOrUpdateCertificatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CertificateOrdersClientCreateOrUpdateCertificateResponse, error) {
-	respType := CertificateOrdersClientCreateOrUpdateCertificateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CertificateResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CertificateOrdersClientCreateOrUpdateCertificatePollerResponse from the provided client and resume
-// token.
-func (l *CertificateOrdersClientCreateOrUpdateCertificatePollerResponse) Resume(ctx context.Context, client *CertificateOrdersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CertificateOrdersClient.CreateOrUpdateCertificate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CertificateOrdersClientCreateOrUpdateCertificatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
 
 // CertificateOrdersClientCreateOrUpdateCertificateResponse contains the response from method CertificateOrdersClient.CreateOrUpdateCertificate.
 type CertificateOrdersClientCreateOrUpdateCertificateResponse struct {
 	CertificateResource
-}
-
-// CertificateOrdersClientCreateOrUpdatePollerResponse contains the response from method CertificateOrdersClient.CreateOrUpdate.
-type CertificateOrdersClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CertificateOrdersClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CertificateOrdersClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CertificateOrdersClientCreateOrUpdateResponse, error) {
-	respType := CertificateOrdersClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CertificateOrder)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CertificateOrdersClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *CertificateOrdersClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *CertificateOrdersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CertificateOrdersClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CertificateOrdersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // CertificateOrdersClientCreateOrUpdateResponse contains the response from method CertificateOrdersClient.CreateOrUpdate.
@@ -235,79 +162,9 @@ type CertificatesClientUpdateResponse struct {
 	AppCertificate
 }
 
-// ContainerAppsClientCreateOrUpdatePollerResponse contains the response from method ContainerAppsClient.CreateOrUpdate.
-type ContainerAppsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerAppsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerAppsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerAppsClientCreateOrUpdateResponse, error) {
-	respType := ContainerAppsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ContainerApp)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerAppsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ContainerAppsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ContainerAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerAppsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerAppsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ContainerAppsClientCreateOrUpdateResponse contains the response from method ContainerAppsClient.CreateOrUpdate.
 type ContainerAppsClientCreateOrUpdateResponse struct {
 	ContainerApp
-}
-
-// ContainerAppsClientDeletePollerResponse contains the response from method ContainerAppsClient.Delete.
-type ContainerAppsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerAppsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerAppsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerAppsClientDeleteResponse, error) {
-	respType := ContainerAppsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerAppsClientDeletePollerResponse from the provided client and resume token.
-func (l *ContainerAppsClientDeletePollerResponse) Resume(ctx context.Context, client *ContainerAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerAppsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerAppsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ContainerAppsClientDeleteResponse contains the response from method ContainerAppsClient.Delete.
@@ -500,41 +357,6 @@ type DomainsClientCreateOrUpdateOwnershipIdentifierResponse struct {
 	DomainOwnershipIdentifier
 }
 
-// DomainsClientCreateOrUpdatePollerResponse contains the response from method DomainsClient.CreateOrUpdate.
-type DomainsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DomainsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DomainsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DomainsClientCreateOrUpdateResponse, error) {
-	respType := DomainsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Domain)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DomainsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *DomainsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *DomainsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DomainsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DomainsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // DomainsClientCreateOrUpdateResponse contains the response from method DomainsClient.CreateOrUpdate.
 type DomainsClientCreateOrUpdateResponse struct {
 	Domain
@@ -605,82 +427,9 @@ type DomainsClientUpdateResponse struct {
 	Domain
 }
 
-// EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse contains the response from method EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection.
-type EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
-	respType := EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RemotePrivateEndpointConnectionARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse from the provided client and
-// resume token.
-func (l *EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse contains the response from method EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection.
 type EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse struct {
 	RemotePrivateEndpointConnectionARMResource
-}
-
-// EnvironmentsClientChangeVnetPollerResponse contains the response from method EnvironmentsClient.ChangeVnet.
-type EnvironmentsClientChangeVnetPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientChangeVnetPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientChangeVnetPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (*EnvironmentsClientChangeVnetPager, error) {
-	respType := &EnvironmentsClientChangeVnetPager{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.current.WebAppCollection)
-	if err != nil {
-		return respType, err
-	}
-	respType.client = l.Poller.client
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientChangeVnetPollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientChangeVnetPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.ChangeVnet", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientChangeVnetPoller{
-		pt:     pt,
-		client: client,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientChangeVnetResponse contains the response from method EnvironmentsClient.ChangeVnet.
@@ -688,79 +437,9 @@ type EnvironmentsClientChangeVnetResponse struct {
 	WebAppCollection
 }
 
-// EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse contains the response from method EnvironmentsClient.CreateOrUpdateMultiRolePool.
-type EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientCreateOrUpdateMultiRolePoolPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientCreateOrUpdateMultiRolePoolResponse, error) {
-	respType := EnvironmentsClientCreateOrUpdateMultiRolePoolResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.WorkerPoolResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.CreateOrUpdateMultiRolePool", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientCreateOrUpdateMultiRolePoolPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // EnvironmentsClientCreateOrUpdateMultiRolePoolResponse contains the response from method EnvironmentsClient.CreateOrUpdateMultiRolePool.
 type EnvironmentsClientCreateOrUpdateMultiRolePoolResponse struct {
 	WorkerPoolResource
-}
-
-// EnvironmentsClientCreateOrUpdatePollerResponse contains the response from method EnvironmentsClient.CreateOrUpdate.
-type EnvironmentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientCreateOrUpdateResponse, error) {
-	respType := EnvironmentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.EnvironmentResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientCreateOrUpdateResponse contains the response from method EnvironmentsClient.CreateOrUpdate.
@@ -768,121 +447,20 @@ type EnvironmentsClientCreateOrUpdateResponse struct {
 	EnvironmentResource
 }
 
-// EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse contains the response from method EnvironmentsClient.CreateOrUpdateWorkerPool.
-type EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientCreateOrUpdateWorkerPoolPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientCreateOrUpdateWorkerPoolResponse, error) {
-	respType := EnvironmentsClientCreateOrUpdateWorkerPoolResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.WorkerPoolResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.CreateOrUpdateWorkerPool", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientCreateOrUpdateWorkerPoolPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // EnvironmentsClientCreateOrUpdateWorkerPoolResponse contains the response from method EnvironmentsClient.CreateOrUpdateWorkerPool.
 type EnvironmentsClientCreateOrUpdateWorkerPoolResponse struct {
 	WorkerPoolResource
-}
-
-// EnvironmentsClientDeletePollerResponse contains the response from method EnvironmentsClient.Delete.
-type EnvironmentsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientDeleteResponse, error) {
-	respType := EnvironmentsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientDeletePollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientDeletePollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
-// EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse contains the response from method EnvironmentsClient.DeletePrivateEndpointConnection.
-type EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientDeletePrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnvironmentsClientDeletePrivateEndpointConnectionResponse, error) {
-	respType := EnvironmentsClientDeletePrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Interface)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse from the provided client and resume
-// token.
-func (l *EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.DeletePrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientDeletePrivateEndpointConnectionResponse contains the response from method EnvironmentsClient.DeletePrivateEndpointConnection.
 type EnvironmentsClientDeletePrivateEndpointConnectionResponse struct {
 	// Anything
 	Interface interface{}
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface for type EnvironmentsClientDeletePrivateEndpointConnectionResponse.
+func (e *EnvironmentsClientDeletePrivateEndpointConnectionResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &e.Interface)
 }
 
 // EnvironmentsClientDeleteResponse contains the response from method EnvironmentsClient.Delete.
@@ -1042,83 +620,9 @@ type EnvironmentsClientRebootResponse struct {
 	// placeholder for future response values
 }
 
-// EnvironmentsClientResumePollerResponse contains the response from method EnvironmentsClient.Resume.
-type EnvironmentsClientResumePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientResumePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientResumePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (*EnvironmentsClientResumePager, error) {
-	respType := &EnvironmentsClientResumePager{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.current.WebAppCollection)
-	if err != nil {
-		return respType, err
-	}
-	respType.client = l.Poller.client
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientResumePollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientResumePollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.Resume", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientResumePoller{
-		pt:     pt,
-		client: client,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // EnvironmentsClientResumeResponse contains the response from method EnvironmentsClient.Resume.
 type EnvironmentsClientResumeResponse struct {
 	WebAppCollection
-}
-
-// EnvironmentsClientSuspendPollerResponse contains the response from method EnvironmentsClient.Suspend.
-type EnvironmentsClientSuspendPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *EnvironmentsClientSuspendPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l EnvironmentsClientSuspendPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (*EnvironmentsClientSuspendPager, error) {
-	respType := &EnvironmentsClientSuspendPager{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.current.WebAppCollection)
-	if err != nil {
-		return respType, err
-	}
-	respType.client = l.Poller.client
-	return respType, nil
-}
-
-// Resume rehydrates a EnvironmentsClientSuspendPollerResponse from the provided client and resume token.
-func (l *EnvironmentsClientSuspendPollerResponse) Resume(ctx context.Context, client *EnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("EnvironmentsClient.Suspend", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &EnvironmentsClientSuspendPoller{
-		pt:     pt,
-		client: client,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // EnvironmentsClientSuspendResponse contains the response from method EnvironmentsClient.Suspend.
@@ -1162,79 +666,9 @@ type GlobalClientGetSubscriptionOperationWithAsyncResponseResponse struct {
 	// placeholder for future response values
 }
 
-// KubeEnvironmentsClientCreateOrUpdatePollerResponse contains the response from method KubeEnvironmentsClient.CreateOrUpdate.
-type KubeEnvironmentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *KubeEnvironmentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l KubeEnvironmentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (KubeEnvironmentsClientCreateOrUpdateResponse, error) {
-	respType := KubeEnvironmentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.KubeEnvironment)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a KubeEnvironmentsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *KubeEnvironmentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *KubeEnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("KubeEnvironmentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &KubeEnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // KubeEnvironmentsClientCreateOrUpdateResponse contains the response from method KubeEnvironmentsClient.CreateOrUpdate.
 type KubeEnvironmentsClientCreateOrUpdateResponse struct {
 	KubeEnvironment
-}
-
-// KubeEnvironmentsClientDeletePollerResponse contains the response from method KubeEnvironmentsClient.Delete.
-type KubeEnvironmentsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *KubeEnvironmentsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l KubeEnvironmentsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (KubeEnvironmentsClientDeleteResponse, error) {
-	respType := KubeEnvironmentsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a KubeEnvironmentsClientDeletePollerResponse from the provided client and resume token.
-func (l *KubeEnvironmentsClientDeletePollerResponse) Resume(ctx context.Context, client *KubeEnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("KubeEnvironmentsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &KubeEnvironmentsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // KubeEnvironmentsClientDeleteResponse contains the response from method KubeEnvironmentsClient.Delete.
@@ -1260,41 +694,6 @@ type KubeEnvironmentsClientListBySubscriptionResponse struct {
 // KubeEnvironmentsClientUpdateResponse contains the response from method KubeEnvironmentsClient.Update.
 type KubeEnvironmentsClientUpdateResponse struct {
 	KubeEnvironment
-}
-
-// PlansClientCreateOrUpdatePollerResponse contains the response from method PlansClient.CreateOrUpdate.
-type PlansClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *PlansClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l PlansClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PlansClientCreateOrUpdateResponse, error) {
-	respType := PlansClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Plan)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a PlansClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *PlansClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *PlansClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("PlansClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &PlansClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // PlansClientCreateOrUpdateResponse contains the response from method PlansClient.CreateOrUpdate.
@@ -1577,42 +976,6 @@ type ResourceHealthMetadataClientListResponse struct {
 	ResourceHealthMetadataCollection
 }
 
-// StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse contains the response from method StaticSitesClient.ApproveOrRejectPrivateEndpointConnection.
-type StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientApproveOrRejectPrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
-	respType := StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RemotePrivateEndpointConnectionARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse from the provided client and
-// resume token.
-func (l *StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.ApproveOrRejectPrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientApproveOrRejectPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse contains the response from method StaticSitesClient.ApproveOrRejectPrivateEndpointConnection.
 type StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse struct {
 	RemotePrivateEndpointConnectionARMResource
@@ -1633,42 +996,6 @@ type StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse s
 	StringDictionary
 }
 
-// StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse contains the response from method StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain.
-type StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse, error) {
-	respType := StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StaticSiteCustomDomainOverviewARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse from the provided client and resume
-// token.
-func (l *StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse contains the response from method StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain.
 type StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse struct {
 	StaticSiteCustomDomainOverviewARMResource
@@ -1677,41 +1004,6 @@ type StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse struct {
 // StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse contains the response from method StaticSitesClient.CreateOrUpdateStaticSiteFunctionAppSettings.
 type StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse struct {
 	StringDictionary
-}
-
-// StaticSitesClientCreateOrUpdateStaticSitePollerResponse contains the response from method StaticSitesClient.CreateOrUpdateStaticSite.
-type StaticSitesClientCreateOrUpdateStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientCreateOrUpdateStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientCreateOrUpdateStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientCreateOrUpdateStaticSiteResponse, error) {
-	respType := StaticSitesClientCreateOrUpdateStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StaticSiteARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientCreateOrUpdateStaticSitePollerResponse from the provided client and resume token.
-func (l *StaticSitesClientCreateOrUpdateStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.CreateOrUpdateStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientCreateOrUpdateStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientCreateOrUpdateStaticSiteResponse contains the response from method StaticSitesClient.CreateOrUpdateStaticSite.
@@ -1724,122 +1016,14 @@ type StaticSitesClientCreateUserRolesInvitationLinkResponse struct {
 	StaticSiteUserInvitationResponseResource
 }
 
-// StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse contains the response from method StaticSitesClient.CreateZipDeploymentForStaticSiteBuild.
-type StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientCreateZipDeploymentForStaticSiteBuildPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse, error) {
-	respType := StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse from the provided client and resume
-// token.
-func (l *StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.CreateZipDeploymentForStaticSiteBuild", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientCreateZipDeploymentForStaticSiteBuildPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse contains the response from method StaticSitesClient.CreateZipDeploymentForStaticSiteBuild.
 type StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse struct {
 	// placeholder for future response values
 }
 
-// StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse contains the response from method StaticSitesClient.CreateZipDeploymentForStaticSite.
-type StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientCreateZipDeploymentForStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientCreateZipDeploymentForStaticSiteResponse, error) {
-	respType := StaticSitesClientCreateZipDeploymentForStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse from the provided client and resume
-// token.
-func (l *StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.CreateZipDeploymentForStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientCreateZipDeploymentForStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientCreateZipDeploymentForStaticSiteResponse contains the response from method StaticSitesClient.CreateZipDeploymentForStaticSite.
 type StaticSitesClientCreateZipDeploymentForStaticSiteResponse struct {
 	// placeholder for future response values
-}
-
-// StaticSitesClientDeletePrivateEndpointConnectionPollerResponse contains the response from method StaticSitesClient.DeletePrivateEndpointConnection.
-type StaticSitesClientDeletePrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientDeletePrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientDeletePrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientDeletePrivateEndpointConnectionResponse, error) {
-	respType := StaticSitesClientDeletePrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Interface)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientDeletePrivateEndpointConnectionPollerResponse from the provided client and resume
-// token.
-func (l *StaticSitesClientDeletePrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.DeletePrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientDeletePrivateEndpointConnectionResponse contains the response from method StaticSitesClient.DeletePrivateEndpointConnection.
@@ -1848,39 +1032,9 @@ type StaticSitesClientDeletePrivateEndpointConnectionResponse struct {
 	Interface interface{}
 }
 
-// StaticSitesClientDeleteStaticSiteBuildPollerResponse contains the response from method StaticSitesClient.DeleteStaticSiteBuild.
-type StaticSitesClientDeleteStaticSiteBuildPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientDeleteStaticSiteBuildPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientDeleteStaticSiteBuildPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientDeleteStaticSiteBuildResponse, error) {
-	respType := StaticSitesClientDeleteStaticSiteBuildResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientDeleteStaticSiteBuildPollerResponse from the provided client and resume token.
-func (l *StaticSitesClientDeleteStaticSiteBuildPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.DeleteStaticSiteBuild", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientDeleteStaticSiteBuildPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type StaticSitesClientDeletePrivateEndpointConnectionResponse.
+func (s *StaticSitesClientDeletePrivateEndpointConnectionResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &s.Interface)
 }
 
 // StaticSitesClientDeleteStaticSiteBuildResponse contains the response from method StaticSitesClient.DeleteStaticSiteBuild.
@@ -1888,79 +1042,9 @@ type StaticSitesClientDeleteStaticSiteBuildResponse struct {
 	// placeholder for future response values
 }
 
-// StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse contains the response from method StaticSitesClient.DeleteStaticSiteCustomDomain.
-type StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientDeleteStaticSiteCustomDomainPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientDeleteStaticSiteCustomDomainResponse, error) {
-	respType := StaticSitesClientDeleteStaticSiteCustomDomainResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse from the provided client and resume token.
-func (l *StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.DeleteStaticSiteCustomDomain", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientDeleteStaticSiteCustomDomainPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientDeleteStaticSiteCustomDomainResponse contains the response from method StaticSitesClient.DeleteStaticSiteCustomDomain.
 type StaticSitesClientDeleteStaticSiteCustomDomainResponse struct {
 	// placeholder for future response values
-}
-
-// StaticSitesClientDeleteStaticSitePollerResponse contains the response from method StaticSitesClient.DeleteStaticSite.
-type StaticSitesClientDeleteStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientDeleteStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientDeleteStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientDeleteStaticSiteResponse, error) {
-	respType := StaticSitesClientDeleteStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientDeleteStaticSitePollerResponse from the provided client and resume token.
-func (l *StaticSitesClientDeleteStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.DeleteStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientDeleteStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientDeleteStaticSiteResponse contains the response from method StaticSitesClient.DeleteStaticSite.
@@ -1971,41 +1055,6 @@ type StaticSitesClientDeleteStaticSiteResponse struct {
 // StaticSitesClientDeleteStaticSiteUserResponse contains the response from method StaticSitesClient.DeleteStaticSiteUser.
 type StaticSitesClientDeleteStaticSiteUserResponse struct {
 	// placeholder for future response values
-}
-
-// StaticSitesClientDetachStaticSitePollerResponse contains the response from method StaticSitesClient.DetachStaticSite.
-type StaticSitesClientDetachStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientDetachStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientDetachStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientDetachStaticSiteResponse, error) {
-	respType := StaticSitesClientDetachStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientDetachStaticSitePollerResponse from the provided client and resume token.
-func (l *StaticSitesClientDetachStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.DetachStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientDetachStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientDetachStaticSiteResponse contains the response from method StaticSitesClient.DetachStaticSite.
@@ -2143,81 +1192,9 @@ type StaticSitesClientPreviewWorkflowResponse struct {
 	StaticSitesWorkflowPreview
 }
 
-// StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse contains the response from method StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild.
-type StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse, error) {
-	respType := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StaticSiteUserProvidedFunctionAppARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse from the provided
-// client and resume token.
-func (l *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse contains the response from method StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild.
 type StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse struct {
 	StaticSiteUserProvidedFunctionAppARMResource
-}
-
-// StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse contains the response from method StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite.
-type StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse, error) {
-	respType := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StaticSiteUserProvidedFunctionAppARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse from the provided client
-// and resume token.
-func (l *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse contains the response from method StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite.
@@ -2238,42 +1215,6 @@ type StaticSitesClientUpdateStaticSiteResponse struct {
 // StaticSitesClientUpdateStaticSiteUserResponse contains the response from method StaticSitesClient.UpdateStaticSiteUser.
 type StaticSitesClientUpdateStaticSiteUserResponse struct {
 	StaticSiteUserARMResource
-}
-
-// StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse contains the response from method StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite.
-type StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse, error) {
-	respType := StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse from the provided client
-// and resume token.
-func (l *StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse) Resume(ctx context.Context, client *StaticSitesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse contains the response from method StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite.
@@ -2326,81 +1267,9 @@ type WebAppsClientApplySlotConfigurationSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse contains the response from method WebAppsClient.ApproveOrRejectPrivateEndpointConnection.
-type WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientApproveOrRejectPrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
-	respType := WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RemotePrivateEndpointConnectionARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse from the provided client and resume
-// token.
-func (l *WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.ApproveOrRejectPrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientApproveOrRejectPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse contains the response from method WebAppsClient.ApproveOrRejectPrivateEndpointConnection.
 type WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse struct {
 	RemotePrivateEndpointConnectionARMResource
-}
-
-// WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse contains the response from method WebAppsClient.ApproveOrRejectPrivateEndpointConnectionSlot.
-type WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse, error) {
-	respType := WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RemotePrivateEndpointConnectionARMResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse from the provided client and
-// resume token.
-func (l *WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.ApproveOrRejectPrivateEndpointConnectionSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse contains the response from method WebAppsClient.ApproveOrRejectPrivateEndpointConnectionSlot.
@@ -2428,79 +1297,9 @@ type WebAppsClientCreateDeploymentSlotResponse struct {
 	Deployment
 }
 
-// WebAppsClientCreateFunctionPollerResponse contains the response from method WebAppsClient.CreateFunction.
-type WebAppsClientCreateFunctionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateFunctionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateFunctionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateFunctionResponse, error) {
-	respType := WebAppsClientCreateFunctionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.FunctionEnvelope)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateFunctionPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateFunctionPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateFunction", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateFunctionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateFunctionResponse contains the response from method WebAppsClient.CreateFunction.
 type WebAppsClientCreateFunctionResponse struct {
 	FunctionEnvelope
-}
-
-// WebAppsClientCreateInstanceFunctionSlotPollerResponse contains the response from method WebAppsClient.CreateInstanceFunctionSlot.
-type WebAppsClientCreateInstanceFunctionSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateInstanceFunctionSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateInstanceFunctionSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateInstanceFunctionSlotResponse, error) {
-	respType := WebAppsClientCreateInstanceFunctionSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.FunctionEnvelope)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateInstanceFunctionSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateInstanceFunctionSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateInstanceFunctionSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateInstanceFunctionSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientCreateInstanceFunctionSlotResponse contains the response from method WebAppsClient.CreateInstanceFunctionSlot.
@@ -2508,80 +1307,9 @@ type WebAppsClientCreateInstanceFunctionSlotResponse struct {
 	FunctionEnvelope
 }
 
-// WebAppsClientCreateInstanceMSDeployOperationPollerResponse contains the response from method WebAppsClient.CreateInstanceMSDeployOperation.
-type WebAppsClientCreateInstanceMSDeployOperationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateInstanceMSDeployOperationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateInstanceMSDeployOperationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateInstanceMSDeployOperationResponse, error) {
-	respType := WebAppsClientCreateInstanceMSDeployOperationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MSDeployStatus)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateInstanceMSDeployOperationPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateInstanceMSDeployOperationPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateInstanceMSDeployOperation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateInstanceMSDeployOperationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateInstanceMSDeployOperationResponse contains the response from method WebAppsClient.CreateInstanceMSDeployOperation.
 type WebAppsClientCreateInstanceMSDeployOperationResponse struct {
 	MSDeployStatus
-}
-
-// WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse contains the response from method WebAppsClient.CreateInstanceMSDeployOperationSlot.
-type WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateInstanceMSDeployOperationSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateInstanceMSDeployOperationSlotResponse, error) {
-	respType := WebAppsClientCreateInstanceMSDeployOperationSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MSDeployStatus)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse from the provided client and resume
-// token.
-func (l *WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateInstanceMSDeployOperationSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateInstanceMSDeployOperationSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientCreateInstanceMSDeployOperationSlotResponse contains the response from method WebAppsClient.CreateInstanceMSDeployOperationSlot.
@@ -2589,79 +1317,9 @@ type WebAppsClientCreateInstanceMSDeployOperationSlotResponse struct {
 	MSDeployStatus
 }
 
-// WebAppsClientCreateMSDeployOperationPollerResponse contains the response from method WebAppsClient.CreateMSDeployOperation.
-type WebAppsClientCreateMSDeployOperationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateMSDeployOperationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateMSDeployOperationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateMSDeployOperationResponse, error) {
-	respType := WebAppsClientCreateMSDeployOperationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MSDeployStatus)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateMSDeployOperationPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateMSDeployOperationPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateMSDeployOperation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateMSDeployOperationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateMSDeployOperationResponse contains the response from method WebAppsClient.CreateMSDeployOperation.
 type WebAppsClientCreateMSDeployOperationResponse struct {
 	MSDeployStatus
-}
-
-// WebAppsClientCreateMSDeployOperationSlotPollerResponse contains the response from method WebAppsClient.CreateMSDeployOperationSlot.
-type WebAppsClientCreateMSDeployOperationSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateMSDeployOperationSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateMSDeployOperationSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateMSDeployOperationSlotResponse, error) {
-	respType := WebAppsClientCreateMSDeployOperationSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MSDeployStatus)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateMSDeployOperationSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateMSDeployOperationSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateMSDeployOperationSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateMSDeployOperationSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientCreateMSDeployOperationSlotResponse contains the response from method WebAppsClient.CreateMSDeployOperationSlot.
@@ -2735,41 +1393,6 @@ type WebAppsClientCreateOrUpdateHybridConnectionSlotResponse struct {
 	HybridConnection
 }
 
-// WebAppsClientCreateOrUpdatePollerResponse contains the response from method WebAppsClient.CreateOrUpdate.
-type WebAppsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateOrUpdateResponse, error) {
-	respType := WebAppsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Site)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateOrUpdatePublicCertificateResponse contains the response from method WebAppsClient.CreateOrUpdatePublicCertificate.
 type WebAppsClientCreateOrUpdatePublicCertificateResponse struct {
 	PublicCertificate
@@ -2795,119 +1418,14 @@ type WebAppsClientCreateOrUpdateResponse struct {
 	Site
 }
 
-// WebAppsClientCreateOrUpdateSlotPollerResponse contains the response from method WebAppsClient.CreateOrUpdateSlot.
-type WebAppsClientCreateOrUpdateSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateOrUpdateSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateOrUpdateSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateOrUpdateSlotResponse, error) {
-	respType := WebAppsClientCreateOrUpdateSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Site)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateOrUpdateSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateOrUpdateSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateOrUpdateSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateOrUpdateSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateOrUpdateSlotResponse contains the response from method WebAppsClient.CreateOrUpdateSlot.
 type WebAppsClientCreateOrUpdateSlotResponse struct {
 	Site
 }
 
-// WebAppsClientCreateOrUpdateSourceControlPollerResponse contains the response from method WebAppsClient.CreateOrUpdateSourceControl.
-type WebAppsClientCreateOrUpdateSourceControlPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateOrUpdateSourceControlPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateOrUpdateSourceControlPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateOrUpdateSourceControlResponse, error) {
-	respType := WebAppsClientCreateOrUpdateSourceControlResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SiteSourceControl)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateOrUpdateSourceControlPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateOrUpdateSourceControlPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateOrUpdateSourceControl", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateOrUpdateSourceControlPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientCreateOrUpdateSourceControlResponse contains the response from method WebAppsClient.CreateOrUpdateSourceControl.
 type WebAppsClientCreateOrUpdateSourceControlResponse struct {
 	SiteSourceControl
-}
-
-// WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse contains the response from method WebAppsClient.CreateOrUpdateSourceControlSlot.
-type WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientCreateOrUpdateSourceControlSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientCreateOrUpdateSourceControlSlotResponse, error) {
-	respType := WebAppsClientCreateOrUpdateSourceControlSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SiteSourceControl)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.CreateOrUpdateSourceControlSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientCreateOrUpdateSourceControlSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientCreateOrUpdateSourceControlSlotResponse contains the response from method WebAppsClient.CreateOrUpdateSourceControlSlot.
@@ -3065,87 +1583,26 @@ type WebAppsClientDeletePremierAddOnSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientDeletePrivateEndpointConnectionPollerResponse contains the response from method WebAppsClient.DeletePrivateEndpointConnection.
-type WebAppsClientDeletePrivateEndpointConnectionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientDeletePrivateEndpointConnectionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientDeletePrivateEndpointConnectionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientDeletePrivateEndpointConnectionResponse, error) {
-	respType := WebAppsClientDeletePrivateEndpointConnectionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Interface)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientDeletePrivateEndpointConnectionPollerResponse from the provided client and resume token.
-func (l *WebAppsClientDeletePrivateEndpointConnectionPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.DeletePrivateEndpointConnection", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientDeletePrivateEndpointConnectionResponse contains the response from method WebAppsClient.DeletePrivateEndpointConnection.
 type WebAppsClientDeletePrivateEndpointConnectionResponse struct {
 	// Anything
 	Interface interface{}
 }
 
-// WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse contains the response from method WebAppsClient.DeletePrivateEndpointConnectionSlot.
-type WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientDeletePrivateEndpointConnectionSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientDeletePrivateEndpointConnectionSlotResponse, error) {
-	respType := WebAppsClientDeletePrivateEndpointConnectionSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Interface)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse from the provided client and resume
-// token.
-func (l *WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.DeletePrivateEndpointConnectionSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientDeletePrivateEndpointConnectionSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientDeletePrivateEndpointConnectionResponse.
+func (w *WebAppsClientDeletePrivateEndpointConnectionResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.Interface)
 }
 
 // WebAppsClientDeletePrivateEndpointConnectionSlotResponse contains the response from method WebAppsClient.DeletePrivateEndpointConnectionSlot.
 type WebAppsClientDeletePrivateEndpointConnectionSlotResponse struct {
 	// Anything
 	Interface interface{}
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientDeletePrivateEndpointConnectionSlotResponse.
+func (w *WebAppsClientDeletePrivateEndpointConnectionSlotResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.Interface)
 }
 
 // WebAppsClientDeleteProcessResponse contains the response from method WebAppsClient.DeleteProcess.
@@ -3835,79 +2292,9 @@ type WebAppsClientGetWebSiteContainerLogsSlotResponse struct {
 	Body io.ReadCloser
 }
 
-// WebAppsClientInstallSiteExtensionPollerResponse contains the response from method WebAppsClient.InstallSiteExtension.
-type WebAppsClientInstallSiteExtensionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientInstallSiteExtensionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientInstallSiteExtensionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientInstallSiteExtensionResponse, error) {
-	respType := WebAppsClientInstallSiteExtensionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SiteExtensionInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientInstallSiteExtensionPollerResponse from the provided client and resume token.
-func (l *WebAppsClientInstallSiteExtensionPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.InstallSiteExtension", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientInstallSiteExtensionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientInstallSiteExtensionResponse contains the response from method WebAppsClient.InstallSiteExtension.
 type WebAppsClientInstallSiteExtensionResponse struct {
 	SiteExtensionInfo
-}
-
-// WebAppsClientInstallSiteExtensionSlotPollerResponse contains the response from method WebAppsClient.InstallSiteExtensionSlot.
-type WebAppsClientInstallSiteExtensionSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientInstallSiteExtensionSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientInstallSiteExtensionSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientInstallSiteExtensionSlotResponse, error) {
-	respType := WebAppsClientInstallSiteExtensionSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SiteExtensionInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientInstallSiteExtensionSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientInstallSiteExtensionSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.InstallSiteExtensionSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientInstallSiteExtensionSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientInstallSiteExtensionSlotResponse contains the response from method WebAppsClient.InstallSiteExtensionSlot.
@@ -4230,79 +2617,9 @@ type WebAppsClientListPublicCertificatesSlotResponse struct {
 	PublicCertificateCollection
 }
 
-// WebAppsClientListPublishingCredentialsPollerResponse contains the response from method WebAppsClient.ListPublishingCredentials.
-type WebAppsClientListPublishingCredentialsPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientListPublishingCredentialsPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientListPublishingCredentialsPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientListPublishingCredentialsResponse, error) {
-	respType := WebAppsClientListPublishingCredentialsResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.User)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientListPublishingCredentialsPollerResponse from the provided client and resume token.
-func (l *WebAppsClientListPublishingCredentialsPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.ListPublishingCredentials", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientListPublishingCredentialsPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientListPublishingCredentialsResponse contains the response from method WebAppsClient.ListPublishingCredentials.
 type WebAppsClientListPublishingCredentialsResponse struct {
 	User
-}
-
-// WebAppsClientListPublishingCredentialsSlotPollerResponse contains the response from method WebAppsClient.ListPublishingCredentialsSlot.
-type WebAppsClientListPublishingCredentialsSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientListPublishingCredentialsSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientListPublishingCredentialsSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientListPublishingCredentialsSlotResponse, error) {
-	respType := WebAppsClientListPublishingCredentialsSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.User)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientListPublishingCredentialsSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientListPublishingCredentialsSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.ListPublishingCredentialsSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientListPublishingCredentialsSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientListPublishingCredentialsSlotResponse contains the response from method WebAppsClient.ListPublishingCredentialsSlot.
@@ -4479,79 +2796,9 @@ type WebAppsClientListWebJobsSlotResponse struct {
 	WebJobCollection
 }
 
-// WebAppsClientMigrateMySQLPollerResponse contains the response from method WebAppsClient.MigrateMySQL.
-type WebAppsClientMigrateMySQLPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientMigrateMySQLPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientMigrateMySQLPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientMigrateMySQLResponse, error) {
-	respType := WebAppsClientMigrateMySQLResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Operation)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientMigrateMySQLPollerResponse from the provided client and resume token.
-func (l *WebAppsClientMigrateMySQLPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.MigrateMySQL", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientMigrateMySQLPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientMigrateMySQLResponse contains the response from method WebAppsClient.MigrateMySQL.
 type WebAppsClientMigrateMySQLResponse struct {
 	Operation
-}
-
-// WebAppsClientMigrateStoragePollerResponse contains the response from method WebAppsClient.MigrateStorage.
-type WebAppsClientMigrateStoragePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientMigrateStoragePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientMigrateStoragePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientMigrateStorageResponse, error) {
-	respType := WebAppsClientMigrateStorageResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StorageMigrationResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientMigrateStoragePollerResponse from the provided client and resume token.
-func (l *WebAppsClientMigrateStoragePollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.MigrateStorage", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientMigrateStoragePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientMigrateStorageResponse contains the response from method WebAppsClient.MigrateStorage.
@@ -4599,79 +2846,9 @@ type WebAppsClientRestartSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientRestoreFromBackupBlobPollerResponse contains the response from method WebAppsClient.RestoreFromBackupBlob.
-type WebAppsClientRestoreFromBackupBlobPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreFromBackupBlobPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreFromBackupBlobPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreFromBackupBlobResponse, error) {
-	respType := WebAppsClientRestoreFromBackupBlobResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreFromBackupBlobPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreFromBackupBlobPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreFromBackupBlob", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreFromBackupBlobPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientRestoreFromBackupBlobResponse contains the response from method WebAppsClient.RestoreFromBackupBlob.
 type WebAppsClientRestoreFromBackupBlobResponse struct {
 	// placeholder for future response values
-}
-
-// WebAppsClientRestoreFromBackupBlobSlotPollerResponse contains the response from method WebAppsClient.RestoreFromBackupBlobSlot.
-type WebAppsClientRestoreFromBackupBlobSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreFromBackupBlobSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreFromBackupBlobSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreFromBackupBlobSlotResponse, error) {
-	respType := WebAppsClientRestoreFromBackupBlobSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreFromBackupBlobSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreFromBackupBlobSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreFromBackupBlobSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreFromBackupBlobSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientRestoreFromBackupBlobSlotResponse contains the response from method WebAppsClient.RestoreFromBackupBlobSlot.
@@ -4679,79 +2856,9 @@ type WebAppsClientRestoreFromBackupBlobSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientRestoreFromDeletedAppPollerResponse contains the response from method WebAppsClient.RestoreFromDeletedApp.
-type WebAppsClientRestoreFromDeletedAppPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreFromDeletedAppPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreFromDeletedAppPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreFromDeletedAppResponse, error) {
-	respType := WebAppsClientRestoreFromDeletedAppResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreFromDeletedAppPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreFromDeletedAppPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreFromDeletedApp", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreFromDeletedAppPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientRestoreFromDeletedAppResponse contains the response from method WebAppsClient.RestoreFromDeletedApp.
 type WebAppsClientRestoreFromDeletedAppResponse struct {
 	// placeholder for future response values
-}
-
-// WebAppsClientRestoreFromDeletedAppSlotPollerResponse contains the response from method WebAppsClient.RestoreFromDeletedAppSlot.
-type WebAppsClientRestoreFromDeletedAppSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreFromDeletedAppSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreFromDeletedAppSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreFromDeletedAppSlotResponse, error) {
-	respType := WebAppsClientRestoreFromDeletedAppSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreFromDeletedAppSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreFromDeletedAppSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreFromDeletedAppSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreFromDeletedAppSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientRestoreFromDeletedAppSlotResponse contains the response from method WebAppsClient.RestoreFromDeletedAppSlot.
@@ -4759,79 +2866,9 @@ type WebAppsClientRestoreFromDeletedAppSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientRestorePollerResponse contains the response from method WebAppsClient.Restore.
-type WebAppsClientRestorePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestorePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestorePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreResponse, error) {
-	respType := WebAppsClientRestoreResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestorePollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestorePollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.Restore", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestorePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientRestoreResponse contains the response from method WebAppsClient.Restore.
 type WebAppsClientRestoreResponse struct {
 	// placeholder for future response values
-}
-
-// WebAppsClientRestoreSlotPollerResponse contains the response from method WebAppsClient.RestoreSlot.
-type WebAppsClientRestoreSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreSlotResponse, error) {
-	respType := WebAppsClientRestoreSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientRestoreSlotResponse contains the response from method WebAppsClient.RestoreSlot.
@@ -4839,79 +2876,9 @@ type WebAppsClientRestoreSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientRestoreSnapshotPollerResponse contains the response from method WebAppsClient.RestoreSnapshot.
-type WebAppsClientRestoreSnapshotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreSnapshotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreSnapshotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreSnapshotResponse, error) {
-	respType := WebAppsClientRestoreSnapshotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreSnapshotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreSnapshotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreSnapshot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreSnapshotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientRestoreSnapshotResponse contains the response from method WebAppsClient.RestoreSnapshot.
 type WebAppsClientRestoreSnapshotResponse struct {
 	// placeholder for future response values
-}
-
-// WebAppsClientRestoreSnapshotSlotPollerResponse contains the response from method WebAppsClient.RestoreSnapshotSlot.
-type WebAppsClientRestoreSnapshotSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientRestoreSnapshotSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientRestoreSnapshotSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientRestoreSnapshotSlotResponse, error) {
-	respType := WebAppsClientRestoreSnapshotSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientRestoreSnapshotSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientRestoreSnapshotSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.RestoreSnapshotSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientRestoreSnapshotSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientRestoreSnapshotSlotResponse contains the response from method WebAppsClient.RestoreSnapshotSlot.
@@ -4939,86 +2906,26 @@ type WebAppsClientStartContinuousWebJobSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientStartNetworkTracePollerResponse contains the response from method WebAppsClient.StartNetworkTrace.
-type WebAppsClientStartNetworkTracePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientStartNetworkTracePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientStartNetworkTracePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientStartNetworkTraceResponse, error) {
-	respType := WebAppsClientStartNetworkTraceResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.NetworkTraceArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientStartNetworkTracePollerResponse from the provided client and resume token.
-func (l *WebAppsClientStartNetworkTracePollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.StartNetworkTrace", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientStartNetworkTracePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientStartNetworkTraceResponse contains the response from method WebAppsClient.StartNetworkTrace.
 type WebAppsClientStartNetworkTraceResponse struct {
 	// Array of NetworkTrace
 	NetworkTraceArray []*NetworkTrace
 }
 
-// WebAppsClientStartNetworkTraceSlotPollerResponse contains the response from method WebAppsClient.StartNetworkTraceSlot.
-type WebAppsClientStartNetworkTraceSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientStartNetworkTraceSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientStartNetworkTraceSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientStartNetworkTraceSlotResponse, error) {
-	respType := WebAppsClientStartNetworkTraceSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.NetworkTraceArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientStartNetworkTraceSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientStartNetworkTraceSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.StartNetworkTraceSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientStartNetworkTraceSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientStartNetworkTraceResponse.
+func (w *WebAppsClientStartNetworkTraceResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.NetworkTraceArray)
 }
 
 // WebAppsClientStartNetworkTraceSlotResponse contains the response from method WebAppsClient.StartNetworkTraceSlot.
 type WebAppsClientStartNetworkTraceSlotResponse struct {
 	// Array of NetworkTrace
 	NetworkTraceArray []*NetworkTrace
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientStartNetworkTraceSlotResponse.
+func (w *WebAppsClientStartNetworkTraceSlotResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.NetworkTraceArray)
 }
 
 // WebAppsClientStartResponse contains the response from method WebAppsClient.Start.
@@ -5031,87 +2938,26 @@ type WebAppsClientStartSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse contains the response from method WebAppsClient.StartWebSiteNetworkTraceOperation.
-type WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientStartWebSiteNetworkTraceOperationPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientStartWebSiteNetworkTraceOperationResponse, error) {
-	respType := WebAppsClientStartWebSiteNetworkTraceOperationResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.NetworkTraceArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse from the provided client and resume token.
-func (l *WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.StartWebSiteNetworkTraceOperation", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientStartWebSiteNetworkTraceOperationPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientStartWebSiteNetworkTraceOperationResponse contains the response from method WebAppsClient.StartWebSiteNetworkTraceOperation.
 type WebAppsClientStartWebSiteNetworkTraceOperationResponse struct {
 	// Array of NetworkTrace
 	NetworkTraceArray []*NetworkTrace
 }
 
-// WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse contains the response from method WebAppsClient.StartWebSiteNetworkTraceOperationSlot.
-type WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientStartWebSiteNetworkTraceOperationSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse, error) {
-	respType := WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.NetworkTraceArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse from the provided client and resume
-// token.
-func (l *WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.StartWebSiteNetworkTraceOperationSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientStartWebSiteNetworkTraceOperationSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientStartWebSiteNetworkTraceOperationResponse.
+func (w *WebAppsClientStartWebSiteNetworkTraceOperationResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.NetworkTraceArray)
 }
 
 // WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse contains the response from method WebAppsClient.StartWebSiteNetworkTraceOperationSlot.
 type WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse struct {
 	// Array of NetworkTrace
 	NetworkTraceArray []*NetworkTrace
+}
+
+// UnmarshalJSON implements the json.Unmarshaller interface for type WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse.
+func (w *WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &w.NetworkTraceArray)
 }
 
 // WebAppsClientStartWebSiteNetworkTraceResponse contains the response from method WebAppsClient.StartWebSiteNetworkTrace.
@@ -5164,79 +3010,9 @@ type WebAppsClientStopWebSiteNetworkTraceSlotResponse struct {
 	// placeholder for future response values
 }
 
-// WebAppsClientSwapSlotPollerResponse contains the response from method WebAppsClient.SwapSlot.
-type WebAppsClientSwapSlotPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientSwapSlotPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientSwapSlotPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientSwapSlotResponse, error) {
-	respType := WebAppsClientSwapSlotResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientSwapSlotPollerResponse from the provided client and resume token.
-func (l *WebAppsClientSwapSlotPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.SwapSlot", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientSwapSlotPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // WebAppsClientSwapSlotResponse contains the response from method WebAppsClient.SwapSlot.
 type WebAppsClientSwapSlotResponse struct {
 	// placeholder for future response values
-}
-
-// WebAppsClientSwapSlotWithProductionPollerResponse contains the response from method WebAppsClient.SwapSlotWithProduction.
-type WebAppsClientSwapSlotWithProductionPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WebAppsClientSwapSlotWithProductionPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WebAppsClientSwapSlotWithProductionPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WebAppsClientSwapSlotWithProductionResponse, error) {
-	respType := WebAppsClientSwapSlotWithProductionResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WebAppsClientSwapSlotWithProductionPollerResponse from the provided client and resume token.
-func (l *WebAppsClientSwapSlotWithProductionPollerResponse) Resume(ctx context.Context, client *WebAppsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WebAppsClient.SwapSlotWithProduction", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WebAppsClientSwapSlotWithProductionPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WebAppsClientSwapSlotWithProductionResponse contains the response from method WebAppsClient.SwapSlotWithProduction.

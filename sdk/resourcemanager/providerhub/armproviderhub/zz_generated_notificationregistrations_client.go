@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *NotificationRegistrationsClient) getHandleResponse(resp *http.Resp
 // providerNamespace - The name of the resource provider hosted within ProviderHub.
 // options - NotificationRegistrationsClientListByProviderRegistrationOptions contains the optional parameters for the NotificationRegistrationsClient.ListByProviderRegistration
 // method.
-func (client *NotificationRegistrationsClient) ListByProviderRegistration(providerNamespace string, options *NotificationRegistrationsClientListByProviderRegistrationOptions) *NotificationRegistrationsClientListByProviderRegistrationPager {
-	return &NotificationRegistrationsClientListByProviderRegistrationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+func (client *NotificationRegistrationsClient) ListByProviderRegistration(providerNamespace string, options *NotificationRegistrationsClientListByProviderRegistrationOptions) *runtime.Pager[NotificationRegistrationsClientListByProviderRegistrationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NotificationRegistrationsClientListByProviderRegistrationResponse]{
+		More: func(page NotificationRegistrationsClientListByProviderRegistrationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NotificationRegistrationsClientListByProviderRegistrationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NotificationRegistrationArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *NotificationRegistrationsClientListByProviderRegistrationResponse) (NotificationRegistrationsClientListByProviderRegistrationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NotificationRegistrationsClientListByProviderRegistrationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NotificationRegistrationsClientListByProviderRegistrationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NotificationRegistrationsClientListByProviderRegistrationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProviderRegistrationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProviderRegistrationCreateRequest creates the ListByProviderRegistration request.

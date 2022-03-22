@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -48,20 +48,16 @@ func NewCalculateExchangeClient(credential azcore.TokenCredential, options *arm.
 // body - Request containing purchases and refunds that need to be executed.
 // options - CalculateExchangeClientBeginPostOptions contains the optional parameters for the CalculateExchangeClient.BeginPost
 // method.
-func (client *CalculateExchangeClient) BeginPost(ctx context.Context, body CalculateExchangeRequest, options *CalculateExchangeClientBeginPostOptions) (CalculateExchangeClientPostPollerResponse, error) {
-	resp, err := client.post(ctx, body, options)
-	if err != nil {
-		return CalculateExchangeClientPostPollerResponse{}, err
+func (client *CalculateExchangeClient) BeginPost(ctx context.Context, body CalculateExchangeRequest, options *CalculateExchangeClientBeginPostOptions) (*armruntime.Poller[CalculateExchangeClientPostResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.post(ctx, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CalculateExchangeClientPostResponse]("CalculateExchangeClient.Post", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CalculateExchangeClientPostResponse]("CalculateExchangeClient.Post", options.ResumeToken, client.pl, nil)
 	}
-	result := CalculateExchangeClientPostPollerResponse{}
-	pt, err := armruntime.NewPoller("CalculateExchangeClient.Post", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CalculateExchangeClientPostPollerResponse{}, err
-	}
-	result.Poller = &CalculateExchangeClientPostPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Post - Calculates price for exchanging Reservations if there are no policy errors.

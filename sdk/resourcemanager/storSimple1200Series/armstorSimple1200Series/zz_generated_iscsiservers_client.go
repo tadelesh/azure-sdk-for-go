@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewIscsiServersClient(subscriptionID string, credential azcore.TokenCredent
 // managerName - The manager name
 // options - IscsiServersClientBeginBackupNowOptions contains the optional parameters for the IscsiServersClient.BeginBackupNow
 // method.
-func (client *IscsiServersClient) BeginBackupNow(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientBeginBackupNowOptions) (IscsiServersClientBackupNowPollerResponse, error) {
-	resp, err := client.backupNow(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
-	if err != nil {
-		return IscsiServersClientBackupNowPollerResponse{}, err
+func (client *IscsiServersClient) BeginBackupNow(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientBeginBackupNowOptions) (*armruntime.Poller[IscsiServersClientBackupNowResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.backupNow(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IscsiServersClientBackupNowResponse]("IscsiServersClient.BackupNow", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IscsiServersClientBackupNowResponse]("IscsiServersClient.BackupNow", options.ResumeToken, client.pl, nil)
 	}
-	result := IscsiServersClientBackupNowPollerResponse{}
-	pt, err := armruntime.NewPoller("IscsiServersClient.BackupNow", "", resp, client.pl)
-	if err != nil {
-		return IscsiServersClientBackupNowPollerResponse{}, err
-	}
-	result.Poller = &IscsiServersClientBackupNowPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // BackupNow - Backup the iSCSI server now.
@@ -133,20 +129,16 @@ func (client *IscsiServersClient) backupNowCreateRequest(ctx context.Context, de
 // iscsiServer - The iSCSI server.
 // options - IscsiServersClientBeginCreateOrUpdateOptions contains the optional parameters for the IscsiServersClient.BeginCreateOrUpdate
 // method.
-func (client *IscsiServersClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, iscsiServer ISCSIServer, options *IscsiServersClientBeginCreateOrUpdateOptions) (IscsiServersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, iscsiServer, options)
-	if err != nil {
-		return IscsiServersClientCreateOrUpdatePollerResponse{}, err
+func (client *IscsiServersClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, iscsiServer ISCSIServer, options *IscsiServersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[IscsiServersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, iscsiServer, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IscsiServersClientCreateOrUpdateResponse]("IscsiServersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IscsiServersClientCreateOrUpdateResponse]("IscsiServersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := IscsiServersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IscsiServersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return IscsiServersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &IscsiServersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the iSCSI server.
@@ -208,20 +200,16 @@ func (client *IscsiServersClient) createOrUpdateCreateRequest(ctx context.Contex
 // managerName - The manager name
 // options - IscsiServersClientBeginDeleteOptions contains the optional parameters for the IscsiServersClient.BeginDelete
 // method.
-func (client *IscsiServersClient) BeginDelete(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientBeginDeleteOptions) (IscsiServersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
-	if err != nil {
-		return IscsiServersClientDeletePollerResponse{}, err
+func (client *IscsiServersClient) BeginDelete(ctx context.Context, deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientBeginDeleteOptions) (*armruntime.Poller[IscsiServersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IscsiServersClientDeleteResponse]("IscsiServersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IscsiServersClientDeleteResponse]("IscsiServersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IscsiServersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IscsiServersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return IscsiServersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IscsiServersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the iSCSI server.
@@ -347,13 +335,26 @@ func (client *IscsiServersClient) getHandleResponse(resp *http.Response) (IscsiS
 // managerName - The manager name
 // options - IscsiServersClientListByDeviceOptions contains the optional parameters for the IscsiServersClient.ListByDevice
 // method.
-func (client *IscsiServersClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *IscsiServersClientListByDeviceOptions) *IscsiServersClientListByDevicePager {
-	return &IscsiServersClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *IscsiServersClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *IscsiServersClientListByDeviceOptions) *runtime.Pager[IscsiServersClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiServersClientListByDeviceResponse]{
+		More: func(page IscsiServersClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiServersClientListByDeviceResponse) (IscsiServersClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiServersClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiServersClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiServersClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -401,13 +402,26 @@ func (client *IscsiServersClient) listByDeviceHandleResponse(resp *http.Response
 // managerName - The manager name
 // options - IscsiServersClientListByManagerOptions contains the optional parameters for the IscsiServersClient.ListByManager
 // method.
-func (client *IscsiServersClient) ListByManager(resourceGroupName string, managerName string, options *IscsiServersClientListByManagerOptions) *IscsiServersClientListByManagerPager {
-	return &IscsiServersClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *IscsiServersClient) ListByManager(resourceGroupName string, managerName string, options *IscsiServersClientListByManagerOptions) *runtime.Pager[IscsiServersClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiServersClientListByManagerResponse]{
+		More: func(page IscsiServersClientListByManagerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiServersClientListByManagerResponse) (IscsiServersClientListByManagerResponse, error) {
+			req, err := client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiServersClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiServersClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiServersClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
+		},
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.
@@ -453,13 +467,26 @@ func (client *IscsiServersClient) listByManagerHandleResponse(resp *http.Respons
 // managerName - The manager name
 // options - IscsiServersClientListMetricDefinitionOptions contains the optional parameters for the IscsiServersClient.ListMetricDefinition
 // method.
-func (client *IscsiServersClient) ListMetricDefinition(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientListMetricDefinitionOptions) *IscsiServersClientListMetricDefinitionPager {
-	return &IscsiServersClientListMetricDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+func (client *IscsiServersClient) ListMetricDefinition(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientListMetricDefinitionOptions) *runtime.Pager[IscsiServersClientListMetricDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiServersClientListMetricDefinitionResponse]{
+		More: func(page IscsiServersClientListMetricDefinitionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiServersClientListMetricDefinitionResponse) (IscsiServersClientListMetricDefinitionResponse, error) {
+			req, err := client.listMetricDefinitionCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiServersClientListMetricDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiServersClientListMetricDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiServersClientListMetricDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionCreateRequest creates the ListMetricDefinition request.
@@ -513,13 +540,26 @@ func (client *IscsiServersClient) listMetricDefinitionHandleResponse(resp *http.
 // managerName - The manager name
 // options - IscsiServersClientListMetricsOptions contains the optional parameters for the IscsiServersClient.ListMetrics
 // method.
-func (client *IscsiServersClient) ListMetrics(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientListMetricsOptions) *IscsiServersClientListMetricsPager {
-	return &IscsiServersClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+func (client *IscsiServersClient) ListMetrics(deviceName string, iscsiServerName string, resourceGroupName string, managerName string, options *IscsiServersClientListMetricsOptions) *runtime.Pager[IscsiServersClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IscsiServersClientListMetricsResponse]{
+		More: func(page IscsiServersClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IscsiServersClientListMetricsResponse) (IscsiServersClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, deviceName, iscsiServerName, resourceGroupName, managerName, options)
+			if err != nil {
+				return IscsiServersClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IscsiServersClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IscsiServersClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

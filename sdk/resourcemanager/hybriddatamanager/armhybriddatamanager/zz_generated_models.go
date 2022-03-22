@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -119,12 +119,14 @@ type DataManagerUpdateParameter struct {
 
 // DataManagersClientBeginCreateOptions contains the optional parameters for the DataManagersClient.BeginCreate method.
 type DataManagersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataManagersClientBeginDeleteOptions contains the optional parameters for the DataManagersClient.BeginDelete method.
 type DataManagersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataManagersClientBeginUpdateOptions contains the optional parameters for the DataManagersClient.BeginUpdate method.
@@ -132,6 +134,8 @@ type DataManagersClientBeginUpdateOptions struct {
 	// Defines the If-Match condition. The patch will be performed only if the ETag of the data manager resource on the server
 	// matches this value.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataManagersClientGetOptions contains the optional parameters for the DataManagersClient.Get method.
@@ -300,12 +304,14 @@ type DataStoreTypesClientListByDataManagerOptions struct {
 // DataStoresClientBeginCreateOrUpdateOptions contains the optional parameters for the DataStoresClient.BeginCreateOrUpdate
 // method.
 type DataStoresClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataStoresClientBeginDeleteOptions contains the optional parameters for the DataStoresClient.BeginDelete method.
 type DataStoresClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataStoresClientGetOptions contains the optional parameters for the DataStoresClient.Get method.
@@ -453,17 +459,20 @@ type JobDefinitionProperties struct {
 // JobDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the JobDefinitionsClient.BeginCreateOrUpdate
 // method.
 type JobDefinitionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobDefinitionsClientBeginDeleteOptions contains the optional parameters for the JobDefinitionsClient.BeginDelete method.
 type JobDefinitionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobDefinitionsClientBeginRunOptions contains the optional parameters for the JobDefinitionsClient.BeginRun method.
 type JobDefinitionsClientBeginRunOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobDefinitionsClientGetOptions contains the optional parameters for the JobDefinitionsClient.Get method.
@@ -562,12 +571,14 @@ type JobStages struct {
 
 // JobsClientBeginCancelOptions contains the optional parameters for the JobsClient.BeginCancel method.
 type JobsClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientBeginResumeOptions contains the optional parameters for the JobsClient.BeginResume method.
 type JobsClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientGetOptions contains the optional parameters for the JobsClient.Get method.

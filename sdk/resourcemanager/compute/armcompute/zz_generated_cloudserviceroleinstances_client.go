@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewCloudServiceRoleInstancesClient(subscriptionID string, credential azcore
 // roleInstanceName - Name of the role instance.
 // options - CloudServiceRoleInstancesClientBeginDeleteOptions contains the optional parameters for the CloudServiceRoleInstancesClient.BeginDelete
 // method.
-func (client *CloudServiceRoleInstancesClient) BeginDelete(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginDeleteOptions) (CloudServiceRoleInstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServiceRoleInstancesClientDeletePollerResponse{}, err
+func (client *CloudServiceRoleInstancesClient) BeginDelete(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginDeleteOptions) (*armruntime.Poller[CloudServiceRoleInstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServiceRoleInstancesClientDeleteResponse]("CloudServiceRoleInstancesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServiceRoleInstancesClientDeleteResponse]("CloudServiceRoleInstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServiceRoleInstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CloudServiceRoleInstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CloudServiceRoleInstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a role instance from a cloud service.
@@ -295,16 +291,32 @@ func (client *CloudServiceRoleInstancesClient) getRemoteDesktopFileCreateRequest
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CloudServiceRoleInstancesClientListOptions contains the optional parameters for the CloudServiceRoleInstancesClient.List
 // method.
-func (client *CloudServiceRoleInstancesClient) List(resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientListOptions) *CloudServiceRoleInstancesClientListPager {
-	return &CloudServiceRoleInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, cloudServiceName, options)
+func (client *CloudServiceRoleInstancesClient) List(resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientListOptions) *runtime.Pager[CloudServiceRoleInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CloudServiceRoleInstancesClientListResponse]{
+		More: func(page CloudServiceRoleInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CloudServiceRoleInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CloudServiceRoleInstancesClientListResponse) (CloudServiceRoleInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, cloudServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CloudServiceRoleInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CloudServiceRoleInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CloudServiceRoleInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -352,20 +364,16 @@ func (client *CloudServiceRoleInstancesClient) listHandleResponse(resp *http.Res
 // roleInstanceName - Name of the role instance.
 // options - CloudServiceRoleInstancesClientBeginRebuildOptions contains the optional parameters for the CloudServiceRoleInstancesClient.BeginRebuild
 // method.
-func (client *CloudServiceRoleInstancesClient) BeginRebuild(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginRebuildOptions) (CloudServiceRoleInstancesClientRebuildPollerResponse, error) {
-	resp, err := client.rebuild(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServiceRoleInstancesClientRebuildPollerResponse{}, err
+func (client *CloudServiceRoleInstancesClient) BeginRebuild(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginRebuildOptions) (*armruntime.Poller[CloudServiceRoleInstancesClientRebuildResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rebuild(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServiceRoleInstancesClientRebuildResponse]("CloudServiceRoleInstancesClient.Rebuild", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServiceRoleInstancesClientRebuildResponse]("CloudServiceRoleInstancesClient.Rebuild", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServiceRoleInstancesClientRebuildPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Rebuild", "", resp, client.pl)
-	if err != nil {
-		return CloudServiceRoleInstancesClientRebuildPollerResponse{}, err
-	}
-	result.Poller = &CloudServiceRoleInstancesClientRebuildPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Rebuild - The Rebuild Role Instance asynchronous operation reinstalls the operating system on instances of web roles or
@@ -423,20 +431,16 @@ func (client *CloudServiceRoleInstancesClient) rebuildCreateRequest(ctx context.
 // roleInstanceName - Name of the role instance.
 // options - CloudServiceRoleInstancesClientBeginReimageOptions contains the optional parameters for the CloudServiceRoleInstancesClient.BeginReimage
 // method.
-func (client *CloudServiceRoleInstancesClient) BeginReimage(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginReimageOptions) (CloudServiceRoleInstancesClientReimagePollerResponse, error) {
-	resp, err := client.reimage(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServiceRoleInstancesClientReimagePollerResponse{}, err
+func (client *CloudServiceRoleInstancesClient) BeginReimage(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginReimageOptions) (*armruntime.Poller[CloudServiceRoleInstancesClientReimageResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.reimage(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServiceRoleInstancesClientReimageResponse]("CloudServiceRoleInstancesClient.Reimage", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServiceRoleInstancesClientReimageResponse]("CloudServiceRoleInstancesClient.Reimage", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServiceRoleInstancesClientReimagePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Reimage", "", resp, client.pl)
-	if err != nil {
-		return CloudServiceRoleInstancesClientReimagePollerResponse{}, err
-	}
-	result.Poller = &CloudServiceRoleInstancesClientReimagePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Reimage - The Reimage Role Instance asynchronous operation reinstalls the operating system on instances of web roles or
@@ -492,20 +496,16 @@ func (client *CloudServiceRoleInstancesClient) reimageCreateRequest(ctx context.
 // roleInstanceName - Name of the role instance.
 // options - CloudServiceRoleInstancesClientBeginRestartOptions contains the optional parameters for the CloudServiceRoleInstancesClient.BeginRestart
 // method.
-func (client *CloudServiceRoleInstancesClient) BeginRestart(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginRestartOptions) (CloudServiceRoleInstancesClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServiceRoleInstancesClientRestartPollerResponse{}, err
+func (client *CloudServiceRoleInstancesClient) BeginRestart(ctx context.Context, roleInstanceName string, resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientBeginRestartOptions) (*armruntime.Poller[CloudServiceRoleInstancesClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, roleInstanceName, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServiceRoleInstancesClientRestartResponse]("CloudServiceRoleInstancesClient.Restart", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServiceRoleInstancesClientRestartResponse]("CloudServiceRoleInstancesClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServiceRoleInstancesClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Restart", "", resp, client.pl)
-	if err != nil {
-		return CloudServiceRoleInstancesClientRestartPollerResponse{}, err
-	}
-	result.Poller = &CloudServiceRoleInstancesClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - The Reboot Role Instance asynchronous operation requests a reboot of a role instance in the cloud service.

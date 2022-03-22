@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,20 +63,16 @@ func NewGuestAgentsClient(subscriptionID string, credential azcore.TokenCredenti
 // virtualMachineName - Name of the vm.
 // name - Name of the guestAgents.
 // options - GuestAgentsClientBeginCreateOptions contains the optional parameters for the GuestAgentsClient.BeginCreate method.
-func (client *GuestAgentsClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualMachineName string, name string, options *GuestAgentsClientBeginCreateOptions) (GuestAgentsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, virtualMachineName, name, options)
-	if err != nil {
-		return GuestAgentsClientCreatePollerResponse{}, err
+func (client *GuestAgentsClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualMachineName string, name string, options *GuestAgentsClientBeginCreateOptions) (*armruntime.Poller[GuestAgentsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, virtualMachineName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GuestAgentsClientCreateResponse]("GuestAgentsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GuestAgentsClientCreateResponse]("GuestAgentsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := GuestAgentsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("GuestAgentsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GuestAgentsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &GuestAgentsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update GuestAgent.
@@ -135,20 +131,16 @@ func (client *GuestAgentsClient) createCreateRequest(ctx context.Context, resour
 // virtualMachineName - Name of the vm.
 // name - Name of the GuestAgent.
 // options - GuestAgentsClientBeginDeleteOptions contains the optional parameters for the GuestAgentsClient.BeginDelete method.
-func (client *GuestAgentsClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineName string, name string, options *GuestAgentsClientBeginDeleteOptions) (GuestAgentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineName, name, options)
-	if err != nil {
-		return GuestAgentsClientDeletePollerResponse{}, err
+func (client *GuestAgentsClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineName string, name string, options *GuestAgentsClientBeginDeleteOptions) (*armruntime.Poller[GuestAgentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GuestAgentsClientDeleteResponse]("GuestAgentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GuestAgentsClientDeleteResponse]("GuestAgentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GuestAgentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GuestAgentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return GuestAgentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GuestAgentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements GuestAgent DELETE method.
@@ -263,16 +255,32 @@ func (client *GuestAgentsClient) getHandleResponse(resp *http.Response) (GuestAg
 // resourceGroupName - The Resource Group Name.
 // virtualMachineName - Name of the vm.
 // options - GuestAgentsClientListByVMOptions contains the optional parameters for the GuestAgentsClient.ListByVM method.
-func (client *GuestAgentsClient) ListByVM(resourceGroupName string, virtualMachineName string, options *GuestAgentsClientListByVMOptions) *GuestAgentsClientListByVMPager {
-	return &GuestAgentsClientListByVMPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVMCreateRequest(ctx, resourceGroupName, virtualMachineName, options)
+func (client *GuestAgentsClient) ListByVM(resourceGroupName string, virtualMachineName string, options *GuestAgentsClientListByVMOptions) *runtime.Pager[GuestAgentsClientListByVMResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GuestAgentsClientListByVMResponse]{
+		More: func(page GuestAgentsClientListByVMResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GuestAgentsClientListByVMResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GuestAgentList.NextLink)
+		Fetcher: func(ctx context.Context, page *GuestAgentsClientListByVMResponse) (GuestAgentsClientListByVMResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVMCreateRequest(ctx, resourceGroupName, virtualMachineName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GuestAgentsClientListByVMResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GuestAgentsClientListByVMResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GuestAgentsClientListByVMResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVMHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVMCreateRequest creates the ListByVM request.

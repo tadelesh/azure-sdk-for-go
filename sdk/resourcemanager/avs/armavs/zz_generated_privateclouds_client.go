@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewPrivateCloudsClient(subscriptionID string, credential azcore.TokenCreden
 // privateCloud - The private cloud
 // options - PrivateCloudsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateCloudsClient.BeginCreateOrUpdate
 // method.
-func (client *PrivateCloudsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, privateCloud PrivateCloud, options *PrivateCloudsClientBeginCreateOrUpdateOptions) (PrivateCloudsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, privateCloud, options)
-	if err != nil {
-		return PrivateCloudsClientCreateOrUpdatePollerResponse{}, err
+func (client *PrivateCloudsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, privateCloud PrivateCloud, options *PrivateCloudsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PrivateCloudsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, privateCloud, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateCloudsClientCreateOrUpdateResponse]("PrivateCloudsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateCloudsClientCreateOrUpdateResponse]("PrivateCloudsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateCloudsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateCloudsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return PrivateCloudsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateCloudsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a private cloud
@@ -121,20 +117,16 @@ func (client *PrivateCloudsClient) createOrUpdateCreateRequest(ctx context.Conte
 // privateCloudName - Name of the private cloud
 // options - PrivateCloudsClientBeginDeleteOptions contains the optional parameters for the PrivateCloudsClient.BeginDelete
 // method.
-func (client *PrivateCloudsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginDeleteOptions) (PrivateCloudsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, options)
-	if err != nil {
-		return PrivateCloudsClientDeletePollerResponse{}, err
+func (client *PrivateCloudsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginDeleteOptions) (*armruntime.Poller[PrivateCloudsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateCloudsClientDeleteResponse]("PrivateCloudsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateCloudsClientDeleteResponse]("PrivateCloudsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateCloudsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateCloudsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PrivateCloudsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateCloudsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a private cloud
@@ -239,16 +231,32 @@ func (client *PrivateCloudsClient) getHandleResponse(resp *http.Response) (Priva
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - PrivateCloudsClientListOptions contains the optional parameters for the PrivateCloudsClient.List method.
-func (client *PrivateCloudsClient) List(resourceGroupName string, options *PrivateCloudsClientListOptions) *PrivateCloudsClientListPager {
-	return &PrivateCloudsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *PrivateCloudsClient) List(resourceGroupName string, options *PrivateCloudsClientListOptions) *runtime.Pager[PrivateCloudsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateCloudsClientListResponse]{
+		More: func(page PrivateCloudsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateCloudsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateCloudList.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateCloudsClientListResponse) (PrivateCloudsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateCloudsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateCloudsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateCloudsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -342,16 +350,32 @@ func (client *PrivateCloudsClient) listAdminCredentialsHandleResponse(resp *http
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PrivateCloudsClientListInSubscriptionOptions contains the optional parameters for the PrivateCloudsClient.ListInSubscription
 // method.
-func (client *PrivateCloudsClient) ListInSubscription(options *PrivateCloudsClientListInSubscriptionOptions) *PrivateCloudsClientListInSubscriptionPager {
-	return &PrivateCloudsClientListInSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listInSubscriptionCreateRequest(ctx, options)
+func (client *PrivateCloudsClient) ListInSubscription(options *PrivateCloudsClientListInSubscriptionOptions) *runtime.Pager[PrivateCloudsClientListInSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateCloudsClientListInSubscriptionResponse]{
+		More: func(page PrivateCloudsClientListInSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateCloudsClientListInSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateCloudList.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateCloudsClientListInSubscriptionResponse) (PrivateCloudsClientListInSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listInSubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateCloudsClientListInSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateCloudsClientListInSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateCloudsClientListInSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listInSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listInSubscriptionCreateRequest creates the ListInSubscription request.
@@ -387,20 +411,16 @@ func (client *PrivateCloudsClient) listInSubscriptionHandleResponse(resp *http.R
 // privateCloudName - Name of the private cloud
 // options - PrivateCloudsClientBeginRotateNsxtPasswordOptions contains the optional parameters for the PrivateCloudsClient.BeginRotateNsxtPassword
 // method.
-func (client *PrivateCloudsClient) BeginRotateNsxtPassword(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginRotateNsxtPasswordOptions) (PrivateCloudsClientRotateNsxtPasswordPollerResponse, error) {
-	resp, err := client.rotateNsxtPassword(ctx, resourceGroupName, privateCloudName, options)
-	if err != nil {
-		return PrivateCloudsClientRotateNsxtPasswordPollerResponse{}, err
+func (client *PrivateCloudsClient) BeginRotateNsxtPassword(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginRotateNsxtPasswordOptions) (*armruntime.Poller[PrivateCloudsClientRotateNsxtPasswordResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rotateNsxtPassword(ctx, resourceGroupName, privateCloudName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateCloudsClientRotateNsxtPasswordResponse]("PrivateCloudsClient.RotateNsxtPassword", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateCloudsClientRotateNsxtPasswordResponse]("PrivateCloudsClient.RotateNsxtPassword", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateCloudsClientRotateNsxtPasswordPollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateCloudsClient.RotateNsxtPassword", "", resp, client.pl)
-	if err != nil {
-		return PrivateCloudsClientRotateNsxtPasswordPollerResponse{}, err
-	}
-	result.Poller = &PrivateCloudsClientRotateNsxtPasswordPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RotateNsxtPassword - Rotate the NSX-T Manager password
@@ -452,20 +472,16 @@ func (client *PrivateCloudsClient) rotateNsxtPasswordCreateRequest(ctx context.C
 // privateCloudName - Name of the private cloud
 // options - PrivateCloudsClientBeginRotateVcenterPasswordOptions contains the optional parameters for the PrivateCloudsClient.BeginRotateVcenterPassword
 // method.
-func (client *PrivateCloudsClient) BeginRotateVcenterPassword(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginRotateVcenterPasswordOptions) (PrivateCloudsClientRotateVcenterPasswordPollerResponse, error) {
-	resp, err := client.rotateVcenterPassword(ctx, resourceGroupName, privateCloudName, options)
-	if err != nil {
-		return PrivateCloudsClientRotateVcenterPasswordPollerResponse{}, err
+func (client *PrivateCloudsClient) BeginRotateVcenterPassword(ctx context.Context, resourceGroupName string, privateCloudName string, options *PrivateCloudsClientBeginRotateVcenterPasswordOptions) (*armruntime.Poller[PrivateCloudsClientRotateVcenterPasswordResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rotateVcenterPassword(ctx, resourceGroupName, privateCloudName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateCloudsClientRotateVcenterPasswordResponse]("PrivateCloudsClient.RotateVcenterPassword", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateCloudsClientRotateVcenterPasswordResponse]("PrivateCloudsClient.RotateVcenterPassword", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateCloudsClientRotateVcenterPasswordPollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateCloudsClient.RotateVcenterPassword", "", resp, client.pl)
-	if err != nil {
-		return PrivateCloudsClientRotateVcenterPasswordPollerResponse{}, err
-	}
-	result.Poller = &PrivateCloudsClientRotateVcenterPasswordPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RotateVcenterPassword - Rotate the vCenter password
@@ -518,20 +534,16 @@ func (client *PrivateCloudsClient) rotateVcenterPasswordCreateRequest(ctx contex
 // privateCloudUpdate - The private cloud properties to be updated
 // options - PrivateCloudsClientBeginUpdateOptions contains the optional parameters for the PrivateCloudsClient.BeginUpdate
 // method.
-func (client *PrivateCloudsClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, privateCloudUpdate PrivateCloudUpdate, options *PrivateCloudsClientBeginUpdateOptions) (PrivateCloudsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, privateCloudName, privateCloudUpdate, options)
-	if err != nil {
-		return PrivateCloudsClientUpdatePollerResponse{}, err
+func (client *PrivateCloudsClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, privateCloudUpdate PrivateCloudUpdate, options *PrivateCloudsClientBeginUpdateOptions) (*armruntime.Poller[PrivateCloudsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, privateCloudName, privateCloudUpdate, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateCloudsClientUpdateResponse]("PrivateCloudsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateCloudsClientUpdateResponse]("PrivateCloudsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateCloudsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateCloudsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return PrivateCloudsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateCloudsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a private cloud

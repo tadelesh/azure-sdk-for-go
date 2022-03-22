@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCrede
 // managerName - The manager name
 // options - BackupPoliciesClientBeginBackupNowOptions contains the optional parameters for the BackupPoliciesClient.BeginBackupNow
 // method.
-func (client *BackupPoliciesClient) BeginBackupNow(ctx context.Context, deviceName string, backupPolicyName string, backupType string, resourceGroupName string, managerName string, options *BackupPoliciesClientBeginBackupNowOptions) (BackupPoliciesClientBackupNowPollerResponse, error) {
-	resp, err := client.backupNow(ctx, deviceName, backupPolicyName, backupType, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupPoliciesClientBackupNowPollerResponse{}, err
+func (client *BackupPoliciesClient) BeginBackupNow(ctx context.Context, deviceName string, backupPolicyName string, backupType string, resourceGroupName string, managerName string, options *BackupPoliciesClientBeginBackupNowOptions) (*armruntime.Poller[BackupPoliciesClientBackupNowResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.backupNow(ctx, deviceName, backupPolicyName, backupType, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientBackupNowResponse]("BackupPoliciesClient.BackupNow", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientBackupNowResponse]("BackupPoliciesClient.BackupNow", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientBackupNowPollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.BackupNow", "", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientBackupNowPollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientBackupNowPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // BackupNow - Backup the backup policy now.
@@ -119,20 +115,16 @@ func (client *BackupPoliciesClient) backupNowCreateRequest(ctx context.Context, 
 // parameters - The backup policy.
 // options - BackupPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *BackupPoliciesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, backupPolicyName string, resourceGroupName string, managerName string, parameters BackupPolicy, options *BackupPoliciesClientBeginCreateOrUpdateOptions) (BackupPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return BackupPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *BackupPoliciesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, backupPolicyName string, resourceGroupName string, managerName string, parameters BackupPolicy, options *BackupPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BackupPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientCreateOrUpdateResponse]("BackupPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientCreateOrUpdateResponse]("BackupPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the backup policy.
@@ -179,20 +171,16 @@ func (client *BackupPoliciesClient) createOrUpdateCreateRequest(ctx context.Cont
 // managerName - The manager name
 // options - BackupPoliciesClientBeginDeleteOptions contains the optional parameters for the BackupPoliciesClient.BeginDelete
 // method.
-func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, deviceName string, backupPolicyName string, resourceGroupName string, managerName string, options *BackupPoliciesClientBeginDeleteOptions) (BackupPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupPoliciesClientDeletePollerResponse{}, err
+func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, deviceName string, backupPolicyName string, resourceGroupName string, managerName string, options *BackupPoliciesClientBeginDeleteOptions) (*armruntime.Poller[BackupPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupPoliciesClientDeleteResponse]("BackupPoliciesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupPoliciesClientDeleteResponse]("BackupPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupPoliciesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BackupPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the backup policy.
@@ -287,13 +275,26 @@ func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (Back
 // managerName - The manager name
 // options - BackupPoliciesClientListByDeviceOptions contains the optional parameters for the BackupPoliciesClient.ListByDevice
 // method.
-func (client *BackupPoliciesClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupPoliciesClientListByDeviceOptions) *BackupPoliciesClientListByDevicePager {
-	return &BackupPoliciesClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *BackupPoliciesClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *BackupPoliciesClientListByDeviceOptions) *runtime.Pager[BackupPoliciesClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupPoliciesClientListByDeviceResponse]{
+		More: func(page BackupPoliciesClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupPoliciesClientListByDeviceResponse) (BackupPoliciesClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return BackupPoliciesClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupPoliciesClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupPoliciesClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.

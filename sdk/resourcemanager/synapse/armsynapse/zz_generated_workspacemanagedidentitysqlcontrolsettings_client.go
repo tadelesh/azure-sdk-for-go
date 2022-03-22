@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewWorkspaceManagedIdentitySQLControlSettingsClient(subscriptionID string, 
 // managedIdentitySQLControlSettings - Managed Identity Sql Control Settings
 // options - WorkspaceManagedIdentitySQLControlSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the WorkspaceManagedIdentitySQLControlSettingsClient.BeginCreateOrUpdate method.
-func (client *WorkspaceManagedIdentitySQLControlSettingsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, managedIdentitySQLControlSettings ManagedIdentitySQLControlSettingsModel, options *WorkspaceManagedIdentitySQLControlSettingsClientBeginCreateOrUpdateOptions) (WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, managedIdentitySQLControlSettings, options)
-	if err != nil {
-		return WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspaceManagedIdentitySQLControlSettingsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, managedIdentitySQLControlSettings ManagedIdentitySQLControlSettingsModel, options *WorkspaceManagedIdentitySQLControlSettingsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, managedIdentitySQLControlSettings, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdateResponse]("WorkspaceManagedIdentitySQLControlSettingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdateResponse]("WorkspaceManagedIdentitySQLControlSettingsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceManagedIdentitySQLControlSettingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceManagedIdentitySQLControlSettingsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update Managed Identity Sql Control Settings

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewBackupsClient(subscriptionID string, credential azcore.TokenCredential, 
 // backupName - The name of the backup
 // body - Backup object supplied in the body of the operation.
 // options - BackupsClientBeginCreateOptions contains the optional parameters for the BackupsClient.BeginCreate method.
-func (client *BackupsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, body Backup, options *BackupsClientBeginCreateOptions) (BackupsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, body, options)
-	if err != nil {
-		return BackupsClientCreatePollerResponse{}, err
+func (client *BackupsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, body Backup, options *BackupsClientBeginCreateOptions) (*armruntime.Poller[BackupsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientCreateResponse]("BackupsClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientCreateResponse]("BackupsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return BackupsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a backup for the volume
@@ -138,20 +134,16 @@ func (client *BackupsClient) createCreateRequest(ctx context.Context, resourceGr
 // volumeName - The name of the volume
 // backupName - The name of the backup
 // options - BackupsClientBeginDeleteOptions contains the optional parameters for the BackupsClient.BeginDelete method.
-func (client *BackupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, options *BackupsClientBeginDeleteOptions) (BackupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, options)
-	if err != nil {
-		return BackupsClientDeletePollerResponse{}, err
+func (client *BackupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, options *BackupsClientBeginDeleteOptions) (*armruntime.Poller[BackupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientDeleteResponse]("BackupsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientDeleteResponse]("BackupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return BackupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a backup of the volume
@@ -416,13 +408,26 @@ func (client *BackupsClient) getVolumeRestoreStatusHandleResponse(resp *http.Res
 // poolName - The name of the capacity pool
 // volumeName - The name of the volume
 // options - BackupsClientListOptions contains the optional parameters for the BackupsClient.List method.
-func (client *BackupsClient) List(resourceGroupName string, accountName string, poolName string, volumeName string, options *BackupsClientListOptions) *BackupsClientListPager {
-	return &BackupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+func (client *BackupsClient) List(resourceGroupName string, accountName string, poolName string, volumeName string, options *BackupsClientListOptions) *runtime.Pager[BackupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupsClientListResponse]{
+		More: func(page BackupsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupsClientListResponse) (BackupsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+			if err != nil {
+				return BackupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -476,20 +481,16 @@ func (client *BackupsClient) listHandleResponse(resp *http.Response) (BackupsCli
 // volumeName - The name of the volume
 // backupName - The name of the backup
 // options - BackupsClientBeginUpdateOptions contains the optional parameters for the BackupsClient.BeginUpdate method.
-func (client *BackupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, options *BackupsClientBeginUpdateOptions) (BackupsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, options)
-	if err != nil {
-		return BackupsClientUpdatePollerResponse{}, err
+func (client *BackupsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, backupName string, options *BackupsClientBeginUpdateOptions) (*armruntime.Poller[BackupsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, poolName, volumeName, backupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupsClientUpdateResponse]("BackupsClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupsClientUpdateResponse]("BackupsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupsClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return BackupsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch a backup for the volume

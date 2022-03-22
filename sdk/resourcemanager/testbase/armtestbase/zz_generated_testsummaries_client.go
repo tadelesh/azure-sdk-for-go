@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *TestSummariesClient) getHandleResponse(resp *http.Response) (TestS
 // resourceGroupName - The name of the resource group that contains the resource.
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - TestSummariesClientListOptions contains the optional parameters for the TestSummariesClient.List method.
-func (client *TestSummariesClient) List(resourceGroupName string, testBaseAccountName string, options *TestSummariesClientListOptions) *TestSummariesClientListPager {
-	return &TestSummariesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+func (client *TestSummariesClient) List(resourceGroupName string, testBaseAccountName string, options *TestSummariesClientListOptions) *runtime.Pager[TestSummariesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TestSummariesClientListResponse]{
+		More: func(page TestSummariesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TestSummariesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TestSummaryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TestSummariesClientListResponse) (TestSummariesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TestSummariesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TestSummariesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TestSummariesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

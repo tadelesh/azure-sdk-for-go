@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,13 +113,15 @@ type AvailabilityGroupListenerProperties struct {
 // AvailabilityGroupListenersClientBeginCreateOrUpdateOptions contains the optional parameters for the AvailabilityGroupListenersClient.BeginCreateOrUpdate
 // method.
 type AvailabilityGroupListenersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AvailabilityGroupListenersClientBeginDeleteOptions contains the optional parameters for the AvailabilityGroupListenersClient.BeginDelete
 // method.
 type AvailabilityGroupListenersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AvailabilityGroupListenersClientGetOptions contains the optional parameters for the AvailabilityGroupListenersClient.Get
@@ -197,17 +199,20 @@ type GroupUpdate struct {
 
 // GroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the GroupsClient.BeginCreateOrUpdate method.
 type GroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GroupsClientBeginDeleteOptions contains the optional parameters for the GroupsClient.BeginDelete method.
 type GroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GroupsClientBeginUpdateOptions contains the optional parameters for the GroupsClient.BeginUpdate method.
 type GroupsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // GroupsClientGetOptions contains the optional parameters for the GroupsClient.Get method.
@@ -465,19 +470,22 @@ type SQLVirtualMachine struct {
 // SQLVirtualMachinesClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginCreateOrUpdate
 // method.
 type SQLVirtualMachinesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLVirtualMachinesClientBeginDeleteOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginDelete
 // method.
 type SQLVirtualMachinesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLVirtualMachinesClientBeginUpdateOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginUpdate
 // method.
 type SQLVirtualMachinesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SQLVirtualMachinesClientGetOptions contains the optional parameters for the SQLVirtualMachinesClient.Get method.

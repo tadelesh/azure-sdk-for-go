@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -127,16 +127,32 @@ func (client *SQLPoolTablesClient) getHandleResponse(resp *http.Response) (SQLPo
 // schemaName - The name of the schema.
 // options - SQLPoolTablesClientListBySchemaOptions contains the optional parameters for the SQLPoolTablesClient.ListBySchema
 // method.
-func (client *SQLPoolTablesClient) ListBySchema(resourceGroupName string, workspaceName string, sqlPoolName string, schemaName string, options *SQLPoolTablesClientListBySchemaOptions) *SQLPoolTablesClientListBySchemaPager {
-	return &SQLPoolTablesClientListBySchemaPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySchemaCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, schemaName, options)
+func (client *SQLPoolTablesClient) ListBySchema(resourceGroupName string, workspaceName string, sqlPoolName string, schemaName string, options *SQLPoolTablesClientListBySchemaOptions) *runtime.Pager[SQLPoolTablesClientListBySchemaResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolTablesClientListBySchemaResponse]{
+		More: func(page SQLPoolTablesClientListBySchemaResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolTablesClientListBySchemaResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLPoolTableListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolTablesClientListBySchemaResponse) (SQLPoolTablesClientListBySchemaResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySchemaCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, schemaName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolTablesClientListBySchemaResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolTablesClientListBySchemaResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolTablesClientListBySchemaResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySchemaHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySchemaCreateRequest creates the ListBySchema request.

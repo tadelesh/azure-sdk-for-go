@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -50,20 +50,16 @@ func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *C
 // If the operation fails it returns an *azcore.ResponseError type.
 // subscriptionID - Subscription Id.
 // options - ClientBeginAcceptOwnershipOptions contains the optional parameters for the Client.BeginAcceptOwnership method.
-func (client *Client) BeginAcceptOwnership(ctx context.Context, subscriptionID string, body AcceptOwnershipRequest, options *ClientBeginAcceptOwnershipOptions) (ClientAcceptOwnershipPollerResponse, error) {
-	resp, err := client.acceptOwnership(ctx, subscriptionID, body, options)
-	if err != nil {
-		return ClientAcceptOwnershipPollerResponse{}, err
+func (client *Client) BeginAcceptOwnership(ctx context.Context, subscriptionID string, body AcceptOwnershipRequest, options *ClientBeginAcceptOwnershipOptions) (*armruntime.Poller[ClientAcceptOwnershipResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.acceptOwnership(ctx, subscriptionID, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientAcceptOwnershipResponse]("Client.AcceptOwnership", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientAcceptOwnershipResponse]("Client.AcceptOwnership", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientAcceptOwnershipPollerResponse{}
-	pt, err := armruntime.NewPoller("Client.AcceptOwnership", "", resp, client.pl)
-	if err != nil {
-		return ClientAcceptOwnershipPollerResponse{}, err
-	}
-	result.Poller = &ClientAcceptOwnershipPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // AcceptOwnership - Accept subscription ownership.

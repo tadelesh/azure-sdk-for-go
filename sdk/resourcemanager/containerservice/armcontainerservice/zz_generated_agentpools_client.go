@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewAgentPoolsClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - The agent pool to create or update.
 // options - AgentPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the AgentPoolsClient.BeginCreateOrUpdate
 // method.
-func (client *AgentPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, parameters AgentPool, options *AgentPoolsClientBeginCreateOrUpdateOptions) (AgentPoolsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, agentPoolName, parameters, options)
-	if err != nil {
-		return AgentPoolsClientCreateOrUpdatePollerResponse{}, err
+func (client *AgentPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, parameters AgentPool, options *AgentPoolsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AgentPoolsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, agentPoolName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AgentPoolsClientCreateOrUpdateResponse]("AgentPoolsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AgentPoolsClientCreateOrUpdateResponse]("AgentPoolsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AgentPoolsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AgentPoolsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return AgentPoolsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AgentPoolsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an agent pool in the specified managed cluster.
@@ -127,20 +123,16 @@ func (client *AgentPoolsClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceName - The name of the managed cluster resource.
 // agentPoolName - The name of the agent pool.
 // options - AgentPoolsClientBeginDeleteOptions contains the optional parameters for the AgentPoolsClient.BeginDelete method.
-func (client *AgentPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, options *AgentPoolsClientBeginDeleteOptions) (AgentPoolsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, agentPoolName, options)
-	if err != nil {
-		return AgentPoolsClientDeletePollerResponse{}, err
+func (client *AgentPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, options *AgentPoolsClientBeginDeleteOptions) (*armruntime.Poller[AgentPoolsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, agentPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AgentPoolsClientDeleteResponse]("AgentPoolsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AgentPoolsClientDeleteResponse]("AgentPoolsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AgentPoolsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AgentPoolsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return AgentPoolsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AgentPoolsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an agent pool in the specified managed cluster.
@@ -373,16 +365,32 @@ func (client *AgentPoolsClient) getUpgradeProfileHandleResponse(resp *http.Respo
 // resourceGroupName - The name of the resource group.
 // resourceName - The name of the managed cluster resource.
 // options - AgentPoolsClientListOptions contains the optional parameters for the AgentPoolsClient.List method.
-func (client *AgentPoolsClient) List(resourceGroupName string, resourceName string, options *AgentPoolsClientListOptions) *AgentPoolsClientListPager {
-	return &AgentPoolsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *AgentPoolsClient) List(resourceGroupName string, resourceName string, options *AgentPoolsClientListOptions) *runtime.Pager[AgentPoolsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AgentPoolsClientListResponse]{
+		More: func(page AgentPoolsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AgentPoolsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AgentPoolListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AgentPoolsClientListResponse) (AgentPoolsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AgentPoolsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AgentPoolsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AgentPoolsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -429,20 +437,16 @@ func (client *AgentPoolsClient) listHandleResponse(resp *http.Response) (AgentPo
 // agentPoolName - The name of the agent pool.
 // options - AgentPoolsClientBeginUpgradeNodeImageVersionOptions contains the optional parameters for the AgentPoolsClient.BeginUpgradeNodeImageVersion
 // method.
-func (client *AgentPoolsClient) BeginUpgradeNodeImageVersion(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, options *AgentPoolsClientBeginUpgradeNodeImageVersionOptions) (AgentPoolsClientUpgradeNodeImageVersionPollerResponse, error) {
-	resp, err := client.upgradeNodeImageVersion(ctx, resourceGroupName, resourceName, agentPoolName, options)
-	if err != nil {
-		return AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}, err
+func (client *AgentPoolsClient) BeginUpgradeNodeImageVersion(ctx context.Context, resourceGroupName string, resourceName string, agentPoolName string, options *AgentPoolsClientBeginUpgradeNodeImageVersionOptions) (*armruntime.Poller[AgentPoolsClientUpgradeNodeImageVersionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.upgradeNodeImageVersion(ctx, resourceGroupName, resourceName, agentPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AgentPoolsClientUpgradeNodeImageVersionResponse]("AgentPoolsClient.UpgradeNodeImageVersion", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AgentPoolsClientUpgradeNodeImageVersionResponse]("AgentPoolsClient.UpgradeNodeImageVersion", options.ResumeToken, client.pl, nil)
 	}
-	result := AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}
-	pt, err := armruntime.NewPoller("AgentPoolsClient.UpgradeNodeImageVersion", "", resp, client.pl)
-	if err != nil {
-		return AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}, err
-	}
-	result.Poller = &AgentPoolsClientUpgradeNodeImageVersionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpgradeNodeImageVersion - Upgrading the node image version of an agent pool applies the newest OS and runtime updates to

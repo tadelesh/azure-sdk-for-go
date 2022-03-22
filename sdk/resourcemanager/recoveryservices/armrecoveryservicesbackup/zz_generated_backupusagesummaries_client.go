@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewBackupUsageSummariesClient(subscriptionID string, credential azcore.Toke
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // options - BackupUsageSummariesClientListOptions contains the optional parameters for the BackupUsageSummariesClient.List
 // method.
-func (client *BackupUsageSummariesClient) List(vaultName string, resourceGroupName string, options *BackupUsageSummariesClientListOptions) *BackupUsageSummariesClientListPager {
-	return &BackupUsageSummariesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+func (client *BackupUsageSummariesClient) List(vaultName string, resourceGroupName string, options *BackupUsageSummariesClientListOptions) *runtime.Pager[BackupUsageSummariesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupUsageSummariesClientListResponse]{
+		More: func(page BackupUsageSummariesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupUsageSummariesClientListResponse) (BackupUsageSummariesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+			if err != nil {
+				return BackupUsageSummariesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupUsageSummariesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupUsageSummariesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

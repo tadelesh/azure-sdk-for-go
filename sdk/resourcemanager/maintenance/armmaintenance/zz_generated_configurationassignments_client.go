@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -516,13 +516,26 @@ func (client *ConfigurationAssignmentsClient) getParentHandleResponse(resp *http
 // resourceName - Resource identifier
 // options - ConfigurationAssignmentsClientListOptions contains the optional parameters for the ConfigurationAssignmentsClient.List
 // method.
-func (client *ConfigurationAssignmentsClient) List(resourceGroupName string, providerName string, resourceType string, resourceName string, options *ConfigurationAssignmentsClientListOptions) *ConfigurationAssignmentsClientListPager {
-	return &ConfigurationAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
+func (client *ConfigurationAssignmentsClient) List(resourceGroupName string, providerName string, resourceType string, resourceName string, options *ConfigurationAssignmentsClientListOptions) *runtime.Pager[ConfigurationAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationAssignmentsClientListResponse]{
+		More: func(page ConfigurationAssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationAssignmentsClientListResponse) (ConfigurationAssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
+			if err != nil {
+				return ConfigurationAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -578,13 +591,26 @@ func (client *ConfigurationAssignmentsClient) listHandleResponse(resp *http.Resp
 // resourceName - Resource identifier
 // options - ConfigurationAssignmentsClientListParentOptions contains the optional parameters for the ConfigurationAssignmentsClient.ListParent
 // method.
-func (client *ConfigurationAssignmentsClient) ListParent(resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *ConfigurationAssignmentsClientListParentOptions) *ConfigurationAssignmentsClientListParentPager {
-	return &ConfigurationAssignmentsClientListParentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
+func (client *ConfigurationAssignmentsClient) ListParent(resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *ConfigurationAssignmentsClientListParentOptions) *runtime.Pager[ConfigurationAssignmentsClientListParentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationAssignmentsClientListParentResponse]{
+		More: func(page ConfigurationAssignmentsClientListParentResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationAssignmentsClientListParentResponse) (ConfigurationAssignmentsClientListParentResponse, error) {
+			req, err := client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
+			if err != nil {
+				return ConfigurationAssignmentsClientListParentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationAssignmentsClientListParentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationAssignmentsClientListParentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listParentHandleResponse(resp)
+		},
+	})
 }
 
 // listParentCreateRequest creates the ListParent request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *ArtifactSourcesClient) getHandleResponse(resp *http.Response) (Art
 // resourceGroupName - The name of the resource group.
 // labName - The name of the lab.
 // options - ArtifactSourcesClientListOptions contains the optional parameters for the ArtifactSourcesClient.List method.
-func (client *ArtifactSourcesClient) List(resourceGroupName string, labName string, options *ArtifactSourcesClientListOptions) *ArtifactSourcesClientListPager {
-	return &ArtifactSourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *ArtifactSourcesClient) List(resourceGroupName string, labName string, options *ArtifactSourcesClientListOptions) *runtime.Pager[ArtifactSourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ArtifactSourcesClientListResponse]{
+		More: func(page ArtifactSourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ArtifactSourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ArtifactSourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ArtifactSourcesClientListResponse) (ArtifactSourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ArtifactSourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ArtifactSourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ArtifactSourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewTimeSeriesDatabaseConnectionsClient(subscriptionID string, credential az
 // timeSeriesDatabaseConnectionDescription - The time series database connection description.
 // options - TimeSeriesDatabaseConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the TimeSeriesDatabaseConnectionsClient.BeginCreateOrUpdate
 // method.
-func (client *TimeSeriesDatabaseConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, timeSeriesDatabaseConnectionName string, timeSeriesDatabaseConnectionDescription TimeSeriesDatabaseConnection, options *TimeSeriesDatabaseConnectionsClientBeginCreateOrUpdateOptions) (TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, timeSeriesDatabaseConnectionName, timeSeriesDatabaseConnectionDescription, options)
-	if err != nil {
-		return TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse{}, err
+func (client *TimeSeriesDatabaseConnectionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, timeSeriesDatabaseConnectionName string, timeSeriesDatabaseConnectionDescription TimeSeriesDatabaseConnection, options *TimeSeriesDatabaseConnectionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, timeSeriesDatabaseConnectionName, timeSeriesDatabaseConnectionDescription, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse]("TimeSeriesDatabaseConnectionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse]("TimeSeriesDatabaseConnectionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("TimeSeriesDatabaseConnectionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a time series database connection.
@@ -127,20 +123,16 @@ func (client *TimeSeriesDatabaseConnectionsClient) createOrUpdateCreateRequest(c
 // timeSeriesDatabaseConnectionName - Name of time series database connection.
 // options - TimeSeriesDatabaseConnectionsClientBeginDeleteOptions contains the optional parameters for the TimeSeriesDatabaseConnectionsClient.BeginDelete
 // method.
-func (client *TimeSeriesDatabaseConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, timeSeriesDatabaseConnectionName string, options *TimeSeriesDatabaseConnectionsClientBeginDeleteOptions) (TimeSeriesDatabaseConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, timeSeriesDatabaseConnectionName, options)
-	if err != nil {
-		return TimeSeriesDatabaseConnectionsClientDeletePollerResponse{}, err
+func (client *TimeSeriesDatabaseConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, timeSeriesDatabaseConnectionName string, options *TimeSeriesDatabaseConnectionsClientBeginDeleteOptions) (*armruntime.Poller[TimeSeriesDatabaseConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, timeSeriesDatabaseConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TimeSeriesDatabaseConnectionsClientDeleteResponse]("TimeSeriesDatabaseConnectionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TimeSeriesDatabaseConnectionsClientDeleteResponse]("TimeSeriesDatabaseConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TimeSeriesDatabaseConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TimeSeriesDatabaseConnectionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TimeSeriesDatabaseConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TimeSeriesDatabaseConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a time series database connection.
@@ -257,16 +249,32 @@ func (client *TimeSeriesDatabaseConnectionsClient) getHandleResponse(resp *http.
 // resourceName - The name of the DigitalTwinsInstance.
 // options - TimeSeriesDatabaseConnectionsClientListOptions contains the optional parameters for the TimeSeriesDatabaseConnectionsClient.List
 // method.
-func (client *TimeSeriesDatabaseConnectionsClient) List(resourceGroupName string, resourceName string, options *TimeSeriesDatabaseConnectionsClientListOptions) *TimeSeriesDatabaseConnectionsClientListPager {
-	return &TimeSeriesDatabaseConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *TimeSeriesDatabaseConnectionsClient) List(resourceGroupName string, resourceName string, options *TimeSeriesDatabaseConnectionsClientListOptions) *runtime.Pager[TimeSeriesDatabaseConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TimeSeriesDatabaseConnectionsClientListResponse]{
+		More: func(page TimeSeriesDatabaseConnectionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TimeSeriesDatabaseConnectionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TimeSeriesDatabaseConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TimeSeriesDatabaseConnectionsClientListResponse) (TimeSeriesDatabaseConnectionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TimeSeriesDatabaseConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TimeSeriesDatabaseConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TimeSeriesDatabaseConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

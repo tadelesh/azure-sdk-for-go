@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -132,6 +132,8 @@ type PrivateZonesClientBeginCreateOrUpdateOptions struct {
 	// Set to '*' to allow a new Private DNS zone to be created, but to prevent updating an existing zone. Other values will be
 	// ignored.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateZonesClientBeginDeleteOptions contains the optional parameters for the PrivateZonesClient.BeginDelete method.
@@ -139,6 +141,8 @@ type PrivateZonesClientBeginDeleteOptions struct {
 	// The ETag of the Private DNS zone. Omit this value to always delete the current zone. Specify the last-seen ETag value to
 	// prevent accidentally deleting any concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateZonesClientBeginUpdateOptions contains the optional parameters for the PrivateZonesClient.BeginUpdate method.
@@ -146,6 +150,8 @@ type PrivateZonesClientBeginUpdateOptions struct {
 	// The ETag of the Private DNS zone. Omit this value to always overwrite the current zone. Specify the last-seen ETag value
 	// to prevent accidentally overwriting any concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateZonesClientGetOptions contains the optional parameters for the PrivateZonesClient.Get method.
@@ -438,6 +444,8 @@ type VirtualNetworkLinksClientBeginCreateOrUpdateOptions struct {
 	// Set to '*' to allow a new virtual network link to the Private DNS zone to be created, but to prevent updating an existing
 	// link. Other values will be ignored.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkLinksClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkLinksClient.BeginDelete
@@ -447,6 +455,8 @@ type VirtualNetworkLinksClientBeginDeleteOptions struct {
 	// the last-seen ETag value to prevent accidentally deleting any concurrent
 	// changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkLinksClientBeginUpdateOptions contains the optional parameters for the VirtualNetworkLinksClient.BeginUpdate
@@ -456,6 +466,8 @@ type VirtualNetworkLinksClientBeginUpdateOptions struct {
 	// link. Specify the last-seen ETag value to prevent accidentally overwriting
 	// any concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkLinksClientGetOptions contains the optional parameters for the VirtualNetworkLinksClient.Get method.

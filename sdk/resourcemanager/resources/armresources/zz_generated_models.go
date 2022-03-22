@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -88,42 +88,50 @@ type BasicDependency struct {
 
 // ClientBeginCreateOrUpdateByIDOptions contains the optional parameters for the Client.BeginCreateOrUpdateByID method.
 type ClientBeginCreateOrUpdateByIDOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginCreateOrUpdateOptions contains the optional parameters for the Client.BeginCreateOrUpdate method.
 type ClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteByIDOptions contains the optional parameters for the Client.BeginDeleteByID method.
 type ClientBeginDeleteByIDOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 type ClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginMoveResourcesOptions contains the optional parameters for the Client.BeginMoveResources method.
 type ClientBeginMoveResourcesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginUpdateByIDOptions contains the optional parameters for the Client.BeginUpdateByID method.
 type ClientBeginUpdateByIDOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginUpdateOptions contains the optional parameters for the Client.BeginUpdate method.
 type ClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginValidateMoveResourcesOptions contains the optional parameters for the Client.BeginValidateMoveResources method.
 type ClientBeginValidateMoveResourcesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientCheckExistenceByIDOptions contains the optional parameters for the Client.CheckExistenceByID method.
@@ -565,112 +573,131 @@ type DeploymentWhatIfSettings struct {
 // DeploymentsClientBeginCreateOrUpdateAtManagementGroupScopeOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdateAtManagementGroupScope
 // method.
 type DeploymentsClientBeginCreateOrUpdateAtManagementGroupScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginCreateOrUpdateAtScopeOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdateAtScope
 // method.
 type DeploymentsClientBeginCreateOrUpdateAtScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginCreateOrUpdateAtSubscriptionScopeOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdateAtSubscriptionScope
 // method.
 type DeploymentsClientBeginCreateOrUpdateAtSubscriptionScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginCreateOrUpdateAtTenantScopeOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdateAtTenantScope
 // method.
 type DeploymentsClientBeginCreateOrUpdateAtTenantScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginCreateOrUpdateOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdate
 // method.
 type DeploymentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginDeleteAtManagementGroupScopeOptions contains the optional parameters for the DeploymentsClient.BeginDeleteAtManagementGroupScope
 // method.
 type DeploymentsClientBeginDeleteAtManagementGroupScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginDeleteAtScopeOptions contains the optional parameters for the DeploymentsClient.BeginDeleteAtScope
 // method.
 type DeploymentsClientBeginDeleteAtScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginDeleteAtSubscriptionScopeOptions contains the optional parameters for the DeploymentsClient.BeginDeleteAtSubscriptionScope
 // method.
 type DeploymentsClientBeginDeleteAtSubscriptionScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginDeleteAtTenantScopeOptions contains the optional parameters for the DeploymentsClient.BeginDeleteAtTenantScope
 // method.
 type DeploymentsClientBeginDeleteAtTenantScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginDeleteOptions contains the optional parameters for the DeploymentsClient.BeginDelete method.
 type DeploymentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginValidateAtManagementGroupScopeOptions contains the optional parameters for the DeploymentsClient.BeginValidateAtManagementGroupScope
 // method.
 type DeploymentsClientBeginValidateAtManagementGroupScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginValidateAtScopeOptions contains the optional parameters for the DeploymentsClient.BeginValidateAtScope
 // method.
 type DeploymentsClientBeginValidateAtScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginValidateAtSubscriptionScopeOptions contains the optional parameters for the DeploymentsClient.BeginValidateAtSubscriptionScope
 // method.
 type DeploymentsClientBeginValidateAtSubscriptionScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginValidateAtTenantScopeOptions contains the optional parameters for the DeploymentsClient.BeginValidateAtTenantScope
 // method.
 type DeploymentsClientBeginValidateAtTenantScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginValidateOptions contains the optional parameters for the DeploymentsClient.BeginValidate method.
 type DeploymentsClientBeginValidateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginWhatIfAtManagementGroupScopeOptions contains the optional parameters for the DeploymentsClient.BeginWhatIfAtManagementGroupScope
 // method.
 type DeploymentsClientBeginWhatIfAtManagementGroupScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginWhatIfAtSubscriptionScopeOptions contains the optional parameters for the DeploymentsClient.BeginWhatIfAtSubscriptionScope
 // method.
 type DeploymentsClientBeginWhatIfAtSubscriptionScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginWhatIfAtTenantScopeOptions contains the optional parameters for the DeploymentsClient.BeginWhatIfAtTenantScope
 // method.
 type DeploymentsClientBeginWhatIfAtTenantScopeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientBeginWhatIfOptions contains the optional parameters for the DeploymentsClient.BeginWhatIf method.
 type DeploymentsClientBeginWhatIfOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeploymentsClientCalculateTemplateHashOptions contains the optional parameters for the DeploymentsClient.CalculateTemplateHash
@@ -1405,12 +1432,15 @@ type ResourceGroupProperties struct {
 type ResourceGroupsClientBeginDeleteOptions struct {
 	// The resource types you want to force delete. Currently, only the following is supported: forceDeletionTypes=Microsoft.Compute/virtualMachines,Microsoft.Compute/virtualMachineScaleSets
 	ForceDeletionTypes *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ResourceGroupsClientBeginExportTemplateOptions contains the optional parameters for the ResourceGroupsClient.BeginExportTemplate
 // method.
 type ResourceGroupsClientBeginExportTemplateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ResourceGroupsClientCheckExistenceOptions contains the optional parameters for the ResourceGroupsClient.CheckExistence

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -210,13 +210,15 @@ type ApplicationDefinitionProperties struct {
 // ApplicationDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationDefinitionsClient.BeginCreateOrUpdate
 // method.
 type ApplicationDefinitionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationDefinitionsClientBeginDeleteOptions contains the optional parameters for the ApplicationDefinitionsClient.BeginDelete
 // method.
 type ApplicationDefinitionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationDefinitionsClientGetOptions contains the optional parameters for the ApplicationDefinitionsClient.Get method.
@@ -440,18 +442,21 @@ type ApplicationPropertiesPatchable struct {
 // ApplicationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationsClient.BeginCreateOrUpdate
 // method.
 type ApplicationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientBeginDeleteOptions contains the optional parameters for the ApplicationsClient.BeginDelete method.
 type ApplicationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientBeginRefreshPermissionsOptions contains the optional parameters for the ApplicationsClient.BeginRefreshPermissions
 // method.
 type ApplicationsClientBeginRefreshPermissionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientGetOptions contains the optional parameters for the ApplicationsClient.Get method.
@@ -651,7 +656,8 @@ type JitRequestProperties struct {
 // JitRequestsClientBeginCreateOrUpdateOptions contains the optional parameters for the JitRequestsClient.BeginCreateOrUpdate
 // method.
 type JitRequestsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JitRequestsClientDeleteOptions contains the optional parameters for the JitRequestsClient.Delete method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,20 +228,16 @@ func (client *ServicesClient) checkStatusHandleResponse(resp *http.Response) (Se
 // parameters - Information about the service
 // options - ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate
 // method.
-func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, groupName string, serviceName string, parameters Service, options *ServicesClientBeginCreateOrUpdateOptions) (ServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, groupName, serviceName, parameters, options)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, groupName string, serviceName string, parameters Service, options *ServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, groupName, serviceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The services resource is the top-level resource that represents the Database Migration Service. The PUT
@@ -299,20 +295,16 @@ func (client *ServicesClient) createOrUpdateCreateRequest(ctx context.Context, g
 // groupName - Name of the resource group
 // serviceName - Name of the service
 // options - ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
-func (client *ServicesClient) BeginDelete(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginDeleteOptions) (ServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, groupName, serviceName, options)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
+func (client *ServicesClient) BeginDelete(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginDeleteOptions) (*armruntime.Poller[ServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, groupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientDeleteResponse]("ServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientDeleteResponse]("ServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The services resource is the top-level resource that represents the Database Migration Service. The DELETE method
@@ -422,16 +414,32 @@ func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesCl
 // a list of service resources in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServicesClientListOptions contains the optional parameters for the ServicesClient.List method.
-func (client *ServicesClient) List(options *ServicesClientListOptions) *ServicesClientListPager {
-	return &ServicesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ServicesClient) List(options *ServicesClientListOptions) *runtime.Pager[ServicesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListResponse]{
+		More: func(page ServicesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListResponse) (ServicesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -467,16 +475,32 @@ func (client *ServicesClient) listHandleResponse(resp *http.Response) (ServicesC
 // groupName - Name of the resource group
 // options - ServicesClientListByResourceGroupOptions contains the optional parameters for the ServicesClient.ListByResourceGroup
 // method.
-func (client *ServicesClient) ListByResourceGroup(groupName string, options *ServicesClientListByResourceGroupOptions) *ServicesClientListByResourceGroupPager {
-	return &ServicesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, groupName, options)
+func (client *ServicesClient) ListByResourceGroup(groupName string, options *ServicesClientListByResourceGroupOptions) *runtime.Pager[ServicesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListByResourceGroupResponse]{
+		More: func(page ServicesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListByResourceGroupResponse) (ServicesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, groupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -516,16 +540,32 @@ func (client *ServicesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // groupName - Name of the resource group
 // serviceName - Name of the service
 // options - ServicesClientListSKUsOptions contains the optional parameters for the ServicesClient.ListSKUs method.
-func (client *ServicesClient) ListSKUs(groupName string, serviceName string, options *ServicesClientListSKUsOptions) *ServicesClientListSKUsPager {
-	return &ServicesClientListSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSKUsCreateRequest(ctx, groupName, serviceName, options)
+func (client *ServicesClient) ListSKUs(groupName string, serviceName string, options *ServicesClientListSKUsOptions) *runtime.Pager[ServicesClientListSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListSKUsResponse]{
+		More: func(page ServicesClientListSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceSKUList.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListSKUsResponse) (ServicesClientListSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSKUsCreateRequest(ctx, groupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSKUsCreateRequest creates the ListSKUs request.
@@ -569,20 +609,16 @@ func (client *ServicesClient) listSKUsHandleResponse(resp *http.Response) (Servi
 // groupName - Name of the resource group
 // serviceName - Name of the service
 // options - ServicesClientBeginStartOptions contains the optional parameters for the ServicesClient.BeginStart method.
-func (client *ServicesClient) BeginStart(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginStartOptions) (ServicesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, groupName, serviceName, options)
-	if err != nil {
-		return ServicesClientStartPollerResponse{}, err
+func (client *ServicesClient) BeginStart(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginStartOptions) (*armruntime.Poller[ServicesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, groupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientStartResponse]("ServicesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientStartResponse]("ServicesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientStartPollerResponse{}, err
-	}
-	result.Poller = &ServicesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - The services resource is the top-level resource that represents the Database Migration Service. This action starts
@@ -636,20 +672,16 @@ func (client *ServicesClient) startCreateRequest(ctx context.Context, groupName 
 // groupName - Name of the resource group
 // serviceName - Name of the service
 // options - ServicesClientBeginStopOptions contains the optional parameters for the ServicesClient.BeginStop method.
-func (client *ServicesClient) BeginStop(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginStopOptions) (ServicesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, groupName, serviceName, options)
-	if err != nil {
-		return ServicesClientStopPollerResponse{}, err
+func (client *ServicesClient) BeginStop(ctx context.Context, groupName string, serviceName string, options *ServicesClientBeginStopOptions) (*armruntime.Poller[ServicesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, groupName, serviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientStopResponse]("ServicesClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientStopResponse]("ServicesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientStopPollerResponse{}, err
-	}
-	result.Poller = &ServicesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - The services resource is the top-level resource that represents the Database Migration Service. This action stops
@@ -705,20 +737,16 @@ func (client *ServicesClient) stopCreateRequest(ctx context.Context, groupName s
 // serviceName - Name of the service
 // parameters - Information about the service
 // options - ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
-func (client *ServicesClient) BeginUpdate(ctx context.Context, groupName string, serviceName string, parameters Service, options *ServicesClientBeginUpdateOptions) (ServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, groupName, serviceName, parameters, options)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginUpdate(ctx context.Context, groupName string, serviceName string, parameters Service, options *ServicesClientBeginUpdateOptions) (*armruntime.Poller[ServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, groupName, serviceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientUpdateResponse]("ServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientUpdateResponse]("ServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The services resource is the top-level resource that represents the Database Migration Service. The PATCH method

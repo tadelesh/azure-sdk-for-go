@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -170,16 +170,32 @@ func (client *ResourceHealthMetadataClient) getBySiteSlotHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceHealthMetadataClientListOptions contains the optional parameters for the ResourceHealthMetadataClient.List
 // method.
-func (client *ResourceHealthMetadataClient) List(options *ResourceHealthMetadataClientListOptions) *ResourceHealthMetadataClientListPager {
-	return &ResourceHealthMetadataClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ResourceHealthMetadataClient) List(options *ResourceHealthMetadataClientListOptions) *runtime.Pager[ResourceHealthMetadataClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceHealthMetadataClientListResponse]{
+		More: func(page ResourceHealthMetadataClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceHealthMetadataClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceHealthMetadataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceHealthMetadataClientListResponse) (ResourceHealthMetadataClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceHealthMetadataClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceHealthMetadataClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceHealthMetadataClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -214,16 +230,32 @@ func (client *ResourceHealthMetadataClient) listHandleResponse(resp *http.Respon
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - ResourceHealthMetadataClientListByResourceGroupOptions contains the optional parameters for the ResourceHealthMetadataClient.ListByResourceGroup
 // method.
-func (client *ResourceHealthMetadataClient) ListByResourceGroup(resourceGroupName string, options *ResourceHealthMetadataClientListByResourceGroupOptions) *ResourceHealthMetadataClientListByResourceGroupPager {
-	return &ResourceHealthMetadataClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ResourceHealthMetadataClient) ListByResourceGroup(resourceGroupName string, options *ResourceHealthMetadataClientListByResourceGroupOptions) *runtime.Pager[ResourceHealthMetadataClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceHealthMetadataClientListByResourceGroupResponse]{
+		More: func(page ResourceHealthMetadataClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceHealthMetadataClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceHealthMetadataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceHealthMetadataClientListByResourceGroupResponse) (ResourceHealthMetadataClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceHealthMetadataClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceHealthMetadataClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceHealthMetadataClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -263,16 +295,32 @@ func (client *ResourceHealthMetadataClient) listByResourceGroupHandleResponse(re
 // name - Name of web app.
 // options - ResourceHealthMetadataClientListBySiteOptions contains the optional parameters for the ResourceHealthMetadataClient.ListBySite
 // method.
-func (client *ResourceHealthMetadataClient) ListBySite(resourceGroupName string, name string, options *ResourceHealthMetadataClientListBySiteOptions) *ResourceHealthMetadataClientListBySitePager {
-	return &ResourceHealthMetadataClientListBySitePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySiteCreateRequest(ctx, resourceGroupName, name, options)
+func (client *ResourceHealthMetadataClient) ListBySite(resourceGroupName string, name string, options *ResourceHealthMetadataClientListBySiteOptions) *runtime.Pager[ResourceHealthMetadataClientListBySiteResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceHealthMetadataClientListBySiteResponse]{
+		More: func(page ResourceHealthMetadataClientListBySiteResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceHealthMetadataClientListBySiteResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceHealthMetadataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceHealthMetadataClientListBySiteResponse) (ResourceHealthMetadataClientListBySiteResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySiteCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceHealthMetadataClientListBySiteResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceHealthMetadataClientListBySiteResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceHealthMetadataClientListBySiteResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySiteHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySiteCreateRequest creates the ListBySite request.
@@ -317,16 +365,32 @@ func (client *ResourceHealthMetadataClient) listBySiteHandleResponse(resp *http.
 // slot - Name of web app slot. If not specified then will default to production slot.
 // options - ResourceHealthMetadataClientListBySiteSlotOptions contains the optional parameters for the ResourceHealthMetadataClient.ListBySiteSlot
 // method.
-func (client *ResourceHealthMetadataClient) ListBySiteSlot(resourceGroupName string, name string, slot string, options *ResourceHealthMetadataClientListBySiteSlotOptions) *ResourceHealthMetadataClientListBySiteSlotPager {
-	return &ResourceHealthMetadataClientListBySiteSlotPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySiteSlotCreateRequest(ctx, resourceGroupName, name, slot, options)
+func (client *ResourceHealthMetadataClient) ListBySiteSlot(resourceGroupName string, name string, slot string, options *ResourceHealthMetadataClientListBySiteSlotOptions) *runtime.Pager[ResourceHealthMetadataClientListBySiteSlotResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceHealthMetadataClientListBySiteSlotResponse]{
+		More: func(page ResourceHealthMetadataClientListBySiteSlotResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceHealthMetadataClientListBySiteSlotResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceHealthMetadataCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceHealthMetadataClientListBySiteSlotResponse) (ResourceHealthMetadataClientListBySiteSlotResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySiteSlotCreateRequest(ctx, resourceGroupName, name, slot, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceHealthMetadataClientListBySiteSlotResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceHealthMetadataClientListBySiteSlotResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceHealthMetadataClientListBySiteSlotResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySiteSlotHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySiteSlotCreateRequest creates the ListBySiteSlot request.

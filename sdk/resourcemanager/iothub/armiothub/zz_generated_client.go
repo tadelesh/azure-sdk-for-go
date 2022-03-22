@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 // failoverInput - Region to failover to. Must be the Azure paired region. Get the value from the secondary location in the
 // locations property. To learn more, see https://aka.ms/manualfailover/region
 // options - ClientBeginManualFailoverOptions contains the optional parameters for the Client.BeginManualFailover method.
-func (client *Client) BeginManualFailover(ctx context.Context, iotHubName string, resourceGroupName string, failoverInput FailoverInput, options *ClientBeginManualFailoverOptions) (ClientManualFailoverPollerResponse, error) {
-	resp, err := client.manualFailover(ctx, iotHubName, resourceGroupName, failoverInput, options)
-	if err != nil {
-		return ClientManualFailoverPollerResponse{}, err
+func (client *Client) BeginManualFailover(ctx context.Context, iotHubName string, resourceGroupName string, failoverInput FailoverInput, options *ClientBeginManualFailoverOptions) (*armruntime.Poller[ClientManualFailoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.manualFailover(ctx, iotHubName, resourceGroupName, failoverInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientManualFailoverResponse]("Client.ManualFailover", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientManualFailoverResponse]("Client.ManualFailover", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientManualFailoverPollerResponse{}
-	pt, err := armruntime.NewPoller("Client.ManualFailover", "", resp, client.pl)
-	if err != nil {
-		return ClientManualFailoverPollerResponse{}, err
-	}
-	result.Poller = &ClientManualFailoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ManualFailover - Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see https://aka.ms/manualfailover

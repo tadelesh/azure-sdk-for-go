@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewFrontendEndpointsClient(subscriptionID string, credential azcore.TokenCr
 // frontendEndpointName - Name of the Frontend endpoint which is unique within the Front Door.
 // options - FrontendEndpointsClientBeginDisableHTTPSOptions contains the optional parameters for the FrontendEndpointsClient.BeginDisableHTTPS
 // method.
-func (client *FrontendEndpointsClient) BeginDisableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, options *FrontendEndpointsClientBeginDisableHTTPSOptions) (FrontendEndpointsClientDisableHTTPSPollerResponse, error) {
-	resp, err := client.disableHTTPS(ctx, resourceGroupName, frontDoorName, frontendEndpointName, options)
-	if err != nil {
-		return FrontendEndpointsClientDisableHTTPSPollerResponse{}, err
+func (client *FrontendEndpointsClient) BeginDisableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, options *FrontendEndpointsClientBeginDisableHTTPSOptions) (*armruntime.Poller[FrontendEndpointsClientDisableHTTPSResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.disableHTTPS(ctx, resourceGroupName, frontDoorName, frontendEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FrontendEndpointsClientDisableHTTPSResponse]("FrontendEndpointsClient.DisableHTTPS", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FrontendEndpointsClientDisableHTTPSResponse]("FrontendEndpointsClient.DisableHTTPS", options.ResumeToken, client.pl, nil)
 	}
-	result := FrontendEndpointsClientDisableHTTPSPollerResponse{}
-	pt, err := armruntime.NewPoller("FrontendEndpointsClient.DisableHTTPS", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FrontendEndpointsClientDisableHTTPSPollerResponse{}, err
-	}
-	result.Poller = &FrontendEndpointsClientDisableHTTPSPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DisableHTTPS - Disables a frontendEndpoint for HTTPS traffic
@@ -128,20 +124,16 @@ func (client *FrontendEndpointsClient) disableHTTPSCreateRequest(ctx context.Con
 // customHTTPSConfiguration - The configuration specifying how to enable HTTPS
 // options - FrontendEndpointsClientBeginEnableHTTPSOptions contains the optional parameters for the FrontendEndpointsClient.BeginEnableHTTPS
 // method.
-func (client *FrontendEndpointsClient) BeginEnableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, customHTTPSConfiguration CustomHTTPSConfiguration, options *FrontendEndpointsClientBeginEnableHTTPSOptions) (FrontendEndpointsClientEnableHTTPSPollerResponse, error) {
-	resp, err := client.enableHTTPS(ctx, resourceGroupName, frontDoorName, frontendEndpointName, customHTTPSConfiguration, options)
-	if err != nil {
-		return FrontendEndpointsClientEnableHTTPSPollerResponse{}, err
+func (client *FrontendEndpointsClient) BeginEnableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, customHTTPSConfiguration CustomHTTPSConfiguration, options *FrontendEndpointsClientBeginEnableHTTPSOptions) (*armruntime.Poller[FrontendEndpointsClientEnableHTTPSResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.enableHTTPS(ctx, resourceGroupName, frontDoorName, frontendEndpointName, customHTTPSConfiguration, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FrontendEndpointsClientEnableHTTPSResponse]("FrontendEndpointsClient.EnableHTTPS", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FrontendEndpointsClientEnableHTTPSResponse]("FrontendEndpointsClient.EnableHTTPS", options.ResumeToken, client.pl, nil)
 	}
-	result := FrontendEndpointsClientEnableHTTPSPollerResponse{}
-	pt, err := armruntime.NewPoller("FrontendEndpointsClient.EnableHTTPS", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return FrontendEndpointsClientEnableHTTPSPollerResponse{}, err
-	}
-	result.Poller = &FrontendEndpointsClientEnableHTTPSPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // EnableHTTPS - Enables a frontendEndpoint for HTTPS traffic
@@ -257,16 +249,32 @@ func (client *FrontendEndpointsClient) getHandleResponse(resp *http.Response) (F
 // frontDoorName - Name of the Front Door which is globally unique.
 // options - FrontendEndpointsClientListByFrontDoorOptions contains the optional parameters for the FrontendEndpointsClient.ListByFrontDoor
 // method.
-func (client *FrontendEndpointsClient) ListByFrontDoor(resourceGroupName string, frontDoorName string, options *FrontendEndpointsClientListByFrontDoorOptions) *FrontendEndpointsClientListByFrontDoorPager {
-	return &FrontendEndpointsClientListByFrontDoorPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFrontDoorCreateRequest(ctx, resourceGroupName, frontDoorName, options)
+func (client *FrontendEndpointsClient) ListByFrontDoor(resourceGroupName string, frontDoorName string, options *FrontendEndpointsClientListByFrontDoorOptions) *runtime.Pager[FrontendEndpointsClientListByFrontDoorResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FrontendEndpointsClientListByFrontDoorResponse]{
+		More: func(page FrontendEndpointsClientListByFrontDoorResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FrontendEndpointsClientListByFrontDoorResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FrontendEndpointsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *FrontendEndpointsClientListByFrontDoorResponse) (FrontendEndpointsClientListByFrontDoorResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFrontDoorCreateRequest(ctx, resourceGroupName, frontDoorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FrontendEndpointsClientListByFrontDoorResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FrontendEndpointsClientListByFrontDoorResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FrontendEndpointsClientListByFrontDoorResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFrontDoorHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFrontDoorCreateRequest creates the ListByFrontDoor request.

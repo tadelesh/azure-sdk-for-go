@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -282,11 +282,14 @@ type MonitoringTagRulesProperties struct {
 type MonitorsClientBeginCreateOptions struct {
 	// Elastic monitor resource model
 	Body *MonitorResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
 type MonitorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientGetOptions contains the optional parameters for the MonitorsClient.Get method.
@@ -398,7 +401,8 @@ type SystemData struct {
 
 // TagRulesClientBeginDeleteOptions contains the optional parameters for the TagRulesClient.BeginDelete method.
 type TagRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TagRulesClientCreateOrUpdateOptions contains the optional parameters for the TagRulesClient.CreateOrUpdate method.

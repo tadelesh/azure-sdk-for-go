@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, 
 // domainInfo - Domain information.
 // options - DomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainsClient.BeginCreateOrUpdate
 // method.
-func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domainInfo Domain, options *DomainsClientBeginCreateOrUpdateOptions) (DomainsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domainInfo, options)
-	if err != nil {
-		return DomainsClientCreateOrUpdatePollerResponse{}, err
+func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domainInfo Domain, options *DomainsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DomainsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domainInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainsClientCreateOrUpdateResponse]("DomainsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainsClientCreateOrUpdateResponse]("DomainsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DomainsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DomainsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Asynchronously creates or updates a new domain with the specified parameters.
@@ -122,20 +118,16 @@ func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, re
 // resourceGroupName - The name of the resource group within the user's subscription.
 // domainName - Name of the domain.
 // options - DomainsClientBeginDeleteOptions contains the optional parameters for the DomainsClient.BeginDelete method.
-func (client *DomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, domainName string, options *DomainsClientBeginDeleteOptions) (DomainsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, domainName, options)
-	if err != nil {
-		return DomainsClientDeletePollerResponse{}, err
+func (client *DomainsClient) BeginDelete(ctx context.Context, resourceGroupName string, domainName string, options *DomainsClientBeginDeleteOptions) (*armruntime.Poller[DomainsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, domainName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainsClientDeleteResponse]("DomainsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainsClientDeleteResponse]("DomainsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DomainsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DomainsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete existing domain.
@@ -240,16 +232,32 @@ func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClie
 // resourceGroupName - The name of the resource group within the user's subscription.
 // options - DomainsClientListByResourceGroupOptions contains the optional parameters for the DomainsClient.ListByResourceGroup
 // method.
-func (client *DomainsClient) ListByResourceGroup(resourceGroupName string, options *DomainsClientListByResourceGroupOptions) *DomainsClientListByResourceGroupPager {
-	return &DomainsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DomainsClient) ListByResourceGroup(resourceGroupName string, options *DomainsClientListByResourceGroupOptions) *runtime.Pager[DomainsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListByResourceGroupResponse]{
+		More: func(page DomainsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListByResourceGroupResponse) (DomainsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -293,16 +301,32 @@ func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DomainsClientListBySubscriptionOptions contains the optional parameters for the DomainsClient.ListBySubscription
 // method.
-func (client *DomainsClient) ListBySubscription(options *DomainsClientListBySubscriptionOptions) *DomainsClientListBySubscriptionPager {
-	return &DomainsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DomainsClient) ListBySubscription(options *DomainsClientListBySubscriptionOptions) *runtime.Pager[DomainsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListBySubscriptionResponse]{
+		More: func(page DomainsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListBySubscriptionResponse) (DomainsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -456,20 +480,16 @@ func (client *DomainsClient) regenerateKeyHandleResponse(resp *http.Response) (D
 // domainName - Name of the domain.
 // domainUpdateParameters - Domain update information.
 // options - DomainsClientBeginUpdateOptions contains the optional parameters for the DomainsClient.BeginUpdate method.
-func (client *DomainsClient) BeginUpdate(ctx context.Context, resourceGroupName string, domainName string, domainUpdateParameters DomainUpdateParameters, options *DomainsClientBeginUpdateOptions) (DomainsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, domainName, domainUpdateParameters, options)
-	if err != nil {
-		return DomainsClientUpdatePollerResponse{}, err
+func (client *DomainsClient) BeginUpdate(ctx context.Context, resourceGroupName string, domainName string, domainUpdateParameters DomainUpdateParameters, options *DomainsClientBeginUpdateOptions) (*armruntime.Poller[DomainsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, domainName, domainUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainsClientUpdateResponse]("DomainsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainsClientUpdateResponse]("DomainsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DomainsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DomainsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Asynchronously updates a domain with the specified parameters.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewDelegatedSubnetServiceClient(subscriptionID string, credential azcore.To
 // resourceName - The name of the resource. It must be a minimum of 3 characters, and a maximum of 63.
 // options - DelegatedSubnetServiceClientBeginDeleteDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.BeginDeleteDetails
 // method.
-func (client *DelegatedSubnetServiceClient) BeginDeleteDetails(ctx context.Context, resourceGroupName string, resourceName string, options *DelegatedSubnetServiceClientBeginDeleteDetailsOptions) (DelegatedSubnetServiceClientDeleteDetailsPollerResponse, error) {
-	resp, err := client.deleteDetails(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return DelegatedSubnetServiceClientDeleteDetailsPollerResponse{}, err
+func (client *DelegatedSubnetServiceClient) BeginDeleteDetails(ctx context.Context, resourceGroupName string, resourceName string, options *DelegatedSubnetServiceClientBeginDeleteDetailsOptions) (*armruntime.Poller[DelegatedSubnetServiceClientDeleteDetailsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteDetails(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DelegatedSubnetServiceClientDeleteDetailsResponse]("DelegatedSubnetServiceClient.DeleteDetails", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DelegatedSubnetServiceClientDeleteDetailsResponse]("DelegatedSubnetServiceClient.DeleteDetails", options.ResumeToken, client.pl, nil)
 	}
-	result := DelegatedSubnetServiceClientDeleteDetailsPollerResponse{}
-	pt, err := armruntime.NewPoller("DelegatedSubnetServiceClient.DeleteDetails", "", resp, client.pl)
-	if err != nil {
-		return DelegatedSubnetServiceClientDeleteDetailsPollerResponse{}, err
-	}
-	result.Poller = &DelegatedSubnetServiceClientDeleteDetailsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteDetails - Delete dnc DelegatedSubnet.
@@ -179,16 +175,32 @@ func (client *DelegatedSubnetServiceClient) getDetailsHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DelegatedSubnetServiceClientListByResourceGroupOptions contains the optional parameters for the DelegatedSubnetServiceClient.ListByResourceGroup
 // method.
-func (client *DelegatedSubnetServiceClient) ListByResourceGroup(resourceGroupName string, options *DelegatedSubnetServiceClientListByResourceGroupOptions) *DelegatedSubnetServiceClientListByResourceGroupPager {
-	return &DelegatedSubnetServiceClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DelegatedSubnetServiceClient) ListByResourceGroup(resourceGroupName string, options *DelegatedSubnetServiceClientListByResourceGroupOptions) *runtime.Pager[DelegatedSubnetServiceClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DelegatedSubnetServiceClientListByResourceGroupResponse]{
+		More: func(page DelegatedSubnetServiceClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DelegatedSubnetServiceClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DelegatedSubnets.NextLink)
+		Fetcher: func(ctx context.Context, page *DelegatedSubnetServiceClientListByResourceGroupResponse) (DelegatedSubnetServiceClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DelegatedSubnetServiceClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DelegatedSubnetServiceClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DelegatedSubnetServiceClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -226,16 +238,32 @@ func (client *DelegatedSubnetServiceClient) listByResourceGroupHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DelegatedSubnetServiceClientListBySubscriptionOptions contains the optional parameters for the DelegatedSubnetServiceClient.ListBySubscription
 // method.
-func (client *DelegatedSubnetServiceClient) ListBySubscription(options *DelegatedSubnetServiceClientListBySubscriptionOptions) *DelegatedSubnetServiceClientListBySubscriptionPager {
-	return &DelegatedSubnetServiceClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DelegatedSubnetServiceClient) ListBySubscription(options *DelegatedSubnetServiceClientListBySubscriptionOptions) *runtime.Pager[DelegatedSubnetServiceClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DelegatedSubnetServiceClientListBySubscriptionResponse]{
+		More: func(page DelegatedSubnetServiceClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DelegatedSubnetServiceClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DelegatedSubnets.NextLink)
+		Fetcher: func(ctx context.Context, page *DelegatedSubnetServiceClientListBySubscriptionResponse) (DelegatedSubnetServiceClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DelegatedSubnetServiceClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DelegatedSubnetServiceClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DelegatedSubnetServiceClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -272,20 +300,16 @@ func (client *DelegatedSubnetServiceClient) listBySubscriptionHandleResponse(res
 // parameters - Delegated subnet details.
 // options - DelegatedSubnetServiceClientBeginPatchDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.BeginPatchDetails
 // method.
-func (client *DelegatedSubnetServiceClient) BeginPatchDetails(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceUpdateParameters, options *DelegatedSubnetServiceClientBeginPatchDetailsOptions) (DelegatedSubnetServiceClientPatchDetailsPollerResponse, error) {
-	resp, err := client.patchDetails(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return DelegatedSubnetServiceClientPatchDetailsPollerResponse{}, err
+func (client *DelegatedSubnetServiceClient) BeginPatchDetails(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceUpdateParameters, options *DelegatedSubnetServiceClientBeginPatchDetailsOptions) (*armruntime.Poller[DelegatedSubnetServiceClientPatchDetailsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.patchDetails(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DelegatedSubnetServiceClientPatchDetailsResponse]("DelegatedSubnetServiceClient.PatchDetails", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DelegatedSubnetServiceClientPatchDetailsResponse]("DelegatedSubnetServiceClient.PatchDetails", options.ResumeToken, client.pl, nil)
 	}
-	result := DelegatedSubnetServiceClientPatchDetailsPollerResponse{}
-	pt, err := armruntime.NewPoller("DelegatedSubnetServiceClient.PatchDetails", "", resp, client.pl)
-	if err != nil {
-		return DelegatedSubnetServiceClientPatchDetailsPollerResponse{}, err
-	}
-	result.Poller = &DelegatedSubnetServiceClientPatchDetailsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PatchDetails - Patch delegated subnet resource
@@ -338,20 +362,16 @@ func (client *DelegatedSubnetServiceClient) patchDetailsCreateRequest(ctx contex
 // parameters - Delegated subnet details.
 // options - DelegatedSubnetServiceClientBeginPutDetailsOptions contains the optional parameters for the DelegatedSubnetServiceClient.BeginPutDetails
 // method.
-func (client *DelegatedSubnetServiceClient) BeginPutDetails(ctx context.Context, resourceGroupName string, resourceName string, parameters DelegatedSubnet, options *DelegatedSubnetServiceClientBeginPutDetailsOptions) (DelegatedSubnetServiceClientPutDetailsPollerResponse, error) {
-	resp, err := client.putDetails(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return DelegatedSubnetServiceClientPutDetailsPollerResponse{}, err
+func (client *DelegatedSubnetServiceClient) BeginPutDetails(ctx context.Context, resourceGroupName string, resourceName string, parameters DelegatedSubnet, options *DelegatedSubnetServiceClientBeginPutDetailsOptions) (*armruntime.Poller[DelegatedSubnetServiceClientPutDetailsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.putDetails(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DelegatedSubnetServiceClientPutDetailsResponse]("DelegatedSubnetServiceClient.PutDetails", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DelegatedSubnetServiceClientPutDetailsResponse]("DelegatedSubnetServiceClient.PutDetails", options.ResumeToken, client.pl, nil)
 	}
-	result := DelegatedSubnetServiceClientPutDetailsPollerResponse{}
-	pt, err := armruntime.NewPoller("DelegatedSubnetServiceClient.PutDetails", "", resp, client.pl)
-	if err != nil {
-		return DelegatedSubnetServiceClientPutDetailsPollerResponse{}, err
-	}
-	result.Poller = &DelegatedSubnetServiceClientPutDetailsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PutDetails - Put delegated subnet resource

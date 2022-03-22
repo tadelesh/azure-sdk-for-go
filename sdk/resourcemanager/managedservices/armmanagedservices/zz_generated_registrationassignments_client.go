@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewRegistrationAssignmentsClient(credential azcore.TokenCredential, options
 // requestBody - The parameters required to create new registration assignment.
 // options - RegistrationAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the RegistrationAssignmentsClient.BeginCreateOrUpdate
 // method.
-func (client *RegistrationAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, scope string, registrationAssignmentID string, requestBody RegistrationAssignment, options *RegistrationAssignmentsClientBeginCreateOrUpdateOptions) (RegistrationAssignmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, scope, registrationAssignmentID, requestBody, options)
-	if err != nil {
-		return RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *RegistrationAssignmentsClient) BeginCreateOrUpdate(ctx context.Context, scope string, registrationAssignmentID string, requestBody RegistrationAssignment, options *RegistrationAssignmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[RegistrationAssignmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, scope, registrationAssignmentID, requestBody, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistrationAssignmentsClientCreateOrUpdateResponse]("RegistrationAssignmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistrationAssignmentsClientCreateOrUpdateResponse]("RegistrationAssignmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistrationAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &RegistrationAssignmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a registration assignment.
@@ -112,20 +108,16 @@ func (client *RegistrationAssignmentsClient) createOrUpdateCreateRequest(ctx con
 // registrationAssignmentID - The GUID of the registration assignment.
 // options - RegistrationAssignmentsClientBeginDeleteOptions contains the optional parameters for the RegistrationAssignmentsClient.BeginDelete
 // method.
-func (client *RegistrationAssignmentsClient) BeginDelete(ctx context.Context, scope string, registrationAssignmentID string, options *RegistrationAssignmentsClientBeginDeleteOptions) (RegistrationAssignmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, scope, registrationAssignmentID, options)
-	if err != nil {
-		return RegistrationAssignmentsClientDeletePollerResponse{}, err
+func (client *RegistrationAssignmentsClient) BeginDelete(ctx context.Context, scope string, registrationAssignmentID string, options *RegistrationAssignmentsClientBeginDeleteOptions) (*armruntime.Poller[RegistrationAssignmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, scope, registrationAssignmentID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistrationAssignmentsClientDeleteResponse]("RegistrationAssignmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistrationAssignmentsClientDeleteResponse]("RegistrationAssignmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistrationAssignmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistrationAssignmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return RegistrationAssignmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RegistrationAssignmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified registration assignment.
@@ -221,16 +213,32 @@ func (client *RegistrationAssignmentsClient) getHandleResponse(resp *http.Respon
 // scope - The scope of the resource.
 // options - RegistrationAssignmentsClientListOptions contains the optional parameters for the RegistrationAssignmentsClient.List
 // method.
-func (client *RegistrationAssignmentsClient) List(scope string, options *RegistrationAssignmentsClientListOptions) *RegistrationAssignmentsClientListPager {
-	return &RegistrationAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *RegistrationAssignmentsClient) List(scope string, options *RegistrationAssignmentsClientListOptions) *runtime.Pager[RegistrationAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistrationAssignmentsClientListResponse]{
+		More: func(page RegistrationAssignmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistrationAssignmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistrationAssignmentList.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistrationAssignmentsClientListResponse) (RegistrationAssignmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistrationAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistrationAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistrationAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

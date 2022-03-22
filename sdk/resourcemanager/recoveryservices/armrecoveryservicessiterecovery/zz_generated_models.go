@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7792,43 +7792,50 @@ type ReplicationEventsClientListOptions struct {
 // ReplicationFabricsClientBeginCheckConsistencyOptions contains the optional parameters for the ReplicationFabricsClient.BeginCheckConsistency
 // method.
 type ReplicationFabricsClientBeginCheckConsistencyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginCreateOptions contains the optional parameters for the ReplicationFabricsClient.BeginCreate
 // method.
 type ReplicationFabricsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginDeleteOptions contains the optional parameters for the ReplicationFabricsClient.BeginDelete
 // method.
 type ReplicationFabricsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginMigrateToAADOptions contains the optional parameters for the ReplicationFabricsClient.BeginMigrateToAAD
 // method.
 type ReplicationFabricsClientBeginMigrateToAADOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginPurgeOptions contains the optional parameters for the ReplicationFabricsClient.BeginPurge
 // method.
 type ReplicationFabricsClientBeginPurgeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginReassociateGatewayOptions contains the optional parameters for the ReplicationFabricsClient.BeginReassociateGateway
 // method.
 type ReplicationFabricsClientBeginReassociateGatewayOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientBeginRenewCertificateOptions contains the optional parameters for the ReplicationFabricsClient.BeginRenewCertificate
 // method.
 type ReplicationFabricsClientBeginRenewCertificateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationFabricsClientGetOptions contains the optional parameters for the ReplicationFabricsClient.Get method.
@@ -7850,22 +7857,26 @@ type ReplicationGroupDetails struct {
 
 // ReplicationJobsClientBeginCancelOptions contains the optional parameters for the ReplicationJobsClient.BeginCancel method.
 type ReplicationJobsClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationJobsClientBeginExportOptions contains the optional parameters for the ReplicationJobsClient.BeginExport method.
 type ReplicationJobsClientBeginExportOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationJobsClientBeginRestartOptions contains the optional parameters for the ReplicationJobsClient.BeginRestart method.
 type ReplicationJobsClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationJobsClientBeginResumeOptions contains the optional parameters for the ReplicationJobsClient.BeginResume method.
 type ReplicationJobsClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationJobsClientGetOptions contains the optional parameters for the ReplicationJobsClient.Get method.
@@ -7894,7 +7905,8 @@ type ReplicationLogicalNetworksClientListByReplicationFabricsOptions struct {
 // ReplicationMigrationItemsClientBeginCreateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginCreate
 // method.
 type ReplicationMigrationItemsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginDeleteOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginDelete
@@ -7902,36 +7914,43 @@ type ReplicationMigrationItemsClientBeginCreateOptions struct {
 type ReplicationMigrationItemsClientBeginDeleteOptions struct {
 	// The delete option.
 	DeleteOption *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginMigrateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginMigrate
 // method.
 type ReplicationMigrationItemsClientBeginMigrateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginResyncOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginResync
 // method.
 type ReplicationMigrationItemsClientBeginResyncOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginTestMigrateCleanupOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginTestMigrateCleanup
 // method.
 type ReplicationMigrationItemsClientBeginTestMigrateCleanupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginTestMigrateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginTestMigrate
 // method.
 type ReplicationMigrationItemsClientBeginTestMigrateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientBeginUpdateOptions contains the optional parameters for the ReplicationMigrationItemsClient.BeginUpdate
 // method.
 type ReplicationMigrationItemsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationMigrationItemsClientGetOptions contains the optional parameters for the ReplicationMigrationItemsClient.Get
@@ -7965,19 +7984,22 @@ type ReplicationMigrationItemsClientListOptions struct {
 // ReplicationNetworkMappingsClientBeginCreateOptions contains the optional parameters for the ReplicationNetworkMappingsClient.BeginCreate
 // method.
 type ReplicationNetworkMappingsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationNetworkMappingsClientBeginDeleteOptions contains the optional parameters for the ReplicationNetworkMappingsClient.BeginDelete
 // method.
 type ReplicationNetworkMappingsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationNetworkMappingsClientBeginUpdateOptions contains the optional parameters for the ReplicationNetworkMappingsClient.BeginUpdate
 // method.
 type ReplicationNetworkMappingsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationNetworkMappingsClientGetOptions contains the optional parameters for the ReplicationNetworkMappingsClient.Get
@@ -8017,19 +8039,22 @@ type ReplicationNetworksClientListOptions struct {
 // ReplicationPoliciesClientBeginCreateOptions contains the optional parameters for the ReplicationPoliciesClient.BeginCreate
 // method.
 type ReplicationPoliciesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationPoliciesClientBeginDeleteOptions contains the optional parameters for the ReplicationPoliciesClient.BeginDelete
 // method.
 type ReplicationPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationPoliciesClientBeginUpdateOptions contains the optional parameters for the ReplicationPoliciesClient.BeginUpdate
 // method.
 type ReplicationPoliciesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationPoliciesClientGetOptions contains the optional parameters for the ReplicationPoliciesClient.Get method.
@@ -8184,115 +8209,134 @@ type ReplicationProtectedItemProperties struct {
 // ReplicationProtectedItemsClientBeginAddDisksOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginAddDisks
 // method.
 type ReplicationProtectedItemsClientBeginAddDisksOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginApplyRecoveryPointOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginApplyRecoveryPoint
 // method.
 type ReplicationProtectedItemsClientBeginApplyRecoveryPointOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginCreateOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginCreate
 // method.
 type ReplicationProtectedItemsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginDeleteOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginDelete
 // method.
 type ReplicationProtectedItemsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginFailoverCancelOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginFailoverCancel
 // method.
 type ReplicationProtectedItemsClientBeginFailoverCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginFailoverCommitOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginFailoverCommit
 // method.
 type ReplicationProtectedItemsClientBeginFailoverCommitOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginPlannedFailoverOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginPlannedFailover
 // method.
 type ReplicationProtectedItemsClientBeginPlannedFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginPurgeOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginPurge
 // method.
 type ReplicationProtectedItemsClientBeginPurgeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginRemoveDisksOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginRemoveDisks
 // method.
 type ReplicationProtectedItemsClientBeginRemoveDisksOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginRepairReplicationOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginRepairReplication
 // method.
 type ReplicationProtectedItemsClientBeginRepairReplicationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginReprotectOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginReprotect
 // method.
 type ReplicationProtectedItemsClientBeginReprotectOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginResolveHealthErrorsOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginResolveHealthErrors
 // method.
 type ReplicationProtectedItemsClientBeginResolveHealthErrorsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginSwitchProviderOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginSwitchProvider
 // method.
 type ReplicationProtectedItemsClientBeginSwitchProviderOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginTestFailoverCleanupOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginTestFailoverCleanup
 // method.
 type ReplicationProtectedItemsClientBeginTestFailoverCleanupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginTestFailoverOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginTestFailover
 // method.
 type ReplicationProtectedItemsClientBeginTestFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginUnplannedFailoverOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginUnplannedFailover
 // method.
 type ReplicationProtectedItemsClientBeginUnplannedFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginUpdateApplianceOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginUpdateAppliance
 // method.
 type ReplicationProtectedItemsClientBeginUpdateApplianceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginUpdateMobilityServiceOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginUpdateMobilityService
 // method.
 type ReplicationProtectedItemsClientBeginUpdateMobilityServiceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientBeginUpdateOptions contains the optional parameters for the ReplicationProtectedItemsClient.BeginUpdate
 // method.
 type ReplicationProtectedItemsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectedItemsClientGetOptions contains the optional parameters for the ReplicationProtectedItemsClient.Get
@@ -8319,25 +8363,29 @@ type ReplicationProtectedItemsClientListOptions struct {
 // ReplicationProtectionContainerMappingsClientBeginCreateOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginCreate
 // method.
 type ReplicationProtectionContainerMappingsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainerMappingsClientBeginDeleteOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginDelete
 // method.
 type ReplicationProtectionContainerMappingsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainerMappingsClientBeginPurgeOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginPurge
 // method.
 type ReplicationProtectionContainerMappingsClientBeginPurgeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainerMappingsClientBeginUpdateOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.BeginUpdate
 // method.
 type ReplicationProtectionContainerMappingsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainerMappingsClientGetOptions contains the optional parameters for the ReplicationProtectionContainerMappingsClient.Get
@@ -8361,25 +8409,29 @@ type ReplicationProtectionContainerMappingsClientListOptions struct {
 // ReplicationProtectionContainersClientBeginCreateOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginCreate
 // method.
 type ReplicationProtectionContainersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainersClientBeginDeleteOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginDelete
 // method.
 type ReplicationProtectionContainersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainersClientBeginDiscoverProtectableItemOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginDiscoverProtectableItem
 // method.
 type ReplicationProtectionContainersClientBeginDiscoverProtectableItemOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainersClientBeginSwitchProtectionOptions contains the optional parameters for the ReplicationProtectionContainersClient.BeginSwitchProtection
 // method.
 type ReplicationProtectionContainersClientBeginSwitchProtectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationProtectionContainersClientGetOptions contains the optional parameters for the ReplicationProtectionContainersClient.Get
@@ -8556,61 +8608,71 @@ type ReplicationProviderSpecificUpdateContainerMappingInput struct {
 // ReplicationRecoveryPlansClientBeginCreateOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginCreate
 // method.
 type ReplicationRecoveryPlansClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginDeleteOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginDelete
 // method.
 type ReplicationRecoveryPlansClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginFailoverCancelOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginFailoverCancel
 // method.
 type ReplicationRecoveryPlansClientBeginFailoverCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginFailoverCommitOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginFailoverCommit
 // method.
 type ReplicationRecoveryPlansClientBeginFailoverCommitOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginPlannedFailoverOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginPlannedFailover
 // method.
 type ReplicationRecoveryPlansClientBeginPlannedFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginReprotectOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginReprotect
 // method.
 type ReplicationRecoveryPlansClientBeginReprotectOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginTestFailoverCleanupOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginTestFailoverCleanup
 // method.
 type ReplicationRecoveryPlansClientBeginTestFailoverCleanupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginTestFailoverOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginTestFailover
 // method.
 type ReplicationRecoveryPlansClientBeginTestFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginUnplannedFailoverOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginUnplannedFailover
 // method.
 type ReplicationRecoveryPlansClientBeginUnplannedFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientBeginUpdateOptions contains the optional parameters for the ReplicationRecoveryPlansClient.BeginUpdate
 // method.
 type ReplicationRecoveryPlansClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryPlansClientGetOptions contains the optional parameters for the ReplicationRecoveryPlansClient.Get method.
@@ -8627,25 +8689,29 @@ type ReplicationRecoveryPlansClientListOptions struct {
 // ReplicationRecoveryServicesProvidersClientBeginCreateOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.BeginCreate
 // method.
 type ReplicationRecoveryServicesProvidersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryServicesProvidersClientBeginDeleteOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.BeginDelete
 // method.
 type ReplicationRecoveryServicesProvidersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryServicesProvidersClientBeginPurgeOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.BeginPurge
 // method.
 type ReplicationRecoveryServicesProvidersClientBeginPurgeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryServicesProvidersClientBeginRefreshProviderOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.BeginRefreshProvider
 // method.
 type ReplicationRecoveryServicesProvidersClientBeginRefreshProviderOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationRecoveryServicesProvidersClientGetOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.Get
@@ -8669,13 +8735,15 @@ type ReplicationRecoveryServicesProvidersClientListOptions struct {
 // ReplicationStorageClassificationMappingsClientBeginCreateOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.BeginCreate
 // method.
 type ReplicationStorageClassificationMappingsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationStorageClassificationMappingsClientBeginDeleteOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.BeginDelete
 // method.
 type ReplicationStorageClassificationMappingsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationStorageClassificationMappingsClientGetOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.Get
@@ -8717,7 +8785,8 @@ type ReplicationStorageClassificationsClientListOptions struct {
 // ReplicationVaultHealthClientBeginRefreshOptions contains the optional parameters for the ReplicationVaultHealthClient.BeginRefresh
 // method.
 type ReplicationVaultHealthClientBeginRefreshOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationVaultHealthClientGetOptions contains the optional parameters for the ReplicationVaultHealthClient.Get method.
@@ -8728,7 +8797,8 @@ type ReplicationVaultHealthClientGetOptions struct {
 // ReplicationVaultSettingClientBeginCreateOptions contains the optional parameters for the ReplicationVaultSettingClient.BeginCreate
 // method.
 type ReplicationVaultSettingClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationVaultSettingClientGetOptions contains the optional parameters for the ReplicationVaultSettingClient.Get method.
@@ -8744,19 +8814,22 @@ type ReplicationVaultSettingClientListOptions struct {
 // ReplicationvCentersClientBeginCreateOptions contains the optional parameters for the ReplicationvCentersClient.BeginCreate
 // method.
 type ReplicationvCentersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationvCentersClientBeginDeleteOptions contains the optional parameters for the ReplicationvCentersClient.BeginDelete
 // method.
 type ReplicationvCentersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationvCentersClientBeginUpdateOptions contains the optional parameters for the ReplicationvCentersClient.BeginUpdate
 // method.
 type ReplicationvCentersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ReplicationvCentersClientGetOptions contains the optional parameters for the ReplicationvCentersClient.Get method.

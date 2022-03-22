@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewDefaultRolloutsClient(subscriptionID string, credential azcore.TokenCred
 // properties - The Default rollout properties supplied to the CreateOrUpdate operation.
 // options - DefaultRolloutsClientBeginCreateOrUpdateOptions contains the optional parameters for the DefaultRolloutsClient.BeginCreateOrUpdate
 // method.
-func (client *DefaultRolloutsClient) BeginCreateOrUpdate(ctx context.Context, providerNamespace string, rolloutName string, properties DefaultRollout, options *DefaultRolloutsClientBeginCreateOrUpdateOptions) (DefaultRolloutsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, providerNamespace, rolloutName, properties, options)
-	if err != nil {
-		return DefaultRolloutsClientCreateOrUpdatePollerResponse{}, err
+func (client *DefaultRolloutsClient) BeginCreateOrUpdate(ctx context.Context, providerNamespace string, rolloutName string, properties DefaultRollout, options *DefaultRolloutsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DefaultRolloutsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, providerNamespace, rolloutName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DefaultRolloutsClientCreateOrUpdateResponse]("DefaultRolloutsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DefaultRolloutsClientCreateOrUpdateResponse]("DefaultRolloutsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DefaultRolloutsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DefaultRolloutsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DefaultRolloutsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DefaultRolloutsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the rollout details.
@@ -221,16 +217,32 @@ func (client *DefaultRolloutsClient) getHandleResponse(resp *http.Response) (Def
 // providerNamespace - The name of the resource provider hosted within ProviderHub.
 // options - DefaultRolloutsClientListByProviderRegistrationOptions contains the optional parameters for the DefaultRolloutsClient.ListByProviderRegistration
 // method.
-func (client *DefaultRolloutsClient) ListByProviderRegistration(providerNamespace string, options *DefaultRolloutsClientListByProviderRegistrationOptions) *DefaultRolloutsClientListByProviderRegistrationPager {
-	return &DefaultRolloutsClientListByProviderRegistrationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+func (client *DefaultRolloutsClient) ListByProviderRegistration(providerNamespace string, options *DefaultRolloutsClientListByProviderRegistrationOptions) *runtime.Pager[DefaultRolloutsClientListByProviderRegistrationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DefaultRolloutsClientListByProviderRegistrationResponse]{
+		More: func(page DefaultRolloutsClientListByProviderRegistrationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DefaultRolloutsClientListByProviderRegistrationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DefaultRolloutArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *DefaultRolloutsClientListByProviderRegistrationResponse) (DefaultRolloutsClientListByProviderRegistrationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProviderRegistrationCreateRequest(ctx, providerNamespace, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DefaultRolloutsClientListByProviderRegistrationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DefaultRolloutsClientListByProviderRegistrationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DefaultRolloutsClientListByProviderRegistrationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProviderRegistrationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProviderRegistrationCreateRequest creates the ListByProviderRegistration request.

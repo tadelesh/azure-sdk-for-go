@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewConnectorsClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - Parameters supplied to the CreateOrUpdate Connector operation.
 // options - ConnectorsClientBeginCreateOrUpdateOptions contains the optional parameters for the ConnectorsClient.BeginCreateOrUpdate
 // method.
-func (client *ConnectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, connectorName string, parameters ConnectorResourceFormat, options *ConnectorsClientBeginCreateOrUpdateOptions) (ConnectorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, connectorName, parameters, options)
-	if err != nil {
-		return ConnectorsClientCreateOrUpdatePollerResponse{}, err
+func (client *ConnectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, connectorName string, parameters ConnectorResourceFormat, options *ConnectorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ConnectorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, connectorName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectorsClientCreateOrUpdateResponse]("ConnectorsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectorsClientCreateOrUpdateResponse]("ConnectorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectorsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ConnectorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ConnectorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a connector or updates an existing connector in the hub.
@@ -127,20 +123,16 @@ func (client *ConnectorsClient) createOrUpdateCreateRequest(ctx context.Context,
 // hubName - The name of the hub.
 // connectorName - The name of the connector.
 // options - ConnectorsClientBeginDeleteOptions contains the optional parameters for the ConnectorsClient.BeginDelete method.
-func (client *ConnectorsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, connectorName string, options *ConnectorsClientBeginDeleteOptions) (ConnectorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, connectorName, options)
-	if err != nil {
-		return ConnectorsClientDeletePollerResponse{}, err
+func (client *ConnectorsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, connectorName string, options *ConnectorsClientBeginDeleteOptions) (*armruntime.Poller[ConnectorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, connectorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConnectorsClientDeleteResponse]("ConnectorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConnectorsClientDeleteResponse]("ConnectorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ConnectorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ConnectorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ConnectorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ConnectorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a connector in the hub.
@@ -254,16 +246,32 @@ func (client *ConnectorsClient) getHandleResponse(resp *http.Response) (Connecto
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - ConnectorsClientListByHubOptions contains the optional parameters for the ConnectorsClient.ListByHub method.
-func (client *ConnectorsClient) ListByHub(resourceGroupName string, hubName string, options *ConnectorsClientListByHubOptions) *ConnectorsClientListByHubPager {
-	return &ConnectorsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *ConnectorsClient) ListByHub(resourceGroupName string, hubName string, options *ConnectorsClientListByHubOptions) *runtime.Pager[ConnectorsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectorsClientListByHubResponse]{
+		More: func(page ConnectorsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectorsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectorsClientListByHubResponse) (ConnectorsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectorsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectorsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectorsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

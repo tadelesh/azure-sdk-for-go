@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -223,16 +223,32 @@ func (client *CapacityReservationGroupsClient) getHandleResponse(resp *http.Resp
 // resourceGroupName - The name of the resource group.
 // options - CapacityReservationGroupsClientListByResourceGroupOptions contains the optional parameters for the CapacityReservationGroupsClient.ListByResourceGroup
 // method.
-func (client *CapacityReservationGroupsClient) ListByResourceGroup(resourceGroupName string, options *CapacityReservationGroupsClientListByResourceGroupOptions) *CapacityReservationGroupsClientListByResourceGroupPager {
-	return &CapacityReservationGroupsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CapacityReservationGroupsClient) ListByResourceGroup(resourceGroupName string, options *CapacityReservationGroupsClientListByResourceGroupOptions) *runtime.Pager[CapacityReservationGroupsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapacityReservationGroupsClientListByResourceGroupResponse]{
+		More: func(page CapacityReservationGroupsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CapacityReservationGroupsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CapacityReservationGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CapacityReservationGroupsClientListByResourceGroupResponse) (CapacityReservationGroupsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CapacityReservationGroupsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapacityReservationGroupsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapacityReservationGroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -274,16 +290,32 @@ func (client *CapacityReservationGroupsClient) listByResourceGroupHandleResponse
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CapacityReservationGroupsClientListBySubscriptionOptions contains the optional parameters for the CapacityReservationGroupsClient.ListBySubscription
 // method.
-func (client *CapacityReservationGroupsClient) ListBySubscription(options *CapacityReservationGroupsClientListBySubscriptionOptions) *CapacityReservationGroupsClientListBySubscriptionPager {
-	return &CapacityReservationGroupsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *CapacityReservationGroupsClient) ListBySubscription(options *CapacityReservationGroupsClientListBySubscriptionOptions) *runtime.Pager[CapacityReservationGroupsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapacityReservationGroupsClientListBySubscriptionResponse]{
+		More: func(page CapacityReservationGroupsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CapacityReservationGroupsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CapacityReservationGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CapacityReservationGroupsClientListBySubscriptionResponse) (CapacityReservationGroupsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CapacityReservationGroupsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapacityReservationGroupsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapacityReservationGroupsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

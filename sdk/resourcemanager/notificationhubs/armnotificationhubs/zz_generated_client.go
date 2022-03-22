@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -594,16 +594,32 @@ func (client *Client) getPnsCredentialsHandleResponse(resp *http.Response) (Clie
 // resourceGroupName - The name of the resource group.
 // namespaceName - The namespace name.
 // options - ClientListOptions contains the optional parameters for the Client.List method.
-func (client *Client) List(resourceGroupName string, namespaceName string, options *ClientListOptions) *ClientListPager {
-	return &ClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *Client) List(resourceGroupName string, namespaceName string, options *ClientListOptions) *runtime.Pager[ClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListResponse]{
+		More: func(page ClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NotificationHubListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListResponse) (ClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -647,16 +663,32 @@ func (client *Client) listHandleResponse(resp *http.Response) (ClientListRespons
 // namespaceName - The namespace name
 // notificationHubName - The notification hub name.
 // options - ClientListAuthorizationRulesOptions contains the optional parameters for the Client.ListAuthorizationRules method.
-func (client *Client) ListAuthorizationRules(resourceGroupName string, namespaceName string, notificationHubName string, options *ClientListAuthorizationRulesOptions) *ClientListAuthorizationRulesPager {
-	return &ClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, notificationHubName, options)
+func (client *Client) ListAuthorizationRules(resourceGroupName string, namespaceName string, notificationHubName string, options *ClientListAuthorizationRulesOptions) *runtime.Pager[ClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListAuthorizationRulesResponse]{
+		More: func(page ClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SharedAccessAuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListAuthorizationRulesResponse) (ClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, notificationHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.

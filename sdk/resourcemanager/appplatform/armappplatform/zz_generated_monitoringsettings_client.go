@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,20 +114,16 @@ func (client *MonitoringSettingsClient) getHandleResponse(resp *http.Response) (
 // monitoringSettingResource - Parameters for the update operation
 // options - MonitoringSettingsClientBeginUpdatePatchOptions contains the optional parameters for the MonitoringSettingsClient.BeginUpdatePatch
 // method.
-func (client *MonitoringSettingsClient) BeginUpdatePatch(ctx context.Context, resourceGroupName string, serviceName string, monitoringSettingResource MonitoringSettingResource, options *MonitoringSettingsClientBeginUpdatePatchOptions) (MonitoringSettingsClientUpdatePatchPollerResponse, error) {
-	resp, err := client.updatePatch(ctx, resourceGroupName, serviceName, monitoringSettingResource, options)
-	if err != nil {
-		return MonitoringSettingsClientUpdatePatchPollerResponse{}, err
+func (client *MonitoringSettingsClient) BeginUpdatePatch(ctx context.Context, resourceGroupName string, serviceName string, monitoringSettingResource MonitoringSettingResource, options *MonitoringSettingsClientBeginUpdatePatchOptions) (*armruntime.Poller[MonitoringSettingsClientUpdatePatchResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updatePatch(ctx, resourceGroupName, serviceName, monitoringSettingResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitoringSettingsClientUpdatePatchResponse]("MonitoringSettingsClient.UpdatePatch", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitoringSettingsClientUpdatePatchResponse]("MonitoringSettingsClient.UpdatePatch", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitoringSettingsClientUpdatePatchPollerResponse{}
-	pt, err := armruntime.NewPoller("MonitoringSettingsClient.UpdatePatch", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return MonitoringSettingsClientUpdatePatchPollerResponse{}, err
-	}
-	result.Poller = &MonitoringSettingsClientUpdatePatchPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdatePatch - Update the Monitoring Setting.
@@ -181,20 +177,16 @@ func (client *MonitoringSettingsClient) updatePatchCreateRequest(ctx context.Con
 // monitoringSettingResource - Parameters for the update operation
 // options - MonitoringSettingsClientBeginUpdatePutOptions contains the optional parameters for the MonitoringSettingsClient.BeginUpdatePut
 // method.
-func (client *MonitoringSettingsClient) BeginUpdatePut(ctx context.Context, resourceGroupName string, serviceName string, monitoringSettingResource MonitoringSettingResource, options *MonitoringSettingsClientBeginUpdatePutOptions) (MonitoringSettingsClientUpdatePutPollerResponse, error) {
-	resp, err := client.updatePut(ctx, resourceGroupName, serviceName, monitoringSettingResource, options)
-	if err != nil {
-		return MonitoringSettingsClientUpdatePutPollerResponse{}, err
+func (client *MonitoringSettingsClient) BeginUpdatePut(ctx context.Context, resourceGroupName string, serviceName string, monitoringSettingResource MonitoringSettingResource, options *MonitoringSettingsClientBeginUpdatePutOptions) (*armruntime.Poller[MonitoringSettingsClientUpdatePutResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updatePut(ctx, resourceGroupName, serviceName, monitoringSettingResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitoringSettingsClientUpdatePutResponse]("MonitoringSettingsClient.UpdatePut", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitoringSettingsClientUpdatePutResponse]("MonitoringSettingsClient.UpdatePut", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitoringSettingsClientUpdatePutPollerResponse{}
-	pt, err := armruntime.NewPoller("MonitoringSettingsClient.UpdatePut", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return MonitoringSettingsClientUpdatePutPollerResponse{}, err
-	}
-	result.Poller = &MonitoringSettingsClientUpdatePutPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdatePut - Update the Monitoring Setting.

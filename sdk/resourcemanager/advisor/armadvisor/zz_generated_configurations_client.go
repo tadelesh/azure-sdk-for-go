@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -164,13 +164,26 @@ func (client *ConfigurationsClient) createInSubscriptionHandleResponse(resp *htt
 // resourceGroup - The name of the Azure resource group.
 // options - ConfigurationsClientListByResourceGroupOptions contains the optional parameters for the ConfigurationsClient.ListByResourceGroup
 // method.
-func (client *ConfigurationsClient) ListByResourceGroup(resourceGroup string, options *ConfigurationsClientListByResourceGroupOptions) *ConfigurationsClientListByResourceGroupPager {
-	return &ConfigurationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
+func (client *ConfigurationsClient) ListByResourceGroup(resourceGroup string, options *ConfigurationsClientListByResourceGroupOptions) *runtime.Pager[ConfigurationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationsClientListByResourceGroupResponse]{
+		More: func(page ConfigurationsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationsClientListByResourceGroupResponse) (ConfigurationsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
+			if err != nil {
+				return ConfigurationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -208,16 +221,32 @@ func (client *ConfigurationsClient) listByResourceGroupHandleResponse(resp *http
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationsClientListBySubscriptionOptions contains the optional parameters for the ConfigurationsClient.ListBySubscription
 // method.
-func (client *ConfigurationsClient) ListBySubscription(options *ConfigurationsClientListBySubscriptionOptions) *ConfigurationsClientListBySubscriptionPager {
-	return &ConfigurationsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ConfigurationsClient) ListBySubscription(options *ConfigurationsClientListBySubscriptionOptions) *runtime.Pager[ConfigurationsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationsClientListBySubscriptionResponse]{
+		More: func(page ConfigurationsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConfigurationsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConfigurationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConfigurationsClientListBySubscriptionResponse) (ConfigurationsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConfigurationsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

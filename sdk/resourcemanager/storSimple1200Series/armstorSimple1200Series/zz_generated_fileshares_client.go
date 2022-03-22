@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewFileSharesClient(subscriptionID string, credential azcore.TokenCredentia
 // fileShare - The file share.
 // options - FileSharesClientBeginCreateOrUpdateOptions contains the optional parameters for the FileSharesClient.BeginCreateOrUpdate
 // method.
-func (client *FileSharesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, fileShare FileShare, options *FileSharesClientBeginCreateOrUpdateOptions) (FileSharesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, fileShare, options)
-	if err != nil {
-		return FileSharesClientCreateOrUpdatePollerResponse{}, err
+func (client *FileSharesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, fileShare FileShare, options *FileSharesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[FileSharesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, fileShare, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FileSharesClientCreateOrUpdateResponse]("FileSharesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FileSharesClientCreateOrUpdateResponse]("FileSharesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := FileSharesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FileSharesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return FileSharesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &FileSharesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the file share.
@@ -138,20 +134,16 @@ func (client *FileSharesClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - FileSharesClientBeginDeleteOptions contains the optional parameters for the FileSharesClient.BeginDelete method.
-func (client *FileSharesClient) BeginDelete(ctx context.Context, deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientBeginDeleteOptions) (FileSharesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
-	if err != nil {
-		return FileSharesClientDeletePollerResponse{}, err
+func (client *FileSharesClient) BeginDelete(ctx context.Context, deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientBeginDeleteOptions) (*armruntime.Poller[FileSharesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FileSharesClientDeleteResponse]("FileSharesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FileSharesClientDeleteResponse]("FileSharesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := FileSharesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("FileSharesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return FileSharesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &FileSharesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the file share.
@@ -285,13 +277,26 @@ func (client *FileSharesClient) getHandleResponse(resp *http.Response) (FileShar
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - FileSharesClientListByDeviceOptions contains the optional parameters for the FileSharesClient.ListByDevice method.
-func (client *FileSharesClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *FileSharesClientListByDeviceOptions) *FileSharesClientListByDevicePager {
-	return &FileSharesClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *FileSharesClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *FileSharesClientListByDeviceOptions) *runtime.Pager[FileSharesClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FileSharesClientListByDeviceResponse]{
+		More: func(page FileSharesClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FileSharesClientListByDeviceResponse) (FileSharesClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return FileSharesClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FileSharesClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FileSharesClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -341,13 +346,26 @@ func (client *FileSharesClient) listByDeviceHandleResponse(resp *http.Response) 
 // managerName - The manager name
 // options - FileSharesClientListByFileServerOptions contains the optional parameters for the FileSharesClient.ListByFileServer
 // method.
-func (client *FileSharesClient) ListByFileServer(deviceName string, fileServerName string, resourceGroupName string, managerName string, options *FileSharesClientListByFileServerOptions) *FileSharesClientListByFileServerPager {
-	return &FileSharesClientListByFileServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFileServerCreateRequest(ctx, deviceName, fileServerName, resourceGroupName, managerName, options)
+func (client *FileSharesClient) ListByFileServer(deviceName string, fileServerName string, resourceGroupName string, managerName string, options *FileSharesClientListByFileServerOptions) *runtime.Pager[FileSharesClientListByFileServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FileSharesClientListByFileServerResponse]{
+		More: func(page FileSharesClientListByFileServerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FileSharesClientListByFileServerResponse) (FileSharesClientListByFileServerResponse, error) {
+			req, err := client.listByFileServerCreateRequest(ctx, deviceName, fileServerName, resourceGroupName, managerName, options)
+			if err != nil {
+				return FileSharesClientListByFileServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FileSharesClientListByFileServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FileSharesClientListByFileServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFileServerHandleResponse(resp)
+		},
+	})
 }
 
 // listByFileServerCreateRequest creates the ListByFileServer request.
@@ -402,13 +420,26 @@ func (client *FileSharesClient) listByFileServerHandleResponse(resp *http.Respon
 // managerName - The manager name
 // options - FileSharesClientListMetricDefinitionOptions contains the optional parameters for the FileSharesClient.ListMetricDefinition
 // method.
-func (client *FileSharesClient) ListMetricDefinition(deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientListMetricDefinitionOptions) *FileSharesClientListMetricDefinitionPager {
-	return &FileSharesClientListMetricDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionCreateRequest(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
+func (client *FileSharesClient) ListMetricDefinition(deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientListMetricDefinitionOptions) *runtime.Pager[FileSharesClientListMetricDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FileSharesClientListMetricDefinitionResponse]{
+		More: func(page FileSharesClientListMetricDefinitionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FileSharesClientListMetricDefinitionResponse) (FileSharesClientListMetricDefinitionResponse, error) {
+			req, err := client.listMetricDefinitionCreateRequest(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
+			if err != nil {
+				return FileSharesClientListMetricDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FileSharesClientListMetricDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FileSharesClientListMetricDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionCreateRequest creates the ListMetricDefinition request.
@@ -466,13 +497,26 @@ func (client *FileSharesClient) listMetricDefinitionHandleResponse(resp *http.Re
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - FileSharesClientListMetricsOptions contains the optional parameters for the FileSharesClient.ListMetrics method.
-func (client *FileSharesClient) ListMetrics(deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientListMetricsOptions) *FileSharesClientListMetricsPager {
-	return &FileSharesClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
+func (client *FileSharesClient) ListMetrics(deviceName string, fileServerName string, shareName string, resourceGroupName string, managerName string, options *FileSharesClientListMetricsOptions) *runtime.Pager[FileSharesClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FileSharesClientListMetricsResponse]{
+		More: func(page FileSharesClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FileSharesClientListMetricsResponse) (FileSharesClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, deviceName, fileServerName, shareName, resourceGroupName, managerName, options)
+			if err != nil {
+				return FileSharesClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FileSharesClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FileSharesClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

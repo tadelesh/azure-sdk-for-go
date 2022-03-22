@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,20 +63,16 @@ func NewDatastoresClient(subscriptionID string, credential azcore.TokenCredentia
 // resourceGroupName - The Resource Group Name.
 // datastoreName - Name of the datastore.
 // options - DatastoresClientBeginCreateOptions contains the optional parameters for the DatastoresClient.BeginCreate method.
-func (client *DatastoresClient) BeginCreate(ctx context.Context, resourceGroupName string, datastoreName string, options *DatastoresClientBeginCreateOptions) (DatastoresClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, datastoreName, options)
-	if err != nil {
-		return DatastoresClientCreatePollerResponse{}, err
+func (client *DatastoresClient) BeginCreate(ctx context.Context, resourceGroupName string, datastoreName string, options *DatastoresClientBeginCreateOptions) (*armruntime.Poller[DatastoresClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, datastoreName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatastoresClientCreateResponse]("DatastoresClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatastoresClientCreateResponse]("DatastoresClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := DatastoresClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("DatastoresClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DatastoresClientCreatePollerResponse{}, err
-	}
-	result.Poller = &DatastoresClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update datastore.
@@ -130,20 +126,16 @@ func (client *DatastoresClient) createCreateRequest(ctx context.Context, resourc
 // resourceGroupName - The Resource Group Name.
 // datastoreName - Name of the datastore.
 // options - DatastoresClientBeginDeleteOptions contains the optional parameters for the DatastoresClient.BeginDelete method.
-func (client *DatastoresClient) BeginDelete(ctx context.Context, resourceGroupName string, datastoreName string, options *DatastoresClientBeginDeleteOptions) (DatastoresClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, datastoreName, options)
-	if err != nil {
-		return DatastoresClientDeletePollerResponse{}, err
+func (client *DatastoresClient) BeginDelete(ctx context.Context, resourceGroupName string, datastoreName string, options *DatastoresClientBeginDeleteOptions) (*armruntime.Poller[DatastoresClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, datastoreName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DatastoresClientDeleteResponse]("DatastoresClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DatastoresClientDeleteResponse]("DatastoresClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DatastoresClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DatastoresClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DatastoresClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DatastoresClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements datastore DELETE method.
@@ -250,16 +242,32 @@ func (client *DatastoresClient) getHandleResponse(resp *http.Response) (Datastor
 // List - List of datastores in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DatastoresClientListOptions contains the optional parameters for the DatastoresClient.List method.
-func (client *DatastoresClient) List(options *DatastoresClientListOptions) *DatastoresClientListPager {
-	return &DatastoresClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DatastoresClient) List(options *DatastoresClientListOptions) *runtime.Pager[DatastoresClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatastoresClientListResponse]{
+		More: func(page DatastoresClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatastoresClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatastoresList.NextLink)
+		Fetcher: func(ctx context.Context, page *DatastoresClientListResponse) (DatastoresClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatastoresClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatastoresClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatastoresClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -294,16 +302,32 @@ func (client *DatastoresClient) listHandleResponse(resp *http.Response) (Datasto
 // resourceGroupName - The Resource Group Name.
 // options - DatastoresClientListByResourceGroupOptions contains the optional parameters for the DatastoresClient.ListByResourceGroup
 // method.
-func (client *DatastoresClient) ListByResourceGroup(resourceGroupName string, options *DatastoresClientListByResourceGroupOptions) *DatastoresClientListByResourceGroupPager {
-	return &DatastoresClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DatastoresClient) ListByResourceGroup(resourceGroupName string, options *DatastoresClientListByResourceGroupOptions) *runtime.Pager[DatastoresClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatastoresClientListByResourceGroupResponse]{
+		More: func(page DatastoresClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatastoresClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatastoresList.NextLink)
+		Fetcher: func(ctx context.Context, page *DatastoresClientListByResourceGroupResponse) (DatastoresClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatastoresClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatastoresClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatastoresClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

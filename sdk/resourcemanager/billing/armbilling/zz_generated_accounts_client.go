@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -98,16 +98,32 @@ func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsCl
 // List - Lists the billing accounts that a user has access to.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountsClientListOptions contains the optional parameters for the AccountsClient.List method.
-func (client *AccountsClient) List(options *AccountsClientListOptions) *AccountsClientListPager {
-	return &AccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AccountsClient) List(options *AccountsClientListOptions) *runtime.Pager[AccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListResponse]{
+		More: func(page AccountsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListResponse) (AccountsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -142,16 +158,32 @@ func (client *AccountsClient) listHandleResponse(resp *http.Response) (AccountsC
 // billingAccountName - The ID that uniquely identifies a billing account.
 // options - AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionOptions contains the optional parameters for the
 // AccountsClient.ListInvoiceSectionsByCreateSubscriptionPermission method.
-func (client *AccountsClient) ListInvoiceSectionsByCreateSubscriptionPermission(billingAccountName string, options *AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionOptions) *AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager {
-	return &AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listInvoiceSectionsByCreateSubscriptionPermissionCreateRequest(ctx, billingAccountName, options)
+func (client *AccountsClient) ListInvoiceSectionsByCreateSubscriptionPermission(billingAccountName string, options *AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionOptions) *runtime.Pager[AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse]{
+		More: func(page AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvoiceSectionListWithCreateSubPermissionResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse) (AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listInvoiceSectionsByCreateSubscriptionPermissionCreateRequest(ctx, billingAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listInvoiceSectionsByCreateSubscriptionPermissionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listInvoiceSectionsByCreateSubscriptionPermissionCreateRequest creates the ListInvoiceSectionsByCreateSubscriptionPermission request.
@@ -187,20 +219,16 @@ func (client *AccountsClient) listInvoiceSectionsByCreateSubscriptionPermissionH
 // billingAccountName - The ID that uniquely identifies a billing account.
 // parameters - Request parameters that are provided to the update billing account operation.
 // options - AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
-func (client *AccountsClient) BeginUpdate(ctx context.Context, billingAccountName string, parameters AccountUpdateRequest, options *AccountsClientBeginUpdateOptions) (AccountsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, billingAccountName, parameters, options)
-	if err != nil {
-		return AccountsClientUpdatePollerResponse{}, err
+func (client *AccountsClient) BeginUpdate(ctx context.Context, billingAccountName string, parameters AccountUpdateRequest, options *AccountsClientBeginUpdateOptions) (*armruntime.Poller[AccountsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, billingAccountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientUpdateResponse]("AccountsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientUpdateResponse]("AccountsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AccountsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AccountsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the properties of a billing account. Currently, displayName and address can be updated. The operation

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -121,20 +121,16 @@ func (client *ScriptsClient) checkNameAvailabilityHandleResponse(resp *http.Resp
 // parameters - The Kusto Script parameters contains the KQL to run.
 // options - ScriptsClientBeginCreateOrUpdateOptions contains the optional parameters for the ScriptsClient.BeginCreateOrUpdate
 // method.
-func (client *ScriptsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, parameters Script, options *ScriptsClientBeginCreateOrUpdateOptions) (ScriptsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, scriptName, parameters, options)
-	if err != nil {
-		return ScriptsClientCreateOrUpdatePollerResponse{}, err
+func (client *ScriptsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, parameters Script, options *ScriptsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ScriptsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, databaseName, scriptName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScriptsClientCreateOrUpdateResponse]("ScriptsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScriptsClientCreateOrUpdateResponse]("ScriptsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ScriptsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ScriptsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ScriptsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ScriptsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a Kusto database script.
@@ -195,20 +191,16 @@ func (client *ScriptsClient) createOrUpdateCreateRequest(ctx context.Context, re
 // databaseName - The name of the database in the Kusto cluster.
 // scriptName - The name of the Kusto database script.
 // options - ScriptsClientBeginDeleteOptions contains the optional parameters for the ScriptsClient.BeginDelete method.
-func (client *ScriptsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, options *ScriptsClientBeginDeleteOptions) (ScriptsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, scriptName, options)
-	if err != nil {
-		return ScriptsClientDeletePollerResponse{}, err
+func (client *ScriptsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, options *ScriptsClientBeginDeleteOptions) (*armruntime.Poller[ScriptsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, databaseName, scriptName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScriptsClientDeleteResponse]("ScriptsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScriptsClientDeleteResponse]("ScriptsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ScriptsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ScriptsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ScriptsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ScriptsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Kusto principalAssignment.
@@ -333,13 +325,26 @@ func (client *ScriptsClient) getHandleResponse(resp *http.Response) (ScriptsClie
 // clusterName - The name of the Kusto cluster.
 // databaseName - The name of the database in the Kusto cluster.
 // options - ScriptsClientListByDatabaseOptions contains the optional parameters for the ScriptsClient.ListByDatabase method.
-func (client *ScriptsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *ScriptsClientListByDatabaseOptions) *ScriptsClientListByDatabasePager {
-	return &ScriptsClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+func (client *ScriptsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *ScriptsClientListByDatabaseOptions) *runtime.Pager[ScriptsClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScriptsClientListByDatabaseResponse]{
+		More: func(page ScriptsClientListByDatabaseResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ScriptsClientListByDatabaseResponse) (ScriptsClientListByDatabaseResponse, error) {
+			req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+			if err != nil {
+				return ScriptsClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScriptsClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScriptsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -389,20 +394,16 @@ func (client *ScriptsClient) listByDatabaseHandleResponse(resp *http.Response) (
 // scriptName - The name of the Kusto database script.
 // parameters - The Kusto Script parameters contains to the KQL to run.
 // options - ScriptsClientBeginUpdateOptions contains the optional parameters for the ScriptsClient.BeginUpdate method.
-func (client *ScriptsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, parameters Script, options *ScriptsClientBeginUpdateOptions) (ScriptsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, scriptName, parameters, options)
-	if err != nil {
-		return ScriptsClientUpdatePollerResponse{}, err
+func (client *ScriptsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, scriptName string, parameters Script, options *ScriptsClientBeginUpdateOptions) (*armruntime.Poller[ScriptsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, databaseName, scriptName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScriptsClientUpdateResponse]("ScriptsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScriptsClientUpdateResponse]("ScriptsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ScriptsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ScriptsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ScriptsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ScriptsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a database script.

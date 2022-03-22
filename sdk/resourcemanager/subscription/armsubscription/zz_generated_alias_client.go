@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,20 +52,16 @@ func NewAliasClient(credential azcore.TokenCredential, options *arm.ClientOption
 // name and this doesn’t have any other lifecycle need beyond the request for subscription
 // creation.
 // options - AliasClientBeginCreateOptions contains the optional parameters for the AliasClient.BeginCreate method.
-func (client *AliasClient) BeginCreate(ctx context.Context, aliasName string, body PutAliasRequest, options *AliasClientBeginCreateOptions) (AliasClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, aliasName, body, options)
-	if err != nil {
-		return AliasClientCreatePollerResponse{}, err
+func (client *AliasClient) BeginCreate(ctx context.Context, aliasName string, body PutAliasRequest, options *AliasClientBeginCreateOptions) (*armruntime.Poller[AliasClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, aliasName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AliasClientCreateResponse]("AliasClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AliasClientCreateResponse]("AliasClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AliasClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AliasClient.Create", "", resp, client.pl)
-	if err != nil {
-		return AliasClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AliasClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Alias Subscription.

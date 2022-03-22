@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewDicomServicesClient(subscriptionID string, credential azcore.TokenCreden
 // dicomservice - The parameters for creating or updating a Dicom Service resource.
 // options - DicomServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the DicomServicesClient.BeginCreateOrUpdate
 // method.
-func (client *DicomServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, dicomServiceName string, dicomservice DicomService, options *DicomServicesClientBeginCreateOrUpdateOptions) (DicomServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, dicomServiceName, dicomservice, options)
-	if err != nil {
-		return DicomServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *DicomServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, dicomServiceName string, dicomservice DicomService, options *DicomServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DicomServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, dicomServiceName, dicomservice, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DicomServicesClientCreateOrUpdateResponse]("DicomServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DicomServicesClientCreateOrUpdateResponse]("DicomServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DicomServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DicomServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DicomServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DicomServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a DICOM Service resource with the specified parameters.
@@ -127,20 +123,16 @@ func (client *DicomServicesClient) createOrUpdateCreateRequest(ctx context.Conte
 // workspaceName - The name of workspace resource.
 // options - DicomServicesClientBeginDeleteOptions contains the optional parameters for the DicomServicesClient.BeginDelete
 // method.
-func (client *DicomServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, dicomServiceName string, workspaceName string, options *DicomServicesClientBeginDeleteOptions) (DicomServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, dicomServiceName, workspaceName, options)
-	if err != nil {
-		return DicomServicesClientDeletePollerResponse{}, err
+func (client *DicomServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, dicomServiceName string, workspaceName string, options *DicomServicesClientBeginDeleteOptions) (*armruntime.Poller[DicomServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, dicomServiceName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DicomServicesClientDeleteResponse]("DicomServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DicomServicesClientDeleteResponse]("DicomServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DicomServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DicomServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DicomServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DicomServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a DICOM Service.
@@ -256,16 +248,32 @@ func (client *DicomServicesClient) getHandleResponse(resp *http.Response) (Dicom
 // workspaceName - The name of workspace resource.
 // options - DicomServicesClientListByWorkspaceOptions contains the optional parameters for the DicomServicesClient.ListByWorkspace
 // method.
-func (client *DicomServicesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *DicomServicesClientListByWorkspaceOptions) *DicomServicesClientListByWorkspacePager {
-	return &DicomServicesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *DicomServicesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *DicomServicesClientListByWorkspaceOptions) *runtime.Pager[DicomServicesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DicomServicesClientListByWorkspaceResponse]{
+		More: func(page DicomServicesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DicomServicesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DicomServiceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DicomServicesClientListByWorkspaceResponse) (DicomServicesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DicomServicesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DicomServicesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DicomServicesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -311,20 +319,16 @@ func (client *DicomServicesClient) listByWorkspaceHandleResponse(resp *http.Resp
 // dicomservicePatchResource - The parameters for updating a Dicom Service.
 // options - DicomServicesClientBeginUpdateOptions contains the optional parameters for the DicomServicesClient.BeginUpdate
 // method.
-func (client *DicomServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, dicomServiceName string, workspaceName string, dicomservicePatchResource DicomServicePatchResource, options *DicomServicesClientBeginUpdateOptions) (DicomServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, dicomServiceName, workspaceName, dicomservicePatchResource, options)
-	if err != nil {
-		return DicomServicesClientUpdatePollerResponse{}, err
+func (client *DicomServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, dicomServiceName string, workspaceName string, dicomservicePatchResource DicomServicePatchResource, options *DicomServicesClientBeginUpdateOptions) (*armruntime.Poller[DicomServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, dicomServiceName, workspaceName, dicomservicePatchResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DicomServicesClientUpdateResponse]("DicomServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DicomServicesClientUpdateResponse]("DicomServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DicomServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DicomServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DicomServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DicomServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch DICOM Service details.

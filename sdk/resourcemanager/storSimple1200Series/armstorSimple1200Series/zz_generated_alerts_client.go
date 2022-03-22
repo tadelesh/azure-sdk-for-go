@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -101,16 +101,32 @@ func (client *AlertsClient) clearCreateRequest(ctx context.Context, resourceGrou
 // resourceGroupName - The resource group name
 // managerName - The manager name
 // options - AlertsClientListByManagerOptions contains the optional parameters for the AlertsClient.ListByManager method.
-func (client *AlertsClient) ListByManager(resourceGroupName string, managerName string, options *AlertsClientListByManagerOptions) *AlertsClientListByManagerPager {
-	return &AlertsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *AlertsClient) ListByManager(resourceGroupName string, managerName string, options *AlertsClientListByManagerOptions) *runtime.Pager[AlertsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientListByManagerResponse]{
+		More: func(page AlertsClientListByManagerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientListByManagerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientListByManagerResponse) (AlertsClientListByManagerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

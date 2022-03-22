@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -344,16 +344,32 @@ func (client *APIIssueCommentClient) getEntityTagHandleResponse(resp *http.Respo
 // issueID - Issue identifier. Must be unique in the current API Management service instance.
 // options - APIIssueCommentClientListByServiceOptions contains the optional parameters for the APIIssueCommentClient.ListByService
 // method.
-func (client *APIIssueCommentClient) ListByService(resourceGroupName string, serviceName string, apiID string, issueID string, options *APIIssueCommentClientListByServiceOptions) *APIIssueCommentClientListByServicePager {
-	return &APIIssueCommentClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, issueID, options)
+func (client *APIIssueCommentClient) ListByService(resourceGroupName string, serviceName string, apiID string, issueID string, options *APIIssueCommentClientListByServiceOptions) *runtime.Pager[APIIssueCommentClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIIssueCommentClientListByServiceResponse]{
+		More: func(page APIIssueCommentClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIIssueCommentClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IssueCommentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIIssueCommentClientListByServiceResponse) (APIIssueCommentClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, issueID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIIssueCommentClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIIssueCommentClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIIssueCommentClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

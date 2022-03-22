@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -107,16 +107,32 @@ func (client *DeletedWebAppsClient) getDeletedWebAppByLocationHandleResponse(res
 // List - Description for Get all deleted apps for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DeletedWebAppsClientListOptions contains the optional parameters for the DeletedWebAppsClient.List method.
-func (client *DeletedWebAppsClient) List(options *DeletedWebAppsClientListOptions) *DeletedWebAppsClientListPager {
-	return &DeletedWebAppsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DeletedWebAppsClient) List(options *DeletedWebAppsClientListOptions) *runtime.Pager[DeletedWebAppsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedWebAppsClientListResponse]{
+		More: func(page DeletedWebAppsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedWebAppsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeletedWebAppCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedWebAppsClientListResponse) (DeletedWebAppsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedWebAppsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedWebAppsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedWebAppsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -150,16 +166,32 @@ func (client *DeletedWebAppsClient) listHandleResponse(resp *http.Response) (Del
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DeletedWebAppsClientListByLocationOptions contains the optional parameters for the DeletedWebAppsClient.ListByLocation
 // method.
-func (client *DeletedWebAppsClient) ListByLocation(location string, options *DeletedWebAppsClientListByLocationOptions) *DeletedWebAppsClientListByLocationPager {
-	return &DeletedWebAppsClientListByLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLocationCreateRequest(ctx, location, options)
+func (client *DeletedWebAppsClient) ListByLocation(location string, options *DeletedWebAppsClientListByLocationOptions) *runtime.Pager[DeletedWebAppsClientListByLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeletedWebAppsClientListByLocationResponse]{
+		More: func(page DeletedWebAppsClientListByLocationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeletedWebAppsClientListByLocationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeletedWebAppCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DeletedWebAppsClientListByLocationResponse) (DeletedWebAppsClientListByLocationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByLocationCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeletedWebAppsClientListByLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeletedWebAppsClientListByLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeletedWebAppsClientListByLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLocationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -220,7 +220,8 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientCreateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Create
@@ -336,7 +337,8 @@ type PrivateLinkServiceProxy struct {
 // PrivateLinkServiceResourceOperationResultsClientBeginGetOptions contains the optional parameters for the PrivateLinkServiceResourceOperationResultsClient.BeginGet
 // method.
 type PrivateLinkServiceResourceOperationResultsClientBeginGetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientListByResourceGroupOptions contains the optional parameters for the PrivateLinkServicesClient.ListByResourceGroup

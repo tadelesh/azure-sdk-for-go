@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -501,13 +501,26 @@ func (client *ManagersClient) getPublicEncryptionKeyHandleResponse(resp *http.Re
 // List - Retrieves all the managers in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagersClientListOptions contains the optional parameters for the ManagersClient.List method.
-func (client *ManagersClient) List(options *ManagersClientListOptions) *ManagersClientListPager {
-	return &ManagersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ManagersClient) List(options *ManagersClientListOptions) *runtime.Pager[ManagersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagersClientListResponse]{
+		More: func(page ManagersClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagersClientListResponse) (ManagersClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return ManagersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -539,13 +552,26 @@ func (client *ManagersClient) listHandleResponse(resp *http.Response) (ManagersC
 // resourceGroupName - The resource group name
 // options - ManagersClientListByResourceGroupOptions contains the optional parameters for the ManagersClient.ListByResourceGroup
 // method.
-func (client *ManagersClient) ListByResourceGroup(resourceGroupName string, options *ManagersClientListByResourceGroupOptions) *ManagersClientListByResourceGroupPager {
-	return &ManagersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagersClient) ListByResourceGroup(resourceGroupName string, options *ManagersClientListByResourceGroupOptions) *runtime.Pager[ManagersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagersClientListByResourceGroupResponse]{
+		More: func(page ManagersClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagersClientListByResourceGroupResponse) (ManagersClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ManagersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -579,13 +605,26 @@ func (client *ManagersClient) listByResourceGroupHandleResponse(resp *http.Respo
 // managerName - The manager name
 // options - ManagersClientListFeatureSupportStatusOptions contains the optional parameters for the ManagersClient.ListFeatureSupportStatus
 // method.
-func (client *ManagersClient) ListFeatureSupportStatus(resourceGroupName string, managerName string, options *ManagersClientListFeatureSupportStatusOptions) *ManagersClientListFeatureSupportStatusPager {
-	return &ManagersClientListFeatureSupportStatusPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listFeatureSupportStatusCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *ManagersClient) ListFeatureSupportStatus(resourceGroupName string, managerName string, options *ManagersClientListFeatureSupportStatusOptions) *runtime.Pager[ManagersClientListFeatureSupportStatusResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagersClientListFeatureSupportStatusResponse]{
+		More: func(page ManagersClientListFeatureSupportStatusResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagersClientListFeatureSupportStatusResponse) (ManagersClientListFeatureSupportStatusResponse, error) {
+			req, err := client.listFeatureSupportStatusCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return ManagersClientListFeatureSupportStatusResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagersClientListFeatureSupportStatusResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagersClientListFeatureSupportStatusResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listFeatureSupportStatusHandleResponse(resp)
+		},
+	})
 }
 
 // listFeatureSupportStatusCreateRequest creates the ListFeatureSupportStatus request.
@@ -623,13 +662,26 @@ func (client *ManagersClient) listFeatureSupportStatusHandleResponse(resp *http.
 // managerName - The manager name
 // options - ManagersClientListMetricDefinitionOptions contains the optional parameters for the ManagersClient.ListMetricDefinition
 // method.
-func (client *ManagersClient) ListMetricDefinition(resourceGroupName string, managerName string, options *ManagersClientListMetricDefinitionOptions) *ManagersClientListMetricDefinitionPager {
-	return &ManagersClientListMetricDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *ManagersClient) ListMetricDefinition(resourceGroupName string, managerName string, options *ManagersClientListMetricDefinitionOptions) *runtime.Pager[ManagersClientListMetricDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagersClientListMetricDefinitionResponse]{
+		More: func(page ManagersClientListMetricDefinitionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagersClientListMetricDefinitionResponse) (ManagersClientListMetricDefinitionResponse, error) {
+			req, err := client.listMetricDefinitionCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return ManagersClientListMetricDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagersClientListMetricDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagersClientListMetricDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionCreateRequest creates the ListMetricDefinition request.
@@ -664,13 +716,26 @@ func (client *ManagersClient) listMetricDefinitionHandleResponse(resp *http.Resp
 // managerName - The manager name
 // filter - OData Filter options
 // options - ManagersClientListMetricsOptions contains the optional parameters for the ManagersClient.ListMetrics method.
-func (client *ManagersClient) ListMetrics(resourceGroupName string, managerName string, filter string, options *ManagersClientListMetricsOptions) *ManagersClientListMetricsPager {
-	return &ManagersClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, managerName, filter, options)
+func (client *ManagersClient) ListMetrics(resourceGroupName string, managerName string, filter string, options *ManagersClientListMetricsOptions) *runtime.Pager[ManagersClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagersClientListMetricsResponse]{
+		More: func(page ManagersClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagersClientListMetricsResponse) (ManagersClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, managerName, filter, options)
+			if err != nil {
+				return ManagersClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagersClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagersClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

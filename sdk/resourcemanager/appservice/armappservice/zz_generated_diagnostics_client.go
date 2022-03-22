@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -982,16 +982,32 @@ func (client *DiagnosticsClient) getSiteDiagnosticCategorySlotHandleResponse(res
 // name - Site Name
 // options - DiagnosticsClientListHostingEnvironmentDetectorResponsesOptions contains the optional parameters for the DiagnosticsClient.ListHostingEnvironmentDetectorResponses
 // method.
-func (client *DiagnosticsClient) ListHostingEnvironmentDetectorResponses(resourceGroupName string, name string, options *DiagnosticsClientListHostingEnvironmentDetectorResponsesOptions) *DiagnosticsClientListHostingEnvironmentDetectorResponsesPager {
-	return &DiagnosticsClientListHostingEnvironmentDetectorResponsesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listHostingEnvironmentDetectorResponsesCreateRequest(ctx, resourceGroupName, name, options)
+func (client *DiagnosticsClient) ListHostingEnvironmentDetectorResponses(resourceGroupName string, name string, options *DiagnosticsClientListHostingEnvironmentDetectorResponsesOptions) *runtime.Pager[DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse]{
+		More: func(page DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DetectorResponseCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse) (DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listHostingEnvironmentDetectorResponsesCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListHostingEnvironmentDetectorResponsesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHostingEnvironmentDetectorResponsesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listHostingEnvironmentDetectorResponsesCreateRequest creates the ListHostingEnvironmentDetectorResponses request.
@@ -1036,16 +1052,32 @@ func (client *DiagnosticsClient) listHostingEnvironmentDetectorResponsesHandleRe
 // diagnosticCategory - Diagnostic Category
 // options - DiagnosticsClientListSiteAnalysesOptions contains the optional parameters for the DiagnosticsClient.ListSiteAnalyses
 // method.
-func (client *DiagnosticsClient) ListSiteAnalyses(resourceGroupName string, siteName string, diagnosticCategory string, options *DiagnosticsClientListSiteAnalysesOptions) *DiagnosticsClientListSiteAnalysesPager {
-	return &DiagnosticsClientListSiteAnalysesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteAnalysesCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, options)
+func (client *DiagnosticsClient) ListSiteAnalyses(resourceGroupName string, siteName string, diagnosticCategory string, options *DiagnosticsClientListSiteAnalysesOptions) *runtime.Pager[DiagnosticsClientListSiteAnalysesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteAnalysesResponse]{
+		More: func(page DiagnosticsClientListSiteAnalysesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteAnalysesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticAnalysisCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteAnalysesResponse) (DiagnosticsClientListSiteAnalysesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteAnalysesCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteAnalysesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteAnalysesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteAnalysesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteAnalysesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteAnalysesCreateRequest creates the ListSiteAnalyses request.
@@ -1095,16 +1127,32 @@ func (client *DiagnosticsClient) listSiteAnalysesHandleResponse(resp *http.Respo
 // slot - Slot Name
 // options - DiagnosticsClientListSiteAnalysesSlotOptions contains the optional parameters for the DiagnosticsClient.ListSiteAnalysesSlot
 // method.
-func (client *DiagnosticsClient) ListSiteAnalysesSlot(resourceGroupName string, siteName string, diagnosticCategory string, slot string, options *DiagnosticsClientListSiteAnalysesSlotOptions) *DiagnosticsClientListSiteAnalysesSlotPager {
-	return &DiagnosticsClientListSiteAnalysesSlotPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteAnalysesSlotCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, slot, options)
+func (client *DiagnosticsClient) ListSiteAnalysesSlot(resourceGroupName string, siteName string, diagnosticCategory string, slot string, options *DiagnosticsClientListSiteAnalysesSlotOptions) *runtime.Pager[DiagnosticsClientListSiteAnalysesSlotResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteAnalysesSlotResponse]{
+		More: func(page DiagnosticsClientListSiteAnalysesSlotResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteAnalysesSlotResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticAnalysisCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteAnalysesSlotResponse) (DiagnosticsClientListSiteAnalysesSlotResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteAnalysesSlotCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, slot, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteAnalysesSlotResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteAnalysesSlotResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteAnalysesSlotResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteAnalysesSlotHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteAnalysesSlotCreateRequest creates the ListSiteAnalysesSlot request.
@@ -1156,16 +1204,32 @@ func (client *DiagnosticsClient) listSiteAnalysesSlotHandleResponse(resp *http.R
 // siteName - Site Name
 // options - DiagnosticsClientListSiteDetectorResponsesOptions contains the optional parameters for the DiagnosticsClient.ListSiteDetectorResponses
 // method.
-func (client *DiagnosticsClient) ListSiteDetectorResponses(resourceGroupName string, siteName string, options *DiagnosticsClientListSiteDetectorResponsesOptions) *DiagnosticsClientListSiteDetectorResponsesPager {
-	return &DiagnosticsClientListSiteDetectorResponsesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDetectorResponsesCreateRequest(ctx, resourceGroupName, siteName, options)
+func (client *DiagnosticsClient) ListSiteDetectorResponses(resourceGroupName string, siteName string, options *DiagnosticsClientListSiteDetectorResponsesOptions) *runtime.Pager[DiagnosticsClientListSiteDetectorResponsesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDetectorResponsesResponse]{
+		More: func(page DiagnosticsClientListSiteDetectorResponsesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDetectorResponsesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DetectorResponseCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDetectorResponsesResponse) (DiagnosticsClientListSiteDetectorResponsesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDetectorResponsesCreateRequest(ctx, resourceGroupName, siteName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorResponsesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorResponsesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDetectorResponsesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDetectorResponsesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDetectorResponsesCreateRequest creates the ListSiteDetectorResponses request.
@@ -1210,16 +1274,32 @@ func (client *DiagnosticsClient) listSiteDetectorResponsesHandleResponse(resp *h
 // slot - Slot Name
 // options - DiagnosticsClientListSiteDetectorResponsesSlotOptions contains the optional parameters for the DiagnosticsClient.ListSiteDetectorResponsesSlot
 // method.
-func (client *DiagnosticsClient) ListSiteDetectorResponsesSlot(resourceGroupName string, siteName string, slot string, options *DiagnosticsClientListSiteDetectorResponsesSlotOptions) *DiagnosticsClientListSiteDetectorResponsesSlotPager {
-	return &DiagnosticsClientListSiteDetectorResponsesSlotPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDetectorResponsesSlotCreateRequest(ctx, resourceGroupName, siteName, slot, options)
+func (client *DiagnosticsClient) ListSiteDetectorResponsesSlot(resourceGroupName string, siteName string, slot string, options *DiagnosticsClientListSiteDetectorResponsesSlotOptions) *runtime.Pager[DiagnosticsClientListSiteDetectorResponsesSlotResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDetectorResponsesSlotResponse]{
+		More: func(page DiagnosticsClientListSiteDetectorResponsesSlotResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDetectorResponsesSlotResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DetectorResponseCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDetectorResponsesSlotResponse) (DiagnosticsClientListSiteDetectorResponsesSlotResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDetectorResponsesSlotCreateRequest(ctx, resourceGroupName, siteName, slot, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorResponsesSlotResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorResponsesSlotResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDetectorResponsesSlotResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDetectorResponsesSlotHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDetectorResponsesSlotCreateRequest creates the ListSiteDetectorResponsesSlot request.
@@ -1268,16 +1348,32 @@ func (client *DiagnosticsClient) listSiteDetectorResponsesSlotHandleResponse(res
 // diagnosticCategory - Diagnostic Category
 // options - DiagnosticsClientListSiteDetectorsOptions contains the optional parameters for the DiagnosticsClient.ListSiteDetectors
 // method.
-func (client *DiagnosticsClient) ListSiteDetectors(resourceGroupName string, siteName string, diagnosticCategory string, options *DiagnosticsClientListSiteDetectorsOptions) *DiagnosticsClientListSiteDetectorsPager {
-	return &DiagnosticsClientListSiteDetectorsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDetectorsCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, options)
+func (client *DiagnosticsClient) ListSiteDetectors(resourceGroupName string, siteName string, diagnosticCategory string, options *DiagnosticsClientListSiteDetectorsOptions) *runtime.Pager[DiagnosticsClientListSiteDetectorsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDetectorsResponse]{
+		More: func(page DiagnosticsClientListSiteDetectorsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDetectorsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticDetectorCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDetectorsResponse) (DiagnosticsClientListSiteDetectorsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDetectorsCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDetectorsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDetectorsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDetectorsCreateRequest creates the ListSiteDetectors request.
@@ -1327,16 +1423,32 @@ func (client *DiagnosticsClient) listSiteDetectorsHandleResponse(resp *http.Resp
 // slot - Slot Name
 // options - DiagnosticsClientListSiteDetectorsSlotOptions contains the optional parameters for the DiagnosticsClient.ListSiteDetectorsSlot
 // method.
-func (client *DiagnosticsClient) ListSiteDetectorsSlot(resourceGroupName string, siteName string, diagnosticCategory string, slot string, options *DiagnosticsClientListSiteDetectorsSlotOptions) *DiagnosticsClientListSiteDetectorsSlotPager {
-	return &DiagnosticsClientListSiteDetectorsSlotPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDetectorsSlotCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, slot, options)
+func (client *DiagnosticsClient) ListSiteDetectorsSlot(resourceGroupName string, siteName string, diagnosticCategory string, slot string, options *DiagnosticsClientListSiteDetectorsSlotOptions) *runtime.Pager[DiagnosticsClientListSiteDetectorsSlotResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDetectorsSlotResponse]{
+		More: func(page DiagnosticsClientListSiteDetectorsSlotResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDetectorsSlotResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticDetectorCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDetectorsSlotResponse) (DiagnosticsClientListSiteDetectorsSlotResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDetectorsSlotCreateRequest(ctx, resourceGroupName, siteName, diagnosticCategory, slot, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorsSlotResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDetectorsSlotResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDetectorsSlotResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDetectorsSlotHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDetectorsSlotCreateRequest creates the ListSiteDetectorsSlot request.
@@ -1388,16 +1500,32 @@ func (client *DiagnosticsClient) listSiteDetectorsSlotHandleResponse(resp *http.
 // siteName - Site Name
 // options - DiagnosticsClientListSiteDiagnosticCategoriesOptions contains the optional parameters for the DiagnosticsClient.ListSiteDiagnosticCategories
 // method.
-func (client *DiagnosticsClient) ListSiteDiagnosticCategories(resourceGroupName string, siteName string, options *DiagnosticsClientListSiteDiagnosticCategoriesOptions) *DiagnosticsClientListSiteDiagnosticCategoriesPager {
-	return &DiagnosticsClientListSiteDiagnosticCategoriesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDiagnosticCategoriesCreateRequest(ctx, resourceGroupName, siteName, options)
+func (client *DiagnosticsClient) ListSiteDiagnosticCategories(resourceGroupName string, siteName string, options *DiagnosticsClientListSiteDiagnosticCategoriesOptions) *runtime.Pager[DiagnosticsClientListSiteDiagnosticCategoriesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDiagnosticCategoriesResponse]{
+		More: func(page DiagnosticsClientListSiteDiagnosticCategoriesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDiagnosticCategoriesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticCategoryCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDiagnosticCategoriesResponse) (DiagnosticsClientListSiteDiagnosticCategoriesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDiagnosticCategoriesCreateRequest(ctx, resourceGroupName, siteName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDiagnosticCategoriesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDiagnosticCategoriesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDiagnosticCategoriesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDiagnosticCategoriesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDiagnosticCategoriesCreateRequest creates the ListSiteDiagnosticCategories request.
@@ -1442,16 +1570,32 @@ func (client *DiagnosticsClient) listSiteDiagnosticCategoriesHandleResponse(resp
 // slot - Slot Name
 // options - DiagnosticsClientListSiteDiagnosticCategoriesSlotOptions contains the optional parameters for the DiagnosticsClient.ListSiteDiagnosticCategoriesSlot
 // method.
-func (client *DiagnosticsClient) ListSiteDiagnosticCategoriesSlot(resourceGroupName string, siteName string, slot string, options *DiagnosticsClientListSiteDiagnosticCategoriesSlotOptions) *DiagnosticsClientListSiteDiagnosticCategoriesSlotPager {
-	return &DiagnosticsClientListSiteDiagnosticCategoriesSlotPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteDiagnosticCategoriesSlotCreateRequest(ctx, resourceGroupName, siteName, slot, options)
+func (client *DiagnosticsClient) ListSiteDiagnosticCategoriesSlot(resourceGroupName string, siteName string, slot string, options *DiagnosticsClientListSiteDiagnosticCategoriesSlotOptions) *runtime.Pager[DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse]{
+		More: func(page DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticCategoryCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse) (DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteDiagnosticCategoriesSlotCreateRequest(ctx, resourceGroupName, siteName, slot, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiagnosticsClientListSiteDiagnosticCategoriesSlotResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteDiagnosticCategoriesSlotHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteDiagnosticCategoriesSlotCreateRequest creates the ListSiteDiagnosticCategoriesSlot request.

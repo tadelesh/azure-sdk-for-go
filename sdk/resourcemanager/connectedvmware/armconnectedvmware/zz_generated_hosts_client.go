@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,20 +63,16 @@ func NewHostsClient(subscriptionID string, credential azcore.TokenCredential, op
 // resourceGroupName - The Resource Group Name.
 // hostName - Name of the host.
 // options - HostsClientBeginCreateOptions contains the optional parameters for the HostsClient.BeginCreate method.
-func (client *HostsClient) BeginCreate(ctx context.Context, resourceGroupName string, hostName string, options *HostsClientBeginCreateOptions) (HostsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, hostName, options)
-	if err != nil {
-		return HostsClientCreatePollerResponse{}, err
+func (client *HostsClient) BeginCreate(ctx context.Context, resourceGroupName string, hostName string, options *HostsClientBeginCreateOptions) (*armruntime.Poller[HostsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, hostName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[HostsClientCreateResponse]("HostsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[HostsClientCreateResponse]("HostsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := HostsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("HostsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return HostsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &HostsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update host.
@@ -130,20 +126,16 @@ func (client *HostsClient) createCreateRequest(ctx context.Context, resourceGrou
 // resourceGroupName - The Resource Group Name.
 // hostName - Name of the host.
 // options - HostsClientBeginDeleteOptions contains the optional parameters for the HostsClient.BeginDelete method.
-func (client *HostsClient) BeginDelete(ctx context.Context, resourceGroupName string, hostName string, options *HostsClientBeginDeleteOptions) (HostsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hostName, options)
-	if err != nil {
-		return HostsClientDeletePollerResponse{}, err
+func (client *HostsClient) BeginDelete(ctx context.Context, resourceGroupName string, hostName string, options *HostsClientBeginDeleteOptions) (*armruntime.Poller[HostsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hostName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[HostsClientDeleteResponse]("HostsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[HostsClientDeleteResponse]("HostsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := HostsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("HostsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return HostsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &HostsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements host DELETE method.
@@ -250,16 +242,32 @@ func (client *HostsClient) getHandleResponse(resp *http.Response) (HostsClientGe
 // List - List of hosts in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - HostsClientListOptions contains the optional parameters for the HostsClient.List method.
-func (client *HostsClient) List(options *HostsClientListOptions) *HostsClientListPager {
-	return &HostsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *HostsClient) List(options *HostsClientListOptions) *runtime.Pager[HostsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HostsClientListResponse]{
+		More: func(page HostsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HostsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HostsList.NextLink)
+		Fetcher: func(ctx context.Context, page *HostsClientListResponse) (HostsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HostsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HostsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HostsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -294,16 +302,32 @@ func (client *HostsClient) listHandleResponse(resp *http.Response) (HostsClientL
 // resourceGroupName - The Resource Group Name.
 // options - HostsClientListByResourceGroupOptions contains the optional parameters for the HostsClient.ListByResourceGroup
 // method.
-func (client *HostsClient) ListByResourceGroup(resourceGroupName string, options *HostsClientListByResourceGroupOptions) *HostsClientListByResourceGroupPager {
-	return &HostsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *HostsClient) ListByResourceGroup(resourceGroupName string, options *HostsClientListByResourceGroupOptions) *runtime.Pager[HostsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HostsClientListByResourceGroupResponse]{
+		More: func(page HostsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HostsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HostsList.NextLink)
+		Fetcher: func(ctx context.Context, page *HostsClientListByResourceGroupResponse) (HostsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HostsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HostsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HostsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

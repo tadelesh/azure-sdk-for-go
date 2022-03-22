@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armsupport
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // CommunicationsClientCheckNameAvailabilityResponse contains the response from method CommunicationsClient.CheckNameAvailability.
 type CommunicationsClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityOutput
-}
-
-// CommunicationsClientCreatePollerResponse contains the response from method CommunicationsClient.Create.
-type CommunicationsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CommunicationsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CommunicationsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CommunicationsClientCreateResponse, error) {
-	respType := CommunicationsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CommunicationDetails)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CommunicationsClientCreatePollerResponse from the provided client and resume token.
-func (l *CommunicationsClientCreatePollerResponse) Resume(ctx context.Context, client *CommunicationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CommunicationsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CommunicationsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // CommunicationsClientCreateResponse contains the response from method CommunicationsClient.Create.
@@ -97,41 +56,6 @@ type ServicesClientListResponse struct {
 // TicketsClientCheckNameAvailabilityResponse contains the response from method TicketsClient.CheckNameAvailability.
 type TicketsClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityOutput
-}
-
-// TicketsClientCreatePollerResponse contains the response from method TicketsClient.Create.
-type TicketsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *TicketsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l TicketsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (TicketsClientCreateResponse, error) {
-	respType := TicketsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.TicketDetails)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a TicketsClientCreatePollerResponse from the provided client and resume token.
-func (l *TicketsClientCreatePollerResponse) Resume(ctx context.Context, client *TicketsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("TicketsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &TicketsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // TicketsClientCreateResponse contains the response from method TicketsClient.Create.

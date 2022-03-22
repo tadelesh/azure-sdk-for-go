@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -382,16 +382,32 @@ func (client *FactoriesClient) getGitHubAccessTokenHandleResponse(resp *http.Res
 // List - Lists factories under the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - FactoriesClientListOptions contains the optional parameters for the FactoriesClient.List method.
-func (client *FactoriesClient) List(options *FactoriesClientListOptions) *FactoriesClientListPager {
-	return &FactoriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *FactoriesClient) List(options *FactoriesClientListOptions) *runtime.Pager[FactoriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FactoriesClientListResponse]{
+		More: func(page FactoriesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FactoriesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FactoryListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *FactoriesClientListResponse) (FactoriesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FactoriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FactoriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FactoriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -426,16 +442,32 @@ func (client *FactoriesClient) listHandleResponse(resp *http.Response) (Factorie
 // resourceGroupName - The resource group name.
 // options - FactoriesClientListByResourceGroupOptions contains the optional parameters for the FactoriesClient.ListByResourceGroup
 // method.
-func (client *FactoriesClient) ListByResourceGroup(resourceGroupName string, options *FactoriesClientListByResourceGroupOptions) *FactoriesClientListByResourceGroupPager {
-	return &FactoriesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *FactoriesClient) ListByResourceGroup(resourceGroupName string, options *FactoriesClientListByResourceGroupOptions) *runtime.Pager[FactoriesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FactoriesClientListByResourceGroupResponse]{
+		More: func(page FactoriesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FactoriesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FactoryListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *FactoriesClientListByResourceGroupResponse) (FactoriesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FactoriesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FactoriesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FactoriesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

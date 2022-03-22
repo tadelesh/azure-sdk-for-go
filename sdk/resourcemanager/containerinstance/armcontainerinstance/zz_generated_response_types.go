@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armcontainerinstance
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// ContainerGroupsClientCreateOrUpdatePollerResponse contains the response from method ContainerGroupsClient.CreateOrUpdate.
-type ContainerGroupsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerGroupsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerGroupsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerGroupsClientCreateOrUpdateResponse, error) {
-	respType := ContainerGroupsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ContainerGroup)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerGroupsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ContainerGroupsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ContainerGroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerGroupsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerGroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ContainerGroupsClientCreateOrUpdateResponse contains the response from method ContainerGroupsClient.CreateOrUpdate.
 type ContainerGroupsClientCreateOrUpdateResponse struct {
 	ContainerGroup
-}
-
-// ContainerGroupsClientDeletePollerResponse contains the response from method ContainerGroupsClient.Delete.
-type ContainerGroupsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerGroupsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerGroupsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerGroupsClientDeleteResponse, error) {
-	respType := ContainerGroupsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ContainerGroup)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerGroupsClientDeletePollerResponse from the provided client and resume token.
-func (l *ContainerGroupsClientDeletePollerResponse) Resume(ctx context.Context, client *ContainerGroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerGroupsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerGroupsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ContainerGroupsClientDeleteResponse contains the response from method ContainerGroupsClient.Delete.
@@ -115,79 +39,9 @@ type ContainerGroupsClientListResponse struct {
 	ContainerGroupListResult
 }
 
-// ContainerGroupsClientRestartPollerResponse contains the response from method ContainerGroupsClient.Restart.
-type ContainerGroupsClientRestartPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerGroupsClientRestartPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerGroupsClientRestartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerGroupsClientRestartResponse, error) {
-	respType := ContainerGroupsClientRestartResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerGroupsClientRestartPollerResponse from the provided client and resume token.
-func (l *ContainerGroupsClientRestartPollerResponse) Resume(ctx context.Context, client *ContainerGroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerGroupsClient.Restart", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerGroupsClientRestartPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ContainerGroupsClientRestartResponse contains the response from method ContainerGroupsClient.Restart.
 type ContainerGroupsClientRestartResponse struct {
 	// placeholder for future response values
-}
-
-// ContainerGroupsClientStartPollerResponse contains the response from method ContainerGroupsClient.Start.
-type ContainerGroupsClientStartPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ContainerGroupsClientStartPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ContainerGroupsClientStartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ContainerGroupsClientStartResponse, error) {
-	respType := ContainerGroupsClientStartResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ContainerGroupsClientStartPollerResponse from the provided client and resume token.
-func (l *ContainerGroupsClientStartPollerResponse) Resume(ctx context.Context, client *ContainerGroupsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ContainerGroupsClient.Start", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ContainerGroupsClientStartPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ContainerGroupsClientStartResponse contains the response from method ContainerGroupsClient.Start.

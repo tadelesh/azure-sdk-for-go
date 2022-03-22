@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -117,20 +117,16 @@ func (client *InstancesClient) checkNameAvailabilityHandleResponse(resp *http.Re
 // instanceName - The name of the DFP instances. It must be a minimum of 3 characters, and a maximum of 63.
 // instanceParameters - Contains the information used to provision the DFP instance.
 // options - InstancesClientBeginCreateOptions contains the optional parameters for the InstancesClient.BeginCreate method.
-func (client *InstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, instanceName string, instanceParameters Instance, options *InstancesClientBeginCreateOptions) (InstancesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, instanceName, instanceParameters, options)
-	if err != nil {
-		return InstancesClientCreatePollerResponse{}, err
+func (client *InstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, instanceName string, instanceParameters Instance, options *InstancesClientBeginCreateOptions) (*armruntime.Poller[InstancesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, instanceName, instanceParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InstancesClientCreateResponse]("InstancesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InstancesClientCreateResponse]("InstancesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := InstancesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("InstancesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return InstancesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &InstancesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Provisions the specified DFP instance based on the configuration specified in the request.
@@ -182,20 +178,16 @@ func (client *InstancesClient) createCreateRequest(ctx context.Context, resource
 // 1 character in length, and no more than 90.
 // instanceName - The name of the DFP instance. It must be at least 3 characters in length, and no more than 63.
 // options - InstancesClientBeginDeleteOptions contains the optional parameters for the InstancesClient.BeginDelete method.
-func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, instanceName string, options *InstancesClientBeginDeleteOptions) (InstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, instanceName, options)
-	if err != nil {
-		return InstancesClientDeletePollerResponse{}, err
+func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, instanceName string, options *InstancesClientBeginDeleteOptions) (*armruntime.Poller[InstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, instanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InstancesClientDeleteResponse]("InstancesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InstancesClientDeleteResponse]("InstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := InstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("InstancesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return InstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &InstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified DFP instance.
@@ -300,16 +292,32 @@ func (client *InstancesClient) getDetailsHandleResponse(resp *http.Response) (In
 // List - Lists all the Dedicated instances for the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - InstancesClientListOptions contains the optional parameters for the InstancesClient.List method.
-func (client *InstancesClient) List(options *InstancesClientListOptions) *InstancesClientListPager {
-	return &InstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *InstancesClient) List(options *InstancesClientListOptions) *runtime.Pager[InstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InstancesClientListResponse]{
+		More: func(page InstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Instances.NextLink)
+		Fetcher: func(ctx context.Context, page *InstancesClientListResponse) (InstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -345,16 +353,32 @@ func (client *InstancesClient) listHandleResponse(resp *http.Response) (Instance
 // 1 character in length, and no more than 90.
 // options - InstancesClientListByResourceGroupOptions contains the optional parameters for the InstancesClient.ListByResourceGroup
 // method.
-func (client *InstancesClient) ListByResourceGroup(resourceGroupName string, options *InstancesClientListByResourceGroupOptions) *InstancesClientListByResourceGroupPager {
-	return &InstancesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *InstancesClient) ListByResourceGroup(resourceGroupName string, options *InstancesClientListByResourceGroupOptions) *runtime.Pager[InstancesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InstancesClientListByResourceGroupResponse]{
+		More: func(page InstancesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InstancesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Instances.NextLink)
+		Fetcher: func(ctx context.Context, page *InstancesClientListByResourceGroupResponse) (InstancesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InstancesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InstancesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InstancesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -395,20 +419,16 @@ func (client *InstancesClient) listByResourceGroupHandleResponse(resp *http.Resp
 // instanceName - The name of the DFP instance. It must be at least 3 characters in length, and no more than 63.
 // instanceUpdateParameters - Request object that contains the updated information for the instance.
 // options - InstancesClientBeginUpdateOptions contains the optional parameters for the InstancesClient.BeginUpdate method.
-func (client *InstancesClient) BeginUpdate(ctx context.Context, resourceGroupName string, instanceName string, instanceUpdateParameters InstanceUpdateParameters, options *InstancesClientBeginUpdateOptions) (InstancesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, instanceName, instanceUpdateParameters, options)
-	if err != nil {
-		return InstancesClientUpdatePollerResponse{}, err
+func (client *InstancesClient) BeginUpdate(ctx context.Context, resourceGroupName string, instanceName string, instanceUpdateParameters InstanceUpdateParameters, options *InstancesClientBeginUpdateOptions) (*armruntime.Poller[InstancesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, instanceName, instanceUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InstancesClientUpdateResponse]("InstancesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InstancesClientUpdateResponse]("InstancesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := InstancesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("InstancesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return InstancesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &InstancesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the current state of the specified DFP instance.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewWorkloadClassifiersClient(subscriptionID string, credential azcore.Token
 // parameters - The properties of the workload classifier.
 // options - WorkloadClassifiersClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkloadClassifiersClient.BeginCreateOrUpdate
 // method.
-func (client *WorkloadClassifiersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, workloadGroupName string, workloadClassifierName string, parameters WorkloadClassifier, options *WorkloadClassifiersClientBeginCreateOrUpdateOptions) (WorkloadClassifiersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, workloadClassifierName, parameters, options)
-	if err != nil {
-		return WorkloadClassifiersClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkloadClassifiersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, workloadGroupName string, workloadClassifierName string, parameters WorkloadClassifier, options *WorkloadClassifiersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkloadClassifiersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, workloadClassifierName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkloadClassifiersClientCreateOrUpdateResponse]("WorkloadClassifiersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkloadClassifiersClientCreateOrUpdateResponse]("WorkloadClassifiersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkloadClassifiersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkloadClassifiersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return WorkloadClassifiersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkloadClassifiersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a workload classifier.
@@ -141,20 +137,16 @@ func (client *WorkloadClassifiersClient) createOrUpdateCreateRequest(ctx context
 // workloadClassifierName - The name of the workload classifier to delete.
 // options - WorkloadClassifiersClientBeginDeleteOptions contains the optional parameters for the WorkloadClassifiersClient.BeginDelete
 // method.
-func (client *WorkloadClassifiersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, workloadGroupName string, workloadClassifierName string, options *WorkloadClassifiersClientBeginDeleteOptions) (WorkloadClassifiersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, workloadClassifierName, options)
-	if err != nil {
-		return WorkloadClassifiersClientDeletePollerResponse{}, err
+func (client *WorkloadClassifiersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, workloadGroupName string, workloadClassifierName string, options *WorkloadClassifiersClientBeginDeleteOptions) (*armruntime.Poller[WorkloadClassifiersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, workloadClassifierName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkloadClassifiersClientDeleteResponse]("WorkloadClassifiersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkloadClassifiersClientDeleteResponse]("WorkloadClassifiersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkloadClassifiersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkloadClassifiersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return WorkloadClassifiersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkloadClassifiersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a workload classifier.
@@ -291,16 +283,32 @@ func (client *WorkloadClassifiersClient) getHandleResponse(resp *http.Response) 
 // workloadGroupName - The name of the workload group from which to receive the classifiers from.
 // options - WorkloadClassifiersClientListByWorkloadGroupOptions contains the optional parameters for the WorkloadClassifiersClient.ListByWorkloadGroup
 // method.
-func (client *WorkloadClassifiersClient) ListByWorkloadGroup(resourceGroupName string, serverName string, databaseName string, workloadGroupName string, options *WorkloadClassifiersClientListByWorkloadGroupOptions) *WorkloadClassifiersClientListByWorkloadGroupPager {
-	return &WorkloadClassifiersClientListByWorkloadGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkloadGroupCreateRequest(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, options)
+func (client *WorkloadClassifiersClient) ListByWorkloadGroup(resourceGroupName string, serverName string, databaseName string, workloadGroupName string, options *WorkloadClassifiersClientListByWorkloadGroupOptions) *runtime.Pager[WorkloadClassifiersClientListByWorkloadGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkloadClassifiersClientListByWorkloadGroupResponse]{
+		More: func(page WorkloadClassifiersClientListByWorkloadGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkloadClassifiersClientListByWorkloadGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkloadClassifierListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkloadClassifiersClientListByWorkloadGroupResponse) (WorkloadClassifiersClientListByWorkloadGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkloadGroupCreateRequest(ctx, resourceGroupName, serverName, databaseName, workloadGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkloadClassifiersClientListByWorkloadGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkloadClassifiersClientListByWorkloadGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkloadClassifiersClientListByWorkloadGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkloadGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkloadGroupCreateRequest creates the ListByWorkloadGroup request.

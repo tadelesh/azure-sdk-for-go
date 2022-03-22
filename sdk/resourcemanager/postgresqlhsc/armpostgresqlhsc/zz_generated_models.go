@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -33,7 +33,8 @@ type CloudErrorBody struct {
 
 // ConfigurationsClientBeginUpdateOptions contains the optional parameters for the ConfigurationsClient.BeginUpdate method.
 type ConfigurationsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationsClientGetOptions contains the optional parameters for the ConfigurationsClient.Get method.
@@ -88,12 +89,14 @@ type FirewallRuleProperties struct {
 // FirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallRulesClient.BeginCreateOrUpdate
 // method.
 type FirewallRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallRulesClientBeginDeleteOptions contains the optional parameters for the FirewallRulesClient.BeginDelete method.
 type FirewallRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallRulesClientGetOptions contains the optional parameters for the FirewallRulesClient.Get method.
@@ -250,12 +253,14 @@ type RoleProperties struct {
 
 // RolesClientBeginCreateOptions contains the optional parameters for the RolesClient.BeginCreate method.
 type RolesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RolesClientBeginDeleteOptions contains the optional parameters for the RolesClient.BeginDelete method.
 type RolesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RolesClientListByServerGroupOptions contains the optional parameters for the RolesClient.ListByServerGroup method.
@@ -591,32 +596,38 @@ type ServerGroupServerProperties struct {
 // ServerGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerGroupsClient.BeginCreateOrUpdate
 // method.
 type ServerGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientBeginDeleteOptions contains the optional parameters for the ServerGroupsClient.BeginDelete method.
 type ServerGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientBeginRestartOptions contains the optional parameters for the ServerGroupsClient.BeginRestart method.
 type ServerGroupsClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientBeginStartOptions contains the optional parameters for the ServerGroupsClient.BeginStart method.
 type ServerGroupsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientBeginStopOptions contains the optional parameters for the ServerGroupsClient.BeginStop method.
 type ServerGroupsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientBeginUpdateOptions contains the optional parameters for the ServerGroupsClient.BeginUpdate method.
 type ServerGroupsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerGroupsClientCheckNameAvailabilityOptions contains the optional parameters for the ServerGroupsClient.CheckNameAvailability

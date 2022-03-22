@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewIPFirewallRulesClient(subscriptionID string, credential azcore.TokenCred
 // ipFirewallRuleInfo - IP firewall rule properties
 // options - IPFirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the IPFirewallRulesClient.BeginCreateOrUpdate
 // method.
-func (client *IPFirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, ruleName string, ipFirewallRuleInfo IPFirewallRuleInfo, options *IPFirewallRulesClientBeginCreateOrUpdateOptions) (IPFirewallRulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, ruleName, ipFirewallRuleInfo, options)
-	if err != nil {
-		return IPFirewallRulesClientCreateOrUpdatePollerResponse{}, err
+func (client *IPFirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, ruleName string, ipFirewallRuleInfo IPFirewallRuleInfo, options *IPFirewallRulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[IPFirewallRulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, ruleName, ipFirewallRuleInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IPFirewallRulesClientCreateOrUpdateResponse]("IPFirewallRulesClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IPFirewallRulesClientCreateOrUpdateResponse]("IPFirewallRulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := IPFirewallRulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IPFirewallRulesClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return IPFirewallRulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &IPFirewallRulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a firewall rule
@@ -127,20 +123,16 @@ func (client *IPFirewallRulesClient) createOrUpdateCreateRequest(ctx context.Con
 // ruleName - The IP firewall rule name
 // options - IPFirewallRulesClientBeginDeleteOptions contains the optional parameters for the IPFirewallRulesClient.BeginDelete
 // method.
-func (client *IPFirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, ruleName string, options *IPFirewallRulesClientBeginDeleteOptions) (IPFirewallRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, ruleName, options)
-	if err != nil {
-		return IPFirewallRulesClientDeletePollerResponse{}, err
+func (client *IPFirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, ruleName string, options *IPFirewallRulesClientBeginDeleteOptions) (*armruntime.Poller[IPFirewallRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, ruleName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IPFirewallRulesClientDeleteResponse]("IPFirewallRulesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IPFirewallRulesClientDeleteResponse]("IPFirewallRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IPFirewallRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IPFirewallRulesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return IPFirewallRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IPFirewallRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a firewall rule
@@ -256,16 +248,32 @@ func (client *IPFirewallRulesClient) getHandleResponse(resp *http.Response) (IPF
 // workspaceName - The name of the workspace.
 // options - IPFirewallRulesClientListByWorkspaceOptions contains the optional parameters for the IPFirewallRulesClient.ListByWorkspace
 // method.
-func (client *IPFirewallRulesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IPFirewallRulesClientListByWorkspaceOptions) *IPFirewallRulesClientListByWorkspacePager {
-	return &IPFirewallRulesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *IPFirewallRulesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IPFirewallRulesClientListByWorkspaceOptions) *runtime.Pager[IPFirewallRulesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IPFirewallRulesClientListByWorkspaceResponse]{
+		More: func(page IPFirewallRulesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IPFirewallRulesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IPFirewallRuleInfoListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IPFirewallRulesClientListByWorkspaceResponse) (IPFirewallRulesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IPFirewallRulesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IPFirewallRulesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IPFirewallRulesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -310,20 +318,16 @@ func (client *IPFirewallRulesClient) listByWorkspaceHandleResponse(resp *http.Re
 // request - Replace all IP firewall rules request
 // options - IPFirewallRulesClientBeginReplaceAllOptions contains the optional parameters for the IPFirewallRulesClient.BeginReplaceAll
 // method.
-func (client *IPFirewallRulesClient) BeginReplaceAll(ctx context.Context, resourceGroupName string, workspaceName string, request ReplaceAllIPFirewallRulesRequest, options *IPFirewallRulesClientBeginReplaceAllOptions) (IPFirewallRulesClientReplaceAllPollerResponse, error) {
-	resp, err := client.replaceAll(ctx, resourceGroupName, workspaceName, request, options)
-	if err != nil {
-		return IPFirewallRulesClientReplaceAllPollerResponse{}, err
+func (client *IPFirewallRulesClient) BeginReplaceAll(ctx context.Context, resourceGroupName string, workspaceName string, request ReplaceAllIPFirewallRulesRequest, options *IPFirewallRulesClientBeginReplaceAllOptions) (*armruntime.Poller[IPFirewallRulesClientReplaceAllResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.replaceAll(ctx, resourceGroupName, workspaceName, request, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IPFirewallRulesClientReplaceAllResponse]("IPFirewallRulesClient.ReplaceAll", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IPFirewallRulesClientReplaceAllResponse]("IPFirewallRulesClient.ReplaceAll", options.ResumeToken, client.pl, nil)
 	}
-	result := IPFirewallRulesClientReplaceAllPollerResponse{}
-	pt, err := armruntime.NewPoller("IPFirewallRulesClient.ReplaceAll", "location", resp, client.pl)
-	if err != nil {
-		return IPFirewallRulesClientReplaceAllPollerResponse{}, err
-	}
-	result.Poller = &IPFirewallRulesClientReplaceAllPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ReplaceAll - Replaces firewall rules

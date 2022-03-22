@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,11 +214,14 @@ type MemberUpdate struct {
 type MembersClientBeginCreateOptions struct {
 	// Payload to create a blockchain member.
 	BlockchainMember *Member
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MembersClientBeginDeleteOptions contains the optional parameters for the MembersClient.BeginDelete method.
 type MembersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MembersClientGetOptions contains the optional parameters for the MembersClient.Get method.
@@ -480,13 +483,16 @@ type TransactionNodeUpdate struct {
 
 // TransactionNodesClientBeginCreateOptions contains the optional parameters for the TransactionNodesClient.BeginCreate method.
 type TransactionNodesClientBeginCreateOptions struct {
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// Payload to create the transaction node.
 	TransactionNode *TransactionNode
 }
 
 // TransactionNodesClientBeginDeleteOptions contains the optional parameters for the TransactionNodesClient.BeginDelete method.
 type TransactionNodesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TransactionNodesClientGetOptions contains the optional parameters for the TransactionNodesClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -247,16 +247,32 @@ func (client *JobCredentialsClient) getHandleResponse(resp *http.Response) (JobC
 // jobAgentName - The name of the job agent.
 // options - JobCredentialsClientListByAgentOptions contains the optional parameters for the JobCredentialsClient.ListByAgent
 // method.
-func (client *JobCredentialsClient) ListByAgent(resourceGroupName string, serverName string, jobAgentName string, options *JobCredentialsClientListByAgentOptions) *JobCredentialsClientListByAgentPager {
-	return &JobCredentialsClientListByAgentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAgentCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, options)
+func (client *JobCredentialsClient) ListByAgent(resourceGroupName string, serverName string, jobAgentName string, options *JobCredentialsClientListByAgentOptions) *runtime.Pager[JobCredentialsClientListByAgentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobCredentialsClientListByAgentResponse]{
+		More: func(page JobCredentialsClientListByAgentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobCredentialsClientListByAgentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobCredentialListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobCredentialsClientListByAgentResponse) (JobCredentialsClientListByAgentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAgentCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobCredentialsClientListByAgentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobCredentialsClientListByAgentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobCredentialsClientListByAgentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAgentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAgentCreateRequest creates the ListByAgent request.

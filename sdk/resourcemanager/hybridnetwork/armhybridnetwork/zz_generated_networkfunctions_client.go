@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewNetworkFunctionsClient(subscriptionID string, credential azcore.TokenCre
 // parameters - Parameters supplied in the body to the create or update network function operation.
 // options - NetworkFunctionsClientBeginCreateOrUpdateOptions contains the optional parameters for the NetworkFunctionsClient.BeginCreateOrUpdate
 // method.
-func (client *NetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkFunctionName string, parameters NetworkFunction, options *NetworkFunctionsClientBeginCreateOrUpdateOptions) (NetworkFunctionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, networkFunctionName, parameters, options)
-	if err != nil {
-		return NetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
+func (client *NetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, networkFunctionName string, parameters NetworkFunction, options *NetworkFunctionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NetworkFunctionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, networkFunctionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NetworkFunctionsClientCreateOrUpdateResponse]("NetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NetworkFunctionsClientCreateOrUpdateResponse]("NetworkFunctionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NetworkFunctionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return NetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NetworkFunctionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a network function resource. This operation can take up to 6 hours to complete. This
@@ -124,20 +120,16 @@ func (client *NetworkFunctionsClient) createOrUpdateCreateRequest(ctx context.Co
 // networkFunctionName - The name of the network function.
 // options - NetworkFunctionsClientBeginDeleteOptions contains the optional parameters for the NetworkFunctionsClient.BeginDelete
 // method.
-func (client *NetworkFunctionsClient) BeginDelete(ctx context.Context, resourceGroupName string, networkFunctionName string, options *NetworkFunctionsClientBeginDeleteOptions) (NetworkFunctionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, networkFunctionName, options)
-	if err != nil {
-		return NetworkFunctionsClientDeletePollerResponse{}, err
+func (client *NetworkFunctionsClient) BeginDelete(ctx context.Context, resourceGroupName string, networkFunctionName string, options *NetworkFunctionsClientBeginDeleteOptions) (*armruntime.Poller[NetworkFunctionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, networkFunctionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NetworkFunctionsClientDeleteResponse]("NetworkFunctionsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NetworkFunctionsClientDeleteResponse]("NetworkFunctionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := NetworkFunctionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("NetworkFunctionsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return NetworkFunctionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &NetworkFunctionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified network function resource. This operation can take up to 1 hour to complete. This is expected
@@ -244,16 +236,32 @@ func (client *NetworkFunctionsClient) getHandleResponse(resp *http.Response) (Ne
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - NetworkFunctionsClientListByResourceGroupOptions contains the optional parameters for the NetworkFunctionsClient.ListByResourceGroup
 // method.
-func (client *NetworkFunctionsClient) ListByResourceGroup(resourceGroupName string, options *NetworkFunctionsClientListByResourceGroupOptions) *NetworkFunctionsClientListByResourceGroupPager {
-	return &NetworkFunctionsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *NetworkFunctionsClient) ListByResourceGroup(resourceGroupName string, options *NetworkFunctionsClientListByResourceGroupOptions) *runtime.Pager[NetworkFunctionsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkFunctionsClientListByResourceGroupResponse]{
+		More: func(page NetworkFunctionsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkFunctionsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkFunctionsClientListByResourceGroupResponse) (NetworkFunctionsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkFunctionsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkFunctionsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkFunctionsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -291,16 +299,32 @@ func (client *NetworkFunctionsClient) listByResourceGroupHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - NetworkFunctionsClientListBySubscriptionOptions contains the optional parameters for the NetworkFunctionsClient.ListBySubscription
 // method.
-func (client *NetworkFunctionsClient) ListBySubscription(options *NetworkFunctionsClientListBySubscriptionOptions) *NetworkFunctionsClientListBySubscriptionPager {
-	return &NetworkFunctionsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *NetworkFunctionsClient) ListBySubscription(options *NetworkFunctionsClientListBySubscriptionOptions) *runtime.Pager[NetworkFunctionsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkFunctionsClientListBySubscriptionResponse]{
+		More: func(page NetworkFunctionsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkFunctionsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkFunctionsClientListBySubscriptionResponse) (NetworkFunctionsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkFunctionsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkFunctionsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkFunctionsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

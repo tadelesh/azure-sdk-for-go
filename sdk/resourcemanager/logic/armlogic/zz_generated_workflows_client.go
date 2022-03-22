@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -362,16 +362,32 @@ func (client *WorkflowsClient) getHandleResponse(resp *http.Response) (Workflows
 // resourceGroupName - The resource group name.
 // options - WorkflowsClientListByResourceGroupOptions contains the optional parameters for the WorkflowsClient.ListByResourceGroup
 // method.
-func (client *WorkflowsClient) ListByResourceGroup(resourceGroupName string, options *WorkflowsClientListByResourceGroupOptions) *WorkflowsClientListByResourceGroupPager {
-	return &WorkflowsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WorkflowsClient) ListByResourceGroup(resourceGroupName string, options *WorkflowsClientListByResourceGroupOptions) *runtime.Pager[WorkflowsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowsClientListByResourceGroupResponse]{
+		More: func(page WorkflowsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkflowsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkflowListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkflowsClientListByResourceGroupResponse) (WorkflowsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkflowsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -415,16 +431,32 @@ func (client *WorkflowsClient) listByResourceGroupHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkflowsClientListBySubscriptionOptions contains the optional parameters for the WorkflowsClient.ListBySubscription
 // method.
-func (client *WorkflowsClient) ListBySubscription(options *WorkflowsClientListBySubscriptionOptions) *WorkflowsClientListBySubscriptionPager {
-	return &WorkflowsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *WorkflowsClient) ListBySubscription(options *WorkflowsClientListBySubscriptionOptions) *runtime.Pager[WorkflowsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkflowsClientListBySubscriptionResponse]{
+		More: func(page WorkflowsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkflowsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkflowListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkflowsClientListBySubscriptionResponse) (WorkflowsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkflowsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkflowsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkflowsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -578,20 +610,16 @@ func (client *WorkflowsClient) listSwaggerHandleResponse(resp *http.Response) (W
 // workflowName - The workflow name.
 // move - The workflow to move.
 // options - WorkflowsClientBeginMoveOptions contains the optional parameters for the WorkflowsClient.BeginMove method.
-func (client *WorkflowsClient) BeginMove(ctx context.Context, resourceGroupName string, workflowName string, move WorkflowReference, options *WorkflowsClientBeginMoveOptions) (WorkflowsClientMovePollerResponse, error) {
-	resp, err := client.move(ctx, resourceGroupName, workflowName, move, options)
-	if err != nil {
-		return WorkflowsClientMovePollerResponse{}, err
+func (client *WorkflowsClient) BeginMove(ctx context.Context, resourceGroupName string, workflowName string, move WorkflowReference, options *WorkflowsClientBeginMoveOptions) (*armruntime.Poller[WorkflowsClientMoveResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.move(ctx, resourceGroupName, workflowName, move, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkflowsClientMoveResponse]("WorkflowsClient.Move", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkflowsClientMoveResponse]("WorkflowsClient.Move", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkflowsClientMovePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkflowsClient.Move", "", resp, client.pl)
-	if err != nil {
-		return WorkflowsClientMovePollerResponse{}, err
-	}
-	result.Poller = &WorkflowsClientMovePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Move - Moves an existing workflow.

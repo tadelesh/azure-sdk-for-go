@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,13 +231,26 @@ func (client *LinkedStorageAccountsClient) getHandleResponse(resp *http.Response
 // workspaceName - The name of the workspace.
 // options - LinkedStorageAccountsClientListByWorkspaceOptions contains the optional parameters for the LinkedStorageAccountsClient.ListByWorkspace
 // method.
-func (client *LinkedStorageAccountsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *LinkedStorageAccountsClientListByWorkspaceOptions) *LinkedStorageAccountsClientListByWorkspacePager {
-	return &LinkedStorageAccountsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *LinkedStorageAccountsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *LinkedStorageAccountsClientListByWorkspaceOptions) *runtime.Pager[LinkedStorageAccountsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinkedStorageAccountsClientListByWorkspaceResponse]{
+		More: func(page LinkedStorageAccountsClientListByWorkspaceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *LinkedStorageAccountsClientListByWorkspaceResponse) (LinkedStorageAccountsClientListByWorkspaceResponse, error) {
+			req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			if err != nil {
+				return LinkedStorageAccountsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinkedStorageAccountsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinkedStorageAccountsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
+		},
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,13 +56,26 @@ func NewStatisticsClient(subscriptionID string, credential azcore.TokenCredentia
 // automationAccountName - The name of the automation account.
 // options - StatisticsClientListByAutomationAccountOptions contains the optional parameters for the StatisticsClient.ListByAutomationAccount
 // method.
-func (client *StatisticsClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *StatisticsClientListByAutomationAccountOptions) *StatisticsClientListByAutomationAccountPager {
-	return &StatisticsClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *StatisticsClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *StatisticsClientListByAutomationAccountOptions) *runtime.Pager[StatisticsClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StatisticsClientListByAutomationAccountResponse]{
+		More: func(page StatisticsClientListByAutomationAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *StatisticsClientListByAutomationAccountResponse) (StatisticsClientListByAutomationAccountResponse, error) {
+			req, err := client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			if err != nil {
+				return StatisticsClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StatisticsClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StatisticsClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

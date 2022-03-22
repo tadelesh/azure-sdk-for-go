@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,6 @@
 
 package armelastic
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // DeploymentInfoClientListResponse contains the response from method DeploymentInfoClient.List.
 type DeploymentInfoClientListResponse struct {
 	DeploymentInfoResponse
@@ -32,79 +26,9 @@ type MonitoredResourcesClientListResponse struct {
 	MonitoredResourceListResponse
 }
 
-// MonitorsClientCreatePollerResponse contains the response from method MonitorsClient.Create.
-type MonitorsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MonitorsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MonitorsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MonitorsClientCreateResponse, error) {
-	respType := MonitorsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MonitorResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MonitorsClientCreatePollerResponse from the provided client and resume token.
-func (l *MonitorsClientCreatePollerResponse) Resume(ctx context.Context, client *MonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MonitorsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MonitorsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // MonitorsClientCreateResponse contains the response from method MonitorsClient.Create.
 type MonitorsClientCreateResponse struct {
 	MonitorResource
-}
-
-// MonitorsClientDeletePollerResponse contains the response from method MonitorsClient.Delete.
-type MonitorsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MonitorsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MonitorsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MonitorsClientDeleteResponse, error) {
-	respType := MonitorsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MonitorsClientDeletePollerResponse from the provided client and resume token.
-func (l *MonitorsClientDeletePollerResponse) Resume(ctx context.Context, client *MonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MonitorsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MonitorsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // MonitorsClientDeleteResponse contains the response from method MonitorsClient.Delete.
@@ -140,41 +64,6 @@ type OperationsClientListResponse struct {
 // TagRulesClientCreateOrUpdateResponse contains the response from method TagRulesClient.CreateOrUpdate.
 type TagRulesClientCreateOrUpdateResponse struct {
 	MonitoringTagRules
-}
-
-// TagRulesClientDeletePollerResponse contains the response from method TagRulesClient.Delete.
-type TagRulesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *TagRulesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l TagRulesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (TagRulesClientDeleteResponse, error) {
-	respType := TagRulesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a TagRulesClientDeletePollerResponse from the provided client and resume token.
-func (l *TagRulesClientDeletePollerResponse) Resume(ctx context.Context, client *TagRulesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("TagRulesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &TagRulesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // TagRulesClientDeleteResponse contains the response from method TagRulesClient.Delete.

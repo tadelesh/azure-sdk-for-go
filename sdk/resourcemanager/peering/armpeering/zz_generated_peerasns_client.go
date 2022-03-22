@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -195,16 +195,32 @@ func (client *PeerAsnsClient) getHandleResponse(resp *http.Response) (PeerAsnsCl
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PeerAsnsClientListBySubscriptionOptions contains the optional parameters for the PeerAsnsClient.ListBySubscription
 // method.
-func (client *PeerAsnsClient) ListBySubscription(options *PeerAsnsClientListBySubscriptionOptions) *PeerAsnsClientListBySubscriptionPager {
-	return &PeerAsnsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *PeerAsnsClient) ListBySubscription(options *PeerAsnsClientListBySubscriptionOptions) *runtime.Pager[PeerAsnsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PeerAsnsClientListBySubscriptionResponse]{
+		More: func(page PeerAsnsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PeerAsnsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PeerAsnListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PeerAsnsClientListBySubscriptionResponse) (PeerAsnsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PeerAsnsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PeerAsnsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PeerAsnsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

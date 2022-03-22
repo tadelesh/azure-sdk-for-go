@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewSQLVirtualMachinesClient(subscriptionID string, credential azcore.TokenC
 // parameters - The SQL virtual machine.
 // options - SQLVirtualMachinesClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginCreateOrUpdate
 // method.
-func (client *SQLVirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, parameters SQLVirtualMachine, options *SQLVirtualMachinesClientBeginCreateOrUpdateOptions) (SQLVirtualMachinesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineName, parameters, options)
-	if err != nil {
-		return SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}, err
+func (client *SQLVirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, parameters SQLVirtualMachine, options *SQLVirtualMachinesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SQLVirtualMachinesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlVirtualMachineName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLVirtualMachinesClientCreateOrUpdateResponse]("SQLVirtualMachinesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLVirtualMachinesClientCreateOrUpdateResponse]("SQLVirtualMachinesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SQLVirtualMachinesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a SQL virtual machine.
@@ -123,20 +119,16 @@ func (client *SQLVirtualMachinesClient) createOrUpdateCreateRequest(ctx context.
 // sqlVirtualMachineName - Name of the SQL virtual machine.
 // options - SQLVirtualMachinesClientBeginDeleteOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginDelete
 // method.
-func (client *SQLVirtualMachinesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, options *SQLVirtualMachinesClientBeginDeleteOptions) (SQLVirtualMachinesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sqlVirtualMachineName, options)
-	if err != nil {
-		return SQLVirtualMachinesClientDeletePollerResponse{}, err
+func (client *SQLVirtualMachinesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, options *SQLVirtualMachinesClientBeginDeleteOptions) (*armruntime.Poller[SQLVirtualMachinesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sqlVirtualMachineName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLVirtualMachinesClientDeleteResponse]("SQLVirtualMachinesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLVirtualMachinesClientDeleteResponse]("SQLVirtualMachinesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLVirtualMachinesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SQLVirtualMachinesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SQLVirtualMachinesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a SQL virtual machine.
@@ -243,16 +235,32 @@ func (client *SQLVirtualMachinesClient) getHandleResponse(resp *http.Response) (
 // List - Gets all SQL virtual machines in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SQLVirtualMachinesClientListOptions contains the optional parameters for the SQLVirtualMachinesClient.List method.
-func (client *SQLVirtualMachinesClient) List(options *SQLVirtualMachinesClientListOptions) *SQLVirtualMachinesClientListPager {
-	return &SQLVirtualMachinesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SQLVirtualMachinesClient) List(options *SQLVirtualMachinesClientListOptions) *runtime.Pager[SQLVirtualMachinesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLVirtualMachinesClientListResponse]{
+		More: func(page SQLVirtualMachinesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLVirtualMachinesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLVirtualMachinesClientListResponse) (SQLVirtualMachinesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLVirtualMachinesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLVirtualMachinesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLVirtualMachinesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -288,16 +296,32 @@ func (client *SQLVirtualMachinesClient) listHandleResponse(resp *http.Response) 
 // Manager API or the portal.
 // options - SQLVirtualMachinesClientListByResourceGroupOptions contains the optional parameters for the SQLVirtualMachinesClient.ListByResourceGroup
 // method.
-func (client *SQLVirtualMachinesClient) ListByResourceGroup(resourceGroupName string, options *SQLVirtualMachinesClientListByResourceGroupOptions) *SQLVirtualMachinesClientListByResourceGroupPager {
-	return &SQLVirtualMachinesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SQLVirtualMachinesClient) ListByResourceGroup(resourceGroupName string, options *SQLVirtualMachinesClientListByResourceGroupOptions) *runtime.Pager[SQLVirtualMachinesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLVirtualMachinesClientListByResourceGroupResponse]{
+		More: func(page SQLVirtualMachinesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLVirtualMachinesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLVirtualMachinesClientListByResourceGroupResponse) (SQLVirtualMachinesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLVirtualMachinesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -338,16 +362,32 @@ func (client *SQLVirtualMachinesClient) listByResourceGroupHandleResponse(resp *
 // sqlVirtualMachineGroupName - Name of the SQL virtual machine group.
 // options - SQLVirtualMachinesClientListBySQLVMGroupOptions contains the optional parameters for the SQLVirtualMachinesClient.ListBySQLVMGroup
 // method.
-func (client *SQLVirtualMachinesClient) ListBySQLVMGroup(resourceGroupName string, sqlVirtualMachineGroupName string, options *SQLVirtualMachinesClientListBySQLVMGroupOptions) *SQLVirtualMachinesClientListBySQLVMGroupPager {
-	return &SQLVirtualMachinesClientListBySQLVMGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySQLVMGroupCreateRequest(ctx, resourceGroupName, sqlVirtualMachineGroupName, options)
+func (client *SQLVirtualMachinesClient) ListBySQLVMGroup(resourceGroupName string, sqlVirtualMachineGroupName string, options *SQLVirtualMachinesClientListBySQLVMGroupOptions) *runtime.Pager[SQLVirtualMachinesClientListBySQLVMGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLVirtualMachinesClientListBySQLVMGroupResponse]{
+		More: func(page SQLVirtualMachinesClientListBySQLVMGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLVirtualMachinesClientListBySQLVMGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLVirtualMachinesClientListBySQLVMGroupResponse) (SQLVirtualMachinesClientListBySQLVMGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySQLVMGroupCreateRequest(ctx, resourceGroupName, sqlVirtualMachineGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySQLVMGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySQLVMGroupCreateRequest creates the ListBySQLVMGroup request.
@@ -393,20 +433,16 @@ func (client *SQLVirtualMachinesClient) listBySQLVMGroupHandleResponse(resp *htt
 // parameters - The SQL virtual machine.
 // options - SQLVirtualMachinesClientBeginUpdateOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginUpdate
 // method.
-func (client *SQLVirtualMachinesClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, parameters Update, options *SQLVirtualMachinesClientBeginUpdateOptions) (SQLVirtualMachinesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, sqlVirtualMachineName, parameters, options)
-	if err != nil {
-		return SQLVirtualMachinesClientUpdatePollerResponse{}, err
+func (client *SQLVirtualMachinesClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlVirtualMachineName string, parameters Update, options *SQLVirtualMachinesClientBeginUpdateOptions) (*armruntime.Poller[SQLVirtualMachinesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, sqlVirtualMachineName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLVirtualMachinesClientUpdateResponse]("SQLVirtualMachinesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLVirtualMachinesClientUpdateResponse]("SQLVirtualMachinesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLVirtualMachinesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return SQLVirtualMachinesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &SQLVirtualMachinesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a SQL virtual machine.

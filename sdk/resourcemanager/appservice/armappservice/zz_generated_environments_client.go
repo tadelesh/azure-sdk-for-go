@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewEnvironmentsClient(subscriptionID string, credential azcore.TokenCredent
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientBeginApproveOrRejectPrivateEndpointConnectionOptions contains the optional parameters for the
 // EnvironmentsClient.BeginApproveOrRejectPrivateEndpointConnection method.
-func (client *EnvironmentsClient) BeginApproveOrRejectPrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper PrivateLinkConnectionApprovalRequestResource, options *EnvironmentsClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.approveOrRejectPrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, privateEndpointWrapper, options)
-	if err != nil {
-		return EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
+func (client *EnvironmentsClient) BeginApproveOrRejectPrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper PrivateLinkConnectionApprovalRequestResource, options *EnvironmentsClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (*armruntime.Poller[EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.approveOrRejectPrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, privateEndpointWrapper, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse]("EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse]("EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ApproveOrRejectPrivateEndpointConnection - Description for Approves or rejects a private endpoint connection
@@ -126,21 +122,35 @@ func (client *EnvironmentsClient) approveOrRejectPrivateEndpointConnectionCreate
 // vnetInfo - Details for the new virtual network.
 // options - EnvironmentsClientBeginChangeVnetOptions contains the optional parameters for the EnvironmentsClient.BeginChangeVnet
 // method.
-func (client *EnvironmentsClient) BeginChangeVnet(ctx context.Context, resourceGroupName string, name string, vnetInfo VirtualNetworkProfile, options *EnvironmentsClientBeginChangeVnetOptions) (EnvironmentsClientChangeVnetPollerResponse, error) {
-	resp, err := client.changeVnet(ctx, resourceGroupName, name, vnetInfo, options)
-	if err != nil {
-		return EnvironmentsClientChangeVnetPollerResponse{}, err
+func (client *EnvironmentsClient) BeginChangeVnet(ctx context.Context, resourceGroupName string, name string, vnetInfo VirtualNetworkProfile, options *EnvironmentsClientBeginChangeVnetOptions) (*armruntime.Poller[*runtime.Pager[EnvironmentsClientChangeVnetResponse]], error) {
+	pager := runtime.NewPager(runtime.PageProcessor[EnvironmentsClientChangeVnetResponse]{
+		More: func(page EnvironmentsClientChangeVnetResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
+		},
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientChangeVnetResponse) (EnvironmentsClientChangeVnetResponse, error) {
+			req, err := runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			if err != nil {
+				return EnvironmentsClientChangeVnetResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientChangeVnetResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientChangeVnetResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.changeVnetHandleResponse(resp)
+		},
+	})
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.changeVnet(ctx, resourceGroupName, name, vnetInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller("EnvironmentsClient.ChangeVnet", "", resp, client.pl, &pager)
+	} else {
+		return armruntime.NewPollerFromResumeToken("EnvironmentsClient.ChangeVnet", options.ResumeToken, client.pl, &pager)
 	}
-	result := EnvironmentsClientChangeVnetPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.ChangeVnet", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientChangeVnetPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientChangeVnetPoller{
-		pt:     pt,
-		client: client,
-	}
-	return result, nil
 }
 
 // ChangeVnet - Description for Move an App Service Environment to a different VNET.
@@ -202,20 +212,16 @@ func (client *EnvironmentsClient) changeVnetHandleResponse(resp *http.Response) 
 // hostingEnvironmentEnvelope - Configuration details of the App Service Environment.
 // options - EnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdate
 // method.
-func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, hostingEnvironmentEnvelope EnvironmentResource, options *EnvironmentsClientBeginCreateOrUpdateOptions) (EnvironmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, name, hostingEnvironmentEnvelope, options)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, hostingEnvironmentEnvelope EnvironmentResource, options *EnvironmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[EnvironmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, name, hostingEnvironmentEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Description for Create or update an App Service Environment.
@@ -268,20 +274,16 @@ func (client *EnvironmentsClient) createOrUpdateCreateRequest(ctx context.Contex
 // multiRolePoolEnvelope - Properties of the multi-role pool.
 // options - EnvironmentsClientBeginCreateOrUpdateMultiRolePoolOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdateMultiRolePool
 // method.
-func (client *EnvironmentsClient) BeginCreateOrUpdateMultiRolePool(ctx context.Context, resourceGroupName string, name string, multiRolePoolEnvelope WorkerPoolResource, options *EnvironmentsClientBeginCreateOrUpdateMultiRolePoolOptions) (EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse, error) {
-	resp, err := client.createOrUpdateMultiRolePool(ctx, resourceGroupName, name, multiRolePoolEnvelope, options)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}, err
+func (client *EnvironmentsClient) BeginCreateOrUpdateMultiRolePool(ctx context.Context, resourceGroupName string, name string, multiRolePoolEnvelope WorkerPoolResource, options *EnvironmentsClientBeginCreateOrUpdateMultiRolePoolOptions) (*armruntime.Poller[EnvironmentsClientCreateOrUpdateMultiRolePoolResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateMultiRolePool(ctx, resourceGroupName, name, multiRolePoolEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientCreateOrUpdateMultiRolePoolResponse]("EnvironmentsClient.CreateOrUpdateMultiRolePool", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientCreateOrUpdateMultiRolePoolResponse]("EnvironmentsClient.CreateOrUpdateMultiRolePool", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdateMultiRolePool", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientCreateOrUpdateMultiRolePoolPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateMultiRolePool - Description for Create or update a multi-role pool.
@@ -335,20 +337,16 @@ func (client *EnvironmentsClient) createOrUpdateMultiRolePoolCreateRequest(ctx c
 // workerPoolEnvelope - Properties of the worker pool.
 // options - EnvironmentsClientBeginCreateOrUpdateWorkerPoolOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdateWorkerPool
 // method.
-func (client *EnvironmentsClient) BeginCreateOrUpdateWorkerPool(ctx context.Context, resourceGroupName string, name string, workerPoolName string, workerPoolEnvelope WorkerPoolResource, options *EnvironmentsClientBeginCreateOrUpdateWorkerPoolOptions) (EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse, error) {
-	resp, err := client.createOrUpdateWorkerPool(ctx, resourceGroupName, name, workerPoolName, workerPoolEnvelope, options)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}, err
+func (client *EnvironmentsClient) BeginCreateOrUpdateWorkerPool(ctx context.Context, resourceGroupName string, name string, workerPoolName string, workerPoolEnvelope WorkerPoolResource, options *EnvironmentsClientBeginCreateOrUpdateWorkerPoolOptions) (*armruntime.Poller[EnvironmentsClientCreateOrUpdateWorkerPoolResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateWorkerPool(ctx, resourceGroupName, name, workerPoolName, workerPoolEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientCreateOrUpdateWorkerPoolResponse]("EnvironmentsClient.CreateOrUpdateWorkerPool", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientCreateOrUpdateWorkerPoolResponse]("EnvironmentsClient.CreateOrUpdateWorkerPool", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdateWorkerPool", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientCreateOrUpdateWorkerPoolPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateWorkerPool - Description for Create or update a worker pool.
@@ -404,20 +402,16 @@ func (client *EnvironmentsClient) createOrUpdateWorkerPoolCreateRequest(ctx cont
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientBeginDeleteOptions contains the optional parameters for the EnvironmentsClient.BeginDelete
 // method.
-func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginDeleteOptions) (EnvironmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return EnvironmentsClientDeletePollerResponse{}, err
+func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginDeleteOptions) (*armruntime.Poller[EnvironmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientDeleteResponse]("EnvironmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientDeleteResponse]("EnvironmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Description for Delete an App Service Environment.
@@ -472,20 +466,16 @@ func (client *EnvironmentsClient) deleteCreateRequest(ctx context.Context, resou
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the EnvironmentsClient.BeginDeletePrivateEndpointConnection
 // method.
-func (client *EnvironmentsClient) BeginDeletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *EnvironmentsClientBeginDeletePrivateEndpointConnectionOptions) (EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.deletePrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
-	if err != nil {
-		return EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}, err
+func (client *EnvironmentsClient) BeginDeletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *EnvironmentsClientBeginDeletePrivateEndpointConnectionOptions) (*armruntime.Poller[EnvironmentsClientDeletePrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deletePrivateEndpointConnection(ctx, resourceGroupName, name, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientDeletePrivateEndpointConnectionResponse]("EnvironmentsClient.DeletePrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientDeletePrivateEndpointConnectionResponse]("EnvironmentsClient.DeletePrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.DeletePrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientDeletePrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeletePrivateEndpointConnection - Description for Deletes a private endpoint connection
@@ -714,16 +704,32 @@ func (client *EnvironmentsClient) getDiagnosticsItemHandleResponse(resp *http.Re
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientGetInboundNetworkDependenciesEndpointsOptions contains the optional parameters for the EnvironmentsClient.GetInboundNetworkDependenciesEndpoints
 // method.
-func (client *EnvironmentsClient) GetInboundNetworkDependenciesEndpoints(resourceGroupName string, name string, options *EnvironmentsClientGetInboundNetworkDependenciesEndpointsOptions) *EnvironmentsClientGetInboundNetworkDependenciesEndpointsPager {
-	return &EnvironmentsClientGetInboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getInboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) GetInboundNetworkDependenciesEndpoints(resourceGroupName string, name string, options *EnvironmentsClientGetInboundNetworkDependenciesEndpointsOptions) *runtime.Pager[EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse]{
+		More: func(page EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InboundEnvironmentEndpointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse) (EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getInboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getInboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getInboundNetworkDependenciesEndpointsCreateRequest creates the GetInboundNetworkDependenciesEndpoints request.
@@ -824,16 +830,32 @@ func (client *EnvironmentsClient) getMultiRolePoolHandleResponse(resp *http.Resp
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientGetOutboundNetworkDependenciesEndpointsOptions contains the optional parameters for the EnvironmentsClient.GetOutboundNetworkDependenciesEndpoints
 // method.
-func (client *EnvironmentsClient) GetOutboundNetworkDependenciesEndpoints(resourceGroupName string, name string, options *EnvironmentsClientGetOutboundNetworkDependenciesEndpointsOptions) *EnvironmentsClientGetOutboundNetworkDependenciesEndpointsPager {
-	return &EnvironmentsClientGetOutboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) GetOutboundNetworkDependenciesEndpoints(resourceGroupName string, name string, options *EnvironmentsClientGetOutboundNetworkDependenciesEndpointsOptions) *runtime.Pager[EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse]{
+		More: func(page EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundEnvironmentEndpointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse) (EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getOutboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getOutboundNetworkDependenciesEndpointsCreateRequest creates the GetOutboundNetworkDependenciesEndpoints request.
@@ -938,16 +960,32 @@ func (client *EnvironmentsClient) getPrivateEndpointConnectionHandleResponse(res
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientGetPrivateEndpointConnectionListOptions contains the optional parameters for the EnvironmentsClient.GetPrivateEndpointConnectionList
 // method.
-func (client *EnvironmentsClient) GetPrivateEndpointConnectionList(resourceGroupName string, name string, options *EnvironmentsClientGetPrivateEndpointConnectionListOptions) *EnvironmentsClientGetPrivateEndpointConnectionListPager {
-	return &EnvironmentsClientGetPrivateEndpointConnectionListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) GetPrivateEndpointConnectionList(resourceGroupName string, name string, options *EnvironmentsClientGetPrivateEndpointConnectionListOptions) *runtime.Pager[EnvironmentsClientGetPrivateEndpointConnectionListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientGetPrivateEndpointConnectionListResponse]{
+		More: func(page EnvironmentsClientGetPrivateEndpointConnectionListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientGetPrivateEndpointConnectionListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientGetPrivateEndpointConnectionListResponse) (EnvironmentsClientGetPrivateEndpointConnectionListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientGetPrivateEndpointConnectionListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientGetPrivateEndpointConnectionListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientGetPrivateEndpointConnectionListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getPrivateEndpointConnectionListHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getPrivateEndpointConnectionListCreateRequest creates the GetPrivateEndpointConnectionList request.
@@ -1160,16 +1198,32 @@ func (client *EnvironmentsClient) getWorkerPoolHandleResponse(resp *http.Respons
 // List - Description for Get all App Service Environments for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EnvironmentsClientListOptions contains the optional parameters for the EnvironmentsClient.List method.
-func (client *EnvironmentsClient) List(options *EnvironmentsClientListOptions) *EnvironmentsClientListPager {
-	return &EnvironmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *EnvironmentsClient) List(options *EnvironmentsClientListOptions) *runtime.Pager[EnvironmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListResponse]{
+		More: func(page EnvironmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnvironmentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListResponse) (EnvironmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -1205,16 +1259,32 @@ func (client *EnvironmentsClient) listHandleResponse(resp *http.Response) (Envir
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListAppServicePlansOptions contains the optional parameters for the EnvironmentsClient.ListAppServicePlans
 // method.
-func (client *EnvironmentsClient) ListAppServicePlans(resourceGroupName string, name string, options *EnvironmentsClientListAppServicePlansOptions) *EnvironmentsClientListAppServicePlansPager {
-	return &EnvironmentsClientListAppServicePlansPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAppServicePlansCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListAppServicePlans(resourceGroupName string, name string, options *EnvironmentsClientListAppServicePlansOptions) *runtime.Pager[EnvironmentsClientListAppServicePlansResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListAppServicePlansResponse]{
+		More: func(page EnvironmentsClientListAppServicePlansResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListAppServicePlansResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PlanCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListAppServicePlansResponse) (EnvironmentsClientListAppServicePlansResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAppServicePlansCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListAppServicePlansResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListAppServicePlansResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListAppServicePlansResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAppServicePlansHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAppServicePlansCreateRequest creates the ListAppServicePlans request.
@@ -1257,16 +1327,32 @@ func (client *EnvironmentsClient) listAppServicePlansHandleResponse(resp *http.R
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - EnvironmentsClientListByResourceGroupOptions contains the optional parameters for the EnvironmentsClient.ListByResourceGroup
 // method.
-func (client *EnvironmentsClient) ListByResourceGroup(resourceGroupName string, options *EnvironmentsClientListByResourceGroupOptions) *EnvironmentsClientListByResourceGroupPager {
-	return &EnvironmentsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *EnvironmentsClient) ListByResourceGroup(resourceGroupName string, options *EnvironmentsClientListByResourceGroupOptions) *runtime.Pager[EnvironmentsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListByResourceGroupResponse]{
+		More: func(page EnvironmentsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnvironmentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListByResourceGroupResponse) (EnvironmentsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -1306,16 +1392,32 @@ func (client *EnvironmentsClient) listByResourceGroupHandleResponse(resp *http.R
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListCapacitiesOptions contains the optional parameters for the EnvironmentsClient.ListCapacities
 // method.
-func (client *EnvironmentsClient) ListCapacities(resourceGroupName string, name string, options *EnvironmentsClientListCapacitiesOptions) *EnvironmentsClientListCapacitiesPager {
-	return &EnvironmentsClientListCapacitiesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCapacitiesCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListCapacities(resourceGroupName string, name string, options *EnvironmentsClientListCapacitiesOptions) *runtime.Pager[EnvironmentsClientListCapacitiesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListCapacitiesResponse]{
+		More: func(page EnvironmentsClientListCapacitiesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListCapacitiesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StampCapacityCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListCapacitiesResponse) (EnvironmentsClientListCapacitiesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCapacitiesCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListCapacitiesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListCapacitiesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListCapacitiesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCapacitiesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCapacitiesCreateRequest creates the ListCapacities request.
@@ -1415,16 +1517,32 @@ func (client *EnvironmentsClient) listDiagnosticsHandleResponse(resp *http.Respo
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListMultiRoleMetricDefinitionsOptions contains the optional parameters for the EnvironmentsClient.ListMultiRoleMetricDefinitions
 // method.
-func (client *EnvironmentsClient) ListMultiRoleMetricDefinitions(resourceGroupName string, name string, options *EnvironmentsClientListMultiRoleMetricDefinitionsOptions) *EnvironmentsClientListMultiRoleMetricDefinitionsPager {
-	return &EnvironmentsClientListMultiRoleMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMultiRoleMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListMultiRoleMetricDefinitions(resourceGroupName string, name string, options *EnvironmentsClientListMultiRoleMetricDefinitionsOptions) *runtime.Pager[EnvironmentsClientListMultiRoleMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListMultiRoleMetricDefinitionsResponse]{
+		More: func(page EnvironmentsClientListMultiRoleMetricDefinitionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListMultiRoleMetricDefinitionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceMetricDefinitionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListMultiRoleMetricDefinitionsResponse) (EnvironmentsClientListMultiRoleMetricDefinitionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMultiRoleMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListMultiRoleMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListMultiRoleMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListMultiRoleMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMultiRoleMetricDefinitionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMultiRoleMetricDefinitionsCreateRequest creates the ListMultiRoleMetricDefinitions request.
@@ -1470,16 +1588,32 @@ func (client *EnvironmentsClient) listMultiRoleMetricDefinitionsHandleResponse(r
 // instance - Name of the instance in the multi-role pool.
 // options - EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsOptions contains the optional parameters for the
 // EnvironmentsClient.ListMultiRolePoolInstanceMetricDefinitions method.
-func (client *EnvironmentsClient) ListMultiRolePoolInstanceMetricDefinitions(resourceGroupName string, name string, instance string, options *EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsOptions) *EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsPager {
-	return &EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMultiRolePoolInstanceMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, instance, options)
+func (client *EnvironmentsClient) ListMultiRolePoolInstanceMetricDefinitions(resourceGroupName string, name string, instance string, options *EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsOptions) *runtime.Pager[EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse]{
+		More: func(page EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceMetricDefinitionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse) (EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMultiRolePoolInstanceMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, instance, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMultiRolePoolInstanceMetricDefinitionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMultiRolePoolInstanceMetricDefinitionsCreateRequest creates the ListMultiRolePoolInstanceMetricDefinitions request.
@@ -1527,16 +1661,32 @@ func (client *EnvironmentsClient) listMultiRolePoolInstanceMetricDefinitionsHand
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListMultiRolePoolSKUsOptions contains the optional parameters for the EnvironmentsClient.ListMultiRolePoolSKUs
 // method.
-func (client *EnvironmentsClient) ListMultiRolePoolSKUs(resourceGroupName string, name string, options *EnvironmentsClientListMultiRolePoolSKUsOptions) *EnvironmentsClientListMultiRolePoolSKUsPager {
-	return &EnvironmentsClientListMultiRolePoolSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMultiRolePoolSKUsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListMultiRolePoolSKUs(resourceGroupName string, name string, options *EnvironmentsClientListMultiRolePoolSKUsOptions) *runtime.Pager[EnvironmentsClientListMultiRolePoolSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListMultiRolePoolSKUsResponse]{
+		More: func(page EnvironmentsClientListMultiRolePoolSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListMultiRolePoolSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUInfoCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListMultiRolePoolSKUsResponse) (EnvironmentsClientListMultiRolePoolSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMultiRolePoolSKUsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListMultiRolePoolSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMultiRolePoolSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMultiRolePoolSKUsCreateRequest creates the ListMultiRolePoolSKUs request.
@@ -1580,16 +1730,32 @@ func (client *EnvironmentsClient) listMultiRolePoolSKUsHandleResponse(resp *http
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListMultiRolePoolsOptions contains the optional parameters for the EnvironmentsClient.ListMultiRolePools
 // method.
-func (client *EnvironmentsClient) ListMultiRolePools(resourceGroupName string, name string, options *EnvironmentsClientListMultiRolePoolsOptions) *EnvironmentsClientListMultiRolePoolsPager {
-	return &EnvironmentsClientListMultiRolePoolsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMultiRolePoolsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListMultiRolePools(resourceGroupName string, name string, options *EnvironmentsClientListMultiRolePoolsOptions) *runtime.Pager[EnvironmentsClientListMultiRolePoolsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListMultiRolePoolsResponse]{
+		More: func(page EnvironmentsClientListMultiRolePoolsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListMultiRolePoolsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkerPoolCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListMultiRolePoolsResponse) (EnvironmentsClientListMultiRolePoolsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMultiRolePoolsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListMultiRolePoolsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListMultiRolePoolsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMultiRolePoolsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMultiRolePoolsCreateRequest creates the ListMultiRolePools request.
@@ -1633,16 +1799,32 @@ func (client *EnvironmentsClient) listMultiRolePoolsHandleResponse(resp *http.Re
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListMultiRoleUsagesOptions contains the optional parameters for the EnvironmentsClient.ListMultiRoleUsages
 // method.
-func (client *EnvironmentsClient) ListMultiRoleUsages(resourceGroupName string, name string, options *EnvironmentsClientListMultiRoleUsagesOptions) *EnvironmentsClientListMultiRoleUsagesPager {
-	return &EnvironmentsClientListMultiRoleUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMultiRoleUsagesCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListMultiRoleUsages(resourceGroupName string, name string, options *EnvironmentsClientListMultiRoleUsagesOptions) *runtime.Pager[EnvironmentsClientListMultiRoleUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListMultiRoleUsagesResponse]{
+		More: func(page EnvironmentsClientListMultiRoleUsagesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListMultiRoleUsagesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsageCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListMultiRoleUsagesResponse) (EnvironmentsClientListMultiRoleUsagesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMultiRoleUsagesCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListMultiRoleUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListMultiRoleUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListMultiRoleUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMultiRoleUsagesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMultiRoleUsagesCreateRequest creates the ListMultiRoleUsages request.
@@ -1741,16 +1923,32 @@ func (client *EnvironmentsClient) listOperationsHandleResponse(resp *http.Respon
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListUsagesOptions contains the optional parameters for the EnvironmentsClient.ListUsages method.
-func (client *EnvironmentsClient) ListUsages(resourceGroupName string, name string, options *EnvironmentsClientListUsagesOptions) *EnvironmentsClientListUsagesPager {
-	return &EnvironmentsClientListUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listUsagesCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListUsages(resourceGroupName string, name string, options *EnvironmentsClientListUsagesOptions) *runtime.Pager[EnvironmentsClientListUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListUsagesResponse]{
+		More: func(page EnvironmentsClientListUsagesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListUsagesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CsmUsageQuotaCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListUsagesResponse) (EnvironmentsClientListUsagesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listUsagesCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listUsagesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listUsagesCreateRequest creates the ListUsages request.
@@ -1799,16 +1997,32 @@ func (client *EnvironmentsClient) listUsagesHandleResponse(resp *http.Response) 
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListWebAppsOptions contains the optional parameters for the EnvironmentsClient.ListWebApps
 // method.
-func (client *EnvironmentsClient) ListWebApps(resourceGroupName string, name string, options *EnvironmentsClientListWebAppsOptions) *EnvironmentsClientListWebAppsPager {
-	return &EnvironmentsClientListWebAppsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWebAppsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListWebApps(resourceGroupName string, name string, options *EnvironmentsClientListWebAppsOptions) *runtime.Pager[EnvironmentsClientListWebAppsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWebAppsResponse]{
+		More: func(page EnvironmentsClientListWebAppsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWebAppsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebAppCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWebAppsResponse) (EnvironmentsClientListWebAppsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWebAppsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWebAppsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWebAppsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWebAppsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWebAppsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWebAppsCreateRequest creates the ListWebApps request.
@@ -1856,16 +2070,32 @@ func (client *EnvironmentsClient) listWebAppsHandleResponse(resp *http.Response)
 // workerPoolName - Name of the worker pool.
 // options - EnvironmentsClientListWebWorkerMetricDefinitionsOptions contains the optional parameters for the EnvironmentsClient.ListWebWorkerMetricDefinitions
 // method.
-func (client *EnvironmentsClient) ListWebWorkerMetricDefinitions(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWebWorkerMetricDefinitionsOptions) *EnvironmentsClientListWebWorkerMetricDefinitionsPager {
-	return &EnvironmentsClientListWebWorkerMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWebWorkerMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+func (client *EnvironmentsClient) ListWebWorkerMetricDefinitions(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWebWorkerMetricDefinitionsOptions) *runtime.Pager[EnvironmentsClientListWebWorkerMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWebWorkerMetricDefinitionsResponse]{
+		More: func(page EnvironmentsClientListWebWorkerMetricDefinitionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWebWorkerMetricDefinitionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceMetricDefinitionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWebWorkerMetricDefinitionsResponse) (EnvironmentsClientListWebWorkerMetricDefinitionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWebWorkerMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWebWorkerMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWebWorkerMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWebWorkerMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWebWorkerMetricDefinitionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWebWorkerMetricDefinitionsCreateRequest creates the ListWebWorkerMetricDefinitions request.
@@ -1914,16 +2144,32 @@ func (client *EnvironmentsClient) listWebWorkerMetricDefinitionsHandleResponse(r
 // workerPoolName - Name of the worker pool.
 // options - EnvironmentsClientListWebWorkerUsagesOptions contains the optional parameters for the EnvironmentsClient.ListWebWorkerUsages
 // method.
-func (client *EnvironmentsClient) ListWebWorkerUsages(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWebWorkerUsagesOptions) *EnvironmentsClientListWebWorkerUsagesPager {
-	return &EnvironmentsClientListWebWorkerUsagesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWebWorkerUsagesCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+func (client *EnvironmentsClient) ListWebWorkerUsages(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWebWorkerUsagesOptions) *runtime.Pager[EnvironmentsClientListWebWorkerUsagesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWebWorkerUsagesResponse]{
+		More: func(page EnvironmentsClientListWebWorkerUsagesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWebWorkerUsagesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsageCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWebWorkerUsagesResponse) (EnvironmentsClientListWebWorkerUsagesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWebWorkerUsagesCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWebWorkerUsagesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWebWorkerUsagesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWebWorkerUsagesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWebWorkerUsagesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWebWorkerUsagesCreateRequest creates the ListWebWorkerUsages request.
@@ -1974,16 +2220,32 @@ func (client *EnvironmentsClient) listWebWorkerUsagesHandleResponse(resp *http.R
 // instance - Name of the instance in the worker pool.
 // options - EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsOptions contains the optional parameters for the EnvironmentsClient.ListWorkerPoolInstanceMetricDefinitions
 // method.
-func (client *EnvironmentsClient) ListWorkerPoolInstanceMetricDefinitions(resourceGroupName string, name string, workerPoolName string, instance string, options *EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsOptions) *EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsPager {
-	return &EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWorkerPoolInstanceMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, workerPoolName, instance, options)
+func (client *EnvironmentsClient) ListWorkerPoolInstanceMetricDefinitions(resourceGroupName string, name string, workerPoolName string, instance string, options *EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsOptions) *runtime.Pager[EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse]{
+		More: func(page EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceMetricDefinitionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse) (EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWorkerPoolInstanceMetricDefinitionsCreateRequest(ctx, resourceGroupName, name, workerPoolName, instance, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWorkerPoolInstanceMetricDefinitionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWorkerPoolInstanceMetricDefinitionsCreateRequest creates the ListWorkerPoolInstanceMetricDefinitions request.
@@ -2036,16 +2298,32 @@ func (client *EnvironmentsClient) listWorkerPoolInstanceMetricDefinitionsHandleR
 // workerPoolName - Name of the worker pool.
 // options - EnvironmentsClientListWorkerPoolSKUsOptions contains the optional parameters for the EnvironmentsClient.ListWorkerPoolSKUs
 // method.
-func (client *EnvironmentsClient) ListWorkerPoolSKUs(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWorkerPoolSKUsOptions) *EnvironmentsClientListWorkerPoolSKUsPager {
-	return &EnvironmentsClientListWorkerPoolSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWorkerPoolSKUsCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+func (client *EnvironmentsClient) ListWorkerPoolSKUs(resourceGroupName string, name string, workerPoolName string, options *EnvironmentsClientListWorkerPoolSKUsOptions) *runtime.Pager[EnvironmentsClientListWorkerPoolSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWorkerPoolSKUsResponse]{
+		More: func(page EnvironmentsClientListWorkerPoolSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWorkerPoolSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUInfoCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWorkerPoolSKUsResponse) (EnvironmentsClientListWorkerPoolSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWorkerPoolSKUsCreateRequest(ctx, resourceGroupName, name, workerPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWorkerPoolSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWorkerPoolSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWorkerPoolSKUsCreateRequest creates the ListWorkerPoolSKUs request.
@@ -2093,16 +2371,32 @@ func (client *EnvironmentsClient) listWorkerPoolSKUsHandleResponse(resp *http.Re
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientListWorkerPoolsOptions contains the optional parameters for the EnvironmentsClient.ListWorkerPools
 // method.
-func (client *EnvironmentsClient) ListWorkerPools(resourceGroupName string, name string, options *EnvironmentsClientListWorkerPoolsOptions) *EnvironmentsClientListWorkerPoolsPager {
-	return &EnvironmentsClientListWorkerPoolsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listWorkerPoolsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *EnvironmentsClient) ListWorkerPools(resourceGroupName string, name string, options *EnvironmentsClientListWorkerPoolsOptions) *runtime.Pager[EnvironmentsClientListWorkerPoolsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnvironmentsClientListWorkerPoolsResponse]{
+		More: func(page EnvironmentsClientListWorkerPoolsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnvironmentsClientListWorkerPoolsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkerPoolCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientListWorkerPoolsResponse) (EnvironmentsClientListWorkerPoolsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listWorkerPoolsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientListWorkerPoolsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientListWorkerPoolsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listWorkerPoolsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listWorkerPoolsCreateRequest creates the ListWorkerPools request.
@@ -2192,21 +2486,35 @@ func (client *EnvironmentsClient) rebootCreateRequest(ctx context.Context, resou
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientBeginResumeOptions contains the optional parameters for the EnvironmentsClient.BeginResume
 // method.
-func (client *EnvironmentsClient) BeginResume(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginResumeOptions) (EnvironmentsClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return EnvironmentsClientResumePollerResponse{}, err
+func (client *EnvironmentsClient) BeginResume(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginResumeOptions) (*armruntime.Poller[*runtime.Pager[EnvironmentsClientResumeResponse]], error) {
+	pager := runtime.NewPager(runtime.PageProcessor[EnvironmentsClientResumeResponse]{
+		More: func(page EnvironmentsClientResumeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
+		},
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientResumeResponse) (EnvironmentsClientResumeResponse, error) {
+			req, err := runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			if err != nil {
+				return EnvironmentsClientResumeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientResumeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientResumeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.resumeHandleResponse(resp)
+		},
+	})
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller("EnvironmentsClient.Resume", "", resp, client.pl, &pager)
+	} else {
+		return armruntime.NewPollerFromResumeToken("EnvironmentsClient.Resume", options.ResumeToken, client.pl, &pager)
 	}
-	result := EnvironmentsClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.Resume", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientResumePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientResumePoller{
-		pt:     pt,
-		client: client,
-	}
-	return result, nil
 }
 
 // Resume - Description for Resume an App Service Environment.
@@ -2267,21 +2575,35 @@ func (client *EnvironmentsClient) resumeHandleResponse(resp *http.Response) (Env
 // name - Name of the App Service Environment.
 // options - EnvironmentsClientBeginSuspendOptions contains the optional parameters for the EnvironmentsClient.BeginSuspend
 // method.
-func (client *EnvironmentsClient) BeginSuspend(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginSuspendOptions) (EnvironmentsClientSuspendPollerResponse, error) {
-	resp, err := client.suspend(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return EnvironmentsClientSuspendPollerResponse{}, err
+func (client *EnvironmentsClient) BeginSuspend(ctx context.Context, resourceGroupName string, name string, options *EnvironmentsClientBeginSuspendOptions) (*armruntime.Poller[*runtime.Pager[EnvironmentsClientSuspendResponse]], error) {
+	pager := runtime.NewPager(runtime.PageProcessor[EnvironmentsClientSuspendResponse]{
+		More: func(page EnvironmentsClientSuspendResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
+		},
+		Fetcher: func(ctx context.Context, page *EnvironmentsClientSuspendResponse) (EnvironmentsClientSuspendResponse, error) {
+			req, err := runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			if err != nil {
+				return EnvironmentsClientSuspendResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnvironmentsClientSuspendResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnvironmentsClientSuspendResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.suspendHandleResponse(resp)
+		},
+	})
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.suspend(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller("EnvironmentsClient.Suspend", "", resp, client.pl, &pager)
+	} else {
+		return armruntime.NewPollerFromResumeToken("EnvironmentsClient.Suspend", options.ResumeToken, client.pl, &pager)
 	}
-	result := EnvironmentsClientSuspendPollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.Suspend", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientSuspendPollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientSuspendPoller{
-		pt:     pt,
-		client: client,
-	}
-	return result, nil
 }
 
 // Suspend - Description for Suspend an App Service Environment.

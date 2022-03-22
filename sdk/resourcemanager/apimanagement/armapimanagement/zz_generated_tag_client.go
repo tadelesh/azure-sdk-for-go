@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1093,16 +1093,32 @@ func (client *TagClient) getEntityStateByProductHandleResponse(resp *http.Respon
 // apiID - API revision identifier. Must be unique in the current API Management service instance. Non-current revision has
 // ;rev=n as a suffix where n is the revision number.
 // options - TagClientListByAPIOptions contains the optional parameters for the TagClient.ListByAPI method.
-func (client *TagClient) ListByAPI(resourceGroupName string, serviceName string, apiID string, options *TagClientListByAPIOptions) *TagClientListByAPIPager {
-	return &TagClientListByAPIPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAPICreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+func (client *TagClient) ListByAPI(resourceGroupName string, serviceName string, apiID string, options *TagClientListByAPIOptions) *runtime.Pager[TagClientListByAPIResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagClientListByAPIResponse]{
+		More: func(page TagClientListByAPIResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagClientListByAPIResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TagClientListByAPIResponse) (TagClientListByAPIResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAPICreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagClientListByAPIResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagClientListByAPIResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagClientListByAPIResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAPIHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAPICreateRequest creates the ListByAPI request.
@@ -1161,16 +1177,32 @@ func (client *TagClient) listByAPIHandleResponse(resp *http.Response) (TagClient
 // ;rev=n as a suffix where n is the revision number.
 // operationID - Operation identifier within an API. Must be unique in the current API Management service instance.
 // options - TagClientListByOperationOptions contains the optional parameters for the TagClient.ListByOperation method.
-func (client *TagClient) ListByOperation(resourceGroupName string, serviceName string, apiID string, operationID string, options *TagClientListByOperationOptions) *TagClientListByOperationPager {
-	return &TagClientListByOperationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByOperationCreateRequest(ctx, resourceGroupName, serviceName, apiID, operationID, options)
+func (client *TagClient) ListByOperation(resourceGroupName string, serviceName string, apiID string, operationID string, options *TagClientListByOperationOptions) *runtime.Pager[TagClientListByOperationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagClientListByOperationResponse]{
+		More: func(page TagClientListByOperationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagClientListByOperationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TagClientListByOperationResponse) (TagClientListByOperationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByOperationCreateRequest(ctx, resourceGroupName, serviceName, apiID, operationID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagClientListByOperationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagClientListByOperationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagClientListByOperationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByOperationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByOperationCreateRequest creates the ListByOperation request.
@@ -1231,16 +1263,32 @@ func (client *TagClient) listByOperationHandleResponse(resp *http.Response) (Tag
 // serviceName - The name of the API Management service.
 // productID - Product identifier. Must be unique in the current API Management service instance.
 // options - TagClientListByProductOptions contains the optional parameters for the TagClient.ListByProduct method.
-func (client *TagClient) ListByProduct(resourceGroupName string, serviceName string, productID string, options *TagClientListByProductOptions) *TagClientListByProductPager {
-	return &TagClientListByProductPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProductCreateRequest(ctx, resourceGroupName, serviceName, productID, options)
+func (client *TagClient) ListByProduct(resourceGroupName string, serviceName string, productID string, options *TagClientListByProductOptions) *runtime.Pager[TagClientListByProductResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagClientListByProductResponse]{
+		More: func(page TagClientListByProductResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagClientListByProductResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TagClientListByProductResponse) (TagClientListByProductResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByProductCreateRequest(ctx, resourceGroupName, serviceName, productID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagClientListByProductResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagClientListByProductResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagClientListByProductResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProductHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByProductCreateRequest creates the ListByProduct request.
@@ -1296,16 +1344,32 @@ func (client *TagClient) listByProductHandleResponse(resp *http.Response) (TagCl
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - TagClientListByServiceOptions contains the optional parameters for the TagClient.ListByService method.
-func (client *TagClient) ListByService(resourceGroupName string, serviceName string, options *TagClientListByServiceOptions) *TagClientListByServicePager {
-	return &TagClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *TagClient) ListByService(resourceGroupName string, serviceName string, options *TagClientListByServiceOptions) *runtime.Pager[TagClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagClientListByServiceResponse]{
+		More: func(page TagClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TagClientListByServiceResponse) (TagClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

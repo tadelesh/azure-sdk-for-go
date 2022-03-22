@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *AccountFiltersClient) getHandleResponse(resp *http.Response) (Acco
 // resourceGroupName - The name of the resource group within the Azure subscription.
 // accountName - The Media Services account name.
 // options - AccountFiltersClientListOptions contains the optional parameters for the AccountFiltersClient.List method.
-func (client *AccountFiltersClient) List(resourceGroupName string, accountName string, options *AccountFiltersClientListOptions) *AccountFiltersClientListPager {
-	return &AccountFiltersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *AccountFiltersClient) List(resourceGroupName string, accountName string, options *AccountFiltersClientListOptions) *runtime.Pager[AccountFiltersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountFiltersClientListResponse]{
+		More: func(page AccountFiltersClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountFiltersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountFilterCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *AccountFiltersClientListResponse) (AccountFiltersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return AccountFiltersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountFiltersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountFiltersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

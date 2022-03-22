@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,13 +229,26 @@ func (client *ConfigurationProfileAssignmentsClient) getHandleResponse(resp *htt
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ConfigurationProfileAssignmentsClientListOptions contains the optional parameters for the ConfigurationProfileAssignmentsClient.List
 // method.
-func (client *ConfigurationProfileAssignmentsClient) List(resourceGroupName string, options *ConfigurationProfileAssignmentsClientListOptions) *ConfigurationProfileAssignmentsClientListPager {
-	return &ConfigurationProfileAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *ConfigurationProfileAssignmentsClient) List(resourceGroupName string, options *ConfigurationProfileAssignmentsClientListOptions) *runtime.Pager[ConfigurationProfileAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationProfileAssignmentsClientListResponse]{
+		More: func(page ConfigurationProfileAssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationProfileAssignmentsClientListResponse) (ConfigurationProfileAssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ConfigurationProfileAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationProfileAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationProfileAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -273,13 +286,26 @@ func (client *ConfigurationProfileAssignmentsClient) listHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationProfileAssignmentsClientListBySubscriptionOptions contains the optional parameters for the ConfigurationProfileAssignmentsClient.ListBySubscription
 // method.
-func (client *ConfigurationProfileAssignmentsClient) ListBySubscription(options *ConfigurationProfileAssignmentsClientListBySubscriptionOptions) *ConfigurationProfileAssignmentsClientListBySubscriptionPager {
-	return &ConfigurationProfileAssignmentsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ConfigurationProfileAssignmentsClient) ListBySubscription(options *ConfigurationProfileAssignmentsClientListBySubscriptionOptions) *runtime.Pager[ConfigurationProfileAssignmentsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationProfileAssignmentsClientListBySubscriptionResponse]{
+		More: func(page ConfigurationProfileAssignmentsClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationProfileAssignmentsClientListBySubscriptionResponse) (ConfigurationProfileAssignmentsClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return ConfigurationProfileAssignmentsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationProfileAssignmentsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationProfileAssignmentsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

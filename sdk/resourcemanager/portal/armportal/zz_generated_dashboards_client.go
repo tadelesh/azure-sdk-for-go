@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,16 +212,32 @@ func (client *DashboardsClient) getHandleResponse(resp *http.Response) (Dashboar
 // resourceGroupName - The name of the resource group.
 // options - DashboardsClientListByResourceGroupOptions contains the optional parameters for the DashboardsClient.ListByResourceGroup
 // method.
-func (client *DashboardsClient) ListByResourceGroup(resourceGroupName string, options *DashboardsClientListByResourceGroupOptions) *DashboardsClientListByResourceGroupPager {
-	return &DashboardsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DashboardsClient) ListByResourceGroup(resourceGroupName string, options *DashboardsClientListByResourceGroupOptions) *runtime.Pager[DashboardsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DashboardsClientListByResourceGroupResponse]{
+		More: func(page DashboardsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DashboardsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DashboardListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DashboardsClientListByResourceGroupResponse) (DashboardsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DashboardsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DashboardsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DashboardsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -259,16 +275,32 @@ func (client *DashboardsClient) listByResourceGroupHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DashboardsClientListBySubscriptionOptions contains the optional parameters for the DashboardsClient.ListBySubscription
 // method.
-func (client *DashboardsClient) ListBySubscription(options *DashboardsClientListBySubscriptionOptions) *DashboardsClientListBySubscriptionPager {
-	return &DashboardsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DashboardsClient) ListBySubscription(options *DashboardsClientListBySubscriptionOptions) *runtime.Pager[DashboardsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DashboardsClientListBySubscriptionResponse]{
+		More: func(page DashboardsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DashboardsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DashboardListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DashboardsClientListBySubscriptionResponse) (DashboardsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DashboardsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DashboardsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DashboardsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

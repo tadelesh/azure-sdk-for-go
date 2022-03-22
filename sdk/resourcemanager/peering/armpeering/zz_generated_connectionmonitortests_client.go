@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -233,16 +233,32 @@ func (client *ConnectionMonitorTestsClient) getHandleResponse(resp *http.Respons
 // peeringServiceName - The name of the peering service.
 // options - ConnectionMonitorTestsClientListByPeeringServiceOptions contains the optional parameters for the ConnectionMonitorTestsClient.ListByPeeringService
 // method.
-func (client *ConnectionMonitorTestsClient) ListByPeeringService(resourceGroupName string, peeringServiceName string, options *ConnectionMonitorTestsClientListByPeeringServiceOptions) *ConnectionMonitorTestsClientListByPeeringServicePager {
-	return &ConnectionMonitorTestsClientListByPeeringServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByPeeringServiceCreateRequest(ctx, resourceGroupName, peeringServiceName, options)
+func (client *ConnectionMonitorTestsClient) ListByPeeringService(resourceGroupName string, peeringServiceName string, options *ConnectionMonitorTestsClientListByPeeringServiceOptions) *runtime.Pager[ConnectionMonitorTestsClientListByPeeringServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConnectionMonitorTestsClientListByPeeringServiceResponse]{
+		More: func(page ConnectionMonitorTestsClientListByPeeringServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConnectionMonitorTestsClientListByPeeringServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConnectionMonitorTestListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConnectionMonitorTestsClientListByPeeringServiceResponse) (ConnectionMonitorTestsClientListByPeeringServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByPeeringServiceCreateRequest(ctx, resourceGroupName, peeringServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConnectionMonitorTestsClientListByPeeringServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConnectionMonitorTestsClientListByPeeringServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConnectionMonitorTestsClientListByPeeringServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByPeeringServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByPeeringServiceCreateRequest creates the ListByPeeringService request.

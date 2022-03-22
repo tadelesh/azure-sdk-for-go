@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -107,16 +107,32 @@ func (client *AlertsClient) changeStateHandleResponse(resp *http.Response) (Aler
 // lastModifiedDateTime.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AlertsClientGetAllOptions contains the optional parameters for the AlertsClient.GetAll method.
-func (client *AlertsClient) GetAll(options *AlertsClientGetAllOptions) *AlertsClientGetAllPager {
-	return &AlertsClientGetAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getAllCreateRequest(ctx, options)
+func (client *AlertsClient) GetAll(options *AlertsClientGetAllOptions) *runtime.Pager[AlertsClientGetAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientGetAllResponse]{
+		More: func(page AlertsClientGetAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientGetAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertsList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientGetAllResponse) (AlertsClientGetAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getAllCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientGetAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientGetAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientGetAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getAllCreateRequest creates the GetAll request.

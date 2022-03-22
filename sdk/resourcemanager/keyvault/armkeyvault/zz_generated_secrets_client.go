@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -182,16 +182,32 @@ func (client *SecretsClient) getHandleResponse(resp *http.Response) (SecretsClie
 // resourceGroupName - The name of the Resource Group to which the vault belongs.
 // vaultName - The name of the vault.
 // options - SecretsClientListOptions contains the optional parameters for the SecretsClient.List method.
-func (client *SecretsClient) List(resourceGroupName string, vaultName string, options *SecretsClientListOptions) *SecretsClientListPager {
-	return &SecretsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+func (client *SecretsClient) List(resourceGroupName string, vaultName string, options *SecretsClientListOptions) *runtime.Pager[SecretsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecretsClientListResponse]{
+		More: func(page SecretsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecretsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecretListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SecretsClientListResponse) (SecretsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecretsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecretsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecretsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

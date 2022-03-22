@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,13 +230,26 @@ func (client *ConfigurationProfilesVersionsClient) getHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ConfigurationProfilesVersionsClientListChildResourcesOptions contains the optional parameters for the ConfigurationProfilesVersionsClient.ListChildResources
 // method.
-func (client *ConfigurationProfilesVersionsClient) ListChildResources(configurationProfileName string, resourceGroupName string, options *ConfigurationProfilesVersionsClientListChildResourcesOptions) *ConfigurationProfilesVersionsClientListChildResourcesPager {
-	return &ConfigurationProfilesVersionsClientListChildResourcesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listChildResourcesCreateRequest(ctx, configurationProfileName, resourceGroupName, options)
+func (client *ConfigurationProfilesVersionsClient) ListChildResources(configurationProfileName string, resourceGroupName string, options *ConfigurationProfilesVersionsClientListChildResourcesOptions) *runtime.Pager[ConfigurationProfilesVersionsClientListChildResourcesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConfigurationProfilesVersionsClientListChildResourcesResponse]{
+		More: func(page ConfigurationProfilesVersionsClientListChildResourcesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ConfigurationProfilesVersionsClientListChildResourcesResponse) (ConfigurationProfilesVersionsClientListChildResourcesResponse, error) {
+			req, err := client.listChildResourcesCreateRequest(ctx, configurationProfileName, resourceGroupName, options)
+			if err != nil {
+				return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listChildResourcesHandleResponse(resp)
+		},
+	})
 }
 
 // listChildResourcesCreateRequest creates the ListChildResources request.

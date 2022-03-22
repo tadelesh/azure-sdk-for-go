@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -103,20 +103,16 @@ func (client *RegistriesClient) checkNameAvailabilityHandleResponse(resp *http.R
 // registryName - The name of the container registry.
 // registry - The parameters for creating a container registry.
 // options - RegistriesClientBeginCreateOptions contains the optional parameters for the RegistriesClient.BeginCreate method.
-func (client *RegistriesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, registry Registry, options *RegistriesClientBeginCreateOptions) (RegistriesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, registryName, registry, options)
-	if err != nil {
-		return RegistriesClientCreatePollerResponse{}, err
+func (client *RegistriesClient) BeginCreate(ctx context.Context, resourceGroupName string, registryName string, registry Registry, options *RegistriesClientBeginCreateOptions) (*armruntime.Poller[RegistriesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, registryName, registry, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientCreateResponse]("RegistriesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientCreateResponse]("RegistriesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a container registry with the specified parameters.
@@ -167,20 +163,16 @@ func (client *RegistriesClient) createCreateRequest(ctx context.Context, resourc
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // registryName - The name of the container registry.
 // options - RegistriesClientBeginDeleteOptions contains the optional parameters for the RegistriesClient.BeginDelete method.
-func (client *RegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, options *RegistriesClientBeginDeleteOptions) (RegistriesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, options)
-	if err != nil {
-		return RegistriesClientDeletePollerResponse{}, err
+func (client *RegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, registryName string, options *RegistriesClientBeginDeleteOptions) (*armruntime.Poller[RegistriesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, registryName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientDeleteResponse]("RegistriesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientDeleteResponse]("RegistriesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a container registry.
@@ -232,20 +224,16 @@ func (client *RegistriesClient) deleteCreateRequest(ctx context.Context, resourc
 // generateCredentialsParameters - The parameters for generating credentials.
 // options - RegistriesClientBeginGenerateCredentialsOptions contains the optional parameters for the RegistriesClient.BeginGenerateCredentials
 // method.
-func (client *RegistriesClient) BeginGenerateCredentials(ctx context.Context, resourceGroupName string, registryName string, generateCredentialsParameters GenerateCredentialsParameters, options *RegistriesClientBeginGenerateCredentialsOptions) (RegistriesClientGenerateCredentialsPollerResponse, error) {
-	resp, err := client.generateCredentials(ctx, resourceGroupName, registryName, generateCredentialsParameters, options)
-	if err != nil {
-		return RegistriesClientGenerateCredentialsPollerResponse{}, err
+func (client *RegistriesClient) BeginGenerateCredentials(ctx context.Context, resourceGroupName string, registryName string, generateCredentialsParameters GenerateCredentialsParameters, options *RegistriesClientBeginGenerateCredentialsOptions) (*armruntime.Poller[RegistriesClientGenerateCredentialsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.generateCredentials(ctx, resourceGroupName, registryName, generateCredentialsParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientGenerateCredentialsResponse]("RegistriesClient.GenerateCredentials", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientGenerateCredentialsResponse]("RegistriesClient.GenerateCredentials", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientGenerateCredentialsPollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.GenerateCredentials", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientGenerateCredentialsPollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientGenerateCredentialsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // GenerateCredentials - Generate keys for a token of a specified container registry.
@@ -470,20 +458,16 @@ func (client *RegistriesClient) getPrivateLinkResourceHandleResponse(resp *http.
 // parameters - The parameters specifying the image to copy and the source container registry.
 // options - RegistriesClientBeginImportImageOptions contains the optional parameters for the RegistriesClient.BeginImportImage
 // method.
-func (client *RegistriesClient) BeginImportImage(ctx context.Context, resourceGroupName string, registryName string, parameters ImportImageParameters, options *RegistriesClientBeginImportImageOptions) (RegistriesClientImportImagePollerResponse, error) {
-	resp, err := client.importImage(ctx, resourceGroupName, registryName, parameters, options)
-	if err != nil {
-		return RegistriesClientImportImagePollerResponse{}, err
+func (client *RegistriesClient) BeginImportImage(ctx context.Context, resourceGroupName string, registryName string, parameters ImportImageParameters, options *RegistriesClientBeginImportImageOptions) (*armruntime.Poller[RegistriesClientImportImageResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.importImage(ctx, resourceGroupName, registryName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientImportImageResponse]("RegistriesClient.ImportImage", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientImportImageResponse]("RegistriesClient.ImportImage", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientImportImagePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.ImportImage", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientImportImagePollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientImportImagePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ImportImage - Copies an image to this container registry from the specified container registry.
@@ -531,16 +515,32 @@ func (client *RegistriesClient) importImageCreateRequest(ctx context.Context, re
 // List - Lists all the container registries under the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RegistriesClientListOptions contains the optional parameters for the RegistriesClient.List method.
-func (client *RegistriesClient) List(options *RegistriesClientListOptions) *RegistriesClientListPager {
-	return &RegistriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *RegistriesClient) List(options *RegistriesClientListOptions) *runtime.Pager[RegistriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistriesClientListResponse]{
+		More: func(page RegistriesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistriesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistriesClientListResponse) (RegistriesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -575,16 +575,32 @@ func (client *RegistriesClient) listHandleResponse(resp *http.Response) (Registr
 // resourceGroupName - The name of the resource group to which the container registry belongs.
 // options - RegistriesClientListByResourceGroupOptions contains the optional parameters for the RegistriesClient.ListByResourceGroup
 // method.
-func (client *RegistriesClient) ListByResourceGroup(resourceGroupName string, options *RegistriesClientListByResourceGroupOptions) *RegistriesClientListByResourceGroupPager {
-	return &RegistriesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *RegistriesClient) ListByResourceGroup(resourceGroupName string, options *RegistriesClientListByResourceGroupOptions) *runtime.Pager[RegistriesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistriesClientListByResourceGroupResponse]{
+		More: func(page RegistriesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistriesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegistryListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistriesClientListByResourceGroupResponse) (RegistriesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistriesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistriesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistriesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -680,16 +696,32 @@ func (client *RegistriesClient) listCredentialsHandleResponse(resp *http.Respons
 // registryName - The name of the container registry.
 // options - RegistriesClientListPrivateLinkResourcesOptions contains the optional parameters for the RegistriesClient.ListPrivateLinkResources
 // method.
-func (client *RegistriesClient) ListPrivateLinkResources(resourceGroupName string, registryName string, options *RegistriesClientListPrivateLinkResourcesOptions) *RegistriesClientListPrivateLinkResourcesPager {
-	return &RegistriesClientListPrivateLinkResourcesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listPrivateLinkResourcesCreateRequest(ctx, resourceGroupName, registryName, options)
+func (client *RegistriesClient) ListPrivateLinkResources(resourceGroupName string, registryName string, options *RegistriesClientListPrivateLinkResourcesOptions) *runtime.Pager[RegistriesClientListPrivateLinkResourcesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegistriesClientListPrivateLinkResourcesResponse]{
+		More: func(page RegistriesClientListPrivateLinkResourcesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegistriesClientListPrivateLinkResourcesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegistriesClientListPrivateLinkResourcesResponse) (RegistriesClientListPrivateLinkResourcesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listPrivateLinkResourcesCreateRequest(ctx, resourceGroupName, registryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegistriesClientListPrivateLinkResourcesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegistriesClientListPrivateLinkResourcesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegistriesClientListPrivateLinkResourcesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listPrivateLinkResourcesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listPrivateLinkResourcesCreateRequest creates the ListPrivateLinkResources request.
@@ -846,20 +878,16 @@ func (client *RegistriesClient) regenerateCredentialHandleResponse(resp *http.Re
 // runRequest - The parameters of a run that needs to scheduled.
 // options - RegistriesClientBeginScheduleRunOptions contains the optional parameters for the RegistriesClient.BeginScheduleRun
 // method.
-func (client *RegistriesClient) BeginScheduleRun(ctx context.Context, resourceGroupName string, registryName string, runRequest RunRequestClassification, options *RegistriesClientBeginScheduleRunOptions) (RegistriesClientScheduleRunPollerResponse, error) {
-	resp, err := client.scheduleRun(ctx, resourceGroupName, registryName, runRequest, options)
-	if err != nil {
-		return RegistriesClientScheduleRunPollerResponse{}, err
+func (client *RegistriesClient) BeginScheduleRun(ctx context.Context, resourceGroupName string, registryName string, runRequest RunRequestClassification, options *RegistriesClientBeginScheduleRunOptions) (*armruntime.Poller[RegistriesClientScheduleRunResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.scheduleRun(ctx, resourceGroupName, registryName, runRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientScheduleRunResponse]("RegistriesClient.ScheduleRun", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientScheduleRunResponse]("RegistriesClient.ScheduleRun", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientScheduleRunPollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.ScheduleRun", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientScheduleRunPollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientScheduleRunPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ScheduleRun - Schedules a new run based on the request parameters and add it to the run queue.
@@ -911,20 +939,16 @@ func (client *RegistriesClient) scheduleRunCreateRequest(ctx context.Context, re
 // registryName - The name of the container registry.
 // registryUpdateParameters - The parameters for updating a container registry.
 // options - RegistriesClientBeginUpdateOptions contains the optional parameters for the RegistriesClient.BeginUpdate method.
-func (client *RegistriesClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, registryUpdateParameters RegistryUpdateParameters, options *RegistriesClientBeginUpdateOptions) (RegistriesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, registryName, registryUpdateParameters, options)
-	if err != nil {
-		return RegistriesClientUpdatePollerResponse{}, err
+func (client *RegistriesClient) BeginUpdate(ctx context.Context, resourceGroupName string, registryName string, registryUpdateParameters RegistryUpdateParameters, options *RegistriesClientBeginUpdateOptions) (*armruntime.Poller[RegistriesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, registryName, registryUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RegistriesClientUpdateResponse]("RegistriesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RegistriesClientUpdateResponse]("RegistriesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := RegistriesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RegistriesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return RegistriesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &RegistriesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a container registry with the specified parameters.

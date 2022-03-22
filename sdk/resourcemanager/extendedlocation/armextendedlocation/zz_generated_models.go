@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -122,12 +122,14 @@ type CustomLocationPropertiesAuthentication struct {
 // CustomLocationsClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomLocationsClient.BeginCreateOrUpdate
 // method.
 type CustomLocationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomLocationsClientBeginDeleteOptions contains the optional parameters for the CustomLocationsClient.BeginDelete method.
 type CustomLocationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomLocationsClientGetOptions contains the optional parameters for the CustomLocationsClient.Get method.

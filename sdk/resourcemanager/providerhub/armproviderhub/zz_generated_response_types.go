@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armproviderhub
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // ClientCheckinManifestResponse contains the response from method Client.CheckinManifest.
 type ClientCheckinManifestResponse struct {
@@ -37,41 +31,6 @@ type CustomRolloutsClientGetResponse struct {
 // CustomRolloutsClientListByProviderRegistrationResponse contains the response from method CustomRolloutsClient.ListByProviderRegistration.
 type CustomRolloutsClientListByProviderRegistrationResponse struct {
 	CustomRolloutArrayResponseWithContinuation
-}
-
-// DefaultRolloutsClientCreateOrUpdatePollerResponse contains the response from method DefaultRolloutsClient.CreateOrUpdate.
-type DefaultRolloutsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DefaultRolloutsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DefaultRolloutsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DefaultRolloutsClientCreateOrUpdateResponse, error) {
-	respType := DefaultRolloutsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DefaultRollout)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DefaultRolloutsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *DefaultRolloutsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *DefaultRolloutsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DefaultRolloutsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DefaultRolloutsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // DefaultRolloutsClientCreateOrUpdateResponse contains the response from method DefaultRolloutsClient.CreateOrUpdate.
@@ -140,41 +99,6 @@ type OperationsClientListResponse struct {
 	OperationsDefinitionArrayResponseWithContinuation
 }
 
-// ProviderRegistrationsClientCreateOrUpdatePollerResponse contains the response from method ProviderRegistrationsClient.CreateOrUpdate.
-type ProviderRegistrationsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProviderRegistrationsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProviderRegistrationsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProviderRegistrationsClientCreateOrUpdateResponse, error) {
-	respType := ProviderRegistrationsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProviderRegistration)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProviderRegistrationsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ProviderRegistrationsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ProviderRegistrationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProviderRegistrationsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProviderRegistrationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ProviderRegistrationsClientCreateOrUpdateResponse contains the response from method ProviderRegistrationsClient.CreateOrUpdate.
 type ProviderRegistrationsClientCreateOrUpdateResponse struct {
 	ProviderRegistration
@@ -199,41 +123,6 @@ type ProviderRegistrationsClientGetResponse struct {
 // ProviderRegistrationsClientListResponse contains the response from method ProviderRegistrationsClient.List.
 type ProviderRegistrationsClientListResponse struct {
 	ProviderRegistrationArrayResponseWithContinuation
-}
-
-// ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse contains the response from method ResourceTypeRegistrationsClient.CreateOrUpdate.
-type ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ResourceTypeRegistrationsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ResourceTypeRegistrationsClientCreateOrUpdateResponse, error) {
-	respType := ResourceTypeRegistrationsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ResourceTypeRegistration)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *ResourceTypeRegistrationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ResourceTypeRegistrationsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ResourceTypeRegistrationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ResourceTypeRegistrationsClientCreateOrUpdateResponse contains the response from method ResourceTypeRegistrationsClient.CreateOrUpdate.

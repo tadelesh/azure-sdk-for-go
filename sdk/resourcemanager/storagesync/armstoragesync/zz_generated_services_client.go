@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -107,20 +107,16 @@ func (client *ServicesClient) checkNameAvailabilityHandleResponse(resp *http.Res
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // parameters - Storage Sync Service resource name.
 // options - ServicesClientBeginCreateOptions contains the optional parameters for the ServicesClient.BeginCreate method.
-func (client *ServicesClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, parameters ServiceCreateParameters, options *ServicesClientBeginCreateOptions) (ServicesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, parameters, options)
-	if err != nil {
-		return ServicesClientCreatePollerResponse{}, err
+func (client *ServicesClient) BeginCreate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, parameters ServiceCreateParameters, options *ServicesClientBeginCreateOptions) (*armruntime.Poller[ServicesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, storageSyncServiceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientCreateResponse]("ServicesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientCreateResponse]("ServicesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a new StorageSyncService.
@@ -171,20 +167,16 @@ func (client *ServicesClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
-func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *ServicesClientBeginDeleteOptions) (ServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, options)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
+func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *ServicesClientBeginDeleteOptions) (*armruntime.Poller[ServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, storageSyncServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientDeleteResponse]("ServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientDeleteResponse]("ServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a given StorageSyncService.
@@ -296,13 +288,26 @@ func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ServicesClientListByResourceGroupOptions contains the optional parameters for the ServicesClient.ListByResourceGroup
 // method.
-func (client *ServicesClient) ListByResourceGroup(resourceGroupName string, options *ServicesClientListByResourceGroupOptions) *ServicesClientListByResourceGroupPager {
-	return &ServicesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ServicesClient) ListByResourceGroup(resourceGroupName string, options *ServicesClientListByResourceGroupOptions) *runtime.Pager[ServicesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListByResourceGroupResponse]{
+		More: func(page ServicesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServicesClientListByResourceGroupResponse) (ServicesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -346,13 +351,26 @@ func (client *ServicesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServicesClientListBySubscriptionOptions contains the optional parameters for the ServicesClient.ListBySubscription
 // method.
-func (client *ServicesClient) ListBySubscription(options *ServicesClientListBySubscriptionOptions) *ServicesClientListBySubscriptionPager {
-	return &ServicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ServicesClient) ListBySubscription(options *ServicesClientListBySubscriptionOptions) *runtime.Pager[ServicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListBySubscriptionResponse]{
+		More: func(page ServicesClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServicesClientListBySubscriptionResponse) (ServicesClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -393,20 +411,16 @@ func (client *ServicesClient) listBySubscriptionHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
-func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *ServicesClientBeginUpdateOptions) (ServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, storageSyncServiceName, options)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *ServicesClientBeginUpdateOptions) (*armruntime.Poller[ServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, storageSyncServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientUpdateResponse]("ServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientUpdateResponse]("ServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch a given StorageSyncService.

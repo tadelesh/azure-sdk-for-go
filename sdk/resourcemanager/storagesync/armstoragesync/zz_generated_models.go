@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -218,42 +218,49 @@ type CloudEndpointProperties struct {
 
 // CloudEndpointsClientBeginCreateOptions contains the optional parameters for the CloudEndpointsClient.BeginCreate method.
 type CloudEndpointsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginDeleteOptions contains the optional parameters for the CloudEndpointsClient.BeginDelete method.
 type CloudEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginPostBackupOptions contains the optional parameters for the CloudEndpointsClient.BeginPostBackup
 // method.
 type CloudEndpointsClientBeginPostBackupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginPostRestoreOptions contains the optional parameters for the CloudEndpointsClient.BeginPostRestore
 // method.
 type CloudEndpointsClientBeginPostRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginPreBackupOptions contains the optional parameters for the CloudEndpointsClient.BeginPreBackup
 // method.
 type CloudEndpointsClientBeginPreBackupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginPreRestoreOptions contains the optional parameters for the CloudEndpointsClient.BeginPreRestore
 // method.
 type CloudEndpointsClientBeginPreRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientBeginTriggerChangeDetectionOptions contains the optional parameters for the CloudEndpointsClient.BeginTriggerChangeDetection
 // method.
 type CloudEndpointsClientBeginTriggerChangeDetectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudEndpointsClientGetOptions contains the optional parameters for the CloudEndpointsClient.Get method.
@@ -673,13 +680,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -909,19 +918,22 @@ type RegisteredServerProperties struct {
 // RegisteredServersClientBeginCreateOptions contains the optional parameters for the RegisteredServersClient.BeginCreate
 // method.
 type RegisteredServersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegisteredServersClientBeginDeleteOptions contains the optional parameters for the RegisteredServersClient.BeginDelete
 // method.
 type RegisteredServersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegisteredServersClientBeginTriggerRolloverOptions contains the optional parameters for the RegisteredServersClient.BeginTriggerRollover
 // method.
 type RegisteredServersClientBeginTriggerRolloverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegisteredServersClientGetOptions contains the optional parameters for the RegisteredServersClient.Get method.
@@ -1303,24 +1315,29 @@ type ServerEndpointUpdateProperties struct {
 
 // ServerEndpointsClientBeginCreateOptions contains the optional parameters for the ServerEndpointsClient.BeginCreate method.
 type ServerEndpointsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerEndpointsClientBeginDeleteOptions contains the optional parameters for the ServerEndpointsClient.BeginDelete method.
 type ServerEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerEndpointsClientBeginRecallActionOptions contains the optional parameters for the ServerEndpointsClient.BeginRecallAction
 // method.
 type ServerEndpointsClientBeginRecallActionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerEndpointsClientBeginUpdateOptions contains the optional parameters for the ServerEndpointsClient.BeginUpdate method.
 type ServerEndpointsClientBeginUpdateOptions struct {
 	// Any of the properties applicable in PUT request.
 	Parameters *ServerEndpointUpdateParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerEndpointsClientGetOptions contains the optional parameters for the ServerEndpointsClient.Get method.
@@ -1425,18 +1442,22 @@ type ServiceUpdateProperties struct {
 
 // ServicesClientBeginCreateOptions contains the optional parameters for the ServicesClient.BeginCreate method.
 type ServicesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
 type ServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
 type ServicesClientBeginUpdateOptions struct {
 	// Storage Sync Service resource.
 	Parameters *ServiceUpdateParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientCheckNameAvailabilityOptions contains the optional parameters for the ServicesClient.CheckNameAvailability

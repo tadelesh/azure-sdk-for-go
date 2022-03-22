@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewCustomerEventsClient(subscriptionID string, credential azcore.TokenCrede
 // parameters - Parameters supplied to create a Test Base CustomerEvent.
 // options - CustomerEventsClientBeginCreateOptions contains the optional parameters for the CustomerEventsClient.BeginCreate
 // method.
-func (client *CustomerEventsClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, customerEventName string, parameters CustomerEventResource, options *CustomerEventsClientBeginCreateOptions) (CustomerEventsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, customerEventName, parameters, options)
-	if err != nil {
-		return CustomerEventsClientCreatePollerResponse{}, err
+func (client *CustomerEventsClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, customerEventName string, parameters CustomerEventResource, options *CustomerEventsClientBeginCreateOptions) (*armruntime.Poller[CustomerEventsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, customerEventName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomerEventsClientCreateResponse]("CustomerEventsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomerEventsClientCreateResponse]("CustomerEventsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomerEventsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomerEventsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomerEventsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &CustomerEventsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create or replace a Test Base Customer Event.
@@ -127,20 +123,16 @@ func (client *CustomerEventsClient) createCreateRequest(ctx context.Context, res
 // customerEventName - The resource name of the Test Base Customer event.
 // options - CustomerEventsClientBeginDeleteOptions contains the optional parameters for the CustomerEventsClient.BeginDelete
 // method.
-func (client *CustomerEventsClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, customerEventName string, options *CustomerEventsClientBeginDeleteOptions) (CustomerEventsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, customerEventName, options)
-	if err != nil {
-		return CustomerEventsClientDeletePollerResponse{}, err
+func (client *CustomerEventsClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, customerEventName string, options *CustomerEventsClientBeginDeleteOptions) (*armruntime.Poller[CustomerEventsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, customerEventName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomerEventsClientDeleteResponse]("CustomerEventsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomerEventsClientDeleteResponse]("CustomerEventsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomerEventsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomerEventsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomerEventsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomerEventsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Test Base Customer Event.
@@ -256,16 +248,32 @@ func (client *CustomerEventsClient) getHandleResponse(resp *http.Response) (Cust
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - CustomerEventsClientListByTestBaseAccountOptions contains the optional parameters for the CustomerEventsClient.ListByTestBaseAccount
 // method.
-func (client *CustomerEventsClient) ListByTestBaseAccount(resourceGroupName string, testBaseAccountName string, options *CustomerEventsClientListByTestBaseAccountOptions) *CustomerEventsClientListByTestBaseAccountPager {
-	return &CustomerEventsClientListByTestBaseAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTestBaseAccountCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+func (client *CustomerEventsClient) ListByTestBaseAccount(resourceGroupName string, testBaseAccountName string, options *CustomerEventsClientListByTestBaseAccountOptions) *runtime.Pager[CustomerEventsClientListByTestBaseAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomerEventsClientListByTestBaseAccountResponse]{
+		More: func(page CustomerEventsClientListByTestBaseAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomerEventsClientListByTestBaseAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomerEventListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomerEventsClientListByTestBaseAccountResponse) (CustomerEventsClientListByTestBaseAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTestBaseAccountCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomerEventsClientListByTestBaseAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomerEventsClientListByTestBaseAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomerEventsClientListByTestBaseAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTestBaseAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTestBaseAccountCreateRequest creates the ListByTestBaseAccount request.

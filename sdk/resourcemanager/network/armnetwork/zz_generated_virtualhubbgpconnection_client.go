@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewVirtualHubBgpConnectionClient(subscriptionID string, credential azcore.T
 // parameters - Parameters of Bgp connection.
 // options - VirtualHubBgpConnectionClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubBgpConnectionClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualHubBgpConnectionClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualHubName string, connectionName string, parameters BgpConnection, options *VirtualHubBgpConnectionClientBeginCreateOrUpdateOptions) (VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualHubName, connectionName, parameters, options)
-	if err != nil {
-		return VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualHubBgpConnectionClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, virtualHubName string, connectionName string, parameters BgpConnection, options *VirtualHubBgpConnectionClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualHubBgpConnectionClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, virtualHubName, connectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualHubBgpConnectionClientCreateOrUpdateResponse]("VirtualHubBgpConnectionClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualHubBgpConnectionClientCreateOrUpdateResponse]("VirtualHubBgpConnectionClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualHubBgpConnectionClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualHubBgpConnectionClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a VirtualHubBgpConnection resource if it doesn't exist else updates the existing VirtualHubBgpConnection.
@@ -128,20 +124,16 @@ func (client *VirtualHubBgpConnectionClient) createOrUpdateCreateRequest(ctx con
 // connectionName - The name of the connection.
 // options - VirtualHubBgpConnectionClientBeginDeleteOptions contains the optional parameters for the VirtualHubBgpConnectionClient.BeginDelete
 // method.
-func (client *VirtualHubBgpConnectionClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualHubName string, connectionName string, options *VirtualHubBgpConnectionClientBeginDeleteOptions) (VirtualHubBgpConnectionClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualHubName, connectionName, options)
-	if err != nil {
-		return VirtualHubBgpConnectionClientDeletePollerResponse{}, err
+func (client *VirtualHubBgpConnectionClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualHubName string, connectionName string, options *VirtualHubBgpConnectionClientBeginDeleteOptions) (*armruntime.Poller[VirtualHubBgpConnectionClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualHubName, connectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualHubBgpConnectionClientDeleteResponse]("VirtualHubBgpConnectionClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualHubBgpConnectionClientDeleteResponse]("VirtualHubBgpConnectionClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualHubBgpConnectionClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualHubBgpConnectionClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return VirtualHubBgpConnectionClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualHubBgpConnectionClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a VirtualHubBgpConnection.

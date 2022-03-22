@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -356,22 +356,26 @@ type LabPlanUpdateProperties struct {
 
 // LabPlansClientBeginCreateOrUpdateOptions contains the optional parameters for the LabPlansClient.BeginCreateOrUpdate method.
 type LabPlansClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabPlansClientBeginDeleteOptions contains the optional parameters for the LabPlansClient.BeginDelete method.
 type LabPlansClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabPlansClientBeginSaveImageOptions contains the optional parameters for the LabPlansClient.BeginSaveImage method.
 type LabPlansClientBeginSaveImageOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabPlansClientBeginUpdateOptions contains the optional parameters for the LabPlansClient.BeginUpdate method.
 type LabPlansClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabPlansClientGetOptions contains the optional parameters for the LabPlansClient.Get method.
@@ -473,27 +477,32 @@ type LabUpdateProperties struct {
 
 // LabsClientBeginCreateOrUpdateOptions contains the optional parameters for the LabsClient.BeginCreateOrUpdate method.
 type LabsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabsClientBeginDeleteOptions contains the optional parameters for the LabsClient.BeginDelete method.
 type LabsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabsClientBeginPublishOptions contains the optional parameters for the LabsClient.BeginPublish method.
 type LabsClientBeginPublishOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabsClientBeginSyncGroupOptions contains the optional parameters for the LabsClient.BeginSyncGroup method.
 type LabsClientBeginSyncGroupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabsClientBeginUpdateOptions contains the optional parameters for the LabsClient.BeginUpdate method.
 type LabsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LabsClientGetOptions contains the optional parameters for the LabsClient.Get method.
@@ -916,7 +925,8 @@ type ScheduleUpdateProperties struct {
 
 // SchedulesClientBeginDeleteOptions contains the optional parameters for the SchedulesClient.BeginDelete method.
 type SchedulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SchedulesClientCreateOrUpdateOptions contains the optional parameters for the SchedulesClient.CreateOrUpdate method.
@@ -1102,22 +1112,26 @@ type UserUpdateProperties struct {
 
 // UsersClientBeginCreateOrUpdateOptions contains the optional parameters for the UsersClient.BeginCreateOrUpdate method.
 type UsersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // UsersClientBeginDeleteOptions contains the optional parameters for the UsersClient.BeginDelete method.
 type UsersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // UsersClientBeginInviteOptions contains the optional parameters for the UsersClient.BeginInvite method.
 type UsersClientBeginInviteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // UsersClientBeginUpdateOptions contains the optional parameters for the UsersClient.BeginUpdate method.
 type UsersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // UsersClientGetOptions contains the optional parameters for the UsersClient.Get method.
@@ -1230,28 +1244,33 @@ type VirtualMachineProperties struct {
 // VirtualMachinesClientBeginRedeployOptions contains the optional parameters for the VirtualMachinesClient.BeginRedeploy
 // method.
 type VirtualMachinesClientBeginRedeployOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginReimageOptions contains the optional parameters for the VirtualMachinesClient.BeginReimage method.
 type VirtualMachinesClientBeginReimageOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginResetPasswordOptions contains the optional parameters for the VirtualMachinesClient.BeginResetPassword
 // method.
 type VirtualMachinesClientBeginResetPasswordOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStartOptions contains the optional parameters for the VirtualMachinesClient.BeginStart method.
 type VirtualMachinesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientBeginStopOptions contains the optional parameters for the VirtualMachinesClient.BeginStop method.
 type VirtualMachinesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientGetOptions contains the optional parameters for the VirtualMachinesClient.Get method.

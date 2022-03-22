@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -96,13 +96,26 @@ func (client *BestPracticesClient) getHandleResponse(resp *http.Response) (BestP
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - BestPracticesClientListByTenantOptions contains the optional parameters for the BestPracticesClient.ListByTenant
 // method.
-func (client *BestPracticesClient) ListByTenant(options *BestPracticesClientListByTenantOptions) *BestPracticesClientListByTenantPager {
-	return &BestPracticesClientListByTenantPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTenantCreateRequest(ctx, options)
+func (client *BestPracticesClient) ListByTenant(options *BestPracticesClientListByTenantOptions) *runtime.Pager[BestPracticesClientListByTenantResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BestPracticesClientListByTenantResponse]{
+		More: func(page BestPracticesClientListByTenantResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BestPracticesClientListByTenantResponse) (BestPracticesClientListByTenantResponse, error) {
+			req, err := client.listByTenantCreateRequest(ctx, options)
+			if err != nil {
+				return BestPracticesClientListByTenantResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BestPracticesClientListByTenantResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BestPracticesClientListByTenantResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTenantHandleResponse(resp)
+		},
+	})
 }
 
 // listByTenantCreateRequest creates the ListByTenant request.

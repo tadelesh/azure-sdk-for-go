@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewSecureScoreControlDefinitionsClient(subscriptionID string, credential az
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SecureScoreControlDefinitionsClientListOptions contains the optional parameters for the SecureScoreControlDefinitionsClient.List
 // method.
-func (client *SecureScoreControlDefinitionsClient) List(options *SecureScoreControlDefinitionsClientListOptions) *SecureScoreControlDefinitionsClientListPager {
-	return &SecureScoreControlDefinitionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SecureScoreControlDefinitionsClient) List(options *SecureScoreControlDefinitionsClientListOptions) *runtime.Pager[SecureScoreControlDefinitionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecureScoreControlDefinitionsClientListResponse]{
+		More: func(page SecureScoreControlDefinitionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecureScoreControlDefinitionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecureScoreControlDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SecureScoreControlDefinitionsClientListResponse) (SecureScoreControlDefinitionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecureScoreControlDefinitionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecureScoreControlDefinitionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecureScoreControlDefinitionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -93,16 +109,32 @@ func (client *SecureScoreControlDefinitionsClient) listHandleResponse(resp *http
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SecureScoreControlDefinitionsClientListBySubscriptionOptions contains the optional parameters for the SecureScoreControlDefinitionsClient.ListBySubscription
 // method.
-func (client *SecureScoreControlDefinitionsClient) ListBySubscription(options *SecureScoreControlDefinitionsClientListBySubscriptionOptions) *SecureScoreControlDefinitionsClientListBySubscriptionPager {
-	return &SecureScoreControlDefinitionsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *SecureScoreControlDefinitionsClient) ListBySubscription(options *SecureScoreControlDefinitionsClientListBySubscriptionOptions) *runtime.Pager[SecureScoreControlDefinitionsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SecureScoreControlDefinitionsClientListBySubscriptionResponse]{
+		More: func(page SecureScoreControlDefinitionsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SecureScoreControlDefinitionsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SecureScoreControlDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SecureScoreControlDefinitionsClientListBySubscriptionResponse) (SecureScoreControlDefinitionsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SecureScoreControlDefinitionsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SecureScoreControlDefinitionsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SecureScoreControlDefinitionsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

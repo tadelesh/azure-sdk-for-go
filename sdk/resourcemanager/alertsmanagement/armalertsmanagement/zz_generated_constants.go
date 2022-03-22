@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -10,7 +10,7 @@ package armalertsmanagement
 
 const (
 	moduleName    = "armalertsmanagement"
-	moduleVersion = "v0.4.0"
+	moduleVersion = "v0.5.0"
 )
 
 // ActionType - Action that should be applied.

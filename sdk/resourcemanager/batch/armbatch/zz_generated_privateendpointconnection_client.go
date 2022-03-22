@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -117,16 +117,32 @@ func (client *PrivateEndpointConnectionClient) getHandleResponse(resp *http.Resp
 // accountName - The name of the Batch account.
 // options - PrivateEndpointConnectionClientListByBatchAccountOptions contains the optional parameters for the PrivateEndpointConnectionClient.ListByBatchAccount
 // method.
-func (client *PrivateEndpointConnectionClient) ListByBatchAccount(resourceGroupName string, accountName string, options *PrivateEndpointConnectionClientListByBatchAccountOptions) *PrivateEndpointConnectionClientListByBatchAccountPager {
-	return &PrivateEndpointConnectionClientListByBatchAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PrivateEndpointConnectionClient) ListByBatchAccount(resourceGroupName string, accountName string, options *PrivateEndpointConnectionClientListByBatchAccountOptions) *runtime.Pager[PrivateEndpointConnectionClientListByBatchAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionClientListByBatchAccountResponse]{
+		More: func(page PrivateEndpointConnectionClientListByBatchAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointConnectionClientListByBatchAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListPrivateEndpointConnectionsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionClientListByBatchAccountResponse) (PrivateEndpointConnectionClientListByBatchAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointConnectionClientListByBatchAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionClientListByBatchAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionClientListByBatchAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBatchAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBatchAccountCreateRequest creates the ListByBatchAccount request.
@@ -176,20 +192,16 @@ func (client *PrivateEndpointConnectionClient) listByBatchAccountHandleResponse(
 // any property not supplied will be unchanged.
 // options - PrivateEndpointConnectionClientBeginUpdateOptions contains the optional parameters for the PrivateEndpointConnectionClient.BeginUpdate
 // method.
-func (client *PrivateEndpointConnectionClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionName string, parameters PrivateEndpointConnection, options *PrivateEndpointConnectionClientBeginUpdateOptions) (PrivateEndpointConnectionClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, privateEndpointConnectionName, parameters, options)
-	if err != nil {
-		return PrivateEndpointConnectionClientUpdatePollerResponse{}, err
+func (client *PrivateEndpointConnectionClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionName string, parameters PrivateEndpointConnection, options *PrivateEndpointConnectionClientBeginUpdateOptions) (*armruntime.Poller[PrivateEndpointConnectionClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, privateEndpointConnectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionClientUpdateResponse]("PrivateEndpointConnectionClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionClientUpdateResponse]("PrivateEndpointConnectionClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the properties of an existing private endpoint connection.

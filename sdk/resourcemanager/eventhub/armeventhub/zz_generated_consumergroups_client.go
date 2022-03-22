@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -247,16 +247,32 @@ func (client *ConsumerGroupsClient) getHandleResponse(resp *http.Response) (Cons
 // eventHubName - The Event Hub name
 // options - ConsumerGroupsClientListByEventHubOptions contains the optional parameters for the ConsumerGroupsClient.ListByEventHub
 // method.
-func (client *ConsumerGroupsClient) ListByEventHub(resourceGroupName string, namespaceName string, eventHubName string, options *ConsumerGroupsClientListByEventHubOptions) *ConsumerGroupsClientListByEventHubPager {
-	return &ConsumerGroupsClientListByEventHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByEventHubCreateRequest(ctx, resourceGroupName, namespaceName, eventHubName, options)
+func (client *ConsumerGroupsClient) ListByEventHub(resourceGroupName string, namespaceName string, eventHubName string, options *ConsumerGroupsClientListByEventHubOptions) *runtime.Pager[ConsumerGroupsClientListByEventHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConsumerGroupsClientListByEventHubResponse]{
+		More: func(page ConsumerGroupsClientListByEventHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConsumerGroupsClientListByEventHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConsumerGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ConsumerGroupsClientListByEventHubResponse) (ConsumerGroupsClientListByEventHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByEventHubCreateRequest(ctx, resourceGroupName, namespaceName, eventHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConsumerGroupsClientListByEventHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConsumerGroupsClientListByEventHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConsumerGroupsClientListByEventHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByEventHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByEventHubCreateRequest creates the ListByEventHub request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -173,20 +173,16 @@ func (client *ResourceClient) createEventHubConsumerGroupHandleResponse(resp *ht
 // iotHubDescription - The IoT hub metadata and security metadata.
 // options - ResourceClientBeginCreateOrUpdateOptions contains the optional parameters for the ResourceClient.BeginCreateOrUpdate
 // method.
-func (client *ResourceClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubDescription Description, options *ResourceClientBeginCreateOrUpdateOptions) (ResourceClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, iotHubDescription, options)
-	if err != nil {
-		return ResourceClientCreateOrUpdatePollerResponse{}, err
+func (client *ResourceClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubDescription Description, options *ResourceClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ResourceClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, iotHubDescription, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ResourceClientCreateOrUpdateResponse]("ResourceClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ResourceClientCreateOrUpdateResponse]("ResourceClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ResourceClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ResourceClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ResourceClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ResourceClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update the metadata of an Iot hub. The usual pattern to modify a property is to retrieve the
@@ -243,20 +239,16 @@ func (client *ResourceClient) createOrUpdateCreateRequest(ctx context.Context, r
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // resourceName - The name of the IoT hub.
 // options - ResourceClientBeginDeleteOptions contains the optional parameters for the ResourceClient.BeginDelete method.
-func (client *ResourceClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ResourceClientBeginDeleteOptions) (ResourceClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ResourceClientDeletePollerResponse{}, err
+func (client *ResourceClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ResourceClientBeginDeleteOptions) (*armruntime.Poller[ResourceClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ResourceClientDeleteResponse]("ResourceClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ResourceClientDeleteResponse]("ResourceClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ResourceClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ResourceClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ResourceClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ResourceClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete an IoT hub.
@@ -476,16 +468,32 @@ func (client *ResourceClient) getHandleResponse(resp *http.Response) (ResourceCl
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceClientGetEndpointHealthOptions contains the optional parameters for the ResourceClient.GetEndpointHealth
 // method.
-func (client *ResourceClient) GetEndpointHealth(resourceGroupName string, iotHubName string, options *ResourceClientGetEndpointHealthOptions) *ResourceClientGetEndpointHealthPager {
-	return &ResourceClientGetEndpointHealthPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getEndpointHealthCreateRequest(ctx, resourceGroupName, iotHubName, options)
+func (client *ResourceClient) GetEndpointHealth(resourceGroupName string, iotHubName string, options *ResourceClientGetEndpointHealthOptions) *runtime.Pager[ResourceClientGetEndpointHealthResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientGetEndpointHealthResponse]{
+		More: func(page ResourceClientGetEndpointHealthResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientGetEndpointHealthResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EndpointHealthDataListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientGetEndpointHealthResponse) (ResourceClientGetEndpointHealthResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getEndpointHealthCreateRequest(ctx, resourceGroupName, iotHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientGetEndpointHealthResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientGetEndpointHealthResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientGetEndpointHealthResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getEndpointHealthHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getEndpointHealthCreateRequest creates the GetEndpointHealth request.
@@ -716,16 +724,32 @@ func (client *ResourceClient) getKeysForKeyNameHandleResponse(resp *http.Respons
 // resourceName - The name of the IoT hub.
 // options - ResourceClientGetQuotaMetricsOptions contains the optional parameters for the ResourceClient.GetQuotaMetrics
 // method.
-func (client *ResourceClient) GetQuotaMetrics(resourceGroupName string, resourceName string, options *ResourceClientGetQuotaMetricsOptions) *ResourceClientGetQuotaMetricsPager {
-	return &ResourceClientGetQuotaMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getQuotaMetricsCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *ResourceClient) GetQuotaMetrics(resourceGroupName string, resourceName string, options *ResourceClientGetQuotaMetricsOptions) *runtime.Pager[ResourceClientGetQuotaMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientGetQuotaMetricsResponse]{
+		More: func(page ResourceClientGetQuotaMetricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientGetQuotaMetricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.QuotaMetricInfoListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientGetQuotaMetricsResponse) (ResourceClientGetQuotaMetricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getQuotaMetricsCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientGetQuotaMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientGetQuotaMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientGetQuotaMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getQuotaMetricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getQuotaMetricsCreateRequest creates the GetQuotaMetrics request.
@@ -823,16 +847,32 @@ func (client *ResourceClient) getStatsHandleResponse(resp *http.Response) (Resou
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // resourceName - The name of the IoT hub.
 // options - ResourceClientGetValidSKUsOptions contains the optional parameters for the ResourceClient.GetValidSKUs method.
-func (client *ResourceClient) GetValidSKUs(resourceGroupName string, resourceName string, options *ResourceClientGetValidSKUsOptions) *ResourceClientGetValidSKUsPager {
-	return &ResourceClientGetValidSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getValidSKUsCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *ResourceClient) GetValidSKUs(resourceGroupName string, resourceName string, options *ResourceClientGetValidSKUsOptions) *runtime.Pager[ResourceClientGetValidSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientGetValidSKUsResponse]{
+		More: func(page ResourceClientGetValidSKUsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientGetValidSKUsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUDescriptionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientGetValidSKUsResponse) (ResourceClientGetValidSKUsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getValidSKUsCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientGetValidSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientGetValidSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientGetValidSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getValidSKUsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getValidSKUsCreateRequest creates the GetValidSKUs request.
@@ -933,16 +973,32 @@ func (client *ResourceClient) importDevicesHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // options - ResourceClientListByResourceGroupOptions contains the optional parameters for the ResourceClient.ListByResourceGroup
 // method.
-func (client *ResourceClient) ListByResourceGroup(resourceGroupName string, options *ResourceClientListByResourceGroupOptions) *ResourceClientListByResourceGroupPager {
-	return &ResourceClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ResourceClient) ListByResourceGroup(resourceGroupName string, options *ResourceClientListByResourceGroupOptions) *runtime.Pager[ResourceClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientListByResourceGroupResponse]{
+		More: func(page ResourceClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DescriptionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientListByResourceGroupResponse) (ResourceClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -980,16 +1036,32 @@ func (client *ResourceClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceClientListBySubscriptionOptions contains the optional parameters for the ResourceClient.ListBySubscription
 // method.
-func (client *ResourceClient) ListBySubscription(options *ResourceClientListBySubscriptionOptions) *ResourceClientListBySubscriptionPager {
-	return &ResourceClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ResourceClient) ListBySubscription(options *ResourceClientListBySubscriptionOptions) *runtime.Pager[ResourceClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientListBySubscriptionResponse]{
+		More: func(page ResourceClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DescriptionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientListBySubscriptionResponse) (ResourceClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -1027,16 +1099,32 @@ func (client *ResourceClient) listBySubscriptionHandleResponse(resp *http.Respon
 // eventHubEndpointName - The name of the Event Hub-compatible endpoint.
 // options - ResourceClientListEventHubConsumerGroupsOptions contains the optional parameters for the ResourceClient.ListEventHubConsumerGroups
 // method.
-func (client *ResourceClient) ListEventHubConsumerGroups(resourceGroupName string, resourceName string, eventHubEndpointName string, options *ResourceClientListEventHubConsumerGroupsOptions) *ResourceClientListEventHubConsumerGroupsPager {
-	return &ResourceClientListEventHubConsumerGroupsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listEventHubConsumerGroupsCreateRequest(ctx, resourceGroupName, resourceName, eventHubEndpointName, options)
+func (client *ResourceClient) ListEventHubConsumerGroups(resourceGroupName string, resourceName string, eventHubEndpointName string, options *ResourceClientListEventHubConsumerGroupsOptions) *runtime.Pager[ResourceClientListEventHubConsumerGroupsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientListEventHubConsumerGroupsResponse]{
+		More: func(page ResourceClientListEventHubConsumerGroupsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientListEventHubConsumerGroupsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EventHubConsumerGroupsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientListEventHubConsumerGroupsResponse) (ResourceClientListEventHubConsumerGroupsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listEventHubConsumerGroupsCreateRequest(ctx, resourceGroupName, resourceName, eventHubEndpointName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientListEventHubConsumerGroupsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientListEventHubConsumerGroupsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientListEventHubConsumerGroupsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listEventHubConsumerGroupsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listEventHubConsumerGroupsCreateRequest creates the ListEventHubConsumerGroups request.
@@ -1083,16 +1171,32 @@ func (client *ResourceClient) listEventHubConsumerGroupsHandleResponse(resp *htt
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // resourceName - The name of the IoT hub.
 // options - ResourceClientListJobsOptions contains the optional parameters for the ResourceClient.ListJobs method.
-func (client *ResourceClient) ListJobs(resourceGroupName string, resourceName string, options *ResourceClientListJobsOptions) *ResourceClientListJobsPager {
-	return &ResourceClientListJobsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listJobsCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *ResourceClient) ListJobs(resourceGroupName string, resourceName string, options *ResourceClientListJobsOptions) *runtime.Pager[ResourceClientListJobsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientListJobsResponse]{
+		More: func(page ResourceClientListJobsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientListJobsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobResponseListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientListJobsResponse) (ResourceClientListJobsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listJobsCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientListJobsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientListJobsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientListJobsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listJobsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listJobsCreateRequest creates the ListJobs request.
@@ -1135,16 +1239,32 @@ func (client *ResourceClient) listJobsHandleResponse(resp *http.Response) (Resou
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // resourceName - The name of the IoT hub.
 // options - ResourceClientListKeysOptions contains the optional parameters for the ResourceClient.ListKeys method.
-func (client *ResourceClient) ListKeys(resourceGroupName string, resourceName string, options *ResourceClientListKeysOptions) *ResourceClientListKeysPager {
-	return &ResourceClientListKeysPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listKeysCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *ResourceClient) ListKeys(resourceGroupName string, resourceName string, options *ResourceClientListKeysOptions) *runtime.Pager[ResourceClientListKeysResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceClientListKeysResponse]{
+		More: func(page ResourceClientListKeysResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceClientListKeysResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SharedAccessSignatureAuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceClientListKeysResponse) (ResourceClientListKeysResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listKeysCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceClientListKeysResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceClientListKeysResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceClientListKeysResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listKeysHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listKeysCreateRequest creates the ListKeys request.
@@ -1300,20 +1420,16 @@ func (client *ResourceClient) testRouteHandleResponse(resp *http.Response) (Reso
 // resourceName - Name of iot hub to update.
 // iotHubTags - Updated tag information to set into the iot hub instance.
 // options - ResourceClientBeginUpdateOptions contains the optional parameters for the ResourceClient.BeginUpdate method.
-func (client *ResourceClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubTags TagsResource, options *ResourceClientBeginUpdateOptions) (ResourceClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, resourceName, iotHubTags, options)
-	if err != nil {
-		return ResourceClientUpdatePollerResponse{}, err
+func (client *ResourceClient) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubTags TagsResource, options *ResourceClientBeginUpdateOptions) (*armruntime.Poller[ResourceClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, resourceName, iotHubTags, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ResourceClientUpdateResponse]("ResourceClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ResourceClientUpdateResponse]("ResourceClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ResourceClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ResourceClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ResourceClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ResourceClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update an existing IoT Hub tags. to update other fields use the CreateOrUpdate method

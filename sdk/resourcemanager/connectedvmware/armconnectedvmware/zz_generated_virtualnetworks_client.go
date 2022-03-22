@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,20 +64,16 @@ func NewVirtualNetworksClient(subscriptionID string, credential azcore.TokenCred
 // virtualNetworkName - Name of the virtual network resource.
 // options - VirtualNetworksClientBeginCreateOptions contains the optional parameters for the VirtualNetworksClient.BeginCreate
 // method.
-func (client *VirtualNetworksClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualNetworkName string, options *VirtualNetworksClientBeginCreateOptions) (VirtualNetworksClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, virtualNetworkName, options)
-	if err != nil {
-		return VirtualNetworksClientCreatePollerResponse{}, err
+func (client *VirtualNetworksClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualNetworkName string, options *VirtualNetworksClientBeginCreateOptions) (*armruntime.Poller[VirtualNetworksClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, virtualNetworkName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworksClientCreateResponse]("VirtualNetworksClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworksClientCreateResponse]("VirtualNetworksClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworksClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworksClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualNetworksClientCreatePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworksClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update virtual network.
@@ -132,20 +128,16 @@ func (client *VirtualNetworksClient) createCreateRequest(ctx context.Context, re
 // virtualNetworkName - Name of the virtual network resource.
 // options - VirtualNetworksClientBeginDeleteOptions contains the optional parameters for the VirtualNetworksClient.BeginDelete
 // method.
-func (client *VirtualNetworksClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualNetworkName string, options *VirtualNetworksClientBeginDeleteOptions) (VirtualNetworksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualNetworkName, options)
-	if err != nil {
-		return VirtualNetworksClientDeletePollerResponse{}, err
+func (client *VirtualNetworksClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualNetworkName string, options *VirtualNetworksClientBeginDeleteOptions) (*armruntime.Poller[VirtualNetworksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualNetworkName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworksClientDeleteResponse]("VirtualNetworksClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworksClientDeleteResponse]("VirtualNetworksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworksClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VirtualNetworksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements virtual network DELETE method.
@@ -252,16 +244,32 @@ func (client *VirtualNetworksClient) getHandleResponse(resp *http.Response) (Vir
 // List - List of virtualNetworks in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualNetworksClientListOptions contains the optional parameters for the VirtualNetworksClient.List method.
-func (client *VirtualNetworksClient) List(options *VirtualNetworksClientListOptions) *VirtualNetworksClientListPager {
-	return &VirtualNetworksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VirtualNetworksClient) List(options *VirtualNetworksClientListOptions) *runtime.Pager[VirtualNetworksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualNetworksClientListResponse]{
+		More: func(page VirtualNetworksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualNetworksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualNetworksList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualNetworksClientListResponse) (VirtualNetworksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualNetworksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualNetworksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualNetworksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -296,16 +304,32 @@ func (client *VirtualNetworksClient) listHandleResponse(resp *http.Response) (Vi
 // resourceGroupName - The Resource Group Name.
 // options - VirtualNetworksClientListByResourceGroupOptions contains the optional parameters for the VirtualNetworksClient.ListByResourceGroup
 // method.
-func (client *VirtualNetworksClient) ListByResourceGroup(resourceGroupName string, options *VirtualNetworksClientListByResourceGroupOptions) *VirtualNetworksClientListByResourceGroupPager {
-	return &VirtualNetworksClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VirtualNetworksClient) ListByResourceGroup(resourceGroupName string, options *VirtualNetworksClientListByResourceGroupOptions) *runtime.Pager[VirtualNetworksClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualNetworksClientListByResourceGroupResponse]{
+		More: func(page VirtualNetworksClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualNetworksClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualNetworksList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualNetworksClientListByResourceGroupResponse) (VirtualNetworksClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualNetworksClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualNetworksClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualNetworksClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

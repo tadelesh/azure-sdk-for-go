@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewKubeEnvironmentsClient(subscriptionID string, credential azcore.TokenCre
 // kubeEnvironmentEnvelope - Configuration details of the Kubernetes Environment.
 // options - KubeEnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the KubeEnvironmentsClient.BeginCreateOrUpdate
 // method.
-func (client *KubeEnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, kubeEnvironmentEnvelope KubeEnvironment, options *KubeEnvironmentsClientBeginCreateOrUpdateOptions) (KubeEnvironmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, name, kubeEnvironmentEnvelope, options)
-	if err != nil {
-		return KubeEnvironmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *KubeEnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, kubeEnvironmentEnvelope KubeEnvironment, options *KubeEnvironmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[KubeEnvironmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, name, kubeEnvironmentEnvelope, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[KubeEnvironmentsClientCreateOrUpdateResponse]("KubeEnvironmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[KubeEnvironmentsClientCreateOrUpdateResponse]("KubeEnvironmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := KubeEnvironmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("KubeEnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return KubeEnvironmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &KubeEnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Description for Creates or updates a Kubernetes Environment.
@@ -121,20 +117,16 @@ func (client *KubeEnvironmentsClient) createOrUpdateCreateRequest(ctx context.Co
 // name - Name of the Kubernetes Environment.
 // options - KubeEnvironmentsClientBeginDeleteOptions contains the optional parameters for the KubeEnvironmentsClient.BeginDelete
 // method.
-func (client *KubeEnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *KubeEnvironmentsClientBeginDeleteOptions) (KubeEnvironmentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return KubeEnvironmentsClientDeletePollerResponse{}, err
+func (client *KubeEnvironmentsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *KubeEnvironmentsClientBeginDeleteOptions) (*armruntime.Poller[KubeEnvironmentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[KubeEnvironmentsClientDeleteResponse]("KubeEnvironmentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[KubeEnvironmentsClientDeleteResponse]("KubeEnvironmentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := KubeEnvironmentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("KubeEnvironmentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return KubeEnvironmentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &KubeEnvironmentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Description for Delete a Kubernetes Environment.
@@ -240,16 +232,32 @@ func (client *KubeEnvironmentsClient) getHandleResponse(resp *http.Response) (Ku
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - KubeEnvironmentsClientListByResourceGroupOptions contains the optional parameters for the KubeEnvironmentsClient.ListByResourceGroup
 // method.
-func (client *KubeEnvironmentsClient) ListByResourceGroup(resourceGroupName string, options *KubeEnvironmentsClientListByResourceGroupOptions) *KubeEnvironmentsClientListByResourceGroupPager {
-	return &KubeEnvironmentsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *KubeEnvironmentsClient) ListByResourceGroup(resourceGroupName string, options *KubeEnvironmentsClientListByResourceGroupOptions) *runtime.Pager[KubeEnvironmentsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[KubeEnvironmentsClientListByResourceGroupResponse]{
+		More: func(page KubeEnvironmentsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp KubeEnvironmentsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.KubeEnvironmentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *KubeEnvironmentsClientListByResourceGroupResponse) (KubeEnvironmentsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return KubeEnvironmentsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return KubeEnvironmentsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return KubeEnvironmentsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -287,16 +295,32 @@ func (client *KubeEnvironmentsClient) listByResourceGroupHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - KubeEnvironmentsClientListBySubscriptionOptions contains the optional parameters for the KubeEnvironmentsClient.ListBySubscription
 // method.
-func (client *KubeEnvironmentsClient) ListBySubscription(options *KubeEnvironmentsClientListBySubscriptionOptions) *KubeEnvironmentsClientListBySubscriptionPager {
-	return &KubeEnvironmentsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *KubeEnvironmentsClient) ListBySubscription(options *KubeEnvironmentsClientListBySubscriptionOptions) *runtime.Pager[KubeEnvironmentsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[KubeEnvironmentsClientListBySubscriptionResponse]{
+		More: func(page KubeEnvironmentsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp KubeEnvironmentsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.KubeEnvironmentCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *KubeEnvironmentsClientListBySubscriptionResponse) (KubeEnvironmentsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return KubeEnvironmentsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return KubeEnvironmentsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return KubeEnvironmentsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

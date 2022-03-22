@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -218,7 +218,8 @@ type AdaptiveNetworkHardeningProperties struct {
 // AdaptiveNetworkHardeningsClientBeginEnforceOptions contains the optional parameters for the AdaptiveNetworkHardeningsClient.BeginEnforce
 // method.
 type AdaptiveNetworkHardeningsClientBeginEnforceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AdaptiveNetworkHardeningsClientGetOptions contains the optional parameters for the AdaptiveNetworkHardeningsClient.Get
@@ -472,7 +473,8 @@ type AlertSyncSettings struct {
 
 // AlertsClientBeginSimulateOptions contains the optional parameters for the AlertsClient.BeginSimulate method.
 type AlertsClientBeginSimulateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AlertsClientGetResourceGroupLevelOptions contains the optional parameters for the AlertsClient.GetResourceGroupLevel method.
@@ -4775,7 +4777,8 @@ type ServerVulnerabilityAssessment struct {
 // ServerVulnerabilityAssessmentClientBeginDeleteOptions contains the optional parameters for the ServerVulnerabilityAssessmentClient.BeginDelete
 // method.
 type ServerVulnerabilityAssessmentClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerVulnerabilityAssessmentClientCreateOrUpdateOptions contains the optional parameters for the ServerVulnerabilityAssessmentClient.CreateOrUpdate

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -104,20 +104,16 @@ func (client *ServersClient) checkNameAvailabilityHandleResponse(resp *http.Resp
 // parameters - The requested server resource state.
 // options - ServersClientBeginCreateOrUpdateOptions contains the optional parameters for the ServersClient.BeginCreateOrUpdate
 // method.
-func (client *ServersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters Server, options *ServersClientBeginCreateOrUpdateOptions) (ServersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, parameters, options)
-	if err != nil {
-		return ServersClientCreateOrUpdatePollerResponse{}, err
+func (client *ServersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters Server, options *ServersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientCreateOrUpdateResponse]("ServersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientCreateOrUpdateResponse]("ServersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a server.
@@ -169,20 +165,16 @@ func (client *ServersClient) createOrUpdateCreateRequest(ctx context.Context, re
 // Resource Manager API or the portal.
 // serverName - The name of the server.
 // options - ServersClientBeginDeleteOptions contains the optional parameters for the ServersClient.BeginDelete method.
-func (client *ServersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginDeleteOptions) (ServersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServersClientDeletePollerResponse{}, err
+func (client *ServersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginDeleteOptions) (*armruntime.Poller[ServersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientDeleteResponse]("ServersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientDeleteResponse]("ServersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a server.
@@ -294,20 +286,16 @@ func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClie
 // parameters - The database import request parameters.
 // options - ServersClientBeginImportDatabaseOptions contains the optional parameters for the ServersClient.BeginImportDatabase
 // method.
-func (client *ServersClient) BeginImportDatabase(ctx context.Context, resourceGroupName string, serverName string, parameters ImportNewDatabaseDefinition, options *ServersClientBeginImportDatabaseOptions) (ServersClientImportDatabasePollerResponse, error) {
-	resp, err := client.importDatabase(ctx, resourceGroupName, serverName, parameters, options)
-	if err != nil {
-		return ServersClientImportDatabasePollerResponse{}, err
+func (client *ServersClient) BeginImportDatabase(ctx context.Context, resourceGroupName string, serverName string, parameters ImportNewDatabaseDefinition, options *ServersClientBeginImportDatabaseOptions) (*armruntime.Poller[ServersClientImportDatabaseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.importDatabase(ctx, resourceGroupName, serverName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientImportDatabaseResponse]("ServersClient.ImportDatabase", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientImportDatabaseResponse]("ServersClient.ImportDatabase", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientImportDatabasePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.ImportDatabase", "", resp, client.pl)
-	if err != nil {
-		return ServersClientImportDatabasePollerResponse{}, err
-	}
-	result.Poller = &ServersClientImportDatabasePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ImportDatabase - Imports a bacpac into a new database.
@@ -356,16 +344,32 @@ func (client *ServersClient) importDatabaseCreateRequest(ctx context.Context, re
 // List - Gets a list of all servers in the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServersClientListOptions contains the optional parameters for the ServersClient.List method.
-func (client *ServersClient) List(options *ServersClientListOptions) *ServersClientListPager {
-	return &ServersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ServersClient) List(options *ServersClientListOptions) *runtime.Pager[ServersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServersClientListResponse]{
+		More: func(page ServersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServersClientListResponse) (ServersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -404,16 +408,32 @@ func (client *ServersClient) listHandleResponse(resp *http.Response) (ServersCli
 // Resource Manager API or the portal.
 // options - ServersClientListByResourceGroupOptions contains the optional parameters for the ServersClient.ListByResourceGroup
 // method.
-func (client *ServersClient) ListByResourceGroup(resourceGroupName string, options *ServersClientListByResourceGroupOptions) *ServersClientListByResourceGroupPager {
-	return &ServersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ServersClient) ListByResourceGroup(resourceGroupName string, options *ServersClientListByResourceGroupOptions) *runtime.Pager[ServersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServersClientListByResourceGroupResponse]{
+		More: func(page ServersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServersClientListByResourceGroupResponse) (ServersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -457,20 +477,16 @@ func (client *ServersClient) listByResourceGroupHandleResponse(resp *http.Respon
 // serverName - The name of the server.
 // parameters - The requested server resource state.
 // options - ServersClientBeginUpdateOptions contains the optional parameters for the ServersClient.BeginUpdate method.
-func (client *ServersClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ServerUpdate, options *ServersClientBeginUpdateOptions) (ServersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverName, parameters, options)
-	if err != nil {
-		return ServersClientUpdatePollerResponse{}, err
+func (client *ServersClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ServerUpdate, options *ServersClientBeginUpdateOptions) (*armruntime.Poller[ServersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientUpdateResponse]("ServersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientUpdateResponse]("ServersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a server.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *SpatialAnchorsAccountsClient) getHandleResponse(resp *http.Respons
 // resourceGroupName - Name of an Azure resource group.
 // options - SpatialAnchorsAccountsClientListByResourceGroupOptions contains the optional parameters for the SpatialAnchorsAccountsClient.ListByResourceGroup
 // method.
-func (client *SpatialAnchorsAccountsClient) ListByResourceGroup(resourceGroupName string, options *SpatialAnchorsAccountsClientListByResourceGroupOptions) *SpatialAnchorsAccountsClientListByResourceGroupPager {
-	return &SpatialAnchorsAccountsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SpatialAnchorsAccountsClient) ListByResourceGroup(resourceGroupName string, options *SpatialAnchorsAccountsClientListByResourceGroupOptions) *runtime.Pager[SpatialAnchorsAccountsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SpatialAnchorsAccountsClientListByResourceGroupResponse]{
+		More: func(page SpatialAnchorsAccountsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SpatialAnchorsAccountsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SpatialAnchorsAccountPage.NextLink)
+		Fetcher: func(ctx context.Context, page *SpatialAnchorsAccountsClientListByResourceGroupResponse) (SpatialAnchorsAccountsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SpatialAnchorsAccountsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SpatialAnchorsAccountsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SpatialAnchorsAccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -261,16 +277,32 @@ func (client *SpatialAnchorsAccountsClient) listByResourceGroupHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SpatialAnchorsAccountsClientListBySubscriptionOptions contains the optional parameters for the SpatialAnchorsAccountsClient.ListBySubscription
 // method.
-func (client *SpatialAnchorsAccountsClient) ListBySubscription(options *SpatialAnchorsAccountsClientListBySubscriptionOptions) *SpatialAnchorsAccountsClientListBySubscriptionPager {
-	return &SpatialAnchorsAccountsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *SpatialAnchorsAccountsClient) ListBySubscription(options *SpatialAnchorsAccountsClientListBySubscriptionOptions) *runtime.Pager[SpatialAnchorsAccountsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SpatialAnchorsAccountsClientListBySubscriptionResponse]{
+		More: func(page SpatialAnchorsAccountsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SpatialAnchorsAccountsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SpatialAnchorsAccountPage.NextLink)
+		Fetcher: func(ctx context.Context, page *SpatialAnchorsAccountsClientListBySubscriptionResponse) (SpatialAnchorsAccountsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SpatialAnchorsAccountsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SpatialAnchorsAccountsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SpatialAnchorsAccountsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

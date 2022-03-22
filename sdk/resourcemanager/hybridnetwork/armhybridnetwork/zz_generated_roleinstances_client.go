@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -120,16 +120,32 @@ func (client *RoleInstancesClient) getHandleResponse(resp *http.Response) (RoleI
 // vendorName - The name of the vendor.
 // serviceKey - The GUID for the vendor network function.
 // options - RoleInstancesClientListOptions contains the optional parameters for the RoleInstancesClient.List method.
-func (client *RoleInstancesClient) List(locationName string, vendorName string, serviceKey string, options *RoleInstancesClientListOptions) *RoleInstancesClientListPager {
-	return &RoleInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, locationName, vendorName, serviceKey, options)
+func (client *RoleInstancesClient) List(locationName string, vendorName string, serviceKey string, options *RoleInstancesClientListOptions) *runtime.Pager[RoleInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RoleInstancesClientListResponse]{
+		More: func(page RoleInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RoleInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionRoleInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RoleInstancesClientListResponse) (RoleInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, locationName, vendorName, serviceKey, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RoleInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RoleInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RoleInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -179,20 +195,16 @@ func (client *RoleInstancesClient) listHandleResponse(resp *http.Response) (Role
 // roleInstanceName - The name of the role instance of the vendor network function.
 // options - RoleInstancesClientBeginRestartOptions contains the optional parameters for the RoleInstancesClient.BeginRestart
 // method.
-func (client *RoleInstancesClient) BeginRestart(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginRestartOptions) (RoleInstancesClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
-	if err != nil {
-		return RoleInstancesClientRestartPollerResponse{}, err
+func (client *RoleInstancesClient) BeginRestart(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginRestartOptions) (*armruntime.Poller[RoleInstancesClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RoleInstancesClientRestartResponse]("RoleInstancesClient.Restart", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RoleInstancesClientRestartResponse]("RoleInstancesClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := RoleInstancesClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("RoleInstancesClient.Restart", "location", resp, client.pl)
-	if err != nil {
-		return RoleInstancesClientRestartPollerResponse{}, err
-	}
-	result.Poller = &RoleInstancesClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - Restarts a role instance of a vendor network function.
@@ -254,20 +266,16 @@ func (client *RoleInstancesClient) restartCreateRequest(ctx context.Context, loc
 // roleInstanceName - The name of the role instance of the vendor network function.
 // options - RoleInstancesClientBeginStartOptions contains the optional parameters for the RoleInstancesClient.BeginStart
 // method.
-func (client *RoleInstancesClient) BeginStart(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginStartOptions) (RoleInstancesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
-	if err != nil {
-		return RoleInstancesClientStartPollerResponse{}, err
+func (client *RoleInstancesClient) BeginStart(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginStartOptions) (*armruntime.Poller[RoleInstancesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RoleInstancesClientStartResponse]("RoleInstancesClient.Start", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RoleInstancesClientStartResponse]("RoleInstancesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := RoleInstancesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("RoleInstancesClient.Start", "location", resp, client.pl)
-	if err != nil {
-		return RoleInstancesClientStartPollerResponse{}, err
-	}
-	result.Poller = &RoleInstancesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts a role instance of a vendor network function.
@@ -328,20 +336,16 @@ func (client *RoleInstancesClient) startCreateRequest(ctx context.Context, locat
 // serviceKey - The GUID for the vendor network function.
 // roleInstanceName - The name of the role instance of the vendor network function.
 // options - RoleInstancesClientBeginStopOptions contains the optional parameters for the RoleInstancesClient.BeginStop method.
-func (client *RoleInstancesClient) BeginStop(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginStopOptions) (RoleInstancesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
-	if err != nil {
-		return RoleInstancesClientStopPollerResponse{}, err
+func (client *RoleInstancesClient) BeginStop(ctx context.Context, locationName string, vendorName string, serviceKey string, roleInstanceName string, options *RoleInstancesClientBeginStopOptions) (*armruntime.Poller[RoleInstancesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, locationName, vendorName, serviceKey, roleInstanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RoleInstancesClientStopResponse]("RoleInstancesClient.Stop", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RoleInstancesClientStopResponse]("RoleInstancesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := RoleInstancesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("RoleInstancesClient.Stop", "location", resp, client.pl)
-	if err != nil {
-		return RoleInstancesClientStopPollerResponse{}, err
-	}
-	result.Poller = &RoleInstancesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Powers off (stop) a role instance of a vendor network function.

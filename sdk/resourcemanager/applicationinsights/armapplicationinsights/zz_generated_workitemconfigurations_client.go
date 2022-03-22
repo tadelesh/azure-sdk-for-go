@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -283,13 +283,26 @@ func (client *WorkItemConfigurationsClient) getItemHandleResponse(resp *http.Res
 // resourceName - The name of the Application Insights component resource.
 // options - WorkItemConfigurationsClientListOptions contains the optional parameters for the WorkItemConfigurationsClient.List
 // method.
-func (client *WorkItemConfigurationsClient) List(resourceGroupName string, resourceName string, options *WorkItemConfigurationsClientListOptions) *WorkItemConfigurationsClientListPager {
-	return &WorkItemConfigurationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *WorkItemConfigurationsClient) List(resourceGroupName string, resourceName string, options *WorkItemConfigurationsClientListOptions) *runtime.Pager[WorkItemConfigurationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkItemConfigurationsClientListResponse]{
+		More: func(page WorkItemConfigurationsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkItemConfigurationsClientListResponse) (WorkItemConfigurationsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			if err != nil {
+				return WorkItemConfigurationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkItemConfigurationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkItemConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

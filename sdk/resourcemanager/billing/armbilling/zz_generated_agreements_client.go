@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -105,16 +105,32 @@ func (client *AgreementsClient) getHandleResponse(resp *http.Response) (Agreemen
 // billingAccountName - The ID that uniquely identifies a billing account.
 // options - AgreementsClientListByBillingAccountOptions contains the optional parameters for the AgreementsClient.ListByBillingAccount
 // method.
-func (client *AgreementsClient) ListByBillingAccount(billingAccountName string, options *AgreementsClientListByBillingAccountOptions) *AgreementsClientListByBillingAccountPager {
-	return &AgreementsClientListByBillingAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+func (client *AgreementsClient) ListByBillingAccount(billingAccountName string, options *AgreementsClientListByBillingAccountOptions) *runtime.Pager[AgreementsClientListByBillingAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AgreementsClientListByBillingAccountResponse]{
+		More: func(page AgreementsClientListByBillingAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AgreementsClientListByBillingAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AgreementListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AgreementsClientListByBillingAccountResponse) (AgreementsClientListByBillingAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AgreementsClientListByBillingAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AgreementsClientListByBillingAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AgreementsClientListByBillingAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBillingAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.

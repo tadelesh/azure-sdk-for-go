@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -422,16 +422,32 @@ func (client *EventHubsClient) getAuthorizationRuleHandleResponse(resp *http.Res
 // eventHubName - The Event Hub name
 // options - EventHubsClientListAuthorizationRulesOptions contains the optional parameters for the EventHubsClient.ListAuthorizationRules
 // method.
-func (client *EventHubsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, eventHubName string, options *EventHubsClientListAuthorizationRulesOptions) *EventHubsClientListAuthorizationRulesPager {
-	return &EventHubsClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, eventHubName, options)
+func (client *EventHubsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, eventHubName string, options *EventHubsClientListAuthorizationRulesOptions) *runtime.Pager[EventHubsClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EventHubsClientListAuthorizationRulesResponse]{
+		More: func(page EventHubsClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EventHubsClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EventHubsClientListAuthorizationRulesResponse) (EventHubsClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, eventHubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EventHubsClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EventHubsClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EventHubsClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.
@@ -479,16 +495,32 @@ func (client *EventHubsClient) listAuthorizationRulesHandleResponse(resp *http.R
 // namespaceName - The Namespace name
 // options - EventHubsClientListByNamespaceOptions contains the optional parameters for the EventHubsClient.ListByNamespace
 // method.
-func (client *EventHubsClient) ListByNamespace(resourceGroupName string, namespaceName string, options *EventHubsClientListByNamespaceOptions) *EventHubsClientListByNamespacePager {
-	return &EventHubsClientListByNamespacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *EventHubsClient) ListByNamespace(resourceGroupName string, namespaceName string, options *EventHubsClientListByNamespaceOptions) *runtime.Pager[EventHubsClientListByNamespaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EventHubsClientListByNamespaceResponse]{
+		More: func(page EventHubsClientListByNamespaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EventHubsClientListByNamespaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EventHubsClientListByNamespaceResponse) (EventHubsClientListByNamespaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EventHubsClientListByNamespaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EventHubsClientListByNamespaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EventHubsClientListByNamespaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNamespaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByNamespaceCreateRequest creates the ListByNamespace request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -244,13 +244,26 @@ func (client *HyperVCollectorsClient) getHandleResponse(resp *http.Response) (Hy
 // projectName - Name of the Azure Migrate project.
 // options - HyperVCollectorsClientListByProjectOptions contains the optional parameters for the HyperVCollectorsClient.ListByProject
 // method.
-func (client *HyperVCollectorsClient) ListByProject(resourceGroupName string, projectName string, options *HyperVCollectorsClientListByProjectOptions) *HyperVCollectorsClientListByProjectPager {
-	return &HyperVCollectorsClientListByProjectPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProjectCreateRequest(ctx, resourceGroupName, projectName, options)
+func (client *HyperVCollectorsClient) ListByProject(resourceGroupName string, projectName string, options *HyperVCollectorsClientListByProjectOptions) *runtime.Pager[HyperVCollectorsClientListByProjectResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HyperVCollectorsClientListByProjectResponse]{
+		More: func(page HyperVCollectorsClientListByProjectResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *HyperVCollectorsClientListByProjectResponse) (HyperVCollectorsClientListByProjectResponse, error) {
+			req, err := client.listByProjectCreateRequest(ctx, resourceGroupName, projectName, options)
+			if err != nil {
+				return HyperVCollectorsClientListByProjectResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HyperVCollectorsClientListByProjectResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HyperVCollectorsClientListByProjectResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProjectHandleResponse(resp)
+		},
+	})
 }
 
 // listByProjectCreateRequest creates the ListByProject request.

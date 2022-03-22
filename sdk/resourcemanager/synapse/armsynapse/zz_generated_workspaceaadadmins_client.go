@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewWorkspaceAADAdminsClient(subscriptionID string, credential azcore.TokenC
 // aadAdminInfo - Workspace active directory administrator properties
 // options - WorkspaceAADAdminsClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspaceAADAdminsClient.BeginCreateOrUpdate
 // method.
-func (client *WorkspaceAADAdminsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, aadAdminInfo WorkspaceAADAdminInfo, options *WorkspaceAADAdminsClientBeginCreateOrUpdateOptions) (WorkspaceAADAdminsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, aadAdminInfo, options)
-	if err != nil {
-		return WorkspaceAADAdminsClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspaceAADAdminsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, aadAdminInfo WorkspaceAADAdminInfo, options *WorkspaceAADAdminsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspaceAADAdminsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, aadAdminInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceAADAdminsClientCreateOrUpdateResponse]("WorkspaceAADAdminsClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceAADAdminsClientCreateOrUpdateResponse]("WorkspaceAADAdminsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceAADAdminsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceAADAdminsClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return WorkspaceAADAdminsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceAADAdminsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a workspace active directory admin
@@ -121,20 +117,16 @@ func (client *WorkspaceAADAdminsClient) createOrUpdateCreateRequest(ctx context.
 // workspaceName - The name of the workspace.
 // options - WorkspaceAADAdminsClientBeginDeleteOptions contains the optional parameters for the WorkspaceAADAdminsClient.BeginDelete
 // method.
-func (client *WorkspaceAADAdminsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspaceAADAdminsClientBeginDeleteOptions) (WorkspaceAADAdminsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspaceAADAdminsClientDeletePollerResponse{}, err
+func (client *WorkspaceAADAdminsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspaceAADAdminsClientBeginDeleteOptions) (*armruntime.Poller[WorkspaceAADAdminsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceAADAdminsClientDeleteResponse]("WorkspaceAADAdminsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceAADAdminsClientDeleteResponse]("WorkspaceAADAdminsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceAADAdminsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceAADAdminsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return WorkspaceAADAdminsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceAADAdminsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a workspace active directory admin

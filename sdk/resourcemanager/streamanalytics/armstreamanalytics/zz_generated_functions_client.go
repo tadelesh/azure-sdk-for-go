@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -241,16 +241,32 @@ func (client *FunctionsClient) getHandleResponse(resp *http.Response) (Functions
 // jobName - The name of the streaming job.
 // options - FunctionsClientListByStreamingJobOptions contains the optional parameters for the FunctionsClient.ListByStreamingJob
 // method.
-func (client *FunctionsClient) ListByStreamingJob(resourceGroupName string, jobName string, options *FunctionsClientListByStreamingJobOptions) *FunctionsClientListByStreamingJobPager {
-	return &FunctionsClientListByStreamingJobPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByStreamingJobCreateRequest(ctx, resourceGroupName, jobName, options)
+func (client *FunctionsClient) ListByStreamingJob(resourceGroupName string, jobName string, options *FunctionsClientListByStreamingJobOptions) *runtime.Pager[FunctionsClientListByStreamingJobResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FunctionsClientListByStreamingJobResponse]{
+		More: func(page FunctionsClientListByStreamingJobResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FunctionsClientListByStreamingJobResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FunctionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *FunctionsClientListByStreamingJobResponse) (FunctionsClientListByStreamingJobResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByStreamingJobCreateRequest(ctx, resourceGroupName, jobName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FunctionsClientListByStreamingJobResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FunctionsClientListByStreamingJobResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FunctionsClientListByStreamingJobResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByStreamingJobHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByStreamingJobCreateRequest creates the ListByStreamingJob request.
@@ -363,20 +379,16 @@ func (client *FunctionsClient) retrieveDefaultDefinitionHandleResponse(resp *htt
 // jobName - The name of the streaming job.
 // functionName - The name of the function.
 // options - FunctionsClientBeginTestOptions contains the optional parameters for the FunctionsClient.BeginTest method.
-func (client *FunctionsClient) BeginTest(ctx context.Context, resourceGroupName string, jobName string, functionName string, options *FunctionsClientBeginTestOptions) (FunctionsClientTestPollerResponse, error) {
-	resp, err := client.test(ctx, resourceGroupName, jobName, functionName, options)
-	if err != nil {
-		return FunctionsClientTestPollerResponse{}, err
+func (client *FunctionsClient) BeginTest(ctx context.Context, resourceGroupName string, jobName string, functionName string, options *FunctionsClientBeginTestOptions) (*armruntime.Poller[FunctionsClientTestResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.test(ctx, resourceGroupName, jobName, functionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FunctionsClientTestResponse]("FunctionsClient.Test", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FunctionsClientTestResponse]("FunctionsClient.Test", options.ResumeToken, client.pl, nil)
 	}
-	result := FunctionsClientTestPollerResponse{}
-	pt, err := armruntime.NewPoller("FunctionsClient.Test", "", resp, client.pl)
-	if err != nil {
-		return FunctionsClientTestPollerResponse{}, err
-	}
-	result.Poller = &FunctionsClientTestPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Test - Tests if the information provided for a function is valid. This can range from testing the connection to the underlying

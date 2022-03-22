@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -50,20 +50,16 @@ func NewOperationClient(credential azcore.TokenCredential, options *arm.ClientOp
 // If the operation fails it returns an *azcore.ResponseError type.
 // operationID - the operation Id parameter.
 // options - OperationClientBeginGetOptions contains the optional parameters for the OperationClient.BeginGet method.
-func (client *OperationClient) BeginGet(ctx context.Context, operationID string, options *OperationClientBeginGetOptions) (OperationClientGetPollerResponse, error) {
-	resp, err := client.get(ctx, operationID, options)
-	if err != nil {
-		return OperationClientGetPollerResponse{}, err
+func (client *OperationClient) BeginGet(ctx context.Context, operationID string, options *OperationClientBeginGetOptions) (*armruntime.Poller[OperationClientGetResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.get(ctx, operationID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OperationClientGetResponse]("OperationClient.Get", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OperationClientGetResponse]("OperationClient.Get", options.ResumeToken, client.pl, nil)
 	}
-	result := OperationClientGetPollerResponse{}
-	pt, err := armruntime.NewPoller("OperationClient.Get", "location", resp, client.pl)
-	if err != nil {
-		return OperationClientGetPollerResponse{}, err
-	}
-	result.Poller = &OperationClientGetPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Get - Gets information about the specified operation progress.

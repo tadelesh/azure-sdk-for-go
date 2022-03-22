@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -302,13 +302,15 @@ type RegistrationAssignmentPropertiesRegistrationDefinitionProperties struct {
 // RegistrationAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the RegistrationAssignmentsClient.BeginCreateOrUpdate
 // method.
 type RegistrationAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegistrationAssignmentsClientBeginDeleteOptions contains the optional parameters for the RegistrationAssignmentsClient.BeginDelete
 // method.
 type RegistrationAssignmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegistrationAssignmentsClientGetOptions contains the optional parameters for the RegistrationAssignmentsClient.Get method.
@@ -386,7 +388,8 @@ type RegistrationDefinitionProperties struct {
 // RegistrationDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the RegistrationDefinitionsClient.BeginCreateOrUpdate
 // method.
 type RegistrationDefinitionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RegistrationDefinitionsClientDeleteOptions contains the optional parameters for the RegistrationDefinitionsClient.Delete

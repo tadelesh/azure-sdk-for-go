@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -193,16 +193,32 @@ func (client *AssessmentsClient) getHandleResponse(resp *http.Response) (Assessm
 // scope - Scope of the query, can be subscription (/subscriptions/0b06d9ea-afe6-4779-bd59-30e5c2d9d13f) or management group
 // (/providers/Microsoft.Management/managementGroups/mgName).
 // options - AssessmentsClientListOptions contains the optional parameters for the AssessmentsClient.List method.
-func (client *AssessmentsClient) List(scope string, options *AssessmentsClientListOptions) *AssessmentsClientListPager {
-	return &AssessmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *AssessmentsClient) List(scope string, options *AssessmentsClientListOptions) *runtime.Pager[AssessmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessmentsClientListResponse]{
+		More: func(page AssessmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AssessmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AssessmentList.NextLink)
+		Fetcher: func(ctx context.Context, page *AssessmentsClientListResponse) (AssessmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AssessmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

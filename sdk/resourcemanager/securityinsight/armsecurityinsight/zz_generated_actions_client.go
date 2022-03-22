@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -242,16 +242,32 @@ func (client *ActionsClient) getHandleResponse(resp *http.Response) (ActionsClie
 // workspaceName - The name of the workspace.
 // ruleID - Alert rule ID
 // options - ActionsClientListByAlertRuleOptions contains the optional parameters for the ActionsClient.ListByAlertRule method.
-func (client *ActionsClient) ListByAlertRule(resourceGroupName string, workspaceName string, ruleID string, options *ActionsClientListByAlertRuleOptions) *ActionsClientListByAlertRulePager {
-	return &ActionsClientListByAlertRulePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAlertRuleCreateRequest(ctx, resourceGroupName, workspaceName, ruleID, options)
+func (client *ActionsClient) ListByAlertRule(resourceGroupName string, workspaceName string, ruleID string, options *ActionsClientListByAlertRuleOptions) *runtime.Pager[ActionsClientListByAlertRuleResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActionsClientListByAlertRuleResponse]{
+		More: func(page ActionsClientListByAlertRuleResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ActionsClientListByAlertRuleResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ActionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ActionsClientListByAlertRuleResponse) (ActionsClientListByAlertRuleResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAlertRuleCreateRequest(ctx, resourceGroupName, workspaceName, ruleID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ActionsClientListByAlertRuleResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActionsClientListByAlertRuleResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActionsClientListByAlertRuleResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAlertRuleHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAlertRuleCreateRequest creates the ListByAlertRule request.

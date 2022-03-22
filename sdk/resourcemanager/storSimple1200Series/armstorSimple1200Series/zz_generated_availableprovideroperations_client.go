@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -47,16 +47,32 @@ func NewAvailableProviderOperationsClient(credential azcore.TokenCredential, opt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AvailableProviderOperationsClientListOptions contains the optional parameters for the AvailableProviderOperationsClient.List
 // method.
-func (client *AvailableProviderOperationsClient) List(options *AvailableProviderOperationsClientListOptions) *AvailableProviderOperationsClientListPager {
-	return &AvailableProviderOperationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AvailableProviderOperationsClient) List(options *AvailableProviderOperationsClientListOptions) *runtime.Pager[AvailableProviderOperationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AvailableProviderOperationsClientListResponse]{
+		More: func(page AvailableProviderOperationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AvailableProviderOperationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailableProviderOperations.NextLink)
+		Fetcher: func(ctx context.Context, page *AvailableProviderOperationsClientListResponse) (AvailableProviderOperationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AvailableProviderOperationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AvailableProviderOperationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AvailableProviderOperationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

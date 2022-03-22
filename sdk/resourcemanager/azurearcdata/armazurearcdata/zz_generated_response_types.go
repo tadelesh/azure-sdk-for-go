@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,47 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armazurearcdata
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// DataControllersClientDeleteDataControllerPollerResponse contains the response from method DataControllersClient.DeleteDataController.
-type DataControllersClientDeleteDataControllerPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DataControllersClientDeleteDataControllerPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DataControllersClientDeleteDataControllerPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataControllersClientDeleteDataControllerResponse, error) {
-	respType := DataControllersClientDeleteDataControllerResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DataControllersClientDeleteDataControllerPollerResponse from the provided client and resume token.
-func (l *DataControllersClientDeleteDataControllerPollerResponse) Resume(ctx context.Context, client *DataControllersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DataControllersClient.DeleteDataController", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DataControllersClientDeleteDataControllerPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
 
 // DataControllersClientDeleteDataControllerResponse contains the response from method DataControllersClient.DeleteDataController.
 type DataControllersClientDeleteDataControllerResponse struct {
@@ -74,41 +33,6 @@ type DataControllersClientPatchDataControllerResponse struct {
 	DataControllerResource
 }
 
-// DataControllersClientPutDataControllerPollerResponse contains the response from method DataControllersClient.PutDataController.
-type DataControllersClientPutDataControllerPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DataControllersClientPutDataControllerPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DataControllersClientPutDataControllerPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataControllersClientPutDataControllerResponse, error) {
-	respType := DataControllersClientPutDataControllerResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataControllerResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DataControllersClientPutDataControllerPollerResponse from the provided client and resume token.
-func (l *DataControllersClientPutDataControllerPollerResponse) Resume(ctx context.Context, client *DataControllersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DataControllersClient.PutDataController", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DataControllersClientPutDataControllerPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // DataControllersClientPutDataControllerResponse contains the response from method DataControllersClient.PutDataController.
 type DataControllersClientPutDataControllerResponse struct {
 	DataControllerResource
@@ -119,79 +43,9 @@ type OperationsClientListResponse struct {
 	OperationListResult
 }
 
-// SQLManagedInstancesClientCreatePollerResponse contains the response from method SQLManagedInstancesClient.Create.
-type SQLManagedInstancesClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SQLManagedInstancesClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SQLManagedInstancesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SQLManagedInstancesClientCreateResponse, error) {
-	respType := SQLManagedInstancesClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SQLManagedInstance)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SQLManagedInstancesClientCreatePollerResponse from the provided client and resume token.
-func (l *SQLManagedInstancesClientCreatePollerResponse) Resume(ctx context.Context, client *SQLManagedInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SQLManagedInstancesClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SQLManagedInstancesClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SQLManagedInstancesClientCreateResponse contains the response from method SQLManagedInstancesClient.Create.
 type SQLManagedInstancesClientCreateResponse struct {
 	SQLManagedInstance
-}
-
-// SQLManagedInstancesClientDeletePollerResponse contains the response from method SQLManagedInstancesClient.Delete.
-type SQLManagedInstancesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SQLManagedInstancesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SQLManagedInstancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SQLManagedInstancesClientDeleteResponse, error) {
-	respType := SQLManagedInstancesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SQLManagedInstancesClientDeletePollerResponse from the provided client and resume token.
-func (l *SQLManagedInstancesClientDeletePollerResponse) Resume(ctx context.Context, client *SQLManagedInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SQLManagedInstancesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SQLManagedInstancesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SQLManagedInstancesClientDeleteResponse contains the response from method SQLManagedInstancesClient.Delete.
@@ -219,79 +73,9 @@ type SQLManagedInstancesClientUpdateResponse struct {
 	SQLManagedInstance
 }
 
-// SQLServerInstancesClientCreatePollerResponse contains the response from method SQLServerInstancesClient.Create.
-type SQLServerInstancesClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SQLServerInstancesClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SQLServerInstancesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SQLServerInstancesClientCreateResponse, error) {
-	respType := SQLServerInstancesClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SQLServerInstance)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SQLServerInstancesClientCreatePollerResponse from the provided client and resume token.
-func (l *SQLServerInstancesClientCreatePollerResponse) Resume(ctx context.Context, client *SQLServerInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SQLServerInstancesClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SQLServerInstancesClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SQLServerInstancesClientCreateResponse contains the response from method SQLServerInstancesClient.Create.
 type SQLServerInstancesClientCreateResponse struct {
 	SQLServerInstance
-}
-
-// SQLServerInstancesClientDeletePollerResponse contains the response from method SQLServerInstancesClient.Delete.
-type SQLServerInstancesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SQLServerInstancesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SQLServerInstancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SQLServerInstancesClientDeleteResponse, error) {
-	respType := SQLServerInstancesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SQLServerInstancesClientDeletePollerResponse from the provided client and resume token.
-func (l *SQLServerInstancesClientDeletePollerResponse) Resume(ctx context.Context, client *SQLServerInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SQLServerInstancesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SQLServerInstancesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SQLServerInstancesClientDeleteResponse contains the response from method SQLServerInstancesClient.Delete.

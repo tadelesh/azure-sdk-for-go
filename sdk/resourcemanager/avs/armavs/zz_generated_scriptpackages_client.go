@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *ScriptPackagesClient) getHandleResponse(resp *http.Response) (Scri
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // privateCloudName - Name of the private cloud
 // options - ScriptPackagesClientListOptions contains the optional parameters for the ScriptPackagesClient.List method.
-func (client *ScriptPackagesClient) List(resourceGroupName string, privateCloudName string, options *ScriptPackagesClientListOptions) *ScriptPackagesClientListPager {
-	return &ScriptPackagesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+func (client *ScriptPackagesClient) List(resourceGroupName string, privateCloudName string, options *ScriptPackagesClientListOptions) *runtime.Pager[ScriptPackagesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScriptPackagesClientListResponse]{
+		More: func(page ScriptPackagesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScriptPackagesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScriptPackagesList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScriptPackagesClientListResponse) (ScriptPackagesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScriptPackagesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScriptPackagesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScriptPackagesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

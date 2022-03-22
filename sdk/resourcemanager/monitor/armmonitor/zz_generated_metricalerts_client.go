@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,13 +212,26 @@ func (client *MetricAlertsClient) getHandleResponse(resp *http.Response) (Metric
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - MetricAlertsClientListByResourceGroupOptions contains the optional parameters for the MetricAlertsClient.ListByResourceGroup
 // method.
-func (client *MetricAlertsClient) ListByResourceGroup(resourceGroupName string, options *MetricAlertsClientListByResourceGroupOptions) *MetricAlertsClientListByResourceGroupPager {
-	return &MetricAlertsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *MetricAlertsClient) ListByResourceGroup(resourceGroupName string, options *MetricAlertsClientListByResourceGroupOptions) *runtime.Pager[MetricAlertsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MetricAlertsClientListByResourceGroupResponse]{
+		More: func(page MetricAlertsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *MetricAlertsClientListByResourceGroupResponse) (MetricAlertsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return MetricAlertsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MetricAlertsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MetricAlertsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -256,13 +269,26 @@ func (client *MetricAlertsClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - MetricAlertsClientListBySubscriptionOptions contains the optional parameters for the MetricAlertsClient.ListBySubscription
 // method.
-func (client *MetricAlertsClient) ListBySubscription(options *MetricAlertsClientListBySubscriptionOptions) *MetricAlertsClientListBySubscriptionPager {
-	return &MetricAlertsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *MetricAlertsClient) ListBySubscription(options *MetricAlertsClientListBySubscriptionOptions) *runtime.Pager[MetricAlertsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MetricAlertsClientListBySubscriptionResponse]{
+		More: func(page MetricAlertsClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *MetricAlertsClientListBySubscriptionResponse) (MetricAlertsClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return MetricAlertsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MetricAlertsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MetricAlertsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -149,21 +149,26 @@ type AccountUsageName struct {
 type AccountsClientBeginCreateOptions struct {
 	// The flag indicating if we would like to restore the Test Base Accounts which were soft deleted before.
 	Restore *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
 type AccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginOffboardOptions contains the optional parameters for the AccountsClient.BeginOffboard method.
 type AccountsClientBeginOffboardOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
 type AccountsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientCheckPackageNameAvailabilityOptions contains the optional parameters for the AccountsClient.CheckPackageNameAvailability
@@ -418,12 +423,14 @@ type CustomerEventResource struct {
 
 // CustomerEventsClientBeginCreateOptions contains the optional parameters for the CustomerEventsClient.BeginCreate method.
 type CustomerEventsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomerEventsClientBeginDeleteOptions contains the optional parameters for the CustomerEventsClient.BeginDelete method.
 type CustomerEventsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomerEventsClientGetOptions contains the optional parameters for the CustomerEventsClient.Get method.
@@ -987,22 +994,26 @@ type PackageValidationResult struct {
 
 // PackagesClientBeginCreateOptions contains the optional parameters for the PackagesClient.BeginCreate method.
 type PackagesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PackagesClientBeginDeleteOptions contains the optional parameters for the PackagesClient.BeginDelete method.
 type PackagesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PackagesClientBeginHardDeleteOptions contains the optional parameters for the PackagesClient.BeginHardDelete method.
 type PackagesClientBeginHardDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PackagesClientBeginUpdateOptions contains the optional parameters for the PackagesClient.BeginUpdate method.
 type PackagesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PackagesClientGetDownloadURLOptions contains the optional parameters for the PackagesClient.GetDownloadURL method.

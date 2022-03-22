@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,20 +64,16 @@ func NewAppliancesClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - Parameters supplied to create or update an Appliance.
 // options - AppliancesClientBeginCreateOrUpdateOptions contains the optional parameters for the AppliancesClient.BeginCreateOrUpdate
 // method.
-func (client *AppliancesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters Appliance, options *AppliancesClientBeginCreateOrUpdateOptions) (AppliancesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return AppliancesClientCreateOrUpdatePollerResponse{}, err
+func (client *AppliancesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters Appliance, options *AppliancesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AppliancesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppliancesClientCreateOrUpdateResponse]("AppliancesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppliancesClientCreateOrUpdateResponse]("AppliancesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AppliancesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AppliancesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppliancesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppliancesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an Appliance in the specified Subscription and Resource Group.
@@ -128,20 +124,16 @@ func (client *AppliancesClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - Appliances name.
 // options - AppliancesClientBeginDeleteOptions contains the optional parameters for the AppliancesClient.BeginDelete method.
-func (client *AppliancesClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *AppliancesClientBeginDeleteOptions) (AppliancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return AppliancesClientDeletePollerResponse{}, err
+func (client *AppliancesClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *AppliancesClientBeginDeleteOptions) (*armruntime.Poller[AppliancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AppliancesClientDeleteResponse]("AppliancesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppliancesClientDeleteResponse]("AppliancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AppliancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AppliancesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppliancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AppliancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an Appliance with the specified Resource Name, Resource Group, and Subscription Id.
@@ -248,16 +240,32 @@ func (client *AppliancesClient) getHandleResponse(resp *http.Response) (Applianc
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - AppliancesClientListByResourceGroupOptions contains the optional parameters for the AppliancesClient.ListByResourceGroup
 // method.
-func (client *AppliancesClient) ListByResourceGroup(resourceGroupName string, options *AppliancesClientListByResourceGroupOptions) *AppliancesClientListByResourceGroupPager {
-	return &AppliancesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AppliancesClient) ListByResourceGroup(resourceGroupName string, options *AppliancesClientListByResourceGroupOptions) *runtime.Pager[AppliancesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppliancesClientListByResourceGroupResponse]{
+		More: func(page AppliancesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppliancesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplianceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AppliancesClientListByResourceGroupResponse) (AppliancesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppliancesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppliancesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppliancesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -296,16 +304,32 @@ func (client *AppliancesClient) listByResourceGroupHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AppliancesClientListBySubscriptionOptions contains the optional parameters for the AppliancesClient.ListBySubscription
 // method.
-func (client *AppliancesClient) ListBySubscription(options *AppliancesClientListBySubscriptionOptions) *AppliancesClientListBySubscriptionPager {
-	return &AppliancesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AppliancesClient) ListBySubscription(options *AppliancesClientListBySubscriptionOptions) *runtime.Pager[AppliancesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppliancesClientListBySubscriptionResponse]{
+		More: func(page AppliancesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppliancesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplianceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AppliancesClientListBySubscriptionResponse) (AppliancesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppliancesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppliancesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppliancesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -395,16 +419,32 @@ func (client *AppliancesClient) listClusterUserCredentialHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AppliancesClientListOperationsOptions contains the optional parameters for the AppliancesClient.ListOperations
 // method.
-func (client *AppliancesClient) ListOperations(options *AppliancesClientListOperationsOptions) *AppliancesClientListOperationsPager {
-	return &AppliancesClientListOperationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOperationsCreateRequest(ctx, options)
+func (client *AppliancesClient) ListOperations(options *AppliancesClientListOperationsOptions) *runtime.Pager[AppliancesClientListOperationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AppliancesClientListOperationsResponse]{
+		More: func(page AppliancesClientListOperationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppliancesClientListOperationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplianceOperationsList.NextLink)
+		Fetcher: func(ctx context.Context, page *AppliancesClientListOperationsResponse) (AppliancesClientListOperationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOperationsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppliancesClientListOperationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppliancesClientListOperationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppliancesClientListOperationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOperationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.

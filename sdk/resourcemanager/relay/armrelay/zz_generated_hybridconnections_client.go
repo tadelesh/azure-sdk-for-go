@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -421,16 +421,32 @@ func (client *HybridConnectionsClient) getAuthorizationRuleHandleResponse(resp *
 // hybridConnectionName - The hybrid connection name.
 // options - HybridConnectionsClientListAuthorizationRulesOptions contains the optional parameters for the HybridConnectionsClient.ListAuthorizationRules
 // method.
-func (client *HybridConnectionsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, hybridConnectionName string, options *HybridConnectionsClientListAuthorizationRulesOptions) *HybridConnectionsClientListAuthorizationRulesPager {
-	return &HybridConnectionsClientListAuthorizationRulesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, hybridConnectionName, options)
+func (client *HybridConnectionsClient) ListAuthorizationRules(resourceGroupName string, namespaceName string, hybridConnectionName string, options *HybridConnectionsClientListAuthorizationRulesOptions) *runtime.Pager[HybridConnectionsClientListAuthorizationRulesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HybridConnectionsClientListAuthorizationRulesResponse]{
+		More: func(page HybridConnectionsClientListAuthorizationRulesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HybridConnectionsClientListAuthorizationRulesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HybridConnectionsClientListAuthorizationRulesResponse) (HybridConnectionsClientListAuthorizationRulesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, hybridConnectionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HybridConnectionsClientListAuthorizationRulesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HybridConnectionsClientListAuthorizationRulesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HybridConnectionsClientListAuthorizationRulesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAuthorizationRulesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.
@@ -478,16 +494,32 @@ func (client *HybridConnectionsClient) listAuthorizationRulesHandleResponse(resp
 // namespaceName - The namespace name
 // options - HybridConnectionsClientListByNamespaceOptions contains the optional parameters for the HybridConnectionsClient.ListByNamespace
 // method.
-func (client *HybridConnectionsClient) ListByNamespace(resourceGroupName string, namespaceName string, options *HybridConnectionsClientListByNamespaceOptions) *HybridConnectionsClientListByNamespacePager {
-	return &HybridConnectionsClientListByNamespacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+func (client *HybridConnectionsClient) ListByNamespace(resourceGroupName string, namespaceName string, options *HybridConnectionsClientListByNamespaceOptions) *runtime.Pager[HybridConnectionsClientListByNamespaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HybridConnectionsClientListByNamespaceResponse]{
+		More: func(page HybridConnectionsClientListByNamespaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HybridConnectionsClientListByNamespaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HybridConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HybridConnectionsClientListByNamespaceResponse) (HybridConnectionsClientListByNamespaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HybridConnectionsClientListByNamespaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HybridConnectionsClientListByNamespaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HybridConnectionsClientListByNamespaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNamespaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByNamespaceCreateRequest creates the ListByNamespace request.

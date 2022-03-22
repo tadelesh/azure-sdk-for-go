@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewFormulasClient(subscriptionID string, credential azcore.TokenCredential,
 // formula - A formula for creating a VM, specifying an image base and other parameters
 // options - FormulasClientBeginCreateOrUpdateOptions contains the optional parameters for the FormulasClient.BeginCreateOrUpdate
 // method.
-func (client *FormulasClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, formula Formula, options *FormulasClientBeginCreateOrUpdateOptions) (FormulasClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, formula, options)
-	if err != nil {
-		return FormulasClientCreateOrUpdatePollerResponse{}, err
+func (client *FormulasClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, formula Formula, options *FormulasClientBeginCreateOrUpdateOptions) (*armruntime.Poller[FormulasClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, formula, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[FormulasClientCreateOrUpdateResponse]("FormulasClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[FormulasClientCreateOrUpdateResponse]("FormulasClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := FormulasClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("FormulasClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return FormulasClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &FormulasClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing formula. This operation can take a while to complete.
@@ -240,16 +236,32 @@ func (client *FormulasClient) getHandleResponse(resp *http.Response) (FormulasCl
 // resourceGroupName - The name of the resource group.
 // labName - The name of the lab.
 // options - FormulasClientListOptions contains the optional parameters for the FormulasClient.List method.
-func (client *FormulasClient) List(resourceGroupName string, labName string, options *FormulasClientListOptions) *FormulasClientListPager {
-	return &FormulasClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *FormulasClient) List(resourceGroupName string, labName string, options *FormulasClientListOptions) *runtime.Pager[FormulasClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FormulasClientListResponse]{
+		More: func(page FormulasClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FormulasClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FormulaList.NextLink)
+		Fetcher: func(ctx context.Context, page *FormulasClientListResponse) (FormulasClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FormulasClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FormulasClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FormulasClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

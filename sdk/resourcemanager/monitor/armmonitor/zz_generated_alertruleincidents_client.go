@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,13 +115,26 @@ func (client *AlertRuleIncidentsClient) getHandleResponse(resp *http.Response) (
 // ruleName - The name of the rule.
 // options - AlertRuleIncidentsClientListByAlertRuleOptions contains the optional parameters for the AlertRuleIncidentsClient.ListByAlertRule
 // method.
-func (client *AlertRuleIncidentsClient) ListByAlertRule(resourceGroupName string, ruleName string, options *AlertRuleIncidentsClientListByAlertRuleOptions) *AlertRuleIncidentsClientListByAlertRulePager {
-	return &AlertRuleIncidentsClientListByAlertRulePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAlertRuleCreateRequest(ctx, resourceGroupName, ruleName, options)
+func (client *AlertRuleIncidentsClient) ListByAlertRule(resourceGroupName string, ruleName string, options *AlertRuleIncidentsClientListByAlertRuleOptions) *runtime.Pager[AlertRuleIncidentsClientListByAlertRuleResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertRuleIncidentsClientListByAlertRuleResponse]{
+		More: func(page AlertRuleIncidentsClientListByAlertRuleResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AlertRuleIncidentsClientListByAlertRuleResponse) (AlertRuleIncidentsClientListByAlertRuleResponse, error) {
+			req, err := client.listByAlertRuleCreateRequest(ctx, resourceGroupName, ruleName, options)
+			if err != nil {
+				return AlertRuleIncidentsClientListByAlertRuleResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertRuleIncidentsClientListByAlertRuleResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertRuleIncidentsClientListByAlertRuleResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAlertRuleHandleResponse(resp)
+		},
+	})
 }
 
 // listByAlertRuleCreateRequest creates the ListByAlertRule request.

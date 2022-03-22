@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewDomainTopicsClient(subscriptionID string, credential azcore.TokenCredent
 // domainTopicName - Name of the domain topic.
 // options - DomainTopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainTopicsClient.BeginCreateOrUpdate
 // method.
-func (client *DomainTopicsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domainTopicName string, options *DomainTopicsClientBeginCreateOrUpdateOptions) (DomainTopicsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domainTopicName, options)
-	if err != nil {
-		return DomainTopicsClientCreateOrUpdatePollerResponse{}, err
+func (client *DomainTopicsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domainTopicName string, options *DomainTopicsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DomainTopicsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domainTopicName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainTopicsClientCreateOrUpdateResponse]("DomainTopicsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainTopicsClientCreateOrUpdateResponse]("DomainTopicsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainTopicsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainTopicsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DomainTopicsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DomainTopicsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Asynchronously creates or updates a new domain topic with the specified parameters.
@@ -128,20 +124,16 @@ func (client *DomainTopicsClient) createOrUpdateCreateRequest(ctx context.Contex
 // domainTopicName - Name of the domain topic.
 // options - DomainTopicsClientBeginDeleteOptions contains the optional parameters for the DomainTopicsClient.BeginDelete
 // method.
-func (client *DomainTopicsClient) BeginDelete(ctx context.Context, resourceGroupName string, domainName string, domainTopicName string, options *DomainTopicsClientBeginDeleteOptions) (DomainTopicsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, domainName, domainTopicName, options)
-	if err != nil {
-		return DomainTopicsClientDeletePollerResponse{}, err
+func (client *DomainTopicsClient) BeginDelete(ctx context.Context, resourceGroupName string, domainName string, domainTopicName string, options *DomainTopicsClientBeginDeleteOptions) (*armruntime.Poller[DomainTopicsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, domainName, domainTopicName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainTopicsClientDeleteResponse]("DomainTopicsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainTopicsClientDeleteResponse]("DomainTopicsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainTopicsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainTopicsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DomainTopicsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DomainTopicsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete existing domain topic.
@@ -256,16 +248,32 @@ func (client *DomainTopicsClient) getHandleResponse(resp *http.Response) (Domain
 // domainName - Domain name.
 // options - DomainTopicsClientListByDomainOptions contains the optional parameters for the DomainTopicsClient.ListByDomain
 // method.
-func (client *DomainTopicsClient) ListByDomain(resourceGroupName string, domainName string, options *DomainTopicsClientListByDomainOptions) *DomainTopicsClientListByDomainPager {
-	return &DomainTopicsClientListByDomainPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDomainCreateRequest(ctx, resourceGroupName, domainName, options)
+func (client *DomainTopicsClient) ListByDomain(resourceGroupName string, domainName string, options *DomainTopicsClientListByDomainOptions) *runtime.Pager[DomainTopicsClientListByDomainResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainTopicsClientListByDomainResponse]{
+		More: func(page DomainTopicsClientListByDomainResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainTopicsClientListByDomainResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainTopicsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainTopicsClientListByDomainResponse) (DomainTopicsClientListByDomainResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDomainCreateRequest(ctx, resourceGroupName, domainName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainTopicsClientListByDomainResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainTopicsClientListByDomainResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainTopicsClientListByDomainResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDomainHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDomainCreateRequest creates the ListByDomain request.

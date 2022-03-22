@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -191,13 +191,26 @@ func (client *GeoBackupPoliciesClient) getHandleResponse(resp *http.Response) (G
 // databaseName - The name of the database.
 // options - GeoBackupPoliciesClientListByDatabaseOptions contains the optional parameters for the GeoBackupPoliciesClient.ListByDatabase
 // method.
-func (client *GeoBackupPoliciesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *GeoBackupPoliciesClientListByDatabaseOptions) *GeoBackupPoliciesClientListByDatabasePager {
-	return &GeoBackupPoliciesClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *GeoBackupPoliciesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *GeoBackupPoliciesClientListByDatabaseOptions) *runtime.Pager[GeoBackupPoliciesClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GeoBackupPoliciesClientListByDatabaseResponse]{
+		More: func(page GeoBackupPoliciesClientListByDatabaseResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *GeoBackupPoliciesClientListByDatabaseResponse) (GeoBackupPoliciesClientListByDatabaseResponse, error) {
+			req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			if err != nil {
+				return GeoBackupPoliciesClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GeoBackupPoliciesClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GeoBackupPoliciesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

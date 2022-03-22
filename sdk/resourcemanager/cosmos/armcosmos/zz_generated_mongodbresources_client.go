@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewMongoDBResourcesClient(subscriptionID string, credential azcore.TokenCre
 // createUpdateMongoDBCollectionParameters - The parameters to provide for the current MongoDB Collection.
 // options - MongoDBResourcesClientBeginCreateUpdateMongoDBCollectionOptions contains the optional parameters for the MongoDBResourcesClient.BeginCreateUpdateMongoDBCollection
 // method.
-func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBCollection(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, createUpdateMongoDBCollectionParameters MongoDBCollectionCreateUpdateParameters, options *MongoDBResourcesClientBeginCreateUpdateMongoDBCollectionOptions) (MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse, error) {
-	resp, err := client.createUpdateMongoDBCollection(ctx, resourceGroupName, accountName, databaseName, collectionName, createUpdateMongoDBCollectionParameters, options)
-	if err != nil {
-		return MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBCollection(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, createUpdateMongoDBCollectionParameters MongoDBCollectionCreateUpdateParameters, options *MongoDBResourcesClientBeginCreateUpdateMongoDBCollectionOptions) (*armruntime.Poller[MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdateMongoDBCollection(ctx, resourceGroupName, accountName, databaseName, collectionName, createUpdateMongoDBCollectionParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse]("MongoDBResourcesClient.CreateUpdateMongoDBCollection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse]("MongoDBResourcesClient.CreateUpdateMongoDBCollection", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.CreateUpdateMongoDBCollection", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientCreateUpdateMongoDBCollectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdateMongoDBCollection - Create or update an Azure Cosmos DB MongoDB Collection
@@ -133,20 +129,16 @@ func (client *MongoDBResourcesClient) createUpdateMongoDBCollectionCreateRequest
 // createUpdateMongoDBDatabaseParameters - The parameters to provide for the current MongoDB database.
 // options - MongoDBResourcesClientBeginCreateUpdateMongoDBDatabaseOptions contains the optional parameters for the MongoDBResourcesClient.BeginCreateUpdateMongoDBDatabase
 // method.
-func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBDatabase(ctx context.Context, resourceGroupName string, accountName string, databaseName string, createUpdateMongoDBDatabaseParameters MongoDBDatabaseCreateUpdateParameters, options *MongoDBResourcesClientBeginCreateUpdateMongoDBDatabaseOptions) (MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse, error) {
-	resp, err := client.createUpdateMongoDBDatabase(ctx, resourceGroupName, accountName, databaseName, createUpdateMongoDBDatabaseParameters, options)
-	if err != nil {
-		return MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBDatabase(ctx context.Context, resourceGroupName string, accountName string, databaseName string, createUpdateMongoDBDatabaseParameters MongoDBDatabaseCreateUpdateParameters, options *MongoDBResourcesClientBeginCreateUpdateMongoDBDatabaseOptions) (*armruntime.Poller[MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createUpdateMongoDBDatabase(ctx, resourceGroupName, accountName, databaseName, createUpdateMongoDBDatabaseParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse]("MongoDBResourcesClient.CreateUpdateMongoDBDatabase", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse]("MongoDBResourcesClient.CreateUpdateMongoDBDatabase", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.CreateUpdateMongoDBDatabase", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientCreateUpdateMongoDBDatabasePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateUpdateMongoDBDatabase - Create or updates Azure Cosmos DB MongoDB database
@@ -204,20 +196,16 @@ func (client *MongoDBResourcesClient) createUpdateMongoDBDatabaseCreateRequest(c
 // collectionName - Cosmos DB collection name.
 // options - MongoDBResourcesClientBeginDeleteMongoDBCollectionOptions contains the optional parameters for the MongoDBResourcesClient.BeginDeleteMongoDBCollection
 // method.
-func (client *MongoDBResourcesClient) BeginDeleteMongoDBCollection(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginDeleteMongoDBCollectionOptions) (MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse, error) {
-	resp, err := client.deleteMongoDBCollection(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
-	if err != nil {
-		return MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginDeleteMongoDBCollection(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginDeleteMongoDBCollectionOptions) (*armruntime.Poller[MongoDBResourcesClientDeleteMongoDBCollectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteMongoDBCollection(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientDeleteMongoDBCollectionResponse]("MongoDBResourcesClient.DeleteMongoDBCollection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientDeleteMongoDBCollectionResponse]("MongoDBResourcesClient.DeleteMongoDBCollection", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.DeleteMongoDBCollection", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientDeleteMongoDBCollectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteMongoDBCollection - Deletes an existing Azure Cosmos DB MongoDB Collection.
@@ -277,20 +265,16 @@ func (client *MongoDBResourcesClient) deleteMongoDBCollectionCreateRequest(ctx c
 // databaseName - Cosmos DB database name.
 // options - MongoDBResourcesClientBeginDeleteMongoDBDatabaseOptions contains the optional parameters for the MongoDBResourcesClient.BeginDeleteMongoDBDatabase
 // method.
-func (client *MongoDBResourcesClient) BeginDeleteMongoDBDatabase(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginDeleteMongoDBDatabaseOptions) (MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse, error) {
-	resp, err := client.deleteMongoDBDatabase(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginDeleteMongoDBDatabase(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginDeleteMongoDBDatabaseOptions) (*armruntime.Poller[MongoDBResourcesClientDeleteMongoDBDatabaseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteMongoDBDatabase(ctx, resourceGroupName, accountName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientDeleteMongoDBDatabaseResponse]("MongoDBResourcesClient.DeleteMongoDBDatabase", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientDeleteMongoDBDatabaseResponse]("MongoDBResourcesClient.DeleteMongoDBDatabase", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.DeleteMongoDBDatabase", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientDeleteMongoDBDatabasePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteMongoDBDatabase - Deletes an existing Azure Cosmos DB MongoDB database.
@@ -602,13 +586,26 @@ func (client *MongoDBResourcesClient) getMongoDBDatabaseThroughputHandleResponse
 // databaseName - Cosmos DB database name.
 // options - MongoDBResourcesClientListMongoDBCollectionsOptions contains the optional parameters for the MongoDBResourcesClient.ListMongoDBCollections
 // method.
-func (client *MongoDBResourcesClient) ListMongoDBCollections(resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientListMongoDBCollectionsOptions) *MongoDBResourcesClientListMongoDBCollectionsPager {
-	return &MongoDBResourcesClientListMongoDBCollectionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMongoDBCollectionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
+func (client *MongoDBResourcesClient) ListMongoDBCollections(resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientListMongoDBCollectionsOptions) *runtime.Pager[MongoDBResourcesClientListMongoDBCollectionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MongoDBResourcesClientListMongoDBCollectionsResponse]{
+		More: func(page MongoDBResourcesClientListMongoDBCollectionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *MongoDBResourcesClientListMongoDBCollectionsResponse) (MongoDBResourcesClientListMongoDBCollectionsResponse, error) {
+			req, err := client.listMongoDBCollectionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
+			if err != nil {
+				return MongoDBResourcesClientListMongoDBCollectionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MongoDBResourcesClientListMongoDBCollectionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MongoDBResourcesClientListMongoDBCollectionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMongoDBCollectionsHandleResponse(resp)
+		},
+	})
 }
 
 // listMongoDBCollectionsCreateRequest creates the ListMongoDBCollections request.
@@ -656,13 +653,26 @@ func (client *MongoDBResourcesClient) listMongoDBCollectionsHandleResponse(resp 
 // accountName - Cosmos DB database account name.
 // options - MongoDBResourcesClientListMongoDBDatabasesOptions contains the optional parameters for the MongoDBResourcesClient.ListMongoDBDatabases
 // method.
-func (client *MongoDBResourcesClient) ListMongoDBDatabases(resourceGroupName string, accountName string, options *MongoDBResourcesClientListMongoDBDatabasesOptions) *MongoDBResourcesClientListMongoDBDatabasesPager {
-	return &MongoDBResourcesClientListMongoDBDatabasesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMongoDBDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *MongoDBResourcesClient) ListMongoDBDatabases(resourceGroupName string, accountName string, options *MongoDBResourcesClientListMongoDBDatabasesOptions) *runtime.Pager[MongoDBResourcesClientListMongoDBDatabasesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MongoDBResourcesClientListMongoDBDatabasesResponse]{
+		More: func(page MongoDBResourcesClientListMongoDBDatabasesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *MongoDBResourcesClientListMongoDBDatabasesResponse) (MongoDBResourcesClientListMongoDBDatabasesResponse, error) {
+			req, err := client.listMongoDBDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return MongoDBResourcesClientListMongoDBDatabasesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MongoDBResourcesClientListMongoDBDatabasesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MongoDBResourcesClientListMongoDBDatabasesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMongoDBDatabasesHandleResponse(resp)
+		},
+	})
 }
 
 // listMongoDBDatabasesCreateRequest creates the ListMongoDBDatabases request.
@@ -708,20 +718,16 @@ func (client *MongoDBResourcesClient) listMongoDBDatabasesHandleResponse(resp *h
 // collectionName - Cosmos DB collection name.
 // options - MongoDBResourcesClientBeginMigrateMongoDBCollectionToAutoscaleOptions contains the optional parameters for the
 // MongoDBResourcesClient.BeginMigrateMongoDBCollectionToAutoscale method.
-func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToAutoscale(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginMigrateMongoDBCollectionToAutoscaleOptions) (MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse, error) {
-	resp, err := client.migrateMongoDBCollectionToAutoscale(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToAutoscale(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginMigrateMongoDBCollectionToAutoscaleOptions) (*armruntime.Poller[MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateMongoDBCollectionToAutoscale(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse]("MongoDBResourcesClient.MigrateMongoDBCollectionToAutoscale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse]("MongoDBResourcesClient.MigrateMongoDBCollectionToAutoscale", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBCollectionToAutoscale", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateMongoDBCollectionToAutoscale - Migrate an Azure Cosmos DB MongoDB collection from manual throughput to autoscale
@@ -784,20 +790,16 @@ func (client *MongoDBResourcesClient) migrateMongoDBCollectionToAutoscaleCreateR
 // collectionName - Cosmos DB collection name.
 // options - MongoDBResourcesClientBeginMigrateMongoDBCollectionToManualThroughputOptions contains the optional parameters
 // for the MongoDBResourcesClient.BeginMigrateMongoDBCollectionToManualThroughput method.
-func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginMigrateMongoDBCollectionToManualThroughputOptions) (MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse, error) {
-	resp, err := client.migrateMongoDBCollectionToManualThroughput(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, options *MongoDBResourcesClientBeginMigrateMongoDBCollectionToManualThroughputOptions) (*armruntime.Poller[MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateMongoDBCollectionToManualThroughput(ctx, resourceGroupName, accountName, databaseName, collectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse]("MongoDBResourcesClient.MigrateMongoDBCollectionToManualThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse]("MongoDBResourcesClient.MigrateMongoDBCollectionToManualThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBCollectionToManualThroughput", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateMongoDBCollectionToManualThroughput - Migrate an Azure Cosmos DB MongoDB collection from autoscale to manual throughput
@@ -858,20 +860,16 @@ func (client *MongoDBResourcesClient) migrateMongoDBCollectionToManualThroughput
 // databaseName - Cosmos DB database name.
 // options - MongoDBResourcesClientBeginMigrateMongoDBDatabaseToAutoscaleOptions contains the optional parameters for the
 // MongoDBResourcesClient.BeginMigrateMongoDBDatabaseToAutoscale method.
-func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToAutoscale(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginMigrateMongoDBDatabaseToAutoscaleOptions) (MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse, error) {
-	resp, err := client.migrateMongoDBDatabaseToAutoscale(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToAutoscale(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginMigrateMongoDBDatabaseToAutoscaleOptions) (*armruntime.Poller[MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateMongoDBDatabaseToAutoscale(ctx, resourceGroupName, accountName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse]("MongoDBResourcesClient.MigrateMongoDBDatabaseToAutoscale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse]("MongoDBResourcesClient.MigrateMongoDBDatabaseToAutoscale", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBDatabaseToAutoscale", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateMongoDBDatabaseToAutoscale - Migrate an Azure Cosmos DB MongoDB database from manual throughput to autoscale
@@ -928,20 +926,16 @@ func (client *MongoDBResourcesClient) migrateMongoDBDatabaseToAutoscaleCreateReq
 // databaseName - Cosmos DB database name.
 // options - MongoDBResourcesClientBeginMigrateMongoDBDatabaseToManualThroughputOptions contains the optional parameters for
 // the MongoDBResourcesClient.BeginMigrateMongoDBDatabaseToManualThroughput method.
-func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginMigrateMongoDBDatabaseToManualThroughputOptions) (MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse, error) {
-	resp, err := client.migrateMongoDBDatabaseToManualThroughput(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToManualThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientBeginMigrateMongoDBDatabaseToManualThroughputOptions) (*armruntime.Poller[MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.migrateMongoDBDatabaseToManualThroughput(ctx, resourceGroupName, accountName, databaseName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse]("MongoDBResourcesClient.MigrateMongoDBDatabaseToManualThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse]("MongoDBResourcesClient.MigrateMongoDBDatabaseToManualThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBDatabaseToManualThroughput", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // MigrateMongoDBDatabaseToManualThroughput - Migrate an Azure Cosmos DB MongoDB database from autoscale to manual throughput
@@ -1000,20 +994,16 @@ func (client *MongoDBResourcesClient) migrateMongoDBDatabaseToManualThroughputCr
 // location - The name of the continuous backup restore location.
 // options - MongoDBResourcesClientBeginRetrieveContinuousBackupInformationOptions contains the optional parameters for the
 // MongoDBResourcesClient.BeginRetrieveContinuousBackupInformation method.
-func (client *MongoDBResourcesClient) BeginRetrieveContinuousBackupInformation(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, location ContinuousBackupRestoreLocation, options *MongoDBResourcesClientBeginRetrieveContinuousBackupInformationOptions) (MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse, error) {
-	resp, err := client.retrieveContinuousBackupInformation(ctx, resourceGroupName, accountName, databaseName, collectionName, location, options)
-	if err != nil {
-		return MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginRetrieveContinuousBackupInformation(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, location ContinuousBackupRestoreLocation, options *MongoDBResourcesClientBeginRetrieveContinuousBackupInformationOptions) (*armruntime.Poller[MongoDBResourcesClientRetrieveContinuousBackupInformationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.retrieveContinuousBackupInformation(ctx, resourceGroupName, accountName, databaseName, collectionName, location, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientRetrieveContinuousBackupInformationResponse]("MongoDBResourcesClient.RetrieveContinuousBackupInformation", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientRetrieveContinuousBackupInformationResponse]("MongoDBResourcesClient.RetrieveContinuousBackupInformation", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.RetrieveContinuousBackupInformation", "location", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientRetrieveContinuousBackupInformationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RetrieveContinuousBackupInformation - Retrieves continuous backup information for a Mongodb collection.
@@ -1076,20 +1066,16 @@ func (client *MongoDBResourcesClient) retrieveContinuousBackupInformationCreateR
 // updateThroughputParameters - The RUs per second of the parameters to provide for the current MongoDB collection.
 // options - MongoDBResourcesClientBeginUpdateMongoDBCollectionThroughputOptions contains the optional parameters for the
 // MongoDBResourcesClient.BeginUpdateMongoDBCollectionThroughput method.
-func (client *MongoDBResourcesClient) BeginUpdateMongoDBCollectionThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *MongoDBResourcesClientBeginUpdateMongoDBCollectionThroughputOptions) (MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse, error) {
-	resp, err := client.updateMongoDBCollectionThroughput(ctx, resourceGroupName, accountName, databaseName, collectionName, updateThroughputParameters, options)
-	if err != nil {
-		return MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginUpdateMongoDBCollectionThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, collectionName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *MongoDBResourcesClientBeginUpdateMongoDBCollectionThroughputOptions) (*armruntime.Poller[MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateMongoDBCollectionThroughput(ctx, resourceGroupName, accountName, databaseName, collectionName, updateThroughputParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse]("MongoDBResourcesClient.UpdateMongoDBCollectionThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse]("MongoDBResourcesClient.UpdateMongoDBCollectionThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.UpdateMongoDBCollectionThroughput", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientUpdateMongoDBCollectionThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateMongoDBCollectionThroughput - Update the RUs per second of an Azure Cosmos DB MongoDB collection
@@ -1151,20 +1137,16 @@ func (client *MongoDBResourcesClient) updateMongoDBCollectionThroughputCreateReq
 // updateThroughputParameters - The RUs per second of the parameters to provide for the current MongoDB database.
 // options - MongoDBResourcesClientBeginUpdateMongoDBDatabaseThroughputOptions contains the optional parameters for the MongoDBResourcesClient.BeginUpdateMongoDBDatabaseThroughput
 // method.
-func (client *MongoDBResourcesClient) BeginUpdateMongoDBDatabaseThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *MongoDBResourcesClientBeginUpdateMongoDBDatabaseThroughputOptions) (MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse, error) {
-	resp, err := client.updateMongoDBDatabaseThroughput(ctx, resourceGroupName, accountName, databaseName, updateThroughputParameters, options)
-	if err != nil {
-		return MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}, err
+func (client *MongoDBResourcesClient) BeginUpdateMongoDBDatabaseThroughput(ctx context.Context, resourceGroupName string, accountName string, databaseName string, updateThroughputParameters ThroughputSettingsUpdateParameters, options *MongoDBResourcesClientBeginUpdateMongoDBDatabaseThroughputOptions) (*armruntime.Poller[MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateMongoDBDatabaseThroughput(ctx, resourceGroupName, accountName, databaseName, updateThroughputParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse]("MongoDBResourcesClient.UpdateMongoDBDatabaseThroughput", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse]("MongoDBResourcesClient.UpdateMongoDBDatabaseThroughput", options.ResumeToken, client.pl, nil)
 	}
-	result := MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}
-	pt, err := armruntime.NewPoller("MongoDBResourcesClient.UpdateMongoDBDatabaseThroughput", "", resp, client.pl)
-	if err != nil {
-		return MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}, err
-	}
-	result.Poller = &MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateMongoDBDatabaseThroughput - Update RUs per second of the an Azure Cosmos DB MongoDB database

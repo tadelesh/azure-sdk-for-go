@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewRolesClient(subscriptionID string, credential azcore.TokenCredential, op
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - RolesClientListByHubOptions contains the optional parameters for the RolesClient.ListByHub method.
-func (client *RolesClient) ListByHub(resourceGroupName string, hubName string, options *RolesClientListByHubOptions) *RolesClientListByHubPager {
-	return &RolesClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *RolesClient) ListByHub(resourceGroupName string, hubName string, options *RolesClientListByHubOptions) *runtime.Pager[RolesClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RolesClientListByHubResponse]{
+		More: func(page RolesClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RolesClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RoleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RolesClientListByHubResponse) (RolesClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RolesClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RolesClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RolesClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

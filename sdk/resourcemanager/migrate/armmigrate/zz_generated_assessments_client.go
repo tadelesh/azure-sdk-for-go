@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -341,13 +341,26 @@ func (client *AssessmentsClient) getReportDownloadURLHandleResponse(resp *http.R
 // projectName - Name of the Azure Migrate project.
 // groupName - Unique name of a group within a project.
 // options - AssessmentsClientListByGroupOptions contains the optional parameters for the AssessmentsClient.ListByGroup method.
-func (client *AssessmentsClient) ListByGroup(resourceGroupName string, projectName string, groupName string, options *AssessmentsClientListByGroupOptions) *AssessmentsClientListByGroupPager {
-	return &AssessmentsClientListByGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByGroupCreateRequest(ctx, resourceGroupName, projectName, groupName, options)
+func (client *AssessmentsClient) ListByGroup(resourceGroupName string, projectName string, groupName string, options *AssessmentsClientListByGroupOptions) *runtime.Pager[AssessmentsClientListByGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessmentsClientListByGroupResponse]{
+		More: func(page AssessmentsClientListByGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AssessmentsClientListByGroupResponse) (AssessmentsClientListByGroupResponse, error) {
+			req, err := client.listByGroupCreateRequest(ctx, resourceGroupName, projectName, groupName, options)
+			if err != nil {
+				return AssessmentsClientListByGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessmentsClientListByGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessmentsClientListByGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByGroupCreateRequest creates the ListByGroup request.
@@ -399,13 +412,26 @@ func (client *AssessmentsClient) listByGroupHandleResponse(resp *http.Response) 
 // projectName - Name of the Azure Migrate project.
 // options - AssessmentsClientListByProjectOptions contains the optional parameters for the AssessmentsClient.ListByProject
 // method.
-func (client *AssessmentsClient) ListByProject(resourceGroupName string, projectName string, options *AssessmentsClientListByProjectOptions) *AssessmentsClientListByProjectPager {
-	return &AssessmentsClientListByProjectPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByProjectCreateRequest(ctx, resourceGroupName, projectName, options)
+func (client *AssessmentsClient) ListByProject(resourceGroupName string, projectName string, options *AssessmentsClientListByProjectOptions) *runtime.Pager[AssessmentsClientListByProjectResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessmentsClientListByProjectResponse]{
+		More: func(page AssessmentsClientListByProjectResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AssessmentsClientListByProjectResponse) (AssessmentsClientListByProjectResponse, error) {
+			req, err := client.listByProjectCreateRequest(ctx, resourceGroupName, projectName, options)
+			if err != nil {
+				return AssessmentsClientListByProjectResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessmentsClientListByProjectResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessmentsClientListByProjectResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByProjectHandleResponse(resp)
+		},
+	})
 }
 
 // listByProjectCreateRequest creates the ListByProject request.

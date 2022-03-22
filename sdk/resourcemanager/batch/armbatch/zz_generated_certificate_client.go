@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -197,20 +197,16 @@ func (client *CertificateClient) createHandleResponse(resp *http.Response) (Cert
 // certificateName - The identifier for the certificate. This must be made up of algorithm and thumbprint separated by a dash,
 // and must match the certificate data in the request. For example SHA1-a3d1c5.
 // options - CertificateClientBeginDeleteOptions contains the optional parameters for the CertificateClient.BeginDelete method.
-func (client *CertificateClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, certificateName string, options *CertificateClientBeginDeleteOptions) (CertificateClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, certificateName, options)
-	if err != nil {
-		return CertificateClientDeletePollerResponse{}, err
+func (client *CertificateClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, certificateName string, options *CertificateClientBeginDeleteOptions) (*armruntime.Poller[CertificateClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, certificateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CertificateClientDeleteResponse]("CertificateClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CertificateClientDeleteResponse]("CertificateClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CertificateClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CertificateClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return CertificateClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CertificateClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified certificate.
@@ -330,16 +326,32 @@ func (client *CertificateClient) getHandleResponse(resp *http.Response) (Certifi
 // accountName - The name of the Batch account.
 // options - CertificateClientListByBatchAccountOptions contains the optional parameters for the CertificateClient.ListByBatchAccount
 // method.
-func (client *CertificateClient) ListByBatchAccount(resourceGroupName string, accountName string, options *CertificateClientListByBatchAccountOptions) *CertificateClientListByBatchAccountPager {
-	return &CertificateClientListByBatchAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *CertificateClient) ListByBatchAccount(resourceGroupName string, accountName string, options *CertificateClientListByBatchAccountOptions) *runtime.Pager[CertificateClientListByBatchAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CertificateClientListByBatchAccountResponse]{
+		More: func(page CertificateClientListByBatchAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CertificateClientListByBatchAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListCertificatesResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CertificateClientListByBatchAccountResponse) (CertificateClientListByBatchAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByBatchAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CertificateClientListByBatchAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CertificateClientListByBatchAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CertificateClientListByBatchAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBatchAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByBatchAccountCreateRequest creates the ListByBatchAccount request.

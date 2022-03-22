@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewLinksClient(subscriptionID string, credential azcore.TokenCredential, op
 // parameters - Parameters supplied to the CreateOrUpdate Link operation.
 // options - LinksClientBeginCreateOrUpdateOptions contains the optional parameters for the LinksClient.BeginCreateOrUpdate
 // method.
-func (client *LinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, linkName string, parameters LinkResourceFormat, options *LinksClientBeginCreateOrUpdateOptions) (LinksClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, linkName, parameters, options)
-	if err != nil {
-		return LinksClientCreateOrUpdatePollerResponse{}, err
+func (client *LinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, linkName string, parameters LinkResourceFormat, options *LinksClientBeginCreateOrUpdateOptions) (*armruntime.Poller[LinksClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, linkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LinksClientCreateOrUpdateResponse]("LinksClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LinksClientCreateOrUpdateResponse]("LinksClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := LinksClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LinksClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return LinksClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &LinksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a link or updates an existing link in the hub.
@@ -236,16 +232,32 @@ func (client *LinksClient) getHandleResponse(resp *http.Response) (LinksClientGe
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - LinksClientListByHubOptions contains the optional parameters for the LinksClient.ListByHub method.
-func (client *LinksClient) ListByHub(resourceGroupName string, hubName string, options *LinksClientListByHubOptions) *LinksClientListByHubPager {
-	return &LinksClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *LinksClient) ListByHub(resourceGroupName string, hubName string, options *LinksClientListByHubOptions) *runtime.Pager[LinksClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinksClientListByHubResponse]{
+		More: func(page LinksClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LinksClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LinksClientListByHubResponse) (LinksClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LinksClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinksClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinksClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

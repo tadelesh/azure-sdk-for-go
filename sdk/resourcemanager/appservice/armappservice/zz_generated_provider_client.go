@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewProviderClient(subscriptionID string, credential azcore.TokenCredential,
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProviderClientGetAvailableStacksOptions contains the optional parameters for the ProviderClient.GetAvailableStacks
 // method.
-func (client *ProviderClient) GetAvailableStacks(options *ProviderClientGetAvailableStacksOptions) *ProviderClientGetAvailableStacksPager {
-	return &ProviderClientGetAvailableStacksPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getAvailableStacksCreateRequest(ctx, options)
+func (client *ProviderClient) GetAvailableStacks(options *ProviderClientGetAvailableStacksOptions) *runtime.Pager[ProviderClientGetAvailableStacksResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetAvailableStacksResponse]{
+		More: func(page ProviderClientGetAvailableStacksResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetAvailableStacksResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetAvailableStacksResponse) (ProviderClientGetAvailableStacksResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getAvailableStacksCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetAvailableStacksResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetAvailableStacksResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetAvailableStacksResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getAvailableStacksHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getAvailableStacksCreateRequest creates the GetAvailableStacks request.
@@ -95,16 +111,32 @@ func (client *ProviderClient) getAvailableStacksHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProviderClientGetAvailableStacksOnPremOptions contains the optional parameters for the ProviderClient.GetAvailableStacksOnPrem
 // method.
-func (client *ProviderClient) GetAvailableStacksOnPrem(options *ProviderClientGetAvailableStacksOnPremOptions) *ProviderClientGetAvailableStacksOnPremPager {
-	return &ProviderClientGetAvailableStacksOnPremPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getAvailableStacksOnPremCreateRequest(ctx, options)
+func (client *ProviderClient) GetAvailableStacksOnPrem(options *ProviderClientGetAvailableStacksOnPremOptions) *runtime.Pager[ProviderClientGetAvailableStacksOnPremResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetAvailableStacksOnPremResponse]{
+		More: func(page ProviderClientGetAvailableStacksOnPremResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetAvailableStacksOnPremResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetAvailableStacksOnPremResponse) (ProviderClientGetAvailableStacksOnPremResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getAvailableStacksOnPremCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetAvailableStacksOnPremResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetAvailableStacksOnPremResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetAvailableStacksOnPremResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getAvailableStacksOnPremHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getAvailableStacksOnPremCreateRequest creates the GetAvailableStacksOnPrem request.
@@ -141,16 +173,32 @@ func (client *ProviderClient) getAvailableStacksOnPremHandleResponse(resp *http.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProviderClientGetFunctionAppStacksOptions contains the optional parameters for the ProviderClient.GetFunctionAppStacks
 // method.
-func (client *ProviderClient) GetFunctionAppStacks(options *ProviderClientGetFunctionAppStacksOptions) *ProviderClientGetFunctionAppStacksPager {
-	return &ProviderClientGetFunctionAppStacksPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getFunctionAppStacksCreateRequest(ctx, options)
+func (client *ProviderClient) GetFunctionAppStacks(options *ProviderClientGetFunctionAppStacksOptions) *runtime.Pager[ProviderClientGetFunctionAppStacksResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetFunctionAppStacksResponse]{
+		More: func(page ProviderClientGetFunctionAppStacksResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetFunctionAppStacksResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FunctionAppStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetFunctionAppStacksResponse) (ProviderClientGetFunctionAppStacksResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getFunctionAppStacksCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetFunctionAppStacksResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetFunctionAppStacksResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetFunctionAppStacksResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getFunctionAppStacksHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getFunctionAppStacksCreateRequest creates the GetFunctionAppStacks request.
@@ -184,16 +232,32 @@ func (client *ProviderClient) getFunctionAppStacksHandleResponse(resp *http.Resp
 // location - Function App stack location.
 // options - ProviderClientGetFunctionAppStacksForLocationOptions contains the optional parameters for the ProviderClient.GetFunctionAppStacksForLocation
 // method.
-func (client *ProviderClient) GetFunctionAppStacksForLocation(location string, options *ProviderClientGetFunctionAppStacksForLocationOptions) *ProviderClientGetFunctionAppStacksForLocationPager {
-	return &ProviderClientGetFunctionAppStacksForLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getFunctionAppStacksForLocationCreateRequest(ctx, location, options)
+func (client *ProviderClient) GetFunctionAppStacksForLocation(location string, options *ProviderClientGetFunctionAppStacksForLocationOptions) *runtime.Pager[ProviderClientGetFunctionAppStacksForLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetFunctionAppStacksForLocationResponse]{
+		More: func(page ProviderClientGetFunctionAppStacksForLocationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetFunctionAppStacksForLocationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FunctionAppStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetFunctionAppStacksForLocationResponse) (ProviderClientGetFunctionAppStacksForLocationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getFunctionAppStacksForLocationCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetFunctionAppStacksForLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetFunctionAppStacksForLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetFunctionAppStacksForLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getFunctionAppStacksForLocationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getFunctionAppStacksForLocationCreateRequest creates the GetFunctionAppStacksForLocation request.
@@ -230,16 +294,32 @@ func (client *ProviderClient) getFunctionAppStacksForLocationHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProviderClientGetWebAppStacksOptions contains the optional parameters for the ProviderClient.GetWebAppStacks
 // method.
-func (client *ProviderClient) GetWebAppStacks(options *ProviderClientGetWebAppStacksOptions) *ProviderClientGetWebAppStacksPager {
-	return &ProviderClientGetWebAppStacksPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getWebAppStacksCreateRequest(ctx, options)
+func (client *ProviderClient) GetWebAppStacks(options *ProviderClientGetWebAppStacksOptions) *runtime.Pager[ProviderClientGetWebAppStacksResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetWebAppStacksResponse]{
+		More: func(page ProviderClientGetWebAppStacksResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetWebAppStacksResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebAppStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetWebAppStacksResponse) (ProviderClientGetWebAppStacksResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getWebAppStacksCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetWebAppStacksResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetWebAppStacksResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetWebAppStacksResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getWebAppStacksHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getWebAppStacksCreateRequest creates the GetWebAppStacks request.
@@ -273,16 +353,32 @@ func (client *ProviderClient) getWebAppStacksHandleResponse(resp *http.Response)
 // location - Web App stack location.
 // options - ProviderClientGetWebAppStacksForLocationOptions contains the optional parameters for the ProviderClient.GetWebAppStacksForLocation
 // method.
-func (client *ProviderClient) GetWebAppStacksForLocation(location string, options *ProviderClientGetWebAppStacksForLocationOptions) *ProviderClientGetWebAppStacksForLocationPager {
-	return &ProviderClientGetWebAppStacksForLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getWebAppStacksForLocationCreateRequest(ctx, location, options)
+func (client *ProviderClient) GetWebAppStacksForLocation(location string, options *ProviderClientGetWebAppStacksForLocationOptions) *runtime.Pager[ProviderClientGetWebAppStacksForLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientGetWebAppStacksForLocationResponse]{
+		More: func(page ProviderClientGetWebAppStacksForLocationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientGetWebAppStacksForLocationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WebAppStackCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientGetWebAppStacksForLocationResponse) (ProviderClientGetWebAppStacksForLocationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getWebAppStacksForLocationCreateRequest(ctx, location, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientGetWebAppStacksForLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientGetWebAppStacksForLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientGetWebAppStacksForLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getWebAppStacksForLocationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getWebAppStacksForLocationCreateRequest creates the GetWebAppStacksForLocation request.
@@ -319,16 +415,32 @@ func (client *ProviderClient) getWebAppStacksForLocationHandleResponse(resp *htt
 // metric definitions
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProviderClientListOperationsOptions contains the optional parameters for the ProviderClient.ListOperations method.
-func (client *ProviderClient) ListOperations(options *ProviderClientListOperationsOptions) *ProviderClientListOperationsPager {
-	return &ProviderClientListOperationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOperationsCreateRequest(ctx, options)
+func (client *ProviderClient) ListOperations(options *ProviderClientListOperationsOptions) *runtime.Pager[ProviderClientListOperationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProviderClientListOperationsResponse]{
+		More: func(page ProviderClientListOperationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProviderClientListOperationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CsmOperationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ProviderClientListOperationsResponse) (ProviderClientListOperationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOperationsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProviderClientListOperationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProviderClientListOperationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProviderClientListOperationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOperationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.

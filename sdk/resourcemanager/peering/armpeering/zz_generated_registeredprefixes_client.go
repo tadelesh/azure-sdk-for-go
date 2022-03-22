@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *RegisteredPrefixesClient) getHandleResponse(resp *http.Response) (
 // peeringName - The name of the peering.
 // options - RegisteredPrefixesClientListByPeeringOptions contains the optional parameters for the RegisteredPrefixesClient.ListByPeering
 // method.
-func (client *RegisteredPrefixesClient) ListByPeering(resourceGroupName string, peeringName string, options *RegisteredPrefixesClientListByPeeringOptions) *RegisteredPrefixesClientListByPeeringPager {
-	return &RegisteredPrefixesClientListByPeeringPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByPeeringCreateRequest(ctx, resourceGroupName, peeringName, options)
+func (client *RegisteredPrefixesClient) ListByPeering(resourceGroupName string, peeringName string, options *RegisteredPrefixesClientListByPeeringOptions) *runtime.Pager[RegisteredPrefixesClientListByPeeringResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegisteredPrefixesClientListByPeeringResponse]{
+		More: func(page RegisteredPrefixesClientListByPeeringResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegisteredPrefixesClientListByPeeringResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegisteredPrefixListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegisteredPrefixesClientListByPeeringResponse) (RegisteredPrefixesClientListByPeeringResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByPeeringCreateRequest(ctx, resourceGroupName, peeringName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegisteredPrefixesClientListByPeeringResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegisteredPrefixesClientListByPeeringResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegisteredPrefixesClientListByPeeringResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByPeeringHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByPeeringCreateRequest creates the ListByPeering request.

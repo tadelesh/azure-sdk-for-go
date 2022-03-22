@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -195,16 +195,32 @@ func (client *DataCollectionRuleAssociationsClient) getHandleResponse(resp *http
 // resourceURI - The identifier of the resource.
 // options - DataCollectionRuleAssociationsClientListByResourceOptions contains the optional parameters for the DataCollectionRuleAssociationsClient.ListByResource
 // method.
-func (client *DataCollectionRuleAssociationsClient) ListByResource(resourceURI string, options *DataCollectionRuleAssociationsClientListByResourceOptions) *DataCollectionRuleAssociationsClientListByResourcePager {
-	return &DataCollectionRuleAssociationsClientListByResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceCreateRequest(ctx, resourceURI, options)
+func (client *DataCollectionRuleAssociationsClient) ListByResource(resourceURI string, options *DataCollectionRuleAssociationsClientListByResourceOptions) *runtime.Pager[DataCollectionRuleAssociationsClientListByResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataCollectionRuleAssociationsClientListByResourceResponse]{
+		More: func(page DataCollectionRuleAssociationsClientListByResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataCollectionRuleAssociationsClientListByResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataCollectionRuleAssociationProxyOnlyResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataCollectionRuleAssociationsClientListByResourceResponse) (DataCollectionRuleAssociationsClientListByResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceCreateRequest(ctx, resourceURI, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataCollectionRuleAssociationsClientListByResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataCollectionRuleAssociationsClientListByResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataCollectionRuleAssociationsClientListByResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceCreateRequest creates the ListByResource request.
@@ -237,16 +253,32 @@ func (client *DataCollectionRuleAssociationsClient) listByResourceHandleResponse
 // dataCollectionRuleName - The name of the data collection rule. The name is case insensitive.
 // options - DataCollectionRuleAssociationsClientListByRuleOptions contains the optional parameters for the DataCollectionRuleAssociationsClient.ListByRule
 // method.
-func (client *DataCollectionRuleAssociationsClient) ListByRule(resourceGroupName string, dataCollectionRuleName string, options *DataCollectionRuleAssociationsClientListByRuleOptions) *DataCollectionRuleAssociationsClientListByRulePager {
-	return &DataCollectionRuleAssociationsClientListByRulePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRuleCreateRequest(ctx, resourceGroupName, dataCollectionRuleName, options)
+func (client *DataCollectionRuleAssociationsClient) ListByRule(resourceGroupName string, dataCollectionRuleName string, options *DataCollectionRuleAssociationsClientListByRuleOptions) *runtime.Pager[DataCollectionRuleAssociationsClientListByRuleResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataCollectionRuleAssociationsClientListByRuleResponse]{
+		More: func(page DataCollectionRuleAssociationsClientListByRuleResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataCollectionRuleAssociationsClientListByRuleResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataCollectionRuleAssociationProxyOnlyResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DataCollectionRuleAssociationsClientListByRuleResponse) (DataCollectionRuleAssociationsClientListByRuleResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByRuleCreateRequest(ctx, resourceGroupName, dataCollectionRuleName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataCollectionRuleAssociationsClientListByRuleResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataCollectionRuleAssociationsClientListByRuleResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataCollectionRuleAssociationsClientListByRuleResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRuleHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByRuleCreateRequest creates the ListByRule request.

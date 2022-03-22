@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,13 +228,26 @@ func (client *DataExportsClient) getHandleResponse(resp *http.Response) (DataExp
 // workspaceName - The name of the workspace.
 // options - DataExportsClientListByWorkspaceOptions contains the optional parameters for the DataExportsClient.ListByWorkspace
 // method.
-func (client *DataExportsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *DataExportsClientListByWorkspaceOptions) *DataExportsClientListByWorkspacePager {
-	return &DataExportsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *DataExportsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *DataExportsClientListByWorkspaceOptions) *runtime.Pager[DataExportsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataExportsClientListByWorkspaceResponse]{
+		More: func(page DataExportsClientListByWorkspaceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataExportsClientListByWorkspaceResponse) (DataExportsClientListByWorkspaceResponse, error) {
+			req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			if err != nil {
+				return DataExportsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataExportsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataExportsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
+		},
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

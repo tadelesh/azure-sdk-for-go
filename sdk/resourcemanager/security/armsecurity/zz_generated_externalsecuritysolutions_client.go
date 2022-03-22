@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,16 +116,32 @@ func (client *ExternalSecuritySolutionsClient) getHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ExternalSecuritySolutionsClientListOptions contains the optional parameters for the ExternalSecuritySolutionsClient.List
 // method.
-func (client *ExternalSecuritySolutionsClient) List(options *ExternalSecuritySolutionsClientListOptions) *ExternalSecuritySolutionsClientListPager {
-	return &ExternalSecuritySolutionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ExternalSecuritySolutionsClient) List(options *ExternalSecuritySolutionsClientListOptions) *runtime.Pager[ExternalSecuritySolutionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExternalSecuritySolutionsClientListResponse]{
+		More: func(page ExternalSecuritySolutionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExternalSecuritySolutionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExternalSecuritySolutionList.NextLink)
+		Fetcher: func(ctx context.Context, page *ExternalSecuritySolutionsClientListResponse) (ExternalSecuritySolutionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExternalSecuritySolutionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExternalSecuritySolutionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExternalSecuritySolutionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -159,16 +175,32 @@ func (client *ExternalSecuritySolutionsClient) listHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ExternalSecuritySolutionsClientListByHomeRegionOptions contains the optional parameters for the ExternalSecuritySolutionsClient.ListByHomeRegion
 // method.
-func (client *ExternalSecuritySolutionsClient) ListByHomeRegion(options *ExternalSecuritySolutionsClientListByHomeRegionOptions) *ExternalSecuritySolutionsClientListByHomeRegionPager {
-	return &ExternalSecuritySolutionsClientListByHomeRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHomeRegionCreateRequest(ctx, options)
+func (client *ExternalSecuritySolutionsClient) ListByHomeRegion(options *ExternalSecuritySolutionsClientListByHomeRegionOptions) *runtime.Pager[ExternalSecuritySolutionsClientListByHomeRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExternalSecuritySolutionsClientListByHomeRegionResponse]{
+		More: func(page ExternalSecuritySolutionsClientListByHomeRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExternalSecuritySolutionsClientListByHomeRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExternalSecuritySolutionList.NextLink)
+		Fetcher: func(ctx context.Context, page *ExternalSecuritySolutionsClientListByHomeRegionResponse) (ExternalSecuritySolutionsClientListByHomeRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHomeRegionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExternalSecuritySolutionsClientListByHomeRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExternalSecuritySolutionsClientListByHomeRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExternalSecuritySolutionsClientListByHomeRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHomeRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHomeRegionCreateRequest creates the ListByHomeRegion request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient(s
 // options - ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions contains the
 // optional parameters for the ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, policyName, parameters, options)
-	if err != nil {
-		return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, policyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse]("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdateResponse]("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Sets a database's short term retention policy.
@@ -200,16 +196,32 @@ func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesCl
 // options - ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseOptions
 // contains the optional parameters for the ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.ListByRestorableDroppedDatabase
 // method.
-func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) ListByRestorableDroppedDatabase(resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseOptions) *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabasePager {
-	return &ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByRestorableDroppedDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, options)
+func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) ListByRestorableDroppedDatabase(resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseOptions) *runtime.Pager[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse]{
+		More: func(page ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedBackupShortTermRetentionPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse) (ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByRestorableDroppedDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientListByRestorableDroppedDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByRestorableDroppedDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByRestorableDroppedDatabaseCreateRequest creates the ListByRestorableDroppedDatabase request.
@@ -260,20 +272,16 @@ func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesCl
 // parameters - The short term retention policy info.
 // options - ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginUpdateOptions contains the optional
 // parameters for the ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.BeginUpdate method.
-func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginUpdateOptions) (ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, policyName, parameters, options)
-	if err != nil {
-		return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err
+func (client *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, restorableDroppedDatabaseID string, policyName ManagedShortTermRetentionPolicyName, parameters ManagedBackupShortTermRetentionPolicy, options *ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientBeginUpdateOptions) (*armruntime.Poller[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, managedInstanceName, restorableDroppedDatabaseID, policyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdateResponse]("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdateResponse]("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedRestorableDroppedDatabaseBackupShortTermRetentionPoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Sets a database's short term retention policy.

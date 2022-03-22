@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewClustersClient(subscriptionID string, credential azcore.TokenCredential,
 // clusterName - The name of the cluster.
 // parameters - The cluster create request.
 // options - ClustersClientBeginCreateOptions contains the optional parameters for the ClustersClient.BeginCreate method.
-func (client *ClustersClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterCreateParametersExtended, options *ClustersClientBeginCreateOptions) (ClustersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientCreatePollerResponse{}, err
+func (client *ClustersClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterCreateParametersExtended, options *ClustersClientBeginCreateOptions) (*armruntime.Poller[ClustersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientCreateResponse]("ClustersClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientCreateResponse]("ClustersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new HDInsight cluster with the specified parameters.
@@ -120,20 +116,16 @@ func (client *ClustersClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The name of the resource group.
 // clusterName - The name of the cluster.
 // options - ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
-func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (ClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
+func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (*armruntime.Poller[ClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientDeleteResponse]("ClustersClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientDeleteResponse]("ClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified HDInsight cluster.
@@ -186,20 +178,16 @@ func (client *ClustersClient) deleteCreateRequest(ctx context.Context, resourceG
 // parameters - The parameters for executing script actions.
 // options - ClustersClientBeginExecuteScriptActionsOptions contains the optional parameters for the ClustersClient.BeginExecuteScriptActions
 // method.
-func (client *ClustersClient) BeginExecuteScriptActions(ctx context.Context, resourceGroupName string, clusterName string, parameters ExecuteScriptActionParameters, options *ClustersClientBeginExecuteScriptActionsOptions) (ClustersClientExecuteScriptActionsPollerResponse, error) {
-	resp, err := client.executeScriptActions(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientExecuteScriptActionsPollerResponse{}, err
+func (client *ClustersClient) BeginExecuteScriptActions(ctx context.Context, resourceGroupName string, clusterName string, parameters ExecuteScriptActionParameters, options *ClustersClientBeginExecuteScriptActionsOptions) (*armruntime.Poller[ClustersClientExecuteScriptActionsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.executeScriptActions(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientExecuteScriptActionsResponse]("ClustersClient.ExecuteScriptActions", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientExecuteScriptActionsResponse]("ClustersClient.ExecuteScriptActions", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientExecuteScriptActionsPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.ExecuteScriptActions", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientExecuteScriptActionsPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientExecuteScriptActionsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ExecuteScriptActions - Executes script actions on the specified HDInsight cluster.
@@ -420,16 +408,32 @@ func (client *ClustersClient) getGatewaySettingsHandleResponse(resp *http.Respon
 // List - Lists all the HDInsight clusters under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClustersClientListOptions contains the optional parameters for the ClustersClient.List method.
-func (client *ClustersClient) List(options *ClustersClientListOptions) *ClustersClientListPager {
-	return &ClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ClustersClient) List(options *ClustersClientListOptions) *runtime.Pager[ClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListResponse]{
+		More: func(page ClustersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClustersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClustersClientListResponse) (ClustersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -464,16 +468,32 @@ func (client *ClustersClient) listHandleResponse(resp *http.Response) (ClustersC
 // resourceGroupName - The name of the resource group.
 // options - ClustersClientListByResourceGroupOptions contains the optional parameters for the ClustersClient.ListByResourceGroup
 // method.
-func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *ClustersClientListByResourceGroupPager {
-	return &ClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *runtime.Pager[ClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListByResourceGroupResponse]{
+		More: func(page ClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClustersClientListByResourceGroupResponse) (ClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -514,20 +534,16 @@ func (client *ClustersClient) listByResourceGroupHandleResponse(resp *http.Respo
 // roleName - The constant value for the roleName
 // parameters - The parameters for the resize operation.
 // options - ClustersClientBeginResizeOptions contains the optional parameters for the ClustersClient.BeginResize method.
-func (client *ClustersClient) BeginResize(ctx context.Context, resourceGroupName string, clusterName string, roleName RoleName, parameters ClusterResizeParameters, options *ClustersClientBeginResizeOptions) (ClustersClientResizePollerResponse, error) {
-	resp, err := client.resize(ctx, resourceGroupName, clusterName, roleName, parameters, options)
-	if err != nil {
-		return ClustersClientResizePollerResponse{}, err
+func (client *ClustersClient) BeginResize(ctx context.Context, resourceGroupName string, clusterName string, roleName RoleName, parameters ClusterResizeParameters, options *ClustersClientBeginResizeOptions) (*armruntime.Poller[ClustersClientResizeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resize(ctx, resourceGroupName, clusterName, roleName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientResizeResponse]("ClustersClient.Resize", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientResizeResponse]("ClustersClient.Resize", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientResizePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Resize", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientResizePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientResizePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resize - Resizes the specified HDInsight cluster to the specified size.
@@ -584,20 +600,16 @@ func (client *ClustersClient) resizeCreateRequest(ctx context.Context, resourceG
 // parameters - The parameters for the disk encryption operation.
 // options - ClustersClientBeginRotateDiskEncryptionKeyOptions contains the optional parameters for the ClustersClient.BeginRotateDiskEncryptionKey
 // method.
-func (client *ClustersClient) BeginRotateDiskEncryptionKey(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterDiskEncryptionParameters, options *ClustersClientBeginRotateDiskEncryptionKeyOptions) (ClustersClientRotateDiskEncryptionKeyPollerResponse, error) {
-	resp, err := client.rotateDiskEncryptionKey(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientRotateDiskEncryptionKeyPollerResponse{}, err
+func (client *ClustersClient) BeginRotateDiskEncryptionKey(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterDiskEncryptionParameters, options *ClustersClientBeginRotateDiskEncryptionKeyOptions) (*armruntime.Poller[ClustersClientRotateDiskEncryptionKeyResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rotateDiskEncryptionKey(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientRotateDiskEncryptionKeyResponse]("ClustersClient.RotateDiskEncryptionKey", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientRotateDiskEncryptionKeyResponse]("ClustersClient.RotateDiskEncryptionKey", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientRotateDiskEncryptionKeyPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.RotateDiskEncryptionKey", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientRotateDiskEncryptionKeyPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientRotateDiskEncryptionKeyPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RotateDiskEncryptionKey - Rotate disk encryption key of the specified HDInsight cluster.
@@ -707,20 +719,16 @@ func (client *ClustersClient) updateHandleResponse(resp *http.Response) (Cluster
 // parameters - The parameters for the update autoscale configuration operation.
 // options - ClustersClientBeginUpdateAutoScaleConfigurationOptions contains the optional parameters for the ClustersClient.BeginUpdateAutoScaleConfiguration
 // method.
-func (client *ClustersClient) BeginUpdateAutoScaleConfiguration(ctx context.Context, resourceGroupName string, clusterName string, roleName RoleName, parameters AutoscaleConfigurationUpdateParameter, options *ClustersClientBeginUpdateAutoScaleConfigurationOptions) (ClustersClientUpdateAutoScaleConfigurationPollerResponse, error) {
-	resp, err := client.updateAutoScaleConfiguration(ctx, resourceGroupName, clusterName, roleName, parameters, options)
-	if err != nil {
-		return ClustersClientUpdateAutoScaleConfigurationPollerResponse{}, err
+func (client *ClustersClient) BeginUpdateAutoScaleConfiguration(ctx context.Context, resourceGroupName string, clusterName string, roleName RoleName, parameters AutoscaleConfigurationUpdateParameter, options *ClustersClientBeginUpdateAutoScaleConfigurationOptions) (*armruntime.Poller[ClustersClientUpdateAutoScaleConfigurationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateAutoScaleConfiguration(ctx, resourceGroupName, clusterName, roleName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientUpdateAutoScaleConfigurationResponse]("ClustersClient.UpdateAutoScaleConfiguration", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientUpdateAutoScaleConfigurationResponse]("ClustersClient.UpdateAutoScaleConfiguration", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientUpdateAutoScaleConfigurationPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.UpdateAutoScaleConfiguration", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientUpdateAutoScaleConfigurationPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientUpdateAutoScaleConfigurationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateAutoScaleConfiguration - Updates the Autoscale Configuration for HDInsight cluster.
@@ -777,20 +785,16 @@ func (client *ClustersClient) updateAutoScaleConfigurationCreateRequest(ctx cont
 // parameters - The cluster configurations.
 // options - ClustersClientBeginUpdateGatewaySettingsOptions contains the optional parameters for the ClustersClient.BeginUpdateGatewaySettings
 // method.
-func (client *ClustersClient) BeginUpdateGatewaySettings(ctx context.Context, resourceGroupName string, clusterName string, parameters UpdateGatewaySettingsParameters, options *ClustersClientBeginUpdateGatewaySettingsOptions) (ClustersClientUpdateGatewaySettingsPollerResponse, error) {
-	resp, err := client.updateGatewaySettings(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientUpdateGatewaySettingsPollerResponse{}, err
+func (client *ClustersClient) BeginUpdateGatewaySettings(ctx context.Context, resourceGroupName string, clusterName string, parameters UpdateGatewaySettingsParameters, options *ClustersClientBeginUpdateGatewaySettingsOptions) (*armruntime.Poller[ClustersClientUpdateGatewaySettingsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateGatewaySettings(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientUpdateGatewaySettingsResponse]("ClustersClient.UpdateGatewaySettings", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientUpdateGatewaySettingsResponse]("ClustersClient.UpdateGatewaySettings", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientUpdateGatewaySettingsPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.UpdateGatewaySettings", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientUpdateGatewaySettingsPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientUpdateGatewaySettingsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateGatewaySettings - Configures the gateway settings on the specified cluster.
@@ -843,20 +847,16 @@ func (client *ClustersClient) updateGatewaySettingsCreateRequest(ctx context.Con
 // parameters - The cluster configurations.
 // options - ClustersClientBeginUpdateIdentityCertificateOptions contains the optional parameters for the ClustersClient.BeginUpdateIdentityCertificate
 // method.
-func (client *ClustersClient) BeginUpdateIdentityCertificate(ctx context.Context, resourceGroupName string, clusterName string, parameters UpdateClusterIdentityCertificateParameters, options *ClustersClientBeginUpdateIdentityCertificateOptions) (ClustersClientUpdateIdentityCertificatePollerResponse, error) {
-	resp, err := client.updateIdentityCertificate(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientUpdateIdentityCertificatePollerResponse{}, err
+func (client *ClustersClient) BeginUpdateIdentityCertificate(ctx context.Context, resourceGroupName string, clusterName string, parameters UpdateClusterIdentityCertificateParameters, options *ClustersClientBeginUpdateIdentityCertificateOptions) (*armruntime.Poller[ClustersClientUpdateIdentityCertificateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateIdentityCertificate(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientUpdateIdentityCertificateResponse]("ClustersClient.UpdateIdentityCertificate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientUpdateIdentityCertificateResponse]("ClustersClient.UpdateIdentityCertificate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientUpdateIdentityCertificatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.UpdateIdentityCertificate", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientUpdateIdentityCertificatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientUpdateIdentityCertificatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateIdentityCertificate - Updates the cluster identity certificate.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewSQLMigrationServicesClient(subscriptionID string, credential azcore.Toke
 // parameters - Details of SqlMigrationService resource.
 // options - SQLMigrationServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLMigrationServicesClient.BeginCreateOrUpdate
 // method.
-func (client *SQLMigrationServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, parameters SQLMigrationService, options *SQLMigrationServicesClientBeginCreateOrUpdateOptions) (SQLMigrationServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlMigrationServiceName, parameters, options)
-	if err != nil {
-		return SQLMigrationServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *SQLMigrationServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, parameters SQLMigrationService, options *SQLMigrationServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SQLMigrationServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, sqlMigrationServiceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLMigrationServicesClientCreateOrUpdateResponse]("SQLMigrationServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLMigrationServicesClientCreateOrUpdateResponse]("SQLMigrationServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLMigrationServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLMigrationServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return SQLMigrationServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SQLMigrationServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or Update SQL Migration Service.
@@ -123,20 +119,16 @@ func (client *SQLMigrationServicesClient) createOrUpdateCreateRequest(ctx contex
 // sqlMigrationServiceName - Name of the SQL Migration Service.
 // options - SQLMigrationServicesClientBeginDeleteOptions contains the optional parameters for the SQLMigrationServicesClient.BeginDelete
 // method.
-func (client *SQLMigrationServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, options *SQLMigrationServicesClientBeginDeleteOptions) (SQLMigrationServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, sqlMigrationServiceName, options)
-	if err != nil {
-		return SQLMigrationServicesClientDeletePollerResponse{}, err
+func (client *SQLMigrationServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, options *SQLMigrationServicesClientBeginDeleteOptions) (*armruntime.Poller[SQLMigrationServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, sqlMigrationServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLMigrationServicesClientDeleteResponse]("SQLMigrationServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLMigrationServicesClientDeleteResponse]("SQLMigrationServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLMigrationServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLMigrationServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SQLMigrationServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SQLMigrationServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete SQL Migration Service.
@@ -359,16 +351,32 @@ func (client *SQLMigrationServicesClient) listAuthKeysHandleResponse(resp *http.
 // Manager API or the portal.
 // options - SQLMigrationServicesClientListByResourceGroupOptions contains the optional parameters for the SQLMigrationServicesClient.ListByResourceGroup
 // method.
-func (client *SQLMigrationServicesClient) ListByResourceGroup(resourceGroupName string, options *SQLMigrationServicesClientListByResourceGroupOptions) *SQLMigrationServicesClientListByResourceGroupPager {
-	return &SQLMigrationServicesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SQLMigrationServicesClient) ListByResourceGroup(resourceGroupName string, options *SQLMigrationServicesClientListByResourceGroupOptions) *runtime.Pager[SQLMigrationServicesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLMigrationServicesClientListByResourceGroupResponse]{
+		More: func(page SQLMigrationServicesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLMigrationServicesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLMigrationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLMigrationServicesClientListByResourceGroupResponse) (SQLMigrationServicesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLMigrationServicesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLMigrationServicesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLMigrationServicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -406,16 +414,32 @@ func (client *SQLMigrationServicesClient) listByResourceGroupHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SQLMigrationServicesClientListBySubscriptionOptions contains the optional parameters for the SQLMigrationServicesClient.ListBySubscription
 // method.
-func (client *SQLMigrationServicesClient) ListBySubscription(options *SQLMigrationServicesClientListBySubscriptionOptions) *SQLMigrationServicesClientListBySubscriptionPager {
-	return &SQLMigrationServicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *SQLMigrationServicesClient) ListBySubscription(options *SQLMigrationServicesClientListBySubscriptionOptions) *runtime.Pager[SQLMigrationServicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLMigrationServicesClientListBySubscriptionResponse]{
+		More: func(page SQLMigrationServicesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLMigrationServicesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLMigrationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLMigrationServicesClientListBySubscriptionResponse) (SQLMigrationServicesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLMigrationServicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLMigrationServicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLMigrationServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -452,16 +476,32 @@ func (client *SQLMigrationServicesClient) listBySubscriptionHandleResponse(resp 
 // sqlMigrationServiceName - Name of the SQL Migration Service.
 // options - SQLMigrationServicesClientListMigrationsOptions contains the optional parameters for the SQLMigrationServicesClient.ListMigrations
 // method.
-func (client *SQLMigrationServicesClient) ListMigrations(resourceGroupName string, sqlMigrationServiceName string, options *SQLMigrationServicesClientListMigrationsOptions) *SQLMigrationServicesClientListMigrationsPager {
-	return &SQLMigrationServicesClientListMigrationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMigrationsCreateRequest(ctx, resourceGroupName, sqlMigrationServiceName, options)
+func (client *SQLMigrationServicesClient) ListMigrations(resourceGroupName string, sqlMigrationServiceName string, options *SQLMigrationServicesClientListMigrationsOptions) *runtime.Pager[SQLMigrationServicesClientListMigrationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLMigrationServicesClientListMigrationsResponse]{
+		More: func(page SQLMigrationServicesClientListMigrationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLMigrationServicesClientListMigrationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseMigrationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLMigrationServicesClientListMigrationsResponse) (SQLMigrationServicesClientListMigrationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listMigrationsCreateRequest(ctx, resourceGroupName, sqlMigrationServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLMigrationServicesClientListMigrationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLMigrationServicesClientListMigrationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLMigrationServicesClientListMigrationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMigrationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listMigrationsCreateRequest creates the ListMigrations request.
@@ -622,20 +662,16 @@ func (client *SQLMigrationServicesClient) regenerateAuthKeysHandleResponse(resp 
 // parameters - Details of SqlMigrationService resource.
 // options - SQLMigrationServicesClientBeginUpdateOptions contains the optional parameters for the SQLMigrationServicesClient.BeginUpdate
 // method.
-func (client *SQLMigrationServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, parameters SQLMigrationServiceUpdate, options *SQLMigrationServicesClientBeginUpdateOptions) (SQLMigrationServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, sqlMigrationServiceName, parameters, options)
-	if err != nil {
-		return SQLMigrationServicesClientUpdatePollerResponse{}, err
+func (client *SQLMigrationServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, sqlMigrationServiceName string, parameters SQLMigrationServiceUpdate, options *SQLMigrationServicesClientBeginUpdateOptions) (*armruntime.Poller[SQLMigrationServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, sqlMigrationServiceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLMigrationServicesClientUpdateResponse]("SQLMigrationServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLMigrationServicesClientUpdateResponse]("SQLMigrationServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLMigrationServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLMigrationServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return SQLMigrationServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &SQLMigrationServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update SQL Migration Service.

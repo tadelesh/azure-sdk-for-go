@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,20 +62,16 @@ func NewMonitorsClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The name of the resource group to which the Elastic resource belongs.
 // monitorName - Monitor resource name
 // options - MonitorsClientBeginCreateOptions contains the optional parameters for the MonitorsClient.BeginCreate method.
-func (client *MonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginCreateOptions) (MonitorsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, monitorName, options)
-	if err != nil {
-		return MonitorsClientCreatePollerResponse{}, err
+func (client *MonitorsClient) BeginCreate(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginCreateOptions) (*armruntime.Poller[MonitorsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, monitorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitorsClientCreateResponse]("MonitorsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitorsClientCreateResponse]("MonitorsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitorsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("MonitorsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return MonitorsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &MonitorsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a monitor resource.
@@ -129,20 +125,16 @@ func (client *MonitorsClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The name of the resource group to which the Elastic resource belongs.
 // monitorName - Monitor resource name
 // options - MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
-func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginDeleteOptions) (MonitorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, options)
-	if err != nil {
-		return MonitorsClientDeletePollerResponse{}, err
+func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginDeleteOptions) (*armruntime.Poller[MonitorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MonitorsClientDeleteResponse]("MonitorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MonitorsClientDeleteResponse]("MonitorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := MonitorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("MonitorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return MonitorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &MonitorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a monitor resource.
@@ -246,16 +238,32 @@ func (client *MonitorsClient) getHandleResponse(resp *http.Response) (MonitorsCl
 // List - List all monitors under the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - MonitorsClientListOptions contains the optional parameters for the MonitorsClient.List method.
-func (client *MonitorsClient) List(options *MonitorsClientListOptions) *MonitorsClientListPager {
-	return &MonitorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *MonitorsClient) List(options *MonitorsClientListOptions) *runtime.Pager[MonitorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListResponse]{
+		More: func(page MonitorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitorResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListResponse) (MonitorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -290,16 +298,32 @@ func (client *MonitorsClient) listHandleResponse(resp *http.Response) (MonitorsC
 // resourceGroupName - The name of the resource group to which the Elastic resource belongs.
 // options - MonitorsClientListByResourceGroupOptions contains the optional parameters for the MonitorsClient.ListByResourceGroup
 // method.
-func (client *MonitorsClient) ListByResourceGroup(resourceGroupName string, options *MonitorsClientListByResourceGroupOptions) *MonitorsClientListByResourceGroupPager {
-	return &MonitorsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *MonitorsClient) ListByResourceGroup(resourceGroupName string, options *MonitorsClientListByResourceGroupOptions) *runtime.Pager[MonitorsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorsClientListByResourceGroupResponse]{
+		More: func(page MonitorsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitorResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorsClientListByResourceGroupResponse) (MonitorsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

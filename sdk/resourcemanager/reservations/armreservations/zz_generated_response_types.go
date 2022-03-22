@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,11 +8,7 @@
 
 package armreservations
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
+import "encoding/json"
 
 // AzureReservationAPIClientGetAppliedReservationListResponse contains the response from method AzureReservationAPIClient.GetAppliedReservationList.
 type AzureReservationAPIClientGetAppliedReservationListResponse struct {
@@ -25,79 +21,9 @@ type AzureReservationAPIClientGetCatalogResponse struct {
 	CatalogArray []*Catalog
 }
 
-// CalculateExchangeClientPostPollerResponse contains the response from method CalculateExchangeClient.Post.
-type CalculateExchangeClientPostPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CalculateExchangeClientPostPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CalculateExchangeClientPostPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CalculateExchangeClientPostResponse, error) {
-	respType := CalculateExchangeClientPostResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CalculateExchangeOperationResultResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CalculateExchangeClientPostPollerResponse from the provided client and resume token.
-func (l *CalculateExchangeClientPostPollerResponse) Resume(ctx context.Context, client *CalculateExchangeClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CalculateExchangeClient.Post", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CalculateExchangeClientPostPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // CalculateExchangeClientPostResponse contains the response from method CalculateExchangeClient.Post.
 type CalculateExchangeClientPostResponse struct {
 	CalculateExchangeOperationResultResponse
-}
-
-// ExchangeClientPostPollerResponse contains the response from method ExchangeClient.Post.
-type ExchangeClientPostPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExchangeClientPostPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExchangeClientPostPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExchangeClientPostResponse, error) {
-	respType := ExchangeClientPostResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ExchangeOperationResultResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExchangeClientPostPollerResponse from the provided client and resume token.
-func (l *ExchangeClientPostPollerResponse) Resume(ctx context.Context, client *ExchangeClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExchangeClient.Post", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExchangeClientPostPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ExchangeClientPostResponse contains the response from method ExchangeClient.Post.
@@ -108,41 +34,6 @@ type ExchangeClientPostResponse struct {
 // OperationClientListResponse contains the response from method OperationClient.List.
 type OperationClientListResponse struct {
 	OperationList
-}
-
-// QuotaClientCreateOrUpdatePollerResponse contains the response from method QuotaClient.CreateOrUpdate.
-type QuotaClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *QuotaClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l QuotaClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (QuotaClientCreateOrUpdateResponse, error) {
-	respType := QuotaClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a QuotaClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *QuotaClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *QuotaClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("QuotaClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &QuotaClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // QuotaClientCreateOrUpdateResponse contains the response from method QuotaClient.CreateOrUpdate.
@@ -164,41 +55,6 @@ type QuotaClientListResponse struct {
 	ETag *string
 }
 
-// QuotaClientUpdatePollerResponse contains the response from method QuotaClient.Update.
-type QuotaClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *QuotaClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l QuotaClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (QuotaClientUpdateResponse, error) {
-	respType := QuotaClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a QuotaClientUpdatePollerResponse from the provided client and resume token.
-func (l *QuotaClientUpdatePollerResponse) Resume(ctx context.Context, client *QuotaClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("QuotaClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &QuotaClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // QuotaClientUpdateResponse contains the response from method QuotaClient.Update.
 type QuotaClientUpdateResponse struct {
 	QuotaRequestOneResourceSubmitResponse
@@ -212,41 +68,6 @@ type QuotaRequestStatusClientGetResponse struct {
 // QuotaRequestStatusClientListResponse contains the response from method QuotaRequestStatusClient.List.
 type QuotaRequestStatusClientListResponse struct {
 	QuotaRequestDetailsList
-}
-
-// ReservationClientAvailableScopesPollerResponse contains the response from method ReservationClient.AvailableScopes.
-type ReservationClientAvailableScopesPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ReservationClientAvailableScopesPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ReservationClientAvailableScopesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientAvailableScopesResponse, error) {
-	respType := ReservationClientAvailableScopesResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AvailableScopeProperties)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ReservationClientAvailableScopesPollerResponse from the provided client and resume token.
-func (l *ReservationClientAvailableScopesPollerResponse) Resume(ctx context.Context, client *ReservationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ReservationClient.AvailableScopes", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ReservationClientAvailableScopesPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ReservationClientAvailableScopesResponse contains the response from method ReservationClient.AvailableScopes.
@@ -274,80 +95,15 @@ type ReservationClientListRevisionsResponse struct {
 	ReservationList
 }
 
-// ReservationClientMergePollerResponse contains the response from method ReservationClient.Merge.
-type ReservationClientMergePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ReservationClientMergePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ReservationClientMergePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientMergeResponse, error) {
-	respType := ReservationClientMergeResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ReservationClientMergePollerResponse from the provided client and resume token.
-func (l *ReservationClientMergePollerResponse) Resume(ctx context.Context, client *ReservationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ReservationClient.Merge", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ReservationClientMergePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ReservationClientMergeResponse contains the response from method ReservationClient.Merge.
 type ReservationClientMergeResponse struct {
 	// Array of ReservationResponse
 	ReservationResponseArray []*ReservationResponse
 }
 
-// ReservationClientSplitPollerResponse contains the response from method ReservationClient.Split.
-type ReservationClientSplitPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ReservationClientSplitPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ReservationClientSplitPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientSplitResponse, error) {
-	respType := ReservationClientSplitResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ReservationClientSplitPollerResponse from the provided client and resume token.
-func (l *ReservationClientSplitPollerResponse) Resume(ctx context.Context, client *ReservationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ReservationClient.Split", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ReservationClientSplitPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type ReservationClientMergeResponse.
+func (r *ReservationClientMergeResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &r.ReservationResponseArray)
 }
 
 // ReservationClientSplitResponse contains the response from method ReservationClient.Split.
@@ -356,39 +112,9 @@ type ReservationClientSplitResponse struct {
 	ReservationResponseArray []*ReservationResponse
 }
 
-// ReservationClientUpdatePollerResponse contains the response from method ReservationClient.Update.
-type ReservationClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ReservationClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ReservationClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientUpdateResponse, error) {
-	respType := ReservationClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ReservationClientUpdatePollerResponse from the provided client and resume token.
-func (l *ReservationClientUpdatePollerResponse) Resume(ctx context.Context, client *ReservationClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ReservationClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ReservationClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
+// UnmarshalJSON implements the json.Unmarshaller interface for type ReservationClientSplitResponse.
+func (r *ReservationClientSplitResponse) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &r.ReservationResponseArray)
 }
 
 // ReservationClientUpdateResponse contains the response from method ReservationClient.Update.
@@ -414,41 +140,6 @@ type ReservationOrderClientGetResponse struct {
 // ReservationOrderClientListResponse contains the response from method ReservationOrderClient.List.
 type ReservationOrderClientListResponse struct {
 	ReservationOrderList
-}
-
-// ReservationOrderClientPurchasePollerResponse contains the response from method ReservationOrderClient.Purchase.
-type ReservationOrderClientPurchasePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ReservationOrderClientPurchasePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ReservationOrderClientPurchasePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationOrderClientPurchaseResponse, error) {
-	respType := ReservationOrderClientPurchaseResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationOrderResponse)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ReservationOrderClientPurchasePollerResponse from the provided client and resume token.
-func (l *ReservationOrderClientPurchasePollerResponse) Resume(ctx context.Context, client *ReservationOrderClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ReservationOrderClient.Purchase", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ReservationOrderClientPurchasePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ReservationOrderClientPurchaseResponse contains the response from method ReservationOrderClient.Purchase.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewOutboundFirewallRulesClient(subscriptionID string, credential azcore.Tok
 // serverName - The name of the server.
 // options - OutboundFirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the OutboundFirewallRulesClient.BeginCreateOrUpdate
 // method.
-func (client *OutboundFirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, outboundRuleFqdn string, parameters OutboundFirewallRule, options *OutboundFirewallRulesClientBeginCreateOrUpdateOptions) (OutboundFirewallRulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, outboundRuleFqdn, parameters, options)
-	if err != nil {
-		return OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}, err
+func (client *OutboundFirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, outboundRuleFqdn string, parameters OutboundFirewallRule, options *OutboundFirewallRulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[OutboundFirewallRulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, outboundRuleFqdn, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OutboundFirewallRulesClientCreateOrUpdateResponse]("OutboundFirewallRulesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OutboundFirewallRulesClientCreateOrUpdateResponse]("OutboundFirewallRulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("OutboundFirewallRulesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &OutboundFirewallRulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a outbound firewall rule with a given name.
@@ -126,20 +122,16 @@ func (client *OutboundFirewallRulesClient) createOrUpdateCreateRequest(ctx conte
 // serverName - The name of the server.
 // options - OutboundFirewallRulesClientBeginDeleteOptions contains the optional parameters for the OutboundFirewallRulesClient.BeginDelete
 // method.
-func (client *OutboundFirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, outboundRuleFqdn string, options *OutboundFirewallRulesClientBeginDeleteOptions) (OutboundFirewallRulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, outboundRuleFqdn, options)
-	if err != nil {
-		return OutboundFirewallRulesClientDeletePollerResponse{}, err
+func (client *OutboundFirewallRulesClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, outboundRuleFqdn string, options *OutboundFirewallRulesClientBeginDeleteOptions) (*armruntime.Poller[OutboundFirewallRulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, outboundRuleFqdn, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OutboundFirewallRulesClientDeleteResponse]("OutboundFirewallRulesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OutboundFirewallRulesClientDeleteResponse]("OutboundFirewallRulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OutboundFirewallRulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OutboundFirewallRulesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return OutboundFirewallRulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OutboundFirewallRulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a outbound firewall rule with a given name.
@@ -256,16 +248,32 @@ func (client *OutboundFirewallRulesClient) getHandleResponse(resp *http.Response
 // serverName - The name of the server.
 // options - OutboundFirewallRulesClientListByServerOptions contains the optional parameters for the OutboundFirewallRulesClient.ListByServer
 // method.
-func (client *OutboundFirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *OutboundFirewallRulesClientListByServerOptions) *OutboundFirewallRulesClientListByServerPager {
-	return &OutboundFirewallRulesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *OutboundFirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *OutboundFirewallRulesClientListByServerOptions) *runtime.Pager[OutboundFirewallRulesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OutboundFirewallRulesClientListByServerResponse]{
+		More: func(page OutboundFirewallRulesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OutboundFirewallRulesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundFirewallRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OutboundFirewallRulesClientListByServerResponse) (OutboundFirewallRulesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OutboundFirewallRulesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OutboundFirewallRulesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OutboundFirewallRulesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

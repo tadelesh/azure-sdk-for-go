@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -211,16 +211,32 @@ func (client *SnapshotsClient) getHandleResponse(resp *http.Response) (Snapshots
 // List - Gets a list of snapshots in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SnapshotsClientListOptions contains the optional parameters for the SnapshotsClient.List method.
-func (client *SnapshotsClient) List(options *SnapshotsClientListOptions) *SnapshotsClientListPager {
-	return &SnapshotsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SnapshotsClient) List(options *SnapshotsClientListOptions) *runtime.Pager[SnapshotsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SnapshotsClientListResponse]{
+		More: func(page SnapshotsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SnapshotsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SnapshotListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SnapshotsClientListResponse) (SnapshotsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SnapshotsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SnapshotsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SnapshotsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -255,16 +271,32 @@ func (client *SnapshotsClient) listHandleResponse(resp *http.Response) (Snapshot
 // resourceGroupName - The name of the resource group.
 // options - SnapshotsClientListByResourceGroupOptions contains the optional parameters for the SnapshotsClient.ListByResourceGroup
 // method.
-func (client *SnapshotsClient) ListByResourceGroup(resourceGroupName string, options *SnapshotsClientListByResourceGroupOptions) *SnapshotsClientListByResourceGroupPager {
-	return &SnapshotsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SnapshotsClient) ListByResourceGroup(resourceGroupName string, options *SnapshotsClientListByResourceGroupOptions) *runtime.Pager[SnapshotsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SnapshotsClientListByResourceGroupResponse]{
+		More: func(page SnapshotsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SnapshotsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SnapshotListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SnapshotsClientListByResourceGroupResponse) (SnapshotsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SnapshotsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SnapshotsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SnapshotsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

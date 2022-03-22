@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewClustersClient(subscriptionID string, credential azcore.TokenCredential,
 // languageExtensionsToAdd - The language extensions to add.
 // options - ClustersClientBeginAddLanguageExtensionsOptions contains the optional parameters for the ClustersClient.BeginAddLanguageExtensions
 // method.
-func (client *ClustersClient) BeginAddLanguageExtensions(ctx context.Context, resourceGroupName string, clusterName string, languageExtensionsToAdd LanguageExtensionsList, options *ClustersClientBeginAddLanguageExtensionsOptions) (ClustersClientAddLanguageExtensionsPollerResponse, error) {
-	resp, err := client.addLanguageExtensions(ctx, resourceGroupName, clusterName, languageExtensionsToAdd, options)
-	if err != nil {
-		return ClustersClientAddLanguageExtensionsPollerResponse{}, err
+func (client *ClustersClient) BeginAddLanguageExtensions(ctx context.Context, resourceGroupName string, clusterName string, languageExtensionsToAdd LanguageExtensionsList, options *ClustersClientBeginAddLanguageExtensionsOptions) (*armruntime.Poller[ClustersClientAddLanguageExtensionsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.addLanguageExtensions(ctx, resourceGroupName, clusterName, languageExtensionsToAdd, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientAddLanguageExtensionsResponse]("ClustersClient.AddLanguageExtensions", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientAddLanguageExtensionsResponse]("ClustersClient.AddLanguageExtensions", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientAddLanguageExtensionsPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.AddLanguageExtensions", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientAddLanguageExtensionsPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientAddLanguageExtensionsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // AddLanguageExtensions - Add a list of language extensions that can run within KQL queries.
@@ -175,20 +171,16 @@ func (client *ClustersClient) checkNameAvailabilityHandleResponse(resp *http.Res
 // parameters - The Kusto cluster parameters supplied to the CreateOrUpdate operation.
 // options - ClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ClustersClient.BeginCreateOrUpdate
 // method.
-func (client *ClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters Cluster, options *ClustersClientBeginCreateOrUpdateOptions) (ClustersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientCreateOrUpdatePollerResponse{}, err
+func (client *ClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters Cluster, options *ClustersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ClustersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientCreateOrUpdateResponse]("ClustersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientCreateOrUpdateResponse]("ClustersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Kusto cluster.
@@ -245,20 +237,16 @@ func (client *ClustersClient) createOrUpdateCreateRequest(ctx context.Context, r
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
-func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (ClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
+func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (*armruntime.Poller[ClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientDeleteResponse]("ClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientDeleteResponse]("ClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Kusto cluster.
@@ -311,20 +299,16 @@ func (client *ClustersClient) deleteCreateRequest(ctx context.Context, resourceG
 // followerDatabaseToRemove - The follower databases properties to remove.
 // options - ClustersClientBeginDetachFollowerDatabasesOptions contains the optional parameters for the ClustersClient.BeginDetachFollowerDatabases
 // method.
-func (client *ClustersClient) BeginDetachFollowerDatabases(ctx context.Context, resourceGroupName string, clusterName string, followerDatabaseToRemove FollowerDatabaseDefinition, options *ClustersClientBeginDetachFollowerDatabasesOptions) (ClustersClientDetachFollowerDatabasesPollerResponse, error) {
-	resp, err := client.detachFollowerDatabases(ctx, resourceGroupName, clusterName, followerDatabaseToRemove, options)
-	if err != nil {
-		return ClustersClientDetachFollowerDatabasesPollerResponse{}, err
+func (client *ClustersClient) BeginDetachFollowerDatabases(ctx context.Context, resourceGroupName string, clusterName string, followerDatabaseToRemove FollowerDatabaseDefinition, options *ClustersClientBeginDetachFollowerDatabasesOptions) (*armruntime.Poller[ClustersClientDetachFollowerDatabasesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.detachFollowerDatabases(ctx, resourceGroupName, clusterName, followerDatabaseToRemove, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientDetachFollowerDatabasesResponse]("ClustersClient.DetachFollowerDatabases", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientDetachFollowerDatabasesResponse]("ClustersClient.DetachFollowerDatabases", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientDetachFollowerDatabasesPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.DetachFollowerDatabases", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientDetachFollowerDatabasesPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientDetachFollowerDatabasesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DetachFollowerDatabases - Detaches all followers of a database owned by this cluster.
@@ -377,20 +361,16 @@ func (client *ClustersClient) detachFollowerDatabasesCreateRequest(ctx context.C
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientBeginDiagnoseVirtualNetworkOptions contains the optional parameters for the ClustersClient.BeginDiagnoseVirtualNetwork
 // method.
-func (client *ClustersClient) BeginDiagnoseVirtualNetwork(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDiagnoseVirtualNetworkOptions) (ClustersClientDiagnoseVirtualNetworkPollerResponse, error) {
-	resp, err := client.diagnoseVirtualNetwork(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientDiagnoseVirtualNetworkPollerResponse{}, err
+func (client *ClustersClient) BeginDiagnoseVirtualNetwork(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDiagnoseVirtualNetworkOptions) (*armruntime.Poller[ClustersClientDiagnoseVirtualNetworkResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.diagnoseVirtualNetwork(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientDiagnoseVirtualNetworkResponse]("ClustersClient.DiagnoseVirtualNetwork", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientDiagnoseVirtualNetworkResponse]("ClustersClient.DiagnoseVirtualNetwork", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientDiagnoseVirtualNetworkPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.DiagnoseVirtualNetwork", "location", resp, client.pl)
-	if err != nil {
-		return ClustersClientDiagnoseVirtualNetworkPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientDiagnoseVirtualNetworkPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DiagnoseVirtualNetwork - Diagnoses network connectivity status for external resources on which the service is dependent
@@ -495,13 +475,26 @@ func (client *ClustersClient) getHandleResponse(resp *http.Response) (ClustersCl
 // List - Lists all Kusto clusters within a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClustersClientListOptions contains the optional parameters for the ClustersClient.List method.
-func (client *ClustersClient) List(options *ClustersClientListOptions) *ClustersClientListPager {
-	return &ClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ClustersClient) List(options *ClustersClientListOptions) *runtime.Pager[ClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListResponse]{
+		More: func(page ClustersClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListResponse) (ClustersClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -536,13 +529,26 @@ func (client *ClustersClient) listHandleResponse(resp *http.Response) (ClustersC
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // options - ClustersClientListByResourceGroupOptions contains the optional parameters for the ClustersClient.ListByResourceGroup
 // method.
-func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *ClustersClientListByResourceGroupPager {
-	return &ClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *runtime.Pager[ClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListByResourceGroupResponse]{
+		More: func(page ClustersClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListByResourceGroupResponse) (ClustersClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -582,13 +588,26 @@ func (client *ClustersClient) listByResourceGroupHandleResponse(resp *http.Respo
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientListFollowerDatabasesOptions contains the optional parameters for the ClustersClient.ListFollowerDatabases
 // method.
-func (client *ClustersClient) ListFollowerDatabases(resourceGroupName string, clusterName string, options *ClustersClientListFollowerDatabasesOptions) *ClustersClientListFollowerDatabasesPager {
-	return &ClustersClientListFollowerDatabasesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listFollowerDatabasesCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ClustersClient) ListFollowerDatabases(resourceGroupName string, clusterName string, options *ClustersClientListFollowerDatabasesOptions) *runtime.Pager[ClustersClientListFollowerDatabasesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListFollowerDatabasesResponse]{
+		More: func(page ClustersClientListFollowerDatabasesResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListFollowerDatabasesResponse) (ClustersClientListFollowerDatabasesResponse, error) {
+			req, err := client.listFollowerDatabasesCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return ClustersClientListFollowerDatabasesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListFollowerDatabasesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListFollowerDatabasesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listFollowerDatabasesHandleResponse(resp)
+		},
+	})
 }
 
 // listFollowerDatabasesCreateRequest creates the ListFollowerDatabases request.
@@ -632,13 +651,26 @@ func (client *ClustersClient) listFollowerDatabasesHandleResponse(resp *http.Res
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientListLanguageExtensionsOptions contains the optional parameters for the ClustersClient.ListLanguageExtensions
 // method.
-func (client *ClustersClient) ListLanguageExtensions(resourceGroupName string, clusterName string, options *ClustersClientListLanguageExtensionsOptions) *ClustersClientListLanguageExtensionsPager {
-	return &ClustersClientListLanguageExtensionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listLanguageExtensionsCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ClustersClient) ListLanguageExtensions(resourceGroupName string, clusterName string, options *ClustersClientListLanguageExtensionsOptions) *runtime.Pager[ClustersClientListLanguageExtensionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListLanguageExtensionsResponse]{
+		More: func(page ClustersClientListLanguageExtensionsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListLanguageExtensionsResponse) (ClustersClientListLanguageExtensionsResponse, error) {
+			req, err := client.listLanguageExtensionsCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return ClustersClientListLanguageExtensionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListLanguageExtensionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListLanguageExtensionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listLanguageExtensionsHandleResponse(resp)
+		},
+	})
 }
 
 // listLanguageExtensionsCreateRequest creates the ListLanguageExtensions request.
@@ -682,16 +714,32 @@ func (client *ClustersClient) listLanguageExtensionsHandleResponse(resp *http.Re
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientListOutboundNetworkDependenciesEndpointsOptions contains the optional parameters for the ClustersClient.ListOutboundNetworkDependenciesEndpoints
 // method.
-func (client *ClustersClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, clusterName string, options *ClustersClientListOutboundNetworkDependenciesEndpointsOptions) *ClustersClientListOutboundNetworkDependenciesEndpointsPager {
-	return &ClustersClientListOutboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ClustersClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, clusterName string, options *ClustersClientListOutboundNetworkDependenciesEndpointsOptions) *runtime.Pager[ClustersClientListOutboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListOutboundNetworkDependenciesEndpointsResponse]{
+		More: func(page ClustersClientListOutboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClustersClientListOutboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundNetworkDependenciesEndpointListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClustersClientListOutboundNetworkDependenciesEndpointsResponse) (ClustersClientListOutboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOutboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOutboundNetworkDependenciesEndpointsCreateRequest creates the ListOutboundNetworkDependenciesEndpoints request.
@@ -732,13 +780,26 @@ func (client *ClustersClient) listOutboundNetworkDependenciesEndpointsHandleResp
 // ListSKUs - Lists eligible SKUs for Kusto resource provider.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClustersClientListSKUsOptions contains the optional parameters for the ClustersClient.ListSKUs method.
-func (client *ClustersClient) ListSKUs(options *ClustersClientListSKUsOptions) *ClustersClientListSKUsPager {
-	return &ClustersClientListSKUsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSKUsCreateRequest(ctx, options)
+func (client *ClustersClient) ListSKUs(options *ClustersClientListSKUsOptions) *runtime.Pager[ClustersClientListSKUsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListSKUsResponse]{
+		More: func(page ClustersClientListSKUsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListSKUsResponse) (ClustersClientListSKUsResponse, error) {
+			req, err := client.listSKUsCreateRequest(ctx, options)
+			if err != nil {
+				return ClustersClientListSKUsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListSKUsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListSKUsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSKUsHandleResponse(resp)
+		},
+	})
 }
 
 // listSKUsCreateRequest creates the ListSKUs request.
@@ -774,13 +835,26 @@ func (client *ClustersClient) listSKUsHandleResponse(resp *http.Response) (Clust
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientListSKUsByResourceOptions contains the optional parameters for the ClustersClient.ListSKUsByResource
 // method.
-func (client *ClustersClient) ListSKUsByResource(resourceGroupName string, clusterName string, options *ClustersClientListSKUsByResourceOptions) *ClustersClientListSKUsByResourcePager {
-	return &ClustersClientListSKUsByResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSKUsByResourceCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ClustersClient) ListSKUsByResource(resourceGroupName string, clusterName string, options *ClustersClientListSKUsByResourceOptions) *runtime.Pager[ClustersClientListSKUsByResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListSKUsByResourceResponse]{
+		More: func(page ClustersClientListSKUsByResourceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ClustersClientListSKUsByResourceResponse) (ClustersClientListSKUsByResourceResponse, error) {
+			req, err := client.listSKUsByResourceCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return ClustersClientListSKUsByResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListSKUsByResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListSKUsByResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSKUsByResourceHandleResponse(resp)
+		},
+	})
 }
 
 // listSKUsByResourceCreateRequest creates the ListSKUsByResource request.
@@ -825,20 +899,16 @@ func (client *ClustersClient) listSKUsByResourceHandleResponse(resp *http.Respon
 // languageExtensionsToRemove - The language extensions to remove.
 // options - ClustersClientBeginRemoveLanguageExtensionsOptions contains the optional parameters for the ClustersClient.BeginRemoveLanguageExtensions
 // method.
-func (client *ClustersClient) BeginRemoveLanguageExtensions(ctx context.Context, resourceGroupName string, clusterName string, languageExtensionsToRemove LanguageExtensionsList, options *ClustersClientBeginRemoveLanguageExtensionsOptions) (ClustersClientRemoveLanguageExtensionsPollerResponse, error) {
-	resp, err := client.removeLanguageExtensions(ctx, resourceGroupName, clusterName, languageExtensionsToRemove, options)
-	if err != nil {
-		return ClustersClientRemoveLanguageExtensionsPollerResponse{}, err
+func (client *ClustersClient) BeginRemoveLanguageExtensions(ctx context.Context, resourceGroupName string, clusterName string, languageExtensionsToRemove LanguageExtensionsList, options *ClustersClientBeginRemoveLanguageExtensionsOptions) (*armruntime.Poller[ClustersClientRemoveLanguageExtensionsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.removeLanguageExtensions(ctx, resourceGroupName, clusterName, languageExtensionsToRemove, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientRemoveLanguageExtensionsResponse]("ClustersClient.RemoveLanguageExtensions", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientRemoveLanguageExtensionsResponse]("ClustersClient.RemoveLanguageExtensions", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientRemoveLanguageExtensionsPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.RemoveLanguageExtensions", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientRemoveLanguageExtensionsPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientRemoveLanguageExtensionsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RemoveLanguageExtensions - Remove a list of language extensions that can run within KQL queries.
@@ -889,20 +959,16 @@ func (client *ClustersClient) removeLanguageExtensionsCreateRequest(ctx context.
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientBeginStartOptions contains the optional parameters for the ClustersClient.BeginStart method.
-func (client *ClustersClient) BeginStart(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginStartOptions) (ClustersClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientStartPollerResponse{}, err
+func (client *ClustersClient) BeginStart(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginStartOptions) (*armruntime.Poller[ClustersClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientStartResponse]("ClustersClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientStartResponse]("ClustersClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientStartPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts a Kusto cluster.
@@ -953,20 +1019,16 @@ func (client *ClustersClient) startCreateRequest(ctx context.Context, resourceGr
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // clusterName - The name of the Kusto cluster.
 // options - ClustersClientBeginStopOptions contains the optional parameters for the ClustersClient.BeginStop method.
-func (client *ClustersClient) BeginStop(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginStopOptions) (ClustersClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientStopPollerResponse{}, err
+func (client *ClustersClient) BeginStop(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginStopOptions) (*armruntime.Poller[ClustersClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientStopResponse]("ClustersClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientStopResponse]("ClustersClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientStopPollerResponse{}, err
-	}
-	result.Poller = &ClustersClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stops a Kusto cluster.
@@ -1018,20 +1080,16 @@ func (client *ClustersClient) stopCreateRequest(ctx context.Context, resourceGro
 // clusterName - The name of the Kusto cluster.
 // parameters - The Kusto cluster parameters supplied to the Update operation.
 // options - ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
-func (client *ClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterUpdate, options *ClustersClientBeginUpdateOptions) (ClustersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientUpdatePollerResponse{}, err
+func (client *ClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterUpdate, options *ClustersClientBeginUpdateOptions) (*armruntime.Poller[ClustersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientUpdateResponse]("ClustersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientUpdateResponse]("ClustersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a Kusto cluster.

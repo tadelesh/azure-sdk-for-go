@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -272,16 +272,32 @@ func (client *ComponentsClient) getPurgeStatusHandleResponse(resp *http.Response
 // List - Gets a list of all Application Insights components within a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ComponentsClientListOptions contains the optional parameters for the ComponentsClient.List method.
-func (client *ComponentsClient) List(options *ComponentsClientListOptions) *ComponentsClientListPager {
-	return &ComponentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ComponentsClient) List(options *ComponentsClientListOptions) *runtime.Pager[ComponentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ComponentsClientListResponse]{
+		More: func(page ComponentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ComponentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ComponentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ComponentsClientListResponse) (ComponentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ComponentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ComponentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ComponentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -316,16 +332,32 @@ func (client *ComponentsClient) listHandleResponse(resp *http.Response) (Compone
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ComponentsClientListByResourceGroupOptions contains the optional parameters for the ComponentsClient.ListByResourceGroup
 // method.
-func (client *ComponentsClient) ListByResourceGroup(resourceGroupName string, options *ComponentsClientListByResourceGroupOptions) *ComponentsClientListByResourceGroupPager {
-	return &ComponentsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ComponentsClient) ListByResourceGroup(resourceGroupName string, options *ComponentsClientListByResourceGroupOptions) *runtime.Pager[ComponentsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ComponentsClientListByResourceGroupResponse]{
+		More: func(page ComponentsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ComponentsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ComponentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ComponentsClientListByResourceGroupResponse) (ComponentsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ComponentsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ComponentsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ComponentsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

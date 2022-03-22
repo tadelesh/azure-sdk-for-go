@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewEnvironmentsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - Parameters for creating an environment resource.
 // options - EnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdate
 // method.
-func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, parameters EnvironmentCreateOrUpdateParametersClassification, options *EnvironmentsClientBeginCreateOrUpdateOptions) (EnvironmentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, environmentName, parameters, options)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
+func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, parameters EnvironmentCreateOrUpdateParametersClassification, options *EnvironmentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[EnvironmentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, environmentName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientCreateOrUpdateResponse]("EnvironmentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update an environment in the specified subscription and resource group.
@@ -324,20 +320,16 @@ func (client *EnvironmentsClient) listBySubscriptionHandleResponse(resp *http.Re
 // environmentUpdateParameters - Request object that contains the updated information for the environment.
 // options - EnvironmentsClientBeginUpdateOptions contains the optional parameters for the EnvironmentsClient.BeginUpdate
 // method.
-func (client *EnvironmentsClient) BeginUpdate(ctx context.Context, resourceGroupName string, environmentName string, environmentUpdateParameters EnvironmentUpdateParametersClassification, options *EnvironmentsClientBeginUpdateOptions) (EnvironmentsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, environmentName, environmentUpdateParameters, options)
-	if err != nil {
-		return EnvironmentsClientUpdatePollerResponse{}, err
+func (client *EnvironmentsClient) BeginUpdate(ctx context.Context, resourceGroupName string, environmentName string, environmentUpdateParameters EnvironmentUpdateParametersClassification, options *EnvironmentsClientBeginUpdateOptions) (*armruntime.Poller[EnvironmentsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, environmentName, environmentUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[EnvironmentsClientUpdateResponse]("EnvironmentsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[EnvironmentsClientUpdateResponse]("EnvironmentsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := EnvironmentsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("EnvironmentsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return EnvironmentsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &EnvironmentsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the environment with the specified name in the specified subscription and resource group.

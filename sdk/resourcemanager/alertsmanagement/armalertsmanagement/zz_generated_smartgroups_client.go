@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -108,16 +108,32 @@ func (client *SmartGroupsClient) changeStateHandleResponse(resp *http.Response) 
 // GetAll - List all the Smart Groups within a specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SmartGroupsClientGetAllOptions contains the optional parameters for the SmartGroupsClient.GetAll method.
-func (client *SmartGroupsClient) GetAll(options *SmartGroupsClientGetAllOptions) *SmartGroupsClientGetAllPager {
-	return &SmartGroupsClientGetAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getAllCreateRequest(ctx, options)
+func (client *SmartGroupsClient) GetAll(options *SmartGroupsClientGetAllOptions) *runtime.Pager[SmartGroupsClientGetAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SmartGroupsClientGetAllResponse]{
+		More: func(page SmartGroupsClientGetAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SmartGroupsClientGetAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SmartGroupsList.NextLink)
+		Fetcher: func(ctx context.Context, page *SmartGroupsClientGetAllResponse) (SmartGroupsClientGetAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getAllCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SmartGroupsClientGetAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SmartGroupsClientGetAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SmartGroupsClientGetAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getAllCreateRequest creates the GetAll request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -119,16 +119,32 @@ func (client *RecoveryPointsClient) getHandleResponse(resp *http.Response) (Reco
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // backupInstanceName - The name of the backup instance
 // options - RecoveryPointsClientListOptions contains the optional parameters for the RecoveryPointsClient.List method.
-func (client *RecoveryPointsClient) List(vaultName string, resourceGroupName string, backupInstanceName string, options *RecoveryPointsClientListOptions) *RecoveryPointsClientListPager {
-	return &RecoveryPointsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, backupInstanceName, options)
+func (client *RecoveryPointsClient) List(vaultName string, resourceGroupName string, backupInstanceName string, options *RecoveryPointsClientListOptions) *runtime.Pager[RecoveryPointsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecoveryPointsClientListResponse]{
+		More: func(page RecoveryPointsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecoveryPointsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AzureBackupRecoveryPointResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *RecoveryPointsClientListResponse) (RecoveryPointsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vaultName, resourceGroupName, backupInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecoveryPointsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecoveryPointsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecoveryPointsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

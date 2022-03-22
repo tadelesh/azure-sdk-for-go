@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -273,7 +273,8 @@ type DefaultRolloutStatus struct {
 // DefaultRolloutsClientBeginCreateOrUpdateOptions contains the optional parameters for the DefaultRolloutsClient.BeginCreateOrUpdate
 // method.
 type DefaultRolloutsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DefaultRolloutsClientDeleteOptions contains the optional parameters for the DefaultRolloutsClient.Delete method.
@@ -687,7 +688,8 @@ type ProviderRegistrationPropertiesSubscriptionLifecycleNotificationSpecificatio
 // ProviderRegistrationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ProviderRegistrationsClient.BeginCreateOrUpdate
 // method.
 type ProviderRegistrationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProviderRegistrationsClientDeleteOptions contains the optional parameters for the ProviderRegistrationsClient.Delete method.
@@ -1088,7 +1090,8 @@ type ResourceTypeRegistrationPropertiesTemplateDeploymentOptions struct {
 // ResourceTypeRegistrationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ResourceTypeRegistrationsClient.BeginCreateOrUpdate
 // method.
 type ResourceTypeRegistrationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ResourceTypeRegistrationsClientDeleteOptions contains the optional parameters for the ResourceTypeRegistrationsClient.Delete

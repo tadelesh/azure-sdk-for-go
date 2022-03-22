@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewOrchestratorInstanceServiceClient(subscriptionID string, credential azco
 // parameters - OrchestratorInstance type parameters
 // options - OrchestratorInstanceServiceClientBeginCreateOptions contains the optional parameters for the OrchestratorInstanceServiceClient.BeginCreate
 // method.
-func (client *OrchestratorInstanceServiceClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, parameters Orchestrator, options *OrchestratorInstanceServiceClientBeginCreateOptions) (OrchestratorInstanceServiceClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return OrchestratorInstanceServiceClientCreatePollerResponse{}, err
+func (client *OrchestratorInstanceServiceClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, parameters Orchestrator, options *OrchestratorInstanceServiceClientBeginCreateOptions) (*armruntime.Poller[OrchestratorInstanceServiceClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OrchestratorInstanceServiceClientCreateResponse]("OrchestratorInstanceServiceClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OrchestratorInstanceServiceClientCreateResponse]("OrchestratorInstanceServiceClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := OrchestratorInstanceServiceClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("OrchestratorInstanceServiceClient.Create", "", resp, client.pl)
-	if err != nil {
-		return OrchestratorInstanceServiceClientCreatePollerResponse{}, err
-	}
-	result.Poller = &OrchestratorInstanceServiceClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a orchestrator instance
@@ -122,20 +118,16 @@ func (client *OrchestratorInstanceServiceClient) createCreateRequest(ctx context
 // resourceName - The name of the resource. It must be a minimum of 3 characters, and a maximum of 63.
 // options - OrchestratorInstanceServiceClientBeginDeleteOptions contains the optional parameters for the OrchestratorInstanceServiceClient.BeginDelete
 // method.
-func (client *OrchestratorInstanceServiceClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *OrchestratorInstanceServiceClientBeginDeleteOptions) (OrchestratorInstanceServiceClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return OrchestratorInstanceServiceClientDeletePollerResponse{}, err
+func (client *OrchestratorInstanceServiceClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *OrchestratorInstanceServiceClientBeginDeleteOptions) (*armruntime.Poller[OrchestratorInstanceServiceClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OrchestratorInstanceServiceClientDeleteResponse]("OrchestratorInstanceServiceClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OrchestratorInstanceServiceClientDeleteResponse]("OrchestratorInstanceServiceClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OrchestratorInstanceServiceClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OrchestratorInstanceServiceClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return OrchestratorInstanceServiceClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OrchestratorInstanceServiceClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the Orchestrator Instance
@@ -245,16 +237,32 @@ func (client *OrchestratorInstanceServiceClient) getDetailsHandleResponse(resp *
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - OrchestratorInstanceServiceClientListByResourceGroupOptions contains the optional parameters for the OrchestratorInstanceServiceClient.ListByResourceGroup
 // method.
-func (client *OrchestratorInstanceServiceClient) ListByResourceGroup(resourceGroupName string, options *OrchestratorInstanceServiceClientListByResourceGroupOptions) *OrchestratorInstanceServiceClientListByResourceGroupPager {
-	return &OrchestratorInstanceServiceClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *OrchestratorInstanceServiceClient) ListByResourceGroup(resourceGroupName string, options *OrchestratorInstanceServiceClientListByResourceGroupOptions) *runtime.Pager[OrchestratorInstanceServiceClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OrchestratorInstanceServiceClientListByResourceGroupResponse]{
+		More: func(page OrchestratorInstanceServiceClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OrchestratorInstanceServiceClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Orchestrators.NextLink)
+		Fetcher: func(ctx context.Context, page *OrchestratorInstanceServiceClientListByResourceGroupResponse) (OrchestratorInstanceServiceClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OrchestratorInstanceServiceClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OrchestratorInstanceServiceClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OrchestratorInstanceServiceClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -292,16 +300,32 @@ func (client *OrchestratorInstanceServiceClient) listByResourceGroupHandleRespon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OrchestratorInstanceServiceClientListBySubscriptionOptions contains the optional parameters for the OrchestratorInstanceServiceClient.ListBySubscription
 // method.
-func (client *OrchestratorInstanceServiceClient) ListBySubscription(options *OrchestratorInstanceServiceClientListBySubscriptionOptions) *OrchestratorInstanceServiceClientListBySubscriptionPager {
-	return &OrchestratorInstanceServiceClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *OrchestratorInstanceServiceClient) ListBySubscription(options *OrchestratorInstanceServiceClientListBySubscriptionOptions) *runtime.Pager[OrchestratorInstanceServiceClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OrchestratorInstanceServiceClientListBySubscriptionResponse]{
+		More: func(page OrchestratorInstanceServiceClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OrchestratorInstanceServiceClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.Orchestrators.NextLink)
+		Fetcher: func(ctx context.Context, page *OrchestratorInstanceServiceClientListBySubscriptionResponse) (OrchestratorInstanceServiceClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OrchestratorInstanceServiceClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OrchestratorInstanceServiceClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OrchestratorInstanceServiceClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

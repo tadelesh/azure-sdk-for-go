@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armvisualstudio
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AccountsClientCheckNameAvailabilityResponse contains the response from method AccountsClient.CheckNameAvailability.
 type AccountsClientCheckNameAvailabilityResponse struct {
@@ -72,41 +66,6 @@ type ExtensionsClientUpdateResponse struct {
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
 	OperationListResult
-}
-
-// ProjectsClientCreatePollerResponse contains the response from method ProjectsClient.Create.
-type ProjectsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProjectsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProjectsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProjectsClientCreateResponse, error) {
-	respType := ProjectsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProjectResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProjectsClientCreatePollerResponse from the provided client and resume token.
-func (l *ProjectsClientCreatePollerResponse) Resume(ctx context.Context, client *ProjectsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProjectsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProjectsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ProjectsClientCreateResponse contains the response from method ProjectsClient.Create.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armazurestackhci
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // ArcSettingsClientCreateResponse contains the response from method ArcSettingsClient.Create.
 type ArcSettingsClientCreateResponse struct {
 	ArcSetting
-}
-
-// ArcSettingsClientDeletePollerResponse contains the response from method ArcSettingsClient.Delete.
-type ArcSettingsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ArcSettingsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ArcSettingsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ArcSettingsClientDeleteResponse, error) {
-	respType := ArcSettingsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ArcSettingsClientDeletePollerResponse from the provided client and resume token.
-func (l *ArcSettingsClientDeletePollerResponse) Resume(ctx context.Context, client *ArcSettingsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ArcSettingsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ArcSettingsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ArcSettingsClientDeleteResponse contains the response from method ArcSettingsClient.Delete.
@@ -99,79 +58,9 @@ type ClustersClientUpdateResponse struct {
 	Cluster
 }
 
-// ExtensionsClientCreatePollerResponse contains the response from method ExtensionsClient.Create.
-type ExtensionsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExtensionsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExtensionsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExtensionsClientCreateResponse, error) {
-	respType := ExtensionsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Extension)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExtensionsClientCreatePollerResponse from the provided client and resume token.
-func (l *ExtensionsClientCreatePollerResponse) Resume(ctx context.Context, client *ExtensionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExtensionsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExtensionsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ExtensionsClientCreateResponse contains the response from method ExtensionsClient.Create.
 type ExtensionsClientCreateResponse struct {
 	Extension
-}
-
-// ExtensionsClientDeletePollerResponse contains the response from method ExtensionsClient.Delete.
-type ExtensionsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExtensionsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExtensionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExtensionsClientDeleteResponse, error) {
-	respType := ExtensionsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExtensionsClientDeletePollerResponse from the provided client and resume token.
-func (l *ExtensionsClientDeletePollerResponse) Resume(ctx context.Context, client *ExtensionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExtensionsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExtensionsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ExtensionsClientDeleteResponse contains the response from method ExtensionsClient.Delete.
@@ -187,41 +76,6 @@ type ExtensionsClientGetResponse struct {
 // ExtensionsClientListByArcSettingResponse contains the response from method ExtensionsClient.ListByArcSetting.
 type ExtensionsClientListByArcSettingResponse struct {
 	ExtensionList
-}
-
-// ExtensionsClientUpdatePollerResponse contains the response from method ExtensionsClient.Update.
-type ExtensionsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExtensionsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExtensionsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExtensionsClientUpdateResponse, error) {
-	respType := ExtensionsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Extension)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExtensionsClientUpdatePollerResponse from the provided client and resume token.
-func (l *ExtensionsClientUpdatePollerResponse) Resume(ctx context.Context, client *ExtensionsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExtensionsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExtensionsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ExtensionsClientUpdateResponse contains the response from method ExtensionsClient.Update.

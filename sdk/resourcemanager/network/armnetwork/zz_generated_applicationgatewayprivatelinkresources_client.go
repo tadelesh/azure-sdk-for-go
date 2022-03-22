@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,16 +56,32 @@ func NewApplicationGatewayPrivateLinkResourcesClient(subscriptionID string, cred
 // applicationGatewayName - The name of the application gateway.
 // options - ApplicationGatewayPrivateLinkResourcesClientListOptions contains the optional parameters for the ApplicationGatewayPrivateLinkResourcesClient.List
 // method.
-func (client *ApplicationGatewayPrivateLinkResourcesClient) List(resourceGroupName string, applicationGatewayName string, options *ApplicationGatewayPrivateLinkResourcesClientListOptions) *ApplicationGatewayPrivateLinkResourcesClientListPager {
-	return &ApplicationGatewayPrivateLinkResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, applicationGatewayName, options)
+func (client *ApplicationGatewayPrivateLinkResourcesClient) List(resourceGroupName string, applicationGatewayName string, options *ApplicationGatewayPrivateLinkResourcesClientListOptions) *runtime.Pager[ApplicationGatewayPrivateLinkResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationGatewayPrivateLinkResourcesClientListResponse]{
+		More: func(page ApplicationGatewayPrivateLinkResourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationGatewayPrivateLinkResourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationGatewayPrivateLinkResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationGatewayPrivateLinkResourcesClientListResponse) (ApplicationGatewayPrivateLinkResourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, applicationGatewayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationGatewayPrivateLinkResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationGatewayPrivateLinkResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationGatewayPrivateLinkResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

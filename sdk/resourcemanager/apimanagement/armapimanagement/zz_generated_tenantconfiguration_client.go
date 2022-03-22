@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewTenantConfigurationClient(subscriptionID string, credential azcore.Token
 // parameters - Deploy Configuration parameters.
 // options - TenantConfigurationClientBeginDeployOptions contains the optional parameters for the TenantConfigurationClient.BeginDeploy
 // method.
-func (client *TenantConfigurationClient) BeginDeploy(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters DeployConfigurationParameters, options *TenantConfigurationClientBeginDeployOptions) (TenantConfigurationClientDeployPollerResponse, error) {
-	resp, err := client.deploy(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
-	if err != nil {
-		return TenantConfigurationClientDeployPollerResponse{}, err
+func (client *TenantConfigurationClient) BeginDeploy(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters DeployConfigurationParameters, options *TenantConfigurationClientBeginDeployOptions) (*armruntime.Poller[TenantConfigurationClientDeployResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deploy(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TenantConfigurationClientDeployResponse]("TenantConfigurationClient.Deploy", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TenantConfigurationClientDeployResponse]("TenantConfigurationClient.Deploy", options.ResumeToken, client.pl, nil)
 	}
-	result := TenantConfigurationClientDeployPollerResponse{}
-	pt, err := armruntime.NewPoller("TenantConfigurationClient.Deploy", "location", resp, client.pl)
-	if err != nil {
-		return TenantConfigurationClientDeployPollerResponse{}, err
-	}
-	result.Poller = &TenantConfigurationClientDeployPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Deploy - This operation applies changes from the specified Git branch to the configuration database. This is a long running
@@ -193,20 +189,16 @@ func (client *TenantConfigurationClient) getSyncStateHandleResponse(resp *http.R
 // parameters - Save Configuration parameters.
 // options - TenantConfigurationClientBeginSaveOptions contains the optional parameters for the TenantConfigurationClient.BeginSave
 // method.
-func (client *TenantConfigurationClient) BeginSave(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters SaveConfigurationParameter, options *TenantConfigurationClientBeginSaveOptions) (TenantConfigurationClientSavePollerResponse, error) {
-	resp, err := client.save(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
-	if err != nil {
-		return TenantConfigurationClientSavePollerResponse{}, err
+func (client *TenantConfigurationClient) BeginSave(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters SaveConfigurationParameter, options *TenantConfigurationClientBeginSaveOptions) (*armruntime.Poller[TenantConfigurationClientSaveResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.save(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TenantConfigurationClientSaveResponse]("TenantConfigurationClient.Save", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TenantConfigurationClientSaveResponse]("TenantConfigurationClient.Save", options.ResumeToken, client.pl, nil)
 	}
-	result := TenantConfigurationClientSavePollerResponse{}
-	pt, err := armruntime.NewPoller("TenantConfigurationClient.Save", "location", resp, client.pl)
-	if err != nil {
-		return TenantConfigurationClientSavePollerResponse{}, err
-	}
-	result.Poller = &TenantConfigurationClientSavePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Save - This operation creates a commit with the current configuration snapshot to the specified branch in the repository.
@@ -266,20 +258,16 @@ func (client *TenantConfigurationClient) saveCreateRequest(ctx context.Context, 
 // parameters - Validate Configuration parameters.
 // options - TenantConfigurationClientBeginValidateOptions contains the optional parameters for the TenantConfigurationClient.BeginValidate
 // method.
-func (client *TenantConfigurationClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters DeployConfigurationParameters, options *TenantConfigurationClientBeginValidateOptions) (TenantConfigurationClientValidatePollerResponse, error) {
-	resp, err := client.validate(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
-	if err != nil {
-		return TenantConfigurationClientValidatePollerResponse{}, err
+func (client *TenantConfigurationClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configurationName ConfigurationIDName, parameters DeployConfigurationParameters, options *TenantConfigurationClientBeginValidateOptions) (*armruntime.Poller[TenantConfigurationClientValidateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validate(ctx, resourceGroupName, serviceName, configurationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TenantConfigurationClientValidateResponse]("TenantConfigurationClient.Validate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TenantConfigurationClientValidateResponse]("TenantConfigurationClient.Validate", options.ResumeToken, client.pl, nil)
 	}
-	result := TenantConfigurationClientValidatePollerResponse{}
-	pt, err := armruntime.NewPoller("TenantConfigurationClient.Validate", "location", resp, client.pl)
-	if err != nil {
-		return TenantConfigurationClientValidatePollerResponse{}, err
-	}
-	result.Poller = &TenantConfigurationClientValidatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Validate - This operation validates the changes in the specified Git branch. This is a long running operation and could

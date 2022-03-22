@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewStreamingJobsClient(subscriptionID string, credential azcore.TokenCreden
 // one.
 // options - StreamingJobsClientBeginCreateOrReplaceOptions contains the optional parameters for the StreamingJobsClient.BeginCreateOrReplace
 // method.
-func (client *StreamingJobsClient) BeginCreateOrReplace(ctx context.Context, resourceGroupName string, jobName string, streamingJob StreamingJob, options *StreamingJobsClientBeginCreateOrReplaceOptions) (StreamingJobsClientCreateOrReplacePollerResponse, error) {
-	resp, err := client.createOrReplace(ctx, resourceGroupName, jobName, streamingJob, options)
-	if err != nil {
-		return StreamingJobsClientCreateOrReplacePollerResponse{}, err
+func (client *StreamingJobsClient) BeginCreateOrReplace(ctx context.Context, resourceGroupName string, jobName string, streamingJob StreamingJob, options *StreamingJobsClientBeginCreateOrReplaceOptions) (*armruntime.Poller[StreamingJobsClientCreateOrReplaceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrReplace(ctx, resourceGroupName, jobName, streamingJob, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingJobsClientCreateOrReplaceResponse]("StreamingJobsClient.CreateOrReplace", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingJobsClientCreateOrReplaceResponse]("StreamingJobsClient.CreateOrReplace", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingJobsClientCreateOrReplacePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingJobsClient.CreateOrReplace", "", resp, client.pl)
-	if err != nil {
-		return StreamingJobsClientCreateOrReplacePollerResponse{}, err
-	}
-	result.Poller = &StreamingJobsClientCreateOrReplacePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrReplace - Creates a streaming job or replaces an already existing streaming job.
@@ -128,20 +124,16 @@ func (client *StreamingJobsClient) createOrReplaceCreateRequest(ctx context.Cont
 // jobName - The name of the streaming job.
 // options - StreamingJobsClientBeginDeleteOptions contains the optional parameters for the StreamingJobsClient.BeginDelete
 // method.
-func (client *StreamingJobsClient) BeginDelete(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginDeleteOptions) (StreamingJobsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return StreamingJobsClientDeletePollerResponse{}, err
+func (client *StreamingJobsClient) BeginDelete(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginDeleteOptions) (*armruntime.Poller[StreamingJobsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingJobsClientDeleteResponse]("StreamingJobsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingJobsClientDeleteResponse]("StreamingJobsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingJobsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingJobsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return StreamingJobsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &StreamingJobsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a streaming job.
@@ -251,16 +243,32 @@ func (client *StreamingJobsClient) getHandleResponse(resp *http.Response) (Strea
 // List - Lists all of the streaming jobs in the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - StreamingJobsClientListOptions contains the optional parameters for the StreamingJobsClient.List method.
-func (client *StreamingJobsClient) List(options *StreamingJobsClientListOptions) *StreamingJobsClientListPager {
-	return &StreamingJobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *StreamingJobsClient) List(options *StreamingJobsClientListOptions) *runtime.Pager[StreamingJobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StreamingJobsClientListResponse]{
+		More: func(page StreamingJobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StreamingJobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StreamingJobListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *StreamingJobsClientListResponse) (StreamingJobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StreamingJobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StreamingJobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StreamingJobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -298,16 +306,32 @@ func (client *StreamingJobsClient) listHandleResponse(resp *http.Response) (Stre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - StreamingJobsClientListByResourceGroupOptions contains the optional parameters for the StreamingJobsClient.ListByResourceGroup
 // method.
-func (client *StreamingJobsClient) ListByResourceGroup(resourceGroupName string, options *StreamingJobsClientListByResourceGroupOptions) *StreamingJobsClientListByResourceGroupPager {
-	return &StreamingJobsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *StreamingJobsClient) ListByResourceGroup(resourceGroupName string, options *StreamingJobsClientListByResourceGroupOptions) *runtime.Pager[StreamingJobsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[StreamingJobsClientListByResourceGroupResponse]{
+		More: func(page StreamingJobsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp StreamingJobsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StreamingJobListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *StreamingJobsClientListByResourceGroupResponse) (StreamingJobsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return StreamingJobsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return StreamingJobsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return StreamingJobsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -350,20 +374,16 @@ func (client *StreamingJobsClient) listByResourceGroupHandleResponse(resp *http.
 // jobName - The name of the streaming job.
 // options - StreamingJobsClientBeginScaleOptions contains the optional parameters for the StreamingJobsClient.BeginScale
 // method.
-func (client *StreamingJobsClient) BeginScale(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginScaleOptions) (StreamingJobsClientScalePollerResponse, error) {
-	resp, err := client.scale(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return StreamingJobsClientScalePollerResponse{}, err
+func (client *StreamingJobsClient) BeginScale(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginScaleOptions) (*armruntime.Poller[StreamingJobsClientScaleResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.scale(ctx, resourceGroupName, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingJobsClientScaleResponse]("StreamingJobsClient.Scale", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingJobsClientScaleResponse]("StreamingJobsClient.Scale", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingJobsClientScalePollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingJobsClient.Scale", "", resp, client.pl)
-	if err != nil {
-		return StreamingJobsClientScalePollerResponse{}, err
-	}
-	result.Poller = &StreamingJobsClientScalePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Scale - Scales a streaming job when the job is running.
@@ -418,20 +438,16 @@ func (client *StreamingJobsClient) scaleCreateRequest(ctx context.Context, resou
 // jobName - The name of the streaming job.
 // options - StreamingJobsClientBeginStartOptions contains the optional parameters for the StreamingJobsClient.BeginStart
 // method.
-func (client *StreamingJobsClient) BeginStart(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginStartOptions) (StreamingJobsClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return StreamingJobsClientStartPollerResponse{}, err
+func (client *StreamingJobsClient) BeginStart(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginStartOptions) (*armruntime.Poller[StreamingJobsClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingJobsClientStartResponse]("StreamingJobsClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingJobsClientStartResponse]("StreamingJobsClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingJobsClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingJobsClient.Start", "", resp, client.pl)
-	if err != nil {
-		return StreamingJobsClientStartPollerResponse{}, err
-	}
-	result.Poller = &StreamingJobsClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts a streaming job. Once a job is started it will start processing input events and produce output.
@@ -486,20 +502,16 @@ func (client *StreamingJobsClient) startCreateRequest(ctx context.Context, resou
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // jobName - The name of the streaming job.
 // options - StreamingJobsClientBeginStopOptions contains the optional parameters for the StreamingJobsClient.BeginStop method.
-func (client *StreamingJobsClient) BeginStop(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginStopOptions) (StreamingJobsClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return StreamingJobsClientStopPollerResponse{}, err
+func (client *StreamingJobsClient) BeginStop(ctx context.Context, resourceGroupName string, jobName string, options *StreamingJobsClientBeginStopOptions) (*armruntime.Poller[StreamingJobsClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[StreamingJobsClientStopResponse]("StreamingJobsClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[StreamingJobsClientStopResponse]("StreamingJobsClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := StreamingJobsClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("StreamingJobsClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return StreamingJobsClientStopPollerResponse{}, err
-	}
-	result.Poller = &StreamingJobsClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Stops a running streaming job. This will cause a running streaming job to stop processing input events and producing

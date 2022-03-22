@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *PrefixesClient) getHandleResponse(resp *http.Response) (PrefixesCl
 // peeringServiceName - The name of the peering service.
 // options - PrefixesClientListByPeeringServiceOptions contains the optional parameters for the PrefixesClient.ListByPeeringService
 // method.
-func (client *PrefixesClient) ListByPeeringService(resourceGroupName string, peeringServiceName string, options *PrefixesClientListByPeeringServiceOptions) *PrefixesClientListByPeeringServicePager {
-	return &PrefixesClientListByPeeringServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByPeeringServiceCreateRequest(ctx, resourceGroupName, peeringServiceName, options)
+func (client *PrefixesClient) ListByPeeringService(resourceGroupName string, peeringServiceName string, options *PrefixesClientListByPeeringServiceOptions) *runtime.Pager[PrefixesClientListByPeeringServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrefixesClientListByPeeringServiceResponse]{
+		More: func(page PrefixesClientListByPeeringServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrefixesClientListByPeeringServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServicePrefixListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrefixesClientListByPeeringServiceResponse) (PrefixesClientListByPeeringServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByPeeringServiceCreateRequest(ctx, resourceGroupName, peeringServiceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrefixesClientListByPeeringServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrefixesClientListByPeeringServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrefixesClientListByPeeringServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByPeeringServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByPeeringServiceCreateRequest creates the ListByPeeringService request.

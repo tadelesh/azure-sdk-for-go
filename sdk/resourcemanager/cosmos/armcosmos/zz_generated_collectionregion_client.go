@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,13 +61,26 @@ func NewCollectionRegionClient(subscriptionID string, credential azcore.TokenCre
 // and timeGrain. The supported operator is eq.
 // options - CollectionRegionClientListMetricsOptions contains the optional parameters for the CollectionRegionClient.ListMetrics
 // method.
-func (client *CollectionRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, filter string, options *CollectionRegionClientListMetricsOptions) *CollectionRegionClientListMetricsPager {
-	return &CollectionRegionClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, filter, options)
+func (client *CollectionRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, filter string, options *CollectionRegionClientListMetricsOptions) *runtime.Pager[CollectionRegionClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CollectionRegionClientListMetricsResponse]{
+		More: func(page CollectionRegionClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *CollectionRegionClientListMetricsResponse) (CollectionRegionClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, filter, options)
+			if err != nil {
+				return CollectionRegionClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CollectionRegionClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CollectionRegionClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

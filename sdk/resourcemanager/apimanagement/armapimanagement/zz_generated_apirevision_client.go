@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,16 +58,32 @@ func NewAPIRevisionClient(subscriptionID string, credential azcore.TokenCredenti
 // apiID - API identifier. Must be unique in the current API Management service instance.
 // options - APIRevisionClientListByServiceOptions contains the optional parameters for the APIRevisionClient.ListByService
 // method.
-func (client *APIRevisionClient) ListByService(resourceGroupName string, serviceName string, apiID string, options *APIRevisionClientListByServiceOptions) *APIRevisionClientListByServicePager {
-	return &APIRevisionClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+func (client *APIRevisionClient) ListByService(resourceGroupName string, serviceName string, apiID string, options *APIRevisionClientListByServiceOptions) *runtime.Pager[APIRevisionClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIRevisionClientListByServiceResponse]{
+		More: func(page APIRevisionClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIRevisionClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.APIRevisionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIRevisionClientListByServiceResponse) (APIRevisionClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIRevisionClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIRevisionClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIRevisionClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

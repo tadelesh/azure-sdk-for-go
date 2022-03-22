@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewPrivateEndpointConnectionProxiesClient(subscriptionID string, credential
 // privateEndpointConnectionProxy - The parameters for creating a private endpoint connection proxy.
 // options - PrivateEndpointConnectionProxiesClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.BeginCreateOrUpdate
 // method.
-func (client *PrivateEndpointConnectionProxiesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionProxyID string, privateEndpointConnectionProxy PrivateEndpointConnectionProxy, options *PrivateEndpointConnectionProxiesClientBeginCreateOrUpdateOptions) (PrivateEndpointConnectionProxiesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, privateEndpointConnectionProxyID, privateEndpointConnectionProxy, options)
-	if err != nil {
-		return PrivateEndpointConnectionProxiesClientCreateOrUpdatePollerResponse{}, err
+func (client *PrivateEndpointConnectionProxiesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionProxyID string, privateEndpointConnectionProxy PrivateEndpointConnectionProxy, options *PrivateEndpointConnectionProxiesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PrivateEndpointConnectionProxiesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, privateEndpointConnectionProxyID, privateEndpointConnectionProxy, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionProxiesClientCreateOrUpdateResponse]("PrivateEndpointConnectionProxiesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionProxiesClientCreateOrUpdateResponse]("PrivateEndpointConnectionProxiesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionProxiesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionProxiesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionProxiesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionProxiesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - (INTERNAL - DO NOT USE) Creates or updates the specified private endpoint connection proxy resource associated
@@ -130,20 +126,16 @@ func (client *PrivateEndpointConnectionProxiesClient) createOrUpdateCreateReques
 // privateEndpointConnectionProxyID - The ID of the private endpoint connection proxy object.
 // options - PrivateEndpointConnectionProxiesClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.BeginDelete
 // method.
-func (client *PrivateEndpointConnectionProxiesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionProxyID string, options *PrivateEndpointConnectionProxiesClientBeginDeleteOptions) (PrivateEndpointConnectionProxiesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, privateEndpointConnectionProxyID, options)
-	if err != nil {
-		return PrivateEndpointConnectionProxiesClientDeletePollerResponse{}, err
+func (client *PrivateEndpointConnectionProxiesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, privateEndpointConnectionProxyID string, options *PrivateEndpointConnectionProxiesClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointConnectionProxiesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, privateEndpointConnectionProxyID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionProxiesClientDeleteResponse]("PrivateEndpointConnectionProxiesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionProxiesClientDeleteResponse]("PrivateEndpointConnectionProxiesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionProxiesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionProxiesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionProxiesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionProxiesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - (INTERNAL - DO NOT USE) Deletes the specified private endpoint connection proxy associated with the device update
@@ -261,13 +253,26 @@ func (client *PrivateEndpointConnectionProxiesClient) getHandleResponse(resp *ht
 // accountName - Account name.
 // options - PrivateEndpointConnectionProxiesClientListByAccountOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.ListByAccount
 // method.
-func (client *PrivateEndpointConnectionProxiesClient) ListByAccount(resourceGroupName string, accountName string, options *PrivateEndpointConnectionProxiesClientListByAccountOptions) *PrivateEndpointConnectionProxiesClientListByAccountPager {
-	return &PrivateEndpointConnectionProxiesClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *PrivateEndpointConnectionProxiesClient) ListByAccount(resourceGroupName string, accountName string, options *PrivateEndpointConnectionProxiesClientListByAccountOptions) *runtime.Pager[PrivateEndpointConnectionProxiesClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionProxiesClientListByAccountResponse]{
+		More: func(page PrivateEndpointConnectionProxiesClientListByAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionProxiesClientListByAccountResponse) (PrivateEndpointConnectionProxiesClientListByAccountResponse, error) {
+			req, err := client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return PrivateEndpointConnectionProxiesClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionProxiesClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionProxiesClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

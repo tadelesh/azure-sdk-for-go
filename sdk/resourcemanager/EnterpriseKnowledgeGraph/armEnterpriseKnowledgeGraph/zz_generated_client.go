@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -210,16 +210,32 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // List - Returns all the resources of a particular type belonging to a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListOptions contains the optional parameters for the Client.List method.
-func (client *Client) List(options *ClientListOptions) *ClientListPager {
-	return &ClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *Client) List(options *ClientListOptions) *runtime.Pager[ClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListResponse]{
+		More: func(page ClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListResponse) (ClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -253,16 +269,32 @@ func (client *Client) listHandleResponse(resp *http.Response) (ClientListRespons
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the EnterpriseKnowledgeGraph resource group in the user subscription.
 // options - ClientListByResourceGroupOptions contains the optional parameters for the Client.ListByResourceGroup method.
-func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *ClientListByResourceGroupPager {
-	return &ClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *runtime.Pager[ClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListByResourceGroupResponse]{
+		More: func(page ClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListByResourceGroupResponse) (ClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

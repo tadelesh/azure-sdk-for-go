@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *Python2PackageClient) getHandleResponse(resp *http.Response) (Pyth
 // automationAccountName - The name of the automation account.
 // options - Python2PackageClientListByAutomationAccountOptions contains the optional parameters for the Python2PackageClient.ListByAutomationAccount
 // method.
-func (client *Python2PackageClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *Python2PackageClientListByAutomationAccountOptions) *Python2PackageClientListByAutomationAccountPager {
-	return &Python2PackageClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *Python2PackageClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *Python2PackageClientListByAutomationAccountOptions) *runtime.Pager[Python2PackageClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[Python2PackageClientListByAutomationAccountResponse]{
+		More: func(page Python2PackageClientListByAutomationAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp Python2PackageClientListByAutomationAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ModuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *Python2PackageClientListByAutomationAccountResponse) (Python2PackageClientListByAutomationAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return Python2PackageClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return Python2PackageClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return Python2PackageClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

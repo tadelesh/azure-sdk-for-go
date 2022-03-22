@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -323,16 +323,32 @@ func (client *APIDiagnosticClient) getEntityTagHandleResponse(resp *http.Respons
 // apiID - API identifier. Must be unique in the current API Management service instance.
 // options - APIDiagnosticClientListByServiceOptions contains the optional parameters for the APIDiagnosticClient.ListByService
 // method.
-func (client *APIDiagnosticClient) ListByService(resourceGroupName string, serviceName string, apiID string, options *APIDiagnosticClientListByServiceOptions) *APIDiagnosticClientListByServicePager {
-	return &APIDiagnosticClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+func (client *APIDiagnosticClient) ListByService(resourceGroupName string, serviceName string, apiID string, options *APIDiagnosticClientListByServiceOptions) *runtime.Pager[APIDiagnosticClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[APIDiagnosticClientListByServiceResponse]{
+		More: func(page APIDiagnosticClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp APIDiagnosticClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiagnosticCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *APIDiagnosticClientListByServiceResponse) (APIDiagnosticClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, apiID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return APIDiagnosticClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return APIDiagnosticClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return APIDiagnosticClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

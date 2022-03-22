@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewPackagesClient(subscriptionID string, credential azcore.TokenCredential,
 // packageName - The resource name of the Test Base Package.
 // parameters - Parameters supplied to create a Test Base Package.
 // options - PackagesClientBeginCreateOptions contains the optional parameters for the PackagesClient.BeginCreate method.
-func (client *PackagesClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, parameters PackageResource, options *PackagesClientBeginCreateOptions) (PackagesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, packageName, parameters, options)
-	if err != nil {
-		return PackagesClientCreatePollerResponse{}, err
+func (client *PackagesClient) BeginCreate(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, parameters PackageResource, options *PackagesClientBeginCreateOptions) (*armruntime.Poller[PackagesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, testBaseAccountName, packageName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PackagesClientCreateResponse]("PackagesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PackagesClientCreateResponse]("PackagesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := PackagesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("PackagesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PackagesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &PackagesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create or replace (overwrite/recreate, with potential downtime) a Test Base Package.
@@ -125,20 +121,16 @@ func (client *PackagesClient) createCreateRequest(ctx context.Context, resourceG
 // testBaseAccountName - The resource name of the Test Base Account.
 // packageName - The resource name of the Test Base Package.
 // options - PackagesClientBeginDeleteOptions contains the optional parameters for the PackagesClient.BeginDelete method.
-func (client *PackagesClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, options *PackagesClientBeginDeleteOptions) (PackagesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, packageName, options)
-	if err != nil {
-		return PackagesClientDeletePollerResponse{}, err
+func (client *PackagesClient) BeginDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, options *PackagesClientBeginDeleteOptions) (*armruntime.Poller[PackagesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, testBaseAccountName, packageName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PackagesClientDeleteResponse]("PackagesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PackagesClientDeleteResponse]("PackagesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PackagesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PackagesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PackagesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PackagesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Test Base Package.
@@ -315,20 +307,16 @@ func (client *PackagesClient) getDownloadURLHandleResponse(resp *http.Response) 
 // packageName - The resource name of the Test Base Package.
 // options - PackagesClientBeginHardDeleteOptions contains the optional parameters for the PackagesClient.BeginHardDelete
 // method.
-func (client *PackagesClient) BeginHardDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, options *PackagesClientBeginHardDeleteOptions) (PackagesClientHardDeletePollerResponse, error) {
-	resp, err := client.hardDelete(ctx, resourceGroupName, testBaseAccountName, packageName, options)
-	if err != nil {
-		return PackagesClientHardDeletePollerResponse{}, err
+func (client *PackagesClient) BeginHardDelete(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, options *PackagesClientBeginHardDeleteOptions) (*armruntime.Poller[PackagesClientHardDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.hardDelete(ctx, resourceGroupName, testBaseAccountName, packageName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PackagesClientHardDeleteResponse]("PackagesClient.HardDelete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PackagesClientHardDeleteResponse]("PackagesClient.HardDelete", options.ResumeToken, client.pl, nil)
 	}
-	result := PackagesClientHardDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PackagesClient.HardDelete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PackagesClientHardDeletePollerResponse{}, err
-	}
-	result.Poller = &PackagesClientHardDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // HardDelete - Hard Delete a Test Base Package.
@@ -384,16 +372,32 @@ func (client *PackagesClient) hardDeleteCreateRequest(ctx context.Context, resou
 // testBaseAccountName - The resource name of the Test Base Account.
 // options - PackagesClientListByTestBaseAccountOptions contains the optional parameters for the PackagesClient.ListByTestBaseAccount
 // method.
-func (client *PackagesClient) ListByTestBaseAccount(resourceGroupName string, testBaseAccountName string, options *PackagesClientListByTestBaseAccountOptions) *PackagesClientListByTestBaseAccountPager {
-	return &PackagesClientListByTestBaseAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTestBaseAccountCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+func (client *PackagesClient) ListByTestBaseAccount(resourceGroupName string, testBaseAccountName string, options *PackagesClientListByTestBaseAccountOptions) *runtime.Pager[PackagesClientListByTestBaseAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PackagesClientListByTestBaseAccountResponse]{
+		More: func(page PackagesClientListByTestBaseAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PackagesClientListByTestBaseAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PackageListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PackagesClientListByTestBaseAccountResponse) (PackagesClientListByTestBaseAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTestBaseAccountCreateRequest(ctx, resourceGroupName, testBaseAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PackagesClientListByTestBaseAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PackagesClientListByTestBaseAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PackagesClientListByTestBaseAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTestBaseAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTestBaseAccountCreateRequest creates the ListByTestBaseAccount request.
@@ -438,20 +442,16 @@ func (client *PackagesClient) listByTestBaseAccountHandleResponse(resp *http.Res
 // packageName - The resource name of the Test Base Package.
 // parameters - Parameters supplied to update a Test Base Package.
 // options - PackagesClientBeginUpdateOptions contains the optional parameters for the PackagesClient.BeginUpdate method.
-func (client *PackagesClient) BeginUpdate(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, parameters PackageUpdateParameters, options *PackagesClientBeginUpdateOptions) (PackagesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, testBaseAccountName, packageName, parameters, options)
-	if err != nil {
-		return PackagesClientUpdatePollerResponse{}, err
+func (client *PackagesClient) BeginUpdate(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, parameters PackageUpdateParameters, options *PackagesClientBeginUpdateOptions) (*armruntime.Poller[PackagesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, testBaseAccountName, packageName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PackagesClientUpdateResponse]("PackagesClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PackagesClientUpdateResponse]("PackagesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := PackagesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PackagesClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return PackagesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &PackagesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update an existing Test Base Package.

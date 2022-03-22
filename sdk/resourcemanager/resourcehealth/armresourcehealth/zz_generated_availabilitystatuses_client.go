@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *AvailabilityStatusesClient) getByResourceHandleResponse(resp *http
 // /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resource-provider-name}/{parentResourceType}/{parentResourceName}/{resourceType}/{resourceName}
 // options - AvailabilityStatusesClientListOptions contains the optional parameters for the AvailabilityStatusesClient.List
 // method.
-func (client *AvailabilityStatusesClient) List(resourceURI string, options *AvailabilityStatusesClientListOptions) *AvailabilityStatusesClientListPager {
-	return &AvailabilityStatusesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceURI, options)
+func (client *AvailabilityStatusesClient) List(resourceURI string, options *AvailabilityStatusesClientListOptions) *runtime.Pager[AvailabilityStatusesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AvailabilityStatusesClientListResponse]{
+		More: func(page AvailabilityStatusesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AvailabilityStatusesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailabilityStatusListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AvailabilityStatusesClientListResponse) (AvailabilityStatusesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceURI, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AvailabilityStatusesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AvailabilityStatusesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AvailabilityStatusesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -162,16 +178,32 @@ func (client *AvailabilityStatusesClient) listHandleResponse(resp *http.Response
 // resourceGroupName - The name of the resource group.
 // options - AvailabilityStatusesClientListByResourceGroupOptions contains the optional parameters for the AvailabilityStatusesClient.ListByResourceGroup
 // method.
-func (client *AvailabilityStatusesClient) ListByResourceGroup(resourceGroupName string, options *AvailabilityStatusesClientListByResourceGroupOptions) *AvailabilityStatusesClientListByResourceGroupPager {
-	return &AvailabilityStatusesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AvailabilityStatusesClient) ListByResourceGroup(resourceGroupName string, options *AvailabilityStatusesClientListByResourceGroupOptions) *runtime.Pager[AvailabilityStatusesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AvailabilityStatusesClientListByResourceGroupResponse]{
+		More: func(page AvailabilityStatusesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AvailabilityStatusesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailabilityStatusListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AvailabilityStatusesClientListByResourceGroupResponse) (AvailabilityStatusesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AvailabilityStatusesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AvailabilityStatusesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AvailabilityStatusesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -216,16 +248,32 @@ func (client *AvailabilityStatusesClient) listByResourceGroupHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AvailabilityStatusesClientListBySubscriptionIDOptions contains the optional parameters for the AvailabilityStatusesClient.ListBySubscriptionID
 // method.
-func (client *AvailabilityStatusesClient) ListBySubscriptionID(options *AvailabilityStatusesClientListBySubscriptionIDOptions) *AvailabilityStatusesClientListBySubscriptionIDPager {
-	return &AvailabilityStatusesClientListBySubscriptionIDPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionIDCreateRequest(ctx, options)
+func (client *AvailabilityStatusesClient) ListBySubscriptionID(options *AvailabilityStatusesClientListBySubscriptionIDOptions) *runtime.Pager[AvailabilityStatusesClientListBySubscriptionIDResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AvailabilityStatusesClientListBySubscriptionIDResponse]{
+		More: func(page AvailabilityStatusesClientListBySubscriptionIDResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AvailabilityStatusesClientListBySubscriptionIDResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailabilityStatusListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AvailabilityStatusesClientListBySubscriptionIDResponse) (AvailabilityStatusesClientListBySubscriptionIDResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionIDCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AvailabilityStatusesClientListBySubscriptionIDResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AvailabilityStatusesClientListBySubscriptionIDResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AvailabilityStatusesClientListBySubscriptionIDResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionIDHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionIDCreateRequest creates the ListBySubscriptionID request.

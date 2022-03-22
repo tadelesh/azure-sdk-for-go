@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -246,16 +246,32 @@ func (client *TenantAccessClient) getEntityTagHandleResponse(resp *http.Response
 // serviceName - The name of the API Management service.
 // options - TenantAccessClientListByServiceOptions contains the optional parameters for the TenantAccessClient.ListByService
 // method.
-func (client *TenantAccessClient) ListByService(resourceGroupName string, serviceName string, options *TenantAccessClientListByServiceOptions) *TenantAccessClientListByServicePager {
-	return &TenantAccessClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *TenantAccessClient) ListByService(resourceGroupName string, serviceName string, options *TenantAccessClientListByServiceOptions) *runtime.Pager[TenantAccessClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TenantAccessClientListByServiceResponse]{
+		More: func(page TenantAccessClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TenantAccessClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccessInformationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TenantAccessClientListByServiceResponse) (TenantAccessClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TenantAccessClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TenantAccessClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TenantAccessClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

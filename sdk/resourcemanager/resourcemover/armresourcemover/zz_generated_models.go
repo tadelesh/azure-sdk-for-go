@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -319,38 +319,50 @@ type MoveCollectionResultList struct {
 // method.
 type MoveCollectionsClientBeginBulkRemoveOptions struct {
 	Body *BulkRemoveRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginCommitOptions contains the optional parameters for the MoveCollectionsClient.BeginCommit method.
 type MoveCollectionsClientBeginCommitOptions struct {
 	Body *CommitRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginDeleteOptions contains the optional parameters for the MoveCollectionsClient.BeginDelete method.
 type MoveCollectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginDiscardOptions contains the optional parameters for the MoveCollectionsClient.BeginDiscard method.
 type MoveCollectionsClientBeginDiscardOptions struct {
 	Body *DiscardRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginInitiateMoveOptions contains the optional parameters for the MoveCollectionsClient.BeginInitiateMove
 // method.
 type MoveCollectionsClientBeginInitiateMoveOptions struct {
 	Body *ResourceMoveRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginPrepareOptions contains the optional parameters for the MoveCollectionsClient.BeginPrepare method.
 type MoveCollectionsClientBeginPrepareOptions struct {
 	Body *PrepareRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientBeginResolveDependenciesOptions contains the optional parameters for the MoveCollectionsClient.BeginResolveDependencies
 // method.
 type MoveCollectionsClientBeginResolveDependenciesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveCollectionsClientCreateOptions contains the optional parameters for the MoveCollectionsClient.Create method.
@@ -558,11 +570,14 @@ type MoveResourceStatus struct {
 // MoveResourcesClientBeginCreateOptions contains the optional parameters for the MoveResourcesClient.BeginCreate method.
 type MoveResourcesClientBeginCreateOptions struct {
 	Body *MoveResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveResourcesClientBeginDeleteOptions contains the optional parameters for the MoveResourcesClient.BeginDelete method.
 type MoveResourcesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MoveResourcesClientGetOptions contains the optional parameters for the MoveResourcesClient.Get method.

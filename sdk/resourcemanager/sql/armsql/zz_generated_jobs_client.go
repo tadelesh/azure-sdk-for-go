@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -245,16 +245,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // serverName - The name of the server.
 // jobAgentName - The name of the job agent.
 // options - JobsClientListByAgentOptions contains the optional parameters for the JobsClient.ListByAgent method.
-func (client *JobsClient) ListByAgent(resourceGroupName string, serverName string, jobAgentName string, options *JobsClientListByAgentOptions) *JobsClientListByAgentPager {
-	return &JobsClientListByAgentPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAgentCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, options)
+func (client *JobsClient) ListByAgent(resourceGroupName string, serverName string, jobAgentName string, options *JobsClientListByAgentOptions) *runtime.Pager[JobsClientListByAgentResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListByAgentResponse]{
+		More: func(page JobsClientListByAgentResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListByAgentResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListByAgentResponse) (JobsClientListByAgentResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAgentCreateRequest(ctx, resourceGroupName, serverName, jobAgentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListByAgentResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListByAgentResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListByAgentResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAgentHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAgentCreateRequest creates the ListByAgent request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,20 +54,16 @@ func NewExportJobsClient(subscriptionID string, credential azcore.TokenCredentia
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // vaultName - The name of the backup vault.
 // options - ExportJobsClientBeginTriggerOptions contains the optional parameters for the ExportJobsClient.BeginTrigger method.
-func (client *ExportJobsClient) BeginTrigger(ctx context.Context, resourceGroupName string, vaultName string, options *ExportJobsClientBeginTriggerOptions) (ExportJobsClientTriggerPollerResponse, error) {
-	resp, err := client.trigger(ctx, resourceGroupName, vaultName, options)
-	if err != nil {
-		return ExportJobsClientTriggerPollerResponse{}, err
+func (client *ExportJobsClient) BeginTrigger(ctx context.Context, resourceGroupName string, vaultName string, options *ExportJobsClientBeginTriggerOptions) (*armruntime.Poller[ExportJobsClientTriggerResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.trigger(ctx, resourceGroupName, vaultName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExportJobsClientTriggerResponse]("ExportJobsClient.Trigger", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExportJobsClientTriggerResponse]("ExportJobsClient.Trigger", options.ResumeToken, client.pl, nil)
 	}
-	result := ExportJobsClientTriggerPollerResponse{}
-	pt, err := armruntime.NewPoller("ExportJobsClient.Trigger", "location", resp, client.pl)
-	if err != nil {
-		return ExportJobsClientTriggerPollerResponse{}, err
-	}
-	result.Poller = &ExportJobsClientTriggerPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Trigger - Triggers export of jobs and returns an OperationID to track.

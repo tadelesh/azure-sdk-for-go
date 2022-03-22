@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -75,17 +75,20 @@ type AccountUpdate struct {
 
 // AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
 type AccountsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
 type AccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
 type AccountsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientGetOptions contains the optional parameters for the AccountsClient.Get method.
@@ -305,12 +308,14 @@ type InstanceProperties struct {
 
 // InstancesClientBeginCreateOptions contains the optional parameters for the InstancesClient.BeginCreate method.
 type InstancesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InstancesClientBeginDeleteOptions contains the optional parameters for the InstancesClient.BeginDelete method.
 type InstancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InstancesClientGetOptions contains the optional parameters for the InstancesClient.Get method.
@@ -467,13 +472,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionProxiesClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionProxiesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionProxiesClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.BeginDelete
 // method.
 type PrivateEndpointConnectionProxiesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionProxiesClientGetOptions contains the optional parameters for the PrivateEndpointConnectionProxiesClient.Get
@@ -549,13 +556,15 @@ type PrivateEndpointConnectionProxyProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get

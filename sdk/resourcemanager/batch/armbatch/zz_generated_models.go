@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -36,12 +36,14 @@ type Account struct {
 
 // AccountClientBeginCreateOptions contains the optional parameters for the AccountClient.BeginCreate method.
 type AccountClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountClientBeginDeleteOptions contains the optional parameters for the AccountClient.BeginDelete method.
 type AccountClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountClientGetKeysOptions contains the optional parameters for the AccountClient.GetKeys method.
@@ -564,7 +566,8 @@ type CertificateBaseProperties struct {
 
 // CertificateClientBeginDeleteOptions contains the optional parameters for the CertificateClient.BeginDelete method.
 type CertificateClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CertificateClientCancelDeletionOptions contains the optional parameters for the CertificateClient.CancelDeletion method.
@@ -1280,7 +1283,8 @@ type Pool struct {
 
 // PoolClientBeginDeleteOptions contains the optional parameters for the PoolClient.BeginDelete method.
 type PoolClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoolClientCreateOptions contains the optional parameters for the PoolClient.Create method.
@@ -1477,6 +1481,8 @@ type PrivateEndpointConnectionClientBeginUpdateOptions struct {
 	// The state (ETag) version of the private endpoint connection to update. This value can be omitted or set to "*" to apply
 	// the operation unconditionally.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionClientGetOptions contains the optional parameters for the PrivateEndpointConnectionClient.Get

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -170,16 +170,32 @@ func (client *AlertsClient) getSubscriptionLevelHandleResponse(resp *http.Respon
 // List - List all the alerts that are associated with the subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AlertsClientListOptions contains the optional parameters for the AlertsClient.List method.
-func (client *AlertsClient) List(options *AlertsClientListOptions) *AlertsClientListPager {
-	return &AlertsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AlertsClient) List(options *AlertsClientListOptions) *runtime.Pager[AlertsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientListResponse]{
+		More: func(page AlertsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientListResponse) (AlertsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -214,16 +230,32 @@ func (client *AlertsClient) listHandleResponse(resp *http.Response) (AlertsClien
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - AlertsClientListByResourceGroupOptions contains the optional parameters for the AlertsClient.ListByResourceGroup
 // method.
-func (client *AlertsClient) ListByResourceGroup(resourceGroupName string, options *AlertsClientListByResourceGroupOptions) *AlertsClientListByResourceGroupPager {
-	return &AlertsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AlertsClient) ListByResourceGroup(resourceGroupName string, options *AlertsClientListByResourceGroupOptions) *runtime.Pager[AlertsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientListByResourceGroupResponse]{
+		More: func(page AlertsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientListByResourceGroupResponse) (AlertsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -263,16 +295,32 @@ func (client *AlertsClient) listByResourceGroupHandleResponse(resp *http.Respons
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - AlertsClientListResourceGroupLevelByRegionOptions contains the optional parameters for the AlertsClient.ListResourceGroupLevelByRegion
 // method.
-func (client *AlertsClient) ListResourceGroupLevelByRegion(resourceGroupName string, options *AlertsClientListResourceGroupLevelByRegionOptions) *AlertsClientListResourceGroupLevelByRegionPager {
-	return &AlertsClientListResourceGroupLevelByRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listResourceGroupLevelByRegionCreateRequest(ctx, resourceGroupName, options)
+func (client *AlertsClient) ListResourceGroupLevelByRegion(resourceGroupName string, options *AlertsClientListResourceGroupLevelByRegionOptions) *runtime.Pager[AlertsClientListResourceGroupLevelByRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientListResourceGroupLevelByRegionResponse]{
+		More: func(page AlertsClientListResourceGroupLevelByRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientListResourceGroupLevelByRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientListResourceGroupLevelByRegionResponse) (AlertsClientListResourceGroupLevelByRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listResourceGroupLevelByRegionCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientListResourceGroupLevelByRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientListResourceGroupLevelByRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientListResourceGroupLevelByRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listResourceGroupLevelByRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listResourceGroupLevelByRegionCreateRequest creates the ListResourceGroupLevelByRegion request.
@@ -315,16 +363,32 @@ func (client *AlertsClient) listResourceGroupLevelByRegionHandleResponse(resp *h
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AlertsClientListSubscriptionLevelByRegionOptions contains the optional parameters for the AlertsClient.ListSubscriptionLevelByRegion
 // method.
-func (client *AlertsClient) ListSubscriptionLevelByRegion(options *AlertsClientListSubscriptionLevelByRegionOptions) *AlertsClientListSubscriptionLevelByRegionPager {
-	return &AlertsClientListSubscriptionLevelByRegionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSubscriptionLevelByRegionCreateRequest(ctx, options)
+func (client *AlertsClient) ListSubscriptionLevelByRegion(options *AlertsClientListSubscriptionLevelByRegionOptions) *runtime.Pager[AlertsClientListSubscriptionLevelByRegionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertsClientListSubscriptionLevelByRegionResponse]{
+		More: func(page AlertsClientListSubscriptionLevelByRegionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AlertsClientListSubscriptionLevelByRegionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AlertList.NextLink)
+		Fetcher: func(ctx context.Context, page *AlertsClientListSubscriptionLevelByRegionResponse) (AlertsClientListSubscriptionLevelByRegionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSubscriptionLevelByRegionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AlertsClientListSubscriptionLevelByRegionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertsClientListSubscriptionLevelByRegionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertsClientListSubscriptionLevelByRegionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSubscriptionLevelByRegionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSubscriptionLevelByRegionCreateRequest creates the ListSubscriptionLevelByRegion request.
@@ -362,20 +426,16 @@ func (client *AlertsClient) listSubscriptionLevelByRegionHandleResponse(resp *ht
 // If the operation fails it returns an *azcore.ResponseError type.
 // alertSimulatorRequestBody - Alert Simulator Request Properties
 // options - AlertsClientBeginSimulateOptions contains the optional parameters for the AlertsClient.BeginSimulate method.
-func (client *AlertsClient) BeginSimulate(ctx context.Context, alertSimulatorRequestBody AlertSimulatorRequestBody, options *AlertsClientBeginSimulateOptions) (AlertsClientSimulatePollerResponse, error) {
-	resp, err := client.simulate(ctx, alertSimulatorRequestBody, options)
-	if err != nil {
-		return AlertsClientSimulatePollerResponse{}, err
+func (client *AlertsClient) BeginSimulate(ctx context.Context, alertSimulatorRequestBody AlertSimulatorRequestBody, options *AlertsClientBeginSimulateOptions) (*armruntime.Poller[AlertsClientSimulateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.simulate(ctx, alertSimulatorRequestBody, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AlertsClientSimulateResponse]("AlertsClient.Simulate", "original-uri", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AlertsClientSimulateResponse]("AlertsClient.Simulate", options.ResumeToken, client.pl, nil)
 	}
-	result := AlertsClientSimulatePollerResponse{}
-	pt, err := armruntime.NewPoller("AlertsClient.Simulate", "original-uri", resp, client.pl)
-	if err != nil {
-		return AlertsClientSimulatePollerResponse{}, err
-	}
-	result.Poller = &AlertsClientSimulatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Simulate - Simulate security alerts

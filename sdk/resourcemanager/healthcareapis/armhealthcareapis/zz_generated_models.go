@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -85,17 +85,20 @@ type DicomServiceProperties struct {
 // DicomServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the DicomServicesClient.BeginCreateOrUpdate
 // method.
 type DicomServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DicomServicesClientBeginDeleteOptions contains the optional parameters for the DicomServicesClient.BeginDelete method.
 type DicomServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DicomServicesClientBeginUpdateOptions contains the optional parameters for the DicomServicesClient.BeginUpdate method.
 type DicomServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DicomServicesClientGetOptions contains the optional parameters for the DicomServicesClient.Get method.
@@ -262,17 +265,20 @@ type FhirServiceProperties struct {
 // FhirServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the FhirServicesClient.BeginCreateOrUpdate
 // method.
 type FhirServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FhirServicesClientBeginDeleteOptions contains the optional parameters for the FhirServicesClient.BeginDelete method.
 type FhirServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FhirServicesClientBeginUpdateOptions contains the optional parameters for the FhirServicesClient.BeginUpdate method.
 type FhirServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FhirServicesClientGetOptions contains the optional parameters for the FhirServicesClient.Get method.
@@ -327,13 +333,15 @@ type IotConnectorCollection struct {
 // IotConnectorFhirDestinationClientBeginCreateOrUpdateOptions contains the optional parameters for the IotConnectorFhirDestinationClient.BeginCreateOrUpdate
 // method.
 type IotConnectorFhirDestinationClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotConnectorFhirDestinationClientBeginDeleteOptions contains the optional parameters for the IotConnectorFhirDestinationClient.BeginDelete
 // method.
 type IotConnectorFhirDestinationClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotConnectorFhirDestinationClientGetOptions contains the optional parameters for the IotConnectorFhirDestinationClient.Get
@@ -366,17 +374,20 @@ type IotConnectorProperties struct {
 // IotConnectorsClientBeginCreateOrUpdateOptions contains the optional parameters for the IotConnectorsClient.BeginCreateOrUpdate
 // method.
 type IotConnectorsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotConnectorsClientBeginDeleteOptions contains the optional parameters for the IotConnectorsClient.BeginDelete method.
 type IotConnectorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotConnectorsClientBeginUpdateOptions contains the optional parameters for the IotConnectorsClient.BeginUpdate method.
 type IotConnectorsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IotConnectorsClientGetOptions contains the optional parameters for the IotConnectorsClient.Get method.
@@ -612,13 +623,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -812,17 +825,20 @@ type ServiceManagedIdentityIdentity struct {
 
 // ServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServicesClient.BeginCreateOrUpdate method.
 type ServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
 type ServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientBeginUpdateOptions contains the optional parameters for the ServicesClient.BeginUpdate method.
 type ServicesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesClientCheckNameAvailabilityOptions contains the optional parameters for the ServicesClient.CheckNameAvailability
@@ -1077,17 +1093,20 @@ type WorkspaceProperties struct {
 // WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
 type WorkspacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
 type WorkspacesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientBeginUpdateOptions contains the optional parameters for the WorkspacesClient.BeginUpdate method.
 type WorkspacesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkspacesClientGetOptions contains the optional parameters for the WorkspacesClient.Get method.

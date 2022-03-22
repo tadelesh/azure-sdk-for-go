@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewNetworkExperimentProfilesClient(subscriptionID string, credential azcore
 // parameters - An Network Experiment Profile
 // options - NetworkExperimentProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginCreateOrUpdate
 // method.
-func (client *NetworkExperimentProfilesClient) BeginCreateOrUpdate(ctx context.Context, profileName string, resourceGroupName string, parameters Profile, options *NetworkExperimentProfilesClientBeginCreateOrUpdateOptions) (NetworkExperimentProfilesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, profileName, resourceGroupName, parameters, options)
-	if err != nil {
-		return NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}, err
+func (client *NetworkExperimentProfilesClient) BeginCreateOrUpdate(ctx context.Context, profileName string, resourceGroupName string, parameters Profile, options *NetworkExperimentProfilesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NetworkExperimentProfilesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, profileName, resourceGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NetworkExperimentProfilesClientCreateOrUpdateResponse]("NetworkExperimentProfilesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NetworkExperimentProfilesClientCreateOrUpdateResponse]("NetworkExperimentProfilesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NetworkExperimentProfilesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates an NetworkExperiment Profile
@@ -122,20 +118,16 @@ func (client *NetworkExperimentProfilesClient) createOrUpdateCreateRequest(ctx c
 // profileName - The Profile identifier associated with the Tenant and Partner
 // options - NetworkExperimentProfilesClientBeginDeleteOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginDelete
 // method.
-func (client *NetworkExperimentProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, options *NetworkExperimentProfilesClientBeginDeleteOptions) (NetworkExperimentProfilesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, options)
-	if err != nil {
-		return NetworkExperimentProfilesClientDeletePollerResponse{}, err
+func (client *NetworkExperimentProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, options *NetworkExperimentProfilesClientBeginDeleteOptions) (*armruntime.Poller[NetworkExperimentProfilesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NetworkExperimentProfilesClientDeleteResponse]("NetworkExperimentProfilesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NetworkExperimentProfilesClientDeleteResponse]("NetworkExperimentProfilesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := NetworkExperimentProfilesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return NetworkExperimentProfilesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &NetworkExperimentProfilesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an NetworkExperiment Profile by ProfileName
@@ -241,16 +233,32 @@ func (client *NetworkExperimentProfilesClient) getHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - NetworkExperimentProfilesClientListOptions contains the optional parameters for the NetworkExperimentProfilesClient.List
 // method.
-func (client *NetworkExperimentProfilesClient) List(options *NetworkExperimentProfilesClientListOptions) *NetworkExperimentProfilesClientListPager {
-	return &NetworkExperimentProfilesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *NetworkExperimentProfilesClient) List(options *NetworkExperimentProfilesClientListOptions) *runtime.Pager[NetworkExperimentProfilesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkExperimentProfilesClientListResponse]{
+		More: func(page NetworkExperimentProfilesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkExperimentProfilesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProfileList.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkExperimentProfilesClientListResponse) (NetworkExperimentProfilesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkExperimentProfilesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkExperimentProfilesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkExperimentProfilesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -285,16 +293,32 @@ func (client *NetworkExperimentProfilesClient) listHandleResponse(resp *http.Res
 // resourceGroupName - Name of the Resource group within the Azure subscription.
 // options - NetworkExperimentProfilesClientListByResourceGroupOptions contains the optional parameters for the NetworkExperimentProfilesClient.ListByResourceGroup
 // method.
-func (client *NetworkExperimentProfilesClient) ListByResourceGroup(resourceGroupName string, options *NetworkExperimentProfilesClientListByResourceGroupOptions) *NetworkExperimentProfilesClientListByResourceGroupPager {
-	return &NetworkExperimentProfilesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *NetworkExperimentProfilesClient) ListByResourceGroup(resourceGroupName string, options *NetworkExperimentProfilesClientListByResourceGroupOptions) *runtime.Pager[NetworkExperimentProfilesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkExperimentProfilesClientListByResourceGroupResponse]{
+		More: func(page NetworkExperimentProfilesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkExperimentProfilesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProfileList.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkExperimentProfilesClientListByResourceGroupResponse) (NetworkExperimentProfilesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkExperimentProfilesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkExperimentProfilesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkExperimentProfilesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -335,20 +359,16 @@ func (client *NetworkExperimentProfilesClient) listByResourceGroupHandleResponse
 // parameters - The Profile Update Model
 // options - NetworkExperimentProfilesClientBeginUpdateOptions contains the optional parameters for the NetworkExperimentProfilesClient.BeginUpdate
 // method.
-func (client *NetworkExperimentProfilesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, parameters ProfileUpdateModel, options *NetworkExperimentProfilesClientBeginUpdateOptions) (NetworkExperimentProfilesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, parameters, options)
-	if err != nil {
-		return NetworkExperimentProfilesClientUpdatePollerResponse{}, err
+func (client *NetworkExperimentProfilesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, parameters ProfileUpdateModel, options *NetworkExperimentProfilesClientBeginUpdateOptions) (*armruntime.Poller[NetworkExperimentProfilesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NetworkExperimentProfilesClientUpdateResponse]("NetworkExperimentProfilesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NetworkExperimentProfilesClientUpdateResponse]("NetworkExperimentProfilesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := NetworkExperimentProfilesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return NetworkExperimentProfilesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &NetworkExperimentProfilesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an NetworkExperimentProfiles

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,20 +63,16 @@ func NewClustersClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The Resource Group Name.
 // clusterName - Name of the cluster.
 // options - ClustersClientBeginCreateOptions contains the optional parameters for the ClustersClient.BeginCreate method.
-func (client *ClustersClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginCreateOptions) (ClustersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientCreatePollerResponse{}, err
+func (client *ClustersClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginCreateOptions) (*armruntime.Poller[ClustersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientCreateResponse]("ClustersClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientCreateResponse]("ClustersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ClustersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update cluster.
@@ -130,20 +126,16 @@ func (client *ClustersClient) createCreateRequest(ctx context.Context, resourceG
 // resourceGroupName - The Resource Group Name.
 // clusterName - Name of the cluster.
 // options - ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
-func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (ClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
+func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, options *ClustersClientBeginDeleteOptions) (*armruntime.Poller[ClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientDeleteResponse]("ClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientDeleteResponse]("ClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements cluster DELETE method.
@@ -250,16 +242,32 @@ func (client *ClustersClient) getHandleResponse(resp *http.Response) (ClustersCl
 // List - List of clusters in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClustersClientListOptions contains the optional parameters for the ClustersClient.List method.
-func (client *ClustersClient) List(options *ClustersClientListOptions) *ClustersClientListPager {
-	return &ClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ClustersClient) List(options *ClustersClientListOptions) *runtime.Pager[ClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListResponse]{
+		More: func(page ClustersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClustersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ClustersList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClustersClientListResponse) (ClustersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -294,16 +302,32 @@ func (client *ClustersClient) listHandleResponse(resp *http.Response) (ClustersC
 // resourceGroupName - The Resource Group Name.
 // options - ClustersClientListByResourceGroupOptions contains the optional parameters for the ClustersClient.ListByResourceGroup
 // method.
-func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *ClustersClientListByResourceGroupPager {
-	return &ClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ClustersClient) ListByResourceGroup(resourceGroupName string, options *ClustersClientListByResourceGroupOptions) *runtime.Pager[ClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClustersClientListByResourceGroupResponse]{
+		More: func(page ClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ClustersList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClustersClientListByResourceGroupResponse) (ClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -112,20 +112,16 @@ func (client *ServicesClient) checkNameAvailabilityHandleResponse(resp *http.Res
 // You cannot change the service name after the service is created.
 // service - The definition of the search service to create or update.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, searchServiceName string, service Service, options *SearchManagementRequestOptions) (ServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, searchServiceName, service, options)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, searchServiceName string, service Service, options *SearchManagementRequestOptions) (*armruntime.Poller[ServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, searchServiceName, service, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServicesClientCreateOrUpdateResponse]("ServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a search service in the given resource group. If the search service already exists,
@@ -289,16 +285,32 @@ func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesCl
 // resourceGroupName - The name of the resource group within the current subscription. You can obtain this value from the
 // Azure Resource Manager API or the portal.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *ServicesClient) ListByResourceGroup(resourceGroupName string, options *SearchManagementRequestOptions) *ServicesClientListByResourceGroupPager {
-	return &ServicesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ServicesClient) ListByResourceGroup(resourceGroupName string, options *SearchManagementRequestOptions) *runtime.Pager[ServicesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListByResourceGroupResponse]{
+		More: func(page ServicesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListByResourceGroupResponse) (ServicesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -338,16 +350,32 @@ func (client *ServicesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // ListBySubscription - Gets a list of all search services in the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *ServicesClient) ListBySubscription(options *SearchManagementRequestOptions) *ServicesClientListBySubscriptionPager {
-	return &ServicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ServicesClient) ListBySubscription(options *SearchManagementRequestOptions) *runtime.Pager[ServicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServicesClientListBySubscriptionResponse]{
+		More: func(page ServicesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServicesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServicesClientListBySubscriptionResponse) (ServicesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

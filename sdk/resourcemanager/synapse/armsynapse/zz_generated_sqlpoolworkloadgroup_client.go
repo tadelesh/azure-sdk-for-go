@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewSQLPoolWorkloadGroupClient(subscriptionID string, credential azcore.Toke
 // parameters - The requested workload group state.
 // options - SQLPoolWorkloadGroupClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.BeginCreateOrUpdate
 // method.
-func (client *SQLPoolWorkloadGroupClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, workloadGroupName string, parameters WorkloadGroup, options *SQLPoolWorkloadGroupClientBeginCreateOrUpdateOptions) (SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, sqlPoolName, workloadGroupName, parameters, options)
-	if err != nil {
-		return SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}, err
+func (client *SQLPoolWorkloadGroupClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, workloadGroupName string, parameters WorkloadGroup, options *SQLPoolWorkloadGroupClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SQLPoolWorkloadGroupClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, sqlPoolName, workloadGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolWorkloadGroupClientCreateOrUpdateResponse]("SQLPoolWorkloadGroupClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolWorkloadGroupClientCreateOrUpdateResponse]("SQLPoolWorkloadGroupClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolWorkloadGroupClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolWorkloadGroupClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create Or Update a Sql pool's workload group.
@@ -133,20 +129,16 @@ func (client *SQLPoolWorkloadGroupClient) createOrUpdateCreateRequest(ctx contex
 // workloadGroupName - The name of the workload group.
 // options - SQLPoolWorkloadGroupClientBeginDeleteOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.BeginDelete
 // method.
-func (client *SQLPoolWorkloadGroupClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, workloadGroupName string, options *SQLPoolWorkloadGroupClientBeginDeleteOptions) (SQLPoolWorkloadGroupClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, sqlPoolName, workloadGroupName, options)
-	if err != nil {
-		return SQLPoolWorkloadGroupClientDeletePollerResponse{}, err
+func (client *SQLPoolWorkloadGroupClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, workloadGroupName string, options *SQLPoolWorkloadGroupClientBeginDeleteOptions) (*armruntime.Poller[SQLPoolWorkloadGroupClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, sqlPoolName, workloadGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolWorkloadGroupClientDeleteResponse]("SQLPoolWorkloadGroupClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolWorkloadGroupClientDeleteResponse]("SQLPoolWorkloadGroupClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolWorkloadGroupClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolWorkloadGroupClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SQLPoolWorkloadGroupClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolWorkloadGroupClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Remove Sql pool's workload group.
@@ -272,16 +264,32 @@ func (client *SQLPoolWorkloadGroupClient) getHandleResponse(resp *http.Response)
 // sqlPoolName - SQL pool name
 // options - SQLPoolWorkloadGroupClientListOptions contains the optional parameters for the SQLPoolWorkloadGroupClient.List
 // method.
-func (client *SQLPoolWorkloadGroupClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolWorkloadGroupClientListOptions) *SQLPoolWorkloadGroupClientListPager {
-	return &SQLPoolWorkloadGroupClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *SQLPoolWorkloadGroupClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolWorkloadGroupClientListOptions) *runtime.Pager[SQLPoolWorkloadGroupClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolWorkloadGroupClientListResponse]{
+		More: func(page SQLPoolWorkloadGroupClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolWorkloadGroupClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkloadGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolWorkloadGroupClientListResponse) (SQLPoolWorkloadGroupClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolWorkloadGroupClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolWorkloadGroupClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolWorkloadGroupClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

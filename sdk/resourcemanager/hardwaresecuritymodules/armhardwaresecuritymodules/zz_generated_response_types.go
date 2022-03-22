@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armhardwaresecuritymodules
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// DedicatedHsmClientCreateOrUpdatePollerResponse contains the response from method DedicatedHsmClient.CreateOrUpdate.
-type DedicatedHsmClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DedicatedHsmClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DedicatedHsmClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientCreateOrUpdateResponse, error) {
-	respType := DedicatedHsmClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DedicatedHsmClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *DedicatedHsmClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *DedicatedHsmClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DedicatedHsmClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DedicatedHsmClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // DedicatedHsmClientCreateOrUpdateResponse contains the response from method DedicatedHsmClient.CreateOrUpdate.
 type DedicatedHsmClientCreateOrUpdateResponse struct {
 	DedicatedHsm
-}
-
-// DedicatedHsmClientDeletePollerResponse contains the response from method DedicatedHsmClient.Delete.
-type DedicatedHsmClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DedicatedHsmClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DedicatedHsmClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientDeleteResponse, error) {
-	respType := DedicatedHsmClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DedicatedHsmClientDeletePollerResponse from the provided client and resume token.
-func (l *DedicatedHsmClientDeletePollerResponse) Resume(ctx context.Context, client *DedicatedHsmClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DedicatedHsmClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DedicatedHsmClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // DedicatedHsmClientDeleteResponse contains the response from method DedicatedHsmClient.Delete.
@@ -112,41 +36,6 @@ type DedicatedHsmClientListBySubscriptionResponse struct {
 // DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse contains the response from method DedicatedHsmClient.ListOutboundNetworkDependenciesEndpoints.
 type DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse struct {
 	OutboundEnvironmentEndpointCollection
-}
-
-// DedicatedHsmClientUpdatePollerResponse contains the response from method DedicatedHsmClient.Update.
-type DedicatedHsmClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *DedicatedHsmClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l DedicatedHsmClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientUpdateResponse, error) {
-	respType := DedicatedHsmClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a DedicatedHsmClientUpdatePollerResponse from the provided client and resume token.
-func (l *DedicatedHsmClientUpdatePollerResponse) Resume(ctx context.Context, client *DedicatedHsmClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("DedicatedHsmClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &DedicatedHsmClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // DedicatedHsmClientUpdateResponse contains the response from method DedicatedHsmClient.Update.

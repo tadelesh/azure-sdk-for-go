@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredentia
 // parameters - The parameters for creating or updating a machine learning workspace.
 // options - WorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the WorkspacesClient.BeginCreateOrUpdate
 // method.
-func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace, options *WorkspacesClientBeginCreateOrUpdateOptions) (WorkspacesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, parameters, options)
-	if err != nil {
-		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace, options *WorkspacesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspacesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientCreateOrUpdateResponse]("WorkspacesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientCreateOrUpdateResponse]("WorkspacesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a workspace with the specified parameters.
@@ -120,20 +116,16 @@ func (client *WorkspacesClient) createOrUpdateCreateRequest(ctx context.Context,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspacesClientBeginDeleteOptions contains the optional parameters for the WorkspacesClient.BeginDelete method.
-func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDeleteOptions) (WorkspacesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspacesClientDeletePollerResponse{}, err
+func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDeleteOptions) (*armruntime.Poller[WorkspacesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientDeleteResponse]("WorkspacesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientDeleteResponse]("WorkspacesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a machine learning workspace.
@@ -185,20 +177,16 @@ func (client *WorkspacesClient) deleteCreateRequest(ctx context.Context, resourc
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspacesClientBeginDiagnoseOptions contains the optional parameters for the WorkspacesClient.BeginDiagnose
 // method.
-func (client *WorkspacesClient) BeginDiagnose(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDiagnoseOptions) (WorkspacesClientDiagnosePollerResponse, error) {
-	resp, err := client.diagnose(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspacesClientDiagnosePollerResponse{}, err
+func (client *WorkspacesClient) BeginDiagnose(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginDiagnoseOptions) (*armruntime.Poller[WorkspacesClientDiagnoseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.diagnose(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientDiagnoseResponse]("WorkspacesClient.Diagnose", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientDiagnoseResponse]("WorkspacesClient.Diagnose", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientDiagnosePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.Diagnose", "location", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientDiagnosePollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientDiagnosePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Diagnose - Diagnose workspace setup issue.
@@ -307,16 +295,32 @@ func (client *WorkspacesClient) getHandleResponse(resp *http.Response) (Workspac
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WorkspacesClientListByResourceGroupOptions contains the optional parameters for the WorkspacesClient.ListByResourceGroup
 // method.
-func (client *WorkspacesClient) ListByResourceGroup(resourceGroupName string, options *WorkspacesClientListByResourceGroupOptions) *WorkspacesClientListByResourceGroupPager {
-	return &WorkspacesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WorkspacesClient) ListByResourceGroup(resourceGroupName string, options *WorkspacesClientListByResourceGroupOptions) *runtime.Pager[WorkspacesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspacesClientListByResourceGroupResponse]{
+		More: func(page WorkspacesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkspacesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkspaceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkspacesClientListByResourceGroupResponse) (WorkspacesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkspacesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspacesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspacesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -357,16 +361,32 @@ func (client *WorkspacesClient) listByResourceGroupHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkspacesClientListBySubscriptionOptions contains the optional parameters for the WorkspacesClient.ListBySubscription
 // method.
-func (client *WorkspacesClient) ListBySubscription(options *WorkspacesClientListBySubscriptionOptions) *WorkspacesClientListBySubscriptionPager {
-	return &WorkspacesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *WorkspacesClient) ListBySubscription(options *WorkspacesClientListBySubscriptionOptions) *runtime.Pager[WorkspacesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspacesClientListBySubscriptionResponse]{
+		More: func(page WorkspacesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkspacesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkspaceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkspacesClientListBySubscriptionResponse) (WorkspacesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkspacesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspacesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspacesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -686,20 +706,16 @@ func (client *WorkspacesClient) listStorageAccountKeysHandleResponse(resp *http.
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspacesClientBeginPrepareNotebookOptions contains the optional parameters for the WorkspacesClient.BeginPrepareNotebook
 // method.
-func (client *WorkspacesClient) BeginPrepareNotebook(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginPrepareNotebookOptions) (WorkspacesClientPrepareNotebookPollerResponse, error) {
-	resp, err := client.prepareNotebook(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspacesClientPrepareNotebookPollerResponse{}, err
+func (client *WorkspacesClient) BeginPrepareNotebook(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginPrepareNotebookOptions) (*armruntime.Poller[WorkspacesClientPrepareNotebookResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.prepareNotebook(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientPrepareNotebookResponse]("WorkspacesClient.PrepareNotebook", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientPrepareNotebookResponse]("WorkspacesClient.PrepareNotebook", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientPrepareNotebookPollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.PrepareNotebook", "location", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientPrepareNotebookPollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientPrepareNotebookPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PrepareNotebook - Prepare a notebook.
@@ -752,20 +768,16 @@ func (client *WorkspacesClient) prepareNotebookCreateRequest(ctx context.Context
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspacesClientBeginResyncKeysOptions contains the optional parameters for the WorkspacesClient.BeginResyncKeys
 // method.
-func (client *WorkspacesClient) BeginResyncKeys(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginResyncKeysOptions) (WorkspacesClientResyncKeysPollerResponse, error) {
-	resp, err := client.resyncKeys(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspacesClientResyncKeysPollerResponse{}, err
+func (client *WorkspacesClient) BeginResyncKeys(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspacesClientBeginResyncKeysOptions) (*armruntime.Poller[WorkspacesClientResyncKeysResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resyncKeys(ctx, resourceGroupName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspacesClientResyncKeysResponse]("WorkspacesClient.ResyncKeys", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspacesClientResyncKeysResponse]("WorkspacesClient.ResyncKeys", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspacesClientResyncKeysPollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspacesClient.ResyncKeys", "", resp, client.pl)
-	if err != nil {
-		return WorkspacesClientResyncKeysPollerResponse{}, err
-	}
-	result.Poller = &WorkspacesClientResyncKeysPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ResyncKeys - Resync all the keys associated with this workspace. This includes keys for the storage account, app insights

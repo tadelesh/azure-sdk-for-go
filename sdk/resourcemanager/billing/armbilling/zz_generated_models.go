@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -79,7 +79,8 @@ type AccountUpdateRequest struct {
 
 // AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
 type AccountsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientGetOptions contains the optional parameters for the AccountsClient.Get method.
@@ -857,7 +858,8 @@ type InvoiceSectionWithCreateSubPermission struct {
 // InvoiceSectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the InvoiceSectionsClient.BeginCreateOrUpdate
 // method.
 type InvoiceSectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InvoiceSectionsClientGetOptions contains the optional parameters for the InvoiceSectionsClient.Get method.
@@ -886,25 +888,29 @@ type InvoiceSectionsOnExpand struct {
 // InvoicesClientBeginDownloadBillingSubscriptionInvoiceOptions contains the optional parameters for the InvoicesClient.BeginDownloadBillingSubscriptionInvoice
 // method.
 type InvoicesClientBeginDownloadBillingSubscriptionInvoiceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InvoicesClientBeginDownloadInvoiceOptions contains the optional parameters for the InvoicesClient.BeginDownloadInvoice
 // method.
 type InvoicesClientBeginDownloadInvoiceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InvoicesClientBeginDownloadMultipleBillingProfileInvoicesOptions contains the optional parameters for the InvoicesClient.BeginDownloadMultipleBillingProfileInvoices
 // method.
 type InvoicesClientBeginDownloadMultipleBillingProfileInvoicesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InvoicesClientBeginDownloadMultipleBillingSubscriptionInvoicesOptions contains the optional parameters for the InvoicesClient.BeginDownloadMultipleBillingSubscriptionInvoices
 // method.
 type InvoicesClientBeginDownloadMultipleBillingSubscriptionInvoicesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InvoicesClientGetByIDOptions contains the optional parameters for the InvoicesClient.GetByID method.
@@ -1418,7 +1424,8 @@ type ProfileProperties struct {
 
 // ProfilesClientBeginCreateOrUpdateOptions contains the optional parameters for the ProfilesClient.BeginCreateOrUpdate method.
 type ProfilesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientGetOptions contains the optional parameters for the ProfilesClient.Get method.
@@ -1978,7 +1985,8 @@ type SubscriptionProperties struct {
 
 // SubscriptionsClientBeginMoveOptions contains the optional parameters for the SubscriptionsClient.BeginMove method.
 type SubscriptionsClientBeginMoveOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionsClientGetOptions contains the optional parameters for the SubscriptionsClient.Get method.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -62,13 +62,26 @@ func NewPartitionKeyRangeIDRegionClient(subscriptionID string, credential azcore
 // and timeGrain. The supported operator is eq.
 // options - PartitionKeyRangeIDRegionClientListMetricsOptions contains the optional parameters for the PartitionKeyRangeIDRegionClient.ListMetrics
 // method.
-func (client *PartitionKeyRangeIDRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, partitionKeyRangeID string, filter string, options *PartitionKeyRangeIDRegionClientListMetricsOptions) *PartitionKeyRangeIDRegionClientListMetricsPager {
-	return &PartitionKeyRangeIDRegionClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, partitionKeyRangeID, filter, options)
+func (client *PartitionKeyRangeIDRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, partitionKeyRangeID string, filter string, options *PartitionKeyRangeIDRegionClientListMetricsOptions) *runtime.Pager[PartitionKeyRangeIDRegionClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PartitionKeyRangeIDRegionClientListMetricsResponse]{
+		More: func(page PartitionKeyRangeIDRegionClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PartitionKeyRangeIDRegionClientListMetricsResponse) (PartitionKeyRangeIDRegionClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, partitionKeyRangeID, filter, options)
+			if err != nil {
+				return PartitionKeyRangeIDRegionClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PartitionKeyRangeIDRegionClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PartitionKeyRangeIDRegionClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewCustomLocationsClient(subscriptionID string, credential azcore.TokenCred
 // parameters - Parameters supplied to create or update a Custom Location.
 // options - CustomLocationsClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomLocationsClient.BeginCreateOrUpdate
 // method.
-func (client *CustomLocationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters CustomLocation, options *CustomLocationsClientBeginCreateOrUpdateOptions) (CustomLocationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return CustomLocationsClientCreateOrUpdatePollerResponse{}, err
+func (client *CustomLocationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters CustomLocation, options *CustomLocationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CustomLocationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomLocationsClientCreateOrUpdateResponse]("CustomLocationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomLocationsClientCreateOrUpdateResponse]("CustomLocationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomLocationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomLocationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomLocationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomLocationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a Custom Location in the specified Subscription and Resource Group
@@ -121,20 +117,16 @@ func (client *CustomLocationsClient) createOrUpdateCreateRequest(ctx context.Con
 // resourceName - Custom Locations name.
 // options - CustomLocationsClientBeginDeleteOptions contains the optional parameters for the CustomLocationsClient.BeginDelete
 // method.
-func (client *CustomLocationsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *CustomLocationsClientBeginDeleteOptions) (CustomLocationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return CustomLocationsClientDeletePollerResponse{}, err
+func (client *CustomLocationsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *CustomLocationsClientBeginDeleteOptions) (*armruntime.Poller[CustomLocationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomLocationsClientDeleteResponse]("CustomLocationsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomLocationsClientDeleteResponse]("CustomLocationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomLocationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomLocationsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CustomLocationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomLocationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the Custom Location with the specified Resource Name, Resource Group, and Subscription Id.
@@ -241,16 +233,32 @@ func (client *CustomLocationsClient) getHandleResponse(resp *http.Response) (Cus
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - CustomLocationsClientListByResourceGroupOptions contains the optional parameters for the CustomLocationsClient.ListByResourceGroup
 // method.
-func (client *CustomLocationsClient) ListByResourceGroup(resourceGroupName string, options *CustomLocationsClientListByResourceGroupOptions) *CustomLocationsClientListByResourceGroupPager {
-	return &CustomLocationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CustomLocationsClient) ListByResourceGroup(resourceGroupName string, options *CustomLocationsClientListByResourceGroupOptions) *runtime.Pager[CustomLocationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomLocationsClientListByResourceGroupResponse]{
+		More: func(page CustomLocationsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomLocationsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomLocationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomLocationsClientListByResourceGroupResponse) (CustomLocationsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomLocationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomLocationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomLocationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -289,16 +297,32 @@ func (client *CustomLocationsClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CustomLocationsClientListBySubscriptionOptions contains the optional parameters for the CustomLocationsClient.ListBySubscription
 // method.
-func (client *CustomLocationsClient) ListBySubscription(options *CustomLocationsClientListBySubscriptionOptions) *CustomLocationsClientListBySubscriptionPager {
-	return &CustomLocationsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *CustomLocationsClient) ListBySubscription(options *CustomLocationsClientListBySubscriptionOptions) *runtime.Pager[CustomLocationsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomLocationsClientListBySubscriptionResponse]{
+		More: func(page CustomLocationsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomLocationsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomLocationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomLocationsClientListBySubscriptionResponse) (CustomLocationsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomLocationsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomLocationsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomLocationsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -334,16 +358,32 @@ func (client *CustomLocationsClient) listBySubscriptionHandleResponse(resp *http
 // resourceName - Custom Locations name.
 // options - CustomLocationsClientListEnabledResourceTypesOptions contains the optional parameters for the CustomLocationsClient.ListEnabledResourceTypes
 // method.
-func (client *CustomLocationsClient) ListEnabledResourceTypes(resourceGroupName string, resourceName string, options *CustomLocationsClientListEnabledResourceTypesOptions) *CustomLocationsClientListEnabledResourceTypesPager {
-	return &CustomLocationsClientListEnabledResourceTypesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listEnabledResourceTypesCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *CustomLocationsClient) ListEnabledResourceTypes(resourceGroupName string, resourceName string, options *CustomLocationsClientListEnabledResourceTypesOptions) *runtime.Pager[CustomLocationsClientListEnabledResourceTypesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomLocationsClientListEnabledResourceTypesResponse]{
+		More: func(page CustomLocationsClientListEnabledResourceTypesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomLocationsClientListEnabledResourceTypesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnabledResourceTypesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomLocationsClientListEnabledResourceTypesResponse) (CustomLocationsClientListEnabledResourceTypesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listEnabledResourceTypesCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomLocationsClientListEnabledResourceTypesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomLocationsClientListEnabledResourceTypesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomLocationsClientListEnabledResourceTypesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listEnabledResourceTypesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listEnabledResourceTypesCreateRequest creates the ListEnabledResourceTypes request.
@@ -385,16 +425,32 @@ func (client *CustomLocationsClient) listEnabledResourceTypesHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CustomLocationsClientListOperationsOptions contains the optional parameters for the CustomLocationsClient.ListOperations
 // method.
-func (client *CustomLocationsClient) ListOperations(options *CustomLocationsClientListOperationsOptions) *CustomLocationsClientListOperationsPager {
-	return &CustomLocationsClientListOperationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOperationsCreateRequest(ctx, options)
+func (client *CustomLocationsClient) ListOperations(options *CustomLocationsClientListOperationsOptions) *runtime.Pager[CustomLocationsClientListOperationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomLocationsClientListOperationsResponse]{
+		More: func(page CustomLocationsClientListOperationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomLocationsClientListOperationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomLocationOperationsList.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomLocationsClientListOperationsResponse) (CustomLocationsClientListOperationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOperationsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomLocationsClientListOperationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomLocationsClientListOperationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomLocationsClientListOperationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOperationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,13 +116,26 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // enterprisePolicyName - EnterprisePolicy for the Microsoft Azure subscription.
 // options - PrivateLinkResourcesClientListByEnterprisePolicyOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByEnterprisePolicy
 // method.
-func (client *PrivateLinkResourcesClient) ListByEnterprisePolicy(resourceGroupName string, enterprisePolicyName string, options *PrivateLinkResourcesClientListByEnterprisePolicyOptions) *PrivateLinkResourcesClientListByEnterprisePolicyPager {
-	return &PrivateLinkResourcesClientListByEnterprisePolicyPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByEnterprisePolicyCreateRequest(ctx, resourceGroupName, enterprisePolicyName, options)
+func (client *PrivateLinkResourcesClient) ListByEnterprisePolicy(resourceGroupName string, enterprisePolicyName string, options *PrivateLinkResourcesClientListByEnterprisePolicyOptions) *runtime.Pager[PrivateLinkResourcesClientListByEnterprisePolicyResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByEnterprisePolicyResponse]{
+		More: func(page PrivateLinkResourcesClientListByEnterprisePolicyResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByEnterprisePolicyResponse) (PrivateLinkResourcesClientListByEnterprisePolicyResponse, error) {
+			req, err := client.listByEnterprisePolicyCreateRequest(ctx, resourceGroupName, enterprisePolicyName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientListByEnterprisePolicyResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByEnterprisePolicyResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByEnterprisePolicyResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByEnterprisePolicyHandleResponse(resp)
+		},
+	})
 }
 
 // listByEnterprisePolicyCreateRequest creates the ListByEnterprisePolicy request.

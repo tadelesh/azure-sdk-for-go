@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,13 +228,26 @@ func (client *AssignmentsClient) getHandleResponse(resp *http.Response) (Assignm
 // resourceGroupName - The resource group name.
 // vmName - The name of the virtual machine.
 // options - AssignmentsClientListOptions contains the optional parameters for the AssignmentsClient.List method.
-func (client *AssignmentsClient) List(resourceGroupName string, vmName string, options *AssignmentsClientListOptions) *AssignmentsClientListPager {
-	return &AssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, vmName, options)
+func (client *AssignmentsClient) List(resourceGroupName string, vmName string, options *AssignmentsClientListOptions) *runtime.Pager[AssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssignmentsClientListResponse]{
+		More: func(page AssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AssignmentsClientListResponse) (AssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, vmName, options)
+			if err != nil {
+				return AssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -276,13 +289,26 @@ func (client *AssignmentsClient) listHandleResponse(resp *http.Response) (Assign
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The resource group name.
 // options - AssignmentsClientRGListOptions contains the optional parameters for the AssignmentsClient.RGList method.
-func (client *AssignmentsClient) RGList(resourceGroupName string, options *AssignmentsClientRGListOptions) *AssignmentsClientRGListPager {
-	return &AssignmentsClientRGListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.rgListCreateRequest(ctx, resourceGroupName, options)
+func (client *AssignmentsClient) RGList(resourceGroupName string, options *AssignmentsClientRGListOptions) *runtime.Pager[AssignmentsClientRGListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssignmentsClientRGListResponse]{
+		More: func(page AssignmentsClientRGListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AssignmentsClientRGListResponse) (AssignmentsClientRGListResponse, error) {
+			req, err := client.rgListCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return AssignmentsClientRGListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssignmentsClientRGListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssignmentsClientRGListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.rgListHandleResponse(resp)
+		},
+	})
 }
 
 // rgListCreateRequest creates the RGList request.
@@ -320,13 +346,26 @@ func (client *AssignmentsClient) rgListHandleResponse(resp *http.Response) (Assi
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AssignmentsClientSubscriptionListOptions contains the optional parameters for the AssignmentsClient.SubscriptionList
 // method.
-func (client *AssignmentsClient) SubscriptionList(options *AssignmentsClientSubscriptionListOptions) *AssignmentsClientSubscriptionListPager {
-	return &AssignmentsClientSubscriptionListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.subscriptionListCreateRequest(ctx, options)
+func (client *AssignmentsClient) SubscriptionList(options *AssignmentsClientSubscriptionListOptions) *runtime.Pager[AssignmentsClientSubscriptionListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssignmentsClientSubscriptionListResponse]{
+		More: func(page AssignmentsClientSubscriptionListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AssignmentsClientSubscriptionListResponse) (AssignmentsClientSubscriptionListResponse, error) {
+			req, err := client.subscriptionListCreateRequest(ctx, options)
+			if err != nil {
+				return AssignmentsClientSubscriptionListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssignmentsClientSubscriptionListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssignmentsClientSubscriptionListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.subscriptionListHandleResponse(resp)
+		},
+	})
 }
 
 // subscriptionListCreateRequest creates the SubscriptionList request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewSharedPrivateLinkResourcesClient(subscriptionID string, credential azcor
 // parameters - The shared private link resource
 // options - SharedPrivateLinkResourcesClientBeginCreateOrUpdateOptions contains the optional parameters for the SharedPrivateLinkResourcesClient.BeginCreateOrUpdate
 // method.
-func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.Context, sharedPrivateLinkResourceName string, resourceGroupName string, resourceName string, parameters SharedPrivateLinkResource, options *SharedPrivateLinkResourcesClientBeginCreateOrUpdateOptions) (SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, sharedPrivateLinkResourceName, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
+func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.Context, sharedPrivateLinkResourceName string, resourceGroupName string, resourceName string, parameters SharedPrivateLinkResource, options *SharedPrivateLinkResourcesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[SharedPrivateLinkResourcesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, sharedPrivateLinkResourceName, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SharedPrivateLinkResourcesClientCreateOrUpdateResponse]("SharedPrivateLinkResourcesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SharedPrivateLinkResourcesClientCreateOrUpdateResponse]("SharedPrivateLinkResourcesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a shared private link resource
@@ -130,20 +126,16 @@ func (client *SharedPrivateLinkResourcesClient) createOrUpdateCreateRequest(ctx 
 // resourceName - The name of the resource.
 // options - SharedPrivateLinkResourcesClientBeginDeleteOptions contains the optional parameters for the SharedPrivateLinkResourcesClient.BeginDelete
 // method.
-func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context, sharedPrivateLinkResourceName string, resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientBeginDeleteOptions) (SharedPrivateLinkResourcesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, sharedPrivateLinkResourceName, resourceGroupName, resourceName, options)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
+func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context, sharedPrivateLinkResourceName string, resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientBeginDeleteOptions) (*armruntime.Poller[SharedPrivateLinkResourcesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, sharedPrivateLinkResourceName, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SharedPrivateLinkResourcesClientDeleteResponse]("SharedPrivateLinkResourcesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SharedPrivateLinkResourcesClientDeleteResponse]("SharedPrivateLinkResourcesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SharedPrivateLinkResourcesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SharedPrivateLinkResourcesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified shared private link resource
@@ -262,16 +254,32 @@ func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Res
 // resourceName - The name of the resource.
 // options - SharedPrivateLinkResourcesClientListOptions contains the optional parameters for the SharedPrivateLinkResourcesClient.List
 // method.
-func (client *SharedPrivateLinkResourcesClient) List(resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientListOptions) *SharedPrivateLinkResourcesClientListPager {
-	return &SharedPrivateLinkResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *SharedPrivateLinkResourcesClient) List(resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientListOptions) *runtime.Pager[SharedPrivateLinkResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SharedPrivateLinkResourcesClientListResponse]{
+		More: func(page SharedPrivateLinkResourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SharedPrivateLinkResourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SharedPrivateLinkResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *SharedPrivateLinkResourcesClientListResponse) (SharedPrivateLinkResourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SharedPrivateLinkResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SharedPrivateLinkResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SharedPrivateLinkResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

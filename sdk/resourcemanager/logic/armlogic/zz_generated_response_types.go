@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armlogic
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // IntegrationAccountAgreementsClientCreateOrUpdateResponse contains the response from method IntegrationAccountAgreementsClient.CreateOrUpdate.
 type IntegrationAccountAgreementsClientCreateOrUpdateResponse struct {
@@ -254,42 +248,6 @@ type IntegrationServiceEnvironmentManagedAPIOperationsClientListResponse struct 
 	APIOperationListResult
 }
 
-// IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse contains the response from method IntegrationServiceEnvironmentManagedApisClient.Delete.
-type IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IntegrationServiceEnvironmentManagedApisClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IntegrationServiceEnvironmentManagedApisClientDeleteResponse, error) {
-	respType := IntegrationServiceEnvironmentManagedApisClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse from the provided client and resume
-// token.
-func (l *IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse) Resume(ctx context.Context, client *IntegrationServiceEnvironmentManagedApisClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IntegrationServiceEnvironmentManagedApisClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IntegrationServiceEnvironmentManagedApisClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // IntegrationServiceEnvironmentManagedApisClientDeleteResponse contains the response from method IntegrationServiceEnvironmentManagedApisClient.Delete.
 type IntegrationServiceEnvironmentManagedApisClientDeleteResponse struct {
 	// placeholder for future response values
@@ -303,42 +261,6 @@ type IntegrationServiceEnvironmentManagedApisClientGetResponse struct {
 // IntegrationServiceEnvironmentManagedApisClientListResponse contains the response from method IntegrationServiceEnvironmentManagedApisClient.List.
 type IntegrationServiceEnvironmentManagedApisClientListResponse struct {
 	IntegrationServiceEnvironmentManagedAPIListResult
-}
-
-// IntegrationServiceEnvironmentManagedApisClientPutPollerResponse contains the response from method IntegrationServiceEnvironmentManagedApisClient.Put.
-type IntegrationServiceEnvironmentManagedApisClientPutPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IntegrationServiceEnvironmentManagedApisClientPutPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IntegrationServiceEnvironmentManagedApisClientPutPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IntegrationServiceEnvironmentManagedApisClientPutResponse, error) {
-	respType := IntegrationServiceEnvironmentManagedApisClientPutResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IntegrationServiceEnvironmentManagedAPI)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IntegrationServiceEnvironmentManagedApisClientPutPollerResponse from the provided client and resume
-// token.
-func (l *IntegrationServiceEnvironmentManagedApisClientPutPollerResponse) Resume(ctx context.Context, client *IntegrationServiceEnvironmentManagedApisClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IntegrationServiceEnvironmentManagedApisClient.Put", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IntegrationServiceEnvironmentManagedApisClientPutPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // IntegrationServiceEnvironmentManagedApisClientPutResponse contains the response from method IntegrationServiceEnvironmentManagedApisClient.Put.
@@ -355,42 +277,6 @@ type IntegrationServiceEnvironmentNetworkHealthClientGetResponse struct {
 // IntegrationServiceEnvironmentSKUsClientListResponse contains the response from method IntegrationServiceEnvironmentSKUsClient.List.
 type IntegrationServiceEnvironmentSKUsClientListResponse struct {
 	IntegrationServiceEnvironmentSKUList
-}
-
-// IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse contains the response from method IntegrationServiceEnvironmentsClient.CreateOrUpdate.
-type IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IntegrationServiceEnvironmentsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IntegrationServiceEnvironmentsClientCreateOrUpdateResponse, error) {
-	respType := IntegrationServiceEnvironmentsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IntegrationServiceEnvironment)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse from the provided client and resume
-// token.
-func (l *IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *IntegrationServiceEnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IntegrationServiceEnvironmentsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IntegrationServiceEnvironmentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // IntegrationServiceEnvironmentsClientCreateOrUpdateResponse contains the response from method IntegrationServiceEnvironmentsClient.CreateOrUpdate.
@@ -421,41 +307,6 @@ type IntegrationServiceEnvironmentsClientListBySubscriptionResponse struct {
 // IntegrationServiceEnvironmentsClientRestartResponse contains the response from method IntegrationServiceEnvironmentsClient.Restart.
 type IntegrationServiceEnvironmentsClientRestartResponse struct {
 	// placeholder for future response values
-}
-
-// IntegrationServiceEnvironmentsClientUpdatePollerResponse contains the response from method IntegrationServiceEnvironmentsClient.Update.
-type IntegrationServiceEnvironmentsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *IntegrationServiceEnvironmentsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l IntegrationServiceEnvironmentsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IntegrationServiceEnvironmentsClientUpdateResponse, error) {
-	respType := IntegrationServiceEnvironmentsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IntegrationServiceEnvironment)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a IntegrationServiceEnvironmentsClientUpdatePollerResponse from the provided client and resume token.
-func (l *IntegrationServiceEnvironmentsClientUpdatePollerResponse) Resume(ctx context.Context, client *IntegrationServiceEnvironmentsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("IntegrationServiceEnvironmentsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &IntegrationServiceEnvironmentsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // IntegrationServiceEnvironmentsClientUpdateResponse contains the response from method IntegrationServiceEnvironmentsClient.Update.
@@ -663,41 +514,6 @@ type WorkflowsClientListCallbackURLResponse struct {
 type WorkflowsClientListSwaggerResponse struct {
 	// Anything
 	Interface interface{}
-}
-
-// WorkflowsClientMovePollerResponse contains the response from method WorkflowsClient.Move.
-type WorkflowsClientMovePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *WorkflowsClientMovePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l WorkflowsClientMovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (WorkflowsClientMoveResponse, error) {
-	respType := WorkflowsClientMoveResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a WorkflowsClientMovePollerResponse from the provided client and resume token.
-func (l *WorkflowsClientMovePollerResponse) Resume(ctx context.Context, client *WorkflowsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("WorkflowsClient.Move", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &WorkflowsClientMovePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // WorkflowsClientMoveResponse contains the response from method WorkflowsClient.Move.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewVirtualNetworkLinksClient(subscriptionID string, credential azcore.Token
 // parameters - Parameters supplied to the CreateOrUpdate operation.
 // options - VirtualNetworkLinksClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkLinksClient.BeginCreateOrUpdate
 // method.
-func (client *VirtualNetworkLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, parameters VirtualNetworkLink, options *VirtualNetworkLinksClientBeginCreateOrUpdateOptions) (VirtualNetworkLinksClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, parameters, options)
-	if err != nil {
-		return VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}, err
+func (client *VirtualNetworkLinksClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, parameters VirtualNetworkLink, options *VirtualNetworkLinksClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VirtualNetworkLinksClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworkLinksClientCreateOrUpdateResponse]("VirtualNetworkLinksClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworkLinksClientCreateOrUpdateResponse]("VirtualNetworkLinksClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworkLinksClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a virtual network link to the specified Private DNS zone.
@@ -137,20 +133,16 @@ func (client *VirtualNetworkLinksClient) createOrUpdateCreateRequest(ctx context
 // virtualNetworkLinkName - The name of the virtual network link.
 // options - VirtualNetworkLinksClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkLinksClient.BeginDelete
 // method.
-func (client *VirtualNetworkLinksClient) BeginDelete(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, options *VirtualNetworkLinksClientBeginDeleteOptions) (VirtualNetworkLinksClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, options)
-	if err != nil {
-		return VirtualNetworkLinksClientDeletePollerResponse{}, err
+func (client *VirtualNetworkLinksClient) BeginDelete(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, options *VirtualNetworkLinksClientBeginDeleteOptions) (*armruntime.Poller[VirtualNetworkLinksClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworkLinksClientDeleteResponse]("VirtualNetworkLinksClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworkLinksClientDeleteResponse]("VirtualNetworkLinksClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworkLinksClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VirtualNetworkLinksClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworkLinksClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a virtual network link to the specified Private DNS zone. WARNING: In case of a registration virtual network,
@@ -271,16 +263,32 @@ func (client *VirtualNetworkLinksClient) getHandleResponse(resp *http.Response) 
 // privateZoneName - The name of the Private DNS zone (without a terminating dot).
 // options - VirtualNetworkLinksClientListOptions contains the optional parameters for the VirtualNetworkLinksClient.List
 // method.
-func (client *VirtualNetworkLinksClient) List(resourceGroupName string, privateZoneName string, options *VirtualNetworkLinksClientListOptions) *VirtualNetworkLinksClientListPager {
-	return &VirtualNetworkLinksClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateZoneName, options)
+func (client *VirtualNetworkLinksClient) List(resourceGroupName string, privateZoneName string, options *VirtualNetworkLinksClientListOptions) *runtime.Pager[VirtualNetworkLinksClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualNetworkLinksClientListResponse]{
+		More: func(page VirtualNetworkLinksClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualNetworkLinksClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualNetworkLinkListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualNetworkLinksClientListResponse) (VirtualNetworkLinksClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateZoneName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualNetworkLinksClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualNetworkLinksClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualNetworkLinksClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -329,20 +337,16 @@ func (client *VirtualNetworkLinksClient) listHandleResponse(resp *http.Response)
 // parameters - Parameters supplied to the Update operation.
 // options - VirtualNetworkLinksClientBeginUpdateOptions contains the optional parameters for the VirtualNetworkLinksClient.BeginUpdate
 // method.
-func (client *VirtualNetworkLinksClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, parameters VirtualNetworkLink, options *VirtualNetworkLinksClientBeginUpdateOptions) (VirtualNetworkLinksClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, parameters, options)
-	if err != nil {
-		return VirtualNetworkLinksClientUpdatePollerResponse{}, err
+func (client *VirtualNetworkLinksClient) BeginUpdate(ctx context.Context, resourceGroupName string, privateZoneName string, virtualNetworkLinkName string, parameters VirtualNetworkLink, options *VirtualNetworkLinksClientBeginUpdateOptions) (*armruntime.Poller[VirtualNetworkLinksClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, privateZoneName, virtualNetworkLinkName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualNetworkLinksClientUpdateResponse]("VirtualNetworkLinksClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualNetworkLinksClientUpdateResponse]("VirtualNetworkLinksClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualNetworkLinksClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.Update", "", resp, client.pl)
-	if err != nil {
-		return VirtualNetworkLinksClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VirtualNetworkLinksClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a virtual network link to the specified Private DNS zone.

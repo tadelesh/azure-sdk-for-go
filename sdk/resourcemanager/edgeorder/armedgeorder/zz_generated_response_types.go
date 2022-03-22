@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armedgeorder
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // ManagementClientCancelOrderItemResponse contains the response from method ManagementClient.CancelOrderItem.
 type ManagementClientCancelOrderItemResponse struct {
 	// placeholder for future response values
-}
-
-// ManagementClientCreateAddressPollerResponse contains the response from method ManagementClient.CreateAddress.
-type ManagementClientCreateAddressPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientCreateAddressPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientCreateAddressPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientCreateAddressResponse, error) {
-	respType := ManagementClientCreateAddressResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientCreateAddressPollerResponse from the provided client and resume token.
-func (l *ManagementClientCreateAddressPollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.CreateAddress", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientCreateAddressPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ManagementClientCreateAddressResponse contains the response from method ManagementClient.CreateAddress.
@@ -59,119 +18,14 @@ type ManagementClientCreateAddressResponse struct {
 	AddressResource
 }
 
-// ManagementClientCreateOrderItemPollerResponse contains the response from method ManagementClient.CreateOrderItem.
-type ManagementClientCreateOrderItemPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientCreateOrderItemPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientCreateOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientCreateOrderItemResponse, error) {
-	respType := ManagementClientCreateOrderItemResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientCreateOrderItemPollerResponse from the provided client and resume token.
-func (l *ManagementClientCreateOrderItemPollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.CreateOrderItem", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientCreateOrderItemPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagementClientCreateOrderItemResponse contains the response from method ManagementClient.CreateOrderItem.
 type ManagementClientCreateOrderItemResponse struct {
 	OrderItemResource
 }
 
-// ManagementClientDeleteAddressByNamePollerResponse contains the response from method ManagementClient.DeleteAddressByName.
-type ManagementClientDeleteAddressByNamePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientDeleteAddressByNamePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientDeleteAddressByNamePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientDeleteAddressByNameResponse, error) {
-	respType := ManagementClientDeleteAddressByNameResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientDeleteAddressByNamePollerResponse from the provided client and resume token.
-func (l *ManagementClientDeleteAddressByNamePollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.DeleteAddressByName", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientDeleteAddressByNamePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagementClientDeleteAddressByNameResponse contains the response from method ManagementClient.DeleteAddressByName.
 type ManagementClientDeleteAddressByNameResponse struct {
 	// placeholder for future response values
-}
-
-// ManagementClientDeleteOrderItemByNamePollerResponse contains the response from method ManagementClient.DeleteOrderItemByName.
-type ManagementClientDeleteOrderItemByNamePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientDeleteOrderItemByNamePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientDeleteOrderItemByNamePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientDeleteOrderItemByNameResponse, error) {
-	respType := ManagementClientDeleteOrderItemByNameResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientDeleteOrderItemByNamePollerResponse from the provided client and resume token.
-func (l *ManagementClientDeleteOrderItemByNamePollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.DeleteOrderItemByName", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientDeleteOrderItemByNamePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ManagementClientDeleteOrderItemByNameResponse contains the response from method ManagementClient.DeleteOrderItemByName.
@@ -244,119 +98,14 @@ type ManagementClientListProductFamiliesResponse struct {
 	ProductFamilies
 }
 
-// ManagementClientReturnOrderItemPollerResponse contains the response from method ManagementClient.ReturnOrderItem.
-type ManagementClientReturnOrderItemPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientReturnOrderItemPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientReturnOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientReturnOrderItemResponse, error) {
-	respType := ManagementClientReturnOrderItemResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientReturnOrderItemPollerResponse from the provided client and resume token.
-func (l *ManagementClientReturnOrderItemPollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.ReturnOrderItem", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientReturnOrderItemPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagementClientReturnOrderItemResponse contains the response from method ManagementClient.ReturnOrderItem.
 type ManagementClientReturnOrderItemResponse struct {
 	// placeholder for future response values
 }
 
-// ManagementClientUpdateAddressPollerResponse contains the response from method ManagementClient.UpdateAddress.
-type ManagementClientUpdateAddressPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientUpdateAddressPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientUpdateAddressPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientUpdateAddressResponse, error) {
-	respType := ManagementClientUpdateAddressResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientUpdateAddressPollerResponse from the provided client and resume token.
-func (l *ManagementClientUpdateAddressPollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.UpdateAddress", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientUpdateAddressPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ManagementClientUpdateAddressResponse contains the response from method ManagementClient.UpdateAddress.
 type ManagementClientUpdateAddressResponse struct {
 	AddressResource
-}
-
-// ManagementClientUpdateOrderItemPollerResponse contains the response from method ManagementClient.UpdateOrderItem.
-type ManagementClientUpdateOrderItemPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ManagementClientUpdateOrderItemPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ManagementClientUpdateOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientUpdateOrderItemResponse, error) {
-	respType := ManagementClientUpdateOrderItemResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ManagementClientUpdateOrderItemPollerResponse from the provided client and resume token.
-func (l *ManagementClientUpdateOrderItemPollerResponse) Resume(ctx context.Context, client *ManagementClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ManagementClient.UpdateOrderItem", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ManagementClientUpdateOrderItemPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ManagementClientUpdateOrderItemResponse contains the response from method ManagementClient.UpdateOrderItem.

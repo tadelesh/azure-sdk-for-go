@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -104,13 +104,26 @@ func (client *LocationsClient) getCapabilityHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The resource location without whitespace.
 // options - LocationsClientGetUsageOptions contains the optional parameters for the LocationsClient.GetUsage method.
-func (client *LocationsClient) GetUsage(location string, options *LocationsClientGetUsageOptions) *LocationsClientGetUsagePager {
-	return &LocationsClientGetUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getUsageCreateRequest(ctx, location, options)
+func (client *LocationsClient) GetUsage(location string, options *LocationsClientGetUsageOptions) *runtime.Pager[LocationsClientGetUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LocationsClientGetUsageResponse]{
+		More: func(page LocationsClientGetUsageResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *LocationsClientGetUsageResponse) (LocationsClientGetUsageResponse, error) {
+			req, err := client.getUsageCreateRequest(ctx, location, options)
+			if err != nil {
+				return LocationsClientGetUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LocationsClientGetUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LocationsClientGetUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getUsageHandleResponse(resp)
+		},
+	})
 }
 
 // getUsageCreateRequest creates the GetUsage request.

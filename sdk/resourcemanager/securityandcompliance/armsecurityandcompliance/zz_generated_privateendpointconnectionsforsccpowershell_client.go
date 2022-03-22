@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewPrivateEndpointConnectionsForSCCPowershellClient(subscriptionID string, 
 // properties - The private endpoint connection properties.
 // options - PrivateEndpointConnectionsForSCCPowershellClientBeginCreateOrUpdateOptions contains the optional parameters for
 // the PrivateEndpointConnectionsForSCCPowershellClient.BeginCreateOrUpdate method.
-func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsForSCCPowershellClientBeginCreateOrUpdateOptions) (PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, properties, options)
-	if err != nil {
-		return PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}, err
+func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsForSCCPowershellClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse]("PrivateEndpointConnectionsForSCCPowershellClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse]("PrivateEndpointConnectionsForSCCPowershellClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForSCCPowershellClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Update the state of the specified private endpoint connection associated with the service.
@@ -127,20 +123,16 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) createOrUpdateCr
 // privateEndpointConnectionName - The name of the private endpoint connection associated with the Azure resource
 // options - PrivateEndpointConnectionsForSCCPowershellClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsForSCCPowershellClient.BeginDelete
 // method.
-func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsForSCCPowershellClientBeginDeleteOptions) (PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, options)
-	if err != nil {
-		return PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}, err
+func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, options *PrivateEndpointConnectionsForSCCPowershellClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse]("PrivateEndpointConnectionsForSCCPowershellClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse]("PrivateEndpointConnectionsForSCCPowershellClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForSCCPowershellClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsForSCCPowershellClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a private endpoint connection.
@@ -257,16 +249,32 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) getHandleRespons
 // resourceName - The name of the service instance.
 // options - PrivateEndpointConnectionsForSCCPowershellClientListByServiceOptions contains the optional parameters for the
 // PrivateEndpointConnectionsForSCCPowershellClient.ListByService method.
-func (client *PrivateEndpointConnectionsForSCCPowershellClient) ListByService(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsForSCCPowershellClientListByServiceOptions) *PrivateEndpointConnectionsForSCCPowershellClientListByServicePager {
-	return &PrivateEndpointConnectionsForSCCPowershellClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *PrivateEndpointConnectionsForSCCPowershellClient) ListByService(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsForSCCPowershellClientListByServiceOptions) *runtime.Pager[PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse]{
+		More: func(page PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse) (PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

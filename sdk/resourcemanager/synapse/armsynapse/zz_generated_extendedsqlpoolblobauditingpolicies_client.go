@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -181,16 +181,32 @@ func (client *ExtendedSQLPoolBlobAuditingPoliciesClient) getHandleResponse(resp 
 // sqlPoolName - SQL pool name
 // options - ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolOptions contains the optional parameters for the ExtendedSQLPoolBlobAuditingPoliciesClient.ListBySQLPool
 // method.
-func (client *ExtendedSQLPoolBlobAuditingPoliciesClient) ListBySQLPool(resourceGroupName string, workspaceName string, sqlPoolName string, options *ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolOptions) *ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolPager {
-	return &ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *ExtendedSQLPoolBlobAuditingPoliciesClient) ListBySQLPool(resourceGroupName string, workspaceName string, sqlPoolName string, options *ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolOptions) *runtime.Pager[ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse]{
+		More: func(page ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExtendedSQLPoolBlobAuditingPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse) (ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExtendedSQLPoolBlobAuditingPoliciesClientListBySQLPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySQLPoolHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySQLPoolCreateRequest creates the ListBySQLPool request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewLabsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // body - The request body.
 // options - LabsClientBeginCreateOrUpdateOptions contains the optional parameters for the LabsClient.BeginCreateOrUpdate
 // method.
-func (client *LabsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, body Lab, options *LabsClientBeginCreateOrUpdateOptions) (LabsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, body, options)
-	if err != nil {
-		return LabsClientCreateOrUpdatePollerResponse{}, err
+func (client *LabsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, body Lab, options *LabsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[LabsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientCreateOrUpdateResponse]("LabsClient.CreateOrUpdate", "original-uri", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientCreateOrUpdateResponse]("LabsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.CreateOrUpdate", "original-uri", resp, client.pl)
-	if err != nil {
-		return LabsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &LabsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Operation to create or update a lab resource.
@@ -120,20 +116,16 @@ func (client *LabsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // options - LabsClientBeginDeleteOptions contains the optional parameters for the LabsClient.BeginDelete method.
-func (client *LabsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginDeleteOptions) (LabsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, options)
-	if err != nil {
-		return LabsClientDeletePollerResponse{}, err
+func (client *LabsClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginDeleteOptions) (*armruntime.Poller[LabsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientDeleteResponse]("LabsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientDeleteResponse]("LabsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return LabsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &LabsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete a lab resource.
@@ -239,16 +231,32 @@ func (client *LabsClient) getHandleResponse(resp *http.Response) (LabsClientGetR
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - LabsClientListByResourceGroupOptions contains the optional parameters for the LabsClient.ListByResourceGroup
 // method.
-func (client *LabsClient) ListByResourceGroup(resourceGroupName string, options *LabsClientListByResourceGroupOptions) *LabsClientListByResourceGroupPager {
-	return &LabsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *LabsClient) ListByResourceGroup(resourceGroupName string, options *LabsClientListByResourceGroupOptions) *runtime.Pager[LabsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabsClientListByResourceGroupResponse]{
+		More: func(page LabsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedLabs.NextLink)
+		Fetcher: func(ctx context.Context, page *LabsClientListByResourceGroupResponse) (LabsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -285,16 +293,32 @@ func (client *LabsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // ListBySubscription - Returns a list of all labs for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LabsClientListBySubscriptionOptions contains the optional parameters for the LabsClient.ListBySubscription method.
-func (client *LabsClient) ListBySubscription(options *LabsClientListBySubscriptionOptions) *LabsClientListBySubscriptionPager {
-	return &LabsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *LabsClient) ListBySubscription(options *LabsClientListBySubscriptionOptions) *runtime.Pager[LabsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabsClientListBySubscriptionResponse]{
+		More: func(page LabsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PagedLabs.NextLink)
+		Fetcher: func(ctx context.Context, page *LabsClientListBySubscriptionResponse) (LabsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -332,20 +356,16 @@ func (client *LabsClient) listBySubscriptionHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // options - LabsClientBeginPublishOptions contains the optional parameters for the LabsClient.BeginPublish method.
-func (client *LabsClient) BeginPublish(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginPublishOptions) (LabsClientPublishPollerResponse, error) {
-	resp, err := client.publish(ctx, resourceGroupName, labName, options)
-	if err != nil {
-		return LabsClientPublishPollerResponse{}, err
+func (client *LabsClient) BeginPublish(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginPublishOptions) (*armruntime.Poller[LabsClientPublishResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.publish(ctx, resourceGroupName, labName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientPublishResponse]("LabsClient.Publish", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientPublishResponse]("LabsClient.Publish", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientPublishPollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.Publish", "location", resp, client.pl)
-	if err != nil {
-		return LabsClientPublishPollerResponse{}, err
-	}
-	result.Poller = &LabsClientPublishPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Publish - Publish or re-publish a lab. This will create or update all lab resources, such as virtual machines.
@@ -396,20 +416,16 @@ func (client *LabsClient) publishCreateRequest(ctx context.Context, resourceGrou
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // options - LabsClientBeginSyncGroupOptions contains the optional parameters for the LabsClient.BeginSyncGroup method.
-func (client *LabsClient) BeginSyncGroup(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginSyncGroupOptions) (LabsClientSyncGroupPollerResponse, error) {
-	resp, err := client.syncGroup(ctx, resourceGroupName, labName, options)
-	if err != nil {
-		return LabsClientSyncGroupPollerResponse{}, err
+func (client *LabsClient) BeginSyncGroup(ctx context.Context, resourceGroupName string, labName string, options *LabsClientBeginSyncGroupOptions) (*armruntime.Poller[LabsClientSyncGroupResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.syncGroup(ctx, resourceGroupName, labName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientSyncGroupResponse]("LabsClient.SyncGroup", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientSyncGroupResponse]("LabsClient.SyncGroup", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientSyncGroupPollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.SyncGroup", "location", resp, client.pl)
-	if err != nil {
-		return LabsClientSyncGroupPollerResponse{}, err
-	}
-	result.Poller = &LabsClientSyncGroupPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // SyncGroup - Action used to manually kick off an AAD group sync job.
@@ -461,20 +477,16 @@ func (client *LabsClient) syncGroupCreateRequest(ctx context.Context, resourceGr
 // labName - The name of the lab that uniquely identifies it within containing lab account. Used in resource URIs.
 // body - The request body.
 // options - LabsClientBeginUpdateOptions contains the optional parameters for the LabsClient.BeginUpdate method.
-func (client *LabsClient) BeginUpdate(ctx context.Context, resourceGroupName string, labName string, body LabUpdate, options *LabsClientBeginUpdateOptions) (LabsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, labName, body, options)
-	if err != nil {
-		return LabsClientUpdatePollerResponse{}, err
+func (client *LabsClient) BeginUpdate(ctx context.Context, resourceGroupName string, labName string, body LabUpdate, options *LabsClientBeginUpdateOptions) (*armruntime.Poller[LabsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, labName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientUpdateResponse]("LabsClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientUpdateResponse]("LabsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return LabsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &LabsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update a lab resource.

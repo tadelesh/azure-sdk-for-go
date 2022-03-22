@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -182,20 +182,16 @@ func (client *VirtualMachineSchedulesClient) deleteCreateRequest(ctx context.Con
 // name - The name of the schedule.
 // options - VirtualMachineSchedulesClientBeginExecuteOptions contains the optional parameters for the VirtualMachineSchedulesClient.BeginExecute
 // method.
-func (client *VirtualMachineSchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string, options *VirtualMachineSchedulesClientBeginExecuteOptions) (VirtualMachineSchedulesClientExecutePollerResponse, error) {
-	resp, err := client.execute(ctx, resourceGroupName, labName, virtualMachineName, name, options)
-	if err != nil {
-		return VirtualMachineSchedulesClientExecutePollerResponse{}, err
+func (client *VirtualMachineSchedulesClient) BeginExecute(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string, options *VirtualMachineSchedulesClientBeginExecuteOptions) (*armruntime.Poller[VirtualMachineSchedulesClientExecuteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.execute(ctx, resourceGroupName, labName, virtualMachineName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineSchedulesClientExecuteResponse]("VirtualMachineSchedulesClient.Execute", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineSchedulesClientExecuteResponse]("VirtualMachineSchedulesClient.Execute", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineSchedulesClientExecutePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineSchedulesClient.Execute", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachineSchedulesClientExecutePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineSchedulesClientExecutePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Execute - Execute a schedule. This operation can take a while to complete.
@@ -325,16 +321,32 @@ func (client *VirtualMachineSchedulesClient) getHandleResponse(resp *http.Respon
 // virtualMachineName - The name of the virtual machine.
 // options - VirtualMachineSchedulesClientListOptions contains the optional parameters for the VirtualMachineSchedulesClient.List
 // method.
-func (client *VirtualMachineSchedulesClient) List(resourceGroupName string, labName string, virtualMachineName string, options *VirtualMachineSchedulesClientListOptions) *VirtualMachineSchedulesClientListPager {
-	return &VirtualMachineSchedulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, virtualMachineName, options)
+func (client *VirtualMachineSchedulesClient) List(resourceGroupName string, labName string, virtualMachineName string, options *VirtualMachineSchedulesClientListOptions) *runtime.Pager[VirtualMachineSchedulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineSchedulesClientListResponse]{
+		More: func(page VirtualMachineSchedulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineSchedulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScheduleList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineSchedulesClientListResponse) (VirtualMachineSchedulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, virtualMachineName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineSchedulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineSchedulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineSchedulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

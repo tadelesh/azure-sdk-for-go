@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -184,16 +184,32 @@ func (client *ManagedVirtualNetworksClient) getHandleResponse(resp *http.Respons
 // factoryName - The factory name.
 // options - ManagedVirtualNetworksClientListByFactoryOptions contains the optional parameters for the ManagedVirtualNetworksClient.ListByFactory
 // method.
-func (client *ManagedVirtualNetworksClient) ListByFactory(resourceGroupName string, factoryName string, options *ManagedVirtualNetworksClientListByFactoryOptions) *ManagedVirtualNetworksClientListByFactoryPager {
-	return &ManagedVirtualNetworksClientListByFactoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+func (client *ManagedVirtualNetworksClient) ListByFactory(resourceGroupName string, factoryName string, options *ManagedVirtualNetworksClientListByFactoryOptions) *runtime.Pager[ManagedVirtualNetworksClientListByFactoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedVirtualNetworksClientListByFactoryResponse]{
+		More: func(page ManagedVirtualNetworksClientListByFactoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedVirtualNetworksClientListByFactoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedVirtualNetworkListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedVirtualNetworksClientListByFactoryResponse) (ManagedVirtualNetworksClientListByFactoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedVirtualNetworksClientListByFactoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedVirtualNetworksClientListByFactoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedVirtualNetworksClientListByFactoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFactoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.

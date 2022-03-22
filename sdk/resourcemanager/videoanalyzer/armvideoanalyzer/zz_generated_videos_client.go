@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -227,16 +227,32 @@ func (client *VideosClient) getHandleResponse(resp *http.Response) (VideosClient
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // accountName - The Azure Video Analyzer account name.
 // options - VideosClientListOptions contains the optional parameters for the VideosClient.List method.
-func (client *VideosClient) List(resourceGroupName string, accountName string, options *VideosClientListOptions) *VideosClientListPager {
-	return &VideosClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *VideosClient) List(resourceGroupName string, accountName string, options *VideosClientListOptions) *runtime.Pager[VideosClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VideosClientListResponse]{
+		More: func(page VideosClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VideosClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VideoEntityCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *VideosClientListResponse) (VideosClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VideosClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VideosClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VideosClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

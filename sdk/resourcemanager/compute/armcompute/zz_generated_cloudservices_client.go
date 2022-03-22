@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewCloudServicesClient(subscriptionID string, credential azcore.TokenCreden
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the CloudServicesClient.BeginCreateOrUpdate
 // method.
-func (client *CloudServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginCreateOrUpdateOptions) (CloudServicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientCreateOrUpdatePollerResponse{}, err
+func (client *CloudServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CloudServicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientCreateOrUpdateResponse]("CloudServicesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientCreateOrUpdateResponse]("CloudServicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a cloud service. Please note some properties can be set only during cloud service creation.
@@ -125,20 +121,16 @@ func (client *CloudServicesClient) createOrUpdateCreateRequest(ctx context.Conte
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginDeleteOptions contains the optional parameters for the CloudServicesClient.BeginDelete
 // method.
-func (client *CloudServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginDeleteOptions) (CloudServicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientDeletePollerResponse{}, err
+func (client *CloudServicesClient) BeginDelete(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginDeleteOptions) (*armruntime.Poller[CloudServicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientDeleteResponse]("CloudServicesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientDeleteResponse]("CloudServicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a cloud service.
@@ -190,20 +182,16 @@ func (client *CloudServicesClient) deleteCreateRequest(ctx context.Context, reso
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginDeleteInstancesOptions contains the optional parameters for the CloudServicesClient.BeginDeleteInstances
 // method.
-func (client *CloudServicesClient) BeginDeleteInstances(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginDeleteInstancesOptions) (CloudServicesClientDeleteInstancesPollerResponse, error) {
-	resp, err := client.deleteInstances(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientDeleteInstancesPollerResponse{}, err
+func (client *CloudServicesClient) BeginDeleteInstances(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginDeleteInstancesOptions) (*armruntime.Poller[CloudServicesClientDeleteInstancesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteInstances(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientDeleteInstancesResponse]("CloudServicesClient.DeleteInstances", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientDeleteInstancesResponse]("CloudServicesClient.DeleteInstances", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientDeleteInstancesPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.DeleteInstances", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientDeleteInstancesPollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientDeleteInstancesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteInstances - Deletes role instances in a cloud service.
@@ -368,16 +356,32 @@ func (client *CloudServicesClient) getInstanceViewHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - Name of the resource group.
 // options - CloudServicesClientListOptions contains the optional parameters for the CloudServicesClient.List method.
-func (client *CloudServicesClient) List(resourceGroupName string, options *CloudServicesClientListOptions) *CloudServicesClientListPager {
-	return &CloudServicesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *CloudServicesClient) List(resourceGroupName string, options *CloudServicesClientListOptions) *runtime.Pager[CloudServicesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CloudServicesClientListResponse]{
+		More: func(page CloudServicesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CloudServicesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CloudServiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CloudServicesClientListResponse) (CloudServicesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CloudServicesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CloudServicesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CloudServicesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -416,16 +420,32 @@ func (client *CloudServicesClient) listHandleResponse(resp *http.Response) (Clou
 // is null to fetch all the Cloud Services.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CloudServicesClientListAllOptions contains the optional parameters for the CloudServicesClient.ListAll method.
-func (client *CloudServicesClient) ListAll(options *CloudServicesClientListAllOptions) *CloudServicesClientListAllPager {
-	return &CloudServicesClientListAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAllCreateRequest(ctx, options)
+func (client *CloudServicesClient) ListAll(options *CloudServicesClientListAllOptions) *runtime.Pager[CloudServicesClientListAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CloudServicesClientListAllResponse]{
+		More: func(page CloudServicesClientListAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CloudServicesClientListAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CloudServiceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CloudServicesClientListAllResponse) (CloudServicesClientListAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAllCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CloudServicesClientListAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CloudServicesClientListAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CloudServicesClientListAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAllCreateRequest creates the ListAll request.
@@ -462,20 +482,16 @@ func (client *CloudServicesClient) listAllHandleResponse(resp *http.Response) (C
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginPowerOffOptions contains the optional parameters for the CloudServicesClient.BeginPowerOff
 // method.
-func (client *CloudServicesClient) BeginPowerOff(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginPowerOffOptions) (CloudServicesClientPowerOffPollerResponse, error) {
-	resp, err := client.powerOff(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientPowerOffPollerResponse{}, err
+func (client *CloudServicesClient) BeginPowerOff(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginPowerOffOptions) (*armruntime.Poller[CloudServicesClientPowerOffResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.powerOff(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientPowerOffResponse]("CloudServicesClient.PowerOff", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientPowerOffResponse]("CloudServicesClient.PowerOff", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientPowerOffPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.PowerOff", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientPowerOffPollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientPowerOffPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PowerOff - Power off the cloud service. Note that resources are still attached and you are getting charged for the resources.
@@ -529,20 +545,16 @@ func (client *CloudServicesClient) powerOffCreateRequest(ctx context.Context, re
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginRebuildOptions contains the optional parameters for the CloudServicesClient.BeginRebuild
 // method.
-func (client *CloudServicesClient) BeginRebuild(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginRebuildOptions) (CloudServicesClientRebuildPollerResponse, error) {
-	resp, err := client.rebuild(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientRebuildPollerResponse{}, err
+func (client *CloudServicesClient) BeginRebuild(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginRebuildOptions) (*armruntime.Poller[CloudServicesClientRebuildResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rebuild(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientRebuildResponse]("CloudServicesClient.Rebuild", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientRebuildResponse]("CloudServicesClient.Rebuild", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientRebuildPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Rebuild", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientRebuildPollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientRebuildPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Rebuild - Rebuild Role Instances reinstalls the operating system on instances of web roles or worker roles and initializes
@@ -599,20 +611,16 @@ func (client *CloudServicesClient) rebuildCreateRequest(ctx context.Context, res
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginReimageOptions contains the optional parameters for the CloudServicesClient.BeginReimage
 // method.
-func (client *CloudServicesClient) BeginReimage(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginReimageOptions) (CloudServicesClientReimagePollerResponse, error) {
-	resp, err := client.reimage(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientReimagePollerResponse{}, err
+func (client *CloudServicesClient) BeginReimage(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginReimageOptions) (*armruntime.Poller[CloudServicesClientReimageResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.reimage(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientReimageResponse]("CloudServicesClient.Reimage", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientReimageResponse]("CloudServicesClient.Reimage", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientReimagePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Reimage", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientReimagePollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientReimagePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Reimage - Reimage asynchronous operation reinstalls the operating system on instances of web roles or worker roles.
@@ -667,20 +675,16 @@ func (client *CloudServicesClient) reimageCreateRequest(ctx context.Context, res
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginRestartOptions contains the optional parameters for the CloudServicesClient.BeginRestart
 // method.
-func (client *CloudServicesClient) BeginRestart(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginRestartOptions) (CloudServicesClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientRestartPollerResponse{}, err
+func (client *CloudServicesClient) BeginRestart(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginRestartOptions) (*armruntime.Poller[CloudServicesClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientRestartResponse]("CloudServicesClient.Restart", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientRestartResponse]("CloudServicesClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Restart", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientRestartPollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - Restarts one or more role instances in a cloud service.
@@ -735,20 +739,16 @@ func (client *CloudServicesClient) restartCreateRequest(ctx context.Context, res
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginStartOptions contains the optional parameters for the CloudServicesClient.BeginStart
 // method.
-func (client *CloudServicesClient) BeginStart(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginStartOptions) (CloudServicesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientStartPollerResponse{}, err
+func (client *CloudServicesClient) BeginStart(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginStartOptions) (*armruntime.Poller[CloudServicesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientStartResponse]("CloudServicesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientStartResponse]("CloudServicesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientStartPollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts the cloud service.
@@ -800,20 +800,16 @@ func (client *CloudServicesClient) startCreateRequest(ctx context.Context, resou
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesClientBeginUpdateOptions contains the optional parameters for the CloudServicesClient.BeginUpdate
 // method.
-func (client *CloudServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginUpdateOptions) (CloudServicesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, cloudServiceName, options)
-	if err != nil {
-		return CloudServicesClientUpdatePollerResponse{}, err
+func (client *CloudServicesClient) BeginUpdate(ctx context.Context, resourceGroupName string, cloudServiceName string, options *CloudServicesClientBeginUpdateOptions) (*armruntime.Poller[CloudServicesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, cloudServiceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CloudServicesClientUpdateResponse]("CloudServicesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CloudServicesClientUpdateResponse]("CloudServicesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := CloudServicesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CloudServicesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return CloudServicesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &CloudServicesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a cloud service.

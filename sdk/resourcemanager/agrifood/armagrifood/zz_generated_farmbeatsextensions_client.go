@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -97,16 +97,32 @@ func (client *FarmBeatsExtensionsClient) getHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - FarmBeatsExtensionsClientListOptions contains the optional parameters for the FarmBeatsExtensionsClient.List
 // method.
-func (client *FarmBeatsExtensionsClient) List(options *FarmBeatsExtensionsClientListOptions) *FarmBeatsExtensionsClientListPager {
-	return &FarmBeatsExtensionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *FarmBeatsExtensionsClient) List(options *FarmBeatsExtensionsClientListOptions) *runtime.Pager[FarmBeatsExtensionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FarmBeatsExtensionsClientListResponse]{
+		More: func(page FarmBeatsExtensionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FarmBeatsExtensionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FarmBeatsExtensionListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *FarmBeatsExtensionsClientListResponse) (FarmBeatsExtensionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FarmBeatsExtensionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FarmBeatsExtensionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FarmBeatsExtensionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

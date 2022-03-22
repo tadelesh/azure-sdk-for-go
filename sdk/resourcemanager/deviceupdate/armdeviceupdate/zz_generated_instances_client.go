@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewInstancesClient(subscriptionID string, credential azcore.TokenCredential
 // instanceName - Instance name.
 // instance - Instance details.
 // options - InstancesClientBeginCreateOptions contains the optional parameters for the InstancesClient.BeginCreate method.
-func (client *InstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, instanceName string, instance Instance, options *InstancesClientBeginCreateOptions) (InstancesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, instanceName, instance, options)
-	if err != nil {
-		return InstancesClientCreatePollerResponse{}, err
+func (client *InstancesClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, instanceName string, instance Instance, options *InstancesClientBeginCreateOptions) (*armruntime.Poller[InstancesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, instanceName, instance, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InstancesClientCreateResponse]("InstancesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InstancesClientCreateResponse]("InstancesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := InstancesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("InstancesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return InstancesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &InstancesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates or updates instance.
@@ -125,20 +121,16 @@ func (client *InstancesClient) createCreateRequest(ctx context.Context, resource
 // accountName - Account name.
 // instanceName - Instance name.
 // options - InstancesClientBeginDeleteOptions contains the optional parameters for the InstancesClient.BeginDelete method.
-func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, instanceName string, options *InstancesClientBeginDeleteOptions) (InstancesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, instanceName, options)
-	if err != nil {
-		return InstancesClientDeletePollerResponse{}, err
+func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, instanceName string, options *InstancesClientBeginDeleteOptions) (*armruntime.Poller[InstancesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, instanceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[InstancesClientDeleteResponse]("InstancesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[InstancesClientDeleteResponse]("InstancesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := InstancesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("InstancesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return InstancesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &InstancesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes instance.
@@ -304,16 +296,32 @@ func (client *InstancesClient) headCreateRequest(ctx context.Context, resourceGr
 // resourceGroupName - The resource group name.
 // accountName - Account name.
 // options - InstancesClientListByAccountOptions contains the optional parameters for the InstancesClient.ListByAccount method.
-func (client *InstancesClient) ListByAccount(resourceGroupName string, accountName string, options *InstancesClientListByAccountOptions) *InstancesClientListByAccountPager {
-	return &InstancesClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *InstancesClient) ListByAccount(resourceGroupName string, accountName string, options *InstancesClientListByAccountOptions) *runtime.Pager[InstancesClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InstancesClientListByAccountResponse]{
+		More: func(page InstancesClientListByAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InstancesClientListByAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InstanceList.NextLink)
+		Fetcher: func(ctx context.Context, page *InstancesClientListByAccountResponse) (InstancesClientListByAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InstancesClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InstancesClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InstancesClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 // connectivityCheckRequestParams - Connectivity Check request parameters.
 // options - ClientBeginPerformConnectivityCheckAsyncOptions contains the optional parameters for the Client.BeginPerformConnectivityCheckAsync
 // method.
-func (client *Client) BeginPerformConnectivityCheckAsync(ctx context.Context, resourceGroupName string, serviceName string, connectivityCheckRequestParams ConnectivityCheckRequest, options *ClientBeginPerformConnectivityCheckAsyncOptions) (ClientPerformConnectivityCheckAsyncPollerResponse, error) {
-	resp, err := client.performConnectivityCheckAsync(ctx, resourceGroupName, serviceName, connectivityCheckRequestParams, options)
-	if err != nil {
-		return ClientPerformConnectivityCheckAsyncPollerResponse{}, err
+func (client *Client) BeginPerformConnectivityCheckAsync(ctx context.Context, resourceGroupName string, serviceName string, connectivityCheckRequestParams ConnectivityCheckRequest, options *ClientBeginPerformConnectivityCheckAsyncOptions) (*armruntime.Poller[ClientPerformConnectivityCheckAsyncResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.performConnectivityCheckAsync(ctx, resourceGroupName, serviceName, connectivityCheckRequestParams, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientPerformConnectivityCheckAsyncResponse]("Client.PerformConnectivityCheckAsync", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientPerformConnectivityCheckAsyncResponse]("Client.PerformConnectivityCheckAsync", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientPerformConnectivityCheckAsyncPollerResponse{}
-	pt, err := armruntime.NewPoller("Client.PerformConnectivityCheckAsync", "location", resp, client.pl)
-	if err != nil {
-		return ClientPerformConnectivityCheckAsyncPollerResponse{}, err
-	}
-	result.Poller = &ClientPerformConnectivityCheckAsyncPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PerformConnectivityCheckAsync - Performs a connectivity check between the API Management service and a given destination,

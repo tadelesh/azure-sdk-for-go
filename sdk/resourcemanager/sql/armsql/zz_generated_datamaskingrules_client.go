@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -126,13 +126,26 @@ func (client *DataMaskingRulesClient) createOrUpdateHandleResponse(resp *http.Re
 // databaseName - The name of the database.
 // options - DataMaskingRulesClientListByDatabaseOptions contains the optional parameters for the DataMaskingRulesClient.ListByDatabase
 // method.
-func (client *DataMaskingRulesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DataMaskingRulesClientListByDatabaseOptions) *DataMaskingRulesClientListByDatabasePager {
-	return &DataMaskingRulesClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *DataMaskingRulesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DataMaskingRulesClientListByDatabaseOptions) *runtime.Pager[DataMaskingRulesClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataMaskingRulesClientListByDatabaseResponse]{
+		More: func(page DataMaskingRulesClientListByDatabaseResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataMaskingRulesClientListByDatabaseResponse) (DataMaskingRulesClientListByDatabaseResponse, error) {
+			req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			if err != nil {
+				return DataMaskingRulesClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataMaskingRulesClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataMaskingRulesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

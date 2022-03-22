@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewNotebookWorkspacesClient(subscriptionID string, credential azcore.TokenC
 // notebookCreateUpdateParameters - The notebook workspace to create for the current database account.
 // options - NotebookWorkspacesClientBeginCreateOrUpdateOptions contains the optional parameters for the NotebookWorkspacesClient.BeginCreateOrUpdate
 // method.
-func (client *NotebookWorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, notebookCreateUpdateParameters NotebookWorkspaceCreateUpdateParameters, options *NotebookWorkspacesClientBeginCreateOrUpdateOptions) (NotebookWorkspacesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, notebookWorkspaceName, notebookCreateUpdateParameters, options)
-	if err != nil {
-		return NotebookWorkspacesClientCreateOrUpdatePollerResponse{}, err
+func (client *NotebookWorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, notebookCreateUpdateParameters NotebookWorkspaceCreateUpdateParameters, options *NotebookWorkspacesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[NotebookWorkspacesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, notebookWorkspaceName, notebookCreateUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NotebookWorkspacesClientCreateOrUpdateResponse]("NotebookWorkspacesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NotebookWorkspacesClientCreateOrUpdateResponse]("NotebookWorkspacesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := NotebookWorkspacesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return NotebookWorkspacesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &NotebookWorkspacesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates the notebook workspace for a Cosmos DB account.
@@ -127,20 +123,16 @@ func (client *NotebookWorkspacesClient) createOrUpdateCreateRequest(ctx context.
 // notebookWorkspaceName - The name of the notebook workspace resource.
 // options - NotebookWorkspacesClientBeginDeleteOptions contains the optional parameters for the NotebookWorkspacesClient.BeginDelete
 // method.
-func (client *NotebookWorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginDeleteOptions) (NotebookWorkspacesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
-	if err != nil {
-		return NotebookWorkspacesClientDeletePollerResponse{}, err
+func (client *NotebookWorkspacesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginDeleteOptions) (*armruntime.Poller[NotebookWorkspacesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NotebookWorkspacesClientDeleteResponse]("NotebookWorkspacesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NotebookWorkspacesClientDeleteResponse]("NotebookWorkspacesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := NotebookWorkspacesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return NotebookWorkspacesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &NotebookWorkspacesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the notebook workspace for a Cosmos DB account.
@@ -256,13 +248,26 @@ func (client *NotebookWorkspacesClient) getHandleResponse(resp *http.Response) (
 // accountName - Cosmos DB database account name.
 // options - NotebookWorkspacesClientListByDatabaseAccountOptions contains the optional parameters for the NotebookWorkspacesClient.ListByDatabaseAccount
 // method.
-func (client *NotebookWorkspacesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *NotebookWorkspacesClientListByDatabaseAccountOptions) *NotebookWorkspacesClientListByDatabaseAccountPager {
-	return &NotebookWorkspacesClientListByDatabaseAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *NotebookWorkspacesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *NotebookWorkspacesClientListByDatabaseAccountOptions) *runtime.Pager[NotebookWorkspacesClientListByDatabaseAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NotebookWorkspacesClientListByDatabaseAccountResponse]{
+		More: func(page NotebookWorkspacesClientListByDatabaseAccountResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *NotebookWorkspacesClientListByDatabaseAccountResponse) (NotebookWorkspacesClientListByDatabaseAccountResponse, error) {
+			req, err := client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return NotebookWorkspacesClientListByDatabaseAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NotebookWorkspacesClientListByDatabaseAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NotebookWorkspacesClientListByDatabaseAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseAccountHandleResponse(resp)
+		},
+	})
 }
 
 // listByDatabaseAccountCreateRequest creates the ListByDatabaseAccount request.
@@ -368,20 +373,16 @@ func (client *NotebookWorkspacesClient) listConnectionInfoHandleResponse(resp *h
 // notebookWorkspaceName - The name of the notebook workspace resource.
 // options - NotebookWorkspacesClientBeginRegenerateAuthTokenOptions contains the optional parameters for the NotebookWorkspacesClient.BeginRegenerateAuthToken
 // method.
-func (client *NotebookWorkspacesClient) BeginRegenerateAuthToken(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginRegenerateAuthTokenOptions) (NotebookWorkspacesClientRegenerateAuthTokenPollerResponse, error) {
-	resp, err := client.regenerateAuthToken(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
-	if err != nil {
-		return NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}, err
+func (client *NotebookWorkspacesClient) BeginRegenerateAuthToken(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginRegenerateAuthTokenOptions) (*armruntime.Poller[NotebookWorkspacesClientRegenerateAuthTokenResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.regenerateAuthToken(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NotebookWorkspacesClientRegenerateAuthTokenResponse]("NotebookWorkspacesClient.RegenerateAuthToken", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NotebookWorkspacesClientRegenerateAuthTokenResponse]("NotebookWorkspacesClient.RegenerateAuthToken", options.ResumeToken, client.pl, nil)
 	}
-	result := NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}
-	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.RegenerateAuthToken", "", resp, client.pl)
-	if err != nil {
-		return NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}, err
-	}
-	result.Poller = &NotebookWorkspacesClientRegenerateAuthTokenPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegenerateAuthToken - Regenerates the auth token for the notebook workspace
@@ -438,20 +439,16 @@ func (client *NotebookWorkspacesClient) regenerateAuthTokenCreateRequest(ctx con
 // notebookWorkspaceName - The name of the notebook workspace resource.
 // options - NotebookWorkspacesClientBeginStartOptions contains the optional parameters for the NotebookWorkspacesClient.BeginStart
 // method.
-func (client *NotebookWorkspacesClient) BeginStart(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginStartOptions) (NotebookWorkspacesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
-	if err != nil {
-		return NotebookWorkspacesClientStartPollerResponse{}, err
+func (client *NotebookWorkspacesClient) BeginStart(ctx context.Context, resourceGroupName string, accountName string, notebookWorkspaceName NotebookWorkspaceName, options *NotebookWorkspacesClientBeginStartOptions) (*armruntime.Poller[NotebookWorkspacesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, accountName, notebookWorkspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[NotebookWorkspacesClientStartResponse]("NotebookWorkspacesClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[NotebookWorkspacesClientStartResponse]("NotebookWorkspacesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := NotebookWorkspacesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.Start", "", resp, client.pl)
-	if err != nil {
-		return NotebookWorkspacesClientStartPollerResponse{}, err
-	}
-	result.Poller = &NotebookWorkspacesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Starts the notebook workspace

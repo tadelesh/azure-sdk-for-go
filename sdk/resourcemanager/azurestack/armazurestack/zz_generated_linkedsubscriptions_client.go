@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *LinkedSubscriptionsClient) getHandleResponse(resp *http.Response) 
 // resourceGroup - Name of the resource group.
 // options - LinkedSubscriptionsClientListByResourceGroupOptions contains the optional parameters for the LinkedSubscriptionsClient.ListByResourceGroup
 // method.
-func (client *LinkedSubscriptionsClient) ListByResourceGroup(resourceGroup string, options *LinkedSubscriptionsClientListByResourceGroupOptions) *LinkedSubscriptionsClientListByResourceGroupPager {
-	return &LinkedSubscriptionsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
+func (client *LinkedSubscriptionsClient) ListByResourceGroup(resourceGroup string, options *LinkedSubscriptionsClientListByResourceGroupOptions) *runtime.Pager[LinkedSubscriptionsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinkedSubscriptionsClientListByResourceGroupResponse]{
+		More: func(page LinkedSubscriptionsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LinkedSubscriptionsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LinkedSubscriptionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *LinkedSubscriptionsClientListByResourceGroupResponse) (LinkedSubscriptionsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LinkedSubscriptionsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinkedSubscriptionsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinkedSubscriptionsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -261,16 +277,32 @@ func (client *LinkedSubscriptionsClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LinkedSubscriptionsClientListBySubscriptionOptions contains the optional parameters for the LinkedSubscriptionsClient.ListBySubscription
 // method.
-func (client *LinkedSubscriptionsClient) ListBySubscription(options *LinkedSubscriptionsClientListBySubscriptionOptions) *LinkedSubscriptionsClientListBySubscriptionPager {
-	return &LinkedSubscriptionsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *LinkedSubscriptionsClient) ListBySubscription(options *LinkedSubscriptionsClientListBySubscriptionOptions) *runtime.Pager[LinkedSubscriptionsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LinkedSubscriptionsClientListBySubscriptionResponse]{
+		More: func(page LinkedSubscriptionsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LinkedSubscriptionsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LinkedSubscriptionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *LinkedSubscriptionsClientListBySubscriptionResponse) (LinkedSubscriptionsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LinkedSubscriptionsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LinkedSubscriptionsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LinkedSubscriptionsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

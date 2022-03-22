@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,125 +8,14 @@
 
 package armdataprotection
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// BackupInstancesClientAdhocBackupPollerResponse contains the response from method BackupInstancesClient.AdhocBackup.
-type BackupInstancesClientAdhocBackupPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientAdhocBackupPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientAdhocBackupPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientAdhocBackupResponse, error) {
-	respType := BackupInstancesClientAdhocBackupResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationJobExtendedInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientAdhocBackupPollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientAdhocBackupPollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.AdhocBackup", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientAdhocBackupPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupInstancesClientAdhocBackupResponse contains the response from method BackupInstancesClient.AdhocBackup.
 type BackupInstancesClientAdhocBackupResponse struct {
 	OperationJobExtendedInfo
 }
 
-// BackupInstancesClientCreateOrUpdatePollerResponse contains the response from method BackupInstancesClient.CreateOrUpdate.
-type BackupInstancesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientCreateOrUpdateResponse, error) {
-	respType := BackupInstancesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.BackupInstanceResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupInstancesClientCreateOrUpdateResponse contains the response from method BackupInstancesClient.CreateOrUpdate.
 type BackupInstancesClientCreateOrUpdateResponse struct {
 	BackupInstanceResource
-}
-
-// BackupInstancesClientDeletePollerResponse contains the response from method BackupInstancesClient.Delete.
-type BackupInstancesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientDeleteResponse, error) {
-	respType := BackupInstancesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientDeletePollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientDeletePollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // BackupInstancesClientDeleteResponse contains the response from method BackupInstancesClient.Delete.
@@ -144,79 +33,9 @@ type BackupInstancesClientListResponse struct {
 	BackupInstanceResourceList
 }
 
-// BackupInstancesClientTriggerRehydratePollerResponse contains the response from method BackupInstancesClient.TriggerRehydrate.
-type BackupInstancesClientTriggerRehydratePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientTriggerRehydratePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientTriggerRehydratePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientTriggerRehydrateResponse, error) {
-	respType := BackupInstancesClientTriggerRehydrateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientTriggerRehydratePollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientTriggerRehydratePollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.TriggerRehydrate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientTriggerRehydratePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupInstancesClientTriggerRehydrateResponse contains the response from method BackupInstancesClient.TriggerRehydrate.
 type BackupInstancesClientTriggerRehydrateResponse struct {
 	// placeholder for future response values
-}
-
-// BackupInstancesClientTriggerRestorePollerResponse contains the response from method BackupInstancesClient.TriggerRestore.
-type BackupInstancesClientTriggerRestorePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientTriggerRestorePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientTriggerRestorePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientTriggerRestoreResponse, error) {
-	respType := BackupInstancesClientTriggerRestoreResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationJobExtendedInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientTriggerRestorePollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientTriggerRestorePollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.TriggerRestore", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientTriggerRestorePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // BackupInstancesClientTriggerRestoreResponse contains the response from method BackupInstancesClient.TriggerRestore.
@@ -224,79 +43,9 @@ type BackupInstancesClientTriggerRestoreResponse struct {
 	OperationJobExtendedInfo
 }
 
-// BackupInstancesClientValidateForBackupPollerResponse contains the response from method BackupInstancesClient.ValidateForBackup.
-type BackupInstancesClientValidateForBackupPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientValidateForBackupPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientValidateForBackupPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientValidateForBackupResponse, error) {
-	respType := BackupInstancesClientValidateForBackupResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationJobExtendedInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientValidateForBackupPollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientValidateForBackupPollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.ValidateForBackup", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientValidateForBackupPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupInstancesClientValidateForBackupResponse contains the response from method BackupInstancesClient.ValidateForBackup.
 type BackupInstancesClientValidateForBackupResponse struct {
 	OperationJobExtendedInfo
-}
-
-// BackupInstancesClientValidateForRestorePollerResponse contains the response from method BackupInstancesClient.ValidateForRestore.
-type BackupInstancesClientValidateForRestorePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupInstancesClientValidateForRestorePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupInstancesClientValidateForRestorePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupInstancesClientValidateForRestoreResponse, error) {
-	respType := BackupInstancesClientValidateForRestoreResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationJobExtendedInfo)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupInstancesClientValidateForRestorePollerResponse from the provided client and resume token.
-func (l *BackupInstancesClientValidateForRestorePollerResponse) Resume(ctx context.Context, client *BackupInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupInstancesClient.ValidateForRestore", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupInstancesClientValidateForRestorePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // BackupInstancesClientValidateForRestoreResponse contains the response from method BackupInstancesClient.ValidateForRestore.
@@ -342,41 +91,6 @@ type BackupVaultsClientCheckNameAvailabilityResponse struct {
 	CheckNameAvailabilityResult
 }
 
-// BackupVaultsClientCreateOrUpdatePollerResponse contains the response from method BackupVaultsClient.CreateOrUpdate.
-type BackupVaultsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupVaultsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupVaultsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupVaultsClientCreateOrUpdateResponse, error) {
-	respType := BackupVaultsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.BackupVaultResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupVaultsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *BackupVaultsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *BackupVaultsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupVaultsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupVaultsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupVaultsClientCreateOrUpdateResponse contains the response from method BackupVaultsClient.CreateOrUpdate.
 type BackupVaultsClientCreateOrUpdateResponse struct {
 	BackupVaultResource
@@ -402,41 +116,6 @@ type BackupVaultsClientGetResponse struct {
 	BackupVaultResource
 }
 
-// BackupVaultsClientUpdatePollerResponse contains the response from method BackupVaultsClient.Update.
-type BackupVaultsClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *BackupVaultsClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l BackupVaultsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BackupVaultsClientUpdateResponse, error) {
-	respType := BackupVaultsClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.BackupVaultResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a BackupVaultsClientUpdatePollerResponse from the provided client and resume token.
-func (l *BackupVaultsClientUpdatePollerResponse) Resume(ctx context.Context, client *BackupVaultsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("BackupVaultsClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &BackupVaultsClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // BackupVaultsClientUpdateResponse contains the response from method BackupVaultsClient.Update.
 type BackupVaultsClientUpdateResponse struct {
 	BackupVaultResource
@@ -454,41 +133,6 @@ func (c *ClientCheckFeatureSupportResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.FeatureValidationResponseBaseClassification = res
-	return nil
-}
-
-// ExportJobsClientTriggerPollerResponse contains the response from method ExportJobsClient.Trigger.
-type ExportJobsClientTriggerPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ExportJobsClientTriggerPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ExportJobsClientTriggerPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExportJobsClientTriggerResponse, error) {
-	respType := ExportJobsClientTriggerResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ExportJobsClientTriggerPollerResponse from the provided client and resume token.
-func (l *ExportJobsClientTriggerPollerResponse) Resume(ctx context.Context, client *ExportJobsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ExportJobsClient.Trigger", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ExportJobsClientTriggerPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
 	return nil
 }
 

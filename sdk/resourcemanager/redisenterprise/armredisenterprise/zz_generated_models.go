@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -19,17 +19,20 @@ type AccessKeys struct {
 
 // ClientBeginCreateOptions contains the optional parameters for the Client.BeginCreate method.
 type ClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 type ClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginUpdateOptions contains the optional parameters for the Client.BeginUpdate method.
 type ClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientGetOptions contains the optional parameters for the Client.Get method.
@@ -188,37 +191,44 @@ type DatabaseUpdate struct {
 
 // DatabasesClientBeginCreateOptions contains the optional parameters for the DatabasesClient.BeginCreate method.
 type DatabasesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
 type DatabasesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginExportOptions contains the optional parameters for the DatabasesClient.BeginExport method.
 type DatabasesClientBeginExportOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginForceUnlinkOptions contains the optional parameters for the DatabasesClient.BeginForceUnlink method.
 type DatabasesClientBeginForceUnlinkOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginImportOptions contains the optional parameters for the DatabasesClient.BeginImport method.
 type DatabasesClientBeginImportOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginRegenerateKeyOptions contains the optional parameters for the DatabasesClient.BeginRegenerateKey method.
 type DatabasesClientBeginRegenerateKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginUpdateOptions contains the optional parameters for the DatabasesClient.BeginUpdate method.
 type DatabasesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientGetOptions contains the optional parameters for the DatabasesClient.Get method.
@@ -446,7 +456,8 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginPutOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginPut
 // method.
 type PrivateEndpointConnectionsClientBeginPutOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Delete

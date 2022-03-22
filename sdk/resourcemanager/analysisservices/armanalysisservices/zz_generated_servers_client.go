@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -109,20 +109,16 @@ func (client *ServersClient) checkNameAvailabilityHandleResponse(resp *http.Resp
 // serverName - The name of the Analysis Services server. It must be a minimum of 3 characters, and a maximum of 63.
 // serverParameters - Contains the information used to provision the Analysis Services server.
 // options - ServersClientBeginCreateOptions contains the optional parameters for the ServersClient.BeginCreate method.
-func (client *ServersClient) BeginCreate(ctx context.Context, resourceGroupName string, serverName string, serverParameters Server, options *ServersClientBeginCreateOptions) (ServersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, serverName, serverParameters, options)
-	if err != nil {
-		return ServersClientCreatePollerResponse{}, err
+func (client *ServersClient) BeginCreate(ctx context.Context, resourceGroupName string, serverName string, serverParameters Server, options *ServersClientBeginCreateOptions) (*armruntime.Poller[ServersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, serverName, serverParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientCreateResponse]("ServersClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientCreateResponse]("ServersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ServersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ServersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Provisions the specified Analysis Services server based on the configuration specified in the request.
@@ -174,20 +170,16 @@ func (client *ServersClient) createCreateRequest(ctx context.Context, resourceGr
 // be at least 1 character in length, and no more than 90.
 // serverName - The name of the Analysis Services server. It must be at least 3 characters in length, and no more than 63.
 // options - ServersClientBeginDeleteOptions contains the optional parameters for the ServersClient.BeginDelete method.
-func (client *ServersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginDeleteOptions) (ServersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServersClientDeletePollerResponse{}, err
+func (client *ServersClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginDeleteOptions) (*armruntime.Poller[ServersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientDeleteResponse]("ServersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientDeleteResponse]("ServersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified Analysis Services server.
@@ -340,13 +332,26 @@ func (client *ServersClient) getDetailsHandleResponse(resp *http.Response) (Serv
 // List - Lists all the Analysis Services servers for the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServersClientListOptions contains the optional parameters for the ServersClient.List method.
-func (client *ServersClient) List(options *ServersClientListOptions) *ServersClientListPager {
-	return &ServersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ServersClient) List(options *ServersClientListOptions) *runtime.Pager[ServersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServersClientListResponse]{
+		More: func(page ServersClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServersClientListResponse) (ServersClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, options)
+			if err != nil {
+				return ServersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -382,13 +387,26 @@ func (client *ServersClient) listHandleResponse(resp *http.Response) (ServersCli
 // be at least 1 character in length, and no more than 90.
 // options - ServersClientListByResourceGroupOptions contains the optional parameters for the ServersClient.ListByResourceGroup
 // method.
-func (client *ServersClient) ListByResourceGroup(resourceGroupName string, options *ServersClientListByResourceGroupOptions) *ServersClientListByResourceGroupPager {
-	return &ServersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ServersClient) ListByResourceGroup(resourceGroupName string, options *ServersClientListByResourceGroupOptions) *runtime.Pager[ServersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServersClientListByResourceGroupResponse]{
+		More: func(page ServersClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServersClientListByResourceGroupResponse) (ServersClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ServersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -690,20 +708,16 @@ func (client *ServersClient) listSKUsForNewHandleResponse(resp *http.Response) (
 // be at least 1 character in length, and no more than 90.
 // serverName - The name of the Analysis Services server. It must be at least 3 characters in length, and no more than 63.
 // options - ServersClientBeginResumeOptions contains the optional parameters for the ServersClient.BeginResume method.
-func (client *ServersClient) BeginResume(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginResumeOptions) (ServersClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServersClientResumePollerResponse{}, err
+func (client *ServersClient) BeginResume(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginResumeOptions) (*armruntime.Poller[ServersClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, serverName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientResumeResponse]("ServersClient.Resume", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientResumeResponse]("ServersClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Resume", "", resp, client.pl)
-	if err != nil {
-		return ServersClientResumePollerResponse{}, err
-	}
-	result.Poller = &ServersClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - Resumes operation of the specified Analysis Services server instance.
@@ -755,20 +769,16 @@ func (client *ServersClient) resumeCreateRequest(ctx context.Context, resourceGr
 // be at least 1 character in length, and no more than 90.
 // serverName - The name of the Analysis Services server. It must be at least 3 characters in length, and no more than 63.
 // options - ServersClientBeginSuspendOptions contains the optional parameters for the ServersClient.BeginSuspend method.
-func (client *ServersClient) BeginSuspend(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginSuspendOptions) (ServersClientSuspendPollerResponse, error) {
-	resp, err := client.suspend(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServersClientSuspendPollerResponse{}, err
+func (client *ServersClient) BeginSuspend(ctx context.Context, resourceGroupName string, serverName string, options *ServersClientBeginSuspendOptions) (*armruntime.Poller[ServersClientSuspendResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.suspend(ctx, resourceGroupName, serverName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientSuspendResponse]("ServersClient.Suspend", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientSuspendResponse]("ServersClient.Suspend", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientSuspendPollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Suspend", "", resp, client.pl)
-	if err != nil {
-		return ServersClientSuspendPollerResponse{}, err
-	}
-	result.Poller = &ServersClientSuspendPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Suspend - Suspends operation of the specified Analysis Services server instance.
@@ -821,20 +831,16 @@ func (client *ServersClient) suspendCreateRequest(ctx context.Context, resourceG
 // serverName - The name of the Analysis Services server. It must be at least 3 characters in length, and no more than 63.
 // serverUpdateParameters - Request object that contains the updated information for the server.
 // options - ServersClientBeginUpdateOptions contains the optional parameters for the ServersClient.BeginUpdate method.
-func (client *ServersClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, serverUpdateParameters ServerUpdateParameters, options *ServersClientBeginUpdateOptions) (ServersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serverName, serverUpdateParameters, options)
-	if err != nil {
-		return ServersClientUpdatePollerResponse{}, err
+func (client *ServersClient) BeginUpdate(ctx context.Context, resourceGroupName string, serverName string, serverUpdateParameters ServerUpdateParameters, options *ServersClientBeginUpdateOptions) (*armruntime.Poller[ServersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serverName, serverUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServersClientUpdateResponse]("ServersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServersClientUpdateResponse]("ServersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ServersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ServersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the current state of the specified Analysis Services server.

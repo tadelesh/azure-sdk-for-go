@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *CapabilityTypesClient) getHandleResponse(resp *http.Response) (Cap
 // locationName - String that represents a Location resource name.
 // targetTypeName - String that represents a Target Type resource name.
 // options - CapabilityTypesClientListOptions contains the optional parameters for the CapabilityTypesClient.List method.
-func (client *CapabilityTypesClient) List(locationName string, targetTypeName string, options *CapabilityTypesClientListOptions) *CapabilityTypesClientListPager {
-	return &CapabilityTypesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, locationName, targetTypeName, options)
+func (client *CapabilityTypesClient) List(locationName string, targetTypeName string, options *CapabilityTypesClientListOptions) *runtime.Pager[CapabilityTypesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CapabilityTypesClientListResponse]{
+		More: func(page CapabilityTypesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CapabilityTypesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CapabilityTypeListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CapabilityTypesClientListResponse) (CapabilityTypesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, locationName, targetTypeName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CapabilityTypesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CapabilityTypesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CapabilityTypesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

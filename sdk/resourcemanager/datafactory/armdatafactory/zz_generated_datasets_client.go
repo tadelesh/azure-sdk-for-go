@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -232,16 +232,32 @@ func (client *DatasetsClient) getHandleResponse(resp *http.Response) (DatasetsCl
 // resourceGroupName - The resource group name.
 // factoryName - The factory name.
 // options - DatasetsClientListByFactoryOptions contains the optional parameters for the DatasetsClient.ListByFactory method.
-func (client *DatasetsClient) ListByFactory(resourceGroupName string, factoryName string, options *DatasetsClientListByFactoryOptions) *DatasetsClientListByFactoryPager {
-	return &DatasetsClientListByFactoryPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+func (client *DatasetsClient) ListByFactory(resourceGroupName string, factoryName string, options *DatasetsClientListByFactoryOptions) *runtime.Pager[DatasetsClientListByFactoryResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DatasetsClientListByFactoryResponse]{
+		More: func(page DatasetsClientListByFactoryResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DatasetsClientListByFactoryResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatasetListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *DatasetsClientListByFactoryResponse) (DatasetsClientListByFactoryResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DatasetsClientListByFactoryResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DatasetsClientListByFactoryResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DatasetsClientListByFactoryResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByFactoryHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.

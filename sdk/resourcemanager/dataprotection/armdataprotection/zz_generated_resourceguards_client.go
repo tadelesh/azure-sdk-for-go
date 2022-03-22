@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -156,16 +156,32 @@ func (client *ResourceGuardsClient) getHandleResponse(resp *http.Response) (Reso
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetBackupSecurityPINRequestsObjectsOptions contains the optional parameters for the ResourceGuardsClient.GetBackupSecurityPINRequestsObjects
 // method.
-func (client *ResourceGuardsClient) GetBackupSecurityPINRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetBackupSecurityPINRequestsObjectsOptions) *ResourceGuardsClientGetBackupSecurityPINRequestsObjectsPager {
-	return &ResourceGuardsClientGetBackupSecurityPINRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getBackupSecurityPINRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetBackupSecurityPINRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetBackupSecurityPINRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse) (ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getBackupSecurityPINRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getBackupSecurityPINRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getBackupSecurityPINRequestsObjectsCreateRequest creates the GetBackupSecurityPINRequestsObjects request.
@@ -569,16 +585,32 @@ func (client *ResourceGuardsClient) getDefaultUpdateProtectionPolicyRequestsObje
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsOptions contains the optional parameters for the ResourceGuardsClient.GetDeleteProtectedItemRequestsObjects
 // method.
-func (client *ResourceGuardsClient) GetDeleteProtectedItemRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsOptions) *ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsPager {
-	return &ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getDeleteProtectedItemRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetDeleteProtectedItemRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse) (ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getDeleteProtectedItemRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getDeleteProtectedItemRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getDeleteProtectedItemRequestsObjectsCreateRequest creates the GetDeleteProtectedItemRequestsObjects request.
@@ -622,16 +654,32 @@ func (client *ResourceGuardsClient) getDeleteProtectedItemRequestsObjectsHandleR
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsOptions contains the optional parameters for the
 // ResourceGuardsClient.GetDeleteResourceGuardProxyRequestsObjects method.
-func (client *ResourceGuardsClient) GetDeleteResourceGuardProxyRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsOptions) *ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsPager {
-	return &ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getDeleteResourceGuardProxyRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetDeleteResourceGuardProxyRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse) (ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getDeleteResourceGuardProxyRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getDeleteResourceGuardProxyRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getDeleteResourceGuardProxyRequestsObjectsCreateRequest creates the GetDeleteResourceGuardProxyRequestsObjects request.
@@ -675,16 +723,32 @@ func (client *ResourceGuardsClient) getDeleteResourceGuardProxyRequestsObjectsHa
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsOptions contains the optional parameters for the ResourceGuardsClient.GetDisableSoftDeleteRequestsObjects
 // method.
-func (client *ResourceGuardsClient) GetDisableSoftDeleteRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsOptions) *ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsPager {
-	return &ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getDisableSoftDeleteRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetDisableSoftDeleteRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse) (ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getDisableSoftDeleteRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getDisableSoftDeleteRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getDisableSoftDeleteRequestsObjectsCreateRequest creates the GetDisableSoftDeleteRequestsObjects request.
@@ -727,16 +791,32 @@ func (client *ResourceGuardsClient) getDisableSoftDeleteRequestsObjectsHandleRes
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetResourcesInResourceGroupOptions contains the optional parameters for the ResourceGuardsClient.GetResourcesInResourceGroup
 // method.
-func (client *ResourceGuardsClient) GetResourcesInResourceGroup(resourceGroupName string, options *ResourceGuardsClientGetResourcesInResourceGroupOptions) *ResourceGuardsClientGetResourcesInResourceGroupPager {
-	return &ResourceGuardsClientGetResourcesInResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getResourcesInResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ResourceGuardsClient) GetResourcesInResourceGroup(resourceGroupName string, options *ResourceGuardsClientGetResourcesInResourceGroupOptions) *runtime.Pager[ResourceGuardsClientGetResourcesInResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetResourcesInResourceGroupResponse]{
+		More: func(page ResourceGuardsClientGetResourcesInResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetResourcesInResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceGuardResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetResourcesInResourceGroupResponse) (ResourceGuardsClientGetResourcesInResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getResourcesInResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetResourcesInResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetResourcesInResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetResourcesInResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getResourcesInResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getResourcesInResourceGroupCreateRequest creates the GetResourcesInResourceGroup request.
@@ -774,16 +854,32 @@ func (client *ResourceGuardsClient) getResourcesInResourceGroupHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceGuardsClientGetResourcesInSubscriptionOptions contains the optional parameters for the ResourceGuardsClient.GetResourcesInSubscription
 // method.
-func (client *ResourceGuardsClient) GetResourcesInSubscription(options *ResourceGuardsClientGetResourcesInSubscriptionOptions) *ResourceGuardsClientGetResourcesInSubscriptionPager {
-	return &ResourceGuardsClientGetResourcesInSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getResourcesInSubscriptionCreateRequest(ctx, options)
+func (client *ResourceGuardsClient) GetResourcesInSubscription(options *ResourceGuardsClientGetResourcesInSubscriptionOptions) *runtime.Pager[ResourceGuardsClientGetResourcesInSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetResourcesInSubscriptionResponse]{
+		More: func(page ResourceGuardsClientGetResourcesInSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetResourcesInSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceGuardResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetResourcesInSubscriptionResponse) (ResourceGuardsClientGetResourcesInSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getResourcesInSubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetResourcesInSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetResourcesInSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetResourcesInSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getResourcesInSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getResourcesInSubscriptionCreateRequest creates the GetResourcesInSubscription request.
@@ -819,16 +915,32 @@ func (client *ResourceGuardsClient) getResourcesInSubscriptionHandleResponse(res
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsOptions contains the optional parameters for the ResourceGuardsClient.GetUpdateProtectedItemRequestsObjects
 // method.
-func (client *ResourceGuardsClient) GetUpdateProtectedItemRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsOptions) *ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsPager {
-	return &ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getUpdateProtectedItemRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetUpdateProtectedItemRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse) (ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getUpdateProtectedItemRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getUpdateProtectedItemRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getUpdateProtectedItemRequestsObjectsCreateRequest creates the GetUpdateProtectedItemRequestsObjects request.
@@ -872,16 +984,32 @@ func (client *ResourceGuardsClient) getUpdateProtectedItemRequestsObjectsHandleR
 // resourceGroupName - The name of the resource group where the backup vault is present.
 // options - ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsOptions contains the optional parameters for the
 // ResourceGuardsClient.GetUpdateProtectionPolicyRequestsObjects method.
-func (client *ResourceGuardsClient) GetUpdateProtectionPolicyRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsOptions) *ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsPager {
-	return &ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getUpdateProtectionPolicyRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+func (client *ResourceGuardsClient) GetUpdateProtectionPolicyRequestsObjects(resourceGroupName string, resourceGuardsName string, options *ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsOptions) *runtime.Pager[ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse]{
+		More: func(page ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DppBaseResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse) (ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getUpdateProtectionPolicyRequestsObjectsCreateRequest(ctx, resourceGroupName, resourceGuardsName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getUpdateProtectionPolicyRequestsObjectsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getUpdateProtectionPolicyRequestsObjectsCreateRequest creates the GetUpdateProtectionPolicyRequestsObjects request.

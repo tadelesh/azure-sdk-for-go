@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -144,13 +144,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsAdtAPIClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsAdtAPIClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsAdtAPIClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsAdtAPIClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsAdtAPIClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsAdtAPIClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsAdtAPIClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsAdtAPIClient.Get
@@ -168,13 +170,15 @@ type PrivateEndpointConnectionsAdtAPIClientListByServiceOptions struct {
 // PrivateEndpointConnectionsCompClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsCompClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsCompClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsCompClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsCompClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsCompClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsCompClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsCompClient.Get
@@ -192,13 +196,15 @@ type PrivateEndpointConnectionsCompClientListByServiceOptions struct {
 // PrivateEndpointConnectionsForEDMClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsForEDMClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsForEDMClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForEDMClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsForEDMClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsForEDMClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForEDMClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsForEDMClient.Get
@@ -216,13 +222,15 @@ type PrivateEndpointConnectionsForEDMClientListByServiceOptions struct {
 // PrivateEndpointConnectionsForMIPPolicySyncClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsForMIPPolicySyncClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsForMIPPolicySyncClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForMIPPolicySyncClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsForMIPPolicySyncClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsForMIPPolicySyncClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForMIPPolicySyncClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsForMIPPolicySyncClient.Get
@@ -240,13 +248,15 @@ type PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceOptions struct
 // PrivateEndpointConnectionsForSCCPowershellClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsForSCCPowershellClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsForSCCPowershellClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForSCCPowershellClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsForSCCPowershellClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsForSCCPowershellClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsForSCCPowershellClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsForSCCPowershellClient.Get
@@ -264,13 +274,15 @@ type PrivateEndpointConnectionsForSCCPowershellClientListByServiceOptions struct
 // PrivateEndpointConnectionsSecClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsSecClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsSecClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsSecClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsSecClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsSecClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsSecClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsSecClient.Get
@@ -409,13 +421,15 @@ type PrivateLinkServiceConnectionState struct {
 // PrivateLinkServicesForEDMUploadClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesForEDMUploadClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesForEDMUploadClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForEDMUploadClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForEDMUploadClient.BeginUpdate
 // method.
 type PrivateLinkServicesForEDMUploadClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForEDMUploadClientGetOptions contains the optional parameters for the PrivateLinkServicesForEDMUploadClient.Get
@@ -481,19 +495,22 @@ type PrivateLinkServicesForEDMUploadDescriptionListResult struct {
 // PrivateLinkServicesForM365ComplianceCenterClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesForM365ComplianceCenterClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesForM365ComplianceCenterClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365ComplianceCenterClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesForM365ComplianceCenterClient.BeginDelete
 // method.
 type PrivateLinkServicesForM365ComplianceCenterClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365ComplianceCenterClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForM365ComplianceCenterClient.BeginUpdate
 // method.
 type PrivateLinkServicesForM365ComplianceCenterClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365ComplianceCenterClientGetOptions contains the optional parameters for the PrivateLinkServicesForM365ComplianceCenterClient.Get
@@ -559,19 +576,22 @@ type PrivateLinkServicesForM365ComplianceCenterDescriptionListResult struct {
 // PrivateLinkServicesForM365SecurityCenterClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesForM365SecurityCenterClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesForM365SecurityCenterClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365SecurityCenterClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesForM365SecurityCenterClient.BeginDelete
 // method.
 type PrivateLinkServicesForM365SecurityCenterClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365SecurityCenterClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForM365SecurityCenterClient.BeginUpdate
 // method.
 type PrivateLinkServicesForM365SecurityCenterClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForM365SecurityCenterClientGetOptions contains the optional parameters for the PrivateLinkServicesForM365SecurityCenterClient.Get
@@ -637,19 +657,22 @@ type PrivateLinkServicesForM365SecurityCenterDescriptionListResult struct {
 // PrivateLinkServicesForMIPPolicySyncClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesForMIPPolicySyncClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesForMIPPolicySyncClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForMIPPolicySyncClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesForMIPPolicySyncClient.BeginDelete
 // method.
 type PrivateLinkServicesForMIPPolicySyncClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForMIPPolicySyncClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForMIPPolicySyncClient.BeginUpdate
 // method.
 type PrivateLinkServicesForMIPPolicySyncClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForMIPPolicySyncClientGetOptions contains the optional parameters for the PrivateLinkServicesForMIPPolicySyncClient.Get
@@ -715,19 +738,22 @@ type PrivateLinkServicesForMIPPolicySyncDescriptionListResult struct {
 // PrivateLinkServicesForO365ManagementActivityAPIClientBeginCreateOrUpdateOptions contains the optional parameters for the
 // PrivateLinkServicesForO365ManagementActivityAPIClient.BeginCreateOrUpdate method.
 type PrivateLinkServicesForO365ManagementActivityAPIClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForO365ManagementActivityAPIClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesForO365ManagementActivityAPIClient.BeginDelete
 // method.
 type PrivateLinkServicesForO365ManagementActivityAPIClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForO365ManagementActivityAPIClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForO365ManagementActivityAPIClient.BeginUpdate
 // method.
 type PrivateLinkServicesForO365ManagementActivityAPIClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForO365ManagementActivityAPIClientGetOptions contains the optional parameters for the PrivateLinkServicesForO365ManagementActivityAPIClient.Get
@@ -794,19 +820,22 @@ type PrivateLinkServicesForO365ManagementActivityAPIDescriptionListResult struct
 // PrivateLinkServicesForSCCPowershellClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesForSCCPowershellClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesForSCCPowershellClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForSCCPowershellClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesForSCCPowershellClient.BeginDelete
 // method.
 type PrivateLinkServicesForSCCPowershellClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForSCCPowershellClientBeginUpdateOptions contains the optional parameters for the PrivateLinkServicesForSCCPowershellClient.BeginUpdate
 // method.
 type PrivateLinkServicesForSCCPowershellClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesForSCCPowershellClientGetOptions contains the optional parameters for the PrivateLinkServicesForSCCPowershellClient.Get
@@ -934,7 +963,8 @@ type ServiceExportConfigurationInfo struct {
 
 // ServicesClientBeginDeleteOptions contains the optional parameters for the ServicesClient.BeginDelete method.
 type ServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServicesPatchDescription - The description of the service.

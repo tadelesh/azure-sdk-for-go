@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredentia
 // extensionName - The name of the machine extension.
 // extension - Details of the Machine Extension to be created.
 // options - ExtensionsClientBeginCreateOptions contains the optional parameters for the ExtensionsClient.BeginCreate method.
-func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, extension Extension, options *ExtensionsClientBeginCreateOptions) (ExtensionsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, extension, options)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
+func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, extension Extension, options *ExtensionsClientBeginCreateOptions) (*armruntime.Poller[ExtensionsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, extension, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientCreateResponse]("ExtensionsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientCreateResponse]("ExtensionsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Extension for HCI cluster.
@@ -131,20 +127,16 @@ func (client *ExtensionsClient) createCreateRequest(ctx context.Context, resourc
 // arcSettingName - The name of the proxy resource holding details of HCI ArcSetting information.
 // extensionName - The name of the machine extension.
 // options - ExtensionsClientBeginDeleteOptions contains the optional parameters for the ExtensionsClient.BeginDelete method.
-func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (ExtensionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, options)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
+func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (*armruntime.Poller[ExtensionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete particular Arc Extension of HCI Cluster.
@@ -270,16 +262,32 @@ func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (Extensio
 // arcSettingName - The name of the proxy resource holding details of HCI ArcSetting information.
 // options - ExtensionsClientListByArcSettingOptions contains the optional parameters for the ExtensionsClient.ListByArcSetting
 // method.
-func (client *ExtensionsClient) ListByArcSetting(resourceGroupName string, clusterName string, arcSettingName string, options *ExtensionsClientListByArcSettingOptions) *ExtensionsClientListByArcSettingPager {
-	return &ExtensionsClientListByArcSettingPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByArcSettingCreateRequest(ctx, resourceGroupName, clusterName, arcSettingName, options)
+func (client *ExtensionsClient) ListByArcSetting(resourceGroupName string, clusterName string, arcSettingName string, options *ExtensionsClientListByArcSettingOptions) *runtime.Pager[ExtensionsClientListByArcSettingResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ExtensionsClientListByArcSettingResponse]{
+		More: func(page ExtensionsClientListByArcSettingResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ExtensionsClientListByArcSettingResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExtensionList.NextLink)
+		Fetcher: func(ctx context.Context, page *ExtensionsClientListByArcSettingResponse) (ExtensionsClientListByArcSettingResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByArcSettingCreateRequest(ctx, resourceGroupName, clusterName, arcSettingName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ExtensionsClientListByArcSettingResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ExtensionsClientListByArcSettingResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ExtensionsClientListByArcSettingResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByArcSettingHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByArcSettingCreateRequest creates the ListByArcSetting request.
@@ -329,20 +337,16 @@ func (client *ExtensionsClient) listByArcSettingHandleResponse(resp *http.Respon
 // extensionName - The name of the machine extension.
 // extension - Details of the Machine Extension to be created.
 // options - ExtensionsClientBeginUpdateOptions contains the optional parameters for the ExtensionsClient.BeginUpdate method.
-func (client *ExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, extension Extension, options *ExtensionsClientBeginUpdateOptions) (ExtensionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, extension, options)
-	if err != nil {
-		return ExtensionsClientUpdatePollerResponse{}, err
+func (client *ExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, arcSettingName string, extensionName string, extension Extension, options *ExtensionsClientBeginUpdateOptions) (*armruntime.Poller[ExtensionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, arcSettingName, extensionName, extension, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientUpdateResponse]("ExtensionsClient.Update", "original-uri", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientUpdateResponse]("ExtensionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Update", "original-uri", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update Extension for HCI cluster.

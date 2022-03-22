@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -104,20 +104,16 @@ func (client *DomainsClient) checkAvailabilityHandleResponse(resp *http.Response
 // domain - Domain registration information.
 // options - DomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainsClient.BeginCreateOrUpdate
 // method.
-func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domain Domain, options *DomainsClientBeginCreateOrUpdateOptions) (DomainsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domain, options)
-	if err != nil {
-		return DomainsClientCreateOrUpdatePollerResponse{}, err
+func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domain Domain, options *DomainsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DomainsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, domainName, domain, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DomainsClientCreateOrUpdateResponse]("DomainsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DomainsClientCreateOrUpdateResponse]("DomainsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DomainsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DomainsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DomainsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DomainsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Description for Creates or updates a domain.
@@ -492,16 +488,32 @@ func (client *DomainsClient) getOwnershipIdentifierHandleResponse(resp *http.Res
 // List - Description for Get all domains in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DomainsClientListOptions contains the optional parameters for the DomainsClient.List method.
-func (client *DomainsClient) List(options *DomainsClientListOptions) *DomainsClientListPager {
-	return &DomainsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DomainsClient) List(options *DomainsClientListOptions) *runtime.Pager[DomainsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListResponse]{
+		More: func(page DomainsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListResponse) (DomainsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -536,16 +548,32 @@ func (client *DomainsClient) listHandleResponse(resp *http.Response) (DomainsCli
 // resourceGroupName - Name of the resource group to which the resource belongs.
 // options - DomainsClientListByResourceGroupOptions contains the optional parameters for the DomainsClient.ListByResourceGroup
 // method.
-func (client *DomainsClient) ListByResourceGroup(resourceGroupName string, options *DomainsClientListByResourceGroupOptions) *DomainsClientListByResourceGroupPager {
-	return &DomainsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DomainsClient) ListByResourceGroup(resourceGroupName string, options *DomainsClientListByResourceGroupOptions) *runtime.Pager[DomainsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListByResourceGroupResponse]{
+		More: func(page DomainsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListByResourceGroupResponse) (DomainsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -585,16 +613,32 @@ func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Respon
 // domainName - Name of domain.
 // options - DomainsClientListOwnershipIdentifiersOptions contains the optional parameters for the DomainsClient.ListOwnershipIdentifiers
 // method.
-func (client *DomainsClient) ListOwnershipIdentifiers(resourceGroupName string, domainName string, options *DomainsClientListOwnershipIdentifiersOptions) *DomainsClientListOwnershipIdentifiersPager {
-	return &DomainsClientListOwnershipIdentifiersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOwnershipIdentifiersCreateRequest(ctx, resourceGroupName, domainName, options)
+func (client *DomainsClient) ListOwnershipIdentifiers(resourceGroupName string, domainName string, options *DomainsClientListOwnershipIdentifiersOptions) *runtime.Pager[DomainsClientListOwnershipIdentifiersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListOwnershipIdentifiersResponse]{
+		More: func(page DomainsClientListOwnershipIdentifiersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListOwnershipIdentifiersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DomainOwnershipIdentifierCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListOwnershipIdentifiersResponse) (DomainsClientListOwnershipIdentifiersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOwnershipIdentifiersCreateRequest(ctx, resourceGroupName, domainName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListOwnershipIdentifiersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListOwnershipIdentifiersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListOwnershipIdentifiersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOwnershipIdentifiersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOwnershipIdentifiersCreateRequest creates the ListOwnershipIdentifiers request.
@@ -637,16 +681,32 @@ func (client *DomainsClient) listOwnershipIdentifiersHandleResponse(resp *http.R
 // parameters - Search parameters for domain name recommendations.
 // options - DomainsClientListRecommendationsOptions contains the optional parameters for the DomainsClient.ListRecommendations
 // method.
-func (client *DomainsClient) ListRecommendations(parameters DomainRecommendationSearchParameters, options *DomainsClientListRecommendationsOptions) *DomainsClientListRecommendationsPager {
-	return &DomainsClientListRecommendationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRecommendationsCreateRequest(ctx, parameters, options)
+func (client *DomainsClient) ListRecommendations(parameters DomainRecommendationSearchParameters, options *DomainsClientListRecommendationsOptions) *runtime.Pager[DomainsClientListRecommendationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DomainsClientListRecommendationsResponse]{
+		More: func(page DomainsClientListRecommendationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DomainsClientListRecommendationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NameIdentifierCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *DomainsClientListRecommendationsResponse) (DomainsClientListRecommendationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRecommendationsCreateRequest(ctx, parameters, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DomainsClientListRecommendationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DomainsClientListRecommendationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DomainsClientListRecommendationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRecommendationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRecommendationsCreateRequest creates the ListRecommendations request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewApplicationsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - The application resource.
 // options - ApplicationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationsClient.BeginCreateOrUpdate
 // method.
-func (client *ApplicationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, parameters ApplicationResource, options *ApplicationsClientBeginCreateOrUpdateOptions) (ApplicationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationName, parameters, options)
-	if err != nil {
-		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
+func (client *ApplicationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, parameters ApplicationResource, options *ApplicationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ApplicationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, applicationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientCreateOrUpdateResponse]("ApplicationsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientCreateOrUpdateResponse]("ApplicationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Service Fabric application resource with the specified name.
@@ -127,20 +123,16 @@ func (client *ApplicationsClient) createOrUpdateCreateRequest(ctx context.Contex
 // applicationName - The name of the application resource.
 // options - ApplicationsClientBeginDeleteOptions contains the optional parameters for the ApplicationsClient.BeginDelete
 // method.
-func (client *ApplicationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, options *ApplicationsClientBeginDeleteOptions) (ApplicationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationName, options)
-	if err != nil {
-		return ApplicationsClientDeletePollerResponse{}, err
+func (client *ApplicationsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, options *ApplicationsClientBeginDeleteOptions) (*armruntime.Poller[ApplicationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, applicationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientDeleteResponse]("ApplicationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientDeleteResponse]("ApplicationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Service Fabric application resource with the specified name.
@@ -314,20 +306,16 @@ func (client *ApplicationsClient) listHandleResponse(resp *http.Response) (Appli
 // parameters - The application resource for patch operations.
 // options - ApplicationsClientBeginUpdateOptions contains the optional parameters for the ApplicationsClient.BeginUpdate
 // method.
-func (client *ApplicationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, parameters ApplicationResourceUpdate, options *ApplicationsClientBeginUpdateOptions) (ApplicationsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, applicationName, parameters, options)
-	if err != nil {
-		return ApplicationsClientUpdatePollerResponse{}, err
+func (client *ApplicationsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, parameters ApplicationResourceUpdate, options *ApplicationsClientBeginUpdateOptions) (*armruntime.Poller[ApplicationsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, applicationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientUpdateResponse]("ApplicationsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientUpdateResponse]("ApplicationsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update a Service Fabric application resource with the specified name.

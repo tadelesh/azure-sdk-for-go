@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -254,16 +254,32 @@ func (client *TestResultsClient) getVideoDownloadURLHandleResponse(resp *http.Re
 // packageName - The resource name of the Test Base Package.
 // osUpdateType - The type of the OS Update.
 // options - TestResultsClientListOptions contains the optional parameters for the TestResultsClient.List method.
-func (client *TestResultsClient) List(resourceGroupName string, testBaseAccountName string, packageName string, osUpdateType OsUpdateType, options *TestResultsClientListOptions) *TestResultsClientListPager {
-	return &TestResultsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, osUpdateType, options)
+func (client *TestResultsClient) List(resourceGroupName string, testBaseAccountName string, packageName string, osUpdateType OsUpdateType, options *TestResultsClientListOptions) *runtime.Pager[TestResultsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TestResultsClientListResponse]{
+		More: func(page TestResultsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TestResultsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TestResultListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TestResultsClientListResponse) (TestResultsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, osUpdateType, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TestResultsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TestResultsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TestResultsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

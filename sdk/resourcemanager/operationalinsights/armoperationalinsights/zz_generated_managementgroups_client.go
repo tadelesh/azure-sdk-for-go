@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewManagementGroupsClient(subscriptionID string, credential azcore.TokenCre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - ManagementGroupsClientListOptions contains the optional parameters for the ManagementGroupsClient.List method.
-func (client *ManagementGroupsClient) List(resourceGroupName string, workspaceName string, options *ManagementGroupsClientListOptions) *ManagementGroupsClientListPager {
-	return &ManagementGroupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *ManagementGroupsClient) List(resourceGroupName string, workspaceName string, options *ManagementGroupsClientListOptions) *runtime.Pager[ManagementGroupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementGroupsClientListResponse]{
+		More: func(page ManagementGroupsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagementGroupsClientListResponse) (ManagementGroupsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			if err != nil {
+				return ManagementGroupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementGroupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementGroupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

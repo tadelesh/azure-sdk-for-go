@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,90 +8,14 @@
 
 package armcpim
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // B2CTenantsClientCheckNameAvailabilityResponse contains the response from method B2CTenantsClient.CheckNameAvailability.
 type B2CTenantsClientCheckNameAvailabilityResponse struct {
 	NameAvailabilityResponse
 }
 
-// B2CTenantsClientCreatePollerResponse contains the response from method B2CTenantsClient.Create.
-type B2CTenantsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *B2CTenantsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l B2CTenantsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (B2CTenantsClientCreateResponse, error) {
-	respType := B2CTenantsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.B2CTenantResource)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a B2CTenantsClientCreatePollerResponse from the provided client and resume token.
-func (l *B2CTenantsClientCreatePollerResponse) Resume(ctx context.Context, client *B2CTenantsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("B2CTenantsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &B2CTenantsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // B2CTenantsClientCreateResponse contains the response from method B2CTenantsClient.Create.
 type B2CTenantsClientCreateResponse struct {
 	B2CTenantResource
-}
-
-// B2CTenantsClientDeletePollerResponse contains the response from method B2CTenantsClient.Delete.
-type B2CTenantsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *B2CTenantsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l B2CTenantsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (B2CTenantsClientDeleteResponse, error) {
-	respType := B2CTenantsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a B2CTenantsClientDeletePollerResponse from the provided client and resume token.
-func (l *B2CTenantsClientDeletePollerResponse) Resume(ctx context.Context, client *B2CTenantsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("B2CTenantsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &B2CTenantsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // B2CTenantsClientDeleteResponse contains the response from method B2CTenantsClient.Delete.

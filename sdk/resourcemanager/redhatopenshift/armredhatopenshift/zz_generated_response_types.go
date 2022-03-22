@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armredhatopenshift
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// OpenShiftClustersClientCreateOrUpdatePollerResponse contains the response from method OpenShiftClustersClient.CreateOrUpdate.
-type OpenShiftClustersClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OpenShiftClustersClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OpenShiftClustersClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OpenShiftClustersClientCreateOrUpdateResponse, error) {
-	respType := OpenShiftClustersClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OpenShiftCluster)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OpenShiftClustersClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *OpenShiftClustersClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *OpenShiftClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OpenShiftClustersClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OpenShiftClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // OpenShiftClustersClientCreateOrUpdateResponse contains the response from method OpenShiftClustersClient.CreateOrUpdate.
 type OpenShiftClustersClientCreateOrUpdateResponse struct {
 	OpenShiftCluster
-}
-
-// OpenShiftClustersClientDeletePollerResponse contains the response from method OpenShiftClustersClient.Delete.
-type OpenShiftClustersClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OpenShiftClustersClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OpenShiftClustersClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OpenShiftClustersClientDeleteResponse, error) {
-	respType := OpenShiftClustersClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OpenShiftClustersClientDeletePollerResponse from the provided client and resume token.
-func (l *OpenShiftClustersClientDeletePollerResponse) Resume(ctx context.Context, client *OpenShiftClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OpenShiftClustersClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OpenShiftClustersClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // OpenShiftClustersClientDeleteResponse contains the response from method OpenShiftClustersClient.Delete.
@@ -112,41 +36,6 @@ type OpenShiftClustersClientListCredentialsResponse struct {
 // OpenShiftClustersClientListResponse contains the response from method OpenShiftClustersClient.List.
 type OpenShiftClustersClientListResponse struct {
 	OpenShiftClusterList
-}
-
-// OpenShiftClustersClientUpdatePollerResponse contains the response from method OpenShiftClustersClient.Update.
-type OpenShiftClustersClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *OpenShiftClustersClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l OpenShiftClustersClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OpenShiftClustersClientUpdateResponse, error) {
-	respType := OpenShiftClustersClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OpenShiftCluster)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a OpenShiftClustersClientUpdatePollerResponse from the provided client and resume token.
-func (l *OpenShiftClustersClientUpdatePollerResponse) Resume(ctx context.Context, client *OpenShiftClustersClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("OpenShiftClustersClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &OpenShiftClustersClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // OpenShiftClustersClientUpdateResponse contains the response from method OpenShiftClustersClient.Update.

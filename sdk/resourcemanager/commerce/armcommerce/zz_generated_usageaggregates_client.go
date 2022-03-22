@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,16 +57,32 @@ func NewUsageAggregatesClient(subscriptionID string, credential azcore.TokenCred
 // reportedStartTime - The start of the time range to retrieve data for.
 // reportedEndTime - The end of the time range to retrieve data for.
 // options - UsageAggregatesClientListOptions contains the optional parameters for the UsageAggregatesClient.List method.
-func (client *UsageAggregatesClient) List(reportedStartTime time.Time, reportedEndTime time.Time, options *UsageAggregatesClientListOptions) *UsageAggregatesClientListPager {
-	return &UsageAggregatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, reportedStartTime, reportedEndTime, options)
+func (client *UsageAggregatesClient) List(reportedStartTime time.Time, reportedEndTime time.Time, options *UsageAggregatesClientListOptions) *runtime.Pager[UsageAggregatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UsageAggregatesClientListResponse]{
+		More: func(page UsageAggregatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UsageAggregatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UsageAggregationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *UsageAggregatesClientListResponse) (UsageAggregatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, reportedStartTime, reportedEndTime, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UsageAggregatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UsageAggregatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UsageAggregatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

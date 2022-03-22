@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *HostPoolsClient) getHandleResponse(resp *http.Response) (HostPools
 // List - List hostPools in subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - HostPoolsClientListOptions contains the optional parameters for the HostPoolsClient.List method.
-func (client *HostPoolsClient) List(options *HostPoolsClientListOptions) *HostPoolsClientListPager {
-	return &HostPoolsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *HostPoolsClient) List(options *HostPoolsClientListOptions) *runtime.Pager[HostPoolsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HostPoolsClientListResponse]{
+		More: func(page HostPoolsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HostPoolsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HostPoolList.NextLink)
+		Fetcher: func(ctx context.Context, page *HostPoolsClientListResponse) (HostPoolsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HostPoolsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HostPoolsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HostPoolsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -258,16 +274,32 @@ func (client *HostPoolsClient) listHandleResponse(resp *http.Response) (HostPool
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - HostPoolsClientListByResourceGroupOptions contains the optional parameters for the HostPoolsClient.ListByResourceGroup
 // method.
-func (client *HostPoolsClient) ListByResourceGroup(resourceGroupName string, options *HostPoolsClientListByResourceGroupOptions) *HostPoolsClientListByResourceGroupPager {
-	return &HostPoolsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *HostPoolsClient) ListByResourceGroup(resourceGroupName string, options *HostPoolsClientListByResourceGroupOptions) *runtime.Pager[HostPoolsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HostPoolsClientListByResourceGroupResponse]{
+		More: func(page HostPoolsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HostPoolsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HostPoolList.NextLink)
+		Fetcher: func(ctx context.Context, page *HostPoolsClientListByResourceGroupResponse) (HostPoolsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HostPoolsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HostPoolsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HostPoolsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

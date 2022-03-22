@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -242,16 +242,32 @@ func (client *InvitationsClient) getHandleResponse(resp *http.Response) (Invitat
 // accountName - The name of the share account.
 // shareName - The name of the share.
 // options - InvitationsClientListByShareOptions contains the optional parameters for the InvitationsClient.ListByShare method.
-func (client *InvitationsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *InvitationsClientListByShareOptions) *InvitationsClientListBySharePager {
-	return &InvitationsClientListBySharePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+func (client *InvitationsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *InvitationsClientListByShareOptions) *runtime.Pager[InvitationsClientListByShareResponse] {
+	return runtime.NewPager(runtime.PageProcessor[InvitationsClientListByShareResponse]{
+		More: func(page InvitationsClientListByShareResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp InvitationsClientListByShareResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.InvitationList.NextLink)
+		Fetcher: func(ctx context.Context, page *InvitationsClientListByShareResponse) (InvitationsClientListByShareResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return InvitationsClientListByShareResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return InvitationsClientListByShareResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return InvitationsClientListByShareResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareCreateRequest creates the ListByShare request.

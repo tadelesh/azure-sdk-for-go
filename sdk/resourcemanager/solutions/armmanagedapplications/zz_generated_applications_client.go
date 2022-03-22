@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewApplicationsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - Parameters supplied to the create or update a managed application.
 // options - ApplicationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationsClient.BeginCreateOrUpdate
 // method.
-func (client *ApplicationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, applicationName string, parameters Application, options *ApplicationsClientBeginCreateOrUpdateOptions) (ApplicationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, applicationName, parameters, options)
-	if err != nil {
-		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
+func (client *ApplicationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, applicationName string, parameters Application, options *ApplicationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ApplicationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, applicationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientCreateOrUpdateResponse]("ApplicationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientCreateOrUpdateResponse]("ApplicationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a new managed application.
@@ -121,20 +117,16 @@ func (client *ApplicationsClient) createOrUpdateCreateRequest(ctx context.Contex
 // applicationName - The name of the managed application.
 // options - ApplicationsClientBeginDeleteOptions contains the optional parameters for the ApplicationsClient.BeginDelete
 // method.
-func (client *ApplicationsClient) BeginDelete(ctx context.Context, resourceGroupName string, applicationName string, options *ApplicationsClientBeginDeleteOptions) (ApplicationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, applicationName, options)
-	if err != nil {
-		return ApplicationsClientDeletePollerResponse{}, err
+func (client *ApplicationsClient) BeginDelete(ctx context.Context, resourceGroupName string, applicationName string, options *ApplicationsClientBeginDeleteOptions) (*armruntime.Poller[ApplicationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, applicationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientDeleteResponse]("ApplicationsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientDeleteResponse]("ApplicationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the managed application.
@@ -287,16 +279,32 @@ func (client *ApplicationsClient) listAllowedUpgradePlansCreateRequest(ctx conte
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ApplicationsClientListByResourceGroupOptions contains the optional parameters for the ApplicationsClient.ListByResourceGroup
 // method.
-func (client *ApplicationsClient) ListByResourceGroup(resourceGroupName string, options *ApplicationsClientListByResourceGroupOptions) *ApplicationsClientListByResourceGroupPager {
-	return &ApplicationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ApplicationsClient) ListByResourceGroup(resourceGroupName string, options *ApplicationsClientListByResourceGroupOptions) *runtime.Pager[ApplicationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationsClientListByResourceGroupResponse]{
+		More: func(page ApplicationsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationsClientListByResourceGroupResponse) (ApplicationsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -334,16 +342,32 @@ func (client *ApplicationsClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ApplicationsClientListBySubscriptionOptions contains the optional parameters for the ApplicationsClient.ListBySubscription
 // method.
-func (client *ApplicationsClient) ListBySubscription(options *ApplicationsClientListBySubscriptionOptions) *ApplicationsClientListBySubscriptionPager {
-	return &ApplicationsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *ApplicationsClient) ListBySubscription(options *ApplicationsClientListBySubscriptionOptions) *runtime.Pager[ApplicationsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationsClientListBySubscriptionResponse]{
+		More: func(page ApplicationsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationsClientListBySubscriptionResponse) (ApplicationsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -379,20 +403,16 @@ func (client *ApplicationsClient) listBySubscriptionHandleResponse(resp *http.Re
 // applicationName - The name of the managed application.
 // options - ApplicationsClientBeginRefreshPermissionsOptions contains the optional parameters for the ApplicationsClient.BeginRefreshPermissions
 // method.
-func (client *ApplicationsClient) BeginRefreshPermissions(ctx context.Context, resourceGroupName string, applicationName string, options *ApplicationsClientBeginRefreshPermissionsOptions) (ApplicationsClientRefreshPermissionsPollerResponse, error) {
-	resp, err := client.refreshPermissions(ctx, resourceGroupName, applicationName, options)
-	if err != nil {
-		return ApplicationsClientRefreshPermissionsPollerResponse{}, err
+func (client *ApplicationsClient) BeginRefreshPermissions(ctx context.Context, resourceGroupName string, applicationName string, options *ApplicationsClientBeginRefreshPermissionsOptions) (*armruntime.Poller[ApplicationsClientRefreshPermissionsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.refreshPermissions(ctx, resourceGroupName, applicationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationsClientRefreshPermissionsResponse]("ApplicationsClient.RefreshPermissions", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationsClientRefreshPermissionsResponse]("ApplicationsClient.RefreshPermissions", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationsClientRefreshPermissionsPollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationsClient.RefreshPermissions", "", resp, client.pl)
-	if err != nil {
-		return ApplicationsClientRefreshPermissionsPollerResponse{}, err
-	}
-	result.Poller = &ApplicationsClientRefreshPermissionsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RefreshPermissions - Refresh Permissions for application.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -232,16 +232,32 @@ func (client *ComputePoliciesClient) getHandleResponse(resp *http.Response) (Com
 // accountName - The name of the Data Lake Analytics account.
 // options - ComputePoliciesClientListByAccountOptions contains the optional parameters for the ComputePoliciesClient.ListByAccount
 // method.
-func (client *ComputePoliciesClient) ListByAccount(resourceGroupName string, accountName string, options *ComputePoliciesClientListByAccountOptions) *ComputePoliciesClientListByAccountPager {
-	return &ComputePoliciesClientListByAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *ComputePoliciesClient) ListByAccount(resourceGroupName string, accountName string, options *ComputePoliciesClientListByAccountOptions) *runtime.Pager[ComputePoliciesClientListByAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ComputePoliciesClientListByAccountResponse]{
+		More: func(page ComputePoliciesClientListByAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ComputePoliciesClientListByAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ComputePolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ComputePoliciesClientListByAccountResponse) (ComputePoliciesClientListByAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ComputePoliciesClientListByAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ComputePoliciesClientListByAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ComputePoliciesClientListByAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.

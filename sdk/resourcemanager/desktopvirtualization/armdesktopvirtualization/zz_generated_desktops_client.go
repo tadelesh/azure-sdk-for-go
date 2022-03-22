@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,16 +114,32 @@ func (client *DesktopsClient) getHandleResponse(resp *http.Response) (DesktopsCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // applicationGroupName - The name of the application group
 // options - DesktopsClientListOptions contains the optional parameters for the DesktopsClient.List method.
-func (client *DesktopsClient) List(resourceGroupName string, applicationGroupName string, options *DesktopsClientListOptions) *DesktopsClientListPager {
-	return &DesktopsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, applicationGroupName, options)
+func (client *DesktopsClient) List(resourceGroupName string, applicationGroupName string, options *DesktopsClientListOptions) *runtime.Pager[DesktopsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DesktopsClientListResponse]{
+		More: func(page DesktopsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DesktopsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DesktopList.NextLink)
+		Fetcher: func(ctx context.Context, page *DesktopsClientListResponse) (DesktopsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, applicationGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DesktopsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DesktopsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DesktopsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

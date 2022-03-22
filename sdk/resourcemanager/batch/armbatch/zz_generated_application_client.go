@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *ApplicationClient) getHandleResponse(resp *http.Response) (Applica
 // resourceGroupName - The name of the resource group that contains the Batch account.
 // accountName - The name of the Batch account.
 // options - ApplicationClientListOptions contains the optional parameters for the ApplicationClient.List method.
-func (client *ApplicationClient) List(resourceGroupName string, accountName string, options *ApplicationClientListOptions) *ApplicationClientListPager {
-	return &ApplicationClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *ApplicationClient) List(resourceGroupName string, accountName string, options *ApplicationClientListOptions) *runtime.Pager[ApplicationClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationClientListResponse]{
+		More: func(page ApplicationClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListApplicationsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationClientListResponse) (ApplicationClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewServerParametersClient(subscriptionID string, credential azcore.TokenCre
 // value - The parameters for updating a list of server configuration.
 // options - ServerParametersClientBeginListUpdateConfigurationsOptions contains the optional parameters for the ServerParametersClient.BeginListUpdateConfigurations
 // method.
-func (client *ServerParametersClient) BeginListUpdateConfigurations(ctx context.Context, resourceGroupName string, serverName string, value ConfigurationListResult, options *ServerParametersClientBeginListUpdateConfigurationsOptions) (ServerParametersClientListUpdateConfigurationsPollerResponse, error) {
-	resp, err := client.listUpdateConfigurations(ctx, resourceGroupName, serverName, value, options)
-	if err != nil {
-		return ServerParametersClientListUpdateConfigurationsPollerResponse{}, err
+func (client *ServerParametersClient) BeginListUpdateConfigurations(ctx context.Context, resourceGroupName string, serverName string, value ConfigurationListResult, options *ServerParametersClientBeginListUpdateConfigurationsOptions) (*armruntime.Poller[ServerParametersClientListUpdateConfigurationsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.listUpdateConfigurations(ctx, resourceGroupName, serverName, value, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerParametersClientListUpdateConfigurationsResponse]("ServerParametersClient.ListUpdateConfigurations", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerParametersClientListUpdateConfigurationsResponse]("ServerParametersClient.ListUpdateConfigurations", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerParametersClientListUpdateConfigurationsPollerResponse{}
-	pt, err := armruntime.NewPoller("ServerParametersClient.ListUpdateConfigurations", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServerParametersClientListUpdateConfigurationsPollerResponse{}, err
-	}
-	result.Poller = &ServerParametersClientListUpdateConfigurationsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ListUpdateConfigurations - Update a list of configurations in a given server.

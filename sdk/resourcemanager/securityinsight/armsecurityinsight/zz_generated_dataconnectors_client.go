@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -331,16 +331,32 @@ func (client *DataConnectorsClient) getHandleResponse(resp *http.Response) (Data
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - DataConnectorsClientListOptions contains the optional parameters for the DataConnectorsClient.List method.
-func (client *DataConnectorsClient) List(resourceGroupName string, workspaceName string, options *DataConnectorsClientListOptions) *DataConnectorsClientListPager {
-	return &DataConnectorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *DataConnectorsClient) List(resourceGroupName string, workspaceName string, options *DataConnectorsClientListOptions) *runtime.Pager[DataConnectorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataConnectorsClientListResponse]{
+		More: func(page DataConnectorsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DataConnectorsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DataConnectorList.NextLink)
+		Fetcher: func(ctx context.Context, page *DataConnectorsClientListResponse) (DataConnectorsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DataConnectorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataConnectorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataConnectorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

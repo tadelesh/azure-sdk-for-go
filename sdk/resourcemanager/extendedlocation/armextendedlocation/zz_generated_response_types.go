@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armextendedlocation
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// CustomLocationsClientCreateOrUpdatePollerResponse contains the response from method CustomLocationsClient.CreateOrUpdate.
-type CustomLocationsClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CustomLocationsClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CustomLocationsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CustomLocationsClientCreateOrUpdateResponse, error) {
-	respType := CustomLocationsClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CustomLocation)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CustomLocationsClientCreateOrUpdatePollerResponse from the provided client and resume token.
-func (l *CustomLocationsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *CustomLocationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CustomLocationsClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CustomLocationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // CustomLocationsClientCreateOrUpdateResponse contains the response from method CustomLocationsClient.CreateOrUpdate.
 type CustomLocationsClientCreateOrUpdateResponse struct {
 	CustomLocation
-}
-
-// CustomLocationsClientDeletePollerResponse contains the response from method CustomLocationsClient.Delete.
-type CustomLocationsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *CustomLocationsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l CustomLocationsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CustomLocationsClientDeleteResponse, error) {
-	respType := CustomLocationsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a CustomLocationsClientDeletePollerResponse from the provided client and resume token.
-func (l *CustomLocationsClientDeletePollerResponse) Resume(ctx context.Context, client *CustomLocationsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("CustomLocationsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &CustomLocationsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // CustomLocationsClientDeleteResponse contains the response from method CustomLocationsClient.Delete.

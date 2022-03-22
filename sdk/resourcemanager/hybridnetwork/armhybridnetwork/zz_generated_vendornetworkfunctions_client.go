@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewVendorNetworkFunctionsClient(subscriptionID string, credential azcore.To
 // parameters - Parameters supplied to the create or update vendor network function operation.
 // options - VendorNetworkFunctionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorNetworkFunctionsClient.BeginCreateOrUpdate
 // method.
-func (client *VendorNetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Context, locationName string, vendorName string, serviceKey string, parameters VendorNetworkFunction, options *VendorNetworkFunctionsClientBeginCreateOrUpdateOptions) (VendorNetworkFunctionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, locationName, vendorName, serviceKey, parameters, options)
-	if err != nil {
-		return VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
+func (client *VendorNetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Context, locationName string, vendorName string, serviceKey string, parameters VendorNetworkFunction, options *VendorNetworkFunctionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VendorNetworkFunctionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, locationName, vendorName, serviceKey, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VendorNetworkFunctionsClientCreateOrUpdateResponse]("VendorNetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VendorNetworkFunctionsClientCreateOrUpdateResponse]("VendorNetworkFunctionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VendorNetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VendorNetworkFunctionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a vendor network function. This operation can take up to 6 hours to complete. This
@@ -189,16 +185,32 @@ func (client *VendorNetworkFunctionsClient) getHandleResponse(resp *http.Respons
 // vendorName - The name of the vendor.
 // options - VendorNetworkFunctionsClientListOptions contains the optional parameters for the VendorNetworkFunctionsClient.List
 // method.
-func (client *VendorNetworkFunctionsClient) List(locationName string, vendorName string, options *VendorNetworkFunctionsClientListOptions) *VendorNetworkFunctionsClientListPager {
-	return &VendorNetworkFunctionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, locationName, vendorName, options)
+func (client *VendorNetworkFunctionsClient) List(locationName string, vendorName string, options *VendorNetworkFunctionsClientListOptions) *runtime.Pager[VendorNetworkFunctionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VendorNetworkFunctionsClientListResponse]{
+		More: func(page VendorNetworkFunctionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VendorNetworkFunctionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VendorNetworkFunctionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *VendorNetworkFunctionsClientListResponse) (VendorNetworkFunctionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, locationName, vendorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VendorNetworkFunctionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VendorNetworkFunctionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VendorNetworkFunctionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

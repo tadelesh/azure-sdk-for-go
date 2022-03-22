@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewTriggersClient(subscriptionID string, credential azcore.TokenCredential,
 // triggerName - The name of the trigger.
 // trigger - Trigger details.
 // options - TriggersClientBeginCreateOptions contains the optional parameters for the TriggersClient.BeginCreate method.
-func (client *TriggersClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, triggerName string, trigger TriggerClassification, options *TriggersClientBeginCreateOptions) (TriggersClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, shareSubscriptionName, triggerName, trigger, options)
-	if err != nil {
-		return TriggersClientCreatePollerResponse{}, err
+func (client *TriggersClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, triggerName string, trigger TriggerClassification, options *TriggersClientBeginCreateOptions) (*armruntime.Poller[TriggersClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, shareSubscriptionName, triggerName, trigger, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TriggersClientCreateResponse]("TriggersClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TriggersClientCreateResponse]("TriggersClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := TriggersClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("TriggersClient.Create", "", resp, client.pl)
-	if err != nil {
-		return TriggersClientCreatePollerResponse{}, err
-	}
-	result.Poller = &TriggersClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a Trigger
@@ -131,20 +127,16 @@ func (client *TriggersClient) createCreateRequest(ctx context.Context, resourceG
 // shareSubscriptionName - The name of the shareSubscription.
 // triggerName - The name of the trigger.
 // options - TriggersClientBeginDeleteOptions contains the optional parameters for the TriggersClient.BeginDelete method.
-func (client *TriggersClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, triggerName string, options *TriggersClientBeginDeleteOptions) (TriggersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareSubscriptionName, triggerName, options)
-	if err != nil {
-		return TriggersClientDeletePollerResponse{}, err
+func (client *TriggersClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareSubscriptionName string, triggerName string, options *TriggersClientBeginDeleteOptions) (*armruntime.Poller[TriggersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareSubscriptionName, triggerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[TriggersClientDeleteResponse]("TriggersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[TriggersClientDeleteResponse]("TriggersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := TriggersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("TriggersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return TriggersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &TriggersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a Trigger in a shareSubscription
@@ -270,16 +262,32 @@ func (client *TriggersClient) getHandleResponse(resp *http.Response) (TriggersCl
 // shareSubscriptionName - The name of the share subscription.
 // options - TriggersClientListByShareSubscriptionOptions contains the optional parameters for the TriggersClient.ListByShareSubscription
 // method.
-func (client *TriggersClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *TriggersClientListByShareSubscriptionOptions) *TriggersClientListByShareSubscriptionPager {
-	return &TriggersClientListByShareSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+func (client *TriggersClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *TriggersClientListByShareSubscriptionOptions) *runtime.Pager[TriggersClientListByShareSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TriggersClientListByShareSubscriptionResponse]{
+		More: func(page TriggersClientListByShareSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TriggersClientListByShareSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TriggerList.NextLink)
+		Fetcher: func(ctx context.Context, page *TriggersClientListByShareSubscriptionResponse) (TriggersClientListByShareSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TriggersClientListByShareSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TriggersClientListByShareSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TriggersClientListByShareSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareSubscriptionCreateRequest creates the ListByShareSubscription request.

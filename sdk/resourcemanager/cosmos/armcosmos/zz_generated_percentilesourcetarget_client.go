@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,13 +61,26 @@ func NewPercentileSourceTargetClient(subscriptionID string, credential azcore.To
 // and timeGrain. The supported operator is eq.
 // options - PercentileSourceTargetClientListMetricsOptions contains the optional parameters for the PercentileSourceTargetClient.ListMetrics
 // method.
-func (client *PercentileSourceTargetClient) ListMetrics(resourceGroupName string, accountName string, sourceRegion string, targetRegion string, filter string, options *PercentileSourceTargetClientListMetricsOptions) *PercentileSourceTargetClientListMetricsPager {
-	return &PercentileSourceTargetClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, sourceRegion, targetRegion, filter, options)
+func (client *PercentileSourceTargetClient) ListMetrics(resourceGroupName string, accountName string, sourceRegion string, targetRegion string, filter string, options *PercentileSourceTargetClientListMetricsOptions) *runtime.Pager[PercentileSourceTargetClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PercentileSourceTargetClientListMetricsResponse]{
+		More: func(page PercentileSourceTargetClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PercentileSourceTargetClientListMetricsResponse) (PercentileSourceTargetClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, sourceRegion, targetRegion, filter, options)
+			if err != nil {
+				return PercentileSourceTargetClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PercentileSourceTargetClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PercentileSourceTargetClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

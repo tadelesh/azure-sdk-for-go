@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -95,16 +95,32 @@ func (client *EnrollmentAccountsClient) getHandleResponse(resp *http.Response) (
 // List - Lists the enrollment accounts the caller has access to.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EnrollmentAccountsClientListOptions contains the optional parameters for the EnrollmentAccountsClient.List method.
-func (client *EnrollmentAccountsClient) List(options *EnrollmentAccountsClientListOptions) *EnrollmentAccountsClientListPager {
-	return &EnrollmentAccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *EnrollmentAccountsClient) List(options *EnrollmentAccountsClientListOptions) *runtime.Pager[EnrollmentAccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[EnrollmentAccountsClientListResponse]{
+		More: func(page EnrollmentAccountsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp EnrollmentAccountsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.EnrollmentAccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *EnrollmentAccountsClientListResponse) (EnrollmentAccountsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return EnrollmentAccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return EnrollmentAccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return EnrollmentAccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

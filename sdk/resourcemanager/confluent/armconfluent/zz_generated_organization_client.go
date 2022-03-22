@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewOrganizationClient(subscriptionID string, credential azcore.TokenCredent
 // organizationName - Organization resource name
 // options - OrganizationClientBeginCreateOptions contains the optional parameters for the OrganizationClient.BeginCreate
 // method.
-func (client *OrganizationClient) BeginCreate(ctx context.Context, resourceGroupName string, organizationName string, options *OrganizationClientBeginCreateOptions) (OrganizationClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, organizationName, options)
-	if err != nil {
-		return OrganizationClientCreatePollerResponse{}, err
+func (client *OrganizationClient) BeginCreate(ctx context.Context, resourceGroupName string, organizationName string, options *OrganizationClientBeginCreateOptions) (*armruntime.Poller[OrganizationClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, organizationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OrganizationClientCreateResponse]("OrganizationClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OrganizationClientCreateResponse]("OrganizationClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := OrganizationClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("OrganizationClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return OrganizationClientCreatePollerResponse{}, err
-	}
-	result.Poller = &OrganizationClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Organization resource
@@ -123,20 +119,16 @@ func (client *OrganizationClient) createCreateRequest(ctx context.Context, resou
 // organizationName - Organization resource name
 // options - OrganizationClientBeginDeleteOptions contains the optional parameters for the OrganizationClient.BeginDelete
 // method.
-func (client *OrganizationClient) BeginDelete(ctx context.Context, resourceGroupName string, organizationName string, options *OrganizationClientBeginDeleteOptions) (OrganizationClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, organizationName, options)
-	if err != nil {
-		return OrganizationClientDeletePollerResponse{}, err
+func (client *OrganizationClient) BeginDelete(ctx context.Context, resourceGroupName string, organizationName string, options *OrganizationClientBeginDeleteOptions) (*armruntime.Poller[OrganizationClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, organizationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OrganizationClientDeleteResponse]("OrganizationClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OrganizationClientDeleteResponse]("OrganizationClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OrganizationClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OrganizationClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return OrganizationClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OrganizationClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete Organization resource
@@ -242,16 +234,32 @@ func (client *OrganizationClient) getHandleResponse(resp *http.Response) (Organi
 // resourceGroupName - Resource group name
 // options - OrganizationClientListByResourceGroupOptions contains the optional parameters for the OrganizationClient.ListByResourceGroup
 // method.
-func (client *OrganizationClient) ListByResourceGroup(resourceGroupName string, options *OrganizationClientListByResourceGroupOptions) *OrganizationClientListByResourceGroupPager {
-	return &OrganizationClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *OrganizationClient) ListByResourceGroup(resourceGroupName string, options *OrganizationClientListByResourceGroupOptions) *runtime.Pager[OrganizationClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OrganizationClientListByResourceGroupResponse]{
+		More: func(page OrganizationClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OrganizationClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrganizationResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OrganizationClientListByResourceGroupResponse) (OrganizationClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OrganizationClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OrganizationClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OrganizationClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -289,16 +297,32 @@ func (client *OrganizationClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OrganizationClientListBySubscriptionOptions contains the optional parameters for the OrganizationClient.ListBySubscription
 // method.
-func (client *OrganizationClient) ListBySubscription(options *OrganizationClientListBySubscriptionOptions) *OrganizationClientListBySubscriptionPager {
-	return &OrganizationClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *OrganizationClient) ListBySubscription(options *OrganizationClientListBySubscriptionOptions) *runtime.Pager[OrganizationClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OrganizationClientListBySubscriptionResponse]{
+		More: func(page OrganizationClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OrganizationClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OrganizationResourceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OrganizationClientListBySubscriptionResponse) (OrganizationClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OrganizationClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OrganizationClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OrganizationClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

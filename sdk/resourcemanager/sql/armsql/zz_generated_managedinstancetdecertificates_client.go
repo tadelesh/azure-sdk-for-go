@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewManagedInstanceTdeCertificatesClient(subscriptionID string, credential a
 // parameters - The requested TDE certificate to be created or updated.
 // options - ManagedInstanceTdeCertificatesClientBeginCreateOptions contains the optional parameters for the ManagedInstanceTdeCertificatesClient.BeginCreate
 // method.
-func (client *ManagedInstanceTdeCertificatesClient) BeginCreate(ctx context.Context, resourceGroupName string, managedInstanceName string, parameters TdeCertificate, options *ManagedInstanceTdeCertificatesClientBeginCreateOptions) (ManagedInstanceTdeCertificatesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, managedInstanceName, parameters, options)
-	if err != nil {
-		return ManagedInstanceTdeCertificatesClientCreatePollerResponse{}, err
+func (client *ManagedInstanceTdeCertificatesClient) BeginCreate(ctx context.Context, resourceGroupName string, managedInstanceName string, parameters TdeCertificate, options *ManagedInstanceTdeCertificatesClientBeginCreateOptions) (*armruntime.Poller[ManagedInstanceTdeCertificatesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, managedInstanceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceTdeCertificatesClientCreateResponse]("ManagedInstanceTdeCertificatesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceTdeCertificatesClientCreateResponse]("ManagedInstanceTdeCertificatesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceTdeCertificatesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceTdeCertificatesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceTdeCertificatesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceTdeCertificatesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a TDE certificate for a given server.

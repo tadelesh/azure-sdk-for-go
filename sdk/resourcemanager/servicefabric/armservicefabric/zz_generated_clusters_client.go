@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewClustersClient(subscriptionID string, credential azcore.TokenCredential,
 // parameters - The cluster resource.
 // options - ClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ClustersClient.BeginCreateOrUpdate
 // method.
-func (client *ClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters Cluster, options *ClustersClientBeginCreateOrUpdateOptions) (ClustersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientCreateOrUpdatePollerResponse{}, err
+func (client *ClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters Cluster, options *ClustersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ClustersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientCreateOrUpdateResponse]("ClustersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientCreateOrUpdateResponse]("ClustersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Service Fabric cluster resource with the specified name.
@@ -380,20 +376,16 @@ func (client *ClustersClient) listUpgradableVersionsHandleResponse(resp *http.Re
 // clusterName - The name of the cluster resource.
 // parameters - The parameters which contains the property value and property name which used to update the cluster configuration.
 // options - ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
-func (client *ClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterUpdateParameters, options *ClustersClientBeginUpdateOptions) (ClustersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ClustersClientUpdatePollerResponse{}, err
+func (client *ClustersClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterUpdateParameters, options *ClustersClientBeginUpdateOptions) (*armruntime.Poller[ClustersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClustersClientUpdateResponse]("ClustersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClustersClientUpdateResponse]("ClustersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ClustersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ClustersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ClustersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClustersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Update the configuration of a Service Fabric cluster resource with the specified name.

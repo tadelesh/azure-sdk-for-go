@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,13 +54,26 @@ func NewReplicationUsagesClient(subscriptionID string, credential azcore.TokenCr
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // vaultName - The name of the recovery services vault.
 // options - ReplicationUsagesClientListOptions contains the optional parameters for the ReplicationUsagesClient.List method.
-func (client *ReplicationUsagesClient) List(resourceGroupName string, vaultName string, options *ReplicationUsagesClientListOptions) *ReplicationUsagesClientListPager {
-	return &ReplicationUsagesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+func (client *ReplicationUsagesClient) List(resourceGroupName string, vaultName string, options *ReplicationUsagesClientListOptions) *runtime.Pager[ReplicationUsagesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationUsagesClientListResponse]{
+		More: func(page ReplicationUsagesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ReplicationUsagesClientListResponse) (ReplicationUsagesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+			if err != nil {
+				return ReplicationUsagesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationUsagesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationUsagesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

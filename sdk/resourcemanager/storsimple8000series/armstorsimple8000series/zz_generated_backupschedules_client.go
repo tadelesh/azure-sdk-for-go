@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewBackupSchedulesClient(subscriptionID string, credential azcore.TokenCred
 // parameters - The backup schedule.
 // options - BackupSchedulesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupSchedulesClient.BeginCreateOrUpdate
 // method.
-func (client *BackupSchedulesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, backupPolicyName string, backupScheduleName string, resourceGroupName string, managerName string, parameters BackupSchedule, options *BackupSchedulesClientBeginCreateOrUpdateOptions) (BackupSchedulesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, backupPolicyName, backupScheduleName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return BackupSchedulesClientCreateOrUpdatePollerResponse{}, err
+func (client *BackupSchedulesClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, backupPolicyName string, backupScheduleName string, resourceGroupName string, managerName string, parameters BackupSchedule, options *BackupSchedulesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BackupSchedulesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, backupPolicyName, backupScheduleName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupSchedulesClientCreateOrUpdateResponse]("BackupSchedulesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupSchedulesClientCreateOrUpdateResponse]("BackupSchedulesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupSchedulesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupSchedulesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BackupSchedulesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BackupSchedulesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the backup schedule.
@@ -119,20 +115,16 @@ func (client *BackupSchedulesClient) createOrUpdateCreateRequest(ctx context.Con
 // managerName - The manager name
 // options - BackupSchedulesClientBeginDeleteOptions contains the optional parameters for the BackupSchedulesClient.BeginDelete
 // method.
-func (client *BackupSchedulesClient) BeginDelete(ctx context.Context, deviceName string, backupPolicyName string, backupScheduleName string, resourceGroupName string, managerName string, options *BackupSchedulesClientBeginDeleteOptions) (BackupSchedulesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, backupPolicyName, backupScheduleName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BackupSchedulesClientDeletePollerResponse{}, err
+func (client *BackupSchedulesClient) BeginDelete(ctx context.Context, deviceName string, backupPolicyName string, backupScheduleName string, resourceGroupName string, managerName string, options *BackupSchedulesClientBeginDeleteOptions) (*armruntime.Poller[BackupSchedulesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, backupPolicyName, backupScheduleName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BackupSchedulesClientDeleteResponse]("BackupSchedulesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BackupSchedulesClientDeleteResponse]("BackupSchedulesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BackupSchedulesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BackupSchedulesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BackupSchedulesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BackupSchedulesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the backup schedule.
@@ -231,13 +223,26 @@ func (client *BackupSchedulesClient) getHandleResponse(resp *http.Response) (Bac
 // managerName - The manager name
 // options - BackupSchedulesClientListByBackupPolicyOptions contains the optional parameters for the BackupSchedulesClient.ListByBackupPolicy
 // method.
-func (client *BackupSchedulesClient) ListByBackupPolicy(deviceName string, backupPolicyName string, resourceGroupName string, managerName string, options *BackupSchedulesClientListByBackupPolicyOptions) *BackupSchedulesClientListByBackupPolicyPager {
-	return &BackupSchedulesClientListByBackupPolicyPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByBackupPolicyCreateRequest(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, options)
+func (client *BackupSchedulesClient) ListByBackupPolicy(deviceName string, backupPolicyName string, resourceGroupName string, managerName string, options *BackupSchedulesClientListByBackupPolicyOptions) *runtime.Pager[BackupSchedulesClientListByBackupPolicyResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupSchedulesClientListByBackupPolicyResponse]{
+		More: func(page BackupSchedulesClientListByBackupPolicyResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BackupSchedulesClientListByBackupPolicyResponse) (BackupSchedulesClientListByBackupPolicyResponse, error) {
+			req, err := client.listByBackupPolicyCreateRequest(ctx, deviceName, backupPolicyName, resourceGroupName, managerName, options)
+			if err != nil {
+				return BackupSchedulesClientListByBackupPolicyResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupSchedulesClientListByBackupPolicyResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupSchedulesClientListByBackupPolicyResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByBackupPolicyHandleResponse(resp)
+		},
+	})
 }
 
 // listByBackupPolicyCreateRequest creates the ListByBackupPolicy request.

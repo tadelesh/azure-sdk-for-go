@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewPredictionsClient(subscriptionID string, credential azcore.TokenCredenti
 // parameters - Parameters supplied to the create/update Prediction operation.
 // options - PredictionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PredictionsClient.BeginCreateOrUpdate
 // method.
-func (client *PredictionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, predictionName string, parameters PredictionResourceFormat, options *PredictionsClientBeginCreateOrUpdateOptions) (PredictionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, predictionName, parameters, options)
-	if err != nil {
-		return PredictionsClientCreateOrUpdatePollerResponse{}, err
+func (client *PredictionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, predictionName string, parameters PredictionResourceFormat, options *PredictionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[PredictionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, predictionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PredictionsClientCreateOrUpdateResponse]("PredictionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PredictionsClientCreateOrUpdateResponse]("PredictionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := PredictionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("PredictionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return PredictionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &PredictionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a Prediction or updates an existing Prediction in the hub.
@@ -127,20 +123,16 @@ func (client *PredictionsClient) createOrUpdateCreateRequest(ctx context.Context
 // hubName - The name of the hub.
 // predictionName - The name of the Prediction.
 // options - PredictionsClientBeginDeleteOptions contains the optional parameters for the PredictionsClient.BeginDelete method.
-func (client *PredictionsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, predictionName string, options *PredictionsClientBeginDeleteOptions) (PredictionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, predictionName, options)
-	if err != nil {
-		return PredictionsClientDeletePollerResponse{}, err
+func (client *PredictionsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, predictionName string, options *PredictionsClientBeginDeleteOptions) (*armruntime.Poller[PredictionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, predictionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PredictionsClientDeleteResponse]("PredictionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PredictionsClientDeleteResponse]("PredictionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PredictionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PredictionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PredictionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PredictionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Prediction in the hub.
@@ -376,16 +368,32 @@ func (client *PredictionsClient) getTrainingResultsHandleResponse(resp *http.Res
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - PredictionsClientListByHubOptions contains the optional parameters for the PredictionsClient.ListByHub method.
-func (client *PredictionsClient) ListByHub(resourceGroupName string, hubName string, options *PredictionsClientListByHubOptions) *PredictionsClientListByHubPager {
-	return &PredictionsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *PredictionsClient) ListByHub(resourceGroupName string, hubName string, options *PredictionsClientListByHubOptions) *runtime.Pager[PredictionsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PredictionsClientListByHubResponse]{
+		More: func(page PredictionsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PredictionsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PredictionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PredictionsClientListByHubResponse) (PredictionsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PredictionsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PredictionsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PredictionsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

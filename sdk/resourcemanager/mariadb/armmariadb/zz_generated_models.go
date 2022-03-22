@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -102,7 +102,8 @@ type ConfigurationProperties struct {
 // ConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ConfigurationsClient.BeginCreateOrUpdate
 // method.
 type ConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationsClientGetOptions contains the optional parameters for the ConfigurationsClient.Get method.
@@ -148,12 +149,14 @@ type DatabaseProperties struct {
 // DatabasesClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasesClient.BeginCreateOrUpdate
 // method.
 type DatabasesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
 type DatabasesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientGetOptions contains the optional parameters for the DatabasesClient.Get method.
@@ -227,12 +230,14 @@ type FirewallRuleProperties struct {
 // FirewallRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallRulesClient.BeginCreateOrUpdate
 // method.
 type FirewallRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallRulesClientBeginDeleteOptions contains the optional parameters for the FirewallRulesClient.BeginDelete method.
 type FirewallRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallRulesClientGetOptions contains the optional parameters for the FirewallRulesClient.Get method.
@@ -310,7 +315,8 @@ type LogFilesClientListByServerOptions struct {
 // ManagementClientBeginCreateRecommendedActionSessionOptions contains the optional parameters for the ManagementClient.BeginCreateRecommendedActionSession
 // method.
 type ManagementClientBeginCreateRecommendedActionSessionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientResetQueryPerformanceInsightDataOptions contains the optional parameters for the ManagementClient.ResetQueryPerformanceInsightData
@@ -480,19 +486,22 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginUpdateTagsOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginUpdateTags
 // method.
 type PrivateEndpointConnectionsClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -910,7 +919,8 @@ type ServerListResult struct {
 // ServerParametersClientBeginListUpdateConfigurationsOptions contains the optional parameters for the ServerParametersClient.BeginListUpdateConfigurations
 // method.
 type ServerParametersClientBeginListUpdateConfigurationsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerPrivateEndpointConnection - A private endpoint connection under a server
@@ -1132,7 +1142,8 @@ type ServerPropertiesForRestore struct {
 // ServerSecurityAlertPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerSecurityAlertPoliciesClient.BeginCreateOrUpdate
 // method.
 type ServerSecurityAlertPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServerSecurityAlertPoliciesClientGetOptions contains the optional parameters for the ServerSecurityAlertPoliciesClient.Get
@@ -1210,32 +1221,38 @@ type ServerUpdateParametersProperties struct {
 
 // ServersClientBeginCreateOptions contains the optional parameters for the ServersClient.BeginCreate method.
 type ServersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientBeginDeleteOptions contains the optional parameters for the ServersClient.BeginDelete method.
 type ServersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientBeginRestartOptions contains the optional parameters for the ServersClient.BeginRestart method.
 type ServersClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientBeginStartOptions contains the optional parameters for the ServersClient.BeginStart method.
 type ServersClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientBeginStopOptions contains the optional parameters for the ServersClient.BeginStop method.
 type ServersClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientBeginUpdateOptions contains the optional parameters for the ServersClient.BeginUpdate method.
 type ServersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServersClientGetOptions contains the optional parameters for the ServersClient.Get method.
@@ -1379,13 +1396,15 @@ type VirtualNetworkRuleProperties struct {
 // VirtualNetworkRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkRulesClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkRulesClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkRulesClient.BeginDelete
 // method.
 type VirtualNetworkRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkRulesClientGetOptions contains the optional parameters for the VirtualNetworkRulesClient.Get method.

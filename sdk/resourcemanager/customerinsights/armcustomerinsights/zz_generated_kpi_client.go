@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewKpiClient(subscriptionID string, credential azcore.TokenCredential, opti
 // kpiName - The name of the KPI.
 // parameters - Parameters supplied to the create/update KPI operation.
 // options - KpiClientBeginCreateOrUpdateOptions contains the optional parameters for the KpiClient.BeginCreateOrUpdate method.
-func (client *KpiClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, kpiName string, parameters KpiResourceFormat, options *KpiClientBeginCreateOrUpdateOptions) (KpiClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, kpiName, parameters, options)
-	if err != nil {
-		return KpiClientCreateOrUpdatePollerResponse{}, err
+func (client *KpiClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, kpiName string, parameters KpiResourceFormat, options *KpiClientBeginCreateOrUpdateOptions) (*armruntime.Poller[KpiClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, kpiName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[KpiClientCreateOrUpdateResponse]("KpiClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[KpiClientCreateOrUpdateResponse]("KpiClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := KpiClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("KpiClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return KpiClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &KpiClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a KPI or updates an existing KPI in the hub.
@@ -126,20 +122,16 @@ func (client *KpiClient) createOrUpdateCreateRequest(ctx context.Context, resour
 // hubName - The name of the hub.
 // kpiName - The name of the KPI.
 // options - KpiClientBeginDeleteOptions contains the optional parameters for the KpiClient.BeginDelete method.
-func (client *KpiClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, kpiName string, options *KpiClientBeginDeleteOptions) (KpiClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, kpiName, options)
-	if err != nil {
-		return KpiClientDeletePollerResponse{}, err
+func (client *KpiClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, kpiName string, options *KpiClientBeginDeleteOptions) (*armruntime.Poller[KpiClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, kpiName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[KpiClientDeleteResponse]("KpiClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[KpiClientDeleteResponse]("KpiClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := KpiClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("KpiClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return KpiClientDeletePollerResponse{}, err
-	}
-	result.Poller = &KpiClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a KPI in the hub.
@@ -253,16 +245,32 @@ func (client *KpiClient) getHandleResponse(resp *http.Response) (KpiClientGetRes
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - KpiClientListByHubOptions contains the optional parameters for the KpiClient.ListByHub method.
-func (client *KpiClient) ListByHub(resourceGroupName string, hubName string, options *KpiClientListByHubOptions) *KpiClientListByHubPager {
-	return &KpiClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *KpiClient) ListByHub(resourceGroupName string, hubName string, options *KpiClientListByHubOptions) *runtime.Pager[KpiClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[KpiClientListByHubResponse]{
+		More: func(page KpiClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp KpiClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.KpiListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *KpiClientListByHubResponse) (KpiClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return KpiClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return KpiClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return KpiClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

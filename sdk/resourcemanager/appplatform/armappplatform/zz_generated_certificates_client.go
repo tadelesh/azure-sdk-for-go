@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewCertificatesClient(subscriptionID string, credential azcore.TokenCredent
 // certificateResource - Parameters for the create or update operation
 // options - CertificatesClientBeginCreateOrUpdateOptions contains the optional parameters for the CertificatesClient.BeginCreateOrUpdate
 // method.
-func (client *CertificatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, certificateName string, certificateResource CertificateResource, options *CertificatesClientBeginCreateOrUpdateOptions) (CertificatesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, certificateName, certificateResource, options)
-	if err != nil {
-		return CertificatesClientCreateOrUpdatePollerResponse{}, err
+func (client *CertificatesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, certificateName string, certificateResource CertificateResource, options *CertificatesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CertificatesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, certificateName, certificateResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CertificatesClientCreateOrUpdateResponse]("CertificatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CertificatesClientCreateOrUpdateResponse]("CertificatesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CertificatesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CertificatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CertificatesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CertificatesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update certificate resource.
@@ -130,20 +126,16 @@ func (client *CertificatesClient) createOrUpdateCreateRequest(ctx context.Contex
 // certificateName - The name of the certificate resource.
 // options - CertificatesClientBeginDeleteOptions contains the optional parameters for the CertificatesClient.BeginDelete
 // method.
-func (client *CertificatesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, certificateName string, options *CertificatesClientBeginDeleteOptions) (CertificatesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, certificateName, options)
-	if err != nil {
-		return CertificatesClientDeletePollerResponse{}, err
+func (client *CertificatesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, certificateName string, options *CertificatesClientBeginDeleteOptions) (*armruntime.Poller[CertificatesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, certificateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CertificatesClientDeleteResponse]("CertificatesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CertificatesClientDeleteResponse]("CertificatesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CertificatesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CertificatesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CertificatesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CertificatesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the certificate resource.
@@ -260,16 +252,32 @@ func (client *CertificatesClient) getHandleResponse(resp *http.Response) (Certif
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - CertificatesClientListOptions contains the optional parameters for the CertificatesClient.List method.
-func (client *CertificatesClient) List(resourceGroupName string, serviceName string, options *CertificatesClientListOptions) *CertificatesClientListPager {
-	return &CertificatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *CertificatesClient) List(resourceGroupName string, serviceName string, options *CertificatesClientListOptions) *runtime.Pager[CertificatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CertificatesClientListResponse]{
+		More: func(page CertificatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CertificatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CertificateResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CertificatesClientListResponse) (CertificatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CertificatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CertificatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CertificatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

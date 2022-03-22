@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,20 +124,16 @@ func (client *SynchronizationSettingsClient) createHandleResponse(resp *http.Res
 // synchronizationSettingName - The name of the synchronizationSetting .
 // options - SynchronizationSettingsClientBeginDeleteOptions contains the optional parameters for the SynchronizationSettingsClient.BeginDelete
 // method.
-func (client *SynchronizationSettingsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareName string, synchronizationSettingName string, options *SynchronizationSettingsClientBeginDeleteOptions) (SynchronizationSettingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareName, synchronizationSettingName, options)
-	if err != nil {
-		return SynchronizationSettingsClientDeletePollerResponse{}, err
+func (client *SynchronizationSettingsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, shareName string, synchronizationSettingName string, options *SynchronizationSettingsClientBeginDeleteOptions) (*armruntime.Poller[SynchronizationSettingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, shareName, synchronizationSettingName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SynchronizationSettingsClientDeleteResponse]("SynchronizationSettingsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SynchronizationSettingsClientDeleteResponse]("SynchronizationSettingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SynchronizationSettingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SynchronizationSettingsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return SynchronizationSettingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SynchronizationSettingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a synchronizationSetting in a share
@@ -264,16 +260,32 @@ func (client *SynchronizationSettingsClient) getHandleResponse(resp *http.Respon
 // shareName - The name of the share.
 // options - SynchronizationSettingsClientListByShareOptions contains the optional parameters for the SynchronizationSettingsClient.ListByShare
 // method.
-func (client *SynchronizationSettingsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *SynchronizationSettingsClientListByShareOptions) *SynchronizationSettingsClientListBySharePager {
-	return &SynchronizationSettingsClientListBySharePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+func (client *SynchronizationSettingsClient) ListByShare(resourceGroupName string, accountName string, shareName string, options *SynchronizationSettingsClientListByShareOptions) *runtime.Pager[SynchronizationSettingsClientListByShareResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SynchronizationSettingsClientListByShareResponse]{
+		More: func(page SynchronizationSettingsClientListByShareResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SynchronizationSettingsClientListByShareResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SynchronizationSettingList.NextLink)
+		Fetcher: func(ctx context.Context, page *SynchronizationSettingsClientListByShareResponse) (SynchronizationSettingsClientListByShareResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareCreateRequest(ctx, resourceGroupName, accountName, shareName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SynchronizationSettingsClientListByShareResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SynchronizationSettingsClientListByShareResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SynchronizationSettingsClientListByShareResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareCreateRequest creates the ListByShare request.

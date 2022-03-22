@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewWorkspaceManagedSQLServerBlobAuditingPoliciesClient(subscriptionID strin
 // parameters - Properties of extended blob auditing policy.
 // options - WorkspaceManagedSQLServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters
 // for the WorkspaceManagedSQLServerBlobAuditingPoliciesClient.BeginCreateOrUpdate method.
-func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, blobAuditingPolicyName BlobAuditingPolicyName, parameters ServerBlobAuditingPolicy, options *WorkspaceManagedSQLServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions) (WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, blobAuditingPolicyName, parameters, options)
-	if err != nil {
-		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, blobAuditingPolicyName BlobAuditingPolicyName, parameters ServerBlobAuditingPolicy, options *WorkspaceManagedSQLServerBlobAuditingPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, blobAuditingPolicyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdateResponse]("WorkspaceManagedSQLServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdateResponse]("WorkspaceManagedSQLServerBlobAuditingPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("WorkspaceManagedSQLServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or Update a workspace managed sql server's blob auditing policy.
@@ -187,16 +183,32 @@ func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) getHandleResp
 // workspaceName - The name of the workspace.
 // options - WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceOptions contains the optional parameters for
 // the WorkspaceManagedSQLServerBlobAuditingPoliciesClient.ListByWorkspace method.
-func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceOptions) *WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspacePager {
-	return &WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceOptions) *runtime.Pager[WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse]{
+		More: func(page WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerBlobAuditingPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse) (WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

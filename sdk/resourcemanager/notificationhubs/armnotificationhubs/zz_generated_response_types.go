@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armnotificationhubs
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // ClientCheckNotificationHubAvailabilityResponse contains the response from method Client.CheckNotificationHubAvailability.
 type ClientCheckNotificationHubAvailabilityResponse struct {
@@ -102,41 +96,6 @@ type NamespacesClientCreateOrUpdateResponse struct {
 // NamespacesClientDeleteAuthorizationRuleResponse contains the response from method NamespacesClient.DeleteAuthorizationRule.
 type NamespacesClientDeleteAuthorizationRuleResponse struct {
 	// placeholder for future response values
-}
-
-// NamespacesClientDeletePollerResponse contains the response from method NamespacesClient.Delete.
-type NamespacesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *NamespacesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l NamespacesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (NamespacesClientDeleteResponse, error) {
-	respType := NamespacesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a NamespacesClientDeletePollerResponse from the provided client and resume token.
-func (l *NamespacesClientDeletePollerResponse) Resume(ctx context.Context, client *NamespacesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("NamespacesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &NamespacesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // NamespacesClientDeleteResponse contains the response from method NamespacesClient.Delete.

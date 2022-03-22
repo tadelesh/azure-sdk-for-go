@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewFieldsClient(subscriptionID string, credential azcore.TokenCredential, o
 // moduleName - The name of module.
 // typeName - The name of type.
 // options - FieldsClientListByTypeOptions contains the optional parameters for the FieldsClient.ListByType method.
-func (client *FieldsClient) ListByType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *FieldsClientListByTypeOptions) *FieldsClientListByTypePager {
-	return &FieldsClientListByTypePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+func (client *FieldsClient) ListByType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *FieldsClientListByTypeOptions) *runtime.Pager[FieldsClientListByTypeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FieldsClientListByTypeResponse]{
+		More: func(page FieldsClientListByTypeResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *FieldsClientListByTypeResponse) (FieldsClientListByTypeResponse, error) {
+			req, err := client.listByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+			if err != nil {
+				return FieldsClientListByTypeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FieldsClientListByTypeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FieldsClientListByTypeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTypeHandleResponse(resp)
+		},
+	})
 }
 
 // listByTypeCreateRequest creates the ListByType request.

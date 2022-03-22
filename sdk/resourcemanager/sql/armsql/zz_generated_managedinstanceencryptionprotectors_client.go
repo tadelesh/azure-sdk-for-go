@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewManagedInstanceEncryptionProtectorsClient(subscriptionID string, credent
 // parameters - The requested encryption protector resource state.
 // options - ManagedInstanceEncryptionProtectorsClientBeginCreateOrUpdateOptions contains the optional parameters for the
 // ManagedInstanceEncryptionProtectorsClient.BeginCreateOrUpdate method.
-func (client *ManagedInstanceEncryptionProtectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, encryptionProtectorName EncryptionProtectorName, parameters ManagedInstanceEncryptionProtector, options *ManagedInstanceEncryptionProtectorsClientBeginCreateOrUpdateOptions) (ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, encryptionProtectorName, parameters, options)
-	if err != nil {
-		return ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedInstanceEncryptionProtectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, encryptionProtectorName EncryptionProtectorName, parameters ManagedInstanceEncryptionProtector, options *ManagedInstanceEncryptionProtectorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedInstanceEncryptionProtectorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedInstanceName, encryptionProtectorName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceEncryptionProtectorsClientCreateOrUpdateResponse]("ManagedInstanceEncryptionProtectorsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceEncryptionProtectorsClientCreateOrUpdateResponse]("ManagedInstanceEncryptionProtectorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceEncryptionProtectorsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Updates an existing encryption protector.
@@ -190,16 +186,32 @@ func (client *ManagedInstanceEncryptionProtectorsClient) getHandleResponse(resp 
 // managedInstanceName - The name of the managed instance.
 // options - ManagedInstanceEncryptionProtectorsClientListByInstanceOptions contains the optional parameters for the ManagedInstanceEncryptionProtectorsClient.ListByInstance
 // method.
-func (client *ManagedInstanceEncryptionProtectorsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceEncryptionProtectorsClientListByInstanceOptions) *ManagedInstanceEncryptionProtectorsClientListByInstancePager {
-	return &ManagedInstanceEncryptionProtectorsClientListByInstancePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+func (client *ManagedInstanceEncryptionProtectorsClient) ListByInstance(resourceGroupName string, managedInstanceName string, options *ManagedInstanceEncryptionProtectorsClientListByInstanceOptions) *runtime.Pager[ManagedInstanceEncryptionProtectorsClientListByInstanceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedInstanceEncryptionProtectorsClientListByInstanceResponse]{
+		More: func(page ManagedInstanceEncryptionProtectorsClientListByInstanceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedInstanceEncryptionProtectorsClientListByInstanceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedInstanceEncryptionProtectorListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedInstanceEncryptionProtectorsClientListByInstanceResponse) (ManagedInstanceEncryptionProtectorsClientListByInstanceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByInstanceCreateRequest(ctx, resourceGroupName, managedInstanceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByInstanceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.
@@ -245,20 +257,16 @@ func (client *ManagedInstanceEncryptionProtectorsClient) listByInstanceHandleRes
 // encryptionProtectorName - The name of the encryption protector to be updated.
 // options - ManagedInstanceEncryptionProtectorsClientBeginRevalidateOptions contains the optional parameters for the ManagedInstanceEncryptionProtectorsClient.BeginRevalidate
 // method.
-func (client *ManagedInstanceEncryptionProtectorsClient) BeginRevalidate(ctx context.Context, resourceGroupName string, managedInstanceName string, encryptionProtectorName EncryptionProtectorName, options *ManagedInstanceEncryptionProtectorsClientBeginRevalidateOptions) (ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse, error) {
-	resp, err := client.revalidate(ctx, resourceGroupName, managedInstanceName, encryptionProtectorName, options)
-	if err != nil {
-		return ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}, err
+func (client *ManagedInstanceEncryptionProtectorsClient) BeginRevalidate(ctx context.Context, resourceGroupName string, managedInstanceName string, encryptionProtectorName EncryptionProtectorName, options *ManagedInstanceEncryptionProtectorsClientBeginRevalidateOptions) (*armruntime.Poller[ManagedInstanceEncryptionProtectorsClientRevalidateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.revalidate(ctx, resourceGroupName, managedInstanceName, encryptionProtectorName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedInstanceEncryptionProtectorsClientRevalidateResponse]("ManagedInstanceEncryptionProtectorsClient.Revalidate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedInstanceEncryptionProtectorsClientRevalidateResponse]("ManagedInstanceEncryptionProtectorsClient.Revalidate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedInstanceEncryptionProtectorsClient.Revalidate", "", resp, client.pl)
-	if err != nil {
-		return ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}, err
-	}
-	result.Poller = &ManagedInstanceEncryptionProtectorsClientRevalidatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Revalidate - Revalidates an existing encryption protector.

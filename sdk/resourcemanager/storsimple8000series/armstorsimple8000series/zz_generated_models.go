@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -46,13 +46,15 @@ type AccessControlRecordProperties struct {
 // AccessControlRecordsClientBeginCreateOrUpdateOptions contains the optional parameters for the AccessControlRecordsClient.BeginCreateOrUpdate
 // method.
 type AccessControlRecordsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccessControlRecordsClientBeginDeleteOptions contains the optional parameters for the AccessControlRecordsClient.BeginDelete
 // method.
 type AccessControlRecordsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccessControlRecordsClientGetOptions contains the optional parameters for the AccessControlRecordsClient.Get method.
@@ -372,18 +374,21 @@ type BackupList struct {
 // BackupPoliciesClientBeginBackupNowOptions contains the optional parameters for the BackupPoliciesClient.BeginBackupNow
 // method.
 type BackupPoliciesClientBeginBackupNowOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupPoliciesClient.BeginCreateOrUpdate
 // method.
 type BackupPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientBeginDeleteOptions contains the optional parameters for the BackupPoliciesClient.BeginDelete method.
 type BackupPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientGetOptions contains the optional parameters for the BackupPoliciesClient.Get method.
@@ -518,12 +523,14 @@ type BackupScheduleProperties struct {
 // BackupSchedulesClientBeginCreateOrUpdateOptions contains the optional parameters for the BackupSchedulesClient.BeginCreateOrUpdate
 // method.
 type BackupSchedulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupSchedulesClientBeginDeleteOptions contains the optional parameters for the BackupSchedulesClient.BeginDelete method.
 type BackupSchedulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupSchedulesClientGetOptions contains the optional parameters for the BackupSchedulesClient.Get method.
@@ -539,17 +546,20 @@ type BackupSchedulesClientListByBackupPolicyOptions struct {
 
 // BackupsClientBeginCloneOptions contains the optional parameters for the BackupsClient.BeginClone method.
 type BackupsClientBeginCloneOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientBeginDeleteOptions contains the optional parameters for the BackupsClient.BeginDelete method.
 type BackupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientBeginRestoreOptions contains the optional parameters for the BackupsClient.BeginRestore method.
 type BackupsClientBeginRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientListByDeviceOptions contains the optional parameters for the BackupsClient.ListByDevice method.
@@ -609,13 +619,15 @@ type BandwidthSettingList struct {
 // BandwidthSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for the BandwidthSettingsClient.BeginCreateOrUpdate
 // method.
 type BandwidthSettingsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BandwidthSettingsClientBeginDeleteOptions contains the optional parameters for the BandwidthSettingsClient.BeginDelete
 // method.
 type BandwidthSettingsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BandwidthSettingsClientGetOptions contains the optional parameters for the BandwidthSettingsClient.Get method.
@@ -779,7 +791,8 @@ type CloudApplianceSettings struct {
 // CloudAppliancesClientBeginProvisionOptions contains the optional parameters for the CloudAppliancesClient.BeginProvision
 // method.
 type CloudAppliancesClientBeginProvisionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CloudAppliancesClientListSupportedConfigurationsOptions contains the optional parameters for the CloudAppliancesClient.ListSupportedConfigurations
@@ -1032,31 +1045,36 @@ type DeviceRolloverDetails struct {
 // DeviceSettingsClientBeginCreateOrUpdateAlertSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginCreateOrUpdateAlertSettings
 // method.
 type DeviceSettingsClientBeginCreateOrUpdateAlertSettingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeviceSettingsClientBeginCreateOrUpdateTimeSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginCreateOrUpdateTimeSettings
 // method.
 type DeviceSettingsClientBeginCreateOrUpdateTimeSettingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeviceSettingsClientBeginSyncRemotemanagementCertificateOptions contains the optional parameters for the DeviceSettingsClient.BeginSyncRemotemanagementCertificate
 // method.
 type DeviceSettingsClientBeginSyncRemotemanagementCertificateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeviceSettingsClientBeginUpdateNetworkSettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginUpdateNetworkSettings
 // method.
 type DeviceSettingsClientBeginUpdateNetworkSettingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeviceSettingsClientBeginUpdateSecuritySettingsOptions contains the optional parameters for the DeviceSettingsClient.BeginUpdateSecuritySettings
 // method.
 type DeviceSettingsClientBeginUpdateSecuritySettingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DeviceSettingsClientGetAlertSettingsOptions contains the optional parameters for the DeviceSettingsClient.GetAlertSettings
@@ -1091,32 +1109,38 @@ type DevicesClientAuthorizeForServiceEncryptionKeyRolloverOptions struct {
 
 // DevicesClientBeginConfigureOptions contains the optional parameters for the DevicesClient.BeginConfigure method.
 type DevicesClientBeginConfigureOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginDeactivateOptions contains the optional parameters for the DevicesClient.BeginDeactivate method.
 type DevicesClientBeginDeactivateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginDeleteOptions contains the optional parameters for the DevicesClient.BeginDelete method.
 type DevicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginFailoverOptions contains the optional parameters for the DevicesClient.BeginFailover method.
 type DevicesClientBeginFailoverOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginInstallUpdatesOptions contains the optional parameters for the DevicesClient.BeginInstallUpdates method.
 type DevicesClientBeginInstallUpdatesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginScanForUpdatesOptions contains the optional parameters for the DevicesClient.BeginScanForUpdates method.
 type DevicesClientBeginScanForUpdatesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientGetOptions contains the optional parameters for the DevicesClient.Get method.
@@ -1353,7 +1377,8 @@ type HardwareComponentGroupProperties struct {
 // HardwareComponentGroupsClientBeginChangeControllerPowerStateOptions contains the optional parameters for the HardwareComponentGroupsClient.BeginChangeControllerPowerState
 // method.
 type HardwareComponentGroupsClientBeginChangeControllerPowerStateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HardwareComponentGroupsClientListByDeviceOptions contains the optional parameters for the HardwareComponentGroupsClient.ListByDevice
@@ -1494,7 +1519,8 @@ type JobStage struct {
 
 // JobsClientBeginCancelOptions contains the optional parameters for the JobsClient.BeginCancel method.
 type JobsClientBeginCancelOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // JobsClientGetOptions contains the optional parameters for the JobsClient.Get method.
@@ -2166,13 +2192,15 @@ type StorageAccountCredentialProperties struct {
 // StorageAccountCredentialsClientBeginCreateOrUpdateOptions contains the optional parameters for the StorageAccountCredentialsClient.BeginCreateOrUpdate
 // method.
 type StorageAccountCredentialsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageAccountCredentialsClientBeginDeleteOptions contains the optional parameters for the StorageAccountCredentialsClient.BeginDelete
 // method.
 type StorageAccountCredentialsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StorageAccountCredentialsClientGetOptions contains the optional parameters for the StorageAccountCredentialsClient.Get
@@ -2396,12 +2424,14 @@ type VolumeContainerProperties struct {
 // VolumeContainersClientBeginCreateOrUpdateOptions contains the optional parameters for the VolumeContainersClient.BeginCreateOrUpdate
 // method.
 type VolumeContainersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumeContainersClientBeginDeleteOptions contains the optional parameters for the VolumeContainersClient.BeginDelete method.
 type VolumeContainersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumeContainersClientGetOptions contains the optional parameters for the VolumeContainersClient.Get method.
@@ -2488,12 +2518,14 @@ type VolumeProperties struct {
 
 // VolumesClientBeginCreateOrUpdateOptions contains the optional parameters for the VolumesClient.BeginCreateOrUpdate method.
 type VolumesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginDeleteOptions contains the optional parameters for the VolumesClient.BeginDelete method.
 type VolumesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientGetOptions contains the optional parameters for the VolumesClient.Get method.

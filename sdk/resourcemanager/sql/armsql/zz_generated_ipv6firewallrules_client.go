@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -232,16 +232,32 @@ func (client *IPv6FirewallRulesClient) getHandleResponse(resp *http.Response) (I
 // serverName - The name of the server.
 // options - IPv6FirewallRulesClientListByServerOptions contains the optional parameters for the IPv6FirewallRulesClient.ListByServer
 // method.
-func (client *IPv6FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *IPv6FirewallRulesClientListByServerOptions) *IPv6FirewallRulesClientListByServerPager {
-	return &IPv6FirewallRulesClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *IPv6FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *IPv6FirewallRulesClientListByServerOptions) *runtime.Pager[IPv6FirewallRulesClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IPv6FirewallRulesClientListByServerResponse]{
+		More: func(page IPv6FirewallRulesClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IPv6FirewallRulesClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IPv6FirewallRuleListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IPv6FirewallRulesClientListByServerResponse) (IPv6FirewallRulesClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IPv6FirewallRulesClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IPv6FirewallRulesClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IPv6FirewallRulesClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

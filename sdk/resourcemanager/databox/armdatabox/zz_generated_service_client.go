@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,16 +57,32 @@ func NewServiceClient(subscriptionID string, credential azcore.TokenCredential, 
 // availableSKURequest - Filters for showing the available skus.
 // options - ServiceClientListAvailableSKUsByResourceGroupOptions contains the optional parameters for the ServiceClient.ListAvailableSKUsByResourceGroup
 // method.
-func (client *ServiceClient) ListAvailableSKUsByResourceGroup(resourceGroupName string, location string, availableSKURequest AvailableSKURequest, options *ServiceClientListAvailableSKUsByResourceGroupOptions) *ServiceClientListAvailableSKUsByResourceGroupPager {
-	return &ServiceClientListAvailableSKUsByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAvailableSKUsByResourceGroupCreateRequest(ctx, resourceGroupName, location, availableSKURequest, options)
+func (client *ServiceClient) ListAvailableSKUsByResourceGroup(resourceGroupName string, location string, availableSKURequest AvailableSKURequest, options *ServiceClientListAvailableSKUsByResourceGroupOptions) *runtime.Pager[ServiceClientListAvailableSKUsByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceClientListAvailableSKUsByResourceGroupResponse]{
+		More: func(page ServiceClientListAvailableSKUsByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServiceClientListAvailableSKUsByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AvailableSKUsResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServiceClientListAvailableSKUsByResourceGroupResponse) (ServiceClientListAvailableSKUsByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAvailableSKUsByResourceGroupCreateRequest(ctx, resourceGroupName, location, availableSKURequest, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServiceClientListAvailableSKUsByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceClientListAvailableSKUsByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceClientListAvailableSKUsByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAvailableSKUsByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAvailableSKUsByResourceGroupCreateRequest creates the ListAvailableSKUsByResourceGroup request.

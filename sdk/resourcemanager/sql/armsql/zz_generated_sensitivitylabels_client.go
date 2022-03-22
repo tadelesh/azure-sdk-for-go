@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -423,16 +423,32 @@ func (client *SensitivityLabelsClient) getHandleResponse(resp *http.Response) (S
 // databaseName - The name of the database.
 // options - SensitivityLabelsClientListCurrentByDatabaseOptions contains the optional parameters for the SensitivityLabelsClient.ListCurrentByDatabase
 // method.
-func (client *SensitivityLabelsClient) ListCurrentByDatabase(resourceGroupName string, serverName string, databaseName string, options *SensitivityLabelsClientListCurrentByDatabaseOptions) *SensitivityLabelsClientListCurrentByDatabasePager {
-	return &SensitivityLabelsClientListCurrentByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCurrentByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *SensitivityLabelsClient) ListCurrentByDatabase(resourceGroupName string, serverName string, databaseName string, options *SensitivityLabelsClientListCurrentByDatabaseOptions) *runtime.Pager[SensitivityLabelsClientListCurrentByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SensitivityLabelsClientListCurrentByDatabaseResponse]{
+		More: func(page SensitivityLabelsClientListCurrentByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SensitivityLabelsClientListCurrentByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SensitivityLabelListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SensitivityLabelsClientListCurrentByDatabaseResponse) (SensitivityLabelsClientListCurrentByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCurrentByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SensitivityLabelsClientListCurrentByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SensitivityLabelsClientListCurrentByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SensitivityLabelsClientListCurrentByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCurrentByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCurrentByDatabaseCreateRequest creates the ListCurrentByDatabase request.
@@ -491,16 +507,32 @@ func (client *SensitivityLabelsClient) listCurrentByDatabaseHandleResponse(resp 
 // databaseName - The name of the database.
 // options - SensitivityLabelsClientListRecommendedByDatabaseOptions contains the optional parameters for the SensitivityLabelsClient.ListRecommendedByDatabase
 // method.
-func (client *SensitivityLabelsClient) ListRecommendedByDatabase(resourceGroupName string, serverName string, databaseName string, options *SensitivityLabelsClientListRecommendedByDatabaseOptions) *SensitivityLabelsClientListRecommendedByDatabasePager {
-	return &SensitivityLabelsClientListRecommendedByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listRecommendedByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *SensitivityLabelsClient) ListRecommendedByDatabase(resourceGroupName string, serverName string, databaseName string, options *SensitivityLabelsClientListRecommendedByDatabaseOptions) *runtime.Pager[SensitivityLabelsClientListRecommendedByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SensitivityLabelsClientListRecommendedByDatabaseResponse]{
+		More: func(page SensitivityLabelsClientListRecommendedByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SensitivityLabelsClientListRecommendedByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SensitivityLabelListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SensitivityLabelsClientListRecommendedByDatabaseResponse) (SensitivityLabelsClientListRecommendedByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listRecommendedByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SensitivityLabelsClientListRecommendedByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SensitivityLabelsClientListRecommendedByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SensitivityLabelsClientListRecommendedByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listRecommendedByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listRecommendedByDatabaseCreateRequest creates the ListRecommendedByDatabase request.

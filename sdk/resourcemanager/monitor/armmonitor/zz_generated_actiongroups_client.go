@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -312,13 +312,26 @@ func (client *ActionGroupsClient) getTestNotificationsHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ActionGroupsClientListByResourceGroupOptions contains the optional parameters for the ActionGroupsClient.ListByResourceGroup
 // method.
-func (client *ActionGroupsClient) ListByResourceGroup(resourceGroupName string, options *ActionGroupsClientListByResourceGroupOptions) *ActionGroupsClientListByResourceGroupPager {
-	return &ActionGroupsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ActionGroupsClient) ListByResourceGroup(resourceGroupName string, options *ActionGroupsClientListByResourceGroupOptions) *runtime.Pager[ActionGroupsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActionGroupsClientListByResourceGroupResponse]{
+		More: func(page ActionGroupsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ActionGroupsClientListByResourceGroupResponse) (ActionGroupsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return ActionGroupsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActionGroupsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActionGroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -356,13 +369,26 @@ func (client *ActionGroupsClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ActionGroupsClientListBySubscriptionIDOptions contains the optional parameters for the ActionGroupsClient.ListBySubscriptionID
 // method.
-func (client *ActionGroupsClient) ListBySubscriptionID(options *ActionGroupsClientListBySubscriptionIDOptions) *ActionGroupsClientListBySubscriptionIDPager {
-	return &ActionGroupsClientListBySubscriptionIDPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionIDCreateRequest(ctx, options)
+func (client *ActionGroupsClient) ListBySubscriptionID(options *ActionGroupsClientListBySubscriptionIDOptions) *runtime.Pager[ActionGroupsClientListBySubscriptionIDResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ActionGroupsClientListBySubscriptionIDResponse]{
+		More: func(page ActionGroupsClientListBySubscriptionIDResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ActionGroupsClientListBySubscriptionIDResponse) (ActionGroupsClientListBySubscriptionIDResponse, error) {
+			req, err := client.listBySubscriptionIDCreateRequest(ctx, options)
+			if err != nil {
+				return ActionGroupsClientListBySubscriptionIDResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ActionGroupsClientListBySubscriptionIDResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ActionGroupsClientListBySubscriptionIDResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionIDHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionIDCreateRequest creates the ListBySubscriptionID request.
@@ -397,20 +423,16 @@ func (client *ActionGroupsClient) listBySubscriptionIDHandleResponse(resp *http.
 // notificationRequest - The notification request body which includes the contact details
 // options - ActionGroupsClientBeginPostTestNotificationsOptions contains the optional parameters for the ActionGroupsClient.BeginPostTestNotifications
 // method.
-func (client *ActionGroupsClient) BeginPostTestNotifications(ctx context.Context, notificationRequest NotificationRequestBody, options *ActionGroupsClientBeginPostTestNotificationsOptions) (ActionGroupsClientPostTestNotificationsPollerResponse, error) {
-	resp, err := client.postTestNotifications(ctx, notificationRequest, options)
-	if err != nil {
-		return ActionGroupsClientPostTestNotificationsPollerResponse{}, err
+func (client *ActionGroupsClient) BeginPostTestNotifications(ctx context.Context, notificationRequest NotificationRequestBody, options *ActionGroupsClientBeginPostTestNotificationsOptions) (*armruntime.Poller[ActionGroupsClientPostTestNotificationsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.postTestNotifications(ctx, notificationRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ActionGroupsClientPostTestNotificationsResponse]("ActionGroupsClient.PostTestNotifications", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ActionGroupsClientPostTestNotificationsResponse]("ActionGroupsClient.PostTestNotifications", options.ResumeToken, client.pl, nil)
 	}
-	result := ActionGroupsClientPostTestNotificationsPollerResponse{}
-	pt, err := armruntime.NewPoller("ActionGroupsClient.PostTestNotifications", "location", resp, client.pl)
-	if err != nil {
-		return ActionGroupsClientPostTestNotificationsPollerResponse{}, err
-	}
-	result.Poller = &ActionGroupsClientPostTestNotificationsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // PostTestNotifications - Send test notifications to a set of provided receivers

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewExpressRouteGatewaysClient(subscriptionID string, credential azcore.Toke
 // putExpressRouteGatewayParameters - Parameters required in an ExpressRoute gateway PUT operation.
 // options - ExpressRouteGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginCreateOrUpdate
 // method.
-func (client *ExpressRouteGatewaysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, putExpressRouteGatewayParameters ExpressRouteGateway, options *ExpressRouteGatewaysClientBeginCreateOrUpdateOptions) (ExpressRouteGatewaysClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, expressRouteGatewayName, putExpressRouteGatewayParameters, options)
-	if err != nil {
-		return ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}, err
+func (client *ExpressRouteGatewaysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, putExpressRouteGatewayParameters ExpressRouteGateway, options *ExpressRouteGatewaysClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ExpressRouteGatewaysClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, expressRouteGatewayName, putExpressRouteGatewayParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExpressRouteGatewaysClientCreateOrUpdateResponse]("ExpressRouteGatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExpressRouteGatewaysClientCreateOrUpdateResponse]("ExpressRouteGatewaysClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ExpressRouteGatewaysClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a ExpressRoute gateway in a specified resource group.
@@ -123,20 +119,16 @@ func (client *ExpressRouteGatewaysClient) createOrUpdateCreateRequest(ctx contex
 // expressRouteGatewayName - The name of the ExpressRoute gateway.
 // options - ExpressRouteGatewaysClientBeginDeleteOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginDelete
 // method.
-func (client *ExpressRouteGatewaysClient) BeginDelete(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, options *ExpressRouteGatewaysClientBeginDeleteOptions) (ExpressRouteGatewaysClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, expressRouteGatewayName, options)
-	if err != nil {
-		return ExpressRouteGatewaysClientDeletePollerResponse{}, err
+func (client *ExpressRouteGatewaysClient) BeginDelete(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, options *ExpressRouteGatewaysClientBeginDeleteOptions) (*armruntime.Poller[ExpressRouteGatewaysClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, expressRouteGatewayName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExpressRouteGatewaysClientDeleteResponse]("ExpressRouteGatewaysClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExpressRouteGatewaysClientDeleteResponse]("ExpressRouteGatewaysClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ExpressRouteGatewaysClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ExpressRouteGatewaysClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ExpressRouteGatewaysClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified ExpressRoute gateway in a resource group. An ExpressRoute gateway resource can only be deleted
@@ -343,20 +335,16 @@ func (client *ExpressRouteGatewaysClient) listBySubscriptionHandleResponse(resp 
 // expressRouteGatewayParameters - Parameters supplied to update a virtual wan express route gateway tags.
 // options - ExpressRouteGatewaysClientBeginUpdateTagsOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginUpdateTags
 // method.
-func (client *ExpressRouteGatewaysClient) BeginUpdateTags(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, expressRouteGatewayParameters TagsObject, options *ExpressRouteGatewaysClientBeginUpdateTagsOptions) (ExpressRouteGatewaysClientUpdateTagsPollerResponse, error) {
-	resp, err := client.updateTags(ctx, resourceGroupName, expressRouteGatewayName, expressRouteGatewayParameters, options)
-	if err != nil {
-		return ExpressRouteGatewaysClientUpdateTagsPollerResponse{}, err
+func (client *ExpressRouteGatewaysClient) BeginUpdateTags(ctx context.Context, resourceGroupName string, expressRouteGatewayName string, expressRouteGatewayParameters TagsObject, options *ExpressRouteGatewaysClientBeginUpdateTagsOptions) (*armruntime.Poller[ExpressRouteGatewaysClientUpdateTagsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateTags(ctx, resourceGroupName, expressRouteGatewayName, expressRouteGatewayParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExpressRouteGatewaysClientUpdateTagsResponse]("ExpressRouteGatewaysClient.UpdateTags", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExpressRouteGatewaysClientUpdateTagsResponse]("ExpressRouteGatewaysClient.UpdateTags", options.ResumeToken, client.pl, nil)
 	}
-	result := ExpressRouteGatewaysClientUpdateTagsPollerResponse{}
-	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.UpdateTags", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ExpressRouteGatewaysClientUpdateTagsPollerResponse{}, err
-	}
-	result.Poller = &ExpressRouteGatewaysClientUpdateTagsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateTags - Updates express route gateway tags.

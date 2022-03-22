@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -417,12 +417,14 @@ type AccountUpdateParameters struct {
 
 // AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
 type AccountsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
 type AccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientGetOptions contains the optional parameters for the AccountsClient.Get method.
@@ -963,7 +965,8 @@ type DataSetMappingsClientListByShareSubscriptionOptions struct {
 
 // DataSetsClientBeginDeleteOptions contains the optional parameters for the DataSetsClient.BeginDelete method.
 type DataSetsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataSetsClientCreateOptions contains the optional parameters for the DataSetsClient.Create method.
@@ -1509,7 +1512,8 @@ type ProviderShareSubscriptionsClientAdjustOptions struct {
 // ProviderShareSubscriptionsClientBeginRevokeOptions contains the optional parameters for the ProviderShareSubscriptionsClient.BeginRevoke
 // method.
 type ProviderShareSubscriptionsClientBeginRevokeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProviderShareSubscriptionsClientGetByShareOptions contains the optional parameters for the ProviderShareSubscriptionsClient.GetByShare
@@ -1978,19 +1982,22 @@ type ShareSubscriptionSynchronizationList struct {
 // ShareSubscriptionsClientBeginCancelSynchronizationOptions contains the optional parameters for the ShareSubscriptionsClient.BeginCancelSynchronization
 // method.
 type ShareSubscriptionsClientBeginCancelSynchronizationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ShareSubscriptionsClientBeginDeleteOptions contains the optional parameters for the ShareSubscriptionsClient.BeginDelete
 // method.
 type ShareSubscriptionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ShareSubscriptionsClientBeginSynchronizeOptions contains the optional parameters for the ShareSubscriptionsClient.BeginSynchronize
 // method.
 type ShareSubscriptionsClientBeginSynchronizeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ShareSubscriptionsClientCreateOptions contains the optional parameters for the ShareSubscriptionsClient.Create method.
@@ -2087,7 +2094,8 @@ type ShareSynchronizationList struct {
 
 // SharesClientBeginDeleteOptions contains the optional parameters for the SharesClient.BeginDelete method.
 type SharesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SharesClientCreateOptions contains the optional parameters for the SharesClient.Create method.
@@ -2317,7 +2325,8 @@ type SynchronizationSettingList struct {
 // SynchronizationSettingsClientBeginDeleteOptions contains the optional parameters for the SynchronizationSettingsClient.BeginDelete
 // method.
 type SynchronizationSettingsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SynchronizationSettingsClientCreateOptions contains the optional parameters for the SynchronizationSettingsClient.Create
@@ -2403,12 +2412,14 @@ type TriggerList struct {
 
 // TriggersClientBeginCreateOptions contains the optional parameters for the TriggersClient.BeginCreate method.
 type TriggersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientBeginDeleteOptions contains the optional parameters for the TriggersClient.BeginDelete method.
 type TriggersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // TriggersClientGetOptions contains the optional parameters for the TriggersClient.Get method.

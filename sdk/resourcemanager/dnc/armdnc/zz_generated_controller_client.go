@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewControllerClient(subscriptionID string, credential azcore.TokenCredentia
 // resourceName - The name of the resource. It must be a minimum of 3 characters, and a maximum of 63.
 // parameters - controller type parameters
 // options - ControllerClientBeginCreateOptions contains the optional parameters for the ControllerClient.BeginCreate method.
-func (client *ControllerClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, parameters DelegatedController, options *ControllerClientBeginCreateOptions) (ControllerClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ControllerClientCreatePollerResponse{}, err
+func (client *ControllerClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, parameters DelegatedController, options *ControllerClientBeginCreateOptions) (*armruntime.Poller[ControllerClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ControllerClientCreateResponse]("ControllerClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ControllerClientCreateResponse]("ControllerClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ControllerClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ControllerClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ControllerClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ControllerClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a dnc controller
@@ -119,20 +115,16 @@ func (client *ControllerClient) createCreateRequest(ctx context.Context, resourc
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - The name of the resource. It must be a minimum of 3 characters, and a maximum of 63.
 // options - ControllerClientBeginDeleteOptions contains the optional parameters for the ControllerClient.BeginDelete method.
-func (client *ControllerClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ControllerClientBeginDeleteOptions) (ControllerClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ControllerClientDeletePollerResponse{}, err
+func (client *ControllerClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ControllerClientBeginDeleteOptions) (*armruntime.Poller[ControllerClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ControllerClientDeleteResponse]("ControllerClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ControllerClientDeleteResponse]("ControllerClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ControllerClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ControllerClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ControllerClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ControllerClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the DNC controller

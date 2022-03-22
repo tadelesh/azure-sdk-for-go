@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewCustomImagesClient(subscriptionID string, credential azcore.TokenCredent
 // customImage - A custom image.
 // options - CustomImagesClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomImagesClient.BeginCreateOrUpdate
 // method.
-func (client *CustomImagesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, customImage CustomImage, options *CustomImagesClientBeginCreateOrUpdateOptions) (CustomImagesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, customImage, options)
-	if err != nil {
-		return CustomImagesClientCreateOrUpdatePollerResponse{}, err
+func (client *CustomImagesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, customImage CustomImage, options *CustomImagesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CustomImagesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, labName, name, customImage, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomImagesClientCreateOrUpdateResponse]("CustomImagesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomImagesClientCreateOrUpdateResponse]("CustomImagesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomImagesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomImagesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return CustomImagesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomImagesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing custom image. This operation can take a while to complete.
@@ -128,20 +124,16 @@ func (client *CustomImagesClient) createOrUpdateCreateRequest(ctx context.Contex
 // name - The name of the custom image.
 // options - CustomImagesClientBeginDeleteOptions contains the optional parameters for the CustomImagesClient.BeginDelete
 // method.
-func (client *CustomImagesClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, name string, options *CustomImagesClientBeginDeleteOptions) (CustomImagesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, labName, name, options)
-	if err != nil {
-		return CustomImagesClientDeletePollerResponse{}, err
+func (client *CustomImagesClient) BeginDelete(ctx context.Context, resourceGroupName string, labName string, name string, options *CustomImagesClientBeginDeleteOptions) (*armruntime.Poller[CustomImagesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, labName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomImagesClientDeleteResponse]("CustomImagesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomImagesClientDeleteResponse]("CustomImagesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomImagesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomImagesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CustomImagesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomImagesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete custom image. This operation can take a while to complete.
@@ -259,16 +251,32 @@ func (client *CustomImagesClient) getHandleResponse(resp *http.Response) (Custom
 // resourceGroupName - The name of the resource group.
 // labName - The name of the lab.
 // options - CustomImagesClientListOptions contains the optional parameters for the CustomImagesClient.List method.
-func (client *CustomImagesClient) List(resourceGroupName string, labName string, options *CustomImagesClientListOptions) *CustomImagesClientListPager {
-	return &CustomImagesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, options)
+func (client *CustomImagesClient) List(resourceGroupName string, labName string, options *CustomImagesClientListOptions) *runtime.Pager[CustomImagesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomImagesClientListResponse]{
+		More: func(page CustomImagesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomImagesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomImageList.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomImagesClientListResponse) (CustomImagesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomImagesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomImagesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomImagesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

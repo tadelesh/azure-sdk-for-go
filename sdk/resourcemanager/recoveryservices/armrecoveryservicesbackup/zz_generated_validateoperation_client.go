@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewValidateOperationClient(subscriptionID string, credential azcore.TokenCr
 // parameters - resource validate operation request
 // options - ValidateOperationClientBeginTriggerOptions contains the optional parameters for the ValidateOperationClient.BeginTrigger
 // method.
-func (client *ValidateOperationClient) BeginTrigger(ctx context.Context, vaultName string, resourceGroupName string, parameters ValidateOperationRequestClassification, options *ValidateOperationClientBeginTriggerOptions) (ValidateOperationClientTriggerPollerResponse, error) {
-	resp, err := client.trigger(ctx, vaultName, resourceGroupName, parameters, options)
-	if err != nil {
-		return ValidateOperationClientTriggerPollerResponse{}, err
+func (client *ValidateOperationClient) BeginTrigger(ctx context.Context, vaultName string, resourceGroupName string, parameters ValidateOperationRequestClassification, options *ValidateOperationClientBeginTriggerOptions) (*armruntime.Poller[ValidateOperationClientTriggerResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.trigger(ctx, vaultName, resourceGroupName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ValidateOperationClientTriggerResponse]("ValidateOperationClient.Trigger", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ValidateOperationClientTriggerResponse]("ValidateOperationClient.Trigger", options.ResumeToken, client.pl, nil)
 	}
-	result := ValidateOperationClientTriggerPollerResponse{}
-	pt, err := armruntime.NewPoller("ValidateOperationClient.Trigger", "", resp, client.pl)
-	if err != nil {
-		return ValidateOperationClientTriggerPollerResponse{}, err
-	}
-	result.Poller = &ValidateOperationClientTriggerPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Trigger - Validate operation for specified backed up item in the form of an asynchronous operation. Returns tracking headers

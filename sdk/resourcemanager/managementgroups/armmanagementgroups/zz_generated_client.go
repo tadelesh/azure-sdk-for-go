@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,20 +53,16 @@ func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *C
 // groupID - Management Group ID.
 // createManagementGroupRequest - Management group creation parameters.
 // options - ClientBeginCreateOrUpdateOptions contains the optional parameters for the Client.BeginCreateOrUpdate method.
-func (client *Client) BeginCreateOrUpdate(ctx context.Context, groupID string, createManagementGroupRequest CreateManagementGroupRequest, options *ClientBeginCreateOrUpdateOptions) (ClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, groupID, createManagementGroupRequest, options)
-	if err != nil {
-		return ClientCreateOrUpdatePollerResponse{}, err
+func (client *Client) BeginCreateOrUpdate(ctx context.Context, groupID string, createManagementGroupRequest CreateManagementGroupRequest, options *ClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, groupID, createManagementGroupRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientCreateOrUpdateResponse]("Client.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientCreateOrUpdateResponse]("Client.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a management group. If a management group is already created and a subsequent create
@@ -112,20 +108,16 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, groupID s
 // If the operation fails it returns an *azcore.ResponseError type.
 // groupID - Management Group ID.
 // options - ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
-func (client *Client) BeginDelete(ctx context.Context, groupID string, options *ClientBeginDeleteOptions) (ClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, groupID, options)
-	if err != nil {
-		return ClientDeletePollerResponse{}, err
+func (client *Client) BeginDelete(ctx context.Context, groupID string, options *ClientBeginDeleteOptions) (*armruntime.Poller[ClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, groupID, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientDeleteResponse]("Client.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientDeleteResponse]("Client.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("Client.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete management group. If a management group contains child resources, the request will fail.
@@ -228,16 +220,32 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // If the operation fails it returns an *azcore.ResponseError type.
 // groupID - Management Group ID.
 // options - ClientGetDescendantsOptions contains the optional parameters for the Client.GetDescendants method.
-func (client *Client) GetDescendants(groupID string, options *ClientGetDescendantsOptions) *ClientGetDescendantsPager {
-	return &ClientGetDescendantsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getDescendantsCreateRequest(ctx, groupID, options)
+func (client *Client) GetDescendants(groupID string, options *ClientGetDescendantsOptions) *runtime.Pager[ClientGetDescendantsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientGetDescendantsResponse]{
+		More: func(page ClientGetDescendantsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientGetDescendantsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DescendantListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientGetDescendantsResponse) (ClientGetDescendantsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getDescendantsCreateRequest(ctx, groupID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientGetDescendantsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientGetDescendantsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientGetDescendantsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getDescendantsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getDescendantsCreateRequest creates the GetDescendants request.
@@ -276,16 +284,32 @@ func (client *Client) getDescendantsHandleResponse(resp *http.Response) (ClientG
 // List - List management groups for the authenticated user.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListOptions contains the optional parameters for the Client.List method.
-func (client *Client) List(options *ClientListOptions) *ClientListPager {
-	return &ClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *Client) List(options *ClientListOptions) *runtime.Pager[ClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListResponse]{
+		More: func(page ClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagementGroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListResponse) (ClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

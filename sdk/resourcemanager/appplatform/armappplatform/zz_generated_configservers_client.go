@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,20 +114,16 @@ func (client *ConfigServersClient) getHandleResponse(resp *http.Response) (Confi
 // configServerResource - Parameters for the update operation
 // options - ConfigServersClientBeginUpdatePatchOptions contains the optional parameters for the ConfigServersClient.BeginUpdatePatch
 // method.
-func (client *ConfigServersClient) BeginUpdatePatch(ctx context.Context, resourceGroupName string, serviceName string, configServerResource ConfigServerResource, options *ConfigServersClientBeginUpdatePatchOptions) (ConfigServersClientUpdatePatchPollerResponse, error) {
-	resp, err := client.updatePatch(ctx, resourceGroupName, serviceName, configServerResource, options)
-	if err != nil {
-		return ConfigServersClientUpdatePatchPollerResponse{}, err
+func (client *ConfigServersClient) BeginUpdatePatch(ctx context.Context, resourceGroupName string, serviceName string, configServerResource ConfigServerResource, options *ConfigServersClientBeginUpdatePatchOptions) (*armruntime.Poller[ConfigServersClientUpdatePatchResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updatePatch(ctx, resourceGroupName, serviceName, configServerResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigServersClientUpdatePatchResponse]("ConfigServersClient.UpdatePatch", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigServersClientUpdatePatchResponse]("ConfigServersClient.UpdatePatch", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigServersClientUpdatePatchPollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigServersClient.UpdatePatch", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ConfigServersClientUpdatePatchPollerResponse{}, err
-	}
-	result.Poller = &ConfigServersClientUpdatePatchPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdatePatch - Update the config server.
@@ -181,20 +177,16 @@ func (client *ConfigServersClient) updatePatchCreateRequest(ctx context.Context,
 // configServerResource - Parameters for the update operation
 // options - ConfigServersClientBeginUpdatePutOptions contains the optional parameters for the ConfigServersClient.BeginUpdatePut
 // method.
-func (client *ConfigServersClient) BeginUpdatePut(ctx context.Context, resourceGroupName string, serviceName string, configServerResource ConfigServerResource, options *ConfigServersClientBeginUpdatePutOptions) (ConfigServersClientUpdatePutPollerResponse, error) {
-	resp, err := client.updatePut(ctx, resourceGroupName, serviceName, configServerResource, options)
-	if err != nil {
-		return ConfigServersClientUpdatePutPollerResponse{}, err
+func (client *ConfigServersClient) BeginUpdatePut(ctx context.Context, resourceGroupName string, serviceName string, configServerResource ConfigServerResource, options *ConfigServersClientBeginUpdatePutOptions) (*armruntime.Poller[ConfigServersClientUpdatePutResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updatePut(ctx, resourceGroupName, serviceName, configServerResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigServersClientUpdatePutResponse]("ConfigServersClient.UpdatePut", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigServersClientUpdatePutResponse]("ConfigServersClient.UpdatePut", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigServersClientUpdatePutPollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigServersClient.UpdatePut", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ConfigServersClientUpdatePutPollerResponse{}, err
-	}
-	result.Poller = &ConfigServersClientUpdatePutPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdatePut - Update the config server.
@@ -248,20 +240,16 @@ func (client *ConfigServersClient) updatePutCreateRequest(ctx context.Context, r
 // configServerSettings - Config server settings to be validated
 // options - ConfigServersClientBeginValidateOptions contains the optional parameters for the ConfigServersClient.BeginValidate
 // method.
-func (client *ConfigServersClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configServerSettings ConfigServerSettings, options *ConfigServersClientBeginValidateOptions) (ConfigServersClientValidatePollerResponse, error) {
-	resp, err := client.validate(ctx, resourceGroupName, serviceName, configServerSettings, options)
-	if err != nil {
-		return ConfigServersClientValidatePollerResponse{}, err
+func (client *ConfigServersClient) BeginValidate(ctx context.Context, resourceGroupName string, serviceName string, configServerSettings ConfigServerSettings, options *ConfigServersClientBeginValidateOptions) (*armruntime.Poller[ConfigServersClientValidateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.validate(ctx, resourceGroupName, serviceName, configServerSettings, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ConfigServersClientValidateResponse]("ConfigServersClient.Validate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ConfigServersClientValidateResponse]("ConfigServersClient.Validate", options.ResumeToken, client.pl, nil)
 	}
-	result := ConfigServersClientValidatePollerResponse{}
-	pt, err := armruntime.NewPoller("ConfigServersClient.Validate", "location", resp, client.pl)
-	if err != nil {
-		return ConfigServersClientValidatePollerResponse{}, err
-	}
-	result.Poller = &ConfigServersClientValidatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Validate - Check if the config server settings are valid.

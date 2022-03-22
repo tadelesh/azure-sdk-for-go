@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -588,11 +588,14 @@ type ClustersClientBeginCreateOrUpdateOptions struct {
 	// Set to '*' to allow a new resource to be created, but to prevent updating an existing record set. Other values will result
 	// in a 412 Pre-condition Failed response.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
 type ClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
@@ -600,6 +603,8 @@ type ClustersClientBeginUpdateOptions struct {
 	// The ETag of the resource. Omit this value to always overwrite the current record set. Specify the last-seen ETag value
 	// to prevent accidentally overwriting concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientGetOptions contains the optional parameters for the ClustersClient.Get method.
@@ -938,6 +943,8 @@ type FunctionsClientBeginTestOptions struct {
 	// in the existing function (exactly like a PATCH operation) and the
 	// resulting function will be tested.
 	Function *Function
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FunctionsClientCreateOrReplaceOptions contains the optional parameters for the FunctionsClient.CreateOrReplace method.
@@ -1060,6 +1067,8 @@ type InputsClientBeginTestOptions struct {
 	// the existing input (exactly like a PATCH operation) and the resulting input will
 	// be tested.
 	Input *Input
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InputsClientCreateOrReplaceOptions contains the optional parameters for the InputsClient.CreateOrReplace method.
@@ -1331,6 +1340,8 @@ type OutputsClientBeginTestOptions struct {
 	// the existing output (exactly like a PATCH operation) and the resulting output
 	// will be tested.
 	Output *Output
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OutputsClientCreateOrReplaceOptions contains the optional parameters for the OutputsClient.CreateOrReplace method.
@@ -1459,7 +1470,8 @@ type PrivateEndpointProperties struct {
 
 // PrivateEndpointsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointsClient.BeginDelete method.
 type PrivateEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointsClientCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointsClient.CreateOrUpdate
@@ -1944,28 +1956,36 @@ type StreamingJobsClientBeginCreateOrReplaceOptions struct {
 	// Set to '*' to allow a new streaming job to be created, but to prevent updating an existing record set. Other values will
 	// result in a 412 Pre-condition Failed response.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingJobsClientBeginDeleteOptions contains the optional parameters for the StreamingJobsClient.BeginDelete method.
 type StreamingJobsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingJobsClientBeginScaleOptions contains the optional parameters for the StreamingJobsClient.BeginScale method.
 type StreamingJobsClientBeginScaleOptions struct {
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// Parameters applicable to a scale streaming job operation.
 	ScaleJobParameters *ScaleStreamingJobParameters
 }
 
 // StreamingJobsClientBeginStartOptions contains the optional parameters for the StreamingJobsClient.BeginStart method.
 type StreamingJobsClientBeginStartOptions struct {
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// Parameters applicable to a start streaming job operation.
 	StartJobParameters *StartStreamingJobParameters
 }
 
 // StreamingJobsClientBeginStopOptions contains the optional parameters for the StreamingJobsClient.BeginStop method.
 type StreamingJobsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StreamingJobsClientGetOptions contains the optional parameters for the StreamingJobsClient.Get method.

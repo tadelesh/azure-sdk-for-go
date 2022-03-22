@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -10,7 +10,7 @@ package armtimeseriesinsights
 
 const (
 	moduleName    = "armtimeseriesinsights"
-	moduleVersion = "v0.1.0"
+	moduleVersion = "v0.2.0"
 )
 
 // AccessPolicyRole - A role defining the data plane operations that a principal can perform on a Time Series Insights client.

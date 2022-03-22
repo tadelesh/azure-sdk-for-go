@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -244,16 +244,32 @@ func (client *IncidentCommentsClient) getHandleResponse(resp *http.Response) (In
 // workspaceName - The name of the workspace.
 // incidentID - Incident ID
 // options - IncidentCommentsClientListOptions contains the optional parameters for the IncidentCommentsClient.List method.
-func (client *IncidentCommentsClient) List(resourceGroupName string, workspaceName string, incidentID string, options *IncidentCommentsClientListOptions) *IncidentCommentsClientListPager {
-	return &IncidentCommentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, incidentID, options)
+func (client *IncidentCommentsClient) List(resourceGroupName string, workspaceName string, incidentID string, options *IncidentCommentsClientListOptions) *runtime.Pager[IncidentCommentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IncidentCommentsClientListResponse]{
+		More: func(page IncidentCommentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IncidentCommentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IncidentCommentList.NextLink)
+		Fetcher: func(ctx context.Context, page *IncidentCommentsClientListResponse) (IncidentCommentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, incidentID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IncidentCommentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IncidentCommentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IncidentCommentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -384,16 +384,21 @@ type MonitoringTagRulesProperties struct {
 // MonitorsClientBeginCreateOptions contains the optional parameters for the MonitorsClient.BeginCreate method.
 type MonitorsClientBeginCreateOptions struct {
 	Body *MonitorResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
 type MonitorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientBeginUpdateOptions contains the optional parameters for the MonitorsClient.BeginUpdate method.
 type MonitorsClientBeginUpdateOptions struct {
 	Body *MonitorResourceUpdateParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // MonitorsClientGetDefaultKeyOptions contains the optional parameters for the MonitorsClient.GetDefaultKey method.
@@ -529,6 +534,8 @@ type SetPasswordLink struct {
 // method.
 type SingleSignOnConfigurationsClientBeginCreateOrUpdateOptions struct {
 	Body *SingleSignOnResource
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SingleSignOnConfigurationsClientGetOptions contains the optional parameters for the SingleSignOnConfigurationsClient.Get

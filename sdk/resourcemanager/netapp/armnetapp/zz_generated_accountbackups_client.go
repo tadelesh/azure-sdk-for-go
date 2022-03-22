@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewAccountBackupsClient(subscriptionID string, credential azcore.TokenCrede
 // backupName - The name of the backup
 // options - AccountBackupsClientBeginDeleteOptions contains the optional parameters for the AccountBackupsClient.BeginDelete
 // method.
-func (client *AccountBackupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, backupName string, options *AccountBackupsClientBeginDeleteOptions) (AccountBackupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, backupName, options)
-	if err != nil {
-		return AccountBackupsClientDeletePollerResponse{}, err
+func (client *AccountBackupsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, backupName string, options *AccountBackupsClientBeginDeleteOptions) (*armruntime.Poller[AccountBackupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, backupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountBackupsClientDeleteResponse]("AccountBackupsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountBackupsClientDeleteResponse]("AccountBackupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountBackupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountBackupsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return AccountBackupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AccountBackupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified Backup for a Netapp Account
@@ -184,13 +180,26 @@ func (client *AccountBackupsClient) getHandleResponse(resp *http.Response) (Acco
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - AccountBackupsClientListOptions contains the optional parameters for the AccountBackupsClient.List method.
-func (client *AccountBackupsClient) List(resourceGroupName string, accountName string, options *AccountBackupsClientListOptions) *AccountBackupsClientListPager {
-	return &AccountBackupsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *AccountBackupsClient) List(resourceGroupName string, accountName string, options *AccountBackupsClientListOptions) *runtime.Pager[AccountBackupsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountBackupsClientListResponse]{
+		More: func(page AccountBackupsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AccountBackupsClientListResponse) (AccountBackupsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return AccountBackupsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountBackupsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountBackupsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewDevicesClient(subscriptionID string, credential azcore.TokenCredential, 
 // parameters - Parameters supplied to the create or update device operation.
 // options - DevicesClientBeginCreateOrUpdateOptions contains the optional parameters for the DevicesClient.BeginCreateOrUpdate
 // method.
-func (client *DevicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, deviceName string, parameters Device, options *DevicesClientBeginCreateOrUpdateOptions) (DevicesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, deviceName, parameters, options)
-	if err != nil {
-		return DevicesClientCreateOrUpdatePollerResponse{}, err
+func (client *DevicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, deviceName string, parameters Device, options *DevicesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DevicesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, deviceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DevicesClientCreateOrUpdateResponse]("DevicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DevicesClientCreateOrUpdateResponse]("DevicesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DevicesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DevicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DevicesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DevicesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a device.
@@ -120,20 +116,16 @@ func (client *DevicesClient) createOrUpdateCreateRequest(ctx context.Context, re
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // deviceName - The name of the device resource.
 // options - DevicesClientBeginDeleteOptions contains the optional parameters for the DevicesClient.BeginDelete method.
-func (client *DevicesClient) BeginDelete(ctx context.Context, resourceGroupName string, deviceName string, options *DevicesClientBeginDeleteOptions) (DevicesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, deviceName, options)
-	if err != nil {
-		return DevicesClientDeletePollerResponse{}, err
+func (client *DevicesClient) BeginDelete(ctx context.Context, resourceGroupName string, deviceName string, options *DevicesClientBeginDeleteOptions) (*armruntime.Poller[DevicesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, deviceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DevicesClientDeleteResponse]("DevicesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DevicesClientDeleteResponse]("DevicesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DevicesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DevicesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return DevicesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DevicesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified device.
@@ -239,16 +231,32 @@ func (client *DevicesClient) getHandleResponse(resp *http.Response) (DevicesClie
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DevicesClientListByResourceGroupOptions contains the optional parameters for the DevicesClient.ListByResourceGroup
 // method.
-func (client *DevicesClient) ListByResourceGroup(resourceGroupName string, options *DevicesClientListByResourceGroupOptions) *DevicesClientListByResourceGroupPager {
-	return &DevicesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DevicesClient) ListByResourceGroup(resourceGroupName string, options *DevicesClientListByResourceGroupOptions) *runtime.Pager[DevicesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DevicesClientListByResourceGroupResponse]{
+		More: func(page DevicesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DevicesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeviceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DevicesClientListByResourceGroupResponse) (DevicesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DevicesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DevicesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DevicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -286,16 +294,32 @@ func (client *DevicesClient) listByResourceGroupHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DevicesClientListBySubscriptionOptions contains the optional parameters for the DevicesClient.ListBySubscription
 // method.
-func (client *DevicesClient) ListBySubscription(options *DevicesClientListBySubscriptionOptions) *DevicesClientListBySubscriptionPager {
-	return &DevicesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DevicesClient) ListBySubscription(options *DevicesClientListBySubscriptionOptions) *runtime.Pager[DevicesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DevicesClientListBySubscriptionResponse]{
+		More: func(page DevicesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DevicesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeviceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DevicesClientListBySubscriptionResponse) (DevicesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DevicesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DevicesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DevicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

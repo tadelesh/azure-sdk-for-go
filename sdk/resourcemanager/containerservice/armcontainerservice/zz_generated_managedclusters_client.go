@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewManagedClustersClient(subscriptionID string, credential azcore.TokenCred
 // parameters - The managed cluster to create or update.
 // options - ManagedClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedClustersClient.BeginCreateOrUpdate
 // method.
-func (client *ManagedClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedCluster, options *ManagedClustersClientBeginCreateOrUpdateOptions) (ManagedClustersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ManagedClustersClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedCluster, options *ManagedClustersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedClustersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientCreateOrUpdateResponse]("ManagedClustersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientCreateOrUpdateResponse]("ManagedClustersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a managed cluster.
@@ -122,20 +118,16 @@ func (client *ManagedClustersClient) createOrUpdateCreateRequest(ctx context.Con
 // resourceName - The name of the managed cluster resource.
 // options - ManagedClustersClientBeginDeleteOptions contains the optional parameters for the ManagedClustersClient.BeginDelete
 // method.
-func (client *ManagedClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginDeleteOptions) (ManagedClustersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ManagedClustersClientDeletePollerResponse{}, err
+func (client *ManagedClustersClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginDeleteOptions) (*armruntime.Poller[ManagedClustersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientDeleteResponse]("ManagedClustersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientDeleteResponse]("ManagedClustersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a managed cluster.
@@ -473,16 +465,32 @@ func (client *ManagedClustersClient) getUpgradeProfileHandleResponse(resp *http.
 // List - Gets a list of managed clusters in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagedClustersClientListOptions contains the optional parameters for the ManagedClustersClient.List method.
-func (client *ManagedClustersClient) List(options *ManagedClustersClientListOptions) *ManagedClustersClientListPager {
-	return &ManagedClustersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ManagedClustersClient) List(options *ManagedClustersClientListOptions) *runtime.Pager[ManagedClustersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedClustersClientListResponse]{
+		More: func(page ManagedClustersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedClustersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedClustersClientListResponse) (ManagedClustersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedClustersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedClustersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedClustersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -517,16 +525,32 @@ func (client *ManagedClustersClient) listHandleResponse(resp *http.Response) (Ma
 // resourceGroupName - The name of the resource group.
 // options - ManagedClustersClientListByResourceGroupOptions contains the optional parameters for the ManagedClustersClient.ListByResourceGroup
 // method.
-func (client *ManagedClustersClient) ListByResourceGroup(resourceGroupName string, options *ManagedClustersClientListByResourceGroupOptions) *ManagedClustersClientListByResourceGroupPager {
-	return &ManagedClustersClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ManagedClustersClient) ListByResourceGroup(resourceGroupName string, options *ManagedClustersClientListByResourceGroupOptions) *runtime.Pager[ManagedClustersClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedClustersClientListByResourceGroupResponse]{
+		More: func(page ManagedClustersClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedClustersClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedClusterListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedClustersClientListByResourceGroupResponse) (ManagedClustersClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedClustersClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedClustersClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -744,16 +768,32 @@ func (client *ManagedClustersClient) listClusterUserCredentialsHandleResponse(re
 // resourceName - The name of the managed cluster resource.
 // options - ManagedClustersClientListOutboundNetworkDependenciesEndpointsOptions contains the optional parameters for the
 // ManagedClustersClient.ListOutboundNetworkDependenciesEndpoints method.
-func (client *ManagedClustersClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, resourceName string, options *ManagedClustersClientListOutboundNetworkDependenciesEndpointsOptions) *ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager {
-	return &ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, resourceName, options)
+func (client *ManagedClustersClient) ListOutboundNetworkDependenciesEndpoints(resourceGroupName string, resourceName string, options *ManagedClustersClientListOutboundNetworkDependenciesEndpointsOptions) *runtime.Pager[ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse]{
+		More: func(page ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutboundEnvironmentEndpointCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse) (ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listOutboundNetworkDependenciesEndpointsCreateRequest(ctx, resourceGroupName, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listOutboundNetworkDependenciesEndpointsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listOutboundNetworkDependenciesEndpointsCreateRequest creates the ListOutboundNetworkDependenciesEndpoints request.
@@ -798,20 +838,16 @@ func (client *ManagedClustersClient) listOutboundNetworkDependenciesEndpointsHan
 // parameters - The AAD profile to set on the Managed Cluster
 // options - ManagedClustersClientBeginResetAADProfileOptions contains the optional parameters for the ManagedClustersClient.BeginResetAADProfile
 // method.
-func (client *ManagedClustersClient) BeginResetAADProfile(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedClusterAADProfile, options *ManagedClustersClientBeginResetAADProfileOptions) (ManagedClustersClientResetAADProfilePollerResponse, error) {
-	resp, err := client.resetAADProfile(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ManagedClustersClientResetAADProfilePollerResponse{}, err
+func (client *ManagedClustersClient) BeginResetAADProfile(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedClusterAADProfile, options *ManagedClustersClientBeginResetAADProfileOptions) (*armruntime.Poller[ManagedClustersClientResetAADProfileResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resetAADProfile(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientResetAADProfileResponse]("ManagedClustersClient.ResetAADProfile", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientResetAADProfileResponse]("ManagedClustersClient.ResetAADProfile", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientResetAADProfilePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.ResetAADProfile", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientResetAADProfilePollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientResetAADProfilePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ResetAADProfile - Reset the AAD Profile of a managed cluster.
@@ -864,20 +900,16 @@ func (client *ManagedClustersClient) resetAADProfileCreateRequest(ctx context.Co
 // parameters - The service principal profile to set on the managed cluster.
 // options - ManagedClustersClientBeginResetServicePrincipalProfileOptions contains the optional parameters for the ManagedClustersClient.BeginResetServicePrincipalProfile
 // method.
-func (client *ManagedClustersClient) BeginResetServicePrincipalProfile(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedClusterServicePrincipalProfile, options *ManagedClustersClientBeginResetServicePrincipalProfileOptions) (ManagedClustersClientResetServicePrincipalProfilePollerResponse, error) {
-	resp, err := client.resetServicePrincipalProfile(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ManagedClustersClientResetServicePrincipalProfilePollerResponse{}, err
+func (client *ManagedClustersClient) BeginResetServicePrincipalProfile(ctx context.Context, resourceGroupName string, resourceName string, parameters ManagedClusterServicePrincipalProfile, options *ManagedClustersClientBeginResetServicePrincipalProfileOptions) (*armruntime.Poller[ManagedClustersClientResetServicePrincipalProfileResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resetServicePrincipalProfile(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientResetServicePrincipalProfileResponse]("ManagedClustersClient.ResetServicePrincipalProfile", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientResetServicePrincipalProfileResponse]("ManagedClustersClient.ResetServicePrincipalProfile", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientResetServicePrincipalProfilePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.ResetServicePrincipalProfile", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientResetServicePrincipalProfilePollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientResetServicePrincipalProfilePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ResetServicePrincipalProfile - This action cannot be performed on a cluster that is not using a service principal
@@ -930,20 +962,16 @@ func (client *ManagedClustersClient) resetServicePrincipalProfileCreateRequest(c
 // resourceName - The name of the managed cluster resource.
 // options - ManagedClustersClientBeginRotateClusterCertificatesOptions contains the optional parameters for the ManagedClustersClient.BeginRotateClusterCertificates
 // method.
-func (client *ManagedClustersClient) BeginRotateClusterCertificates(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginRotateClusterCertificatesOptions) (ManagedClustersClientRotateClusterCertificatesPollerResponse, error) {
-	resp, err := client.rotateClusterCertificates(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ManagedClustersClientRotateClusterCertificatesPollerResponse{}, err
+func (client *ManagedClustersClient) BeginRotateClusterCertificates(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginRotateClusterCertificatesOptions) (*armruntime.Poller[ManagedClustersClientRotateClusterCertificatesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.rotateClusterCertificates(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientRotateClusterCertificatesResponse]("ManagedClustersClient.RotateClusterCertificates", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientRotateClusterCertificatesResponse]("ManagedClustersClient.RotateClusterCertificates", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientRotateClusterCertificatesPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.RotateClusterCertificates", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientRotateClusterCertificatesPollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientRotateClusterCertificatesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RotateClusterCertificates - See Certificate rotation [https://docs.microsoft.com/azure/aks/certificate-rotation] for more
@@ -999,20 +1027,16 @@ func (client *ManagedClustersClient) rotateClusterCertificatesCreateRequest(ctx 
 // requestPayload - The run command request
 // options - ManagedClustersClientBeginRunCommandOptions contains the optional parameters for the ManagedClustersClient.BeginRunCommand
 // method.
-func (client *ManagedClustersClient) BeginRunCommand(ctx context.Context, resourceGroupName string, resourceName string, requestPayload RunCommandRequest, options *ManagedClustersClientBeginRunCommandOptions) (ManagedClustersClientRunCommandPollerResponse, error) {
-	resp, err := client.runCommand(ctx, resourceGroupName, resourceName, requestPayload, options)
-	if err != nil {
-		return ManagedClustersClientRunCommandPollerResponse{}, err
+func (client *ManagedClustersClient) BeginRunCommand(ctx context.Context, resourceGroupName string, resourceName string, requestPayload RunCommandRequest, options *ManagedClustersClientBeginRunCommandOptions) (*armruntime.Poller[ManagedClustersClientRunCommandResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.runCommand(ctx, resourceGroupName, resourceName, requestPayload, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientRunCommandResponse]("ManagedClustersClient.RunCommand", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientRunCommandResponse]("ManagedClustersClient.RunCommand", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientRunCommandPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.RunCommand", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientRunCommandPollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientRunCommandPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RunCommand - AKS will create a pod to run the command. This is primarily useful for private clusters. For more information
@@ -1067,20 +1091,16 @@ func (client *ManagedClustersClient) runCommandCreateRequest(ctx context.Context
 // resourceName - The name of the managed cluster resource.
 // options - ManagedClustersClientBeginStartOptions contains the optional parameters for the ManagedClustersClient.BeginStart
 // method.
-func (client *ManagedClustersClient) BeginStart(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginStartOptions) (ManagedClustersClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ManagedClustersClientStartPollerResponse{}, err
+func (client *ManagedClustersClient) BeginStart(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginStartOptions) (*armruntime.Poller[ManagedClustersClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientStartResponse]("ManagedClustersClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientStartResponse]("ManagedClustersClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientStartPollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - See starting a cluster [https://docs.microsoft.com/azure/aks/start-stop-cluster] for more details about starting
@@ -1136,20 +1156,16 @@ func (client *ManagedClustersClient) startCreateRequest(ctx context.Context, res
 // resourceName - The name of the managed cluster resource.
 // options - ManagedClustersClientBeginStopOptions contains the optional parameters for the ManagedClustersClient.BeginStop
 // method.
-func (client *ManagedClustersClient) BeginStop(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginStopOptions) (ManagedClustersClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ManagedClustersClientStopPollerResponse{}, err
+func (client *ManagedClustersClient) BeginStop(ctx context.Context, resourceGroupName string, resourceName string, options *ManagedClustersClientBeginStopOptions) (*armruntime.Poller[ManagedClustersClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientStopResponse]("ManagedClustersClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientStopResponse]("ManagedClustersClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientStopPollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - This can only be performed on Azure Virtual Machine Scale set backed clusters. Stopping a cluster stops the control
@@ -1205,20 +1221,16 @@ func (client *ManagedClustersClient) stopCreateRequest(ctx context.Context, reso
 // parameters - Parameters supplied to the Update Managed Cluster Tags operation.
 // options - ManagedClustersClientBeginUpdateTagsOptions contains the optional parameters for the ManagedClustersClient.BeginUpdateTags
 // method.
-func (client *ManagedClustersClient) BeginUpdateTags(ctx context.Context, resourceGroupName string, resourceName string, parameters TagsObject, options *ManagedClustersClientBeginUpdateTagsOptions) (ManagedClustersClientUpdateTagsPollerResponse, error) {
-	resp, err := client.updateTags(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ManagedClustersClientUpdateTagsPollerResponse{}, err
+func (client *ManagedClustersClient) BeginUpdateTags(ctx context.Context, resourceGroupName string, resourceName string, parameters TagsObject, options *ManagedClustersClientBeginUpdateTagsOptions) (*armruntime.Poller[ManagedClustersClientUpdateTagsResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateTags(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedClustersClientUpdateTagsResponse]("ManagedClustersClient.UpdateTags", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedClustersClientUpdateTagsResponse]("ManagedClustersClient.UpdateTags", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedClustersClientUpdateTagsPollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedClustersClient.UpdateTags", "", resp, client.pl)
-	if err != nil {
-		return ManagedClustersClientUpdateTagsPollerResponse{}, err
-	}
-	result.Poller = &ManagedClustersClientUpdateTagsPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateTags - Updates tags on a managed cluster.

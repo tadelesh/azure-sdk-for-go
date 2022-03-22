@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -336,16 +336,32 @@ func (client *DeploymentOperationsClient) getAtTenantScopeHandleResponse(resp *h
 // deploymentName - The name of the deployment.
 // options - DeploymentOperationsClientListOptions contains the optional parameters for the DeploymentOperationsClient.List
 // method.
-func (client *DeploymentOperationsClient) List(resourceGroupName string, deploymentName string, options *DeploymentOperationsClientListOptions) *DeploymentOperationsClientListPager {
-	return &DeploymentOperationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, deploymentName, options)
+func (client *DeploymentOperationsClient) List(resourceGroupName string, deploymentName string, options *DeploymentOperationsClientListOptions) *runtime.Pager[DeploymentOperationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentOperationsClientListResponse]{
+		More: func(page DeploymentOperationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentOperationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentOperationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentOperationsClientListResponse) (DeploymentOperationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, deploymentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentOperationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentOperationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentOperationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -392,16 +408,32 @@ func (client *DeploymentOperationsClient) listHandleResponse(resp *http.Response
 // deploymentName - The name of the deployment.
 // options - DeploymentOperationsClientListAtManagementGroupScopeOptions contains the optional parameters for the DeploymentOperationsClient.ListAtManagementGroupScope
 // method.
-func (client *DeploymentOperationsClient) ListAtManagementGroupScope(groupID string, deploymentName string, options *DeploymentOperationsClientListAtManagementGroupScopeOptions) *DeploymentOperationsClientListAtManagementGroupScopePager {
-	return &DeploymentOperationsClientListAtManagementGroupScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAtManagementGroupScopeCreateRequest(ctx, groupID, deploymentName, options)
+func (client *DeploymentOperationsClient) ListAtManagementGroupScope(groupID string, deploymentName string, options *DeploymentOperationsClientListAtManagementGroupScopeOptions) *runtime.Pager[DeploymentOperationsClientListAtManagementGroupScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentOperationsClientListAtManagementGroupScopeResponse]{
+		More: func(page DeploymentOperationsClientListAtManagementGroupScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentOperationsClientListAtManagementGroupScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentOperationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentOperationsClientListAtManagementGroupScopeResponse) (DeploymentOperationsClientListAtManagementGroupScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAtManagementGroupScopeCreateRequest(ctx, groupID, deploymentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentOperationsClientListAtManagementGroupScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentOperationsClientListAtManagementGroupScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentOperationsClientListAtManagementGroupScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAtManagementGroupScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAtManagementGroupScopeCreateRequest creates the ListAtManagementGroupScope request.
@@ -444,16 +476,32 @@ func (client *DeploymentOperationsClient) listAtManagementGroupScopeHandleRespon
 // deploymentName - The name of the deployment.
 // options - DeploymentOperationsClientListAtScopeOptions contains the optional parameters for the DeploymentOperationsClient.ListAtScope
 // method.
-func (client *DeploymentOperationsClient) ListAtScope(scope string, deploymentName string, options *DeploymentOperationsClientListAtScopeOptions) *DeploymentOperationsClientListAtScopePager {
-	return &DeploymentOperationsClientListAtScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAtScopeCreateRequest(ctx, scope, deploymentName, options)
+func (client *DeploymentOperationsClient) ListAtScope(scope string, deploymentName string, options *DeploymentOperationsClientListAtScopeOptions) *runtime.Pager[DeploymentOperationsClientListAtScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentOperationsClientListAtScopeResponse]{
+		More: func(page DeploymentOperationsClientListAtScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentOperationsClientListAtScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentOperationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentOperationsClientListAtScopeResponse) (DeploymentOperationsClientListAtScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAtScopeCreateRequest(ctx, scope, deploymentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentOperationsClientListAtScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentOperationsClientListAtScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentOperationsClientListAtScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAtScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAtScopeCreateRequest creates the ListAtScope request.
@@ -492,16 +540,32 @@ func (client *DeploymentOperationsClient) listAtScopeHandleResponse(resp *http.R
 // deploymentName - The name of the deployment.
 // options - DeploymentOperationsClientListAtSubscriptionScopeOptions contains the optional parameters for the DeploymentOperationsClient.ListAtSubscriptionScope
 // method.
-func (client *DeploymentOperationsClient) ListAtSubscriptionScope(deploymentName string, options *DeploymentOperationsClientListAtSubscriptionScopeOptions) *DeploymentOperationsClientListAtSubscriptionScopePager {
-	return &DeploymentOperationsClientListAtSubscriptionScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAtSubscriptionScopeCreateRequest(ctx, deploymentName, options)
+func (client *DeploymentOperationsClient) ListAtSubscriptionScope(deploymentName string, options *DeploymentOperationsClientListAtSubscriptionScopeOptions) *runtime.Pager[DeploymentOperationsClientListAtSubscriptionScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentOperationsClientListAtSubscriptionScopeResponse]{
+		More: func(page DeploymentOperationsClientListAtSubscriptionScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentOperationsClientListAtSubscriptionScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentOperationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentOperationsClientListAtSubscriptionScopeResponse) (DeploymentOperationsClientListAtSubscriptionScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAtSubscriptionScopeCreateRequest(ctx, deploymentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentOperationsClientListAtSubscriptionScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentOperationsClientListAtSubscriptionScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentOperationsClientListAtSubscriptionScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAtSubscriptionScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAtSubscriptionScopeCreateRequest creates the ListAtSubscriptionScope request.
@@ -543,16 +607,32 @@ func (client *DeploymentOperationsClient) listAtSubscriptionScopeHandleResponse(
 // deploymentName - The name of the deployment.
 // options - DeploymentOperationsClientListAtTenantScopeOptions contains the optional parameters for the DeploymentOperationsClient.ListAtTenantScope
 // method.
-func (client *DeploymentOperationsClient) ListAtTenantScope(deploymentName string, options *DeploymentOperationsClientListAtTenantScopeOptions) *DeploymentOperationsClientListAtTenantScopePager {
-	return &DeploymentOperationsClientListAtTenantScopePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAtTenantScopeCreateRequest(ctx, deploymentName, options)
+func (client *DeploymentOperationsClient) ListAtTenantScope(deploymentName string, options *DeploymentOperationsClientListAtTenantScopeOptions) *runtime.Pager[DeploymentOperationsClientListAtTenantScopeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentOperationsClientListAtTenantScopeResponse]{
+		More: func(page DeploymentOperationsClientListAtTenantScopeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentOperationsClientListAtTenantScopeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentOperationsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentOperationsClientListAtTenantScopeResponse) (DeploymentOperationsClientListAtTenantScopeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAtTenantScopeCreateRequest(ctx, deploymentName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentOperationsClientListAtTenantScopeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentOperationsClientListAtTenantScopeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentOperationsClientListAtTenantScopeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAtTenantScopeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAtTenantScopeCreateRequest creates the ListAtTenantScope request.

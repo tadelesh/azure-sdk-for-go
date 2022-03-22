@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *UserAssignedIdentitiesClient) getHandleResponse(resp *http.Respons
 // resourceGroupName - The name of the Resource Group to which the identity belongs.
 // options - UserAssignedIdentitiesClientListByResourceGroupOptions contains the optional parameters for the UserAssignedIdentitiesClient.ListByResourceGroup
 // method.
-func (client *UserAssignedIdentitiesClient) ListByResourceGroup(resourceGroupName string, options *UserAssignedIdentitiesClientListByResourceGroupOptions) *UserAssignedIdentitiesClientListByResourceGroupPager {
-	return &UserAssignedIdentitiesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *UserAssignedIdentitiesClient) ListByResourceGroup(resourceGroupName string, options *UserAssignedIdentitiesClientListByResourceGroupOptions) *runtime.Pager[UserAssignedIdentitiesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserAssignedIdentitiesClientListByResourceGroupResponse]{
+		More: func(page UserAssignedIdentitiesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserAssignedIdentitiesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserAssignedIdentitiesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *UserAssignedIdentitiesClientListByResourceGroupResponse) (UserAssignedIdentitiesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserAssignedIdentitiesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserAssignedIdentitiesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserAssignedIdentitiesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -261,16 +277,32 @@ func (client *UserAssignedIdentitiesClient) listByResourceGroupHandleResponse(re
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - UserAssignedIdentitiesClientListBySubscriptionOptions contains the optional parameters for the UserAssignedIdentitiesClient.ListBySubscription
 // method.
-func (client *UserAssignedIdentitiesClient) ListBySubscription(options *UserAssignedIdentitiesClientListBySubscriptionOptions) *UserAssignedIdentitiesClientListBySubscriptionPager {
-	return &UserAssignedIdentitiesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *UserAssignedIdentitiesClient) ListBySubscription(options *UserAssignedIdentitiesClientListBySubscriptionOptions) *runtime.Pager[UserAssignedIdentitiesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UserAssignedIdentitiesClientListBySubscriptionResponse]{
+		More: func(page UserAssignedIdentitiesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp UserAssignedIdentitiesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.UserAssignedIdentitiesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *UserAssignedIdentitiesClientListBySubscriptionResponse) (UserAssignedIdentitiesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return UserAssignedIdentitiesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UserAssignedIdentitiesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UserAssignedIdentitiesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

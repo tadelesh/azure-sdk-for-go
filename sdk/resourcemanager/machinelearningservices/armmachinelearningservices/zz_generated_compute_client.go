@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewComputeClient(subscriptionID string, credential azcore.TokenCredential, 
 // parameters - Payload with Machine Learning compute definition.
 // options - ComputeClientBeginCreateOrUpdateOptions contains the optional parameters for the ComputeClient.BeginCreateOrUpdate
 // method.
-func (client *ComputeClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, parameters ComputeResource, options *ComputeClientBeginCreateOrUpdateOptions) (ComputeClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, computeName, parameters, options)
-	if err != nil {
-		return ComputeClientCreateOrUpdatePollerResponse{}, err
+func (client *ComputeClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, parameters ComputeResource, options *ComputeClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ComputeClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, computeName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientCreateOrUpdateResponse]("ComputeClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientCreateOrUpdateResponse]("ComputeClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ComputeClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates compute. This call will overwrite a compute if it exists. This is a nonrecoverable
@@ -132,20 +128,16 @@ func (client *ComputeClient) createOrUpdateCreateRequest(ctx context.Context, re
 // underlyingResourceAction - Delete the underlying compute if 'Delete', or detach the underlying compute from workspace if
 // 'Detach'.
 // options - ComputeClientBeginDeleteOptions contains the optional parameters for the ComputeClient.BeginDelete method.
-func (client *ComputeClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, underlyingResourceAction UnderlyingResourceAction, options *ComputeClientBeginDeleteOptions) (ComputeClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, computeName, underlyingResourceAction, options)
-	if err != nil {
-		return ComputeClientDeletePollerResponse{}, err
+func (client *ComputeClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, underlyingResourceAction UnderlyingResourceAction, options *ComputeClientBeginDeleteOptions) (*armruntime.Poller[ComputeClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, computeName, underlyingResourceAction, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientDeleteResponse]("ComputeClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientDeleteResponse]("ComputeClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ComputeClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes specified Machine Learning compute.
@@ -262,16 +254,32 @@ func (client *ComputeClient) getHandleResponse(resp *http.Response) (ComputeClie
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - ComputeClientListOptions contains the optional parameters for the ComputeClient.List method.
-func (client *ComputeClient) List(resourceGroupName string, workspaceName string, options *ComputeClientListOptions) *ComputeClientListPager {
-	return &ComputeClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *ComputeClient) List(resourceGroupName string, workspaceName string, options *ComputeClientListOptions) *runtime.Pager[ComputeClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ComputeClientListResponse]{
+		More: func(page ComputeClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ComputeClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PaginatedComputeResourcesList.NextLink)
+		Fetcher: func(ctx context.Context, page *ComputeClientListResponse) (ComputeClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ComputeClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ComputeClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ComputeClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -378,16 +386,32 @@ func (client *ComputeClient) listKeysHandleResponse(resp *http.Response) (Comput
 // workspaceName - Name of Azure Machine Learning workspace.
 // computeName - Name of the Azure Machine Learning compute.
 // options - ComputeClientListNodesOptions contains the optional parameters for the ComputeClient.ListNodes method.
-func (client *ComputeClient) ListNodes(resourceGroupName string, workspaceName string, computeName string, options *ComputeClientListNodesOptions) *ComputeClientListNodesPager {
-	return &ComputeClientListNodesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listNodesCreateRequest(ctx, resourceGroupName, workspaceName, computeName, options)
+func (client *ComputeClient) ListNodes(resourceGroupName string, workspaceName string, computeName string, options *ComputeClientListNodesOptions) *runtime.Pager[ComputeClientListNodesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ComputeClientListNodesResponse]{
+		More: func(page ComputeClientListNodesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ComputeClientListNodesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AmlComputeNodesInformation.NextLink)
+		Fetcher: func(ctx context.Context, page *ComputeClientListNodesResponse) (ComputeClientListNodesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listNodesCreateRequest(ctx, resourceGroupName, workspaceName, computeName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ComputeClientListNodesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ComputeClientListNodesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ComputeClientListNodesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listNodesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listNodesCreateRequest creates the ListNodes request.
@@ -435,20 +459,16 @@ func (client *ComputeClient) listNodesHandleResponse(resp *http.Response) (Compu
 // workspaceName - Name of Azure Machine Learning workspace.
 // computeName - Name of the Azure Machine Learning compute.
 // options - ComputeClientBeginRestartOptions contains the optional parameters for the ComputeClient.BeginRestart method.
-func (client *ComputeClient) BeginRestart(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginRestartOptions) (ComputeClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, resourceGroupName, workspaceName, computeName, options)
-	if err != nil {
-		return ComputeClientRestartPollerResponse{}, err
+func (client *ComputeClient) BeginRestart(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginRestartOptions) (*armruntime.Poller[ComputeClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, resourceGroupName, workspaceName, computeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientRestartResponse]("ComputeClient.Restart", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientRestartResponse]("ComputeClient.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.Restart", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientRestartPollerResponse{}, err
-	}
-	result.Poller = &ComputeClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - Posts a restart action to a compute instance
@@ -504,20 +524,16 @@ func (client *ComputeClient) restartCreateRequest(ctx context.Context, resourceG
 // workspaceName - Name of Azure Machine Learning workspace.
 // computeName - Name of the Azure Machine Learning compute.
 // options - ComputeClientBeginStartOptions contains the optional parameters for the ComputeClient.BeginStart method.
-func (client *ComputeClient) BeginStart(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginStartOptions) (ComputeClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, workspaceName, computeName, options)
-	if err != nil {
-		return ComputeClientStartPollerResponse{}, err
+func (client *ComputeClient) BeginStart(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginStartOptions) (*armruntime.Poller[ComputeClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, workspaceName, computeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientStartResponse]("ComputeClient.Start", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientStartResponse]("ComputeClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.Start", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientStartPollerResponse{}, err
-	}
-	result.Poller = &ComputeClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Posts a start action to a compute instance
@@ -573,20 +589,16 @@ func (client *ComputeClient) startCreateRequest(ctx context.Context, resourceGro
 // workspaceName - Name of Azure Machine Learning workspace.
 // computeName - Name of the Azure Machine Learning compute.
 // options - ComputeClientBeginStopOptions contains the optional parameters for the ComputeClient.BeginStop method.
-func (client *ComputeClient) BeginStop(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginStopOptions) (ComputeClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, workspaceName, computeName, options)
-	if err != nil {
-		return ComputeClientStopPollerResponse{}, err
+func (client *ComputeClient) BeginStop(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, options *ComputeClientBeginStopOptions) (*armruntime.Poller[ComputeClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, workspaceName, computeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientStopResponse]("ComputeClient.Stop", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientStopResponse]("ComputeClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.Stop", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientStopPollerResponse{}, err
-	}
-	result.Poller = &ComputeClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Posts a stop action to a compute instance
@@ -644,20 +656,16 @@ func (client *ComputeClient) stopCreateRequest(ctx context.Context, resourceGrou
 // computeName - Name of the Azure Machine Learning compute.
 // parameters - Additional parameters for cluster update.
 // options - ComputeClientBeginUpdateOptions contains the optional parameters for the ComputeClient.BeginUpdate method.
-func (client *ComputeClient) BeginUpdate(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, parameters ClusterUpdateParameters, options *ComputeClientBeginUpdateOptions) (ComputeClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, workspaceName, computeName, parameters, options)
-	if err != nil {
-		return ComputeClientUpdatePollerResponse{}, err
+func (client *ComputeClient) BeginUpdate(ctx context.Context, resourceGroupName string, workspaceName string, computeName string, parameters ClusterUpdateParameters, options *ComputeClientBeginUpdateOptions) (*armruntime.Poller[ComputeClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, workspaceName, computeName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ComputeClientUpdateResponse]("ComputeClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ComputeClientUpdateResponse]("ComputeClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ComputeClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ComputeClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ComputeClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ComputeClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates properties of a compute. This call will overwrite a compute if it exists. This is a nonrecoverable operation.

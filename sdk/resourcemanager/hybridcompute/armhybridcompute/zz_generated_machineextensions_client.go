@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewMachineExtensionsClient(subscriptionID string, credential azcore.TokenCr
 // extensionParameters - Parameters supplied to the Create Machine Extension operation.
 // options - MachineExtensionsClientBeginCreateOrUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginCreateOrUpdate
 // method.
-func (client *MachineExtensionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, machineName string, extensionName string, extensionParameters MachineExtension, options *MachineExtensionsClientBeginCreateOrUpdateOptions) (MachineExtensionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, machineName, extensionName, extensionParameters, options)
-	if err != nil {
-		return MachineExtensionsClientCreateOrUpdatePollerResponse{}, err
+func (client *MachineExtensionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, machineName string, extensionName string, extensionParameters MachineExtension, options *MachineExtensionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[MachineExtensionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, machineName, extensionName, extensionParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MachineExtensionsClientCreateOrUpdateResponse]("MachineExtensionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MachineExtensionsClientCreateOrUpdateResponse]("MachineExtensionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := MachineExtensionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("MachineExtensionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return MachineExtensionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &MachineExtensionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The operation to create or update the extension.
@@ -127,20 +123,16 @@ func (client *MachineExtensionsClient) createOrUpdateCreateRequest(ctx context.C
 // extensionName - The name of the machine extension.
 // options - MachineExtensionsClientBeginDeleteOptions contains the optional parameters for the MachineExtensionsClient.BeginDelete
 // method.
-func (client *MachineExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, machineName string, extensionName string, options *MachineExtensionsClientBeginDeleteOptions) (MachineExtensionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, machineName, extensionName, options)
-	if err != nil {
-		return MachineExtensionsClientDeletePollerResponse{}, err
+func (client *MachineExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, machineName string, extensionName string, options *MachineExtensionsClientBeginDeleteOptions) (*armruntime.Poller[MachineExtensionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, machineName, extensionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MachineExtensionsClientDeleteResponse]("MachineExtensionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MachineExtensionsClientDeleteResponse]("MachineExtensionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := MachineExtensionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("MachineExtensionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return MachineExtensionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &MachineExtensionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to delete the extension.
@@ -255,16 +247,32 @@ func (client *MachineExtensionsClient) getHandleResponse(resp *http.Response) (M
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // machineName - The name of the machine containing the extension.
 // options - MachineExtensionsClientListOptions contains the optional parameters for the MachineExtensionsClient.List method.
-func (client *MachineExtensionsClient) List(resourceGroupName string, machineName string, options *MachineExtensionsClientListOptions) *MachineExtensionsClientListPager {
-	return &MachineExtensionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, machineName, options)
+func (client *MachineExtensionsClient) List(resourceGroupName string, machineName string, options *MachineExtensionsClientListOptions) *runtime.Pager[MachineExtensionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MachineExtensionsClientListResponse]{
+		More: func(page MachineExtensionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MachineExtensionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MachineExtensionsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MachineExtensionsClientListResponse) (MachineExtensionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, machineName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MachineExtensionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MachineExtensionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MachineExtensionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -313,20 +321,16 @@ func (client *MachineExtensionsClient) listHandleResponse(resp *http.Response) (
 // extensionParameters - Parameters supplied to the Create Machine Extension operation.
 // options - MachineExtensionsClientBeginUpdateOptions contains the optional parameters for the MachineExtensionsClient.BeginUpdate
 // method.
-func (client *MachineExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, machineName string, extensionName string, extensionParameters MachineExtensionUpdate, options *MachineExtensionsClientBeginUpdateOptions) (MachineExtensionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, machineName, extensionName, extensionParameters, options)
-	if err != nil {
-		return MachineExtensionsClientUpdatePollerResponse{}, err
+func (client *MachineExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, machineName string, extensionName string, extensionParameters MachineExtensionUpdate, options *MachineExtensionsClientBeginUpdateOptions) (*armruntime.Poller[MachineExtensionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, machineName, extensionName, extensionParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[MachineExtensionsClientUpdateResponse]("MachineExtensionsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[MachineExtensionsClientUpdateResponse]("MachineExtensionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := MachineExtensionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("MachineExtensionsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return MachineExtensionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &MachineExtensionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - The operation to create or update the extension.

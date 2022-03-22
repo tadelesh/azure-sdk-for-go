@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -341,16 +341,32 @@ func (client *ThreatIntelligenceIndicatorClient) getHandleResponse(resp *http.Re
 // threatIntelligenceFilteringCriteria - Filtering criteria for querying threat intelligence indicators.
 // options - ThreatIntelligenceIndicatorClientQueryIndicatorsOptions contains the optional parameters for the ThreatIntelligenceIndicatorClient.QueryIndicators
 // method.
-func (client *ThreatIntelligenceIndicatorClient) QueryIndicators(resourceGroupName string, workspaceName string, threatIntelligenceFilteringCriteria ThreatIntelligenceFilteringCriteria, options *ThreatIntelligenceIndicatorClientQueryIndicatorsOptions) *ThreatIntelligenceIndicatorClientQueryIndicatorsPager {
-	return &ThreatIntelligenceIndicatorClientQueryIndicatorsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.queryIndicatorsCreateRequest(ctx, resourceGroupName, workspaceName, threatIntelligenceFilteringCriteria, options)
+func (client *ThreatIntelligenceIndicatorClient) QueryIndicators(resourceGroupName string, workspaceName string, threatIntelligenceFilteringCriteria ThreatIntelligenceFilteringCriteria, options *ThreatIntelligenceIndicatorClientQueryIndicatorsOptions) *runtime.Pager[ThreatIntelligenceIndicatorClientQueryIndicatorsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ThreatIntelligenceIndicatorClientQueryIndicatorsResponse]{
+		More: func(page ThreatIntelligenceIndicatorClientQueryIndicatorsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ThreatIntelligenceIndicatorClientQueryIndicatorsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ThreatIntelligenceInformationList.NextLink)
+		Fetcher: func(ctx context.Context, page *ThreatIntelligenceIndicatorClientQueryIndicatorsResponse) (ThreatIntelligenceIndicatorClientQueryIndicatorsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.queryIndicatorsCreateRequest(ctx, resourceGroupName, workspaceName, threatIntelligenceFilteringCriteria, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.queryIndicatorsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // queryIndicatorsCreateRequest creates the QueryIndicators request.

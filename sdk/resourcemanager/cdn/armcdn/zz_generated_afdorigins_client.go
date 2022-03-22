@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewAFDOriginsClient(subscriptionID string, credential azcore.TokenCredentia
 // originName - Name of the origin that is unique within the profile.
 // origin - Origin properties
 // options - AFDOriginsClientBeginCreateOptions contains the optional parameters for the AFDOriginsClient.BeginCreate method.
-func (client *AFDOriginsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, origin AFDOrigin, options *AFDOriginsClientBeginCreateOptions) (AFDOriginsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, originGroupName, originName, origin, options)
-	if err != nil {
-		return AFDOriginsClientCreatePollerResponse{}, err
+func (client *AFDOriginsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, origin AFDOrigin, options *AFDOriginsClientBeginCreateOptions) (*armruntime.Poller[AFDOriginsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, originGroupName, originName, origin, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDOriginsClientCreateResponse]("AFDOriginsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDOriginsClientCreateResponse]("AFDOriginsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDOriginsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDOriginsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDOriginsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AFDOriginsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new origin within the specified origin group.
@@ -133,20 +129,16 @@ func (client *AFDOriginsClient) createCreateRequest(ctx context.Context, resourc
 // originGroupName - Name of the origin group which is unique within the profile.
 // originName - Name of the origin which is unique within the profile.
 // options - AFDOriginsClientBeginDeleteOptions contains the optional parameters for the AFDOriginsClient.BeginDelete method.
-func (client *AFDOriginsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, options *AFDOriginsClientBeginDeleteOptions) (AFDOriginsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, originGroupName, originName, options)
-	if err != nil {
-		return AFDOriginsClientDeletePollerResponse{}, err
+func (client *AFDOriginsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, options *AFDOriginsClientBeginDeleteOptions) (*armruntime.Poller[AFDOriginsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, originGroupName, originName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDOriginsClientDeleteResponse]("AFDOriginsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDOriginsClientDeleteResponse]("AFDOriginsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDOriginsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDOriginsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDOriginsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AFDOriginsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing origin within an origin group.
@@ -274,16 +266,32 @@ func (client *AFDOriginsClient) getHandleResponse(resp *http.Response) (AFDOrigi
 // originGroupName - Name of the origin group which is unique within the profile.
 // options - AFDOriginsClientListByOriginGroupOptions contains the optional parameters for the AFDOriginsClient.ListByOriginGroup
 // method.
-func (client *AFDOriginsClient) ListByOriginGroup(resourceGroupName string, profileName string, originGroupName string, options *AFDOriginsClientListByOriginGroupOptions) *AFDOriginsClientListByOriginGroupPager {
-	return &AFDOriginsClientListByOriginGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByOriginGroupCreateRequest(ctx, resourceGroupName, profileName, originGroupName, options)
+func (client *AFDOriginsClient) ListByOriginGroup(resourceGroupName string, profileName string, originGroupName string, options *AFDOriginsClientListByOriginGroupOptions) *runtime.Pager[AFDOriginsClientListByOriginGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AFDOriginsClientListByOriginGroupResponse]{
+		More: func(page AFDOriginsClientListByOriginGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AFDOriginsClientListByOriginGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AFDOriginListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AFDOriginsClientListByOriginGroupResponse) (AFDOriginsClientListByOriginGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByOriginGroupCreateRequest(ctx, resourceGroupName, profileName, originGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AFDOriginsClientListByOriginGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AFDOriginsClientListByOriginGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AFDOriginsClientListByOriginGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByOriginGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByOriginGroupCreateRequest creates the ListByOriginGroup request.
@@ -334,20 +342,16 @@ func (client *AFDOriginsClient) listByOriginGroupHandleResponse(resp *http.Respo
 // originName - Name of the origin which is unique within the profile.
 // originUpdateProperties - Origin properties
 // options - AFDOriginsClientBeginUpdateOptions contains the optional parameters for the AFDOriginsClient.BeginUpdate method.
-func (client *AFDOriginsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, originUpdateProperties AFDOriginUpdateParameters, options *AFDOriginsClientBeginUpdateOptions) (AFDOriginsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, originGroupName, originName, originUpdateProperties, options)
-	if err != nil {
-		return AFDOriginsClientUpdatePollerResponse{}, err
+func (client *AFDOriginsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, originGroupName string, originName string, originUpdateProperties AFDOriginUpdateParameters, options *AFDOriginsClientBeginUpdateOptions) (*armruntime.Poller[AFDOriginsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, originGroupName, originName, originUpdateProperties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AFDOriginsClientUpdateResponse]("AFDOriginsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AFDOriginsClientUpdateResponse]("AFDOriginsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := AFDOriginsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AFDOriginsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AFDOriginsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AFDOriginsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing origin within an origin group.

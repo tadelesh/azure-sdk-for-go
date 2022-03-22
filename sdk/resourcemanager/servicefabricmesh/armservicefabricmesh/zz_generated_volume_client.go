@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -205,16 +205,32 @@ func (client *VolumeClient) getHandleResponse(resp *http.Response) (VolumeClient
 // resourceGroupName - Azure resource group name
 // options - VolumeClientListByResourceGroupOptions contains the optional parameters for the VolumeClient.ListByResourceGroup
 // method.
-func (client *VolumeClient) ListByResourceGroup(resourceGroupName string, options *VolumeClientListByResourceGroupOptions) *VolumeClientListByResourceGroupPager {
-	return &VolumeClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VolumeClient) ListByResourceGroup(resourceGroupName string, options *VolumeClientListByResourceGroupOptions) *runtime.Pager[VolumeClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeClientListByResourceGroupResponse]{
+		More: func(page VolumeClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VolumeClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VolumeResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *VolumeClientListByResourceGroupResponse) (VolumeClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VolumeClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -253,16 +269,32 @@ func (client *VolumeClient) listByResourceGroupHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VolumeClientListBySubscriptionOptions contains the optional parameters for the VolumeClient.ListBySubscription
 // method.
-func (client *VolumeClient) ListBySubscription(options *VolumeClientListBySubscriptionOptions) *VolumeClientListBySubscriptionPager {
-	return &VolumeClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *VolumeClient) ListBySubscription(options *VolumeClientListBySubscriptionOptions) *runtime.Pager[VolumeClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeClientListBySubscriptionResponse]{
+		More: func(page VolumeClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VolumeClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VolumeResourceDescriptionList.NextLink)
+		Fetcher: func(ctx context.Context, page *VolumeClientListBySubscriptionResponse) (VolumeClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VolumeClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

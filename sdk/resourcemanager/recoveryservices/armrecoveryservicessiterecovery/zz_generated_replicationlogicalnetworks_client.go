@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,16 +124,32 @@ func (client *ReplicationLogicalNetworksClient) getHandleResponse(resp *http.Res
 // fabricName - Server Id.
 // options - ReplicationLogicalNetworksClientListByReplicationFabricsOptions contains the optional parameters for the ReplicationLogicalNetworksClient.ListByReplicationFabrics
 // method.
-func (client *ReplicationLogicalNetworksClient) ListByReplicationFabrics(fabricName string, options *ReplicationLogicalNetworksClientListByReplicationFabricsOptions) *ReplicationLogicalNetworksClientListByReplicationFabricsPager {
-	return &ReplicationLogicalNetworksClientListByReplicationFabricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+func (client *ReplicationLogicalNetworksClient) ListByReplicationFabrics(fabricName string, options *ReplicationLogicalNetworksClientListByReplicationFabricsOptions) *runtime.Pager[ReplicationLogicalNetworksClientListByReplicationFabricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationLogicalNetworksClientListByReplicationFabricsResponse]{
+		More: func(page ReplicationLogicalNetworksClientListByReplicationFabricsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationLogicalNetworksClientListByReplicationFabricsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LogicalNetworkCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationLogicalNetworksClientListByReplicationFabricsResponse) (ReplicationLogicalNetworksClientListByReplicationFabricsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationFabricsCreateRequest(ctx, fabricName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationLogicalNetworksClientListByReplicationFabricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationLogicalNetworksClientListByReplicationFabricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationLogicalNetworksClientListByReplicationFabricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationFabricsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.

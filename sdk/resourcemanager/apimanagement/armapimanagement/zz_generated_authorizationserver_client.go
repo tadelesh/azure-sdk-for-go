@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -303,16 +303,32 @@ func (client *AuthorizationServerClient) getEntityTagHandleResponse(resp *http.R
 // serviceName - The name of the API Management service.
 // options - AuthorizationServerClientListByServiceOptions contains the optional parameters for the AuthorizationServerClient.ListByService
 // method.
-func (client *AuthorizationServerClient) ListByService(resourceGroupName string, serviceName string, options *AuthorizationServerClientListByServiceOptions) *AuthorizationServerClientListByServicePager {
-	return &AuthorizationServerClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *AuthorizationServerClient) ListByService(resourceGroupName string, serviceName string, options *AuthorizationServerClientListByServiceOptions) *runtime.Pager[AuthorizationServerClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AuthorizationServerClientListByServiceResponse]{
+		More: func(page AuthorizationServerClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AuthorizationServerClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AuthorizationServerCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AuthorizationServerClientListByServiceResponse) (AuthorizationServerClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AuthorizationServerClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AuthorizationServerClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AuthorizationServerClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

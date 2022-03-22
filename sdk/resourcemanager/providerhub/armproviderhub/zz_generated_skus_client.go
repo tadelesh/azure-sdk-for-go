@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -842,16 +842,32 @@ func (client *SKUsClient) getNestedResourceTypeThirdHandleResponse(resp *http.Re
 // resourceType - The resource type.
 // options - SKUsClientListByResourceTypeRegistrationsOptions contains the optional parameters for the SKUsClient.ListByResourceTypeRegistrations
 // method.
-func (client *SKUsClient) ListByResourceTypeRegistrations(providerNamespace string, resourceType string, options *SKUsClientListByResourceTypeRegistrationsOptions) *SKUsClientListByResourceTypeRegistrationsPager {
-	return &SKUsClientListByResourceTypeRegistrationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceTypeRegistrationsCreateRequest(ctx, providerNamespace, resourceType, options)
+func (client *SKUsClient) ListByResourceTypeRegistrations(providerNamespace string, resourceType string, options *SKUsClientListByResourceTypeRegistrationsOptions) *runtime.Pager[SKUsClientListByResourceTypeRegistrationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SKUsClientListByResourceTypeRegistrationsResponse]{
+		More: func(page SKUsClientListByResourceTypeRegistrationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SKUsClientListByResourceTypeRegistrationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUResourceArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *SKUsClientListByResourceTypeRegistrationsResponse) (SKUsClientListByResourceTypeRegistrationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceTypeRegistrationsCreateRequest(ctx, providerNamespace, resourceType, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SKUsClientListByResourceTypeRegistrationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceTypeRegistrationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceTypeRegistrationsCreateRequest creates the ListByResourceTypeRegistrations request.
@@ -896,16 +912,32 @@ func (client *SKUsClient) listByResourceTypeRegistrationsHandleResponse(resp *ht
 // nestedResourceTypeFirst - The first child resource type.
 // options - SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstOptions contains the optional parameters for
 // the SKUsClient.ListByResourceTypeRegistrationsNestedResourceTypeFirst method.
-func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeFirst(providerNamespace string, resourceType string, nestedResourceTypeFirst string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstOptions) *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstPager {
-	return &SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceTypeRegistrationsNestedResourceTypeFirstCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, options)
+func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeFirst(providerNamespace string, resourceType string, nestedResourceTypeFirst string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstOptions) *runtime.Pager[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse]{
+		More: func(page SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUResourceArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceTypeRegistrationsNestedResourceTypeFirstCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceTypeRegistrationsNestedResourceTypeFirstHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceTypeRegistrationsNestedResourceTypeFirstCreateRequest creates the ListByResourceTypeRegistrationsNestedResourceTypeFirst request.
@@ -955,16 +987,32 @@ func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeFirst
 // nestedResourceTypeSecond - The second child resource type.
 // options - SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondOptions contains the optional parameters for
 // the SKUsClient.ListByResourceTypeRegistrationsNestedResourceTypeSecond method.
-func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeSecond(providerNamespace string, resourceType string, nestedResourceTypeFirst string, nestedResourceTypeSecond string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondOptions) *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondPager {
-	return &SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceTypeRegistrationsNestedResourceTypeSecondCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, nestedResourceTypeSecond, options)
+func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeSecond(providerNamespace string, resourceType string, nestedResourceTypeFirst string, nestedResourceTypeSecond string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondOptions) *runtime.Pager[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse]{
+		More: func(page SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUResourceArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceTypeRegistrationsNestedResourceTypeSecondCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, nestedResourceTypeSecond, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceTypeRegistrationsNestedResourceTypeSecondHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceTypeRegistrationsNestedResourceTypeSecondCreateRequest creates the ListByResourceTypeRegistrationsNestedResourceTypeSecond request.
@@ -1019,16 +1067,32 @@ func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeSecon
 // nestedResourceTypeThird - The third child resource type.
 // options - SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdOptions contains the optional parameters for
 // the SKUsClient.ListByResourceTypeRegistrationsNestedResourceTypeThird method.
-func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeThird(providerNamespace string, resourceType string, nestedResourceTypeFirst string, nestedResourceTypeSecond string, nestedResourceTypeThird string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdOptions) *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdPager {
-	return &SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceTypeRegistrationsNestedResourceTypeThirdCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, nestedResourceTypeSecond, nestedResourceTypeThird, options)
+func (client *SKUsClient) ListByResourceTypeRegistrationsNestedResourceTypeThird(providerNamespace string, resourceType string, nestedResourceTypeFirst string, nestedResourceTypeSecond string, nestedResourceTypeThird string, options *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdOptions) *runtime.Pager[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse]{
+		More: func(page SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUResourceArrayResponseWithContinuation.NextLink)
+		Fetcher: func(ctx context.Context, page *SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceTypeRegistrationsNestedResourceTypeThirdCreateRequest(ctx, providerNamespace, resourceType, nestedResourceTypeFirst, nestedResourceTypeSecond, nestedResourceTypeThird, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceTypeRegistrationsNestedResourceTypeThirdHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceTypeRegistrationsNestedResourceTypeThirdCreateRequest creates the ListByResourceTypeRegistrationsNestedResourceTypeThird request.

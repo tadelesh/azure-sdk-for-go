@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewBandwidthSettingsClient(subscriptionID string, credential azcore.TokenCr
 // parameters - The bandwidth setting to be added or updated.
 // options - BandwidthSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for the BandwidthSettingsClient.BeginCreateOrUpdate
 // method.
-func (client *BandwidthSettingsClient) BeginCreateOrUpdate(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string, parameters BandwidthSetting, options *BandwidthSettingsClientBeginCreateOrUpdateOptions) (BandwidthSettingsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, bandwidthSettingName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return BandwidthSettingsClientCreateOrUpdatePollerResponse{}, err
+func (client *BandwidthSettingsClient) BeginCreateOrUpdate(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string, parameters BandwidthSetting, options *BandwidthSettingsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[BandwidthSettingsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, bandwidthSettingName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BandwidthSettingsClientCreateOrUpdateResponse]("BandwidthSettingsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BandwidthSettingsClientCreateOrUpdateResponse]("BandwidthSettingsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := BandwidthSettingsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("BandwidthSettingsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return BandwidthSettingsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &BandwidthSettingsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the bandwidth setting
@@ -113,20 +109,16 @@ func (client *BandwidthSettingsClient) createOrUpdateCreateRequest(ctx context.C
 // managerName - The manager name
 // options - BandwidthSettingsClientBeginDeleteOptions contains the optional parameters for the BandwidthSettingsClient.BeginDelete
 // method.
-func (client *BandwidthSettingsClient) BeginDelete(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string, options *BandwidthSettingsClientBeginDeleteOptions) (BandwidthSettingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, bandwidthSettingName, resourceGroupName, managerName, options)
-	if err != nil {
-		return BandwidthSettingsClientDeletePollerResponse{}, err
+func (client *BandwidthSettingsClient) BeginDelete(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string, options *BandwidthSettingsClientBeginDeleteOptions) (*armruntime.Poller[BandwidthSettingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, bandwidthSettingName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BandwidthSettingsClientDeleteResponse]("BandwidthSettingsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BandwidthSettingsClientDeleteResponse]("BandwidthSettingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BandwidthSettingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BandwidthSettingsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BandwidthSettingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BandwidthSettingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the bandwidth setting
@@ -217,13 +209,26 @@ func (client *BandwidthSettingsClient) getHandleResponse(resp *http.Response) (B
 // managerName - The manager name
 // options - BandwidthSettingsClientListByManagerOptions contains the optional parameters for the BandwidthSettingsClient.ListByManager
 // method.
-func (client *BandwidthSettingsClient) ListByManager(resourceGroupName string, managerName string, options *BandwidthSettingsClientListByManagerOptions) *BandwidthSettingsClientListByManagerPager {
-	return &BandwidthSettingsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *BandwidthSettingsClient) ListByManager(resourceGroupName string, managerName string, options *BandwidthSettingsClientListByManagerOptions) *runtime.Pager[BandwidthSettingsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BandwidthSettingsClientListByManagerResponse]{
+		More: func(page BandwidthSettingsClientListByManagerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *BandwidthSettingsClientListByManagerResponse) (BandwidthSettingsClientListByManagerResponse, error) {
+			req, err := client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return BandwidthSettingsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BandwidthSettingsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BandwidthSettingsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
+		},
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

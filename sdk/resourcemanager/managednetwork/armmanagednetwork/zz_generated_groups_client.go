@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewGroupsClient(subscriptionID string, credential azcore.TokenCredential, o
 // managedNetworkGroup - Parameters supplied to the create/update a Managed Network Group resource
 // options - GroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the GroupsClient.BeginCreateOrUpdate
 // method.
-func (client *GroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkGroupName string, managedNetworkGroup Group, options *GroupsClientBeginCreateOrUpdateOptions) (GroupsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, managedNetworkName, managedNetworkGroupName, managedNetworkGroup, options)
-	if err != nil {
-		return GroupsClientCreateOrUpdatePollerResponse{}, err
+func (client *GroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkGroupName string, managedNetworkGroup Group, options *GroupsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GroupsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, managedNetworkName, managedNetworkGroupName, managedNetworkGroup, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GroupsClientCreateOrUpdateResponse]("GroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GroupsClientCreateOrUpdateResponse]("GroupsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GroupsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GroupsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GroupsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - The Put ManagedNetworkGroups operation creates or updates a Managed Network Group resource
@@ -129,20 +125,16 @@ func (client *GroupsClient) createOrUpdateCreateRequest(ctx context.Context, res
 // managedNetworkName - The name of the Managed Network.
 // managedNetworkGroupName - The name of the Managed Network Group.
 // options - GroupsClientBeginDeleteOptions contains the optional parameters for the GroupsClient.BeginDelete method.
-func (client *GroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkGroupName string, options *GroupsClientBeginDeleteOptions) (GroupsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, managedNetworkGroupName, options)
-	if err != nil {
-		return GroupsClientDeletePollerResponse{}, err
+func (client *GroupsClient) BeginDelete(ctx context.Context, resourceGroupName string, managedNetworkName string, managedNetworkGroupName string, options *GroupsClientBeginDeleteOptions) (*armruntime.Poller[GroupsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, managedNetworkName, managedNetworkGroupName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GroupsClientDeleteResponse]("GroupsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GroupsClientDeleteResponse]("GroupsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GroupsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GroupsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GroupsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GroupsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The Delete ManagedNetworkGroups operation deletes a Managed Network Group specified by the resource group, Managed
@@ -261,16 +253,32 @@ func (client *GroupsClient) getHandleResponse(resp *http.Response) (GroupsClient
 // managedNetworkName - The name of the Managed Network.
 // options - GroupsClientListByManagedNetworkOptions contains the optional parameters for the GroupsClient.ListByManagedNetwork
 // method.
-func (client *GroupsClient) ListByManagedNetwork(resourceGroupName string, managedNetworkName string, options *GroupsClientListByManagedNetworkOptions) *GroupsClientListByManagedNetworkPager {
-	return &GroupsClientListByManagedNetworkPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagedNetworkCreateRequest(ctx, resourceGroupName, managedNetworkName, options)
+func (client *GroupsClient) ListByManagedNetwork(resourceGroupName string, managedNetworkName string, options *GroupsClientListByManagedNetworkOptions) *runtime.Pager[GroupsClientListByManagedNetworkResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GroupsClientListByManagedNetworkResponse]{
+		More: func(page GroupsClientListByManagedNetworkResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GroupsClientListByManagedNetworkResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GroupListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *GroupsClientListByManagedNetworkResponse) (GroupsClientListByManagedNetworkResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByManagedNetworkCreateRequest(ctx, resourceGroupName, managedNetworkName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GroupsClientListByManagedNetworkResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GroupsClientListByManagedNetworkResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GroupsClientListByManagedNetworkResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagedNetworkHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByManagedNetworkCreateRequest creates the ListByManagedNetwork request.

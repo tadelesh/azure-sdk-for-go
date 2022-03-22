@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -100,16 +100,32 @@ func (client *CompliancesClient) getHandleResponse(resp *http.Response) (Complia
 // scope - Scope of the query, can be subscription (/subscriptions/0b06d9ea-afe6-4779-bd59-30e5c2d9d13f) or management group
 // (/providers/Microsoft.Management/managementGroups/mgName).
 // options - CompliancesClientListOptions contains the optional parameters for the CompliancesClient.List method.
-func (client *CompliancesClient) List(scope string, options *CompliancesClientListOptions) *CompliancesClientListPager {
-	return &CompliancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *CompliancesClient) List(scope string, options *CompliancesClientListOptions) *runtime.Pager[CompliancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CompliancesClientListResponse]{
+		More: func(page CompliancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CompliancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ComplianceList.NextLink)
+		Fetcher: func(ctx context.Context, page *CompliancesClientListResponse) (CompliancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CompliancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CompliancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CompliancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

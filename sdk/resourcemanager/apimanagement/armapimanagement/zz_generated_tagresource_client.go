@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,16 +57,32 @@ func NewTagResourceClient(subscriptionID string, credential azcore.TokenCredenti
 // serviceName - The name of the API Management service.
 // options - TagResourceClientListByServiceOptions contains the optional parameters for the TagResourceClient.ListByService
 // method.
-func (client *TagResourceClient) ListByService(resourceGroupName string, serviceName string, options *TagResourceClientListByServiceOptions) *TagResourceClientListByServicePager {
-	return &TagResourceClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *TagResourceClient) ListByService(resourceGroupName string, serviceName string, options *TagResourceClientListByServiceOptions) *runtime.Pager[TagResourceClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TagResourceClientListByServiceResponse]{
+		More: func(page TagResourceClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TagResourceClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TagResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *TagResourceClientListByServiceResponse) (TagResourceClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TagResourceClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TagResourceClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TagResourceClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

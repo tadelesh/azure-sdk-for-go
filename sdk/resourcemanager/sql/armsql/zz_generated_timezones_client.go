@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -106,16 +106,32 @@ func (client *TimeZonesClient) getHandleResponse(resp *http.Response) (TimeZones
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - TimeZonesClientListByLocationOptions contains the optional parameters for the TimeZonesClient.ListByLocation
 // method.
-func (client *TimeZonesClient) ListByLocation(locationName string, options *TimeZonesClientListByLocationOptions) *TimeZonesClientListByLocationPager {
-	return &TimeZonesClientListByLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLocationCreateRequest(ctx, locationName, options)
+func (client *TimeZonesClient) ListByLocation(locationName string, options *TimeZonesClientListByLocationOptions) *runtime.Pager[TimeZonesClientListByLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[TimeZonesClientListByLocationResponse]{
+		More: func(page TimeZonesClientListByLocationResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp TimeZonesClientListByLocationResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.TimeZoneListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *TimeZonesClientListByLocationResponse) (TimeZonesClientListByLocationResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByLocationCreateRequest(ctx, locationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return TimeZonesClientListByLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return TimeZonesClientListByLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return TimeZonesClientListByLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLocationHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,16 +212,32 @@ func (client *AutomationsClient) getHandleResponse(resp *http.Response) (Automat
 // get the next page of security automations for the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AutomationsClientListOptions contains the optional parameters for the AutomationsClient.List method.
-func (client *AutomationsClient) List(options *AutomationsClientListOptions) *AutomationsClientListPager {
-	return &AutomationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AutomationsClient) List(options *AutomationsClientListOptions) *runtime.Pager[AutomationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutomationsClientListResponse]{
+		More: func(page AutomationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AutomationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AutomationList.NextLink)
+		Fetcher: func(ctx context.Context, page *AutomationsClientListResponse) (AutomationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AutomationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutomationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutomationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -257,16 +273,32 @@ func (client *AutomationsClient) listHandleResponse(resp *http.Response) (Automa
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - AutomationsClientListByResourceGroupOptions contains the optional parameters for the AutomationsClient.ListByResourceGroup
 // method.
-func (client *AutomationsClient) ListByResourceGroup(resourceGroupName string, options *AutomationsClientListByResourceGroupOptions) *AutomationsClientListByResourceGroupPager {
-	return &AutomationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AutomationsClient) ListByResourceGroup(resourceGroupName string, options *AutomationsClientListByResourceGroupOptions) *runtime.Pager[AutomationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AutomationsClientListByResourceGroupResponse]{
+		More: func(page AutomationsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AutomationsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AutomationList.NextLink)
+		Fetcher: func(ctx context.Context, page *AutomationsClientListByResourceGroupResponse) (AutomationsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AutomationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AutomationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AutomationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

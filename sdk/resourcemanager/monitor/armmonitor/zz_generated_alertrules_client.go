@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -212,13 +212,26 @@ func (client *AlertRulesClient) getHandleResponse(resp *http.Response) (AlertRul
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - AlertRulesClientListByResourceGroupOptions contains the optional parameters for the AlertRulesClient.ListByResourceGroup
 // method.
-func (client *AlertRulesClient) ListByResourceGroup(resourceGroupName string, options *AlertRulesClientListByResourceGroupOptions) *AlertRulesClientListByResourceGroupPager {
-	return &AlertRulesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AlertRulesClient) ListByResourceGroup(resourceGroupName string, options *AlertRulesClientListByResourceGroupOptions) *runtime.Pager[AlertRulesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertRulesClientListByResourceGroupResponse]{
+		More: func(page AlertRulesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AlertRulesClientListByResourceGroupResponse) (AlertRulesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return AlertRulesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertRulesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertRulesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -256,13 +269,26 @@ func (client *AlertRulesClient) listByResourceGroupHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AlertRulesClientListBySubscriptionOptions contains the optional parameters for the AlertRulesClient.ListBySubscription
 // method.
-func (client *AlertRulesClient) ListBySubscription(options *AlertRulesClientListBySubscriptionOptions) *AlertRulesClientListBySubscriptionPager {
-	return &AlertRulesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AlertRulesClient) ListBySubscription(options *AlertRulesClientListBySubscriptionOptions) *runtime.Pager[AlertRulesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AlertRulesClientListBySubscriptionResponse]{
+		More: func(page AlertRulesClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AlertRulesClientListBySubscriptionResponse) (AlertRulesClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return AlertRulesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AlertRulesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AlertRulesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

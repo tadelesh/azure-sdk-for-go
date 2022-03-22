@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -301,16 +301,32 @@ func (client *IdentityProviderClient) getEntityTagHandleResponse(resp *http.Resp
 // serviceName - The name of the API Management service.
 // options - IdentityProviderClientListByServiceOptions contains the optional parameters for the IdentityProviderClient.ListByService
 // method.
-func (client *IdentityProviderClient) ListByService(resourceGroupName string, serviceName string, options *IdentityProviderClientListByServiceOptions) *IdentityProviderClientListByServicePager {
-	return &IdentityProviderClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *IdentityProviderClient) ListByService(resourceGroupName string, serviceName string, options *IdentityProviderClientListByServiceOptions) *runtime.Pager[IdentityProviderClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IdentityProviderClientListByServiceResponse]{
+		More: func(page IdentityProviderClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IdentityProviderClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IdentityProviderList.NextLink)
+		Fetcher: func(ctx context.Context, page *IdentityProviderClientListByServiceResponse) (IdentityProviderClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IdentityProviderClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IdentityProviderClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IdentityProviderClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

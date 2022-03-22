@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -62,22 +62,26 @@ type ErrorResponse struct {
 
 // LinkerClientBeginCreateOrUpdateOptions contains the optional parameters for the LinkerClient.BeginCreateOrUpdate method.
 type LinkerClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkerClientBeginDeleteOptions contains the optional parameters for the LinkerClient.BeginDelete method.
 type LinkerClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkerClientBeginUpdateOptions contains the optional parameters for the LinkerClient.BeginUpdate method.
 type LinkerClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkerClientBeginValidateOptions contains the optional parameters for the LinkerClient.BeginValidate method.
 type LinkerClientBeginValidateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LinkerClientGetOptions contains the optional parameters for the LinkerClient.Get method.

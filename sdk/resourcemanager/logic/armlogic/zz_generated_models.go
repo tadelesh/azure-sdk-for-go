@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -2139,13 +2139,15 @@ type IntegrationServiceEnvironmentManagedAPIProperties struct {
 // IntegrationServiceEnvironmentManagedApisClientBeginDeleteOptions contains the optional parameters for the IntegrationServiceEnvironmentManagedApisClient.BeginDelete
 // method.
 type IntegrationServiceEnvironmentManagedApisClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationServiceEnvironmentManagedApisClientBeginPutOptions contains the optional parameters for the IntegrationServiceEnvironmentManagedApisClient.BeginPut
 // method.
 type IntegrationServiceEnvironmentManagedApisClientBeginPutOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationServiceEnvironmentManagedApisClientGetOptions contains the optional parameters for the IntegrationServiceEnvironmentManagedApisClient.Get
@@ -2295,13 +2297,15 @@ type IntegrationServiceEnvironmentSubnetNetworkHealth struct {
 // IntegrationServiceEnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the IntegrationServiceEnvironmentsClient.BeginCreateOrUpdate
 // method.
 type IntegrationServiceEnvironmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationServiceEnvironmentsClientBeginUpdateOptions contains the optional parameters for the IntegrationServiceEnvironmentsClient.BeginUpdate
 // method.
 type IntegrationServiceEnvironmentsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IntegrationServiceEnvironmentsClientDeleteOptions contains the optional parameters for the IntegrationServiceEnvironmentsClient.Delete
@@ -3908,7 +3912,8 @@ type WorkflowVersionsClientListOptions struct {
 
 // WorkflowsClientBeginMoveOptions contains the optional parameters for the WorkflowsClient.BeginMove method.
 type WorkflowsClientBeginMoveOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WorkflowsClientCreateOrUpdateOptions contains the optional parameters for the WorkflowsClient.CreateOrUpdate method.

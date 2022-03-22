@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,20 +64,16 @@ func NewVirtualMachineTemplatesClient(subscriptionID string, credential azcore.T
 // virtualMachineTemplateName - Name of the virtual machine template resource.
 // options - VirtualMachineTemplatesClientBeginCreateOptions contains the optional parameters for the VirtualMachineTemplatesClient.BeginCreate
 // method.
-func (client *VirtualMachineTemplatesClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualMachineTemplateName string, options *VirtualMachineTemplatesClientBeginCreateOptions) (VirtualMachineTemplatesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, virtualMachineTemplateName, options)
-	if err != nil {
-		return VirtualMachineTemplatesClientCreatePollerResponse{}, err
+func (client *VirtualMachineTemplatesClient) BeginCreate(ctx context.Context, resourceGroupName string, virtualMachineTemplateName string, options *VirtualMachineTemplatesClientBeginCreateOptions) (*armruntime.Poller[VirtualMachineTemplatesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, virtualMachineTemplateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineTemplatesClientCreateResponse]("VirtualMachineTemplatesClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineTemplatesClientCreateResponse]("VirtualMachineTemplatesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineTemplatesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineTemplatesClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return VirtualMachineTemplatesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineTemplatesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create Or Update virtual machine template.
@@ -132,20 +128,16 @@ func (client *VirtualMachineTemplatesClient) createCreateRequest(ctx context.Con
 // virtualMachineTemplateName - Name of the virtual machine template resource.
 // options - VirtualMachineTemplatesClientBeginDeleteOptions contains the optional parameters for the VirtualMachineTemplatesClient.BeginDelete
 // method.
-func (client *VirtualMachineTemplatesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineTemplateName string, options *VirtualMachineTemplatesClientBeginDeleteOptions) (VirtualMachineTemplatesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineTemplateName, options)
-	if err != nil {
-		return VirtualMachineTemplatesClientDeletePollerResponse{}, err
+func (client *VirtualMachineTemplatesClient) BeginDelete(ctx context.Context, resourceGroupName string, virtualMachineTemplateName string, options *VirtualMachineTemplatesClientBeginDeleteOptions) (*armruntime.Poller[VirtualMachineTemplatesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, virtualMachineTemplateName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VirtualMachineTemplatesClientDeleteResponse]("VirtualMachineTemplatesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VirtualMachineTemplatesClientDeleteResponse]("VirtualMachineTemplatesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VirtualMachineTemplatesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VirtualMachineTemplatesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VirtualMachineTemplatesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VirtualMachineTemplatesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Implements virtual machine template DELETE method.
@@ -254,16 +246,32 @@ func (client *VirtualMachineTemplatesClient) getHandleResponse(resp *http.Respon
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualMachineTemplatesClientListOptions contains the optional parameters for the VirtualMachineTemplatesClient.List
 // method.
-func (client *VirtualMachineTemplatesClient) List(options *VirtualMachineTemplatesClientListOptions) *VirtualMachineTemplatesClientListPager {
-	return &VirtualMachineTemplatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *VirtualMachineTemplatesClient) List(options *VirtualMachineTemplatesClientListOptions) *runtime.Pager[VirtualMachineTemplatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineTemplatesClientListResponse]{
+		More: func(page VirtualMachineTemplatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineTemplatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualMachineTemplatesList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineTemplatesClientListResponse) (VirtualMachineTemplatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineTemplatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineTemplatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineTemplatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -298,16 +306,32 @@ func (client *VirtualMachineTemplatesClient) listHandleResponse(resp *http.Respo
 // resourceGroupName - The Resource Group Name.
 // options - VirtualMachineTemplatesClientListByResourceGroupOptions contains the optional parameters for the VirtualMachineTemplatesClient.ListByResourceGroup
 // method.
-func (client *VirtualMachineTemplatesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachineTemplatesClientListByResourceGroupOptions) *VirtualMachineTemplatesClientListByResourceGroupPager {
-	return &VirtualMachineTemplatesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *VirtualMachineTemplatesClient) ListByResourceGroup(resourceGroupName string, options *VirtualMachineTemplatesClientListByResourceGroupOptions) *runtime.Pager[VirtualMachineTemplatesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VirtualMachineTemplatesClientListByResourceGroupResponse]{
+		More: func(page VirtualMachineTemplatesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp VirtualMachineTemplatesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VirtualMachineTemplatesList.NextLink)
+		Fetcher: func(ctx context.Context, page *VirtualMachineTemplatesClientListByResourceGroupResponse) (VirtualMachineTemplatesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return VirtualMachineTemplatesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VirtualMachineTemplatesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VirtualMachineTemplatesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

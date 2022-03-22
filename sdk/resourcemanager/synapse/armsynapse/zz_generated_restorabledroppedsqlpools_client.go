@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -116,13 +116,26 @@ func (client *RestorableDroppedSQLPoolsClient) getHandleResponse(resp *http.Resp
 // workspaceName - The name of the workspace.
 // options - RestorableDroppedSQLPoolsClientListByWorkspaceOptions contains the optional parameters for the RestorableDroppedSQLPoolsClient.ListByWorkspace
 // method.
-func (client *RestorableDroppedSQLPoolsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *RestorableDroppedSQLPoolsClientListByWorkspaceOptions) *RestorableDroppedSQLPoolsClientListByWorkspacePager {
-	return &RestorableDroppedSQLPoolsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *RestorableDroppedSQLPoolsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *RestorableDroppedSQLPoolsClientListByWorkspaceOptions) *runtime.Pager[RestorableDroppedSQLPoolsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RestorableDroppedSQLPoolsClientListByWorkspaceResponse]{
+		More: func(page RestorableDroppedSQLPoolsClientListByWorkspaceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RestorableDroppedSQLPoolsClientListByWorkspaceResponse) (RestorableDroppedSQLPoolsClientListByWorkspaceResponse, error) {
+			req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			if err != nil {
+				return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
+		},
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

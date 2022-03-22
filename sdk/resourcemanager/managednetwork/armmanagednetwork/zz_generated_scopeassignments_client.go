@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -190,16 +190,32 @@ func (client *ScopeAssignmentsClient) getHandleResponse(resp *http.Response) (Sc
 // If the operation fails it returns an *azcore.ResponseError type.
 // scope - The base resource of the scope assignment.
 // options - ScopeAssignmentsClientListOptions contains the optional parameters for the ScopeAssignmentsClient.List method.
-func (client *ScopeAssignmentsClient) List(scope string, options *ScopeAssignmentsClientListOptions) *ScopeAssignmentsClientListPager {
-	return &ScopeAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *ScopeAssignmentsClient) List(scope string, options *ScopeAssignmentsClientListOptions) *runtime.Pager[ScopeAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScopeAssignmentsClientListResponse]{
+		More: func(page ScopeAssignmentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScopeAssignmentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScopeAssignmentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ScopeAssignmentsClientListResponse) (ScopeAssignmentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScopeAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScopeAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScopeAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

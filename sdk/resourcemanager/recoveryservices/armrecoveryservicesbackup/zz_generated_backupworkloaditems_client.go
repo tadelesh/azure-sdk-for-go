@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,16 +58,32 @@ func NewBackupWorkloadItemsClient(subscriptionID string, credential azcore.Token
 // containerName - Name of the container.
 // options - BackupWorkloadItemsClientListOptions contains the optional parameters for the BackupWorkloadItemsClient.List
 // method.
-func (client *BackupWorkloadItemsClient) List(vaultName string, resourceGroupName string, fabricName string, containerName string, options *BackupWorkloadItemsClientListOptions) *BackupWorkloadItemsClientListPager {
-	return &BackupWorkloadItemsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, fabricName, containerName, options)
+func (client *BackupWorkloadItemsClient) List(vaultName string, resourceGroupName string, fabricName string, containerName string, options *BackupWorkloadItemsClientListOptions) *runtime.Pager[BackupWorkloadItemsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupWorkloadItemsClientListResponse]{
+		More: func(page BackupWorkloadItemsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupWorkloadItemsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WorkloadItemResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupWorkloadItemsClientListResponse) (BackupWorkloadItemsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vaultName, resourceGroupName, fabricName, containerName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupWorkloadItemsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupWorkloadItemsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupWorkloadItemsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

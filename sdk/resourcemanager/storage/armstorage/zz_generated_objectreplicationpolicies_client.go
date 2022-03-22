@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -240,13 +240,26 @@ func (client *ObjectReplicationPoliciesClient) getHandleResponse(resp *http.Resp
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - ObjectReplicationPoliciesClientListOptions contains the optional parameters for the ObjectReplicationPoliciesClient.List
 // method.
-func (client *ObjectReplicationPoliciesClient) List(resourceGroupName string, accountName string, options *ObjectReplicationPoliciesClientListOptions) *ObjectReplicationPoliciesClientListPager {
-	return &ObjectReplicationPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *ObjectReplicationPoliciesClient) List(resourceGroupName string, accountName string, options *ObjectReplicationPoliciesClientListOptions) *runtime.Pager[ObjectReplicationPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ObjectReplicationPoliciesClientListResponse]{
+		More: func(page ObjectReplicationPoliciesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ObjectReplicationPoliciesClientListResponse) (ObjectReplicationPoliciesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return ObjectReplicationPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ObjectReplicationPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ObjectReplicationPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

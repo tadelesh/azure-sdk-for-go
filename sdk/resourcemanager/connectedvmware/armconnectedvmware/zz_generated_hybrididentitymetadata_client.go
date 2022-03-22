@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -240,16 +240,32 @@ func (client *HybridIdentityMetadataClient) getHandleResponse(resp *http.Respons
 // virtualMachineName - Name of the vm.
 // options - HybridIdentityMetadataClientListByVMOptions contains the optional parameters for the HybridIdentityMetadataClient.ListByVM
 // method.
-func (client *HybridIdentityMetadataClient) ListByVM(resourceGroupName string, virtualMachineName string, options *HybridIdentityMetadataClientListByVMOptions) *HybridIdentityMetadataClientListByVMPager {
-	return &HybridIdentityMetadataClientListByVMPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVMCreateRequest(ctx, resourceGroupName, virtualMachineName, options)
+func (client *HybridIdentityMetadataClient) ListByVM(resourceGroupName string, virtualMachineName string, options *HybridIdentityMetadataClientListByVMOptions) *runtime.Pager[HybridIdentityMetadataClientListByVMResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HybridIdentityMetadataClientListByVMResponse]{
+		More: func(page HybridIdentityMetadataClientListByVMResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HybridIdentityMetadataClientListByVMResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HybridIdentityMetadataList.NextLink)
+		Fetcher: func(ctx context.Context, page *HybridIdentityMetadataClientListByVMResponse) (HybridIdentityMetadataClientListByVMResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVMCreateRequest(ctx, resourceGroupName, virtualMachineName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HybridIdentityMetadataClientListByVMResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HybridIdentityMetadataClientListByVMResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HybridIdentityMetadataClientListByVMResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVMHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVMCreateRequest creates the ListByVM request.

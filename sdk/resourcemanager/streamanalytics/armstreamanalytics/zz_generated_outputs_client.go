@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -240,16 +240,32 @@ func (client *OutputsClient) getHandleResponse(resp *http.Response) (OutputsClie
 // jobName - The name of the streaming job.
 // options - OutputsClientListByStreamingJobOptions contains the optional parameters for the OutputsClient.ListByStreamingJob
 // method.
-func (client *OutputsClient) ListByStreamingJob(resourceGroupName string, jobName string, options *OutputsClientListByStreamingJobOptions) *OutputsClientListByStreamingJobPager {
-	return &OutputsClientListByStreamingJobPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByStreamingJobCreateRequest(ctx, resourceGroupName, jobName, options)
+func (client *OutputsClient) ListByStreamingJob(resourceGroupName string, jobName string, options *OutputsClientListByStreamingJobOptions) *runtime.Pager[OutputsClientListByStreamingJobResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OutputsClientListByStreamingJobResponse]{
+		More: func(page OutputsClientListByStreamingJobResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OutputsClientListByStreamingJobResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OutputListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OutputsClientListByStreamingJobResponse) (OutputsClientListByStreamingJobResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByStreamingJobCreateRequest(ctx, resourceGroupName, jobName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OutputsClientListByStreamingJobResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OutputsClientListByStreamingJobResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OutputsClientListByStreamingJobResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByStreamingJobHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByStreamingJobCreateRequest creates the ListByStreamingJob request.
@@ -296,20 +312,16 @@ func (client *OutputsClient) listByStreamingJobHandleResponse(resp *http.Respons
 // jobName - The name of the streaming job.
 // outputName - The name of the output.
 // options - OutputsClientBeginTestOptions contains the optional parameters for the OutputsClient.BeginTest method.
-func (client *OutputsClient) BeginTest(ctx context.Context, resourceGroupName string, jobName string, outputName string, options *OutputsClientBeginTestOptions) (OutputsClientTestPollerResponse, error) {
-	resp, err := client.test(ctx, resourceGroupName, jobName, outputName, options)
-	if err != nil {
-		return OutputsClientTestPollerResponse{}, err
+func (client *OutputsClient) BeginTest(ctx context.Context, resourceGroupName string, jobName string, outputName string, options *OutputsClientBeginTestOptions) (*armruntime.Poller[OutputsClientTestResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.test(ctx, resourceGroupName, jobName, outputName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OutputsClientTestResponse]("OutputsClient.Test", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OutputsClientTestResponse]("OutputsClient.Test", options.ResumeToken, client.pl, nil)
 	}
-	result := OutputsClientTestPollerResponse{}
-	pt, err := armruntime.NewPoller("OutputsClient.Test", "", resp, client.pl)
-	if err != nil {
-		return OutputsClientTestPollerResponse{}, err
-	}
-	result.Poller = &OutputsClientTestPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Test - Tests whether an output’s datasource is reachable and usable by the Azure Stream Analytics service.

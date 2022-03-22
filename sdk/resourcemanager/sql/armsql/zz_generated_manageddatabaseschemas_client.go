@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,16 +124,32 @@ func (client *ManagedDatabaseSchemasClient) getHandleResponse(resp *http.Respons
 // databaseName - The name of the database.
 // options - ManagedDatabaseSchemasClientListByDatabaseOptions contains the optional parameters for the ManagedDatabaseSchemasClient.ListByDatabase
 // method.
-func (client *ManagedDatabaseSchemasClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedDatabaseSchemasClientListByDatabaseOptions) *ManagedDatabaseSchemasClientListByDatabasePager {
-	return &ManagedDatabaseSchemasClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+func (client *ManagedDatabaseSchemasClient) ListByDatabase(resourceGroupName string, managedInstanceName string, databaseName string, options *ManagedDatabaseSchemasClientListByDatabaseOptions) *runtime.Pager[ManagedDatabaseSchemasClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedDatabaseSchemasClientListByDatabaseResponse]{
+		More: func(page ManagedDatabaseSchemasClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedDatabaseSchemasClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DatabaseSchemaListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedDatabaseSchemasClientListByDatabaseResponse) (ManagedDatabaseSchemasClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, managedInstanceName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedDatabaseSchemasClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedDatabaseSchemasClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedDatabaseSchemasClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

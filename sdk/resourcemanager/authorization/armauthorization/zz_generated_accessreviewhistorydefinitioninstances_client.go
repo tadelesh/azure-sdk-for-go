@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,16 +54,32 @@ func NewAccessReviewHistoryDefinitionInstancesClient(subscriptionID string, cred
 // historyDefinitionID - The id of the access review history definition.
 // options - AccessReviewHistoryDefinitionInstancesClientListOptions contains the optional parameters for the AccessReviewHistoryDefinitionInstancesClient.List
 // method.
-func (client *AccessReviewHistoryDefinitionInstancesClient) List(historyDefinitionID string, options *AccessReviewHistoryDefinitionInstancesClientListOptions) *AccessReviewHistoryDefinitionInstancesClientListPager {
-	return &AccessReviewHistoryDefinitionInstancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, historyDefinitionID, options)
+func (client *AccessReviewHistoryDefinitionInstancesClient) List(historyDefinitionID string, options *AccessReviewHistoryDefinitionInstancesClientListOptions) *runtime.Pager[AccessReviewHistoryDefinitionInstancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccessReviewHistoryDefinitionInstancesClientListResponse]{
+		More: func(page AccessReviewHistoryDefinitionInstancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccessReviewHistoryDefinitionInstancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccessReviewHistoryDefinitionInstanceListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccessReviewHistoryDefinitionInstancesClientListResponse) (AccessReviewHistoryDefinitionInstancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, historyDefinitionID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccessReviewHistoryDefinitionInstancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccessReviewHistoryDefinitionInstancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccessReviewHistoryDefinitionInstancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

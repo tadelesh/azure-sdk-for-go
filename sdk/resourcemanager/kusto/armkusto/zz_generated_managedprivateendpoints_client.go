@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,20 +115,16 @@ func (client *ManagedPrivateEndpointsClient) checkNameAvailabilityHandleResponse
 // parameters - The managed private endpoint parameters.
 // options - ManagedPrivateEndpointsClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginCreateOrUpdate
 // method.
-func (client *ManagedPrivateEndpointsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, parameters ManagedPrivateEndpoint, options *ManagedPrivateEndpointsClientBeginCreateOrUpdateOptions) (ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, parameters, options)
-	if err != nil {
-		return ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}, err
+func (client *ManagedPrivateEndpointsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, parameters ManagedPrivateEndpoint, options *ManagedPrivateEndpointsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ManagedPrivateEndpointsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedPrivateEndpointsClientCreateOrUpdateResponse]("ManagedPrivateEndpointsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedPrivateEndpointsClientCreateOrUpdateResponse]("ManagedPrivateEndpointsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedPrivateEndpointsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a managed private endpoint.
@@ -185,20 +181,16 @@ func (client *ManagedPrivateEndpointsClient) createOrUpdateCreateRequest(ctx con
 // managedPrivateEndpointName - The name of the managed private endpoint.
 // options - ManagedPrivateEndpointsClientBeginDeleteOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginDelete
 // method.
-func (client *ManagedPrivateEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, options *ManagedPrivateEndpointsClientBeginDeleteOptions) (ManagedPrivateEndpointsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, options)
-	if err != nil {
-		return ManagedPrivateEndpointsClientDeletePollerResponse{}, err
+func (client *ManagedPrivateEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, options *ManagedPrivateEndpointsClientBeginDeleteOptions) (*armruntime.Poller[ManagedPrivateEndpointsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedPrivateEndpointsClientDeleteResponse]("ManagedPrivateEndpointsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedPrivateEndpointsClientDeleteResponse]("ManagedPrivateEndpointsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedPrivateEndpointsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ManagedPrivateEndpointsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ManagedPrivateEndpointsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a managed private endpoint.
@@ -315,13 +307,26 @@ func (client *ManagedPrivateEndpointsClient) getHandleResponse(resp *http.Respon
 // clusterName - The name of the Kusto cluster.
 // options - ManagedPrivateEndpointsClientListOptions contains the optional parameters for the ManagedPrivateEndpointsClient.List
 // method.
-func (client *ManagedPrivateEndpointsClient) List(resourceGroupName string, clusterName string, options *ManagedPrivateEndpointsClientListOptions) *ManagedPrivateEndpointsClientListPager {
-	return &ManagedPrivateEndpointsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ManagedPrivateEndpointsClient) List(resourceGroupName string, clusterName string, options *ManagedPrivateEndpointsClientListOptions) *runtime.Pager[ManagedPrivateEndpointsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedPrivateEndpointsClientListResponse]{
+		More: func(page ManagedPrivateEndpointsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ManagedPrivateEndpointsClientListResponse) (ManagedPrivateEndpointsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+			if err != nil {
+				return ManagedPrivateEndpointsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedPrivateEndpointsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedPrivateEndpointsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -367,20 +372,16 @@ func (client *ManagedPrivateEndpointsClient) listHandleResponse(resp *http.Respo
 // parameters - The managed private endpoint parameters.
 // options - ManagedPrivateEndpointsClientBeginUpdateOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginUpdate
 // method.
-func (client *ManagedPrivateEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, parameters ManagedPrivateEndpoint, options *ManagedPrivateEndpointsClientBeginUpdateOptions) (ManagedPrivateEndpointsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, parameters, options)
-	if err != nil {
-		return ManagedPrivateEndpointsClientUpdatePollerResponse{}, err
+func (client *ManagedPrivateEndpointsClient) BeginUpdate(ctx context.Context, resourceGroupName string, clusterName string, managedPrivateEndpointName string, parameters ManagedPrivateEndpoint, options *ManagedPrivateEndpointsClientBeginUpdateOptions) (*armruntime.Poller[ManagedPrivateEndpointsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, clusterName, managedPrivateEndpointName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ManagedPrivateEndpointsClientUpdateResponse]("ManagedPrivateEndpointsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ManagedPrivateEndpointsClientUpdateResponse]("ManagedPrivateEndpointsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ManagedPrivateEndpointsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ManagedPrivateEndpointsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ManagedPrivateEndpointsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates a managed private endpoint.

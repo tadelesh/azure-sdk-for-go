@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,16 +56,32 @@ func NewConsumerSourceDataSetsClient(subscriptionID string, credential azcore.To
 // shareSubscriptionName - The name of the shareSubscription.
 // options - ConsumerSourceDataSetsClientListByShareSubscriptionOptions contains the optional parameters for the ConsumerSourceDataSetsClient.ListByShareSubscription
 // method.
-func (client *ConsumerSourceDataSetsClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *ConsumerSourceDataSetsClientListByShareSubscriptionOptions) *ConsumerSourceDataSetsClientListByShareSubscriptionPager {
-	return &ConsumerSourceDataSetsClientListByShareSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+func (client *ConsumerSourceDataSetsClient) ListByShareSubscription(resourceGroupName string, accountName string, shareSubscriptionName string, options *ConsumerSourceDataSetsClientListByShareSubscriptionOptions) *runtime.Pager[ConsumerSourceDataSetsClientListByShareSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ConsumerSourceDataSetsClientListByShareSubscriptionResponse]{
+		More: func(page ConsumerSourceDataSetsClientListByShareSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ConsumerSourceDataSetsClientListByShareSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ConsumerSourceDataSetList.NextLink)
+		Fetcher: func(ctx context.Context, page *ConsumerSourceDataSetsClientListByShareSubscriptionResponse) (ConsumerSourceDataSetsClientListByShareSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByShareSubscriptionCreateRequest(ctx, resourceGroupName, accountName, shareSubscriptionName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ConsumerSourceDataSetsClientListByShareSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ConsumerSourceDataSetsClientListByShareSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ConsumerSourceDataSetsClientListByShareSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByShareSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByShareSubscriptionCreateRequest creates the ListByShareSubscription request.

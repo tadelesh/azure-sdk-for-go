@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -243,16 +243,32 @@ func (client *KeysClient) getVersionHandleResponse(resp *http.Response) (KeysCli
 // resourceGroupName - The name of the resource group which contains the specified key vault.
 // vaultName - The name of the vault which contains the keys to be retrieved.
 // options - KeysClientListOptions contains the optional parameters for the KeysClient.List method.
-func (client *KeysClient) List(resourceGroupName string, vaultName string, options *KeysClientListOptions) *KeysClientListPager {
-	return &KeysClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+func (client *KeysClient) List(resourceGroupName string, vaultName string, options *KeysClientListOptions) *runtime.Pager[KeysClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[KeysClientListResponse]{
+		More: func(page KeysClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp KeysClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.KeyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *KeysClientListResponse) (KeysClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return KeysClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return KeysClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return KeysClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -296,16 +312,32 @@ func (client *KeysClient) listHandleResponse(resp *http.Response) (KeysClientLis
 // vaultName - The name of the vault which contains the key versions to be retrieved.
 // keyName - The name of the key versions to be retrieved.
 // options - KeysClientListVersionsOptions contains the optional parameters for the KeysClient.ListVersions method.
-func (client *KeysClient) ListVersions(resourceGroupName string, vaultName string, keyName string, options *KeysClientListVersionsOptions) *KeysClientListVersionsPager {
-	return &KeysClientListVersionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVersionsCreateRequest(ctx, resourceGroupName, vaultName, keyName, options)
+func (client *KeysClient) ListVersions(resourceGroupName string, vaultName string, keyName string, options *KeysClientListVersionsOptions) *runtime.Pager[KeysClientListVersionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[KeysClientListVersionsResponse]{
+		More: func(page KeysClientListVersionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp KeysClientListVersionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.KeyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *KeysClientListVersionsResponse) (KeysClientListVersionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVersionsCreateRequest(ctx, resourceGroupName, vaultName, keyName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return KeysClientListVersionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return KeysClientListVersionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return KeysClientListVersionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVersionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVersionsCreateRequest creates the ListVersions request.

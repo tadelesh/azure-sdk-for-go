@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -246,16 +246,32 @@ func (client *RecordSetsClient) getHandleResponse(resp *http.Response) (RecordSe
 // resourceGroupName - The name of the resource group.
 // privateZoneName - The name of the Private DNS zone (without a terminating dot).
 // options - RecordSetsClientListOptions contains the optional parameters for the RecordSetsClient.List method.
-func (client *RecordSetsClient) List(resourceGroupName string, privateZoneName string, options *RecordSetsClientListOptions) *RecordSetsClientListPager {
-	return &RecordSetsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateZoneName, options)
+func (client *RecordSetsClient) List(resourceGroupName string, privateZoneName string, options *RecordSetsClientListOptions) *runtime.Pager[RecordSetsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecordSetsClientListResponse]{
+		More: func(page RecordSetsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecordSetsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecordSetListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RecordSetsClientListResponse) (RecordSetsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateZoneName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecordSetsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecordSetsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecordSetsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -305,16 +321,32 @@ func (client *RecordSetsClient) listHandleResponse(resp *http.Response) (RecordS
 // privateZoneName - The name of the Private DNS zone (without a terminating dot).
 // recordType - The type of record sets to enumerate.
 // options - RecordSetsClientListByTypeOptions contains the optional parameters for the RecordSetsClient.ListByType method.
-func (client *RecordSetsClient) ListByType(resourceGroupName string, privateZoneName string, recordType RecordType, options *RecordSetsClientListByTypeOptions) *RecordSetsClientListByTypePager {
-	return &RecordSetsClientListByTypePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByTypeCreateRequest(ctx, resourceGroupName, privateZoneName, recordType, options)
+func (client *RecordSetsClient) ListByType(resourceGroupName string, privateZoneName string, recordType RecordType, options *RecordSetsClientListByTypeOptions) *runtime.Pager[RecordSetsClientListByTypeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecordSetsClientListByTypeResponse]{
+		More: func(page RecordSetsClientListByTypeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecordSetsClientListByTypeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RecordSetListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RecordSetsClientListByTypeResponse) (RecordSetsClientListByTypeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByTypeCreateRequest(ctx, resourceGroupName, privateZoneName, recordType, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecordSetsClientListByTypeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecordSetsClientListByTypeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecordSetsClientListByTypeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByTypeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByTypeCreateRequest creates the ListByType request.

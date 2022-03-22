@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -199,16 +199,32 @@ func (client *HybridUseBenefitClient) getHandleResponse(resp *http.Response) (Hy
 // scope - The scope at which the operation is performed. This is limited to Microsoft.Compute/virtualMachines and Microsoft.Compute/hostGroups/hosts
 // for now
 // options - HybridUseBenefitClientListOptions contains the optional parameters for the HybridUseBenefitClient.List method.
-func (client *HybridUseBenefitClient) List(scope string, options *HybridUseBenefitClientListOptions) *HybridUseBenefitClientListPager {
-	return &HybridUseBenefitClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, scope, options)
+func (client *HybridUseBenefitClient) List(scope string, options *HybridUseBenefitClientListOptions) *runtime.Pager[HybridUseBenefitClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HybridUseBenefitClientListResponse]{
+		More: func(page HybridUseBenefitClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp HybridUseBenefitClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.HybridUseBenefitListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *HybridUseBenefitClientListResponse) (HybridUseBenefitClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, scope, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return HybridUseBenefitClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HybridUseBenefitClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HybridUseBenefitClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

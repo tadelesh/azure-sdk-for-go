@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,13 +53,26 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The location of the Azure Storage resource.
 // options - UsagesClientListByLocationOptions contains the optional parameters for the UsagesClient.ListByLocation method.
-func (client *UsagesClient) ListByLocation(location string, options *UsagesClientListByLocationOptions) *UsagesClientListByLocationPager {
-	return &UsagesClientListByLocationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByLocationCreateRequest(ctx, location, options)
+func (client *UsagesClient) ListByLocation(location string, options *UsagesClientListByLocationOptions) *runtime.Pager[UsagesClientListByLocationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[UsagesClientListByLocationResponse]{
+		More: func(page UsagesClientListByLocationResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *UsagesClientListByLocationResponse) (UsagesClientListByLocationResponse, error) {
+			req, err := client.listByLocationCreateRequest(ctx, location, options)
+			if err != nil {
+				return UsagesClientListByLocationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return UsagesClientListByLocationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return UsagesClientListByLocationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByLocationHandleResponse(resp)
+		},
+	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.

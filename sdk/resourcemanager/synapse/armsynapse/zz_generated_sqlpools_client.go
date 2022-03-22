@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewSQLPoolsClient(subscriptionID string, credential azcore.TokenCredential,
 // sqlPoolName - SQL pool name
 // sqlPoolInfo - The SQL pool to create
 // options - SQLPoolsClientBeginCreateOptions contains the optional parameters for the SQLPoolsClient.BeginCreate method.
-func (client *SQLPoolsClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, sqlPoolInfo SQLPool, options *SQLPoolsClientBeginCreateOptions) (SQLPoolsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, workspaceName, sqlPoolName, sqlPoolInfo, options)
-	if err != nil {
-		return SQLPoolsClientCreatePollerResponse{}, err
+func (client *SQLPoolsClient) BeginCreate(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, sqlPoolInfo SQLPool, options *SQLPoolsClientBeginCreateOptions) (*armruntime.Poller[SQLPoolsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, workspaceName, sqlPoolName, sqlPoolInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolsClientCreateResponse]("SQLPoolsClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolsClientCreateResponse]("SQLPoolsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolsClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return SQLPoolsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a SQL pool
@@ -125,20 +121,16 @@ func (client *SQLPoolsClient) createCreateRequest(ctx context.Context, resourceG
 // workspaceName - The name of the workspace.
 // sqlPoolName - SQL pool name
 // options - SQLPoolsClientBeginDeleteOptions contains the optional parameters for the SQLPoolsClient.BeginDelete method.
-func (client *SQLPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginDeleteOptions) (SQLPoolsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
-	if err != nil {
-		return SQLPoolsClientDeletePollerResponse{}, err
+func (client *SQLPoolsClient) BeginDelete(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginDeleteOptions) (*armruntime.Poller[SQLPoolsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolsClientDeleteResponse]("SQLPoolsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolsClientDeleteResponse]("SQLPoolsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return SQLPoolsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a SQL pool
@@ -254,16 +246,32 @@ func (client *SQLPoolsClient) getHandleResponse(resp *http.Response) (SQLPoolsCl
 // workspaceName - The name of the workspace.
 // options - SQLPoolsClientListByWorkspaceOptions contains the optional parameters for the SQLPoolsClient.ListByWorkspace
 // method.
-func (client *SQLPoolsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *SQLPoolsClientListByWorkspaceOptions) *SQLPoolsClientListByWorkspacePager {
-	return &SQLPoolsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *SQLPoolsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *SQLPoolsClientListByWorkspaceOptions) *runtime.Pager[SQLPoolsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLPoolsClientListByWorkspaceResponse]{
+		More: func(page SQLPoolsClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLPoolsClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLPoolInfoListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLPoolsClientListByWorkspaceResponse) (SQLPoolsClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLPoolsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLPoolsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLPoolsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -307,20 +315,16 @@ func (client *SQLPoolsClient) listByWorkspaceHandleResponse(resp *http.Response)
 // workspaceName - The name of the workspace.
 // sqlPoolName - SQL pool name
 // options - SQLPoolsClientBeginPauseOptions contains the optional parameters for the SQLPoolsClient.BeginPause method.
-func (client *SQLPoolsClient) BeginPause(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginPauseOptions) (SQLPoolsClientPausePollerResponse, error) {
-	resp, err := client.pause(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
-	if err != nil {
-		return SQLPoolsClientPausePollerResponse{}, err
+func (client *SQLPoolsClient) BeginPause(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginPauseOptions) (*armruntime.Poller[SQLPoolsClientPauseResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.pause(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolsClientPauseResponse]("SQLPoolsClient.Pause", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolsClientPauseResponse]("SQLPoolsClient.Pause", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolsClientPausePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolsClient.Pause", "location", resp, client.pl)
-	if err != nil {
-		return SQLPoolsClientPausePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolsClientPausePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Pause - Pause a SQL pool
@@ -427,20 +431,16 @@ func (client *SQLPoolsClient) renameCreateRequest(ctx context.Context, resourceG
 // workspaceName - The name of the workspace.
 // sqlPoolName - SQL pool name
 // options - SQLPoolsClientBeginResumeOptions contains the optional parameters for the SQLPoolsClient.BeginResume method.
-func (client *SQLPoolsClient) BeginResume(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginResumeOptions) (SQLPoolsClientResumePollerResponse, error) {
-	resp, err := client.resume(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
-	if err != nil {
-		return SQLPoolsClientResumePollerResponse{}, err
+func (client *SQLPoolsClient) BeginResume(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolsClientBeginResumeOptions) (*armruntime.Poller[SQLPoolsClientResumeResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.resume(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SQLPoolsClientResumeResponse]("SQLPoolsClient.Resume", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SQLPoolsClientResumeResponse]("SQLPoolsClient.Resume", options.ResumeToken, client.pl, nil)
 	}
-	result := SQLPoolsClientResumePollerResponse{}
-	pt, err := armruntime.NewPoller("SQLPoolsClient.Resume", "location", resp, client.pl)
-	if err != nil {
-		return SQLPoolsClientResumePollerResponse{}, err
-	}
-	result.Poller = &SQLPoolsClientResumePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Resume - Resume a SQL pool

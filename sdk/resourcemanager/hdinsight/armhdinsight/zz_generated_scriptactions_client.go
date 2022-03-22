@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -229,16 +229,32 @@ func (client *ScriptActionsClient) getExecutionDetailHandleResponse(resp *http.R
 // clusterName - The name of the cluster.
 // options - ScriptActionsClientListByClusterOptions contains the optional parameters for the ScriptActionsClient.ListByCluster
 // method.
-func (client *ScriptActionsClient) ListByCluster(resourceGroupName string, clusterName string, options *ScriptActionsClientListByClusterOptions) *ScriptActionsClientListByClusterPager {
-	return &ScriptActionsClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *ScriptActionsClient) ListByCluster(resourceGroupName string, clusterName string, options *ScriptActionsClientListByClusterOptions) *runtime.Pager[ScriptActionsClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScriptActionsClientListByClusterResponse]{
+		More: func(page ScriptActionsClientListByClusterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScriptActionsClientListByClusterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScriptActionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScriptActionsClientListByClusterResponse) (ScriptActionsClientListByClusterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScriptActionsClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScriptActionsClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScriptActionsClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.

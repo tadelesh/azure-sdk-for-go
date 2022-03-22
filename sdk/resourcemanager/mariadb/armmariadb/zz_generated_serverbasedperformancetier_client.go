@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewServerBasedPerformanceTierClient(subscriptionID string, credential azcor
 // serverName - The name of the server.
 // options - ServerBasedPerformanceTierClientListOptions contains the optional parameters for the ServerBasedPerformanceTierClient.List
 // method.
-func (client *ServerBasedPerformanceTierClient) List(resourceGroupName string, serverName string, options *ServerBasedPerformanceTierClientListOptions) *ServerBasedPerformanceTierClientListPager {
-	return &ServerBasedPerformanceTierClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerBasedPerformanceTierClient) List(resourceGroupName string, serverName string, options *ServerBasedPerformanceTierClientListOptions) *runtime.Pager[ServerBasedPerformanceTierClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerBasedPerformanceTierClientListResponse]{
+		More: func(page ServerBasedPerformanceTierClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServerBasedPerformanceTierClientListResponse) (ServerBasedPerformanceTierClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ServerBasedPerformanceTierClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerBasedPerformanceTierClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerBasedPerformanceTierClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

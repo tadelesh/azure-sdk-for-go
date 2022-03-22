@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredenti
 // deployment - The deployment properties.
 // options - DeploymentsClientBeginCreateOrUpdateOptions contains the optional parameters for the DeploymentsClient.BeginCreateOrUpdate
 // method.
-func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, deploymentName string, deployment Deployment, options *DeploymentsClientBeginCreateOrUpdateOptions) (DeploymentsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, deploymentName, deployment, options)
-	if err != nil {
-		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
+func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, deploymentName string, deployment Deployment, options *DeploymentsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DeploymentsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, deploymentName, deployment, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeploymentsClientCreateOrUpdateResponse]("DeploymentsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeploymentsClientCreateOrUpdateResponse]("DeploymentsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DeploymentsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DeploymentsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Update the state of specified deployments associated with the Cognitive Services account.
@@ -126,20 +122,16 @@ func (client *DeploymentsClient) createOrUpdateCreateRequest(ctx context.Context
 // accountName - The name of Cognitive Services account.
 // deploymentName - The name of the deployment associated with the Cognitive Services Account
 // options - DeploymentsClientBeginDeleteOptions contains the optional parameters for the DeploymentsClient.BeginDelete method.
-func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, deploymentName string, options *DeploymentsClientBeginDeleteOptions) (DeploymentsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, deploymentName, options)
-	if err != nil {
-		return DeploymentsClientDeletePollerResponse{}, err
+func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, deploymentName string, options *DeploymentsClientBeginDeleteOptions) (*armruntime.Poller[DeploymentsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, deploymentName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DeploymentsClientDeleteResponse]("DeploymentsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DeploymentsClientDeleteResponse]("DeploymentsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DeploymentsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DeploymentsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DeploymentsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DeploymentsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified deployment associated with the Cognitive Services account.
@@ -254,16 +246,32 @@ func (client *DeploymentsClient) getHandleResponse(resp *http.Response) (Deploym
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // accountName - The name of Cognitive Services account.
 // options - DeploymentsClientListOptions contains the optional parameters for the DeploymentsClient.List method.
-func (client *DeploymentsClient) List(resourceGroupName string, accountName string, options *DeploymentsClientListOptions) *DeploymentsClientListPager {
-	return &DeploymentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *DeploymentsClient) List(resourceGroupName string, accountName string, options *DeploymentsClientListOptions) *runtime.Pager[DeploymentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DeploymentsClientListResponse]{
+		More: func(page DeploymentsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DeploymentsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DeploymentListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DeploymentsClientListResponse) (DeploymentsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DeploymentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DeploymentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DeploymentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -61,20 +61,16 @@ func NewGatewayRouteConfigsClient(subscriptionID string, credential azcore.Token
 // gatewayRouteConfigResource - The Spring Cloud Gateway route config for the create or update operation
 // options - GatewayRouteConfigsClientBeginCreateOrUpdateOptions contains the optional parameters for the GatewayRouteConfigsClient.BeginCreateOrUpdate
 // method.
-func (client *GatewayRouteConfigsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, routeConfigName string, gatewayRouteConfigResource GatewayRouteConfigResource, options *GatewayRouteConfigsClientBeginCreateOrUpdateOptions) (GatewayRouteConfigsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, gatewayName, routeConfigName, gatewayRouteConfigResource, options)
-	if err != nil {
-		return GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}, err
+func (client *GatewayRouteConfigsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, routeConfigName string, gatewayRouteConfigResource GatewayRouteConfigResource, options *GatewayRouteConfigsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GatewayRouteConfigsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, gatewayName, routeConfigName, gatewayRouteConfigResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GatewayRouteConfigsClientCreateOrUpdateResponse]("GatewayRouteConfigsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GatewayRouteConfigsClientCreateOrUpdateResponse]("GatewayRouteConfigsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GatewayRouteConfigsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GatewayRouteConfigsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create the default Spring Cloud Gateway route configs or update the existing Spring Cloud Gateway route
@@ -138,20 +134,16 @@ func (client *GatewayRouteConfigsClient) createOrUpdateCreateRequest(ctx context
 // routeConfigName - The name of the Spring Cloud Gateway route config.
 // options - GatewayRouteConfigsClientBeginDeleteOptions contains the optional parameters for the GatewayRouteConfigsClient.BeginDelete
 // method.
-func (client *GatewayRouteConfigsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, routeConfigName string, options *GatewayRouteConfigsClientBeginDeleteOptions) (GatewayRouteConfigsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, gatewayName, routeConfigName, options)
-	if err != nil {
-		return GatewayRouteConfigsClientDeletePollerResponse{}, err
+func (client *GatewayRouteConfigsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, routeConfigName string, options *GatewayRouteConfigsClientBeginDeleteOptions) (*armruntime.Poller[GatewayRouteConfigsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, gatewayName, routeConfigName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GatewayRouteConfigsClientDeleteResponse]("GatewayRouteConfigsClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GatewayRouteConfigsClientDeleteResponse]("GatewayRouteConfigsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GatewayRouteConfigsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GatewayRouteConfigsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GatewayRouteConfigsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GatewayRouteConfigsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the Spring Cloud Gateway route config.
@@ -279,16 +271,32 @@ func (client *GatewayRouteConfigsClient) getHandleResponse(resp *http.Response) 
 // gatewayName - The name of Spring Cloud Gateway.
 // options - GatewayRouteConfigsClientListOptions contains the optional parameters for the GatewayRouteConfigsClient.List
 // method.
-func (client *GatewayRouteConfigsClient) List(resourceGroupName string, serviceName string, gatewayName string, options *GatewayRouteConfigsClientListOptions) *GatewayRouteConfigsClientListPager {
-	return &GatewayRouteConfigsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, gatewayName, options)
+func (client *GatewayRouteConfigsClient) List(resourceGroupName string, serviceName string, gatewayName string, options *GatewayRouteConfigsClientListOptions) *runtime.Pager[GatewayRouteConfigsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewayRouteConfigsClientListResponse]{
+		More: func(page GatewayRouteConfigsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewayRouteConfigsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayRouteConfigResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewayRouteConfigsClientListResponse) (GatewayRouteConfigsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, gatewayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewayRouteConfigsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewayRouteConfigsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewayRouteConfigsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewRegionClient(subscriptionID string, credential azcore.TokenCredential, o
 // resourceGroupName - The name of the resource group.
 // serviceName - The name of the API Management service.
 // options - RegionClientListByServiceOptions contains the optional parameters for the RegionClient.ListByService method.
-func (client *RegionClient) ListByService(resourceGroupName string, serviceName string, options *RegionClientListByServiceOptions) *RegionClientListByServicePager {
-	return &RegionClientListByServicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *RegionClient) ListByService(resourceGroupName string, serviceName string, options *RegionClientListByServiceOptions) *runtime.Pager[RegionClientListByServiceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RegionClientListByServiceResponse]{
+		More: func(page RegionClientListByServiceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RegionClientListByServiceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RegionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RegionClientListByServiceResponse) (RegionClientListByServiceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServiceCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RegionClientListByServiceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RegionClientListByServiceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RegionClientListByServiceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServiceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServiceCreateRequest creates the ListByService request.

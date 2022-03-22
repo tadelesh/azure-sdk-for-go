@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,13 +57,26 @@ func NewRestorableMongodbDatabasesClient(subscriptionID string, credential azcor
 // instanceID - The instanceId GUID of a restorable database account.
 // options - RestorableMongodbDatabasesClientListOptions contains the optional parameters for the RestorableMongodbDatabasesClient.List
 // method.
-func (client *RestorableMongodbDatabasesClient) List(location string, instanceID string, options *RestorableMongodbDatabasesClientListOptions) *RestorableMongodbDatabasesClientListPager {
-	return &RestorableMongodbDatabasesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, instanceID, options)
+func (client *RestorableMongodbDatabasesClient) List(location string, instanceID string, options *RestorableMongodbDatabasesClientListOptions) *runtime.Pager[RestorableMongodbDatabasesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RestorableMongodbDatabasesClientListResponse]{
+		More: func(page RestorableMongodbDatabasesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *RestorableMongodbDatabasesClientListResponse) (RestorableMongodbDatabasesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, location, instanceID, options)
+			if err != nil {
+				return RestorableMongodbDatabasesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RestorableMongodbDatabasesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RestorableMongodbDatabasesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

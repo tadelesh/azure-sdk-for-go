@@ -7,9 +7,9 @@ Param(
 )
 
 $AUTOREST_TEST_PACKAGE_URL = "D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.gotest"
-$AUTOREST_GO_VERSION = "@autorest/go@4.0.0-preview.37"
+$AUTOREST_GO_VERSION = "D:\Workspace\tadelesh\autorest.go"
 $AUTOREST_CONFIG_FILE = "autorest.md"
-$AUTOREST_CORE_VERSION = "3.6.2"
+$AUTOREST_CORE_VERSION = "3.7.3"
 
 function executeSingleGenerate($readmePath, $sepcRPName)
 {
@@ -46,7 +46,10 @@ modelerfour:
     {
         Write-Host "Generate sdk code for RP $rpName with Package $packageName ..."
         Write-Host "generator release-v2 $sdkPath $specPath $rpName $packageName --spec-rp-name=$sepcRPName --skip-create-branch=true"
-        generator release-v2 $sdkPath $specPath $rpName $packageName --spec-rp-name=$sepcRPName --skip-create-branch=true --skip-generate-example=true
+        #generator release-v2 $sdkPath $specPath $rpName $packageName --spec-rp-name=$sepcRPName --skip-create-branch=true --skip-generate-example=true
+        Set-Location (Join-Path $sdkPath "sdk" "resourcemanager" $rpName $packageName)
+        Remove-Item "*.go"
+        autorest --version=$AUTOREST_CORE_VERSION --use=$AUTOREST_GO_VERSION --go --track2 --output-folder=. --file-prefix="zz_generated_" --clear-output-folder=false ./autorest.md
         if ($LASTEXITCODE)
         {
             Write-Host "##[error] generate sdk code error for RP $rpName with Package $packageName"

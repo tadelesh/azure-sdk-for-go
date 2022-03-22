@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -110,13 +110,26 @@ func (client *ResourceQuotaLimitsClient) getHandleResponse(resp *http.Response) 
 // location - The location
 // options - ResourceQuotaLimitsClientListOptions contains the optional parameters for the ResourceQuotaLimitsClient.List
 // method.
-func (client *ResourceQuotaLimitsClient) List(location string, options *ResourceQuotaLimitsClientListOptions) *ResourceQuotaLimitsClientListPager {
-	return &ResourceQuotaLimitsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, options)
+func (client *ResourceQuotaLimitsClient) List(location string, options *ResourceQuotaLimitsClientListOptions) *runtime.Pager[ResourceQuotaLimitsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceQuotaLimitsClientListResponse]{
+		More: func(page ResourceQuotaLimitsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ResourceQuotaLimitsClientListResponse) (ResourceQuotaLimitsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, location, options)
+			if err != nil {
+				return ResourceQuotaLimitsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceQuotaLimitsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceQuotaLimitsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

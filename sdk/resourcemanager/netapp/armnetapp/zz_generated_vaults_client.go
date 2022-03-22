@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewVaultsClient(subscriptionID string, credential azcore.TokenCredential, o
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - VaultsClientListOptions contains the optional parameters for the VaultsClient.List method.
-func (client *VaultsClient) List(resourceGroupName string, accountName string, options *VaultsClientListOptions) *VaultsClientListPager {
-	return &VaultsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *VaultsClient) List(resourceGroupName string, accountName string, options *VaultsClientListOptions) *runtime.Pager[VaultsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VaultsClientListResponse]{
+		More: func(page VaultsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *VaultsClientListResponse) (VaultsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return VaultsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VaultsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VaultsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

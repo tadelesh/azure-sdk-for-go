@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewOriginsClient(subscriptionID string, credential azcore.TokenCredential, 
 // originName - Name of the origin that is unique within the endpoint.
 // origin - Origin properties
 // options - OriginsClientBeginCreateOptions contains the optional parameters for the OriginsClient.BeginCreate method.
-func (client *OriginsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, origin Origin, options *OriginsClientBeginCreateOptions) (OriginsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, originName, origin, options)
-	if err != nil {
-		return OriginsClientCreatePollerResponse{}, err
+func (client *OriginsClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, origin Origin, options *OriginsClientBeginCreateOptions) (*armruntime.Poller[OriginsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, endpointName, originName, origin, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OriginsClientCreateResponse]("OriginsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OriginsClientCreateResponse]("OriginsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := OriginsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("OriginsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return OriginsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &OriginsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new origin within the specified endpoint.
@@ -131,20 +127,16 @@ func (client *OriginsClient) createCreateRequest(ctx context.Context, resourceGr
 // endpointName - Name of the endpoint under the profile which is unique globally.
 // originName - Name of the origin which is unique within the endpoint.
 // options - OriginsClientBeginDeleteOptions contains the optional parameters for the OriginsClient.BeginDelete method.
-func (client *OriginsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, options *OriginsClientBeginDeleteOptions) (OriginsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, originName, options)
-	if err != nil {
-		return OriginsClientDeletePollerResponse{}, err
+func (client *OriginsClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, options *OriginsClientBeginDeleteOptions) (*armruntime.Poller[OriginsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, endpointName, originName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OriginsClientDeleteResponse]("OriginsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OriginsClientDeleteResponse]("OriginsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := OriginsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("OriginsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return OriginsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &OriginsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing origin within an endpoint.
@@ -269,16 +261,32 @@ func (client *OriginsClient) getHandleResponse(resp *http.Response) (OriginsClie
 // profileName - Name of the CDN profile which is unique within the resource group.
 // endpointName - Name of the endpoint under the profile which is unique globally.
 // options - OriginsClientListByEndpointOptions contains the optional parameters for the OriginsClient.ListByEndpoint method.
-func (client *OriginsClient) ListByEndpoint(resourceGroupName string, profileName string, endpointName string, options *OriginsClientListByEndpointOptions) *OriginsClientListByEndpointPager {
-	return &OriginsClientListByEndpointPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByEndpointCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+func (client *OriginsClient) ListByEndpoint(resourceGroupName string, profileName string, endpointName string, options *OriginsClientListByEndpointOptions) *runtime.Pager[OriginsClientListByEndpointResponse] {
+	return runtime.NewPager(runtime.PageProcessor[OriginsClientListByEndpointResponse]{
+		More: func(page OriginsClientListByEndpointResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp OriginsClientListByEndpointResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OriginListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *OriginsClientListByEndpointResponse) (OriginsClientListByEndpointResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByEndpointCreateRequest(ctx, resourceGroupName, profileName, endpointName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return OriginsClientListByEndpointResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return OriginsClientListByEndpointResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return OriginsClientListByEndpointResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByEndpointHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByEndpointCreateRequest creates the ListByEndpoint request.
@@ -328,20 +336,16 @@ func (client *OriginsClient) listByEndpointHandleResponse(resp *http.Response) (
 // originName - Name of the origin which is unique within the endpoint.
 // originUpdateProperties - Origin properties
 // options - OriginsClientBeginUpdateOptions contains the optional parameters for the OriginsClient.BeginUpdate method.
-func (client *OriginsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, originUpdateProperties OriginUpdateParameters, options *OriginsClientBeginUpdateOptions) (OriginsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, endpointName, originName, originUpdateProperties, options)
-	if err != nil {
-		return OriginsClientUpdatePollerResponse{}, err
+func (client *OriginsClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, originUpdateProperties OriginUpdateParameters, options *OriginsClientBeginUpdateOptions) (*armruntime.Poller[OriginsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, endpointName, originName, originUpdateProperties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[OriginsClientUpdateResponse]("OriginsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[OriginsClientUpdateResponse]("OriginsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := OriginsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("OriginsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return OriginsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &OriginsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing origin within an endpoint.

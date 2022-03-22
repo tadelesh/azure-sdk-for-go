@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -105,20 +105,16 @@ func (client *B2CTenantsClient) checkNameAvailabilityHandleResponse(resp *http.R
 // resourceGroupName - The name of the resource group.
 // resourceName - The initial domain name of the B2C tenant.
 // options - B2CTenantsClientBeginCreateOptions contains the optional parameters for the B2CTenantsClient.BeginCreate method.
-func (client *B2CTenantsClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, options *B2CTenantsClientBeginCreateOptions) (B2CTenantsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return B2CTenantsClientCreatePollerResponse{}, err
+func (client *B2CTenantsClient) BeginCreate(ctx context.Context, resourceGroupName string, resourceName string, options *B2CTenantsClientBeginCreateOptions) (*armruntime.Poller[B2CTenantsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[B2CTenantsClientCreateResponse]("B2CTenantsClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[B2CTenantsClientCreateResponse]("B2CTenantsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := B2CTenantsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("B2CTenantsClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return B2CTenantsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &B2CTenantsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Initiates an async request to create both the Azure AD B2C tenant and the corresponding Azure resource linked
@@ -175,20 +171,16 @@ func (client *B2CTenantsClient) createCreateRequest(ctx context.Context, resourc
 // resourceGroupName - The name of the resource group.
 // resourceName - The initial domain name of the B2C tenant.
 // options - B2CTenantsClientBeginDeleteOptions contains the optional parameters for the B2CTenantsClient.BeginDelete method.
-func (client *B2CTenantsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *B2CTenantsClientBeginDeleteOptions) (B2CTenantsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return B2CTenantsClientDeletePollerResponse{}, err
+func (client *B2CTenantsClient) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *B2CTenantsClientBeginDeleteOptions) (*armruntime.Poller[B2CTenantsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[B2CTenantsClientDeleteResponse]("B2CTenantsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[B2CTenantsClientDeleteResponse]("B2CTenantsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := B2CTenantsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("B2CTenantsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return B2CTenantsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &B2CTenantsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Initiates an async operation to delete the Azure AD B2C tenant and Azure resource. The resource deletion can only
@@ -296,13 +288,26 @@ func (client *B2CTenantsClient) getHandleResponse(resp *http.Response) (B2CTenan
 // resourceGroupName - The name of the resource group.
 // options - B2CTenantsClientListByResourceGroupOptions contains the optional parameters for the B2CTenantsClient.ListByResourceGroup
 // method.
-func (client *B2CTenantsClient) ListByResourceGroup(resourceGroupName string, options *B2CTenantsClientListByResourceGroupOptions) *B2CTenantsClientListByResourceGroupPager {
-	return &B2CTenantsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *B2CTenantsClient) ListByResourceGroup(resourceGroupName string, options *B2CTenantsClientListByResourceGroupOptions) *runtime.Pager[B2CTenantsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[B2CTenantsClientListByResourceGroupResponse]{
+		More: func(page B2CTenantsClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *B2CTenantsClientListByResourceGroupResponse) (B2CTenantsClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return B2CTenantsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return B2CTenantsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return B2CTenantsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -340,13 +345,26 @@ func (client *B2CTenantsClient) listByResourceGroupHandleResponse(resp *http.Res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - B2CTenantsClientListBySubscriptionOptions contains the optional parameters for the B2CTenantsClient.ListBySubscription
 // method.
-func (client *B2CTenantsClient) ListBySubscription(options *B2CTenantsClientListBySubscriptionOptions) *B2CTenantsClientListBySubscriptionPager {
-	return &B2CTenantsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *B2CTenantsClient) ListBySubscription(options *B2CTenantsClientListBySubscriptionOptions) *runtime.Pager[B2CTenantsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[B2CTenantsClientListBySubscriptionResponse]{
+		More: func(page B2CTenantsClientListBySubscriptionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *B2CTenantsClientListBySubscriptionResponse) (B2CTenantsClientListBySubscriptionResponse, error) {
+			req, err := client.listBySubscriptionCreateRequest(ctx, options)
+			if err != nil {
+				return B2CTenantsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return B2CTenantsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return B2CTenantsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
+		},
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

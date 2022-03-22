@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -108,20 +108,16 @@ func (client *Client) checkNameAvailabilityHandleResponse(resp *http.Response) (
 // resourceName - The name of the resource.
 // parameters - Parameters for the create or update operation
 // options - ClientBeginCreateOrUpdateOptions contains the optional parameters for the Client.BeginCreateOrUpdate method.
-func (client *Client) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceInfo, options *ClientBeginCreateOrUpdateOptions) (ClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ClientCreateOrUpdatePollerResponse{}, err
+func (client *Client) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceInfo, options *ClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientCreateOrUpdateResponse]("Client.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientCreateOrUpdateResponse]("Client.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a resource.
@@ -173,20 +169,16 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceG
 // Resource Manager API or the portal.
 // resourceName - The name of the resource.
 // options - ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
-func (client *Client) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ClientBeginDeleteOptions) (ClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ClientDeletePollerResponse{}, err
+func (client *Client) BeginDelete(ctx context.Context, resourceGroupName string, resourceName string, options *ClientBeginDeleteOptions) (*armruntime.Poller[ClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientDeleteResponse]("Client.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientDeleteResponse]("Client.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("Client.Delete", "", resp, client.pl)
-	if err != nil {
-		return ClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete a resource.
@@ -293,16 +285,32 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
 // Resource Manager API or the portal.
 // options - ClientListByResourceGroupOptions contains the optional parameters for the Client.ListByResourceGroup method.
-func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *ClientListByResourceGroupPager {
-	return &ClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *runtime.Pager[ClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListByResourceGroupResponse]{
+		More: func(page ClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceInfoList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListByResourceGroupResponse) (ClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -339,16 +347,32 @@ func (client *Client) listByResourceGroupHandleResponse(resp *http.Response) (Cl
 // ListBySubscription - Handles requests to list all resources in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListBySubscriptionOptions contains the optional parameters for the Client.ListBySubscription method.
-func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) *ClientListBySubscriptionPager {
-	return &ClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) *runtime.Pager[ClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListBySubscriptionResponse]{
+		More: func(page ClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceInfoList.NextLink)
+		Fetcher: func(ctx context.Context, page *ClientListBySubscriptionResponse) (ClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -498,20 +522,16 @@ func (client *Client) listSKUsHandleResponse(resp *http.Response) (ClientListSKU
 // resourceName - The name of the resource.
 // parameters - Parameter that describes the Regenerate Key Operation.
 // options - ClientBeginRegenerateKeyOptions contains the optional parameters for the Client.BeginRegenerateKey method.
-func (client *Client) BeginRegenerateKey(ctx context.Context, resourceGroupName string, resourceName string, parameters RegenerateKeyParameters, options *ClientBeginRegenerateKeyOptions) (ClientRegenerateKeyPollerResponse, error) {
-	resp, err := client.regenerateKey(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ClientRegenerateKeyPollerResponse{}, err
+func (client *Client) BeginRegenerateKey(ctx context.Context, resourceGroupName string, resourceName string, parameters RegenerateKeyParameters, options *ClientBeginRegenerateKeyOptions) (*armruntime.Poller[ClientRegenerateKeyResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.regenerateKey(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientRegenerateKeyResponse]("Client.RegenerateKey", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientRegenerateKeyResponse]("Client.RegenerateKey", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientRegenerateKeyPollerResponse{}
-	pt, err := armruntime.NewPoller("Client.RegenerateKey", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ClientRegenerateKeyPollerResponse{}, err
-	}
-	result.Poller = &ClientRegenerateKeyPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RegenerateKey - Regenerate the access key for the resource. PrimaryKey and SecondaryKey cannot be regenerated at the same
@@ -564,20 +584,16 @@ func (client *Client) regenerateKeyCreateRequest(ctx context.Context, resourceGr
 // Resource Manager API or the portal.
 // resourceName - The name of the resource.
 // options - ClientBeginRestartOptions contains the optional parameters for the Client.BeginRestart method.
-func (client *Client) BeginRestart(ctx context.Context, resourceGroupName string, resourceName string, options *ClientBeginRestartOptions) (ClientRestartPollerResponse, error) {
-	resp, err := client.restart(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return ClientRestartPollerResponse{}, err
+func (client *Client) BeginRestart(ctx context.Context, resourceGroupName string, resourceName string, options *ClientBeginRestartOptions) (*armruntime.Poller[ClientRestartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restart(ctx, resourceGroupName, resourceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientRestartResponse]("Client.Restart", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientRestartResponse]("Client.Restart", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientRestartPollerResponse{}
-	pt, err := armruntime.NewPoller("Client.Restart", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ClientRestartPollerResponse{}, err
-	}
-	result.Poller = &ClientRestartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Restart - Operation to restart a resource.
@@ -630,20 +646,16 @@ func (client *Client) restartCreateRequest(ctx context.Context, resourceGroupNam
 // resourceName - The name of the resource.
 // parameters - Parameters for the update operation
 // options - ClientBeginUpdateOptions contains the optional parameters for the Client.BeginUpdate method.
-func (client *Client) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceInfo, options *ClientBeginUpdateOptions) (ClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, resourceName, parameters, options)
-	if err != nil {
-		return ClientUpdatePollerResponse{}, err
+func (client *Client) BeginUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters ResourceInfo, options *ClientBeginUpdateOptions) (*armruntime.Poller[ClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, resourceName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ClientUpdateResponse]("Client.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ClientUpdateResponse]("Client.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("Client.Update", "", resp, client.pl)
-	if err != nil {
-		return ClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update an exiting resource.

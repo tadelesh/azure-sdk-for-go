@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,50 +8,9 @@
 
 package armvirtualmachineimagebuilder
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
 	OperationListResult
-}
-
-// VirtualMachineImageTemplatesClientCancelPollerResponse contains the response from method VirtualMachineImageTemplatesClient.Cancel.
-type VirtualMachineImageTemplatesClientCancelPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualMachineImageTemplatesClientCancelPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualMachineImageTemplatesClientCancelPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientCancelResponse, error) {
-	respType := VirtualMachineImageTemplatesClientCancelResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualMachineImageTemplatesClientCancelPollerResponse from the provided client and resume token.
-func (l *VirtualMachineImageTemplatesClientCancelPollerResponse) Resume(ctx context.Context, client *VirtualMachineImageTemplatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualMachineImageTemplatesClient.Cancel", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualMachineImageTemplatesClientCancelPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VirtualMachineImageTemplatesClientCancelResponse contains the response from method VirtualMachineImageTemplatesClient.Cancel.
@@ -59,80 +18,9 @@ type VirtualMachineImageTemplatesClientCancelResponse struct {
 	// placeholder for future response values
 }
 
-// VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse contains the response from method VirtualMachineImageTemplatesClient.CreateOrUpdate.
-type VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualMachineImageTemplatesClientCreateOrUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientCreateOrUpdateResponse, error) {
-	respType := VirtualMachineImageTemplatesClientCreateOrUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse from the provided client and resume
-// token.
-func (l *VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client *VirtualMachineImageTemplatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualMachineImageTemplatesClient.CreateOrUpdate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualMachineImageTemplatesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // VirtualMachineImageTemplatesClientCreateOrUpdateResponse contains the response from method VirtualMachineImageTemplatesClient.CreateOrUpdate.
 type VirtualMachineImageTemplatesClientCreateOrUpdateResponse struct {
 	ImageTemplate
-}
-
-// VirtualMachineImageTemplatesClientDeletePollerResponse contains the response from method VirtualMachineImageTemplatesClient.Delete.
-type VirtualMachineImageTemplatesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualMachineImageTemplatesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualMachineImageTemplatesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientDeleteResponse, error) {
-	respType := VirtualMachineImageTemplatesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualMachineImageTemplatesClientDeletePollerResponse from the provided client and resume token.
-func (l *VirtualMachineImageTemplatesClientDeletePollerResponse) Resume(ctx context.Context, client *VirtualMachineImageTemplatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualMachineImageTemplatesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualMachineImageTemplatesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VirtualMachineImageTemplatesClientDeleteResponse contains the response from method VirtualMachineImageTemplatesClient.Delete.
@@ -165,79 +53,9 @@ type VirtualMachineImageTemplatesClientListRunOutputsResponse struct {
 	RunOutputCollection
 }
 
-// VirtualMachineImageTemplatesClientRunPollerResponse contains the response from method VirtualMachineImageTemplatesClient.Run.
-type VirtualMachineImageTemplatesClientRunPollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualMachineImageTemplatesClientRunPoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualMachineImageTemplatesClientRunPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientRunResponse, error) {
-	respType := VirtualMachineImageTemplatesClientRunResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualMachineImageTemplatesClientRunPollerResponse from the provided client and resume token.
-func (l *VirtualMachineImageTemplatesClientRunPollerResponse) Resume(ctx context.Context, client *VirtualMachineImageTemplatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualMachineImageTemplatesClient.Run", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualMachineImageTemplatesClientRunPoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // VirtualMachineImageTemplatesClientRunResponse contains the response from method VirtualMachineImageTemplatesClient.Run.
 type VirtualMachineImageTemplatesClientRunResponse struct {
 	// placeholder for future response values
-}
-
-// VirtualMachineImageTemplatesClientUpdatePollerResponse contains the response from method VirtualMachineImageTemplatesClient.Update.
-type VirtualMachineImageTemplatesClientUpdatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *VirtualMachineImageTemplatesClientUpdatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l VirtualMachineImageTemplatesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientUpdateResponse, error) {
-	respType := VirtualMachineImageTemplatesClientUpdateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a VirtualMachineImageTemplatesClientUpdatePollerResponse from the provided client and resume token.
-func (l *VirtualMachineImageTemplatesClientUpdatePollerResponse) Resume(ctx context.Context, client *VirtualMachineImageTemplatesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("VirtualMachineImageTemplatesClient.Update", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &VirtualMachineImageTemplatesClientUpdatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // VirtualMachineImageTemplatesClientUpdateResponse contains the response from method VirtualMachineImageTemplatesClient.Update.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewContactsClient(subscriptionID string, credential azcore.TokenCredential,
 // contactName - Contact Name
 // parameters - The parameters to provide for the created contact.
 // options - ContactsClientBeginCreateOptions contains the optional parameters for the ContactsClient.BeginCreate method.
-func (client *ContactsClient) BeginCreate(ctx context.Context, resourceGroupName string, spacecraftName string, contactName string, parameters Contact, options *ContactsClientBeginCreateOptions) (ContactsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, spacecraftName, contactName, parameters, options)
-	if err != nil {
-		return ContactsClientCreatePollerResponse{}, err
+func (client *ContactsClient) BeginCreate(ctx context.Context, resourceGroupName string, spacecraftName string, contactName string, parameters Contact, options *ContactsClientBeginCreateOptions) (*armruntime.Poller[ContactsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, spacecraftName, contactName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContactsClientCreateResponse]("ContactsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContactsClientCreateResponse]("ContactsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ContactsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ContactsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ContactsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ContactsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a contact.
@@ -125,20 +121,16 @@ func (client *ContactsClient) createCreateRequest(ctx context.Context, resourceG
 // spacecraftName - Spacecraft ID
 // contactName - Contact Name
 // options - ContactsClientBeginDeleteOptions contains the optional parameters for the ContactsClient.BeginDelete method.
-func (client *ContactsClient) BeginDelete(ctx context.Context, resourceGroupName string, spacecraftName string, contactName string, options *ContactsClientBeginDeleteOptions) (ContactsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, spacecraftName, contactName, options)
-	if err != nil {
-		return ContactsClientDeletePollerResponse{}, err
+func (client *ContactsClient) BeginDelete(ctx context.Context, resourceGroupName string, spacecraftName string, contactName string, options *ContactsClientBeginDeleteOptions) (*armruntime.Poller[ContactsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, spacecraftName, contactName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ContactsClientDeleteResponse]("ContactsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ContactsClientDeleteResponse]("ContactsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ContactsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ContactsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ContactsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ContactsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a specified contact
@@ -253,13 +245,26 @@ func (client *ContactsClient) getHandleResponse(resp *http.Response) (ContactsCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // spacecraftName - Spacecraft ID
 // options - ContactsClientListOptions contains the optional parameters for the ContactsClient.List method.
-func (client *ContactsClient) List(resourceGroupName string, spacecraftName string, options *ContactsClientListOptions) *ContactsClientListPager {
-	return &ContactsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, spacecraftName, options)
+func (client *ContactsClient) List(resourceGroupName string, spacecraftName string, options *ContactsClientListOptions) *runtime.Pager[ContactsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ContactsClientListResponse]{
+		More: func(page ContactsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ContactsClientListResponse) (ContactsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, spacecraftName, options)
+			if err != nil {
+				return ContactsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ContactsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ContactsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

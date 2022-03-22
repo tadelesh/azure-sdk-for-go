@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewVolumeContainersClient(subscriptionID string, credential azcore.TokenCre
 // parameters - The volume container to be added or updated.
 // options - VolumeContainersClientBeginCreateOrUpdateOptions contains the optional parameters for the VolumeContainersClient.BeginCreateOrUpdate
 // method.
-func (client *VolumeContainersClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, volumeContainerName string, resourceGroupName string, managerName string, parameters VolumeContainer, options *VolumeContainersClientBeginCreateOrUpdateOptions) (VolumeContainersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return VolumeContainersClientCreateOrUpdatePollerResponse{}, err
+func (client *VolumeContainersClient) BeginCreateOrUpdate(ctx context.Context, deviceName string, volumeContainerName string, resourceGroupName string, managerName string, parameters VolumeContainer, options *VolumeContainersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VolumeContainersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumeContainersClientCreateOrUpdateResponse]("VolumeContainersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumeContainersClientCreateOrUpdateResponse]("VolumeContainersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumeContainersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumeContainersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return VolumeContainersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VolumeContainersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates the volume container.
@@ -116,20 +112,16 @@ func (client *VolumeContainersClient) createOrUpdateCreateRequest(ctx context.Co
 // managerName - The manager name
 // options - VolumeContainersClientBeginDeleteOptions contains the optional parameters for the VolumeContainersClient.BeginDelete
 // method.
-func (client *VolumeContainersClient) BeginDelete(ctx context.Context, deviceName string, volumeContainerName string, resourceGroupName string, managerName string, options *VolumeContainersClientBeginDeleteOptions) (VolumeContainersClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, options)
-	if err != nil {
-		return VolumeContainersClientDeletePollerResponse{}, err
+func (client *VolumeContainersClient) BeginDelete(ctx context.Context, deviceName string, volumeContainerName string, resourceGroupName string, managerName string, options *VolumeContainersClientBeginDeleteOptions) (*armruntime.Poller[VolumeContainersClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VolumeContainersClientDeleteResponse]("VolumeContainersClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VolumeContainersClientDeleteResponse]("VolumeContainersClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := VolumeContainersClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("VolumeContainersClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return VolumeContainersClientDeletePollerResponse{}, err
-	}
-	result.Poller = &VolumeContainersClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the volume container.
@@ -224,13 +216,26 @@ func (client *VolumeContainersClient) getHandleResponse(resp *http.Response) (Vo
 // managerName - The manager name
 // options - VolumeContainersClientListByDeviceOptions contains the optional parameters for the VolumeContainersClient.ListByDevice
 // method.
-func (client *VolumeContainersClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *VolumeContainersClientListByDeviceOptions) *VolumeContainersClientListByDevicePager {
-	return &VolumeContainersClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *VolumeContainersClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *VolumeContainersClientListByDeviceOptions) *runtime.Pager[VolumeContainersClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeContainersClientListByDeviceResponse]{
+		More: func(page VolumeContainersClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *VolumeContainersClientListByDeviceResponse) (VolumeContainersClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return VolumeContainersClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeContainersClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeContainersClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.
@@ -268,13 +273,26 @@ func (client *VolumeContainersClient) listByDeviceHandleResponse(resp *http.Resp
 // managerName - The manager name
 // options - VolumeContainersClientListMetricDefinitionOptions contains the optional parameters for the VolumeContainersClient.ListMetricDefinition
 // method.
-func (client *VolumeContainersClient) ListMetricDefinition(deviceName string, volumeContainerName string, resourceGroupName string, managerName string, options *VolumeContainersClientListMetricDefinitionOptions) *VolumeContainersClientListMetricDefinitionPager {
-	return &VolumeContainersClientListMetricDefinitionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricDefinitionCreateRequest(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, options)
+func (client *VolumeContainersClient) ListMetricDefinition(deviceName string, volumeContainerName string, resourceGroupName string, managerName string, options *VolumeContainersClientListMetricDefinitionOptions) *runtime.Pager[VolumeContainersClientListMetricDefinitionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeContainersClientListMetricDefinitionResponse]{
+		More: func(page VolumeContainersClientListMetricDefinitionResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *VolumeContainersClientListMetricDefinitionResponse) (VolumeContainersClientListMetricDefinitionResponse, error) {
+			req, err := client.listMetricDefinitionCreateRequest(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, options)
+			if err != nil {
+				return VolumeContainersClientListMetricDefinitionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeContainersClientListMetricDefinitionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeContainersClientListMetricDefinitionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricDefinitionHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricDefinitionCreateRequest creates the ListMetricDefinition request.
@@ -314,13 +332,26 @@ func (client *VolumeContainersClient) listMetricDefinitionHandleResponse(resp *h
 // filter - OData Filter options
 // options - VolumeContainersClientListMetricsOptions contains the optional parameters for the VolumeContainersClient.ListMetrics
 // method.
-func (client *VolumeContainersClient) ListMetrics(deviceName string, volumeContainerName string, resourceGroupName string, managerName string, filter string, options *VolumeContainersClientListMetricsOptions) *VolumeContainersClientListMetricsPager {
-	return &VolumeContainersClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, filter, options)
+func (client *VolumeContainersClient) ListMetrics(deviceName string, volumeContainerName string, resourceGroupName string, managerName string, filter string, options *VolumeContainersClientListMetricsOptions) *runtime.Pager[VolumeContainersClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[VolumeContainersClientListMetricsResponse]{
+		More: func(page VolumeContainersClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *VolumeContainersClientListMetricsResponse) (VolumeContainersClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, deviceName, volumeContainerName, resourceGroupName, managerName, filter, options)
+			if err != nil {
+				return VolumeContainersClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return VolumeContainersClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return VolumeContainersClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

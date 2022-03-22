@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,13 +213,26 @@ func (client *WorkbookTemplatesClient) getHandleResponse(resp *http.Response) (W
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WorkbookTemplatesClientListByResourceGroupOptions contains the optional parameters for the WorkbookTemplatesClient.ListByResourceGroup
 // method.
-func (client *WorkbookTemplatesClient) ListByResourceGroup(resourceGroupName string, options *WorkbookTemplatesClientListByResourceGroupOptions) *WorkbookTemplatesClientListByResourceGroupPager {
-	return &WorkbookTemplatesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *WorkbookTemplatesClient) ListByResourceGroup(resourceGroupName string, options *WorkbookTemplatesClientListByResourceGroupOptions) *runtime.Pager[WorkbookTemplatesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkbookTemplatesClientListByResourceGroupResponse]{
+		More: func(page WorkbookTemplatesClientListByResourceGroupResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkbookTemplatesClientListByResourceGroupResponse) (WorkbookTemplatesClientListByResourceGroupResponse, error) {
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			if err != nil {
+				return WorkbookTemplatesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkbookTemplatesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkbookTemplatesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
+		},
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

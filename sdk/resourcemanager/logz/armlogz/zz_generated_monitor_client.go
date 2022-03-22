@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewMonitorClient(subscriptionID string, credential azcore.TokenCredential, 
 // monitorName - Monitor resource name
 // options - MonitorClientListVMHostUpdateOptions contains the optional parameters for the MonitorClient.ListVMHostUpdate
 // method.
-func (client *MonitorClient) ListVMHostUpdate(resourceGroupName string, monitorName string, options *MonitorClientListVMHostUpdateOptions) *MonitorClientListVMHostUpdatePager {
-	return &MonitorClientListVMHostUpdatePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVMHostUpdateCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *MonitorClient) ListVMHostUpdate(resourceGroupName string, monitorName string, options *MonitorClientListVMHostUpdateOptions) *runtime.Pager[MonitorClientListVMHostUpdateResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorClientListVMHostUpdateResponse]{
+		More: func(page MonitorClientListVMHostUpdateResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorClientListVMHostUpdateResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VMResourcesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorClientListVMHostUpdateResponse) (MonitorClientListVMHostUpdateResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVMHostUpdateCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorClientListVMHostUpdateResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorClientListVMHostUpdateResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorClientListVMHostUpdateResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVMHostUpdateHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVMHostUpdateCreateRequest creates the ListVMHostUpdate request.
@@ -110,16 +126,32 @@ func (client *MonitorClient) listVMHostUpdateHandleResponse(resp *http.Response)
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // monitorName - Monitor resource name
 // options - MonitorClientListVMHostsOptions contains the optional parameters for the MonitorClient.ListVMHosts method.
-func (client *MonitorClient) ListVMHosts(resourceGroupName string, monitorName string, options *MonitorClientListVMHostsOptions) *MonitorClientListVMHostsPager {
-	return &MonitorClientListVMHostsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVMHostsCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *MonitorClient) ListVMHosts(resourceGroupName string, monitorName string, options *MonitorClientListVMHostsOptions) *runtime.Pager[MonitorClientListVMHostsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitorClientListVMHostsResponse]{
+		More: func(page MonitorClientListVMHostsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitorClientListVMHostsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.VMResourcesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitorClientListVMHostsResponse) (MonitorClientListVMHostsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVMHostsCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitorClientListVMHostsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitorClientListVMHostsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitorClientListVMHostsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVMHostsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVMHostsCreateRequest creates the ListVMHosts request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -752,13 +752,15 @@ type ApplicationGatewayPrivateEndpointConnectionProperties struct {
 // ApplicationGatewayPrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the ApplicationGatewayPrivateEndpointConnectionsClient.BeginDelete
 // method.
 type ApplicationGatewayPrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewayPrivateEndpointConnectionsClientBeginUpdateOptions contains the optional parameters for the ApplicationGatewayPrivateEndpointConnectionsClient.BeginUpdate
 // method.
 type ApplicationGatewayPrivateEndpointConnectionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewayPrivateEndpointConnectionsClientGetOptions contains the optional parameters for the ApplicationGatewayPrivateEndpointConnectionsClient.Get
@@ -1495,6 +1497,8 @@ type ApplicationGatewayWebApplicationFirewallConfiguration struct {
 type ApplicationGatewaysClientBeginBackendHealthOnDemandOptions struct {
 	// Expands BackendAddressPool and BackendHttpSettings referenced in backend health.
 	Expand *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientBeginBackendHealthOptions contains the optional parameters for the ApplicationGatewaysClient.BeginBackendHealth
@@ -1502,30 +1506,36 @@ type ApplicationGatewaysClientBeginBackendHealthOnDemandOptions struct {
 type ApplicationGatewaysClientBeginBackendHealthOptions struct {
 	// Expands BackendAddressPool and BackendHttpSettings referenced in backend health.
 	Expand *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationGatewaysClient.BeginCreateOrUpdate
 // method.
 type ApplicationGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientBeginDeleteOptions contains the optional parameters for the ApplicationGatewaysClient.BeginDelete
 // method.
 type ApplicationGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientBeginStartOptions contains the optional parameters for the ApplicationGatewaysClient.BeginStart
 // method.
 type ApplicationGatewaysClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientBeginStopOptions contains the optional parameters for the ApplicationGatewaysClient.BeginStop
 // method.
 type ApplicationGatewaysClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationGatewaysClientGetOptions contains the optional parameters for the ApplicationGatewaysClient.Get method.
@@ -1677,13 +1687,15 @@ type ApplicationSecurityGroupPropertiesFormat struct {
 // ApplicationSecurityGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the ApplicationSecurityGroupsClient.BeginCreateOrUpdate
 // method.
 type ApplicationSecurityGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationSecurityGroupsClientBeginDeleteOptions contains the optional parameters for the ApplicationSecurityGroupsClient.BeginDelete
 // method.
 type ApplicationSecurityGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationSecurityGroupsClientGetOptions contains the optional parameters for the ApplicationSecurityGroupsClient.Get
@@ -2330,18 +2342,21 @@ type AzureFirewallSKU struct {
 // AzureFirewallsClientBeginCreateOrUpdateOptions contains the optional parameters for the AzureFirewallsClient.BeginCreateOrUpdate
 // method.
 type AzureFirewallsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AzureFirewallsClientBeginDeleteOptions contains the optional parameters for the AzureFirewallsClient.BeginDelete method.
 type AzureFirewallsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AzureFirewallsClientBeginUpdateTagsOptions contains the optional parameters for the AzureFirewallsClient.BeginUpdateTags
 // method.
 type AzureFirewallsClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AzureFirewallsClientGetOptions contains the optional parameters for the AzureFirewallsClient.Get method.
@@ -2678,17 +2693,20 @@ type BastionHostPropertiesFormat struct {
 // BastionHostsClientBeginCreateOrUpdateOptions contains the optional parameters for the BastionHostsClient.BeginCreateOrUpdate
 // method.
 type BastionHostsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BastionHostsClientBeginDeleteOptions contains the optional parameters for the BastionHostsClient.BeginDelete method.
 type BastionHostsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BastionHostsClientBeginUpdateTagsOptions contains the optional parameters for the BastionHostsClient.BeginUpdateTags method.
 type BastionHostsClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BastionHostsClientGetOptions contains the optional parameters for the BastionHostsClient.Get method.
@@ -3294,29 +3312,35 @@ type ConnectionMonitorWorkspaceSettings struct {
 type ConnectionMonitorsClientBeginCreateOrUpdateOptions struct {
 	// Value indicating whether connection monitor V1 should be migrated to V2 format.
 	Migrate *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectionMonitorsClientBeginDeleteOptions contains the optional parameters for the ConnectionMonitorsClient.BeginDelete
 // method.
 type ConnectionMonitorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectionMonitorsClientBeginQueryOptions contains the optional parameters for the ConnectionMonitorsClient.BeginQuery
 // method.
 type ConnectionMonitorsClientBeginQueryOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectionMonitorsClientBeginStartOptions contains the optional parameters for the ConnectionMonitorsClient.BeginStart
 // method.
 type ConnectionMonitorsClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectionMonitorsClientBeginStopOptions contains the optional parameters for the ConnectionMonitorsClient.BeginStop method.
 type ConnectionMonitorsClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConnectionMonitorsClientGetOptions contains the optional parameters for the ConnectionMonitorsClient.Get method.
@@ -3665,12 +3689,14 @@ type CustomIPPrefixPropertiesFormat struct {
 // CustomIPPrefixesClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomIPPrefixesClient.BeginCreateOrUpdate
 // method.
 type CustomIPPrefixesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomIPPrefixesClientBeginDeleteOptions contains the optional parameters for the CustomIPPrefixesClient.BeginDelete method.
 type CustomIPPrefixesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CustomIPPrefixesClientGetOptions contains the optional parameters for the CustomIPPrefixesClient.Get method.
@@ -3715,13 +3741,15 @@ type DNSSettings struct {
 // DdosCustomPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the DdosCustomPoliciesClient.BeginCreateOrUpdate
 // method.
 type DdosCustomPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DdosCustomPoliciesClientBeginDeleteOptions contains the optional parameters for the DdosCustomPoliciesClient.BeginDelete
 // method.
 type DdosCustomPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DdosCustomPoliciesClientGetOptions contains the optional parameters for the DdosCustomPoliciesClient.Get method.
@@ -3824,13 +3852,15 @@ type DdosProtectionPlanPropertiesFormat struct {
 // DdosProtectionPlansClientBeginCreateOrUpdateOptions contains the optional parameters for the DdosProtectionPlansClient.BeginCreateOrUpdate
 // method.
 type DdosProtectionPlansClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DdosProtectionPlansClientBeginDeleteOptions contains the optional parameters for the DdosProtectionPlansClient.BeginDelete
 // method.
 type DdosProtectionPlansClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DdosProtectionPlansClientGetOptions contains the optional parameters for the DdosProtectionPlansClient.Get method.
@@ -3953,13 +3983,15 @@ type DscpConfiguration struct {
 // DscpConfigurationClientBeginCreateOrUpdateOptions contains the optional parameters for the DscpConfigurationClient.BeginCreateOrUpdate
 // method.
 type DscpConfigurationClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DscpConfigurationClientBeginDeleteOptions contains the optional parameters for the DscpConfigurationClient.BeginDelete
 // method.
 type DscpConfigurationClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DscpConfigurationClientGetOptions contains the optional parameters for the DscpConfigurationClient.Get method.
@@ -4333,13 +4365,15 @@ type ExpressRouteCircuitAuthorization struct {
 // ExpressRouteCircuitAuthorizationsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCircuitAuthorizationsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCircuitAuthorizationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitAuthorizationsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteCircuitAuthorizationsClient.BeginDelete
 // method.
 type ExpressRouteCircuitAuthorizationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitAuthorizationsClientGetOptions contains the optional parameters for the ExpressRouteCircuitAuthorizationsClient.Get
@@ -4409,13 +4443,15 @@ type ExpressRouteCircuitConnectionPropertiesFormat struct {
 // ExpressRouteCircuitConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCircuitConnectionsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCircuitConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitConnectionsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteCircuitConnectionsClient.BeginDelete
 // method.
 type ExpressRouteCircuitConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitConnectionsClientGetOptions contains the optional parameters for the ExpressRouteCircuitConnectionsClient.Get
@@ -4560,13 +4596,15 @@ type ExpressRouteCircuitPeeringPropertiesFormat struct {
 // ExpressRouteCircuitPeeringsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCircuitPeeringsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCircuitPeeringsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitPeeringsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteCircuitPeeringsClient.BeginDelete
 // method.
 type ExpressRouteCircuitPeeringsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitPeeringsClientGetOptions contains the optional parameters for the ExpressRouteCircuitPeeringsClient.Get
@@ -4720,31 +4758,36 @@ type ExpressRouteCircuitsArpTableListResult struct {
 // ExpressRouteCircuitsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCircuitsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCircuitsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteCircuitsClient.BeginDelete
 // method.
 type ExpressRouteCircuitsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitsClientBeginListArpTableOptions contains the optional parameters for the ExpressRouteCircuitsClient.BeginListArpTable
 // method.
 type ExpressRouteCircuitsClientBeginListArpTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitsClientBeginListRoutesTableOptions contains the optional parameters for the ExpressRouteCircuitsClient.BeginListRoutesTable
 // method.
 type ExpressRouteCircuitsClientBeginListRoutesTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitsClientBeginListRoutesTableSummaryOptions contains the optional parameters for the ExpressRouteCircuitsClient.BeginListRoutesTableSummary
 // method.
 type ExpressRouteCircuitsClientBeginListRoutesTableSummaryOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCircuitsClientGetOptions contains the optional parameters for the ExpressRouteCircuitsClient.Get method.
@@ -4850,13 +4893,15 @@ type ExpressRouteConnectionProperties struct {
 // ExpressRouteConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteConnectionsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteConnectionsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteConnectionsClient.BeginDelete
 // method.
 type ExpressRouteConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteConnectionsClientGetOptions contains the optional parameters for the ExpressRouteConnectionsClient.Get method.
@@ -4978,13 +5023,15 @@ type ExpressRouteCrossConnectionPeeringProperties struct {
 // ExpressRouteCrossConnectionPeeringsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCrossConnectionPeeringsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCrossConnectionPeeringsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionPeeringsClientBeginDeleteOptions contains the optional parameters for the ExpressRouteCrossConnectionPeeringsClient.BeginDelete
 // method.
 type ExpressRouteCrossConnectionPeeringsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionPeeringsClientGetOptions contains the optional parameters for the ExpressRouteCrossConnectionPeeringsClient.Get
@@ -5051,25 +5098,29 @@ type ExpressRouteCrossConnectionRoutesTableSummary struct {
 // ExpressRouteCrossConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteCrossConnectionsClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteCrossConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionsClientBeginListArpTableOptions contains the optional parameters for the ExpressRouteCrossConnectionsClient.BeginListArpTable
 // method.
 type ExpressRouteCrossConnectionsClientBeginListArpTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionsClientBeginListRoutesTableOptions contains the optional parameters for the ExpressRouteCrossConnectionsClient.BeginListRoutesTable
 // method.
 type ExpressRouteCrossConnectionsClientBeginListRoutesTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionsClientBeginListRoutesTableSummaryOptions contains the optional parameters for the ExpressRouteCrossConnectionsClient.BeginListRoutesTableSummary
 // method.
 type ExpressRouteCrossConnectionsClientBeginListRoutesTableSummaryOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteCrossConnectionsClientGetOptions contains the optional parameters for the ExpressRouteCrossConnectionsClient.Get
@@ -5169,19 +5220,22 @@ type ExpressRouteGatewayPropertiesAutoScaleConfigurationBounds struct {
 // ExpressRouteGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginCreateOrUpdate
 // method.
 type ExpressRouteGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteGatewaysClientBeginDeleteOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginDelete
 // method.
 type ExpressRouteGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteGatewaysClientBeginUpdateTagsOptions contains the optional parameters for the ExpressRouteGatewaysClient.BeginUpdateTags
 // method.
 type ExpressRouteGatewaysClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRouteGatewaysClientGetOptions contains the optional parameters for the ExpressRouteGatewaysClient.Get method.
@@ -5352,13 +5406,15 @@ type ExpressRoutePortPropertiesFormat struct {
 // ExpressRoutePortsClientBeginCreateOrUpdateOptions contains the optional parameters for the ExpressRoutePortsClient.BeginCreateOrUpdate
 // method.
 type ExpressRoutePortsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRoutePortsClientBeginDeleteOptions contains the optional parameters for the ExpressRoutePortsClient.BeginDelete
 // method.
 type ExpressRoutePortsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExpressRoutePortsClientGenerateLOAOptions contains the optional parameters for the ExpressRoutePortsClient.GenerateLOA
@@ -5532,12 +5588,14 @@ type FilterItems struct {
 // FirewallPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallPoliciesClient.BeginCreateOrUpdate
 // method.
 type FirewallPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallPoliciesClientBeginDeleteOptions contains the optional parameters for the FirewallPoliciesClient.BeginDelete method.
 type FirewallPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallPoliciesClientGetOptions contains the optional parameters for the FirewallPoliciesClient.Get method.
@@ -5910,13 +5968,15 @@ type FirewallPolicyRuleCollectionGroupProperties struct {
 // FirewallPolicyRuleCollectionGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.BeginCreateOrUpdate
 // method.
 type FirewallPolicyRuleCollectionGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallPolicyRuleCollectionGroupsClientBeginDeleteOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.BeginDelete
 // method.
 type FirewallPolicyRuleCollectionGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FirewallPolicyRuleCollectionGroupsClientGetOptions contains the optional parameters for the FirewallPolicyRuleCollectionGroupsClient.Get
@@ -6068,12 +6128,14 @@ type FlowLogStatusParameters struct {
 
 // FlowLogsClientBeginCreateOrUpdateOptions contains the optional parameters for the FlowLogsClient.BeginCreateOrUpdate method.
 type FlowLogsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FlowLogsClientBeginDeleteOptions contains the optional parameters for the FlowLogsClient.BeginDelete method.
 type FlowLogsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // FlowLogsClientGetOptions contains the optional parameters for the FlowLogsClient.Get method.
@@ -6383,12 +6445,14 @@ type HubRouteTableProperties struct {
 // HubRouteTablesClientBeginCreateOrUpdateOptions contains the optional parameters for the HubRouteTablesClient.BeginCreateOrUpdate
 // method.
 type HubRouteTablesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HubRouteTablesClientBeginDeleteOptions contains the optional parameters for the HubRouteTablesClient.BeginDelete method.
 type HubRouteTablesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HubRouteTablesClientGetOptions contains the optional parameters for the HubRouteTablesClient.Get method.
@@ -6440,13 +6504,15 @@ type HubVirtualNetworkConnectionProperties struct {
 // HubVirtualNetworkConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the HubVirtualNetworkConnectionsClient.BeginCreateOrUpdate
 // method.
 type HubVirtualNetworkConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HubVirtualNetworkConnectionsClientBeginDeleteOptions contains the optional parameters for the HubVirtualNetworkConnectionsClient.BeginDelete
 // method.
 type HubVirtualNetworkConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // HubVirtualNetworkConnectionsClientGetOptions contains the optional parameters for the HubVirtualNetworkConnectionsClient.Get
@@ -6554,12 +6620,14 @@ type IPAllocationPropertiesFormat struct {
 // IPAllocationsClientBeginCreateOrUpdateOptions contains the optional parameters for the IPAllocationsClient.BeginCreateOrUpdate
 // method.
 type IPAllocationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPAllocationsClientBeginDeleteOptions contains the optional parameters for the IPAllocationsClient.BeginDelete method.
 type IPAllocationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPAllocationsClientGetOptions contains the optional parameters for the IPAllocationsClient.Get method.
@@ -6709,12 +6777,14 @@ type IPGroupPropertiesFormat struct {
 
 // IPGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the IPGroupsClient.BeginCreateOrUpdate method.
 type IPGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPGroupsClientBeginDeleteOptions contains the optional parameters for the IPGroupsClient.BeginDelete method.
 type IPGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // IPGroupsClientGetOptions contains the optional parameters for the IPGroupsClient.Get method.
@@ -6953,12 +7023,14 @@ type InboundNatRulePropertiesFormat struct {
 // InboundNatRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the InboundNatRulesClient.BeginCreateOrUpdate
 // method.
 type InboundNatRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InboundNatRulesClientBeginDeleteOptions contains the optional parameters for the InboundNatRulesClient.BeginDelete method.
 type InboundNatRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InboundNatRulesClientGetOptions contains the optional parameters for the InboundNatRulesClient.Get method.
@@ -6993,7 +7065,8 @@ type InboundSecurityRule struct {
 // InboundSecurityRuleClientBeginCreateOrUpdateOptions contains the optional parameters for the InboundSecurityRuleClient.BeginCreateOrUpdate
 // method.
 type InboundSecurityRuleClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InboundSecurityRuleProperties - Properties of the Inbound Security Rules resource.
@@ -7325,13 +7398,15 @@ type InterfaceTapConfigurationPropertiesFormat struct {
 // InterfaceTapConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the InterfaceTapConfigurationsClient.BeginCreateOrUpdate
 // method.
 type InterfaceTapConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfaceTapConfigurationsClientBeginDeleteOptions contains the optional parameters for the InterfaceTapConfigurationsClient.BeginDelete
 // method.
 type InterfaceTapConfigurationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfaceTapConfigurationsClientGetOptions contains the optional parameters for the InterfaceTapConfigurationsClient.Get
@@ -7349,24 +7424,28 @@ type InterfaceTapConfigurationsClientListOptions struct {
 // InterfacesClientBeginCreateOrUpdateOptions contains the optional parameters for the InterfacesClient.BeginCreateOrUpdate
 // method.
 type InterfacesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfacesClientBeginDeleteOptions contains the optional parameters for the InterfacesClient.BeginDelete method.
 type InterfacesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfacesClientBeginGetEffectiveRouteTableOptions contains the optional parameters for the InterfacesClient.BeginGetEffectiveRouteTable
 // method.
 type InterfacesClientBeginGetEffectiveRouteTableOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfacesClientBeginListEffectiveNetworkSecurityGroupsOptions contains the optional parameters for the InterfacesClient.BeginListEffectiveNetworkSecurityGroups
 // method.
 type InterfacesClientBeginListEffectiveNetworkSecurityGroupsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // InterfacesClientGetCloudServiceNetworkInterfaceOptions contains the optional parameters for the InterfacesClient.GetCloudServiceNetworkInterface
@@ -7658,13 +7737,15 @@ type LoadBalancerBackendAddressPoolListResult struct {
 // LoadBalancerBackendAddressPoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the LoadBalancerBackendAddressPoolsClient.BeginCreateOrUpdate
 // method.
 type LoadBalancerBackendAddressPoolsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancerBackendAddressPoolsClientBeginDeleteOptions contains the optional parameters for the LoadBalancerBackendAddressPoolsClient.BeginDelete
 // method.
 type LoadBalancerBackendAddressPoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancerBackendAddressPoolsClientGetOptions contains the optional parameters for the LoadBalancerBackendAddressPoolsClient.Get
@@ -7869,24 +7950,28 @@ type LoadBalancerVipSwapRequestFrontendIPConfigurationProperties struct {
 // LoadBalancersClientBeginCreateOrUpdateOptions contains the optional parameters for the LoadBalancersClient.BeginCreateOrUpdate
 // method.
 type LoadBalancersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancersClientBeginDeleteOptions contains the optional parameters for the LoadBalancersClient.BeginDelete method.
 type LoadBalancersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancersClientBeginListInboundNatRulePortMappingsOptions contains the optional parameters for the LoadBalancersClient.BeginListInboundNatRulePortMappings
 // method.
 type LoadBalancersClientBeginListInboundNatRulePortMappingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancersClientBeginSwapPublicIPAddressesOptions contains the optional parameters for the LoadBalancersClient.BeginSwapPublicIPAddresses
 // method.
 type LoadBalancersClientBeginSwapPublicIPAddressesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LoadBalancersClientGetOptions contains the optional parameters for the LoadBalancersClient.Get method.
@@ -8035,13 +8120,15 @@ type LocalNetworkGatewayPropertiesFormat struct {
 // LocalNetworkGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the LocalNetworkGatewaysClient.BeginCreateOrUpdate
 // method.
 type LocalNetworkGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LocalNetworkGatewaysClientBeginDeleteOptions contains the optional parameters for the LocalNetworkGatewaysClient.BeginDelete
 // method.
 type LocalNetworkGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // LocalNetworkGatewaysClientGetOptions contains the optional parameters for the LocalNetworkGatewaysClient.Get method.
@@ -8134,25 +8221,29 @@ type ManagedServiceIdentity struct {
 // ManagementClientBeginDeleteBastionShareableLinkOptions contains the optional parameters for the ManagementClient.BeginDeleteBastionShareableLink
 // method.
 type ManagementClientBeginDeleteBastionShareableLinkOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginGeneratevirtualwanvpnserverconfigurationvpnprofileOptions contains the optional parameters for the
 // ManagementClient.BeginGeneratevirtualwanvpnserverconfigurationvpnprofile method.
 type ManagementClientBeginGeneratevirtualwanvpnserverconfigurationvpnprofileOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginGetActiveSessionsOptions contains the optional parameters for the ManagementClient.BeginGetActiveSessions
 // method.
 type ManagementClientBeginGetActiveSessionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientBeginPutBastionShareableLinkOptions contains the optional parameters for the ManagementClient.BeginPutBastionShareableLink
 // method.
 type ManagementClientBeginPutBastionShareableLinkOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagementClientCheckDNSNameAvailabilityOptions contains the optional parameters for the ManagementClient.CheckDNSNameAvailability
@@ -8329,12 +8420,14 @@ type NatGatewaySKU struct {
 // NatGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the NatGatewaysClient.BeginCreateOrUpdate
 // method.
 type NatGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NatGatewaysClientBeginDeleteOptions contains the optional parameters for the NatGatewaysClient.BeginDelete method.
 type NatGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NatGatewaysClientGetOptions contains the optional parameters for the NatGatewaysClient.Get method.
@@ -8408,12 +8501,14 @@ type NatRulePortMapping struct {
 
 // NatRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the NatRulesClient.BeginCreateOrUpdate method.
 type NatRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NatRulesClientBeginDeleteOptions contains the optional parameters for the NatRulesClient.BeginDelete method.
 type NatRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NatRulesClientGetOptions contains the optional parameters for the NatRulesClient.Get method.
@@ -8715,47 +8810,55 @@ type P2SVPNGatewayProperties struct {
 // P2SVPNGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginCreateOrUpdate
 // method.
 type P2SVPNGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginDeleteOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginDelete method.
 type P2SVPNGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginDisconnectP2SVPNConnectionsOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginDisconnectP2SVPNConnections
 // method.
 type P2SVPNGatewaysClientBeginDisconnectP2SVPNConnectionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginGenerateVPNProfileOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginGenerateVPNProfile
 // method.
 type P2SVPNGatewaysClientBeginGenerateVPNProfileOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginGetP2SVPNConnectionHealthDetailedOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginGetP2SVPNConnectionHealthDetailed
 // method.
 type P2SVPNGatewaysClientBeginGetP2SVPNConnectionHealthDetailedOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginGetP2SVPNConnectionHealthOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginGetP2SVPNConnectionHealth
 // method.
 type P2SVPNGatewaysClientBeginGetP2SVPNConnectionHealthOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginResetOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginReset method.
 type P2SVPNGatewaysClientBeginResetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientBeginUpdateTagsOptions contains the optional parameters for the P2SVPNGatewaysClient.BeginUpdateTags
 // method.
 type P2SVPNGatewaysClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // P2SVPNGatewaysClientGetOptions contains the optional parameters for the P2SVPNGatewaysClient.Get method.
@@ -8916,23 +9019,27 @@ type PacketCaptureStorageLocation struct {
 
 // PacketCapturesClientBeginCreateOptions contains the optional parameters for the PacketCapturesClient.BeginCreate method.
 type PacketCapturesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PacketCapturesClientBeginDeleteOptions contains the optional parameters for the PacketCapturesClient.BeginDelete method.
 type PacketCapturesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PacketCapturesClientBeginGetStatusOptions contains the optional parameters for the PacketCapturesClient.BeginGetStatus
 // method.
 type PacketCapturesClientBeginGetStatusOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PacketCapturesClientBeginStopOptions contains the optional parameters for the PacketCapturesClient.BeginStop method.
 type PacketCapturesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PacketCapturesClientGetOptions contains the optional parameters for the PacketCapturesClient.Get method.
@@ -9147,13 +9254,15 @@ type PrivateDNSZoneGroupPropertiesFormat struct {
 // PrivateDNSZoneGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateDNSZoneGroupsClient.BeginCreateOrUpdate
 // method.
 type PrivateDNSZoneGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateDNSZoneGroupsClientBeginDeleteOptions contains the optional parameters for the PrivateDNSZoneGroupsClient.BeginDelete
 // method.
 type PrivateDNSZoneGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateDNSZoneGroupsClientGetOptions contains the optional parameters for the PrivateDNSZoneGroupsClient.Get method.
@@ -9314,12 +9423,14 @@ type PrivateEndpointProperties struct {
 // PrivateEndpointsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointsClient.BeginDelete method.
 type PrivateEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointsClientGetOptions contains the optional parameters for the PrivateEndpointsClient.Get method.
@@ -9517,31 +9628,36 @@ type PrivateLinkServiceVisibility struct {
 // PrivateLinkServicesClientBeginCheckPrivateLinkServiceVisibilityByResourceGroupOptions contains the optional parameters
 // for the PrivateLinkServicesClient.BeginCheckPrivateLinkServiceVisibilityByResourceGroup method.
 type PrivateLinkServicesClientBeginCheckPrivateLinkServiceVisibilityByResourceGroupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientBeginCheckPrivateLinkServiceVisibilityOptions contains the optional parameters for the PrivateLinkServicesClient.BeginCheckPrivateLinkServiceVisibility
 // method.
 type PrivateLinkServicesClientBeginCheckPrivateLinkServiceVisibilityOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkServicesClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkServicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientBeginDeleteOptions contains the optional parameters for the PrivateLinkServicesClient.BeginDelete
 // method.
 type PrivateLinkServicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the PrivateLinkServicesClient.BeginDeletePrivateEndpointConnection
 // method.
 type PrivateLinkServicesClientBeginDeletePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkServicesClientGetOptions contains the optional parameters for the PrivateLinkServicesClient.Get method.
@@ -9692,7 +9808,8 @@ type ProfilePropertiesFormat struct {
 
 // ProfilesClientBeginDeleteOptions contains the optional parameters for the ProfilesClient.BeginDelete method.
 type ProfilesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ProfilesClientCreateOrUpdateOptions contains the optional parameters for the ProfilesClient.CreateOrUpdate method.
@@ -9876,13 +9993,15 @@ type PublicIPAddressSKU struct {
 // PublicIPAddressesClientBeginCreateOrUpdateOptions contains the optional parameters for the PublicIPAddressesClient.BeginCreateOrUpdate
 // method.
 type PublicIPAddressesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PublicIPAddressesClientBeginDeleteOptions contains the optional parameters for the PublicIPAddressesClient.BeginDelete
 // method.
 type PublicIPAddressesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PublicIPAddressesClientGetCloudServicePublicIPAddressOptions contains the optional parameters for the PublicIPAddressesClient.GetCloudServicePublicIPAddress
@@ -10031,12 +10150,14 @@ type PublicIPPrefixSKU struct {
 // PublicIPPrefixesClientBeginCreateOrUpdateOptions contains the optional parameters for the PublicIPPrefixesClient.BeginCreateOrUpdate
 // method.
 type PublicIPPrefixesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PublicIPPrefixesClientBeginDeleteOptions contains the optional parameters for the PublicIPPrefixesClient.BeginDelete method.
 type PublicIPPrefixesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PublicIPPrefixesClientGetOptions contains the optional parameters for the PublicIPPrefixesClient.Get method.
@@ -10351,12 +10472,14 @@ type RouteFilterRulePropertiesFormat struct {
 // RouteFilterRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the RouteFilterRulesClient.BeginCreateOrUpdate
 // method.
 type RouteFilterRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteFilterRulesClientBeginDeleteOptions contains the optional parameters for the RouteFilterRulesClient.BeginDelete method.
 type RouteFilterRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteFilterRulesClientGetOptions contains the optional parameters for the RouteFilterRulesClient.Get method.
@@ -10373,12 +10496,14 @@ type RouteFilterRulesClientListByRouteFilterOptions struct {
 // RouteFiltersClientBeginCreateOrUpdateOptions contains the optional parameters for the RouteFiltersClient.BeginCreateOrUpdate
 // method.
 type RouteFiltersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteFiltersClientBeginDeleteOptions contains the optional parameters for the RouteFiltersClient.BeginDelete method.
 type RouteFiltersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteFiltersClientGetOptions contains the optional parameters for the RouteFiltersClient.Get method.
@@ -10484,12 +10609,14 @@ type RouteTablePropertiesFormat struct {
 // RouteTablesClientBeginCreateOrUpdateOptions contains the optional parameters for the RouteTablesClient.BeginCreateOrUpdate
 // method.
 type RouteTablesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteTablesClientBeginDeleteOptions contains the optional parameters for the RouteTablesClient.BeginDelete method.
 type RouteTablesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RouteTablesClientGetOptions contains the optional parameters for the RouteTablesClient.Get method.
@@ -10515,12 +10642,14 @@ type RouteTablesClientUpdateTagsOptions struct {
 
 // RoutesClientBeginCreateOrUpdateOptions contains the optional parameters for the RoutesClient.BeginCreateOrUpdate method.
 type RoutesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutesClientBeginDeleteOptions contains the optional parameters for the RoutesClient.BeginDelete method.
 type RoutesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutesClientGetOptions contains the optional parameters for the RoutesClient.Get method.
@@ -10566,12 +10695,14 @@ type RoutingIntent struct {
 // RoutingIntentClientBeginCreateOrUpdateOptions contains the optional parameters for the RoutingIntentClient.BeginCreateOrUpdate
 // method.
 type RoutingIntentClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutingIntentClientBeginDeleteOptions contains the optional parameters for the RoutingIntentClient.BeginDelete method.
 type RoutingIntentClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoutingIntentClientGetOptions contains the optional parameters for the RoutingIntentClient.Get method.
@@ -10734,12 +10865,14 @@ type SecurityGroupViewResult struct {
 // SecurityGroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the SecurityGroupsClient.BeginCreateOrUpdate
 // method.
 type SecurityGroupsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityGroupsClientBeginDeleteOptions contains the optional parameters for the SecurityGroupsClient.BeginDelete method.
 type SecurityGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityGroupsClientGetOptions contains the optional parameters for the SecurityGroupsClient.Get method.
@@ -10814,13 +10947,15 @@ type SecurityPartnerProviderPropertiesFormat struct {
 // SecurityPartnerProvidersClientBeginCreateOrUpdateOptions contains the optional parameters for the SecurityPartnerProvidersClient.BeginCreateOrUpdate
 // method.
 type SecurityPartnerProvidersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityPartnerProvidersClientBeginDeleteOptions contains the optional parameters for the SecurityPartnerProvidersClient.BeginDelete
 // method.
 type SecurityPartnerProvidersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityPartnerProvidersClientGetOptions contains the optional parameters for the SecurityPartnerProvidersClient.Get method.
@@ -10948,12 +11083,14 @@ type SecurityRulePropertiesFormat struct {
 // SecurityRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the SecurityRulesClient.BeginCreateOrUpdate
 // method.
 type SecurityRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityRulesClientBeginDeleteOptions contains the optional parameters for the SecurityRulesClient.BeginDelete method.
 type SecurityRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SecurityRulesClientGetOptions contains the optional parameters for the SecurityRulesClient.Get method.
@@ -11052,13 +11189,15 @@ type ServiceDelegationPropertiesFormat struct {
 // ServiceEndpointPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceEndpointPoliciesClient.BeginCreateOrUpdate
 // method.
 type ServiceEndpointPoliciesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceEndpointPoliciesClientBeginDeleteOptions contains the optional parameters for the ServiceEndpointPoliciesClient.BeginDelete
 // method.
 type ServiceEndpointPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceEndpointPoliciesClientGetOptions contains the optional parameters for the ServiceEndpointPoliciesClient.Get method.
@@ -11157,13 +11296,15 @@ type ServiceEndpointPolicyDefinitionPropertiesFormat struct {
 // ServiceEndpointPolicyDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceEndpointPolicyDefinitionsClient.BeginCreateOrUpdate
 // method.
 type ServiceEndpointPolicyDefinitionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceEndpointPolicyDefinitionsClientBeginDeleteOptions contains the optional parameters for the ServiceEndpointPolicyDefinitionsClient.BeginDelete
 // method.
 type ServiceEndpointPolicyDefinitionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ServiceEndpointPolicyDefinitionsClientGetOptions contains the optional parameters for the ServiceEndpointPolicyDefinitionsClient.Get
@@ -11497,24 +11638,28 @@ type SubnetPropertiesFormat struct {
 
 // SubnetsClientBeginCreateOrUpdateOptions contains the optional parameters for the SubnetsClient.BeginCreateOrUpdate method.
 type SubnetsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubnetsClientBeginDeleteOptions contains the optional parameters for the SubnetsClient.BeginDelete method.
 type SubnetsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubnetsClientBeginPrepareNetworkPoliciesOptions contains the optional parameters for the SubnetsClient.BeginPrepareNetworkPolicies
 // method.
 type SubnetsClientBeginPrepareNetworkPoliciesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubnetsClientBeginUnprepareNetworkPoliciesOptions contains the optional parameters for the SubnetsClient.BeginUnprepareNetworkPolicies
 // method.
 type SubnetsClientBeginUnprepareNetworkPoliciesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubnetsClientGetOptions contains the optional parameters for the SubnetsClient.Get method.
@@ -12060,12 +12205,14 @@ type VPNConnectionProperties struct {
 // VPNConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VPNConnectionsClient.BeginCreateOrUpdate
 // method.
 type VPNConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNConnectionsClientBeginDeleteOptions contains the optional parameters for the VPNConnectionsClient.BeginDelete method.
 type VPNConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNConnectionsClientBeginStartPacketCaptureOptions contains the optional parameters for the VPNConnectionsClient.BeginStartPacketCapture
@@ -12073,6 +12220,8 @@ type VPNConnectionsClientBeginDeleteOptions struct {
 type VPNConnectionsClientBeginStartPacketCaptureOptions struct {
 	// Vpn Connection packet capture parameters supplied to start packet capture on gateway connection.
 	Parameters *VPNConnectionPacketCaptureStartParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNConnectionsClientBeginStopPacketCaptureOptions contains the optional parameters for the VPNConnectionsClient.BeginStopPacketCapture
@@ -12080,6 +12229,8 @@ type VPNConnectionsClientBeginStartPacketCaptureOptions struct {
 type VPNConnectionsClientBeginStopPacketCaptureOptions struct {
 	// Vpn Connection packet capture parameters supplied to stop packet capture on gateway connection.
 	Parameters *VPNConnectionPacketCaptureStopParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNConnectionsClientGetOptions contains the optional parameters for the VPNConnectionsClient.Get method.
@@ -12231,17 +12382,20 @@ type VPNGatewayProperties struct {
 // VPNGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the VPNGatewaysClient.BeginCreateOrUpdate
 // method.
 type VPNGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientBeginDeleteOptions contains the optional parameters for the VPNGatewaysClient.BeginDelete method.
 type VPNGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientBeginResetOptions contains the optional parameters for the VPNGatewaysClient.BeginReset method.
 type VPNGatewaysClientBeginResetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientBeginStartPacketCaptureOptions contains the optional parameters for the VPNGatewaysClient.BeginStartPacketCapture
@@ -12249,6 +12403,8 @@ type VPNGatewaysClientBeginResetOptions struct {
 type VPNGatewaysClientBeginStartPacketCaptureOptions struct {
 	// Vpn gateway packet capture parameters supplied to start packet capture on vpn gateway.
 	Parameters *VPNGatewayPacketCaptureStartParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientBeginStopPacketCaptureOptions contains the optional parameters for the VPNGatewaysClient.BeginStopPacketCapture
@@ -12256,11 +12412,14 @@ type VPNGatewaysClientBeginStartPacketCaptureOptions struct {
 type VPNGatewaysClientBeginStopPacketCaptureOptions struct {
 	// Vpn gateway packet capture parameters supplied to stop packet capture on vpn gateway.
 	Parameters *VPNGatewayPacketCaptureStopParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientBeginUpdateTagsOptions contains the optional parameters for the VPNGatewaysClient.BeginUpdateTags method.
 type VPNGatewaysClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNGatewaysClientGetOptions contains the optional parameters for the VPNGatewaysClient.Get method.
@@ -12291,13 +12450,15 @@ type VPNLinkBgpSettings struct {
 // VPNLinkConnectionsClientBeginGetIkeSasOptions contains the optional parameters for the VPNLinkConnectionsClient.BeginGetIkeSas
 // method.
 type VPNLinkConnectionsClientBeginGetIkeSasOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNLinkConnectionsClientBeginResetConnectionOptions contains the optional parameters for the VPNLinkConnectionsClient.BeginResetConnection
 // method.
 type VPNLinkConnectionsClientBeginResetConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNLinkConnectionsClientListByVPNConnectionOptions contains the optional parameters for the VPNLinkConnectionsClient.ListByVPNConnection
@@ -12454,19 +12615,22 @@ type VPNServerConfigurationProperties struct {
 // VPNServerConfigurationsAssociatedWithVirtualWanClientBeginListOptions contains the optional parameters for the VPNServerConfigurationsAssociatedWithVirtualWanClient.BeginList
 // method.
 type VPNServerConfigurationsAssociatedWithVirtualWanClientBeginListOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNServerConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the VPNServerConfigurationsClient.BeginCreateOrUpdate
 // method.
 type VPNServerConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNServerConfigurationsClientBeginDeleteOptions contains the optional parameters for the VPNServerConfigurationsClient.BeginDelete
 // method.
 type VPNServerConfigurationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNServerConfigurationsClientGetOptions contains the optional parameters for the VPNServerConfigurationsClient.Get method.
@@ -12685,12 +12849,14 @@ type VPNSiteProperties struct {
 
 // VPNSitesClientBeginCreateOrUpdateOptions contains the optional parameters for the VPNSitesClient.BeginCreateOrUpdate method.
 type VPNSitesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNSitesClientBeginDeleteOptions contains the optional parameters for the VPNSitesClient.BeginDelete method.
 type VPNSitesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VPNSitesClientGetOptions contains the optional parameters for the VPNSitesClient.Get method.
@@ -12716,7 +12882,8 @@ type VPNSitesClientUpdateTagsOptions struct {
 // VPNSitesConfigurationClientBeginDownloadOptions contains the optional parameters for the VPNSitesConfigurationClient.BeginDownload
 // method.
 type VPNSitesConfigurationClientBeginDownloadOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VerificationIPFlowParameters - Parameters that define the IP flow to be verified.
@@ -12963,13 +13130,15 @@ type VirtualApplianceSiteProperties struct {
 // VirtualApplianceSitesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualApplianceSitesClient.BeginCreateOrUpdate
 // method.
 type VirtualApplianceSitesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualApplianceSitesClientBeginDeleteOptions contains the optional parameters for the VirtualApplianceSitesClient.BeginDelete
 // method.
 type VirtualApplianceSitesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualApplianceSitesClientGetOptions contains the optional parameters for the VirtualApplianceSitesClient.Get method.
@@ -12985,13 +13154,15 @@ type VirtualApplianceSitesClientListOptions struct {
 // VirtualAppliancesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualAppliancesClient.BeginCreateOrUpdate
 // method.
 type VirtualAppliancesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualAppliancesClientBeginDeleteOptions contains the optional parameters for the VirtualAppliancesClient.BeginDelete
 // method.
 type VirtualAppliancesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualAppliancesClientGetOptions contains the optional parameters for the VirtualAppliancesClient.Get method.
@@ -13046,13 +13217,15 @@ type VirtualHub struct {
 // VirtualHubBgpConnectionClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubBgpConnectionClient.BeginCreateOrUpdate
 // method.
 type VirtualHubBgpConnectionClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubBgpConnectionClientBeginDeleteOptions contains the optional parameters for the VirtualHubBgpConnectionClient.BeginDelete
 // method.
 type VirtualHubBgpConnectionClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubBgpConnectionClientGetOptions contains the optional parameters for the VirtualHubBgpConnectionClient.Get method.
@@ -13063,13 +13236,15 @@ type VirtualHubBgpConnectionClientGetOptions struct {
 // VirtualHubBgpConnectionsClientBeginListAdvertisedRoutesOptions contains the optional parameters for the VirtualHubBgpConnectionsClient.BeginListAdvertisedRoutes
 // method.
 type VirtualHubBgpConnectionsClientBeginListAdvertisedRoutesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubBgpConnectionsClientBeginListLearnedRoutesOptions contains the optional parameters for the VirtualHubBgpConnectionsClient.BeginListLearnedRoutes
 // method.
 type VirtualHubBgpConnectionsClientBeginListLearnedRoutesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubBgpConnectionsClientListOptions contains the optional parameters for the VirtualHubBgpConnectionsClient.List
@@ -13112,13 +13287,15 @@ type VirtualHubID struct {
 // VirtualHubIPConfigurationClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubIPConfigurationClient.BeginCreateOrUpdate
 // method.
 type VirtualHubIPConfigurationClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubIPConfigurationClientBeginDeleteOptions contains the optional parameters for the VirtualHubIPConfigurationClient.BeginDelete
 // method.
 type VirtualHubIPConfigurationClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubIPConfigurationClientGetOptions contains the optional parameters for the VirtualHubIPConfigurationClient.Get
@@ -13238,13 +13415,15 @@ type VirtualHubRouteTableV2Properties struct {
 // VirtualHubRouteTableV2SClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubRouteTableV2SClient.BeginCreateOrUpdate
 // method.
 type VirtualHubRouteTableV2SClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubRouteTableV2SClientBeginDeleteOptions contains the optional parameters for the VirtualHubRouteTableV2SClient.BeginDelete
 // method.
 type VirtualHubRouteTableV2SClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubRouteTableV2SClientGetOptions contains the optional parameters for the VirtualHubRouteTableV2SClient.Get method.
@@ -13275,12 +13454,14 @@ type VirtualHubRouteV2 struct {
 // VirtualHubsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualHubsClient.BeginCreateOrUpdate
 // method.
 type VirtualHubsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubsClientBeginDeleteOptions contains the optional parameters for the VirtualHubsClient.BeginDelete method.
 type VirtualHubsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubsClientBeginGetEffectiveVirtualHubRoutesOptions contains the optional parameters for the VirtualHubsClient.BeginGetEffectiveVirtualHubRoutes
@@ -13288,6 +13469,8 @@ type VirtualHubsClientBeginDeleteOptions struct {
 type VirtualHubsClientBeginGetEffectiveVirtualHubRoutesOptions struct {
 	// Parameters supplied to get the effective routes for a specific resource.
 	EffectiveRoutesParameters *EffectiveRoutesParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualHubsClientGetOptions contains the optional parameters for the VirtualHubsClient.Get method.
@@ -13595,37 +13778,43 @@ type VirtualNetworkGatewayConnectionPropertiesFormat struct {
 // VirtualNetworkGatewayConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginDelete
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginGetIkeSasOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginGetIkeSas
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginGetIkeSasOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginResetConnectionOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginResetConnection
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginResetConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginResetSharedKeyOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginResetSharedKey
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginResetSharedKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginSetSharedKeyOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginSetSharedKey
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginSetSharedKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginStartPacketCaptureOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginStartPacketCapture
@@ -13633,18 +13822,22 @@ type VirtualNetworkGatewayConnectionsClientBeginSetSharedKeyOptions struct {
 type VirtualNetworkGatewayConnectionsClientBeginStartPacketCaptureOptions struct {
 	// Virtual network gateway packet capture parameters supplied to start packet capture on gateway connection.
 	Parameters *VPNPacketCaptureStartParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginStopPacketCaptureOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginStopPacketCapture
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginStopPacketCaptureOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientBeginUpdateTagsOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.BeginUpdateTags
 // method.
 type VirtualNetworkGatewayConnectionsClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayConnectionsClientGetOptions contains the optional parameters for the VirtualNetworkGatewayConnectionsClient.Get
@@ -13758,13 +13951,15 @@ type VirtualNetworkGatewayNatRuleProperties struct {
 // VirtualNetworkGatewayNatRulesClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkGatewayNatRulesClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkGatewayNatRulesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayNatRulesClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkGatewayNatRulesClient.BeginDelete
 // method.
 type VirtualNetworkGatewayNatRulesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewayNatRulesClientGetOptions contains the optional parameters for the VirtualNetworkGatewayNatRulesClient.Get
@@ -13859,37 +14054,43 @@ type VirtualNetworkGatewaySKU struct {
 // VirtualNetworkGatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkGatewaysClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginDelete
 // method.
 type VirtualNetworkGatewaysClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginDisconnectVirtualNetworkGatewayVPNConnectionsOptions contains the optional parameters
 // for the VirtualNetworkGatewaysClient.BeginDisconnectVirtualNetworkGatewayVPNConnections method.
 type VirtualNetworkGatewaysClientBeginDisconnectVirtualNetworkGatewayVPNConnectionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGenerateVPNProfileOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGenerateVPNProfile
 // method.
 type VirtualNetworkGatewaysClientBeginGenerateVPNProfileOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGeneratevpnclientpackageOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGeneratevpnclientpackage
 // method.
 type VirtualNetworkGatewaysClientBeginGeneratevpnclientpackageOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetAdvertisedRoutesOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetAdvertisedRoutes
 // method.
 type VirtualNetworkGatewaysClientBeginGetAdvertisedRoutesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetBgpPeerStatusOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetBgpPeerStatus
@@ -13897,30 +14098,36 @@ type VirtualNetworkGatewaysClientBeginGetAdvertisedRoutesOptions struct {
 type VirtualNetworkGatewaysClientBeginGetBgpPeerStatusOptions struct {
 	// The IP address of the peer to retrieve the status of.
 	Peer *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetLearnedRoutesOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetLearnedRoutes
 // method.
 type VirtualNetworkGatewaysClientBeginGetLearnedRoutesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetVPNProfilePackageURLOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetVPNProfilePackageURL
 // method.
 type VirtualNetworkGatewaysClientBeginGetVPNProfilePackageURLOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetVpnclientConnectionHealthOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetVpnclientConnectionHealth
 // method.
 type VirtualNetworkGatewaysClientBeginGetVpnclientConnectionHealthOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginGetVpnclientIPSecParametersOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginGetVpnclientIPSecParameters
 // method.
 type VirtualNetworkGatewaysClientBeginGetVpnclientIPSecParametersOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginResetOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginReset
@@ -13928,18 +14135,22 @@ type VirtualNetworkGatewaysClientBeginGetVpnclientIPSecParametersOptions struct 
 type VirtualNetworkGatewaysClientBeginResetOptions struct {
 	// Virtual network gateway vip address supplied to the begin reset of the active-active feature enabled gateway.
 	GatewayVip *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginResetVPNClientSharedKeyOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginResetVPNClientSharedKey
 // method.
 type VirtualNetworkGatewaysClientBeginResetVPNClientSharedKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginSetVpnclientIPSecParametersOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginSetVpnclientIPSecParameters
 // method.
 type VirtualNetworkGatewaysClientBeginSetVpnclientIPSecParametersOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginStartPacketCaptureOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginStartPacketCapture
@@ -13947,18 +14158,22 @@ type VirtualNetworkGatewaysClientBeginSetVpnclientIPSecParametersOptions struct 
 type VirtualNetworkGatewaysClientBeginStartPacketCaptureOptions struct {
 	// Virtual network gateway packet capture parameters supplied to start packet capture on gateway.
 	Parameters *VPNPacketCaptureStartParameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginStopPacketCaptureOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginStopPacketCapture
 // method.
 type VirtualNetworkGatewaysClientBeginStopPacketCaptureOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientBeginUpdateTagsOptions contains the optional parameters for the VirtualNetworkGatewaysClient.BeginUpdateTags
 // method.
 type VirtualNetworkGatewaysClientBeginUpdateTagsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkGatewaysClientGetOptions contains the optional parameters for the VirtualNetworkGatewaysClient.Get method.
@@ -14088,6 +14303,8 @@ type VirtualNetworkPeeringPropertiesFormat struct {
 // VirtualNetworkPeeringsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkPeeringsClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkPeeringsClientBeginCreateOrUpdateOptions struct {
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// Parameter indicates the intention to sync the peering with the current address space on the remote vNet after it's updated.
 	SyncRemoteAddressSpace *SyncRemoteAddressSpace
 }
@@ -14095,7 +14312,8 @@ type VirtualNetworkPeeringsClientBeginCreateOrUpdateOptions struct {
 // VirtualNetworkPeeringsClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkPeeringsClient.BeginDelete
 // method.
 type VirtualNetworkPeeringsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkPeeringsClientGetOptions contains the optional parameters for the VirtualNetworkPeeringsClient.Get method.
@@ -14208,13 +14426,15 @@ type VirtualNetworkTapPropertiesFormat struct {
 // VirtualNetworkTapsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworkTapsClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworkTapsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkTapsClientBeginDeleteOptions contains the optional parameters for the VirtualNetworkTapsClient.BeginDelete
 // method.
 type VirtualNetworkTapsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworkTapsClientGetOptions contains the optional parameters for the VirtualNetworkTapsClient.Get method.
@@ -14269,12 +14489,14 @@ type VirtualNetworkUsageName struct {
 // VirtualNetworksClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualNetworksClient.BeginCreateOrUpdate
 // method.
 type VirtualNetworksClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworksClientBeginDeleteOptions contains the optional parameters for the VirtualNetworksClient.BeginDelete method.
 type VirtualNetworksClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualNetworksClientCheckIPAddressAvailabilityOptions contains the optional parameters for the VirtualNetworksClient.CheckIPAddressAvailability
@@ -14384,13 +14606,15 @@ type VirtualRouterPeeringProperties struct {
 // VirtualRouterPeeringsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualRouterPeeringsClient.BeginCreateOrUpdate
 // method.
 type VirtualRouterPeeringsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualRouterPeeringsClientBeginDeleteOptions contains the optional parameters for the VirtualRouterPeeringsClient.BeginDelete
 // method.
 type VirtualRouterPeeringsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualRouterPeeringsClientGetOptions contains the optional parameters for the VirtualRouterPeeringsClient.Get method.
@@ -14427,12 +14651,14 @@ type VirtualRouterPropertiesFormat struct {
 // VirtualRoutersClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualRoutersClient.BeginCreateOrUpdate
 // method.
 type VirtualRoutersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualRoutersClientBeginDeleteOptions contains the optional parameters for the VirtualRoutersClient.BeginDelete method.
 type VirtualRoutersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualRoutersClientGetOptions contains the optional parameters for the VirtualRoutersClient.Get method.
@@ -14533,12 +14759,14 @@ type VirtualWanVPNProfileParameters struct {
 // VirtualWansClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualWansClient.BeginCreateOrUpdate
 // method.
 type VirtualWansClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualWansClientBeginDeleteOptions contains the optional parameters for the VirtualWansClient.BeginDelete method.
 type VirtualWansClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualWansClientGetOptions contains the optional parameters for the VirtualWansClient.Get method.
@@ -14610,70 +14838,82 @@ type WatcherPropertiesFormat struct {
 // WatchersClientBeginCheckConnectivityOptions contains the optional parameters for the WatchersClient.BeginCheckConnectivity
 // method.
 type WatchersClientBeginCheckConnectivityOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginDeleteOptions contains the optional parameters for the WatchersClient.BeginDelete method.
 type WatchersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetAzureReachabilityReportOptions contains the optional parameters for the WatchersClient.BeginGetAzureReachabilityReport
 // method.
 type WatchersClientBeginGetAzureReachabilityReportOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetFlowLogStatusOptions contains the optional parameters for the WatchersClient.BeginGetFlowLogStatus
 // method.
 type WatchersClientBeginGetFlowLogStatusOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetNetworkConfigurationDiagnosticOptions contains the optional parameters for the WatchersClient.BeginGetNetworkConfigurationDiagnostic
 // method.
 type WatchersClientBeginGetNetworkConfigurationDiagnosticOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetNextHopOptions contains the optional parameters for the WatchersClient.BeginGetNextHop method.
 type WatchersClientBeginGetNextHopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetTroubleshootingOptions contains the optional parameters for the WatchersClient.BeginGetTroubleshooting
 // method.
 type WatchersClientBeginGetTroubleshootingOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetTroubleshootingResultOptions contains the optional parameters for the WatchersClient.BeginGetTroubleshootingResult
 // method.
 type WatchersClientBeginGetTroubleshootingResultOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginGetVMSecurityRulesOptions contains the optional parameters for the WatchersClient.BeginGetVMSecurityRules
 // method.
 type WatchersClientBeginGetVMSecurityRulesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginListAvailableProvidersOptions contains the optional parameters for the WatchersClient.BeginListAvailableProviders
 // method.
 type WatchersClientBeginListAvailableProvidersOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginSetFlowLogConfigurationOptions contains the optional parameters for the WatchersClient.BeginSetFlowLogConfiguration
 // method.
 type WatchersClientBeginSetFlowLogConfigurationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientBeginVerifyIPFlowOptions contains the optional parameters for the WatchersClient.BeginVerifyIPFlow method.
 type WatchersClientBeginVerifyIPFlowOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WatchersClientCreateOrUpdateOptions contains the optional parameters for the WatchersClient.CreateOrUpdate method.
@@ -14730,7 +14970,8 @@ type WebApplicationFirewallCustomRule struct {
 // WebApplicationFirewallPoliciesClientBeginDeleteOptions contains the optional parameters for the WebApplicationFirewallPoliciesClient.BeginDelete
 // method.
 type WebApplicationFirewallPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebApplicationFirewallPoliciesClientCreateOrUpdateOptions contains the optional parameters for the WebApplicationFirewallPoliciesClient.CreateOrUpdate

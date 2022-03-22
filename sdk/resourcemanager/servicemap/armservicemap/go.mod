@@ -1,3 +1,6 @@
 module github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/servicemap/armservicemap
 
-go 1.16
+go 1.18
+
+require github.com/Azure/azure-sdk-for-go/sdk/azcore v0.22.1-0.20220315231014-ed309e73db6b
+replace github.com/Azure/azure-sdk-for-go/sdk/azcore => ../../../../../../Azure/azure-sdk-for-go/sdk/azcore

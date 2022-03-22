@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,13 +56,26 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // automationAccountName - The name of the automation account.
 // options - PrivateLinkResourcesClientAutomationOptions contains the optional parameters for the PrivateLinkResourcesClient.Automation
 // method.
-func (client *PrivateLinkResourcesClient) Automation(resourceGroupName string, automationAccountName string, options *PrivateLinkResourcesClientAutomationOptions) *PrivateLinkResourcesClientAutomationPager {
-	return &PrivateLinkResourcesClientAutomationPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.automationCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *PrivateLinkResourcesClient) Automation(resourceGroupName string, automationAccountName string, options *PrivateLinkResourcesClientAutomationOptions) *runtime.Pager[PrivateLinkResourcesClientAutomationResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientAutomationResponse]{
+		More: func(page PrivateLinkResourcesClientAutomationResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientAutomationResponse) (PrivateLinkResourcesClientAutomationResponse, error) {
+			req, err := client.automationCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			if err != nil {
+				return PrivateLinkResourcesClientAutomationResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientAutomationResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientAutomationResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.automationHandleResponse(resp)
+		},
+	})
 }
 
 // automationCreateRequest creates the Automation request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -152,25 +152,29 @@ type ConfigurationStoreUpdateParameters struct {
 // ConfigurationStoresClientBeginCreateOptions contains the optional parameters for the ConfigurationStoresClient.BeginCreate
 // method.
 type ConfigurationStoresClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationStoresClientBeginDeleteOptions contains the optional parameters for the ConfigurationStoresClient.BeginDelete
 // method.
 type ConfigurationStoresClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationStoresClientBeginPurgeDeletedOptions contains the optional parameters for the ConfigurationStoresClient.BeginPurgeDeleted
 // method.
 type ConfigurationStoresClientBeginPurgeDeletedOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationStoresClientBeginUpdateOptions contains the optional parameters for the ConfigurationStoresClient.BeginUpdate
 // method.
 type ConfigurationStoresClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationStoresClientGetDeletedOptions contains the optional parameters for the ConfigurationStoresClient.GetDeleted
@@ -354,7 +358,8 @@ type KeyValueProperties struct {
 
 // KeyValuesClientBeginDeleteOptions contains the optional parameters for the KeyValuesClient.BeginDelete method.
 type KeyValuesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KeyValuesClientCreateOrUpdateOptions contains the optional parameters for the KeyValuesClient.CreateOrUpdate method.
@@ -577,13 +582,15 @@ type PrivateEndpointConnectionReference struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get

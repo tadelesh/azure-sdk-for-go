@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServerDevOpsAuditSettingsClient(subscriptionID string, credential azcore
 // parameters - Properties of DevOps audit settings
 // options - ServerDevOpsAuditSettingsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerDevOpsAuditSettingsClient.BeginCreateOrUpdate
 // method.
-func (client *ServerDevOpsAuditSettingsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, devOpsAuditingSettingsName string, parameters ServerDevOpsAuditingSettings, options *ServerDevOpsAuditSettingsClientBeginCreateOrUpdateOptions) (ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, devOpsAuditingSettingsName, parameters, options)
-	if err != nil {
-		return ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerDevOpsAuditSettingsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, devOpsAuditingSettingsName string, parameters ServerDevOpsAuditingSettings, options *ServerDevOpsAuditSettingsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerDevOpsAuditSettingsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, devOpsAuditingSettingsName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerDevOpsAuditSettingsClientCreateOrUpdateResponse]("ServerDevOpsAuditSettingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerDevOpsAuditSettingsClientCreateOrUpdateResponse]("ServerDevOpsAuditSettingsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerDevOpsAuditSettingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerDevOpsAuditSettingsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a server's DevOps audit settings.
@@ -190,16 +186,32 @@ func (client *ServerDevOpsAuditSettingsClient) getHandleResponse(resp *http.Resp
 // serverName - The name of the server.
 // options - ServerDevOpsAuditSettingsClientListByServerOptions contains the optional parameters for the ServerDevOpsAuditSettingsClient.ListByServer
 // method.
-func (client *ServerDevOpsAuditSettingsClient) ListByServer(resourceGroupName string, serverName string, options *ServerDevOpsAuditSettingsClientListByServerOptions) *ServerDevOpsAuditSettingsClientListByServerPager {
-	return &ServerDevOpsAuditSettingsClientListByServerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerDevOpsAuditSettingsClient) ListByServer(resourceGroupName string, serverName string, options *ServerDevOpsAuditSettingsClientListByServerOptions) *runtime.Pager[ServerDevOpsAuditSettingsClientListByServerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerDevOpsAuditSettingsClientListByServerResponse]{
+		More: func(page ServerDevOpsAuditSettingsClientListByServerResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServerDevOpsAuditSettingsClientListByServerResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServerDevOpsAuditSettingsListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ServerDevOpsAuditSettingsClientListByServerResponse) (ServerDevOpsAuditSettingsClientListByServerResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServerDevOpsAuditSettingsClientListByServerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerDevOpsAuditSettingsClientListByServerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerDevOpsAuditSettingsClientListByServerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByServerHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.

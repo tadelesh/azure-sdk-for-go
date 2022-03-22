@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewBotsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // botName - The name of the Bot resource.
 // parameters - The parameters to provide for the created Azure Health Bot.
 // options - BotsClientBeginCreateOptions contains the optional parameters for the BotsClient.BeginCreate method.
-func (client *BotsClient) BeginCreate(ctx context.Context, resourceGroupName string, botName string, parameters HealthBot, options *BotsClientBeginCreateOptions) (BotsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, botName, parameters, options)
-	if err != nil {
-		return BotsClientCreatePollerResponse{}, err
+func (client *BotsClient) BeginCreate(ctx context.Context, resourceGroupName string, botName string, parameters HealthBot, options *BotsClientBeginCreateOptions) (*armruntime.Poller[BotsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, botName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BotsClientCreateResponse]("BotsClient.Create", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BotsClientCreateResponse]("BotsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := BotsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("BotsClient.Create", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return BotsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &BotsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Create a new Azure Health Bot.
@@ -119,20 +115,16 @@ func (client *BotsClient) createCreateRequest(ctx context.Context, resourceGroup
 // resourceGroupName - The name of the Bot resource group in the user subscription.
 // botName - The name of the Bot resource.
 // options - BotsClientBeginDeleteOptions contains the optional parameters for the BotsClient.BeginDelete method.
-func (client *BotsClient) BeginDelete(ctx context.Context, resourceGroupName string, botName string, options *BotsClientBeginDeleteOptions) (BotsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, botName, options)
-	if err != nil {
-		return BotsClientDeletePollerResponse{}, err
+func (client *BotsClient) BeginDelete(ctx context.Context, resourceGroupName string, botName string, options *BotsClientBeginDeleteOptions) (*armruntime.Poller[BotsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, botName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BotsClientDeleteResponse]("BotsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BotsClientDeleteResponse]("BotsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := BotsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("BotsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return BotsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &BotsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete a HealthBot.
@@ -236,16 +228,32 @@ func (client *BotsClient) getHandleResponse(resp *http.Response) (BotsClientGetR
 // List - Returns all the resources of a particular type belonging to a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - BotsClientListOptions contains the optional parameters for the BotsClient.List method.
-func (client *BotsClient) List(options *BotsClientListOptions) *BotsClientListPager {
-	return &BotsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *BotsClient) List(options *BotsClientListOptions) *runtime.Pager[BotsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BotsClientListResponse]{
+		More: func(page BotsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BotsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BotResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *BotsClientListResponse) (BotsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BotsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BotsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BotsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -280,16 +288,32 @@ func (client *BotsClient) listHandleResponse(resp *http.Response) (BotsClientLis
 // resourceGroupName - The name of the Bot resource group in the user subscription.
 // options - BotsClientListByResourceGroupOptions contains the optional parameters for the BotsClient.ListByResourceGroup
 // method.
-func (client *BotsClient) ListByResourceGroup(resourceGroupName string, options *BotsClientListByResourceGroupOptions) *BotsClientListByResourceGroupPager {
-	return &BotsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *BotsClient) ListByResourceGroup(resourceGroupName string, options *BotsClientListByResourceGroupOptions) *runtime.Pager[BotsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BotsClientListByResourceGroupResponse]{
+		More: func(page BotsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BotsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BotResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *BotsClientListByResourceGroupResponse) (BotsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BotsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BotsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BotsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -252,16 +252,32 @@ func (client *SubAccountTagRulesClient) getHandleResponse(resp *http.Response) (
 // monitorName - Monitor resource name
 // subAccountName - Sub Account resource name
 // options - SubAccountTagRulesClientListOptions contains the optional parameters for the SubAccountTagRulesClient.List method.
-func (client *SubAccountTagRulesClient) List(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountTagRulesClientListOptions) *SubAccountTagRulesClientListPager {
-	return &SubAccountTagRulesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+func (client *SubAccountTagRulesClient) List(resourceGroupName string, monitorName string, subAccountName string, options *SubAccountTagRulesClientListOptions) *runtime.Pager[SubAccountTagRulesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SubAccountTagRulesClientListResponse]{
+		More: func(page SubAccountTagRulesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SubAccountTagRulesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitoringTagRulesListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *SubAccountTagRulesClientListResponse) (SubAccountTagRulesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, monitorName, subAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SubAccountTagRulesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SubAccountTagRulesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SubAccountTagRulesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

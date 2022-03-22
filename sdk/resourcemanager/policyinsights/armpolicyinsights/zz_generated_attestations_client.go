@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewAttestationsClient(subscriptionID string, credential azcore.TokenCredent
 // parameters - The attestation parameters.
 // options - AttestationsClientBeginCreateOrUpdateAtResourceOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtResource
 // method.
-func (client *AttestationsClient) BeginCreateOrUpdateAtResource(ctx context.Context, resourceID string, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtResourceOptions) (AttestationsClientCreateOrUpdateAtResourcePollerResponse, error) {
-	resp, err := client.createOrUpdateAtResource(ctx, resourceID, attestationName, parameters, options)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtResourcePollerResponse{}, err
+func (client *AttestationsClient) BeginCreateOrUpdateAtResource(ctx context.Context, resourceID string, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtResourceOptions) (*armruntime.Poller[AttestationsClientCreateOrUpdateAtResourceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateAtResource(ctx, resourceID, attestationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AttestationsClientCreateOrUpdateAtResourceResponse]("AttestationsClient.CreateOrUpdateAtResource", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AttestationsClientCreateOrUpdateAtResourceResponse]("AttestationsClient.CreateOrUpdateAtResource", options.ResumeToken, client.pl, nil)
 	}
-	result := AttestationsClientCreateOrUpdateAtResourcePollerResponse{}
-	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtResource", "", resp, client.pl)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtResourcePollerResponse{}, err
-	}
-	result.Poller = &AttestationsClientCreateOrUpdateAtResourcePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateAtResource - Creates or updates an attestation at resource scope.
@@ -116,20 +112,16 @@ func (client *AttestationsClient) createOrUpdateAtResourceCreateRequest(ctx cont
 // parameters - The attestation parameters.
 // options - AttestationsClientBeginCreateOrUpdateAtResourceGroupOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtResourceGroup
 // method.
-func (client *AttestationsClient) BeginCreateOrUpdateAtResourceGroup(ctx context.Context, resourceGroupName string, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtResourceGroupOptions) (AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse, error) {
-	resp, err := client.createOrUpdateAtResourceGroup(ctx, resourceGroupName, attestationName, parameters, options)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}, err
+func (client *AttestationsClient) BeginCreateOrUpdateAtResourceGroup(ctx context.Context, resourceGroupName string, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtResourceGroupOptions) (*armruntime.Poller[AttestationsClientCreateOrUpdateAtResourceGroupResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateAtResourceGroup(ctx, resourceGroupName, attestationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AttestationsClientCreateOrUpdateAtResourceGroupResponse]("AttestationsClient.CreateOrUpdateAtResourceGroup", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AttestationsClientCreateOrUpdateAtResourceGroupResponse]("AttestationsClient.CreateOrUpdateAtResourceGroup", options.ResumeToken, client.pl, nil)
 	}
-	result := AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}
-	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtResourceGroup", "", resp, client.pl)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}, err
-	}
-	result.Poller = &AttestationsClientCreateOrUpdateAtResourceGroupPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateAtResourceGroup - Creates or updates an attestation at resource group scope.
@@ -181,20 +173,16 @@ func (client *AttestationsClient) createOrUpdateAtResourceGroupCreateRequest(ctx
 // parameters - The attestation parameters.
 // options - AttestationsClientBeginCreateOrUpdateAtSubscriptionOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtSubscription
 // method.
-func (client *AttestationsClient) BeginCreateOrUpdateAtSubscription(ctx context.Context, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtSubscriptionOptions) (AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse, error) {
-	resp, err := client.createOrUpdateAtSubscription(ctx, attestationName, parameters, options)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}, err
+func (client *AttestationsClient) BeginCreateOrUpdateAtSubscription(ctx context.Context, attestationName string, parameters Attestation, options *AttestationsClientBeginCreateOrUpdateAtSubscriptionOptions) (*armruntime.Poller[AttestationsClientCreateOrUpdateAtSubscriptionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdateAtSubscription(ctx, attestationName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AttestationsClientCreateOrUpdateAtSubscriptionResponse]("AttestationsClient.CreateOrUpdateAtSubscription", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AttestationsClientCreateOrUpdateAtSubscriptionResponse]("AttestationsClient.CreateOrUpdateAtSubscription", options.ResumeToken, client.pl, nil)
 	}
-	result := AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}
-	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtSubscription", "", resp, client.pl)
-	if err != nil {
-		return AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}, err
-	}
-	result.Poller = &AttestationsClientCreateOrUpdateAtSubscriptionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdateAtSubscription - Creates or updates an attestation at subscription scope.
@@ -526,16 +514,32 @@ func (client *AttestationsClient) getAtSubscriptionHandleResponse(resp *http.Res
 // resourceID - Resource ID.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *AttestationsClient) ListForResource(resourceID string, options *QueryOptions) *AttestationsClientListForResourcePager {
-	return &AttestationsClientListForResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listForResourceCreateRequest(ctx, resourceID, options)
+func (client *AttestationsClient) ListForResource(resourceID string, options *QueryOptions) *runtime.Pager[AttestationsClientListForResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AttestationsClientListForResourceResponse]{
+		More: func(page AttestationsClientListForResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AttestationsClientListForResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AttestationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AttestationsClientListForResourceResponse) (AttestationsClientListForResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listForResourceCreateRequest(ctx, resourceID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AttestationsClientListForResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AttestationsClientListForResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AttestationsClientListForResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listForResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listForResourceCreateRequest creates the ListForResource request.
@@ -573,16 +577,32 @@ func (client *AttestationsClient) listForResourceHandleResponse(resp *http.Respo
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *AttestationsClient) ListForResourceGroup(resourceGroupName string, options *QueryOptions) *AttestationsClientListForResourceGroupPager {
-	return &AttestationsClientListForResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listForResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AttestationsClient) ListForResourceGroup(resourceGroupName string, options *QueryOptions) *runtime.Pager[AttestationsClientListForResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AttestationsClientListForResourceGroupResponse]{
+		More: func(page AttestationsClientListForResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AttestationsClientListForResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AttestationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AttestationsClientListForResourceGroupResponse) (AttestationsClientListForResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listForResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AttestationsClientListForResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AttestationsClientListForResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AttestationsClientListForResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listForResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listForResourceGroupCreateRequest creates the ListForResourceGroup request.
@@ -626,16 +646,32 @@ func (client *AttestationsClient) listForResourceGroupHandleResponse(resp *http.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *AttestationsClient) ListForSubscription(options *QueryOptions) *AttestationsClientListForSubscriptionPager {
-	return &AttestationsClientListForSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listForSubscriptionCreateRequest(ctx, options)
+func (client *AttestationsClient) ListForSubscription(options *QueryOptions) *runtime.Pager[AttestationsClientListForSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AttestationsClientListForSubscriptionResponse]{
+		More: func(page AttestationsClientListForSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AttestationsClientListForSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AttestationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AttestationsClientListForSubscriptionResponse) (AttestationsClientListForSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listForSubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AttestationsClientListForSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AttestationsClientListForSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AttestationsClientListForSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listForSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listForSubscriptionCreateRequest creates the ListForSubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -13,7 +13,8 @@ import "time"
 // APISClientBeginManageInventoryMetadataOptions contains the optional parameters for the APISClient.BeginManageInventoryMetadata
 // method.
 type APISClientBeginManageInventoryMetadataOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // APISClientListOperationsPartnerOptions contains the optional parameters for the APISClient.ListOperationsPartner method.

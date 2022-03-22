@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential,
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - AccountsClientBeginAbortHierarchicalNamespaceMigrationOptions contains the optional parameters for the AccountsClient.BeginAbortHierarchicalNamespaceMigration
 // method.
-func (client *AccountsClient) BeginAbortHierarchicalNamespaceMigration(ctx context.Context, resourceGroupName string, accountName string, options *AccountsClientBeginAbortHierarchicalNamespaceMigrationOptions) (AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse, error) {
-	resp, err := client.abortHierarchicalNamespaceMigration(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}, err
+func (client *AccountsClient) BeginAbortHierarchicalNamespaceMigration(ctx context.Context, resourceGroupName string, accountName string, options *AccountsClientBeginAbortHierarchicalNamespaceMigrationOptions) (*armruntime.Poller[AccountsClientAbortHierarchicalNamespaceMigrationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.abortHierarchicalNamespaceMigration(ctx, resourceGroupName, accountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientAbortHierarchicalNamespaceMigrationResponse]("AccountsClient.AbortHierarchicalNamespaceMigration", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientAbortHierarchicalNamespaceMigrationResponse]("AccountsClient.AbortHierarchicalNamespaceMigration", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.AbortHierarchicalNamespaceMigration", "location", resp, client.pl)
-	if err != nil {
-		return AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}, err
-	}
-	result.Poller = &AccountsClientAbortHierarchicalNamespaceMigrationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // AbortHierarchicalNamespaceMigration - Abort live Migration of storage account to enable Hns
@@ -173,20 +169,16 @@ func (client *AccountsClient) checkNameAvailabilityHandleResponse(resp *http.Res
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // parameters - The parameters to provide for the created account.
 // options - AccountsClientBeginCreateOptions contains the optional parameters for the AccountsClient.BeginCreate method.
-func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, parameters AccountCreateParameters, options *AccountsClientBeginCreateOptions) (AccountsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, accountName, parameters, options)
-	if err != nil {
-		return AccountsClientCreatePollerResponse{}, err
+func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName string, accountName string, parameters AccountCreateParameters, options *AccountsClientBeginCreateOptions) (*armruntime.Poller[AccountsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, accountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientCreateResponse]("AccountsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientCreateResponse]("AccountsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return AccountsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &AccountsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Asynchronously creates a new storage account with the specified parameters. If an account is already created and
@@ -289,20 +281,16 @@ func (client *AccountsClient) deleteCreateRequest(ctx context.Context, resourceG
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - AccountsClientBeginFailoverOptions contains the optional parameters for the AccountsClient.BeginFailover method.
-func (client *AccountsClient) BeginFailover(ctx context.Context, resourceGroupName string, accountName string, options *AccountsClientBeginFailoverOptions) (AccountsClientFailoverPollerResponse, error) {
-	resp, err := client.failover(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return AccountsClientFailoverPollerResponse{}, err
+func (client *AccountsClient) BeginFailover(ctx context.Context, resourceGroupName string, accountName string, options *AccountsClientBeginFailoverOptions) (*armruntime.Poller[AccountsClientFailoverResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.failover(ctx, resourceGroupName, accountName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientFailoverResponse]("AccountsClient.Failover", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientFailoverResponse]("AccountsClient.Failover", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientFailoverPollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.Failover", "location", resp, client.pl)
-	if err != nil {
-		return AccountsClientFailoverPollerResponse{}, err
-	}
-	result.Poller = &AccountsClientFailoverPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Failover - Failover request can be triggered for a storage account in case of availability issues. The failover occurs
@@ -419,20 +407,16 @@ func (client *AccountsClient) getPropertiesHandleResponse(resp *http.Response) (
 // request will validate the migration whereas the hydration request will migrate the account.
 // options - AccountsClientBeginHierarchicalNamespaceMigrationOptions contains the optional parameters for the AccountsClient.BeginHierarchicalNamespaceMigration
 // method.
-func (client *AccountsClient) BeginHierarchicalNamespaceMigration(ctx context.Context, resourceGroupName string, accountName string, requestType string, options *AccountsClientBeginHierarchicalNamespaceMigrationOptions) (AccountsClientHierarchicalNamespaceMigrationPollerResponse, error) {
-	resp, err := client.hierarchicalNamespaceMigration(ctx, resourceGroupName, accountName, requestType, options)
-	if err != nil {
-		return AccountsClientHierarchicalNamespaceMigrationPollerResponse{}, err
+func (client *AccountsClient) BeginHierarchicalNamespaceMigration(ctx context.Context, resourceGroupName string, accountName string, requestType string, options *AccountsClientBeginHierarchicalNamespaceMigrationOptions) (*armruntime.Poller[AccountsClientHierarchicalNamespaceMigrationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.hierarchicalNamespaceMigration(ctx, resourceGroupName, accountName, requestType, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientHierarchicalNamespaceMigrationResponse]("AccountsClient.HierarchicalNamespaceMigration", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientHierarchicalNamespaceMigrationResponse]("AccountsClient.HierarchicalNamespaceMigration", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientHierarchicalNamespaceMigrationPollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.HierarchicalNamespaceMigration", "location", resp, client.pl)
-	if err != nil {
-		return AccountsClientHierarchicalNamespaceMigrationPollerResponse{}, err
-	}
-	result.Poller = &AccountsClientHierarchicalNamespaceMigrationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // HierarchicalNamespaceMigration - Live Migration of storage account to enable Hns
@@ -483,16 +467,32 @@ func (client *AccountsClient) hierarchicalNamespaceMigrationCreateRequest(ctx co
 // ListKeys operation for this.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AccountsClientListOptions contains the optional parameters for the AccountsClient.List method.
-func (client *AccountsClient) List(options *AccountsClientListOptions) *AccountsClientListPager {
-	return &AccountsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AccountsClient) List(options *AccountsClientListOptions) *runtime.Pager[AccountsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListResponse]{
+		More: func(page AccountsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListResponse) (AccountsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -585,16 +585,32 @@ func (client *AccountsClient) listAccountSASHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group within the user's subscription. The name is case insensitive.
 // options - AccountsClientListByResourceGroupOptions contains the optional parameters for the AccountsClient.ListByResourceGroup
 // method.
-func (client *AccountsClient) ListByResourceGroup(resourceGroupName string, options *AccountsClientListByResourceGroupOptions) *AccountsClientListByResourceGroupPager {
-	return &AccountsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AccountsClient) ListByResourceGroup(resourceGroupName string, options *AccountsClientListByResourceGroupOptions) *runtime.Pager[AccountsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccountsClientListByResourceGroupResponse]{
+		More: func(page AccountsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AccountsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AccountsClientListByResourceGroupResponse) (AccountsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AccountsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccountsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -809,20 +825,16 @@ func (client *AccountsClient) regenerateKeyHandleResponse(resp *http.Response) (
 // parameters - The parameters to provide for restore blob ranges.
 // options - AccountsClientBeginRestoreBlobRangesOptions contains the optional parameters for the AccountsClient.BeginRestoreBlobRanges
 // method.
-func (client *AccountsClient) BeginRestoreBlobRanges(ctx context.Context, resourceGroupName string, accountName string, parameters BlobRestoreParameters, options *AccountsClientBeginRestoreBlobRangesOptions) (AccountsClientRestoreBlobRangesPollerResponse, error) {
-	resp, err := client.restoreBlobRanges(ctx, resourceGroupName, accountName, parameters, options)
-	if err != nil {
-		return AccountsClientRestoreBlobRangesPollerResponse{}, err
+func (client *AccountsClient) BeginRestoreBlobRanges(ctx context.Context, resourceGroupName string, accountName string, parameters BlobRestoreParameters, options *AccountsClientBeginRestoreBlobRangesOptions) (*armruntime.Poller[AccountsClientRestoreBlobRangesResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.restoreBlobRanges(ctx, resourceGroupName, accountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccountsClientRestoreBlobRangesResponse]("AccountsClient.RestoreBlobRanges", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccountsClientRestoreBlobRangesResponse]("AccountsClient.RestoreBlobRanges", options.ResumeToken, client.pl, nil)
 	}
-	result := AccountsClientRestoreBlobRangesPollerResponse{}
-	pt, err := armruntime.NewPoller("AccountsClient.RestoreBlobRanges", "location", resp, client.pl)
-	if err != nil {
-		return AccountsClientRestoreBlobRangesPollerResponse{}, err
-	}
-	result.Poller = &AccountsClientRestoreBlobRangesPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // RestoreBlobRanges - Restore blobs in the specified blob ranges

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,16 +54,32 @@ func NewResourceChangesClient(credential azcore.TokenCredential, options *arm.Cl
 // startTime - Specifies the start time of the changes request.
 // endTime - Specifies the end time of the changes request.
 // options - ResourceChangesClientListOptions contains the optional parameters for the ResourceChangesClient.List method.
-func (client *ResourceChangesClient) List(resourceID string, startTime time.Time, endTime time.Time, options *ResourceChangesClientListOptions) *ResourceChangesClientListPager {
-	return &ResourceChangesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceID, startTime, endTime, options)
+func (client *ResourceChangesClient) List(resourceID string, startTime time.Time, endTime time.Time, options *ResourceChangesClientListOptions) *runtime.Pager[ResourceChangesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ResourceChangesClientListResponse]{
+		More: func(page ResourceChangesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ResourceChangesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ChangeList.NextLink)
+		Fetcher: func(ctx context.Context, page *ResourceChangesClientListResponse) (ResourceChangesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceID, startTime, endTime, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ResourceChangesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ResourceChangesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ResourceChangesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -195,16 +195,32 @@ func (client *RecommendationsClient) getGenerateStatusCreateRequest(ctx context.
 // List - Obtains cached recommendations for a subscription. The recommendations are generated or computed by invoking generateRecommendations.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RecommendationsClientListOptions contains the optional parameters for the RecommendationsClient.List method.
-func (client *RecommendationsClient) List(options *RecommendationsClientListOptions) *RecommendationsClientListPager {
-	return &RecommendationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *RecommendationsClient) List(options *RecommendationsClientListOptions) *runtime.Pager[RecommendationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RecommendationsClientListResponse]{
+		More: func(page RecommendationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RecommendationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceRecommendationBaseListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RecommendationsClientListResponse) (RecommendationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RecommendationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RecommendationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RecommendationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

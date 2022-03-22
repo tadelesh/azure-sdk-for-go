@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewDedicatedCloudNodesClient(subscriptionID string, referer string, credent
 // dedicatedCloudNodeRequest - Create Dedicated Cloud Node request
 // options - DedicatedCloudNodesClientBeginCreateOrUpdateOptions contains the optional parameters for the DedicatedCloudNodesClient.BeginCreateOrUpdate
 // method.
-func (client *DedicatedCloudNodesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, dedicatedCloudNodeName string, dedicatedCloudNodeRequest DedicatedCloudNode, options *DedicatedCloudNodesClientBeginCreateOrUpdateOptions) (DedicatedCloudNodesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, dedicatedCloudNodeName, dedicatedCloudNodeRequest, options)
-	if err != nil {
-		return DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}, err
+func (client *DedicatedCloudNodesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, dedicatedCloudNodeName string, dedicatedCloudNodeRequest DedicatedCloudNode, options *DedicatedCloudNodesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DedicatedCloudNodesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, dedicatedCloudNodeName, dedicatedCloudNodeRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DedicatedCloudNodesClientCreateOrUpdateResponse]("DedicatedCloudNodesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DedicatedCloudNodesClientCreateOrUpdateResponse]("DedicatedCloudNodesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DedicatedCloudNodesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DedicatedCloudNodesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Returns dedicated cloud node by its name
@@ -227,16 +223,32 @@ func (client *DedicatedCloudNodesClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group
 // options - DedicatedCloudNodesClientListByResourceGroupOptions contains the optional parameters for the DedicatedCloudNodesClient.ListByResourceGroup
 // method.
-func (client *DedicatedCloudNodesClient) ListByResourceGroup(resourceGroupName string, options *DedicatedCloudNodesClientListByResourceGroupOptions) *DedicatedCloudNodesClientListByResourceGroupPager {
-	return &DedicatedCloudNodesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DedicatedCloudNodesClient) ListByResourceGroup(resourceGroupName string, options *DedicatedCloudNodesClientListByResourceGroupOptions) *runtime.Pager[DedicatedCloudNodesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DedicatedCloudNodesClientListByResourceGroupResponse]{
+		More: func(page DedicatedCloudNodesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DedicatedCloudNodesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DedicatedCloudNodeListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *DedicatedCloudNodesClientListByResourceGroupResponse) (DedicatedCloudNodesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DedicatedCloudNodesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DedicatedCloudNodesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DedicatedCloudNodesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -283,16 +295,32 @@ func (client *DedicatedCloudNodesClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DedicatedCloudNodesClientListBySubscriptionOptions contains the optional parameters for the DedicatedCloudNodesClient.ListBySubscription
 // method.
-func (client *DedicatedCloudNodesClient) ListBySubscription(options *DedicatedCloudNodesClientListBySubscriptionOptions) *DedicatedCloudNodesClientListBySubscriptionPager {
-	return &DedicatedCloudNodesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *DedicatedCloudNodesClient) ListBySubscription(options *DedicatedCloudNodesClientListBySubscriptionOptions) *runtime.Pager[DedicatedCloudNodesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DedicatedCloudNodesClientListBySubscriptionResponse]{
+		More: func(page DedicatedCloudNodesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DedicatedCloudNodesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DedicatedCloudNodeListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *DedicatedCloudNodesClientListBySubscriptionResponse) (DedicatedCloudNodesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DedicatedCloudNodesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DedicatedCloudNodesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DedicatedCloudNodesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

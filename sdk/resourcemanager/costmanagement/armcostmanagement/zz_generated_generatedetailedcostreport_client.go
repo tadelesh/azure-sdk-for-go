@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -64,20 +64,16 @@ func NewGenerateDetailedCostReportClient(credential azcore.TokenCredential, opti
 // parameters - Parameters supplied to the Create detailed cost report operation.
 // options - GenerateDetailedCostReportClientBeginCreateOperationOptions contains the optional parameters for the GenerateDetailedCostReportClient.BeginCreateOperation
 // method.
-func (client *GenerateDetailedCostReportClient) BeginCreateOperation(ctx context.Context, scope string, parameters GenerateDetailedCostReportDefinition, options *GenerateDetailedCostReportClientBeginCreateOperationOptions) (GenerateDetailedCostReportClientCreateOperationPollerResponse, error) {
-	resp, err := client.createOperation(ctx, scope, parameters, options)
-	if err != nil {
-		return GenerateDetailedCostReportClientCreateOperationPollerResponse{}, err
+func (client *GenerateDetailedCostReportClient) BeginCreateOperation(ctx context.Context, scope string, parameters GenerateDetailedCostReportDefinition, options *GenerateDetailedCostReportClientBeginCreateOperationOptions) (*armruntime.Poller[GenerateDetailedCostReportClientCreateOperationResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOperation(ctx, scope, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GenerateDetailedCostReportClientCreateOperationResponse]("GenerateDetailedCostReportClient.CreateOperation", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GenerateDetailedCostReportClientCreateOperationResponse]("GenerateDetailedCostReportClient.CreateOperation", options.ResumeToken, client.pl, nil)
 	}
-	result := GenerateDetailedCostReportClientCreateOperationPollerResponse{}
-	pt, err := armruntime.NewPoller("GenerateDetailedCostReportClient.CreateOperation", "location", resp, client.pl)
-	if err != nil {
-		return GenerateDetailedCostReportClientCreateOperationPollerResponse{}, err
-	}
-	result.Poller = &GenerateDetailedCostReportClientCreateOperationPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOperation - Generates the detailed cost report for provided date range, billing period(Only enterprise customers)

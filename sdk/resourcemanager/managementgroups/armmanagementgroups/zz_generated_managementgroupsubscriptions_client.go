@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -208,16 +208,32 @@ func (client *ManagementGroupSubscriptionsClient) getSubscriptionHandleResponse(
 // groupID - Management Group ID.
 // options - ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupOptions contains the optional parameters
 // for the ManagementGroupSubscriptionsClient.GetSubscriptionsUnderManagementGroup method.
-func (client *ManagementGroupSubscriptionsClient) GetSubscriptionsUnderManagementGroup(groupID string, options *ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupOptions) *ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager {
-	return &ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.getSubscriptionsUnderManagementGroupCreateRequest(ctx, groupID, options)
+func (client *ManagementGroupSubscriptionsClient) GetSubscriptionsUnderManagementGroup(groupID string, options *ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupOptions) *runtime.Pager[ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse]{
+		More: func(page ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListSubscriptionUnderManagementGroup.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse) (ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.getSubscriptionsUnderManagementGroupCreateRequest(ctx, groupID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.getSubscriptionsUnderManagementGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // getSubscriptionsUnderManagementGroupCreateRequest creates the GetSubscriptionsUnderManagementGroup request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -39,7 +39,8 @@ type Account struct {
 
 // AccountBackupsClientBeginDeleteOptions contains the optional parameters for the AccountBackupsClient.BeginDelete method.
 type AccountBackupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountBackupsClientGetOptions contains the optional parameters for the AccountBackupsClient.Get method.
@@ -102,17 +103,20 @@ type AccountProperties struct {
 
 // AccountsClientBeginCreateOrUpdateOptions contains the optional parameters for the AccountsClient.BeginCreateOrUpdate method.
 type AccountsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginDeleteOptions contains the optional parameters for the AccountsClient.BeginDelete method.
 type AccountsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientBeginUpdateOptions contains the optional parameters for the AccountsClient.BeginUpdate method.
 type AccountsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AccountsClientGetOptions contains the optional parameters for the AccountsClient.Get method.
@@ -235,17 +239,20 @@ type BackupPatch struct {
 
 // BackupPoliciesClientBeginCreateOptions contains the optional parameters for the BackupPoliciesClient.BeginCreate method.
 type BackupPoliciesClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientBeginDeleteOptions contains the optional parameters for the BackupPoliciesClient.BeginDelete method.
 type BackupPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientBeginUpdateOptions contains the optional parameters for the BackupPoliciesClient.BeginUpdate method.
 type BackupPoliciesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupPoliciesClientGetOptions contains the optional parameters for the BackupPoliciesClient.Get method.
@@ -416,18 +423,22 @@ type BackupStatus struct {
 
 // BackupsClientBeginCreateOptions contains the optional parameters for the BackupsClient.BeginCreate method.
 type BackupsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientBeginDeleteOptions contains the optional parameters for the BackupsClient.BeginDelete method.
 type BackupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientBeginUpdateOptions contains the optional parameters for the BackupsClient.BeginUpdate method.
 type BackupsClientBeginUpdateOptions struct {
 	// Backup object supplied in the body of the operation.
 	Body *BackupPatch
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // BackupsClientGetOptions contains the optional parameters for the BackupsClient.Get method.
@@ -861,17 +872,20 @@ type PoolProperties struct {
 
 // PoolsClientBeginCreateOrUpdateOptions contains the optional parameters for the PoolsClient.BeginCreateOrUpdate method.
 type PoolsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoolsClientBeginDeleteOptions contains the optional parameters for the PoolsClient.BeginDelete method.
 type PoolsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoolsClientBeginUpdateOptions contains the optional parameters for the PoolsClient.BeginUpdate method.
 type PoolsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PoolsClientGetOptions contains the optional parameters for the PoolsClient.Get method.
@@ -1059,12 +1073,14 @@ type Snapshot struct {
 
 // SnapshotPoliciesClientBeginDeleteOptions contains the optional parameters for the SnapshotPoliciesClient.BeginDelete method.
 type SnapshotPoliciesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SnapshotPoliciesClientBeginUpdateOptions contains the optional parameters for the SnapshotPoliciesClient.BeginUpdate method.
 type SnapshotPoliciesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SnapshotPoliciesClientCreateOptions contains the optional parameters for the SnapshotPoliciesClient.Create method.
@@ -1200,17 +1216,20 @@ type SnapshotProperties struct {
 
 // SnapshotsClientBeginCreateOptions contains the optional parameters for the SnapshotsClient.BeginCreate method.
 type SnapshotsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SnapshotsClientBeginDeleteOptions contains the optional parameters for the SnapshotsClient.BeginDelete method.
 type SnapshotsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SnapshotsClientBeginUpdateOptions contains the optional parameters for the SnapshotsClient.BeginUpdate method.
 type SnapshotsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SnapshotsClientGetOptions contains the optional parameters for the SnapshotsClient.Get method.
@@ -1479,12 +1498,14 @@ type VolumeGroupVolumeProperties struct {
 
 // VolumeGroupsClientBeginCreateOptions contains the optional parameters for the VolumeGroupsClient.BeginCreate method.
 type VolumeGroupsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumeGroupsClientBeginDeleteOptions contains the optional parameters for the VolumeGroupsClient.BeginDelete method.
 type VolumeGroupsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumeGroupsClientGetOptions contains the optional parameters for the VolumeGroupsClient.Get method.
@@ -1739,7 +1760,8 @@ type VolumeSnapshotProperties struct {
 // VolumesClientBeginAuthorizeReplicationOptions contains the optional parameters for the VolumesClient.BeginAuthorizeReplication
 // method.
 type VolumesClientBeginAuthorizeReplicationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginBreakReplicationOptions contains the optional parameters for the VolumesClient.BeginBreakReplication
@@ -1747,49 +1769,59 @@ type VolumesClientBeginAuthorizeReplicationOptions struct {
 type VolumesClientBeginBreakReplicationOptions struct {
 	// Optional body to force break the replication.
 	Body *BreakReplicationRequest
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginCreateOrUpdateOptions contains the optional parameters for the VolumesClient.BeginCreateOrUpdate method.
 type VolumesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginDeleteOptions contains the optional parameters for the VolumesClient.BeginDelete method.
 type VolumesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginDeleteReplicationOptions contains the optional parameters for the VolumesClient.BeginDeleteReplication
 // method.
 type VolumesClientBeginDeleteReplicationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginPoolChangeOptions contains the optional parameters for the VolumesClient.BeginPoolChange method.
 type VolumesClientBeginPoolChangeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginReInitializeReplicationOptions contains the optional parameters for the VolumesClient.BeginReInitializeReplication
 // method.
 type VolumesClientBeginReInitializeReplicationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginResyncReplicationOptions contains the optional parameters for the VolumesClient.BeginResyncReplication
 // method.
 type VolumesClientBeginResyncReplicationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginRevertOptions contains the optional parameters for the VolumesClient.BeginRevert method.
 type VolumesClientBeginRevertOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientBeginUpdateOptions contains the optional parameters for the VolumesClient.BeginUpdate method.
 type VolumesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VolumesClientGetOptions contains the optional parameters for the VolumesClient.Get method.

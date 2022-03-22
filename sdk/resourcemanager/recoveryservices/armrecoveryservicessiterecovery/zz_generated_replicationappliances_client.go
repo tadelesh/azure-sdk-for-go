@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,16 +59,32 @@ func NewReplicationAppliancesClient(resourceName string, resourceGroupName strin
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationAppliancesClientListOptions contains the optional parameters for the ReplicationAppliancesClient.List
 // method.
-func (client *ReplicationAppliancesClient) List(options *ReplicationAppliancesClientListOptions) *ReplicationAppliancesClientListPager {
-	return &ReplicationAppliancesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationAppliancesClient) List(options *ReplicationAppliancesClientListOptions) *runtime.Pager[ReplicationAppliancesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationAppliancesClientListResponse]{
+		More: func(page ReplicationAppliancesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationAppliancesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplianceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationAppliancesClientListResponse) (ReplicationAppliancesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationAppliancesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationAppliancesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationAppliancesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

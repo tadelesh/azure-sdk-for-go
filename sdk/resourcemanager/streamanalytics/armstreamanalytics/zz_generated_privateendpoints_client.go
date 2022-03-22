@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -125,20 +125,16 @@ func (client *PrivateEndpointsClient) createOrUpdateHandleResponse(resp *http.Re
 // privateEndpointName - The name of the private endpoint.
 // options - PrivateEndpointsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointsClient.BeginDelete
 // method.
-func (client *PrivateEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, privateEndpointName string, options *PrivateEndpointsClientBeginDeleteOptions) (PrivateEndpointsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, privateEndpointName, options)
-	if err != nil {
-		return PrivateEndpointsClientDeletePollerResponse{}, err
+func (client *PrivateEndpointsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, privateEndpointName string, options *PrivateEndpointsClientBeginDeleteOptions) (*armruntime.Poller[PrivateEndpointsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, privateEndpointName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointsClientDeleteResponse]("PrivateEndpointsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointsClientDeleteResponse]("PrivateEndpointsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete the specified private endpoint.
@@ -254,16 +250,32 @@ func (client *PrivateEndpointsClient) getHandleResponse(resp *http.Response) (Pr
 // clusterName - The name of the cluster.
 // options - PrivateEndpointsClientListByClusterOptions contains the optional parameters for the PrivateEndpointsClient.ListByCluster
 // method.
-func (client *PrivateEndpointsClient) ListByCluster(resourceGroupName string, clusterName string, options *PrivateEndpointsClientListByClusterOptions) *PrivateEndpointsClientListByClusterPager {
-	return &PrivateEndpointsClientListByClusterPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+func (client *PrivateEndpointsClient) ListByCluster(resourceGroupName string, clusterName string, options *PrivateEndpointsClientListByClusterOptions) *runtime.Pager[PrivateEndpointsClientListByClusterResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointsClientListByClusterResponse]{
+		More: func(page PrivateEndpointsClientListByClusterResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateEndpointsClientListByClusterResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateEndpointsClientListByClusterResponse) (PrivateEndpointsClientListByClusterResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateEndpointsClientListByClusterResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointsClientListByClusterResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointsClientListByClusterResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByClusterHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.

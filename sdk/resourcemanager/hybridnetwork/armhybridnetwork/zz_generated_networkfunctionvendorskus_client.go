@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewNetworkFunctionVendorSKUsClient(subscriptionID string, credential azcore
 // vendorSKUName - The name of the network function sku.
 // options - NetworkFunctionVendorSKUsClientListBySKUOptions contains the optional parameters for the NetworkFunctionVendorSKUsClient.ListBySKU
 // method.
-func (client *NetworkFunctionVendorSKUsClient) ListBySKU(vendorName string, vendorSKUName string, options *NetworkFunctionVendorSKUsClientListBySKUOptions) *NetworkFunctionVendorSKUsClientListBySKUPager {
-	return &NetworkFunctionVendorSKUsClientListBySKUPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySKUCreateRequest(ctx, vendorName, vendorSKUName, options)
+func (client *NetworkFunctionVendorSKUsClient) ListBySKU(vendorName string, vendorSKUName string, options *NetworkFunctionVendorSKUsClientListBySKUOptions) *runtime.Pager[NetworkFunctionVendorSKUsClientListBySKUResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkFunctionVendorSKUsClientListBySKUResponse]{
+		More: func(page NetworkFunctionVendorSKUsClientListBySKUResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkFunctionVendorSKUsClientListBySKUResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionSKUDetails.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkFunctionVendorSKUsClientListBySKUResponse) (NetworkFunctionVendorSKUsClientListBySKUResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySKUCreateRequest(ctx, vendorName, vendorSKUName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkFunctionVendorSKUsClientListBySKUResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkFunctionVendorSKUsClientListBySKUResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkFunctionVendorSKUsClientListBySKUResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySKUHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySKUCreateRequest creates the ListBySKU request.
@@ -107,16 +123,32 @@ func (client *NetworkFunctionVendorSKUsClient) listBySKUHandleResponse(resp *htt
 // vendorName - The name of the network function vendor.
 // options - NetworkFunctionVendorSKUsClientListByVendorOptions contains the optional parameters for the NetworkFunctionVendorSKUsClient.ListByVendor
 // method.
-func (client *NetworkFunctionVendorSKUsClient) ListByVendor(vendorName string, options *NetworkFunctionVendorSKUsClientListByVendorOptions) *NetworkFunctionVendorSKUsClientListByVendorPager {
-	return &NetworkFunctionVendorSKUsClientListByVendorPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByVendorCreateRequest(ctx, vendorName, options)
+func (client *NetworkFunctionVendorSKUsClient) ListByVendor(vendorName string, options *NetworkFunctionVendorSKUsClientListByVendorOptions) *runtime.Pager[NetworkFunctionVendorSKUsClientListByVendorResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NetworkFunctionVendorSKUsClientListByVendorResponse]{
+		More: func(page NetworkFunctionVendorSKUsClientListByVendorResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NetworkFunctionVendorSKUsClientListByVendorResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.NetworkFunctionSKUListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NetworkFunctionVendorSKUsClientListByVendorResponse) (NetworkFunctionVendorSKUsClientListByVendorResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByVendorCreateRequest(ctx, vendorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NetworkFunctionVendorSKUsClientListByVendorResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NetworkFunctionVendorSKUsClientListByVendorResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NetworkFunctionVendorSKUsClientListByVendorResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByVendorHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByVendorCreateRequest creates the ListByVendor request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -210,16 +210,32 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group within the Azure subscription.
 // options - ClientListOptions contains the optional parameters for the Client.List method.
-func (client *Client) List(resourceGroupName string, options *ClientListOptions) *ClientListPager {
-	return &ClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *Client) List(resourceGroupName string, options *ClientListOptions) *runtime.Pager[ClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListResponse]{
+		More: func(page ClientListResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MediaServiceCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *ClientListResponse) (ClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -256,16 +272,32 @@ func (client *Client) listHandleResponse(resp *http.Response) (ClientListRespons
 // ListBySubscription - List Media Services accounts in the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListBySubscriptionOptions contains the optional parameters for the Client.ListBySubscription method.
-func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) *ClientListBySubscriptionPager {
-	return &ClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) *runtime.Pager[ClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ClientListBySubscriptionResponse]{
+		More: func(page ClientListBySubscriptionResponse) bool {
+			return page.ODataNextLink != nil && len(*page.ODataNextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MediaServiceCollection.ODataNextLink)
+		Fetcher: func(ctx context.Context, page *ClientListBySubscriptionResponse) (ClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.ODataNextLink)
+			}
+			if err != nil {
+				return ClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

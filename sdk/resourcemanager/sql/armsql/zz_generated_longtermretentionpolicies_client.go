@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewLongTermRetentionPoliciesClient(subscriptionID string, credential azcore
 // parameters - The long term retention policy info.
 // options - LongTermRetentionPoliciesClientBeginCreateOrUpdateOptions contains the optional parameters for the LongTermRetentionPoliciesClient.BeginCreateOrUpdate
 // method.
-func (client *LongTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, policyName LongTermRetentionPolicyName, parameters LongTermRetentionPolicy, options *LongTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, policyName, parameters, options)
-	if err != nil {
-		return LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
+func (client *LongTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, policyName LongTermRetentionPolicyName, parameters LongTermRetentionPolicy, options *LongTermRetentionPoliciesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[LongTermRetentionPoliciesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, databaseName, policyName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LongTermRetentionPoliciesClientCreateOrUpdateResponse]("LongTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LongTermRetentionPoliciesClientCreateOrUpdateResponse]("LongTermRetentionPoliciesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LongTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &LongTermRetentionPoliciesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Sets a database's long term retention policy.
@@ -201,16 +197,32 @@ func (client *LongTermRetentionPoliciesClient) getHandleResponse(resp *http.Resp
 // databaseName - The name of the database.
 // options - LongTermRetentionPoliciesClientListByDatabaseOptions contains the optional parameters for the LongTermRetentionPoliciesClient.ListByDatabase
 // method.
-func (client *LongTermRetentionPoliciesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *LongTermRetentionPoliciesClientListByDatabaseOptions) *LongTermRetentionPoliciesClientListByDatabasePager {
-	return &LongTermRetentionPoliciesClientListByDatabasePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+func (client *LongTermRetentionPoliciesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *LongTermRetentionPoliciesClientListByDatabaseOptions) *runtime.Pager[LongTermRetentionPoliciesClientListByDatabaseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LongTermRetentionPoliciesClientListByDatabaseResponse]{
+		More: func(page LongTermRetentionPoliciesClientListByDatabaseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LongTermRetentionPoliciesClientListByDatabaseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LongTermRetentionPolicyListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *LongTermRetentionPoliciesClientListByDatabaseResponse) (LongTermRetentionPoliciesClientListByDatabaseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LongTermRetentionPoliciesClientListByDatabaseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LongTermRetentionPoliciesClientListByDatabaseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LongTermRetentionPoliciesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDatabaseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,16 +55,32 @@ func NewBackupProtectionContainersClient(subscriptionID string, credential azcor
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // options - BackupProtectionContainersClientListOptions contains the optional parameters for the BackupProtectionContainersClient.List
 // method.
-func (client *BackupProtectionContainersClient) List(vaultName string, resourceGroupName string, options *BackupProtectionContainersClientListOptions) *BackupProtectionContainersClientListPager {
-	return &BackupProtectionContainersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+func (client *BackupProtectionContainersClient) List(vaultName string, resourceGroupName string, options *BackupProtectionContainersClientListOptions) *runtime.Pager[BackupProtectionContainersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupProtectionContainersClientListResponse]{
+		More: func(page BackupProtectionContainersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupProtectionContainersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProtectionContainerResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupProtectionContainersClientListResponse) (BackupProtectionContainersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupProtectionContainersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupProtectionContainersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupProtectionContainersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

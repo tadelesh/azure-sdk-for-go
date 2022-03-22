@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -63,20 +63,16 @@ func NewReplicationStorageClassificationMappingsClient(resourceName string, reso
 // pairingInput - Pairing input.
 // options - ReplicationStorageClassificationMappingsClientBeginCreateOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.BeginCreate
 // method.
-func (client *ReplicationStorageClassificationMappingsClient) BeginCreate(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string, pairingInput StorageClassificationMappingInput, options *ReplicationStorageClassificationMappingsClientBeginCreateOptions) (ReplicationStorageClassificationMappingsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, fabricName, storageClassificationName, storageClassificationMappingName, pairingInput, options)
-	if err != nil {
-		return ReplicationStorageClassificationMappingsClientCreatePollerResponse{}, err
+func (client *ReplicationStorageClassificationMappingsClient) BeginCreate(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string, pairingInput StorageClassificationMappingInput, options *ReplicationStorageClassificationMappingsClientBeginCreateOptions) (*armruntime.Poller[ReplicationStorageClassificationMappingsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, fabricName, storageClassificationName, storageClassificationMappingName, pairingInput, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationStorageClassificationMappingsClientCreateResponse]("ReplicationStorageClassificationMappingsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationStorageClassificationMappingsClientCreateResponse]("ReplicationStorageClassificationMappingsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationStorageClassificationMappingsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationStorageClassificationMappingsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ReplicationStorageClassificationMappingsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ReplicationStorageClassificationMappingsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - The operation to create a storage classification mapping.
@@ -141,20 +137,16 @@ func (client *ReplicationStorageClassificationMappingsClient) createCreateReques
 // storageClassificationMappingName - Storage classification mapping name.
 // options - ReplicationStorageClassificationMappingsClientBeginDeleteOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.BeginDelete
 // method.
-func (client *ReplicationStorageClassificationMappingsClient) BeginDelete(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string, options *ReplicationStorageClassificationMappingsClientBeginDeleteOptions) (ReplicationStorageClassificationMappingsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, fabricName, storageClassificationName, storageClassificationMappingName, options)
-	if err != nil {
-		return ReplicationStorageClassificationMappingsClientDeletePollerResponse{}, err
+func (client *ReplicationStorageClassificationMappingsClient) BeginDelete(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string, options *ReplicationStorageClassificationMappingsClientBeginDeleteOptions) (*armruntime.Poller[ReplicationStorageClassificationMappingsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, fabricName, storageClassificationName, storageClassificationMappingName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ReplicationStorageClassificationMappingsClientDeleteResponse]("ReplicationStorageClassificationMappingsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ReplicationStorageClassificationMappingsClientDeleteResponse]("ReplicationStorageClassificationMappingsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ReplicationStorageClassificationMappingsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ReplicationStorageClassificationMappingsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ReplicationStorageClassificationMappingsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ReplicationStorageClassificationMappingsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - The operation to delete a storage classification mapping.
@@ -284,16 +276,32 @@ func (client *ReplicationStorageClassificationMappingsClient) getHandleResponse(
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ReplicationStorageClassificationMappingsClientListOptions contains the optional parameters for the ReplicationStorageClassificationMappingsClient.List
 // method.
-func (client *ReplicationStorageClassificationMappingsClient) List(options *ReplicationStorageClassificationMappingsClientListOptions) *ReplicationStorageClassificationMappingsClientListPager {
-	return &ReplicationStorageClassificationMappingsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ReplicationStorageClassificationMappingsClient) List(options *ReplicationStorageClassificationMappingsClientListOptions) *runtime.Pager[ReplicationStorageClassificationMappingsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationStorageClassificationMappingsClientListResponse]{
+		More: func(page ReplicationStorageClassificationMappingsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationStorageClassificationMappingsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageClassificationMappingCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationStorageClassificationMappingsClientListResponse) (ReplicationStorageClassificationMappingsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationStorageClassificationMappingsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationStorageClassificationMappingsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationStorageClassificationMappingsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -337,16 +345,32 @@ func (client *ReplicationStorageClassificationMappingsClient) listHandleResponse
 // storageClassificationName - Storage classification name.
 // options - ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsOptions contains the optional
 // parameters for the ReplicationStorageClassificationMappingsClient.ListByReplicationStorageClassifications method.
-func (client *ReplicationStorageClassificationMappingsClient) ListByReplicationStorageClassifications(fabricName string, storageClassificationName string, options *ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsOptions) *ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsPager {
-	return &ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByReplicationStorageClassificationsCreateRequest(ctx, fabricName, storageClassificationName, options)
+func (client *ReplicationStorageClassificationMappingsClient) ListByReplicationStorageClassifications(fabricName string, storageClassificationName string, options *ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsOptions) *runtime.Pager[ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse]{
+		More: func(page ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.StorageClassificationMappingCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse) (ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByReplicationStorageClassificationsCreateRequest(ctx, fabricName, storageClassificationName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ReplicationStorageClassificationMappingsClientListByReplicationStorageClassificationsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByReplicationStorageClassificationsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByReplicationStorageClassificationsCreateRequest creates the ListByReplicationStorageClassifications request.

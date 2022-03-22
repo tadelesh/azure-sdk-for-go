@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredentia
 // extensionName - The name of the cluster extension.
 // parameters - The cluster extensions create request.
 // options - ExtensionsClientBeginCreateOptions contains the optional parameters for the ExtensionsClient.BeginCreate method.
-func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, extensionName string, parameters Extension, options *ExtensionsClientBeginCreateOptions) (ExtensionsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, clusterName, extensionName, parameters, options)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
+func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupName string, clusterName string, extensionName string, parameters Extension, options *ExtensionsClientBeginCreateOptions) (*armruntime.Poller[ExtensionsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, clusterName, extensionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientCreateResponse]("ExtensionsClient.Create", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientCreateResponse]("ExtensionsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Create", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates an HDInsight cluster extension.
@@ -126,20 +122,16 @@ func (client *ExtensionsClient) createCreateRequest(ctx context.Context, resourc
 // clusterName - The name of the cluster.
 // extensionName - The name of the cluster extension.
 // options - ExtensionsClientBeginDeleteOptions contains the optional parameters for the ExtensionsClient.BeginDelete method.
-func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (ExtensionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, extensionName, options)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
+func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupName string, clusterName string, extensionName string, options *ExtensionsClientBeginDeleteOptions) (*armruntime.Poller[ExtensionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, clusterName, extensionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientDeleteResponse]("ExtensionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified extension for HDInsight cluster.
@@ -195,20 +187,16 @@ func (client *ExtensionsClient) deleteCreateRequest(ctx context.Context, resourc
 // clusterName - The name of the cluster.
 // options - ExtensionsClientBeginDisableAzureMonitorOptions contains the optional parameters for the ExtensionsClient.BeginDisableAzureMonitor
 // method.
-func (client *ExtensionsClient) BeginDisableAzureMonitor(ctx context.Context, resourceGroupName string, clusterName string, options *ExtensionsClientBeginDisableAzureMonitorOptions) (ExtensionsClientDisableAzureMonitorPollerResponse, error) {
-	resp, err := client.disableAzureMonitor(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ExtensionsClientDisableAzureMonitorPollerResponse{}, err
+func (client *ExtensionsClient) BeginDisableAzureMonitor(ctx context.Context, resourceGroupName string, clusterName string, options *ExtensionsClientBeginDisableAzureMonitorOptions) (*armruntime.Poller[ExtensionsClientDisableAzureMonitorResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.disableAzureMonitor(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientDisableAzureMonitorResponse]("ExtensionsClient.DisableAzureMonitor", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientDisableAzureMonitorResponse]("ExtensionsClient.DisableAzureMonitor", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientDisableAzureMonitorPollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.DisableAzureMonitor", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientDisableAzureMonitorPollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientDisableAzureMonitorPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DisableAzureMonitor - Disables the Azure Monitor on the HDInsight cluster.
@@ -260,20 +248,16 @@ func (client *ExtensionsClient) disableAzureMonitorCreateRequest(ctx context.Con
 // clusterName - The name of the cluster.
 // options - ExtensionsClientBeginDisableMonitoringOptions contains the optional parameters for the ExtensionsClient.BeginDisableMonitoring
 // method.
-func (client *ExtensionsClient) BeginDisableMonitoring(ctx context.Context, resourceGroupName string, clusterName string, options *ExtensionsClientBeginDisableMonitoringOptions) (ExtensionsClientDisableMonitoringPollerResponse, error) {
-	resp, err := client.disableMonitoring(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ExtensionsClientDisableMonitoringPollerResponse{}, err
+func (client *ExtensionsClient) BeginDisableMonitoring(ctx context.Context, resourceGroupName string, clusterName string, options *ExtensionsClientBeginDisableMonitoringOptions) (*armruntime.Poller[ExtensionsClientDisableMonitoringResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.disableMonitoring(ctx, resourceGroupName, clusterName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientDisableMonitoringResponse]("ExtensionsClient.DisableMonitoring", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientDisableMonitoringResponse]("ExtensionsClient.DisableMonitoring", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientDisableMonitoringPollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.DisableMonitoring", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientDisableMonitoringPollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientDisableMonitoringPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DisableMonitoring - Disables the Operations Management Suite (OMS) on the HDInsight cluster.
@@ -326,20 +310,16 @@ func (client *ExtensionsClient) disableMonitoringCreateRequest(ctx context.Conte
 // parameters - The Log Analytics workspace parameters.
 // options - ExtensionsClientBeginEnableAzureMonitorOptions contains the optional parameters for the ExtensionsClient.BeginEnableAzureMonitor
 // method.
-func (client *ExtensionsClient) BeginEnableAzureMonitor(ctx context.Context, resourceGroupName string, clusterName string, parameters AzureMonitorRequest, options *ExtensionsClientBeginEnableAzureMonitorOptions) (ExtensionsClientEnableAzureMonitorPollerResponse, error) {
-	resp, err := client.enableAzureMonitor(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ExtensionsClientEnableAzureMonitorPollerResponse{}, err
+func (client *ExtensionsClient) BeginEnableAzureMonitor(ctx context.Context, resourceGroupName string, clusterName string, parameters AzureMonitorRequest, options *ExtensionsClientBeginEnableAzureMonitorOptions) (*armruntime.Poller[ExtensionsClientEnableAzureMonitorResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.enableAzureMonitor(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientEnableAzureMonitorResponse]("ExtensionsClient.EnableAzureMonitor", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientEnableAzureMonitorResponse]("ExtensionsClient.EnableAzureMonitor", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientEnableAzureMonitorPollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.EnableAzureMonitor", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientEnableAzureMonitorPollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientEnableAzureMonitorPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // EnableAzureMonitor - Enables the Azure Monitor on the HDInsight cluster.
@@ -392,20 +372,16 @@ func (client *ExtensionsClient) enableAzureMonitorCreateRequest(ctx context.Cont
 // parameters - The Operations Management Suite (OMS) workspace parameters.
 // options - ExtensionsClientBeginEnableMonitoringOptions contains the optional parameters for the ExtensionsClient.BeginEnableMonitoring
 // method.
-func (client *ExtensionsClient) BeginEnableMonitoring(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterMonitoringRequest, options *ExtensionsClientBeginEnableMonitoringOptions) (ExtensionsClientEnableMonitoringPollerResponse, error) {
-	resp, err := client.enableMonitoring(ctx, resourceGroupName, clusterName, parameters, options)
-	if err != nil {
-		return ExtensionsClientEnableMonitoringPollerResponse{}, err
+func (client *ExtensionsClient) BeginEnableMonitoring(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterMonitoringRequest, options *ExtensionsClientBeginEnableMonitoringOptions) (*armruntime.Poller[ExtensionsClientEnableMonitoringResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.enableMonitoring(ctx, resourceGroupName, clusterName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ExtensionsClientEnableMonitoringResponse]("ExtensionsClient.EnableMonitoring", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ExtensionsClientEnableMonitoringResponse]("ExtensionsClient.EnableMonitoring", options.ResumeToken, client.pl, nil)
 	}
-	result := ExtensionsClientEnableMonitoringPollerResponse{}
-	pt, err := armruntime.NewPoller("ExtensionsClient.EnableMonitoring", "location", resp, client.pl)
-	if err != nil {
-		return ExtensionsClientEnableMonitoringPollerResponse{}, err
-	}
-	result.Poller = &ExtensionsClientEnableMonitoringPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // EnableMonitoring - Enables the Operations Management Suite (OMS) on the HDInsight cluster.

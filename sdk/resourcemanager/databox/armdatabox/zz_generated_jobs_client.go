@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -162,20 +162,16 @@ func (client *JobsClient) cancelCreateRequest(ctx context.Context, resourceGroup
 // in length and use any alphanumeric and underscore only
 // jobResource - Job details from request body.
 // options - JobsClientBeginCreateOptions contains the optional parameters for the JobsClient.BeginCreate method.
-func (client *JobsClient) BeginCreate(ctx context.Context, resourceGroupName string, jobName string, jobResource JobResource, options *JobsClientBeginCreateOptions) (JobsClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, jobName, jobResource, options)
-	if err != nil {
-		return JobsClientCreatePollerResponse{}, err
+func (client *JobsClient) BeginCreate(ctx context.Context, resourceGroupName string, jobName string, jobResource JobResource, options *JobsClientBeginCreateOptions) (*armruntime.Poller[JobsClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, jobName, jobResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobsClientCreateResponse]("JobsClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobsClientCreateResponse]("JobsClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := JobsClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("JobsClient.Create", "", resp, client.pl)
-	if err != nil {
-		return JobsClientCreatePollerResponse{}, err
-	}
-	result.Poller = &JobsClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new job with the specified parameters. Existing job cannot be updated with this API and should instead
@@ -228,20 +224,16 @@ func (client *JobsClient) createCreateRequest(ctx context.Context, resourceGroup
 // jobName - The name of the job Resource within the specified resource group. job names must be between 3 and 24 characters
 // in length and use any alphanumeric and underscore only
 // options - JobsClientBeginDeleteOptions contains the optional parameters for the JobsClient.BeginDelete method.
-func (client *JobsClient) BeginDelete(ctx context.Context, resourceGroupName string, jobName string, options *JobsClientBeginDeleteOptions) (JobsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return JobsClientDeletePollerResponse{}, err
+func (client *JobsClient) BeginDelete(ctx context.Context, resourceGroupName string, jobName string, options *JobsClientBeginDeleteOptions) (*armruntime.Poller[JobsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, jobName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobsClientDeleteResponse]("JobsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobsClientDeleteResponse]("JobsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := JobsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("JobsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return JobsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &JobsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a job.
@@ -349,16 +341,32 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 // List - Lists all the jobs available under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - JobsClientListOptions contains the optional parameters for the JobsClient.List method.
-func (client *JobsClient) List(options *JobsClientListOptions) *JobsClientListPager {
-	return &JobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *JobsClient) List(options *JobsClientListOptions) *runtime.Pager[JobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListResponse]{
+		More: func(page JobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListResponse) (JobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -396,16 +404,32 @@ func (client *JobsClient) listHandleResponse(resp *http.Response) (JobsClientLis
 // resourceGroupName - The Resource Group Name
 // options - JobsClientListByResourceGroupOptions contains the optional parameters for the JobsClient.ListByResourceGroup
 // method.
-func (client *JobsClient) ListByResourceGroup(resourceGroupName string, options *JobsClientListByResourceGroupOptions) *JobsClientListByResourceGroupPager {
-	return &JobsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *JobsClient) ListByResourceGroup(resourceGroupName string, options *JobsClientListByResourceGroupOptions) *runtime.Pager[JobsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListByResourceGroupResponse]{
+		More: func(page JobsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp JobsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *JobsClientListByResourceGroupResponse) (JobsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return JobsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -448,13 +472,26 @@ func (client *JobsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // jobName - The name of the job Resource within the specified resource group. job names must be between 3 and 24 characters
 // in length and use any alphanumeric and underscore only
 // options - JobsClientListCredentialsOptions contains the optional parameters for the JobsClient.ListCredentials method.
-func (client *JobsClient) ListCredentials(resourceGroupName string, jobName string, options *JobsClientListCredentialsOptions) *JobsClientListCredentialsPager {
-	return &JobsClientListCredentialsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCredentialsCreateRequest(ctx, resourceGroupName, jobName, options)
+func (client *JobsClient) ListCredentials(resourceGroupName string, jobName string, options *JobsClientListCredentialsOptions) *runtime.Pager[JobsClientListCredentialsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[JobsClientListCredentialsResponse]{
+		More: func(page JobsClientListCredentialsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *JobsClientListCredentialsResponse) (JobsClientListCredentialsResponse, error) {
+			req, err := client.listCredentialsCreateRequest(ctx, resourceGroupName, jobName, options)
+			if err != nil {
+				return JobsClientListCredentialsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return JobsClientListCredentialsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return JobsClientListCredentialsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCredentialsHandleResponse(resp)
+		},
+	})
 }
 
 // listCredentialsCreateRequest creates the ListCredentials request.
@@ -547,20 +584,16 @@ func (client *JobsClient) markDevicesShippedCreateRequest(ctx context.Context, j
 // in length and use any alphanumeric and underscore only
 // jobResourceUpdateParameter - Job update parameters from request body.
 // options - JobsClientBeginUpdateOptions contains the optional parameters for the JobsClient.BeginUpdate method.
-func (client *JobsClient) BeginUpdate(ctx context.Context, resourceGroupName string, jobName string, jobResourceUpdateParameter JobResourceUpdateParameter, options *JobsClientBeginUpdateOptions) (JobsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, jobName, jobResourceUpdateParameter, options)
-	if err != nil {
-		return JobsClientUpdatePollerResponse{}, err
+func (client *JobsClient) BeginUpdate(ctx context.Context, resourceGroupName string, jobName string, jobResourceUpdateParameter JobResourceUpdateParameter, options *JobsClientBeginUpdateOptions) (*armruntime.Poller[JobsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, jobName, jobResourceUpdateParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[JobsClientUpdateResponse]("JobsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[JobsClientUpdateResponse]("JobsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := JobsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("JobsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return JobsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &JobsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the properties of an existing job.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,17 +114,20 @@ type ApplicationsClientListOptions struct {
 
 // ClientBeginCreateResourceOptions contains the optional parameters for the Client.BeginCreateResource method.
 type ClientBeginCreateResourceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 type ClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientBeginUpdateResourceOptions contains the optional parameters for the Client.BeginUpdateResource method.
 type ClientBeginUpdateResourceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClientGetResourceOptions contains the optional parameters for the Client.GetResource method.
@@ -228,7 +231,8 @@ type MoveResource struct {
 
 // OperationClientBeginGetOptions contains the optional parameters for the OperationClient.BeginGet method.
 type OperationClientBeginGetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
@@ -387,31 +391,36 @@ type Result struct {
 // SubscriptionLevelClientBeginCreateOrUpdateOptions contains the optional parameters for the SubscriptionLevelClient.BeginCreateOrUpdate
 // method.
 type SubscriptionLevelClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionLevelClientBeginDeleteOptions contains the optional parameters for the SubscriptionLevelClient.BeginDelete
 // method.
 type SubscriptionLevelClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionLevelClientBeginMoveResourcesOptions contains the optional parameters for the SubscriptionLevelClient.BeginMoveResources
 // method.
 type SubscriptionLevelClientBeginMoveResourcesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionLevelClientBeginUpdateOptions contains the optional parameters for the SubscriptionLevelClient.BeginUpdate
 // method.
 type SubscriptionLevelClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionLevelClientBeginUpdateToUnsubscribedOptions contains the optional parameters for the SubscriptionLevelClient.BeginUpdateToUnsubscribed
 // method.
 type SubscriptionLevelClientBeginUpdateToUnsubscribedOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // SubscriptionLevelClientGetOptions contains the optional parameters for the SubscriptionLevelClient.Get method.

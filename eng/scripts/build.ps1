@@ -9,7 +9,7 @@ param(
     [switch]$format,
     [switch]$tidy,
     [string]$config = "autorest.md",
-    [string]$goExtension = "@autorest/go@4.0.0-preview.37",
+    [string]$goExtension = "D:\Workspace\tadelesh\autorest.go",
     [string]$outputFolder
 )
 

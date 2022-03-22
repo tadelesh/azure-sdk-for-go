@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewServerAdministratorsClient(subscriptionID string, credential azcore.Toke
 // properties - The required parameters for creating or updating an AAD server administrator.
 // options - ServerAdministratorsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServerAdministratorsClient.BeginCreateOrUpdate
 // method.
-func (client *ServerAdministratorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, properties ServerAdministratorResource, options *ServerAdministratorsClientBeginCreateOrUpdateOptions) (ServerAdministratorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, properties, options)
-	if err != nil {
-		return ServerAdministratorsClientCreateOrUpdatePollerResponse{}, err
+func (client *ServerAdministratorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, properties ServerAdministratorResource, options *ServerAdministratorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServerAdministratorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serverName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerAdministratorsClientCreateOrUpdateResponse]("ServerAdministratorsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerAdministratorsClientCreateOrUpdateResponse]("ServerAdministratorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerAdministratorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerAdministratorsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServerAdministratorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServerAdministratorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or update active directory administrator on an existing server. The update action will overwrite
@@ -123,20 +119,16 @@ func (client *ServerAdministratorsClient) createOrUpdateCreateRequest(ctx contex
 // serverName - The name of the server.
 // options - ServerAdministratorsClientBeginDeleteOptions contains the optional parameters for the ServerAdministratorsClient.BeginDelete
 // method.
-func (client *ServerAdministratorsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServerAdministratorsClientBeginDeleteOptions) (ServerAdministratorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServerAdministratorsClientDeletePollerResponse{}, err
+func (client *ServerAdministratorsClient) BeginDelete(ctx context.Context, resourceGroupName string, serverName string, options *ServerAdministratorsClientBeginDeleteOptions) (*armruntime.Poller[ServerAdministratorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serverName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServerAdministratorsClientDeleteResponse]("ServerAdministratorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServerAdministratorsClientDeleteResponse]("ServerAdministratorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServerAdministratorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServerAdministratorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ServerAdministratorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServerAdministratorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes server active directory administrator.
@@ -244,13 +236,26 @@ func (client *ServerAdministratorsClient) getHandleResponse(resp *http.Response)
 // serverName - The name of the server.
 // options - ServerAdministratorsClientListOptions contains the optional parameters for the ServerAdministratorsClient.List
 // method.
-func (client *ServerAdministratorsClient) List(resourceGroupName string, serverName string, options *ServerAdministratorsClientListOptions) *ServerAdministratorsClientListPager {
-	return &ServerAdministratorsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+func (client *ServerAdministratorsClient) List(resourceGroupName string, serverName string, options *ServerAdministratorsClientListOptions) *runtime.Pager[ServerAdministratorsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServerAdministratorsClientListResponse]{
+		More: func(page ServerAdministratorsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *ServerAdministratorsClientListResponse) (ServerAdministratorsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+			if err != nil {
+				return ServerAdministratorsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServerAdministratorsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServerAdministratorsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

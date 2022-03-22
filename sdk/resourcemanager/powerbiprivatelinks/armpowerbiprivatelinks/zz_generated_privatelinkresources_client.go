@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,16 +118,32 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PrivateLinkResourcesClientListByResourceOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByResource
 // method.
-func (client *PrivateLinkResourcesClient) ListByResource(options *PrivateLinkResourcesClientListByResourceOptions) *PrivateLinkResourcesClientListByResourcePager {
-	return &PrivateLinkResourcesClientListByResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceCreateRequest(ctx, options)
+func (client *PrivateLinkResourcesClient) ListByResource(options *PrivateLinkResourcesClientListByResourceOptions) *runtime.Pager[PrivateLinkResourcesClientListByResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkResourcesClientListByResourceResponse]{
+		More: func(page PrivateLinkResourcesClientListByResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkResourcesClientListByResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkResourcesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkResourcesClientListByResourceResponse) (PrivateLinkResourcesClientListByResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkResourcesClientListByResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkResourcesClientListByResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceCreateRequest creates the ListByResource request.

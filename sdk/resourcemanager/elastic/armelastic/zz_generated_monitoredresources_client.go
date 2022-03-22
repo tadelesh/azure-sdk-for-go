@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,16 +62,32 @@ func NewMonitoredResourcesClient(subscriptionID string, credential azcore.TokenC
 // resourceGroupName - The name of the resource group to which the Elastic resource belongs.
 // monitorName - Monitor resource name
 // options - MonitoredResourcesClientListOptions contains the optional parameters for the MonitoredResourcesClient.List method.
-func (client *MonitoredResourcesClient) List(resourceGroupName string, monitorName string, options *MonitoredResourcesClientListOptions) *MonitoredResourcesClientListPager {
-	return &MonitoredResourcesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+func (client *MonitoredResourcesClient) List(resourceGroupName string, monitorName string, options *MonitoredResourcesClientListOptions) *runtime.Pager[MonitoredResourcesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MonitoredResourcesClientListResponse]{
+		More: func(page MonitoredResourcesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MonitoredResourcesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MonitoredResourceListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *MonitoredResourcesClientListResponse) (MonitoredResourcesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MonitoredResourcesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MonitoredResourcesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MonitoredResourcesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

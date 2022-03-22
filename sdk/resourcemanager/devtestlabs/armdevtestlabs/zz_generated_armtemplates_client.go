@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -124,16 +124,32 @@ func (client *ArmTemplatesClient) getHandleResponse(resp *http.Response) (ArmTem
 // labName - The name of the lab.
 // artifactSourceName - The name of the artifact source.
 // options - ArmTemplatesClientListOptions contains the optional parameters for the ArmTemplatesClient.List method.
-func (client *ArmTemplatesClient) List(resourceGroupName string, labName string, artifactSourceName string, options *ArmTemplatesClientListOptions) *ArmTemplatesClientListPager {
-	return &ArmTemplatesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, labName, artifactSourceName, options)
+func (client *ArmTemplatesClient) List(resourceGroupName string, labName string, artifactSourceName string, options *ArmTemplatesClientListOptions) *runtime.Pager[ArmTemplatesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ArmTemplatesClientListResponse]{
+		More: func(page ArmTemplatesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ArmTemplatesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ArmTemplateList.NextLink)
+		Fetcher: func(ctx context.Context, page *ArmTemplatesClientListResponse) (ArmTemplatesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, labName, artifactSourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ArmTemplatesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ArmTemplatesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ArmTemplatesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

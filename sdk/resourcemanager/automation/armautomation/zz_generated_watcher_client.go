@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,16 +228,32 @@ func (client *WatcherClient) getHandleResponse(resp *http.Response) (WatcherClie
 // automationAccountName - The name of the automation account.
 // options - WatcherClientListByAutomationAccountOptions contains the optional parameters for the WatcherClient.ListByAutomationAccount
 // method.
-func (client *WatcherClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *WatcherClientListByAutomationAccountOptions) *WatcherClientListByAutomationAccountPager {
-	return &WatcherClientListByAutomationAccountPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+func (client *WatcherClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *WatcherClientListByAutomationAccountOptions) *runtime.Pager[WatcherClientListByAutomationAccountResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WatcherClientListByAutomationAccountResponse]{
+		More: func(page WatcherClientListByAutomationAccountResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WatcherClientListByAutomationAccountResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WatcherListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WatcherClientListByAutomationAccountResponse) (WatcherClientListByAutomationAccountResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WatcherClientListByAutomationAccountResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WatcherClientListByAutomationAccountResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WatcherClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByAutomationAccountHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.

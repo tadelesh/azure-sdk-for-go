@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -228,13 +228,26 @@ func (client *HCRPAssignmentsClient) getHandleResponse(resp *http.Response) (HCR
 // resourceGroupName - The resource group name.
 // machineName - The name of the ARC machine.
 // options - HCRPAssignmentsClientListOptions contains the optional parameters for the HCRPAssignmentsClient.List method.
-func (client *HCRPAssignmentsClient) List(resourceGroupName string, machineName string, options *HCRPAssignmentsClientListOptions) *HCRPAssignmentsClientListPager {
-	return &HCRPAssignmentsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, machineName, options)
+func (client *HCRPAssignmentsClient) List(resourceGroupName string, machineName string, options *HCRPAssignmentsClientListOptions) *runtime.Pager[HCRPAssignmentsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HCRPAssignmentsClientListResponse]{
+		More: func(page HCRPAssignmentsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *HCRPAssignmentsClientListResponse) (HCRPAssignmentsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, machineName, options)
+			if err != nil {
+				return HCRPAssignmentsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HCRPAssignmentsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HCRPAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,20 +60,16 @@ func NewServiceUnitsClient(subscriptionID string, credential azcore.TokenCredent
 // serviceUnitInfo - The service unit resource object.
 // options - ServiceUnitsClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceUnitsClient.BeginCreateOrUpdate
 // method.
-func (client *ServiceUnitsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceTopologyName string, serviceName string, serviceUnitName string, serviceUnitInfo ServiceUnitResource, options *ServiceUnitsClientBeginCreateOrUpdateOptions) (ServiceUnitsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceTopologyName, serviceName, serviceUnitName, serviceUnitInfo, options)
-	if err != nil {
-		return ServiceUnitsClientCreateOrUpdatePollerResponse{}, err
+func (client *ServiceUnitsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceTopologyName string, serviceName string, serviceUnitName string, serviceUnitInfo ServiceUnitResource, options *ServiceUnitsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServiceUnitsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceTopologyName, serviceName, serviceUnitName, serviceUnitInfo, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceUnitsClientCreateOrUpdateResponse]("ServiceUnitsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceUnitsClientCreateOrUpdateResponse]("ServiceUnitsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceUnitsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceUnitsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ServiceUnitsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServiceUnitsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - This is an asynchronous operation and can be polled to completion using the operation resource returned

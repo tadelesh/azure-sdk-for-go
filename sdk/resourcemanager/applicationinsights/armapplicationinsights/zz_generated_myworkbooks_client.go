@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -217,16 +217,32 @@ func (client *MyWorkbooksClient) getHandleResponse(resp *http.Response) (MyWorkb
 // category - Category of workbook to return.
 // options - MyWorkbooksClientListByResourceGroupOptions contains the optional parameters for the MyWorkbooksClient.ListByResourceGroup
 // method.
-func (client *MyWorkbooksClient) ListByResourceGroup(resourceGroupName string, category CategoryType, options *MyWorkbooksClientListByResourceGroupOptions) *MyWorkbooksClientListByResourceGroupPager {
-	return &MyWorkbooksClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, category, options)
+func (client *MyWorkbooksClient) ListByResourceGroup(resourceGroupName string, category CategoryType, options *MyWorkbooksClientListByResourceGroupOptions) *runtime.Pager[MyWorkbooksClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MyWorkbooksClientListByResourceGroupResponse]{
+		More: func(page MyWorkbooksClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MyWorkbooksClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MyWorkbooksListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MyWorkbooksClientListByResourceGroupResponse) (MyWorkbooksClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, category, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MyWorkbooksClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MyWorkbooksClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MyWorkbooksClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -275,16 +291,32 @@ func (client *MyWorkbooksClient) listByResourceGroupHandleResponse(resp *http.Re
 // category - Category of workbook to return.
 // options - MyWorkbooksClientListBySubscriptionOptions contains the optional parameters for the MyWorkbooksClient.ListBySubscription
 // method.
-func (client *MyWorkbooksClient) ListBySubscription(category CategoryType, options *MyWorkbooksClientListBySubscriptionOptions) *MyWorkbooksClientListBySubscriptionPager {
-	return &MyWorkbooksClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, category, options)
+func (client *MyWorkbooksClient) ListBySubscription(category CategoryType, options *MyWorkbooksClientListBySubscriptionOptions) *runtime.Pager[MyWorkbooksClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[MyWorkbooksClientListBySubscriptionResponse]{
+		More: func(page MyWorkbooksClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp MyWorkbooksClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.MyWorkbooksListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *MyWorkbooksClientListBySubscriptionResponse) (MyWorkbooksClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, category, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return MyWorkbooksClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return MyWorkbooksClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return MyWorkbooksClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

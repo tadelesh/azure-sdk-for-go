@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewApplicationGatewayPrivateEndpointConnectionsClient(subscriptionID string
 // connectionName - The name of the application gateway private endpoint connection.
 // options - ApplicationGatewayPrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the
 // ApplicationGatewayPrivateEndpointConnectionsClient.BeginDelete method.
-func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, applicationGatewayName string, connectionName string, options *ApplicationGatewayPrivateEndpointConnectionsClientBeginDeleteOptions) (ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, applicationGatewayName, connectionName, options)
-	if err != nil {
-		return ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}, err
+func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginDelete(ctx context.Context, resourceGroupName string, applicationGatewayName string, connectionName string, options *ApplicationGatewayPrivateEndpointConnectionsClientBeginDeleteOptions) (*armruntime.Poller[ApplicationGatewayPrivateEndpointConnectionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, applicationGatewayName, connectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationGatewayPrivateEndpointConnectionsClientDeleteResponse]("ApplicationGatewayPrivateEndpointConnectionsClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationGatewayPrivateEndpointConnectionsClientDeleteResponse]("ApplicationGatewayPrivateEndpointConnectionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationGatewayPrivateEndpointConnectionsClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ApplicationGatewayPrivateEndpointConnectionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified private endpoint connection on application gateway.
@@ -187,16 +183,32 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) getHandleRespo
 // applicationGatewayName - The name of the application gateway.
 // options - ApplicationGatewayPrivateEndpointConnectionsClientListOptions contains the optional parameters for the ApplicationGatewayPrivateEndpointConnectionsClient.List
 // method.
-func (client *ApplicationGatewayPrivateEndpointConnectionsClient) List(resourceGroupName string, applicationGatewayName string, options *ApplicationGatewayPrivateEndpointConnectionsClientListOptions) *ApplicationGatewayPrivateEndpointConnectionsClientListPager {
-	return &ApplicationGatewayPrivateEndpointConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, applicationGatewayName, options)
+func (client *ApplicationGatewayPrivateEndpointConnectionsClient) List(resourceGroupName string, applicationGatewayName string, options *ApplicationGatewayPrivateEndpointConnectionsClientListOptions) *runtime.Pager[ApplicationGatewayPrivateEndpointConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ApplicationGatewayPrivateEndpointConnectionsClientListResponse]{
+		More: func(page ApplicationGatewayPrivateEndpointConnectionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ApplicationGatewayPrivateEndpointConnectionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ApplicationGatewayPrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ApplicationGatewayPrivateEndpointConnectionsClientListResponse) (ApplicationGatewayPrivateEndpointConnectionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, applicationGatewayName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ApplicationGatewayPrivateEndpointConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ApplicationGatewayPrivateEndpointConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ApplicationGatewayPrivateEndpointConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -242,20 +254,16 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) listHandleResp
 // parameters - Parameters supplied to update application gateway private endpoint connection operation.
 // options - ApplicationGatewayPrivateEndpointConnectionsClientBeginUpdateOptions contains the optional parameters for the
 // ApplicationGatewayPrivateEndpointConnectionsClient.BeginUpdate method.
-func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, applicationGatewayName string, connectionName string, parameters ApplicationGatewayPrivateEndpointConnection, options *ApplicationGatewayPrivateEndpointConnectionsClientBeginUpdateOptions) (ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, applicationGatewayName, connectionName, parameters, options)
-	if err != nil {
-		return ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}, err
+func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginUpdate(ctx context.Context, resourceGroupName string, applicationGatewayName string, connectionName string, parameters ApplicationGatewayPrivateEndpointConnection, options *ApplicationGatewayPrivateEndpointConnectionsClientBeginUpdateOptions) (*armruntime.Poller[ApplicationGatewayPrivateEndpointConnectionsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, applicationGatewayName, connectionName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ApplicationGatewayPrivateEndpointConnectionsClientUpdateResponse]("ApplicationGatewayPrivateEndpointConnectionsClient.Update", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ApplicationGatewayPrivateEndpointConnectionsClientUpdateResponse]("ApplicationGatewayPrivateEndpointConnectionsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ApplicationGatewayPrivateEndpointConnectionsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ApplicationGatewayPrivateEndpointConnectionsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates the specified private endpoint connection on application gateway.

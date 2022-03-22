@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,16 +56,32 @@ func NewFhirDestinationsClient(subscriptionID string, credential azcore.TokenCre
 // iotConnectorName - The name of IoT Connector resource.
 // options - FhirDestinationsClientListByIotConnectorOptions contains the optional parameters for the FhirDestinationsClient.ListByIotConnector
 // method.
-func (client *FhirDestinationsClient) ListByIotConnector(resourceGroupName string, workspaceName string, iotConnectorName string, options *FhirDestinationsClientListByIotConnectorOptions) *FhirDestinationsClientListByIotConnectorPager {
-	return &FhirDestinationsClientListByIotConnectorPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByIotConnectorCreateRequest(ctx, resourceGroupName, workspaceName, iotConnectorName, options)
+func (client *FhirDestinationsClient) ListByIotConnector(resourceGroupName string, workspaceName string, iotConnectorName string, options *FhirDestinationsClientListByIotConnectorOptions) *runtime.Pager[FhirDestinationsClientListByIotConnectorResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FhirDestinationsClientListByIotConnectorResponse]{
+		More: func(page FhirDestinationsClientListByIotConnectorResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FhirDestinationsClientListByIotConnectorResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IotFhirDestinationCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *FhirDestinationsClientListByIotConnectorResponse) (FhirDestinationsClientListByIotConnectorResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByIotConnectorCreateRequest(ctx, resourceGroupName, workspaceName, iotConnectorName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FhirDestinationsClientListByIotConnectorResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FhirDestinationsClientListByIotConnectorResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FhirDestinationsClientListByIotConnectorResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByIotConnectorHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByIotConnectorCreateRequest creates the ListByIotConnector request.

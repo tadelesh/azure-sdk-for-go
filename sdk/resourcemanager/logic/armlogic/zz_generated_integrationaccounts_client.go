@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -214,16 +214,32 @@ func (client *IntegrationAccountsClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The resource group name.
 // options - IntegrationAccountsClientListByResourceGroupOptions contains the optional parameters for the IntegrationAccountsClient.ListByResourceGroup
 // method.
-func (client *IntegrationAccountsClient) ListByResourceGroup(resourceGroupName string, options *IntegrationAccountsClientListByResourceGroupOptions) *IntegrationAccountsClientListByResourceGroupPager {
-	return &IntegrationAccountsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *IntegrationAccountsClient) ListByResourceGroup(resourceGroupName string, options *IntegrationAccountsClientListByResourceGroupOptions) *runtime.Pager[IntegrationAccountsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountsClientListByResourceGroupResponse]{
+		More: func(page IntegrationAccountsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationAccountsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationAccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationAccountsClientListByResourceGroupResponse) (IntegrationAccountsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationAccountsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -264,16 +280,32 @@ func (client *IntegrationAccountsClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - IntegrationAccountsClientListBySubscriptionOptions contains the optional parameters for the IntegrationAccountsClient.ListBySubscription
 // method.
-func (client *IntegrationAccountsClient) ListBySubscription(options *IntegrationAccountsClientListBySubscriptionOptions) *IntegrationAccountsClientListBySubscriptionPager {
-	return &IntegrationAccountsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *IntegrationAccountsClient) ListBySubscription(options *IntegrationAccountsClientListBySubscriptionOptions) *runtime.Pager[IntegrationAccountsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountsClientListBySubscriptionResponse]{
+		More: func(page IntegrationAccountsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationAccountsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationAccountListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationAccountsClientListBySubscriptionResponse) (IntegrationAccountsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationAccountsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -370,13 +402,26 @@ func (client *IntegrationAccountsClient) listCallbackURLHandleResponse(resp *htt
 // listKeyVaultKeys - The key vault parameters.
 // options - IntegrationAccountsClientListKeyVaultKeysOptions contains the optional parameters for the IntegrationAccountsClient.ListKeyVaultKeys
 // method.
-func (client *IntegrationAccountsClient) ListKeyVaultKeys(resourceGroupName string, integrationAccountName string, listKeyVaultKeys ListKeyVaultKeysDefinition, options *IntegrationAccountsClientListKeyVaultKeysOptions) *IntegrationAccountsClientListKeyVaultKeysPager {
-	return &IntegrationAccountsClientListKeyVaultKeysPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listKeyVaultKeysCreateRequest(ctx, resourceGroupName, integrationAccountName, listKeyVaultKeys, options)
+func (client *IntegrationAccountsClient) ListKeyVaultKeys(resourceGroupName string, integrationAccountName string, listKeyVaultKeys ListKeyVaultKeysDefinition, options *IntegrationAccountsClientListKeyVaultKeysOptions) *runtime.Pager[IntegrationAccountsClientListKeyVaultKeysResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountsClientListKeyVaultKeysResponse]{
+		More: func(page IntegrationAccountsClientListKeyVaultKeysResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *IntegrationAccountsClientListKeyVaultKeysResponse) (IntegrationAccountsClientListKeyVaultKeysResponse, error) {
+			req, err := client.listKeyVaultKeysCreateRequest(ctx, resourceGroupName, integrationAccountName, listKeyVaultKeys, options)
+			if err != nil {
+				return IntegrationAccountsClientListKeyVaultKeysResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountsClientListKeyVaultKeysResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountsClientListKeyVaultKeysResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listKeyVaultKeysHandleResponse(resp)
+		},
+	})
 }
 
 // listKeyVaultKeysCreateRequest creates the ListKeyVaultKeys request.

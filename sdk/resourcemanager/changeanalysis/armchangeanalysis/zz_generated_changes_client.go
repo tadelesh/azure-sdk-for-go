@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,16 +58,32 @@ func NewChangesClient(subscriptionID string, credential azcore.TokenCredential, 
 // endTime - Specifies the end time of the changes request.
 // options - ChangesClientListChangesByResourceGroupOptions contains the optional parameters for the ChangesClient.ListChangesByResourceGroup
 // method.
-func (client *ChangesClient) ListChangesByResourceGroup(resourceGroupName string, startTime time.Time, endTime time.Time, options *ChangesClientListChangesByResourceGroupOptions) *ChangesClientListChangesByResourceGroupPager {
-	return &ChangesClientListChangesByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listChangesByResourceGroupCreateRequest(ctx, resourceGroupName, startTime, endTime, options)
+func (client *ChangesClient) ListChangesByResourceGroup(resourceGroupName string, startTime time.Time, endTime time.Time, options *ChangesClientListChangesByResourceGroupOptions) *runtime.Pager[ChangesClientListChangesByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ChangesClientListChangesByResourceGroupResponse]{
+		More: func(page ChangesClientListChangesByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ChangesClientListChangesByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ChangeList.NextLink)
+		Fetcher: func(ctx context.Context, page *ChangesClientListChangesByResourceGroupResponse) (ChangesClientListChangesByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listChangesByResourceGroupCreateRequest(ctx, resourceGroupName, startTime, endTime, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ChangesClientListChangesByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ChangesClientListChangesByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ChangesClientListChangesByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listChangesByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listChangesByResourceGroupCreateRequest creates the ListChangesByResourceGroup request.
@@ -113,16 +129,32 @@ func (client *ChangesClient) listChangesByResourceGroupHandleResponse(resp *http
 // endTime - Specifies the end time of the changes request.
 // options - ChangesClientListChangesBySubscriptionOptions contains the optional parameters for the ChangesClient.ListChangesBySubscription
 // method.
-func (client *ChangesClient) ListChangesBySubscription(startTime time.Time, endTime time.Time, options *ChangesClientListChangesBySubscriptionOptions) *ChangesClientListChangesBySubscriptionPager {
-	return &ChangesClientListChangesBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listChangesBySubscriptionCreateRequest(ctx, startTime, endTime, options)
+func (client *ChangesClient) ListChangesBySubscription(startTime time.Time, endTime time.Time, options *ChangesClientListChangesBySubscriptionOptions) *runtime.Pager[ChangesClientListChangesBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ChangesClientListChangesBySubscriptionResponse]{
+		More: func(page ChangesClientListChangesBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ChangesClientListChangesBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ChangeList.NextLink)
+		Fetcher: func(ctx context.Context, page *ChangesClientListChangesBySubscriptionResponse) (ChangesClientListChangesBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listChangesBySubscriptionCreateRequest(ctx, startTime, endTime, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ChangesClientListChangesBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ChangesClientListChangesBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ChangesClientListChangesBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listChangesBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listChangesBySubscriptionCreateRequest creates the ListChangesBySubscription request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewAuthorizationsClient(subscriptionID string, credential azcore.TokenCrede
 // authorization - An ExpressRoute Circuit Authorization
 // options - AuthorizationsClientBeginCreateOrUpdateOptions contains the optional parameters for the AuthorizationsClient.BeginCreateOrUpdate
 // method.
-func (client *AuthorizationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, authorizationName string, authorization ExpressRouteAuthorization, options *AuthorizationsClientBeginCreateOrUpdateOptions) (AuthorizationsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, authorizationName, authorization, options)
-	if err != nil {
-		return AuthorizationsClientCreateOrUpdatePollerResponse{}, err
+func (client *AuthorizationsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, authorizationName string, authorization ExpressRouteAuthorization, options *AuthorizationsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AuthorizationsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, authorizationName, authorization, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AuthorizationsClientCreateOrUpdateResponse]("AuthorizationsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AuthorizationsClientCreateOrUpdateResponse]("AuthorizationsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AuthorizationsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AuthorizationsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return AuthorizationsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AuthorizationsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update an ExpressRoute Circuit Authorization in a private cloud
@@ -127,20 +123,16 @@ func (client *AuthorizationsClient) createOrUpdateCreateRequest(ctx context.Cont
 // authorizationName - Name of the ExpressRoute Circuit Authorization in the private cloud
 // options - AuthorizationsClientBeginDeleteOptions contains the optional parameters for the AuthorizationsClient.BeginDelete
 // method.
-func (client *AuthorizationsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, authorizationName string, options *AuthorizationsClientBeginDeleteOptions) (AuthorizationsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, authorizationName, options)
-	if err != nil {
-		return AuthorizationsClientDeletePollerResponse{}, err
+func (client *AuthorizationsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, authorizationName string, options *AuthorizationsClientBeginDeleteOptions) (*armruntime.Poller[AuthorizationsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, authorizationName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AuthorizationsClientDeleteResponse]("AuthorizationsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AuthorizationsClientDeleteResponse]("AuthorizationsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AuthorizationsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AuthorizationsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return AuthorizationsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AuthorizationsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete an ExpressRoute Circuit Authorization in a private cloud
@@ -255,16 +247,32 @@ func (client *AuthorizationsClient) getHandleResponse(resp *http.Response) (Auth
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // privateCloudName - Name of the private cloud
 // options - AuthorizationsClientListOptions contains the optional parameters for the AuthorizationsClient.List method.
-func (client *AuthorizationsClient) List(resourceGroupName string, privateCloudName string, options *AuthorizationsClientListOptions) *AuthorizationsClientListPager {
-	return &AuthorizationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+func (client *AuthorizationsClient) List(resourceGroupName string, privateCloudName string, options *AuthorizationsClientListOptions) *runtime.Pager[AuthorizationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AuthorizationsClientListResponse]{
+		More: func(page AuthorizationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AuthorizationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ExpressRouteAuthorizationList.NextLink)
+		Fetcher: func(ctx context.Context, page *AuthorizationsClientListResponse) (AuthorizationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AuthorizationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AuthorizationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AuthorizationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -148,12 +148,14 @@ type ApplicationProperties struct {
 
 // ApplicationsClientBeginCreateOptions contains the optional parameters for the ApplicationsClient.BeginCreate method.
 type ApplicationsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientBeginDeleteOptions contains the optional parameters for the ApplicationsClient.BeginDelete method.
 type ApplicationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ApplicationsClientGetAzureAsyncOperationStatusOptions contains the optional parameters for the ApplicationsClient.GetAzureAsyncOperationStatus
@@ -661,47 +663,55 @@ type ClusterResizeParameters struct {
 
 // ClustersClientBeginCreateOptions contains the optional parameters for the ClustersClient.BeginCreate method.
 type ClustersClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
 type ClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginExecuteScriptActionsOptions contains the optional parameters for the ClustersClient.BeginExecuteScriptActions
 // method.
 type ClustersClientBeginExecuteScriptActionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginResizeOptions contains the optional parameters for the ClustersClient.BeginResize method.
 type ClustersClientBeginResizeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginRotateDiskEncryptionKeyOptions contains the optional parameters for the ClustersClient.BeginRotateDiskEncryptionKey
 // method.
 type ClustersClientBeginRotateDiskEncryptionKeyOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateAutoScaleConfigurationOptions contains the optional parameters for the ClustersClient.BeginUpdateAutoScaleConfiguration
 // method.
 type ClustersClientBeginUpdateAutoScaleConfigurationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateGatewaySettingsOptions contains the optional parameters for the ClustersClient.BeginUpdateGatewaySettings
 // method.
 type ClustersClientBeginUpdateGatewaySettingsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateIdentityCertificateOptions contains the optional parameters for the ClustersClient.BeginUpdateIdentityCertificate
 // method.
 type ClustersClientBeginUpdateIdentityCertificateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientGetAzureAsyncOperationStatusOptions contains the optional parameters for the ClustersClient.GetAzureAsyncOperationStatus
@@ -752,7 +762,8 @@ type ComputeProfile struct {
 
 // ConfigurationsClientBeginUpdateOptions contains the optional parameters for the ConfigurationsClient.BeginUpdate method.
 type ConfigurationsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ConfigurationsClientGetOptions contains the optional parameters for the ConfigurationsClient.Get method.
@@ -896,36 +907,42 @@ type Extension struct {
 
 // ExtensionsClientBeginCreateOptions contains the optional parameters for the ExtensionsClient.BeginCreate method.
 type ExtensionsClientBeginCreateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginDeleteOptions contains the optional parameters for the ExtensionsClient.BeginDelete method.
 type ExtensionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginDisableAzureMonitorOptions contains the optional parameters for the ExtensionsClient.BeginDisableAzureMonitor
 // method.
 type ExtensionsClientBeginDisableAzureMonitorOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginDisableMonitoringOptions contains the optional parameters for the ExtensionsClient.BeginDisableMonitoring
 // method.
 type ExtensionsClientBeginDisableMonitoringOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginEnableAzureMonitorOptions contains the optional parameters for the ExtensionsClient.BeginEnableAzureMonitor
 // method.
 type ExtensionsClientBeginEnableAzureMonitorOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientBeginEnableMonitoringOptions contains the optional parameters for the ExtensionsClient.BeginEnableMonitoring
 // method.
 type ExtensionsClientBeginEnableMonitoringOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ExtensionsClientGetAzureAsyncOperationStatusOptions contains the optional parameters for the ExtensionsClient.GetAzureAsyncOperationStatus
@@ -1266,13 +1283,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -1914,7 +1933,8 @@ type VersionsCapability struct {
 // VirtualMachinesClientBeginRestartHostsOptions contains the optional parameters for the VirtualMachinesClient.BeginRestartHosts
 // method.
 type VirtualMachinesClientBeginRestartHostsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VirtualMachinesClientGetAsyncOperationStatusOptions contains the optional parameters for the VirtualMachinesClient.GetAsyncOperationStatus

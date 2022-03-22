@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewCachesClient(subscriptionID string, credential azcore.TokenCredential, o
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginCreateOrUpdateOptions contains the optional parameters for the CachesClient.BeginCreateOrUpdate
 // method.
-func (client *CachesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginCreateOrUpdateOptions) (CachesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientCreateOrUpdatePollerResponse{}, err
+func (client *CachesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CachesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientCreateOrUpdateResponse]("CachesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientCreateOrUpdateResponse]("CachesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return CachesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CachesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a Cache.
@@ -123,20 +119,16 @@ func (client *CachesClient) createOrUpdateCreateRequest(ctx context.Context, res
 // resourceGroupName - Target resource group.
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginDebugInfoOptions contains the optional parameters for the CachesClient.BeginDebugInfo method.
-func (client *CachesClient) BeginDebugInfo(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginDebugInfoOptions) (CachesClientDebugInfoPollerResponse, error) {
-	resp, err := client.debugInfo(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientDebugInfoPollerResponse{}, err
+func (client *CachesClient) BeginDebugInfo(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginDebugInfoOptions) (*armruntime.Poller[CachesClientDebugInfoResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.debugInfo(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientDebugInfoResponse]("CachesClient.DebugInfo", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientDebugInfoResponse]("CachesClient.DebugInfo", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientDebugInfoPollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.DebugInfo", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CachesClientDebugInfoPollerResponse{}, err
-	}
-	result.Poller = &CachesClientDebugInfoPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DebugInfo - Tells a Cache to write generate debug info for support to process.
@@ -187,20 +179,16 @@ func (client *CachesClient) debugInfoCreateRequest(ctx context.Context, resource
 // resourceGroupName - Target resource group.
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginDeleteOptions contains the optional parameters for the CachesClient.BeginDelete method.
-func (client *CachesClient) BeginDelete(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginDeleteOptions) (CachesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientDeletePollerResponse{}, err
+func (client *CachesClient) BeginDelete(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginDeleteOptions) (*armruntime.Poller[CachesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientDeleteResponse]("CachesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientDeleteResponse]("CachesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return CachesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CachesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Schedules a Cache for deletion.
@@ -252,20 +240,16 @@ func (client *CachesClient) deleteCreateRequest(ctx context.Context, resourceGro
 // resourceGroupName - Target resource group.
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginFlushOptions contains the optional parameters for the CachesClient.BeginFlush method.
-func (client *CachesClient) BeginFlush(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginFlushOptions) (CachesClientFlushPollerResponse, error) {
-	resp, err := client.flush(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientFlushPollerResponse{}, err
+func (client *CachesClient) BeginFlush(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginFlushOptions) (*armruntime.Poller[CachesClientFlushResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.flush(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientFlushResponse]("CachesClient.Flush", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientFlushResponse]("CachesClient.Flush", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientFlushPollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.Flush", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CachesClientFlushPollerResponse{}, err
-	}
-	result.Poller = &CachesClientFlushPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Flush - Tells a Cache to write all dirty data to the Storage Target(s). During the flush, clients will see errors returned
@@ -370,16 +354,32 @@ func (client *CachesClient) getHandleResponse(resp *http.Response) (CachesClient
 // List - Returns all Caches the user has access to under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CachesClientListOptions contains the optional parameters for the CachesClient.List method.
-func (client *CachesClient) List(options *CachesClientListOptions) *CachesClientListPager {
-	return &CachesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *CachesClient) List(options *CachesClientListOptions) *runtime.Pager[CachesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CachesClientListResponse]{
+		More: func(page CachesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CachesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CachesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CachesClientListResponse) (CachesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CachesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CachesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CachesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -414,16 +414,32 @@ func (client *CachesClient) listHandleResponse(resp *http.Response) (CachesClien
 // resourceGroupName - Target resource group.
 // options - CachesClientListByResourceGroupOptions contains the optional parameters for the CachesClient.ListByResourceGroup
 // method.
-func (client *CachesClient) ListByResourceGroup(resourceGroupName string, options *CachesClientListByResourceGroupOptions) *CachesClientListByResourceGroupPager {
-	return &CachesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *CachesClient) ListByResourceGroup(resourceGroupName string, options *CachesClientListByResourceGroupOptions) *runtime.Pager[CachesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CachesClientListByResourceGroupResponse]{
+		More: func(page CachesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CachesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CachesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CachesClientListByResourceGroupResponse) (CachesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CachesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CachesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CachesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -462,20 +478,16 @@ func (client *CachesClient) listByResourceGroupHandleResponse(resp *http.Respons
 // resourceGroupName - Target resource group.
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginStartOptions contains the optional parameters for the CachesClient.BeginStart method.
-func (client *CachesClient) BeginStart(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginStartOptions) (CachesClientStartPollerResponse, error) {
-	resp, err := client.start(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientStartPollerResponse{}, err
+func (client *CachesClient) BeginStart(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginStartOptions) (*armruntime.Poller[CachesClientStartResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.start(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientStartResponse]("CachesClient.Start", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientStartResponse]("CachesClient.Start", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientStartPollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.Start", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CachesClientStartPollerResponse{}, err
-	}
-	result.Poller = &CachesClientStartPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Start - Tells a Stopped state Cache to transition to Active state.
@@ -526,20 +538,16 @@ func (client *CachesClient) startCreateRequest(ctx context.Context, resourceGrou
 // resourceGroupName - Target resource group.
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginStopOptions contains the optional parameters for the CachesClient.BeginStop method.
-func (client *CachesClient) BeginStop(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginStopOptions) (CachesClientStopPollerResponse, error) {
-	resp, err := client.stop(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientStopPollerResponse{}, err
+func (client *CachesClient) BeginStop(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginStopOptions) (*armruntime.Poller[CachesClientStopResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.stop(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientStopResponse]("CachesClient.Stop", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientStopResponse]("CachesClient.Stop", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientStopPollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.Stop", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CachesClientStopPollerResponse{}, err
-	}
-	result.Poller = &CachesClientStopPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Stop - Tells an Active Cache to transition to Stopped state.
@@ -649,20 +657,16 @@ func (client *CachesClient) updateHandleResponse(resp *http.Response) (CachesCli
 // cacheName - Name of Cache. Length of name must not be greater than 80 and chars must be from the [-0-9a-zA-Z_] char class.
 // options - CachesClientBeginUpgradeFirmwareOptions contains the optional parameters for the CachesClient.BeginUpgradeFirmware
 // method.
-func (client *CachesClient) BeginUpgradeFirmware(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginUpgradeFirmwareOptions) (CachesClientUpgradeFirmwarePollerResponse, error) {
-	resp, err := client.upgradeFirmware(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return CachesClientUpgradeFirmwarePollerResponse{}, err
+func (client *CachesClient) BeginUpgradeFirmware(ctx context.Context, resourceGroupName string, cacheName string, options *CachesClientBeginUpgradeFirmwareOptions) (*armruntime.Poller[CachesClientUpgradeFirmwareResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.upgradeFirmware(ctx, resourceGroupName, cacheName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CachesClientUpgradeFirmwareResponse]("CachesClient.UpgradeFirmware", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CachesClientUpgradeFirmwareResponse]("CachesClient.UpgradeFirmware", options.ResumeToken, client.pl, nil)
 	}
-	result := CachesClientUpgradeFirmwarePollerResponse{}
-	pt, err := armruntime.NewPoller("CachesClient.UpgradeFirmware", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return CachesClientUpgradeFirmwarePollerResponse{}, err
-	}
-	result.Poller = &CachesClientUpgradeFirmwarePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpgradeFirmware - Upgrade a Cache's firmware if a new version is available. Otherwise, this operation has no effect.

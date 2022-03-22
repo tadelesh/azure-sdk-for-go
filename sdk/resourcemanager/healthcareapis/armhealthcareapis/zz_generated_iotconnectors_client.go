@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewIotConnectorsClient(subscriptionID string, credential azcore.TokenCreden
 // iotConnector - The parameters for creating or updating an IoT Connectors resource.
 // options - IotConnectorsClientBeginCreateOrUpdateOptions contains the optional parameters for the IotConnectorsClient.BeginCreateOrUpdate
 // method.
-func (client *IotConnectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, iotConnector IotConnector, options *IotConnectorsClientBeginCreateOrUpdateOptions) (IotConnectorsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, iotConnectorName, iotConnector, options)
-	if err != nil {
-		return IotConnectorsClientCreateOrUpdatePollerResponse{}, err
+func (client *IotConnectorsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, iotConnectorName string, iotConnector IotConnector, options *IotConnectorsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[IotConnectorsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, workspaceName, iotConnectorName, iotConnector, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IotConnectorsClientCreateOrUpdateResponse]("IotConnectorsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IotConnectorsClientCreateOrUpdateResponse]("IotConnectorsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := IotConnectorsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IotConnectorsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return IotConnectorsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &IotConnectorsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates an IoT Connector resource with the specified parameters.
@@ -127,20 +123,16 @@ func (client *IotConnectorsClient) createOrUpdateCreateRequest(ctx context.Conte
 // workspaceName - The name of workspace resource.
 // options - IotConnectorsClientBeginDeleteOptions contains the optional parameters for the IotConnectorsClient.BeginDelete
 // method.
-func (client *IotConnectorsClient) BeginDelete(ctx context.Context, resourceGroupName string, iotConnectorName string, workspaceName string, options *IotConnectorsClientBeginDeleteOptions) (IotConnectorsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, iotConnectorName, workspaceName, options)
-	if err != nil {
-		return IotConnectorsClientDeletePollerResponse{}, err
+func (client *IotConnectorsClient) BeginDelete(ctx context.Context, resourceGroupName string, iotConnectorName string, workspaceName string, options *IotConnectorsClientBeginDeleteOptions) (*armruntime.Poller[IotConnectorsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, iotConnectorName, workspaceName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IotConnectorsClientDeleteResponse]("IotConnectorsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IotConnectorsClientDeleteResponse]("IotConnectorsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := IotConnectorsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("IotConnectorsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return IotConnectorsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &IotConnectorsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an IoT Connector.
@@ -256,16 +248,32 @@ func (client *IotConnectorsClient) getHandleResponse(resp *http.Response) (IotCo
 // workspaceName - The name of workspace resource.
 // options - IotConnectorsClientListByWorkspaceOptions contains the optional parameters for the IotConnectorsClient.ListByWorkspace
 // method.
-func (client *IotConnectorsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IotConnectorsClientListByWorkspaceOptions) *IotConnectorsClientListByWorkspacePager {
-	return &IotConnectorsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *IotConnectorsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *IotConnectorsClientListByWorkspaceOptions) *runtime.Pager[IotConnectorsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IotConnectorsClientListByWorkspaceResponse]{
+		More: func(page IotConnectorsClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IotConnectorsClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IotConnectorCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *IotConnectorsClientListByWorkspaceResponse) (IotConnectorsClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IotConnectorsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IotConnectorsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IotConnectorsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -311,20 +319,16 @@ func (client *IotConnectorsClient) listByWorkspaceHandleResponse(resp *http.Resp
 // iotConnectorPatchResource - The parameters for updating an IoT Connector.
 // options - IotConnectorsClientBeginUpdateOptions contains the optional parameters for the IotConnectorsClient.BeginUpdate
 // method.
-func (client *IotConnectorsClient) BeginUpdate(ctx context.Context, resourceGroupName string, iotConnectorName string, workspaceName string, iotConnectorPatchResource IotConnectorPatchResource, options *IotConnectorsClientBeginUpdateOptions) (IotConnectorsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, iotConnectorName, workspaceName, iotConnectorPatchResource, options)
-	if err != nil {
-		return IotConnectorsClientUpdatePollerResponse{}, err
+func (client *IotConnectorsClient) BeginUpdate(ctx context.Context, resourceGroupName string, iotConnectorName string, workspaceName string, iotConnectorPatchResource IotConnectorPatchResource, options *IotConnectorsClientBeginUpdateOptions) (*armruntime.Poller[IotConnectorsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, iotConnectorName, workspaceName, iotConnectorPatchResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[IotConnectorsClientUpdateResponse]("IotConnectorsClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[IotConnectorsClientUpdateResponse]("IotConnectorsClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := IotConnectorsClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("IotConnectorsClient.Update", "", resp, client.pl)
-	if err != nil {
-		return IotConnectorsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &IotConnectorsClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch an IoT Connector.

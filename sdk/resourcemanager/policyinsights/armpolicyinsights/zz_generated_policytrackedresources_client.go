@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,16 +58,32 @@ func NewPolicyTrackedResourcesClient(subscriptionID string, credential azcore.To
 // is allowed.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyTrackedResourcesClient) ListQueryResultsForManagementGroup(managementGroupsNamespace Enum0, managementGroupName string, policyTrackedResourcesResource Enum1, options *QueryOptions) *PolicyTrackedResourcesClientListQueryResultsForManagementGroupPager {
-	return &PolicyTrackedResourcesClientListQueryResultsForManagementGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForManagementGroupCreateRequest(ctx, managementGroupsNamespace, managementGroupName, policyTrackedResourcesResource, options)
+func (client *PolicyTrackedResourcesClient) ListQueryResultsForManagementGroup(managementGroupsNamespace Enum0, managementGroupName string, policyTrackedResourcesResource Enum1, options *QueryOptions) *runtime.Pager[PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse]{
+		More: func(page PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyTrackedResourcesQueryResults.NextLink)
+		Fetcher: func(ctx context.Context, page *PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse) (PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForManagementGroupCreateRequest(ctx, managementGroupsNamespace, managementGroupName, policyTrackedResourcesResource, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForManagementGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForManagementGroupCreateRequest creates the ListQueryResultsForManagementGroup request.
@@ -118,16 +134,32 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForManagementGroupHa
 // is allowed.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyTrackedResourcesClient) ListQueryResultsForResource(resourceID string, policyTrackedResourcesResource Enum1, options *QueryOptions) *PolicyTrackedResourcesClientListQueryResultsForResourcePager {
-	return &PolicyTrackedResourcesClientListQueryResultsForResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForResourceCreateRequest(ctx, resourceID, policyTrackedResourcesResource, options)
+func (client *PolicyTrackedResourcesClient) ListQueryResultsForResource(resourceID string, policyTrackedResourcesResource Enum1, options *QueryOptions) *runtime.Pager[PolicyTrackedResourcesClientListQueryResultsForResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyTrackedResourcesClientListQueryResultsForResourceResponse]{
+		More: func(page PolicyTrackedResourcesClientListQueryResultsForResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyTrackedResourcesClientListQueryResultsForResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyTrackedResourcesQueryResults.NextLink)
+		Fetcher: func(ctx context.Context, page *PolicyTrackedResourcesClientListQueryResultsForResourceResponse) (PolicyTrackedResourcesClientListQueryResultsForResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForResourceCreateRequest(ctx, resourceID, policyTrackedResourcesResource, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForResourceCreateRequest creates the ListQueryResultsForResource request.
@@ -171,16 +203,32 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceHandleRes
 // is allowed.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyTrackedResourcesClient) ListQueryResultsForResourceGroup(resourceGroupName string, policyTrackedResourcesResource Enum1, options *QueryOptions) *PolicyTrackedResourcesClientListQueryResultsForResourceGroupPager {
-	return &PolicyTrackedResourcesClientListQueryResultsForResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForResourceGroupCreateRequest(ctx, resourceGroupName, policyTrackedResourcesResource, options)
+func (client *PolicyTrackedResourcesClient) ListQueryResultsForResourceGroup(resourceGroupName string, policyTrackedResourcesResource Enum1, options *QueryOptions) *runtime.Pager[PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse]{
+		More: func(page PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyTrackedResourcesQueryResults.NextLink)
+		Fetcher: func(ctx context.Context, page *PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse) (PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForResourceGroupCreateRequest(ctx, resourceGroupName, policyTrackedResourcesResource, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForResourceGroupCreateRequest creates the ListQueryResultsForResourceGroup request.
@@ -230,16 +278,32 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceGroupHand
 // is allowed.
 // options - QueryOptions contains a group of parameters for the PolicyTrackedResourcesClient.ListQueryResultsForManagementGroup
 // method.
-func (client *PolicyTrackedResourcesClient) ListQueryResultsForSubscription(policyTrackedResourcesResource Enum1, options *QueryOptions) *PolicyTrackedResourcesClientListQueryResultsForSubscriptionPager {
-	return &PolicyTrackedResourcesClientListQueryResultsForSubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listQueryResultsForSubscriptionCreateRequest(ctx, policyTrackedResourcesResource, options)
+func (client *PolicyTrackedResourcesClient) ListQueryResultsForSubscription(policyTrackedResourcesResource Enum1, options *QueryOptions) *runtime.Pager[PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse]{
+		More: func(page PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PolicyTrackedResourcesQueryResults.NextLink)
+		Fetcher: func(ctx context.Context, page *PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse) (PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listQueryResultsForSubscriptionCreateRequest(ctx, policyTrackedResourcesResource, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listQueryResultsForSubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listQueryResultsForSubscriptionCreateRequest creates the ListQueryResultsForSubscription request.

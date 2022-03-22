@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -128,16 +128,32 @@ func (client *CertificateOrdersDiagnosticsClient) getAppServiceCertificateOrderD
 // certificateOrderName - The certificate order name for which the response is needed.
 // options - CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseOptions contains the optional
 // parameters for the CertificateOrdersDiagnosticsClient.ListAppServiceCertificateOrderDetectorResponse method.
-func (client *CertificateOrdersDiagnosticsClient) ListAppServiceCertificateOrderDetectorResponse(resourceGroupName string, certificateOrderName string, options *CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseOptions) *CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponsePager {
-	return &CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponsePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAppServiceCertificateOrderDetectorResponseCreateRequest(ctx, resourceGroupName, certificateOrderName, options)
+func (client *CertificateOrdersDiagnosticsClient) ListAppServiceCertificateOrderDetectorResponse(resourceGroupName string, certificateOrderName string, options *CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseOptions) *runtime.Pager[CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse]{
+		More: func(page CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DetectorResponseCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse) (CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAppServiceCertificateOrderDetectorResponseCreateRequest(ctx, resourceGroupName, certificateOrderName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAppServiceCertificateOrderDetectorResponseHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAppServiceCertificateOrderDetectorResponseCreateRequest creates the ListAppServiceCertificateOrderDetectorResponse request.

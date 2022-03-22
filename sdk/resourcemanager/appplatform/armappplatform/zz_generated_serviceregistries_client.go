@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewServiceRegistriesClient(subscriptionID string, credential azcore.TokenCr
 // serviceRegistryName - The name of Service Registry.
 // options - ServiceRegistriesClientBeginCreateOrUpdateOptions contains the optional parameters for the ServiceRegistriesClient.BeginCreateOrUpdate
 // method.
-func (client *ServiceRegistriesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, serviceRegistryName string, options *ServiceRegistriesClientBeginCreateOrUpdateOptions) (ServiceRegistriesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, serviceRegistryName, options)
-	if err != nil {
-		return ServiceRegistriesClientCreateOrUpdatePollerResponse{}, err
+func (client *ServiceRegistriesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, serviceRegistryName string, options *ServiceRegistriesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ServiceRegistriesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, serviceRegistryName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceRegistriesClientCreateOrUpdateResponse]("ServiceRegistriesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceRegistriesClientCreateOrUpdateResponse]("ServiceRegistriesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceRegistriesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceRegistriesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServiceRegistriesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ServiceRegistriesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create the default Service Registry or update the existing Service Registry.
@@ -129,20 +125,16 @@ func (client *ServiceRegistriesClient) createOrUpdateCreateRequest(ctx context.C
 // serviceRegistryName - The name of Service Registry.
 // options - ServiceRegistriesClientBeginDeleteOptions contains the optional parameters for the ServiceRegistriesClient.BeginDelete
 // method.
-func (client *ServiceRegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, serviceRegistryName string, options *ServiceRegistriesClientBeginDeleteOptions) (ServiceRegistriesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, serviceRegistryName, options)
-	if err != nil {
-		return ServiceRegistriesClientDeletePollerResponse{}, err
+func (client *ServiceRegistriesClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, serviceRegistryName string, options *ServiceRegistriesClientBeginDeleteOptions) (*armruntime.Poller[ServiceRegistriesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, serviceRegistryName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ServiceRegistriesClientDeleteResponse]("ServiceRegistriesClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ServiceRegistriesClientDeleteResponse]("ServiceRegistriesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ServiceRegistriesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ServiceRegistriesClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return ServiceRegistriesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ServiceRegistriesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Disable the default Service Registry.
@@ -259,16 +251,32 @@ func (client *ServiceRegistriesClient) getHandleResponse(resp *http.Response) (S
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - ServiceRegistriesClientListOptions contains the optional parameters for the ServiceRegistriesClient.List method.
-func (client *ServiceRegistriesClient) List(resourceGroupName string, serviceName string, options *ServiceRegistriesClientListOptions) *ServiceRegistriesClientListPager {
-	return &ServiceRegistriesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *ServiceRegistriesClient) List(resourceGroupName string, serviceName string, options *ServiceRegistriesClientListOptions) *runtime.Pager[ServiceRegistriesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ServiceRegistriesClientListResponse]{
+		More: func(page ServiceRegistriesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ServiceRegistriesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ServiceRegistryResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *ServiceRegistriesClientListResponse) (ServiceRegistriesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ServiceRegistriesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ServiceRegistriesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ServiceRegistriesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

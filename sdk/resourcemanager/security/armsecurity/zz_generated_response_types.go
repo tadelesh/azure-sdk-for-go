@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,12 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armsecurity
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
 
 // AccountConnectorsClientCreateOrUpdateResponse contains the response from method AccountConnectorsClient.CreateOrUpdate.
 type AccountConnectorsClientCreateOrUpdateResponse struct {
@@ -52,41 +46,6 @@ type AdaptiveApplicationControlsClientListResponse struct {
 // AdaptiveApplicationControlsClientPutResponse contains the response from method AdaptiveApplicationControlsClient.Put.
 type AdaptiveApplicationControlsClientPutResponse struct {
 	AdaptiveApplicationControlGroup
-}
-
-// AdaptiveNetworkHardeningsClientEnforcePollerResponse contains the response from method AdaptiveNetworkHardeningsClient.Enforce.
-type AdaptiveNetworkHardeningsClientEnforcePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AdaptiveNetworkHardeningsClientEnforcePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AdaptiveNetworkHardeningsClientEnforcePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AdaptiveNetworkHardeningsClientEnforceResponse, error) {
-	respType := AdaptiveNetworkHardeningsClientEnforceResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AdaptiveNetworkHardeningsClientEnforcePollerResponse from the provided client and resume token.
-func (l *AdaptiveNetworkHardeningsClientEnforcePollerResponse) Resume(ctx context.Context, client *AdaptiveNetworkHardeningsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AdaptiveNetworkHardeningsClient.Enforce", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AdaptiveNetworkHardeningsClientEnforcePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AdaptiveNetworkHardeningsClientEnforceResponse contains the response from method AdaptiveNetworkHardeningsClient.Enforce.
@@ -142,41 +101,6 @@ type AlertsClientListResponse struct {
 // AlertsClientListSubscriptionLevelByRegionResponse contains the response from method AlertsClient.ListSubscriptionLevelByRegion.
 type AlertsClientListSubscriptionLevelByRegionResponse struct {
 	AlertList
-}
-
-// AlertsClientSimulatePollerResponse contains the response from method AlertsClient.Simulate.
-type AlertsClientSimulatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *AlertsClientSimulatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l AlertsClientSimulatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AlertsClientSimulateResponse, error) {
-	respType := AlertsClientSimulateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a AlertsClientSimulatePollerResponse from the provided client and resume token.
-func (l *AlertsClientSimulatePollerResponse) Resume(ctx context.Context, client *AlertsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("AlertsClient.Simulate", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &AlertsClientSimulatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // AlertsClientSimulateResponse contains the response from method AlertsClient.Simulate.
@@ -817,41 +741,6 @@ type SecureScoresClientListResponse struct {
 // ServerVulnerabilityAssessmentClientCreateOrUpdateResponse contains the response from method ServerVulnerabilityAssessmentClient.CreateOrUpdate.
 type ServerVulnerabilityAssessmentClientCreateOrUpdateResponse struct {
 	ServerVulnerabilityAssessment
-}
-
-// ServerVulnerabilityAssessmentClientDeletePollerResponse contains the response from method ServerVulnerabilityAssessmentClient.Delete.
-type ServerVulnerabilityAssessmentClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ServerVulnerabilityAssessmentClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ServerVulnerabilityAssessmentClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServerVulnerabilityAssessmentClientDeleteResponse, error) {
-	respType := ServerVulnerabilityAssessmentClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ServerVulnerabilityAssessmentClientDeletePollerResponse from the provided client and resume token.
-func (l *ServerVulnerabilityAssessmentClientDeletePollerResponse) Resume(ctx context.Context, client *ServerVulnerabilityAssessmentClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ServerVulnerabilityAssessmentClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ServerVulnerabilityAssessmentClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ServerVulnerabilityAssessmentClientDeleteResponse contains the response from method ServerVulnerabilityAssessmentClient.Delete.

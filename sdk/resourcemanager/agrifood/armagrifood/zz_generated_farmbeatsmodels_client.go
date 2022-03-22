@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -213,16 +213,32 @@ func (client *FarmBeatsModelsClient) getHandleResponse(resp *http.Response) (Far
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - FarmBeatsModelsClientListByResourceGroupOptions contains the optional parameters for the FarmBeatsModelsClient.ListByResourceGroup
 // method.
-func (client *FarmBeatsModelsClient) ListByResourceGroup(resourceGroupName string, options *FarmBeatsModelsClientListByResourceGroupOptions) *FarmBeatsModelsClientListByResourceGroupPager {
-	return &FarmBeatsModelsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *FarmBeatsModelsClient) ListByResourceGroup(resourceGroupName string, options *FarmBeatsModelsClientListByResourceGroupOptions) *runtime.Pager[FarmBeatsModelsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FarmBeatsModelsClientListByResourceGroupResponse]{
+		More: func(page FarmBeatsModelsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FarmBeatsModelsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FarmBeatsListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *FarmBeatsModelsClientListByResourceGroupResponse) (FarmBeatsModelsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FarmBeatsModelsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FarmBeatsModelsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FarmBeatsModelsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -266,16 +282,32 @@ func (client *FarmBeatsModelsClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - FarmBeatsModelsClientListBySubscriptionOptions contains the optional parameters for the FarmBeatsModelsClient.ListBySubscription
 // method.
-func (client *FarmBeatsModelsClient) ListBySubscription(options *FarmBeatsModelsClientListBySubscriptionOptions) *FarmBeatsModelsClientListBySubscriptionPager {
-	return &FarmBeatsModelsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *FarmBeatsModelsClient) ListBySubscription(options *FarmBeatsModelsClientListBySubscriptionOptions) *runtime.Pager[FarmBeatsModelsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[FarmBeatsModelsClientListBySubscriptionResponse]{
+		More: func(page FarmBeatsModelsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp FarmBeatsModelsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.FarmBeatsListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *FarmBeatsModelsClientListBySubscriptionResponse) (FarmBeatsModelsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return FarmBeatsModelsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return FarmBeatsModelsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return FarmBeatsModelsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

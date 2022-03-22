@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewScriptExecutionsClient(subscriptionID string, credential azcore.TokenCre
 // scriptExecution - A script running in the private cloud
 // options - ScriptExecutionsClientBeginCreateOrUpdateOptions contains the optional parameters for the ScriptExecutionsClient.BeginCreateOrUpdate
 // method.
-func (client *ScriptExecutionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, scriptExecutionName string, scriptExecution ScriptExecution, options *ScriptExecutionsClientBeginCreateOrUpdateOptions) (ScriptExecutionsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, scriptExecutionName, scriptExecution, options)
-	if err != nil {
-		return ScriptExecutionsClientCreateOrUpdatePollerResponse{}, err
+func (client *ScriptExecutionsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, privateCloudName string, scriptExecutionName string, scriptExecution ScriptExecution, options *ScriptExecutionsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[ScriptExecutionsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, privateCloudName, scriptExecutionName, scriptExecution, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScriptExecutionsClientCreateOrUpdateResponse]("ScriptExecutionsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScriptExecutionsClientCreateOrUpdateResponse]("ScriptExecutionsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := ScriptExecutionsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ScriptExecutionsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return ScriptExecutionsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &ScriptExecutionsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update a script execution in a private cloud
@@ -127,20 +123,16 @@ func (client *ScriptExecutionsClient) createOrUpdateCreateRequest(ctx context.Co
 // scriptExecutionName - Name of the user-invoked script execution resource
 // options - ScriptExecutionsClientBeginDeleteOptions contains the optional parameters for the ScriptExecutionsClient.BeginDelete
 // method.
-func (client *ScriptExecutionsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, scriptExecutionName string, options *ScriptExecutionsClientBeginDeleteOptions) (ScriptExecutionsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, scriptExecutionName, options)
-	if err != nil {
-		return ScriptExecutionsClientDeletePollerResponse{}, err
+func (client *ScriptExecutionsClient) BeginDelete(ctx context.Context, resourceGroupName string, privateCloudName string, scriptExecutionName string, options *ScriptExecutionsClientBeginDeleteOptions) (*armruntime.Poller[ScriptExecutionsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, privateCloudName, scriptExecutionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ScriptExecutionsClientDeleteResponse]("ScriptExecutionsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ScriptExecutionsClientDeleteResponse]("ScriptExecutionsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ScriptExecutionsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ScriptExecutionsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ScriptExecutionsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ScriptExecutionsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Cancel a ScriptExecution in a private cloud
@@ -319,16 +311,32 @@ func (client *ScriptExecutionsClient) getExecutionLogsHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // privateCloudName - Name of the private cloud
 // options - ScriptExecutionsClientListOptions contains the optional parameters for the ScriptExecutionsClient.List method.
-func (client *ScriptExecutionsClient) List(resourceGroupName string, privateCloudName string, options *ScriptExecutionsClientListOptions) *ScriptExecutionsClientListPager {
-	return &ScriptExecutionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+func (client *ScriptExecutionsClient) List(resourceGroupName string, privateCloudName string, options *ScriptExecutionsClientListOptions) *runtime.Pager[ScriptExecutionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ScriptExecutionsClientListResponse]{
+		More: func(page ScriptExecutionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ScriptExecutionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ScriptExecutionsList.NextLink)
+		Fetcher: func(ctx context.Context, page *ScriptExecutionsClientListResponse) (ScriptExecutionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, privateCloudName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ScriptExecutionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ScriptExecutionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ScriptExecutionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

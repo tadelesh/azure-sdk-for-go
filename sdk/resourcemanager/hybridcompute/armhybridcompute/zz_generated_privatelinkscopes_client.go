@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -113,20 +113,16 @@ func (client *PrivateLinkScopesClient) createOrUpdateHandleResponse(resp *http.R
 // scopeName - The name of the Azure Arc PrivateLinkScope resource.
 // options - PrivateLinkScopesClientBeginDeleteOptions contains the optional parameters for the PrivateLinkScopesClient.BeginDelete
 // method.
-func (client *PrivateLinkScopesClient) BeginDelete(ctx context.Context, resourceGroupName string, scopeName string, options *PrivateLinkScopesClientBeginDeleteOptions) (PrivateLinkScopesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, scopeName, options)
-	if err != nil {
-		return PrivateLinkScopesClientDeletePollerResponse{}, err
+func (client *PrivateLinkScopesClient) BeginDelete(ctx context.Context, resourceGroupName string, scopeName string, options *PrivateLinkScopesClientBeginDeleteOptions) (*armruntime.Poller[PrivateLinkScopesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, scopeName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateLinkScopesClientDeleteResponse]("PrivateLinkScopesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateLinkScopesClientDeleteResponse]("PrivateLinkScopesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateLinkScopesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateLinkScopesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return PrivateLinkScopesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &PrivateLinkScopesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a Azure Arc PrivateLinkScope.
@@ -342,16 +338,32 @@ func (client *PrivateLinkScopesClient) getValidationDetailsForMachineHandleRespo
 // List - Gets a list of all Azure Arc PrivateLinkScopes within a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PrivateLinkScopesClientListOptions contains the optional parameters for the PrivateLinkScopesClient.List method.
-func (client *PrivateLinkScopesClient) List(options *PrivateLinkScopesClientListOptions) *PrivateLinkScopesClientListPager {
-	return &PrivateLinkScopesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *PrivateLinkScopesClient) List(options *PrivateLinkScopesClientListOptions) *runtime.Pager[PrivateLinkScopesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkScopesClientListResponse]{
+		More: func(page PrivateLinkScopesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkScopesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkScopeListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkScopesClientListResponse) (PrivateLinkScopesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkScopesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkScopesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkScopesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -386,16 +398,32 @@ func (client *PrivateLinkScopesClient) listHandleResponse(resp *http.Response) (
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - PrivateLinkScopesClientListByResourceGroupOptions contains the optional parameters for the PrivateLinkScopesClient.ListByResourceGroup
 // method.
-func (client *PrivateLinkScopesClient) ListByResourceGroup(resourceGroupName string, options *PrivateLinkScopesClientListByResourceGroupOptions) *PrivateLinkScopesClientListByResourceGroupPager {
-	return &PrivateLinkScopesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *PrivateLinkScopesClient) ListByResourceGroup(resourceGroupName string, options *PrivateLinkScopesClientListByResourceGroupOptions) *runtime.Pager[PrivateLinkScopesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateLinkScopesClientListByResourceGroupResponse]{
+		More: func(page PrivateLinkScopesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateLinkScopesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateLinkScopeListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateLinkScopesClientListByResourceGroupResponse) (PrivateLinkScopesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateLinkScopesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateLinkScopesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateLinkScopesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

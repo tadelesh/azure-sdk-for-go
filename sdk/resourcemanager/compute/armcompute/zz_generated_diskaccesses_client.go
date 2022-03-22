@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewDiskAccessesClient(subscriptionID string, credential azcore.TokenCredent
 // diskAccess - disk access object supplied in the body of the Put disk access operation.
 // options - DiskAccessesClientBeginCreateOrUpdateOptions contains the optional parameters for the DiskAccessesClient.BeginCreateOrUpdate
 // method.
-func (client *DiskAccessesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, diskAccessName string, diskAccess DiskAccess, options *DiskAccessesClientBeginCreateOrUpdateOptions) (DiskAccessesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, diskAccessName, diskAccess, options)
-	if err != nil {
-		return DiskAccessesClientCreateOrUpdatePollerResponse{}, err
+func (client *DiskAccessesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, diskAccessName string, diskAccess DiskAccess, options *DiskAccessesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[DiskAccessesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, diskAccessName, diskAccess, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskAccessesClientCreateOrUpdateResponse]("DiskAccessesClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskAccessesClientCreateOrUpdateResponse]("DiskAccessesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskAccessesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskAccessesClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return DiskAccessesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &DiskAccessesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a disk access resource
@@ -126,20 +122,16 @@ func (client *DiskAccessesClient) createOrUpdateCreateRequest(ctx context.Contex
 // maximum name length is 80 characters.
 // options - DiskAccessesClientBeginDeleteOptions contains the optional parameters for the DiskAccessesClient.BeginDelete
 // method.
-func (client *DiskAccessesClient) BeginDelete(ctx context.Context, resourceGroupName string, diskAccessName string, options *DiskAccessesClientBeginDeleteOptions) (DiskAccessesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, diskAccessName, options)
-	if err != nil {
-		return DiskAccessesClientDeletePollerResponse{}, err
+func (client *DiskAccessesClient) BeginDelete(ctx context.Context, resourceGroupName string, diskAccessName string, options *DiskAccessesClientBeginDeleteOptions) (*armruntime.Poller[DiskAccessesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, diskAccessName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskAccessesClientDeleteResponse]("DiskAccessesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskAccessesClientDeleteResponse]("DiskAccessesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskAccessesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskAccessesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return DiskAccessesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &DiskAccessesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a disk access resource.
@@ -194,20 +186,16 @@ func (client *DiskAccessesClient) deleteCreateRequest(ctx context.Context, resou
 // privateEndpointConnectionName - The name of the private endpoint connection.
 // options - DiskAccessesClientBeginDeleteAPrivateEndpointConnectionOptions contains the optional parameters for the DiskAccessesClient.BeginDeleteAPrivateEndpointConnection
 // method.
-func (client *DiskAccessesClient) BeginDeleteAPrivateEndpointConnection(ctx context.Context, resourceGroupName string, diskAccessName string, privateEndpointConnectionName string, options *DiskAccessesClientBeginDeleteAPrivateEndpointConnectionOptions) (DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.deleteAPrivateEndpointConnection(ctx, resourceGroupName, diskAccessName, privateEndpointConnectionName, options)
-	if err != nil {
-		return DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}, err
+func (client *DiskAccessesClient) BeginDeleteAPrivateEndpointConnection(ctx context.Context, resourceGroupName string, diskAccessName string, privateEndpointConnectionName string, options *DiskAccessesClientBeginDeleteAPrivateEndpointConnectionOptions) (*armruntime.Poller[DiskAccessesClientDeleteAPrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteAPrivateEndpointConnection(ctx, resourceGroupName, diskAccessName, privateEndpointConnectionName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskAccessesClientDeleteAPrivateEndpointConnectionResponse]("DiskAccessesClient.DeleteAPrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskAccessesClientDeleteAPrivateEndpointConnectionResponse]("DiskAccessesClient.DeleteAPrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("DiskAccessesClient.DeleteAPrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &DiskAccessesClientDeleteAPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // DeleteAPrivateEndpointConnection - Deletes a private endpoint connection under a disk access resource.
@@ -438,16 +426,32 @@ func (client *DiskAccessesClient) getPrivateLinkResourcesHandleResponse(resp *ht
 // List - Lists all the disk access resources under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DiskAccessesClientListOptions contains the optional parameters for the DiskAccessesClient.List method.
-func (client *DiskAccessesClient) List(options *DiskAccessesClientListOptions) *DiskAccessesClientListPager {
-	return &DiskAccessesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *DiskAccessesClient) List(options *DiskAccessesClientListOptions) *runtime.Pager[DiskAccessesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListResponse]{
+		More: func(page DiskAccessesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskAccessesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiskAccessList.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskAccessesClientListResponse) (DiskAccessesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskAccessesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskAccessesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskAccessesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -482,16 +486,32 @@ func (client *DiskAccessesClient) listHandleResponse(resp *http.Response) (DiskA
 // resourceGroupName - The name of the resource group.
 // options - DiskAccessesClientListByResourceGroupOptions contains the optional parameters for the DiskAccessesClient.ListByResourceGroup
 // method.
-func (client *DiskAccessesClient) ListByResourceGroup(resourceGroupName string, options *DiskAccessesClientListByResourceGroupOptions) *DiskAccessesClientListByResourceGroupPager {
-	return &DiskAccessesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *DiskAccessesClient) ListByResourceGroup(resourceGroupName string, options *DiskAccessesClientListByResourceGroupOptions) *runtime.Pager[DiskAccessesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListByResourceGroupResponse]{
+		More: func(page DiskAccessesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskAccessesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DiskAccessList.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskAccessesClientListByResourceGroupResponse) (DiskAccessesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskAccessesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskAccessesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskAccessesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -533,16 +553,32 @@ func (client *DiskAccessesClient) listByResourceGroupHandleResponse(resp *http.R
 // maximum name length is 80 characters.
 // options - DiskAccessesClientListPrivateEndpointConnectionsOptions contains the optional parameters for the DiskAccessesClient.ListPrivateEndpointConnections
 // method.
-func (client *DiskAccessesClient) ListPrivateEndpointConnections(resourceGroupName string, diskAccessName string, options *DiskAccessesClientListPrivateEndpointConnectionsOptions) *DiskAccessesClientListPrivateEndpointConnectionsPager {
-	return &DiskAccessesClientListPrivateEndpointConnectionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listPrivateEndpointConnectionsCreateRequest(ctx, resourceGroupName, diskAccessName, options)
+func (client *DiskAccessesClient) ListPrivateEndpointConnections(resourceGroupName string, diskAccessName string, options *DiskAccessesClientListPrivateEndpointConnectionsOptions) *runtime.Pager[DiskAccessesClientListPrivateEndpointConnectionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListPrivateEndpointConnectionsResponse]{
+		More: func(page DiskAccessesClientListPrivateEndpointConnectionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp DiskAccessesClientListPrivateEndpointConnectionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PrivateEndpointConnectionListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *DiskAccessesClientListPrivateEndpointConnectionsResponse) (DiskAccessesClientListPrivateEndpointConnectionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listPrivateEndpointConnectionsCreateRequest(ctx, resourceGroupName, diskAccessName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return DiskAccessesClientListPrivateEndpointConnectionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DiskAccessesClientListPrivateEndpointConnectionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DiskAccessesClientListPrivateEndpointConnectionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listPrivateEndpointConnectionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listPrivateEndpointConnectionsCreateRequest creates the ListPrivateEndpointConnections request.
@@ -589,20 +625,16 @@ func (client *DiskAccessesClient) listPrivateEndpointConnectionsHandleResponse(r
 // diskAccess - disk access object supplied in the body of the Patch disk access operation.
 // options - DiskAccessesClientBeginUpdateOptions contains the optional parameters for the DiskAccessesClient.BeginUpdate
 // method.
-func (client *DiskAccessesClient) BeginUpdate(ctx context.Context, resourceGroupName string, diskAccessName string, diskAccess DiskAccessUpdate, options *DiskAccessesClientBeginUpdateOptions) (DiskAccessesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, diskAccessName, diskAccess, options)
-	if err != nil {
-		return DiskAccessesClientUpdatePollerResponse{}, err
+func (client *DiskAccessesClient) BeginUpdate(ctx context.Context, resourceGroupName string, diskAccessName string, diskAccess DiskAccessUpdate, options *DiskAccessesClientBeginUpdateOptions) (*armruntime.Poller[DiskAccessesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, diskAccessName, diskAccess, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskAccessesClientUpdateResponse]("DiskAccessesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskAccessesClientUpdateResponse]("DiskAccessesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskAccessesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("DiskAccessesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return DiskAccessesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &DiskAccessesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates (patches) a disk access resource.
@@ -660,20 +692,16 @@ func (client *DiskAccessesClient) updateCreateRequest(ctx context.Context, resou
 // operation.
 // options - DiskAccessesClientBeginUpdateAPrivateEndpointConnectionOptions contains the optional parameters for the DiskAccessesClient.BeginUpdateAPrivateEndpointConnection
 // method.
-func (client *DiskAccessesClient) BeginUpdateAPrivateEndpointConnection(ctx context.Context, resourceGroupName string, diskAccessName string, privateEndpointConnectionName string, privateEndpointConnection PrivateEndpointConnection, options *DiskAccessesClientBeginUpdateAPrivateEndpointConnectionOptions) (DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse, error) {
-	resp, err := client.updateAPrivateEndpointConnection(ctx, resourceGroupName, diskAccessName, privateEndpointConnectionName, privateEndpointConnection, options)
-	if err != nil {
-		return DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}, err
+func (client *DiskAccessesClient) BeginUpdateAPrivateEndpointConnection(ctx context.Context, resourceGroupName string, diskAccessName string, privateEndpointConnectionName string, privateEndpointConnection PrivateEndpointConnection, options *DiskAccessesClientBeginUpdateAPrivateEndpointConnectionOptions) (*armruntime.Poller[DiskAccessesClientUpdateAPrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateAPrivateEndpointConnection(ctx, resourceGroupName, diskAccessName, privateEndpointConnectionName, privateEndpointConnection, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[DiskAccessesClientUpdateAPrivateEndpointConnectionResponse]("DiskAccessesClient.UpdateAPrivateEndpointConnection", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[DiskAccessesClientUpdateAPrivateEndpointConnectionResponse]("DiskAccessesClient.UpdateAPrivateEndpointConnection", options.ResumeToken, client.pl, nil)
 	}
-	result := DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}
-	pt, err := armruntime.NewPoller("DiskAccessesClient.UpdateAPrivateEndpointConnection", "", resp, client.pl)
-	if err != nil {
-		return DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}, err
-	}
-	result.Poller = &DiskAccessesClientUpdateAPrivateEndpointConnectionPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // UpdateAPrivateEndpointConnection - Approve or reject a private endpoint connection under disk access resource, this can't

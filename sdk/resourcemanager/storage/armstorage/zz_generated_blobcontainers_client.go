@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -668,16 +668,32 @@ func (client *BlobContainersClient) leaseHandleResponse(resp *http.Response) (Bl
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - BlobContainersClientListOptions contains the optional parameters for the BlobContainersClient.List method.
-func (client *BlobContainersClient) List(resourceGroupName string, accountName string, options *BlobContainersClientListOptions) *BlobContainersClientListPager {
-	return &BlobContainersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *BlobContainersClient) List(resourceGroupName string, accountName string, options *BlobContainersClientListOptions) *runtime.Pager[BlobContainersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BlobContainersClientListResponse]{
+		More: func(page BlobContainersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BlobContainersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ListContainerItems.NextLink)
+		Fetcher: func(ctx context.Context, page *BlobContainersClientListResponse) (BlobContainersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BlobContainersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BlobContainersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BlobContainersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -808,20 +824,16 @@ func (client *BlobContainersClient) lockImmutabilityPolicyHandleResponse(resp *h
 // dash (-) character must be immediately preceded and followed by a letter or number.
 // options - BlobContainersClientBeginObjectLevelWormOptions contains the optional parameters for the BlobContainersClient.BeginObjectLevelWorm
 // method.
-func (client *BlobContainersClient) BeginObjectLevelWorm(ctx context.Context, resourceGroupName string, accountName string, containerName string, options *BlobContainersClientBeginObjectLevelWormOptions) (BlobContainersClientObjectLevelWormPollerResponse, error) {
-	resp, err := client.objectLevelWorm(ctx, resourceGroupName, accountName, containerName, options)
-	if err != nil {
-		return BlobContainersClientObjectLevelWormPollerResponse{}, err
+func (client *BlobContainersClient) BeginObjectLevelWorm(ctx context.Context, resourceGroupName string, accountName string, containerName string, options *BlobContainersClientBeginObjectLevelWormOptions) (*armruntime.Poller[BlobContainersClientObjectLevelWormResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.objectLevelWorm(ctx, resourceGroupName, accountName, containerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[BlobContainersClientObjectLevelWormResponse]("BlobContainersClient.ObjectLevelWorm", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[BlobContainersClientObjectLevelWormResponse]("BlobContainersClient.ObjectLevelWorm", options.ResumeToken, client.pl, nil)
 	}
-	result := BlobContainersClientObjectLevelWormPollerResponse{}
-	pt, err := armruntime.NewPoller("BlobContainersClient.ObjectLevelWorm", "location", resp, client.pl)
-	if err != nil {
-		return BlobContainersClientObjectLevelWormPollerResponse{}, err
-	}
-	result.Poller = &BlobContainersClientObjectLevelWormPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ObjectLevelWorm - This operation migrates a blob container from container level WORM to object level immutability enabled

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -58,20 +58,16 @@ func NewRelationshipsClient(subscriptionID string, credential azcore.TokenCreden
 // parameters - Parameters supplied to the CreateOrUpdate Relationship operation.
 // options - RelationshipsClientBeginCreateOrUpdateOptions contains the optional parameters for the RelationshipsClient.BeginCreateOrUpdate
 // method.
-func (client *RelationshipsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, relationshipName string, parameters RelationshipResourceFormat, options *RelationshipsClientBeginCreateOrUpdateOptions) (RelationshipsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, relationshipName, parameters, options)
-	if err != nil {
-		return RelationshipsClientCreateOrUpdatePollerResponse{}, err
+func (client *RelationshipsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, relationshipName string, parameters RelationshipResourceFormat, options *RelationshipsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[RelationshipsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, hubName, relationshipName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RelationshipsClientCreateOrUpdateResponse]("RelationshipsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RelationshipsClientCreateOrUpdateResponse]("RelationshipsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := RelationshipsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("RelationshipsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return RelationshipsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &RelationshipsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates a relationship or updates an existing relationship within a hub.
@@ -128,20 +124,16 @@ func (client *RelationshipsClient) createOrUpdateCreateRequest(ctx context.Conte
 // relationshipName - The name of the relationship.
 // options - RelationshipsClientBeginDeleteOptions contains the optional parameters for the RelationshipsClient.BeginDelete
 // method.
-func (client *RelationshipsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, relationshipName string, options *RelationshipsClientBeginDeleteOptions) (RelationshipsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, relationshipName, options)
-	if err != nil {
-		return RelationshipsClientDeletePollerResponse{}, err
+func (client *RelationshipsClient) BeginDelete(ctx context.Context, resourceGroupName string, hubName string, relationshipName string, options *RelationshipsClientBeginDeleteOptions) (*armruntime.Poller[RelationshipsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, hubName, relationshipName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[RelationshipsClientDeleteResponse]("RelationshipsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[RelationshipsClientDeleteResponse]("RelationshipsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := RelationshipsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("RelationshipsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return RelationshipsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &RelationshipsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes a relationship within a hub.
@@ -255,16 +247,32 @@ func (client *RelationshipsClient) getHandleResponse(resp *http.Response) (Relat
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - RelationshipsClientListByHubOptions contains the optional parameters for the RelationshipsClient.ListByHub method.
-func (client *RelationshipsClient) ListByHub(resourceGroupName string, hubName string, options *RelationshipsClientListByHubOptions) *RelationshipsClientListByHubPager {
-	return &RelationshipsClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *RelationshipsClient) ListByHub(resourceGroupName string, hubName string, options *RelationshipsClientListByHubOptions) *runtime.Pager[RelationshipsClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[RelationshipsClientListByHubResponse]{
+		More: func(page RelationshipsClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp RelationshipsClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.RelationshipListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *RelationshipsClientListByHubResponse) (RelationshipsClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return RelationshipsClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return RelationshipsClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return RelationshipsClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

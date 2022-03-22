@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -114,12 +114,14 @@ type DeviceRegistrationKey struct {
 
 // DevicesClientBeginCreateOrUpdateOptions contains the optional parameters for the DevicesClient.BeginCreateOrUpdate method.
 type DevicesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientBeginDeleteOptions contains the optional parameters for the DevicesClient.BeginDelete method.
 type DevicesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DevicesClientGetOptions contains the optional parameters for the DevicesClient.Get method.
@@ -440,12 +442,14 @@ type NetworkFunctionVendorsClientListOptions struct {
 // NetworkFunctionsClientBeginCreateOrUpdateOptions contains the optional parameters for the NetworkFunctionsClient.BeginCreateOrUpdate
 // method.
 type NetworkFunctionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NetworkFunctionsClientBeginDeleteOptions contains the optional parameters for the NetworkFunctionsClient.BeginDelete method.
 type NetworkFunctionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // NetworkFunctionsClientGetOptions contains the optional parameters for the NetworkFunctionsClient.Get method.
@@ -687,17 +691,20 @@ type RoleInstanceProperties struct {
 
 // RoleInstancesClientBeginRestartOptions contains the optional parameters for the RoleInstancesClient.BeginRestart method.
 type RoleInstancesClientBeginRestartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoleInstancesClientBeginStartOptions contains the optional parameters for the RoleInstancesClient.BeginStart method.
 type RoleInstancesClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoleInstancesClientBeginStopOptions contains the optional parameters for the RoleInstancesClient.BeginStop method.
 type RoleInstancesClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // RoleInstancesClientGetOptions contains the optional parameters for the RoleInstancesClient.Get method.
@@ -887,7 +894,8 @@ type VendorNetworkFunctionPropertiesFormat struct {
 // VendorNetworkFunctionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorNetworkFunctionsClient.BeginCreateOrUpdate
 // method.
 type VendorNetworkFunctionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorNetworkFunctionsClientGetOptions contains the optional parameters for the VendorNetworkFunctionsClient.Get method.
@@ -940,12 +948,14 @@ type VendorSKUListResult struct {
 // VendorSKUPreviewClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorSKUPreviewClient.BeginCreateOrUpdate
 // method.
 type VendorSKUPreviewClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorSKUPreviewClientBeginDeleteOptions contains the optional parameters for the VendorSKUPreviewClient.BeginDelete method.
 type VendorSKUPreviewClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorSKUPreviewClientGetOptions contains the optional parameters for the VendorSKUPreviewClient.Get method.
@@ -988,12 +998,14 @@ type VendorSKUPropertiesFormat struct {
 // VendorSKUsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorSKUsClient.BeginCreateOrUpdate
 // method.
 type VendorSKUsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorSKUsClientBeginDeleteOptions contains the optional parameters for the VendorSKUsClient.BeginDelete method.
 type VendorSKUsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorSKUsClientGetOptions contains the optional parameters for the VendorSKUsClient.Get method.
@@ -1010,11 +1022,14 @@ type VendorSKUsClientListOptions struct {
 type VendorsClientBeginCreateOrUpdateOptions struct {
 	// Parameters supplied to the create vendor operation.
 	Parameters *Vendor
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorsClientBeginDeleteOptions contains the optional parameters for the VendorsClient.BeginDelete method.
 type VendorsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // VendorsClientGetOptions contains the optional parameters for the VendorsClient.Get method.

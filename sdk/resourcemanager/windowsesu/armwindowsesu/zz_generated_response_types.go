@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7,47 +7,6 @@
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 package armwindowsesu
-
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// MultipleActivationKeysClientCreatePollerResponse contains the response from method MultipleActivationKeysClient.Create.
-type MultipleActivationKeysClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *MultipleActivationKeysClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l MultipleActivationKeysClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MultipleActivationKeysClientCreateResponse, error) {
-	respType := MultipleActivationKeysClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MultipleActivationKey)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a MultipleActivationKeysClientCreatePollerResponse from the provided client and resume token.
-func (l *MultipleActivationKeysClientCreatePollerResponse) Resume(ctx context.Context, client *MultipleActivationKeysClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("MultipleActivationKeysClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &MultipleActivationKeysClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
 
 // MultipleActivationKeysClientCreateResponse contains the response from method MultipleActivationKeysClient.Create.
 type MultipleActivationKeysClientCreateResponse struct {

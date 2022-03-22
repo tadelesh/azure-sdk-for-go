@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -115,16 +115,32 @@ func (client *WidgetTypesClient) getHandleResponse(resp *http.Response) (WidgetT
 // resourceGroupName - The name of the resource group.
 // hubName - The name of the hub.
 // options - WidgetTypesClientListByHubOptions contains the optional parameters for the WidgetTypesClient.ListByHub method.
-func (client *WidgetTypesClient) ListByHub(resourceGroupName string, hubName string, options *WidgetTypesClientListByHubOptions) *WidgetTypesClientListByHubPager {
-	return &WidgetTypesClientListByHubPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+func (client *WidgetTypesClient) ListByHub(resourceGroupName string, hubName string, options *WidgetTypesClientListByHubOptions) *runtime.Pager[WidgetTypesClientListByHubResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WidgetTypesClientListByHubResponse]{
+		More: func(page WidgetTypesClientListByHubResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WidgetTypesClientListByHubResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.WidgetTypeListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WidgetTypesClientListByHubResponse) (WidgetTypesClientListByHubResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByHubCreateRequest(ctx, resourceGroupName, hubName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WidgetTypesClientListByHubResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WidgetTypesClientListByHubResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WidgetTypesClientListByHubResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByHubHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByHubCreateRequest creates the ListByHub request.

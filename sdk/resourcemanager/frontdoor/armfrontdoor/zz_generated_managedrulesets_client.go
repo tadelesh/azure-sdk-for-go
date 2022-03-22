@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -53,16 +53,32 @@ func NewManagedRuleSetsClient(subscriptionID string, credential azcore.TokenCred
 // List - Lists all available managed rule sets.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ManagedRuleSetsClientListOptions contains the optional parameters for the ManagedRuleSetsClient.List method.
-func (client *ManagedRuleSetsClient) List(options *ManagedRuleSetsClientListOptions) *ManagedRuleSetsClientListPager {
-	return &ManagedRuleSetsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ManagedRuleSetsClient) List(options *ManagedRuleSetsClientListOptions) *runtime.Pager[ManagedRuleSetsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ManagedRuleSetsClientListResponse]{
+		More: func(page ManagedRuleSetsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ManagedRuleSetsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ManagedRuleSetDefinitionList.NextLink)
+		Fetcher: func(ctx context.Context, page *ManagedRuleSetsClientListResponse) (ManagedRuleSetsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ManagedRuleSetsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ManagedRuleSetsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ManagedRuleSetsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

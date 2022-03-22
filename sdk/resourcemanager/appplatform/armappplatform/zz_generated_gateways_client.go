@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewGatewaysClient(subscriptionID string, credential azcore.TokenCredential,
 // gatewayResource - The gateway for the create or update operation
 // options - GatewaysClientBeginCreateOrUpdateOptions contains the optional parameters for the GatewaysClient.BeginCreateOrUpdate
 // method.
-func (client *GatewaysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, gatewayResource GatewayResource, options *GatewaysClientBeginCreateOrUpdateOptions) (GatewaysClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, gatewayName, gatewayResource, options)
-	if err != nil {
-		return GatewaysClientCreateOrUpdatePollerResponse{}, err
+func (client *GatewaysClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, gatewayResource GatewayResource, options *GatewaysClientBeginCreateOrUpdateOptions) (*armruntime.Poller[GatewaysClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, gatewayName, gatewayResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GatewaysClientCreateOrUpdateResponse]("GatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GatewaysClientCreateOrUpdateResponse]("GatewaysClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := GatewaysClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("GatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GatewaysClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &GatewaysClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create the default Spring Cloud Gateway or update the existing Spring Cloud Gateway.
@@ -129,20 +125,16 @@ func (client *GatewaysClient) createOrUpdateCreateRequest(ctx context.Context, r
 // serviceName - The name of the Service resource.
 // gatewayName - The name of Spring Cloud Gateway.
 // options - GatewaysClientBeginDeleteOptions contains the optional parameters for the GatewaysClient.BeginDelete method.
-func (client *GatewaysClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, options *GatewaysClientBeginDeleteOptions) (GatewaysClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, gatewayName, options)
-	if err != nil {
-		return GatewaysClientDeletePollerResponse{}, err
+func (client *GatewaysClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, gatewayName string, options *GatewaysClientBeginDeleteOptions) (*armruntime.Poller[GatewaysClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, gatewayName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[GatewaysClientDeleteResponse]("GatewaysClient.Delete", "azure-async-operation", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[GatewaysClientDeleteResponse]("GatewaysClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := GatewaysClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("GatewaysClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return GatewaysClientDeletePollerResponse{}, err
-	}
-	result.Poller = &GatewaysClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Disable the default Spring Cloud Gateway.
@@ -259,16 +251,32 @@ func (client *GatewaysClient) getHandleResponse(resp *http.Response) (GatewaysCl
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - GatewaysClientListOptions contains the optional parameters for the GatewaysClient.List method.
-func (client *GatewaysClient) List(resourceGroupName string, serviceName string, options *GatewaysClientListOptions) *GatewaysClientListPager {
-	return &GatewaysClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *GatewaysClient) List(resourceGroupName string, serviceName string, options *GatewaysClientListOptions) *runtime.Pager[GatewaysClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[GatewaysClientListResponse]{
+		More: func(page GatewaysClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp GatewaysClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GatewayResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *GatewaysClientListResponse) (GatewaysClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return GatewaysClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return GatewaysClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return GatewaysClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

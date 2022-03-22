@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -217,16 +217,32 @@ func (client *PrivateStoreCollectionOfferClient) getHandleResponse(resp *http.Re
 // collectionID - The collection ID
 // options - PrivateStoreCollectionOfferClientListOptions contains the optional parameters for the PrivateStoreCollectionOfferClient.List
 // method.
-func (client *PrivateStoreCollectionOfferClient) List(privateStoreID string, collectionID string, options *PrivateStoreCollectionOfferClientListOptions) *PrivateStoreCollectionOfferClientListPager {
-	return &PrivateStoreCollectionOfferClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, privateStoreID, collectionID, options)
+func (client *PrivateStoreCollectionOfferClient) List(privateStoreID string, collectionID string, options *PrivateStoreCollectionOfferClientListOptions) *runtime.Pager[PrivateStoreCollectionOfferClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateStoreCollectionOfferClientListResponse]{
+		More: func(page PrivateStoreCollectionOfferClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp PrivateStoreCollectionOfferClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.OfferListResponse.NextLink)
+		Fetcher: func(ctx context.Context, page *PrivateStoreCollectionOfferClientListResponse) (PrivateStoreCollectionOfferClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, privateStoreID, collectionID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return PrivateStoreCollectionOfferClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateStoreCollectionOfferClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateStoreCollectionOfferClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

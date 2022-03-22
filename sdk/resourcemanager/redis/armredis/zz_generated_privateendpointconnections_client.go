@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -169,13 +169,26 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // cacheName - The name of the Redis cache.
 // options - PrivateEndpointConnectionsClientListOptions contains the optional parameters for the PrivateEndpointConnectionsClient.List
 // method.
-func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, cacheName string, options *PrivateEndpointConnectionsClientListOptions) *PrivateEndpointConnectionsClientListPager {
-	return &PrivateEndpointConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, cacheName, options)
+func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, cacheName string, options *PrivateEndpointConnectionsClientListOptions) *runtime.Pager[PrivateEndpointConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PrivateEndpointConnectionsClientListResponse]{
+		More: func(page PrivateEndpointConnectionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PrivateEndpointConnectionsClientListResponse) (PrivateEndpointConnectionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, cacheName, options)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PrivateEndpointConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PrivateEndpointConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -221,20 +234,16 @@ func (client *PrivateEndpointConnectionsClient) listHandleResponse(resp *http.Re
 // properties - The private endpoint connection properties.
 // options - PrivateEndpointConnectionsClientBeginPutOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginPut
 // method.
-func (client *PrivateEndpointConnectionsClient) BeginPut(ctx context.Context, resourceGroupName string, cacheName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsClientBeginPutOptions) (PrivateEndpointConnectionsClientPutPollerResponse, error) {
-	resp, err := client.put(ctx, resourceGroupName, cacheName, privateEndpointConnectionName, properties, options)
-	if err != nil {
-		return PrivateEndpointConnectionsClientPutPollerResponse{}, err
+func (client *PrivateEndpointConnectionsClient) BeginPut(ctx context.Context, resourceGroupName string, cacheName string, privateEndpointConnectionName string, properties PrivateEndpointConnection, options *PrivateEndpointConnectionsClientBeginPutOptions) (*armruntime.Poller[PrivateEndpointConnectionsClientPutResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.put(ctx, resourceGroupName, cacheName, privateEndpointConnectionName, properties, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[PrivateEndpointConnectionsClientPutResponse]("PrivateEndpointConnectionsClient.Put", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[PrivateEndpointConnectionsClientPutResponse]("PrivateEndpointConnectionsClient.Put", options.ResumeToken, client.pl, nil)
 	}
-	result := PrivateEndpointConnectionsClientPutPollerResponse{}
-	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.Put", "", resp, client.pl)
-	if err != nil {
-		return PrivateEndpointConnectionsClientPutPollerResponse{}, err
-	}
-	result.Poller = &PrivateEndpointConnectionsClientPutPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Put - Update the state of specified private endpoint connection associated with the redis cache.

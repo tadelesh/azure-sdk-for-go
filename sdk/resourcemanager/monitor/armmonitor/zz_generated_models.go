@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -153,7 +153,8 @@ type ActionGroupResource struct {
 // ActionGroupsClientBeginPostTestNotificationsOptions contains the optional parameters for the ActionGroupsClient.BeginPostTestNotifications
 // method.
 type ActionGroupsClientBeginPostTestNotificationsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ActionGroupsClientCreateOrUpdateOptions contains the optional parameters for the ActionGroupsClient.CreateOrUpdate method.
@@ -2896,13 +2897,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -2976,13 +2979,15 @@ type PrivateLinkScopeOperationStatusClientGetOptions struct {
 // PrivateLinkScopedResourcesClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateLinkScopedResourcesClient.BeginCreateOrUpdate
 // method.
 type PrivateLinkScopedResourcesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkScopedResourcesClientBeginDeleteOptions contains the optional parameters for the PrivateLinkScopedResourcesClient.BeginDelete
 // method.
 type PrivateLinkScopedResourcesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkScopedResourcesClientGetOptions contains the optional parameters for the PrivateLinkScopedResourcesClient.Get
@@ -3000,7 +3005,8 @@ type PrivateLinkScopedResourcesClientListByPrivateLinkScopeOptions struct {
 // PrivateLinkScopesClientBeginDeleteOptions contains the optional parameters for the PrivateLinkScopesClient.BeginDelete
 // method.
 type PrivateLinkScopesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateLinkScopesClientCreateOrUpdateOptions contains the optional parameters for the PrivateLinkScopesClient.CreateOrUpdate

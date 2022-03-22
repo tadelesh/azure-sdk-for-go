@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -186,16 +186,32 @@ func (client *NodeReportsClient) getContentHandleResponse(resp *http.Response) (
 // automationAccountName - The name of the automation account.
 // nodeID - The parameters supplied to the list operation.
 // options - NodeReportsClientListByNodeOptions contains the optional parameters for the NodeReportsClient.ListByNode method.
-func (client *NodeReportsClient) ListByNode(resourceGroupName string, automationAccountName string, nodeID string, options *NodeReportsClientListByNodeOptions) *NodeReportsClientListByNodePager {
-	return &NodeReportsClientListByNodePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByNodeCreateRequest(ctx, resourceGroupName, automationAccountName, nodeID, options)
+func (client *NodeReportsClient) ListByNode(resourceGroupName string, automationAccountName string, nodeID string, options *NodeReportsClientListByNodeOptions) *runtime.Pager[NodeReportsClientListByNodeResponse] {
+	return runtime.NewPager(runtime.PageProcessor[NodeReportsClientListByNodeResponse]{
+		More: func(page NodeReportsClientListByNodeResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp NodeReportsClientListByNodeResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.DscNodeReportListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *NodeReportsClientListByNodeResponse) (NodeReportsClientListByNodeResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByNodeCreateRequest(ctx, resourceGroupName, automationAccountName, nodeID, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return NodeReportsClientListByNodeResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return NodeReportsClientListByNodeResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return NodeReportsClientListByNodeResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByNodeHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByNodeCreateRequest creates the ListByNode request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -60,13 +60,26 @@ func NewPercentileTargetClient(subscriptionID string, credential azcore.TokenCre
 // and timeGrain. The supported operator is eq.
 // options - PercentileTargetClientListMetricsOptions contains the optional parameters for the PercentileTargetClient.ListMetrics
 // method.
-func (client *PercentileTargetClient) ListMetrics(resourceGroupName string, accountName string, targetRegion string, filter string, options *PercentileTargetClientListMetricsOptions) *PercentileTargetClientListMetricsPager {
-	return &PercentileTargetClientListMetricsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, targetRegion, filter, options)
+func (client *PercentileTargetClient) ListMetrics(resourceGroupName string, accountName string, targetRegion string, filter string, options *PercentileTargetClientListMetricsOptions) *runtime.Pager[PercentileTargetClientListMetricsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[PercentileTargetClientListMetricsResponse]{
+		More: func(page PercentileTargetClientListMetricsResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *PercentileTargetClientListMetricsResponse) (PercentileTargetClientListMetricsResponse, error) {
+			req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, targetRegion, filter, options)
+			if err != nil {
+				return PercentileTargetClientListMetricsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return PercentileTargetClientListMetricsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return PercentileTargetClientListMetricsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listMetricsHandleResponse(resp)
+		},
+	})
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.

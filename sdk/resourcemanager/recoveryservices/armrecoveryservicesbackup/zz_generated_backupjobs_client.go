@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -54,16 +54,32 @@ func NewBackupJobsClient(subscriptionID string, credential azcore.TokenCredentia
 // vaultName - The name of the recovery services vault.
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // options - BackupJobsClientListOptions contains the optional parameters for the BackupJobsClient.List method.
-func (client *BackupJobsClient) List(vaultName string, resourceGroupName string, options *BackupJobsClientListOptions) *BackupJobsClientListPager {
-	return &BackupJobsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+func (client *BackupJobsClient) List(vaultName string, resourceGroupName string, options *BackupJobsClientListOptions) *runtime.Pager[BackupJobsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[BackupJobsClientListResponse]{
+		More: func(page BackupJobsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp BackupJobsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.JobResourceList.NextLink)
+		Fetcher: func(ctx context.Context, page *BackupJobsClientListResponse) (BackupJobsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return BackupJobsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return BackupJobsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return BackupJobsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

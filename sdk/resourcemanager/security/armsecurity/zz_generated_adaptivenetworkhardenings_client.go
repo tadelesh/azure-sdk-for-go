@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -59,20 +59,16 @@ func NewAdaptiveNetworkHardeningsClient(subscriptionID string, credential azcore
 // adaptiveNetworkHardeningEnforceAction - Enforces the given rules on the NSG(s) listed in the request
 // options - AdaptiveNetworkHardeningsClientBeginEnforceOptions contains the optional parameters for the AdaptiveNetworkHardeningsClient.BeginEnforce
 // method.
-func (client *AdaptiveNetworkHardeningsClient) BeginEnforce(ctx context.Context, resourceGroupName string, resourceNamespace string, resourceType string, resourceName string, adaptiveNetworkHardeningResourceName string, adaptiveNetworkHardeningEnforceAction Enum51, body AdaptiveNetworkHardeningEnforceRequest, options *AdaptiveNetworkHardeningsClientBeginEnforceOptions) (AdaptiveNetworkHardeningsClientEnforcePollerResponse, error) {
-	resp, err := client.enforce(ctx, resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName, adaptiveNetworkHardeningEnforceAction, body, options)
-	if err != nil {
-		return AdaptiveNetworkHardeningsClientEnforcePollerResponse{}, err
+func (client *AdaptiveNetworkHardeningsClient) BeginEnforce(ctx context.Context, resourceGroupName string, resourceNamespace string, resourceType string, resourceName string, adaptiveNetworkHardeningResourceName string, adaptiveNetworkHardeningEnforceAction Enum51, body AdaptiveNetworkHardeningEnforceRequest, options *AdaptiveNetworkHardeningsClientBeginEnforceOptions) (*armruntime.Poller[AdaptiveNetworkHardeningsClientEnforceResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.enforce(ctx, resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName, adaptiveNetworkHardeningEnforceAction, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AdaptiveNetworkHardeningsClientEnforceResponse]("AdaptiveNetworkHardeningsClient.Enforce", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AdaptiveNetworkHardeningsClientEnforceResponse]("AdaptiveNetworkHardeningsClient.Enforce", options.ResumeToken, client.pl, nil)
 	}
-	result := AdaptiveNetworkHardeningsClientEnforcePollerResponse{}
-	pt, err := armruntime.NewPoller("AdaptiveNetworkHardeningsClient.Enforce", "", resp, client.pl)
-	if err != nil {
-		return AdaptiveNetworkHardeningsClientEnforcePollerResponse{}, err
-	}
-	result.Poller = &AdaptiveNetworkHardeningsClientEnforcePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Enforce - Enforces the given rules on the NSG(s) listed in the request
@@ -213,16 +209,32 @@ func (client *AdaptiveNetworkHardeningsClient) getHandleResponse(resp *http.Resp
 // resourceName - Name of the resource.
 // options - AdaptiveNetworkHardeningsClientListByExtendedResourceOptions contains the optional parameters for the AdaptiveNetworkHardeningsClient.ListByExtendedResource
 // method.
-func (client *AdaptiveNetworkHardeningsClient) ListByExtendedResource(resourceGroupName string, resourceNamespace string, resourceType string, resourceName string, options *AdaptiveNetworkHardeningsClientListByExtendedResourceOptions) *AdaptiveNetworkHardeningsClientListByExtendedResourcePager {
-	return &AdaptiveNetworkHardeningsClientListByExtendedResourcePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByExtendedResourceCreateRequest(ctx, resourceGroupName, resourceNamespace, resourceType, resourceName, options)
+func (client *AdaptiveNetworkHardeningsClient) ListByExtendedResource(resourceGroupName string, resourceNamespace string, resourceType string, resourceName string, options *AdaptiveNetworkHardeningsClientListByExtendedResourceOptions) *runtime.Pager[AdaptiveNetworkHardeningsClientListByExtendedResourceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AdaptiveNetworkHardeningsClientListByExtendedResourceResponse]{
+		More: func(page AdaptiveNetworkHardeningsClientListByExtendedResourceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AdaptiveNetworkHardeningsClientListByExtendedResourceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AdaptiveNetworkHardeningsList.NextLink)
+		Fetcher: func(ctx context.Context, page *AdaptiveNetworkHardeningsClientListByExtendedResourceResponse) (AdaptiveNetworkHardeningsClientListByExtendedResourceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByExtendedResourceCreateRequest(ctx, resourceGroupName, resourceNamespace, resourceType, resourceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByExtendedResourceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByExtendedResourceCreateRequest creates the ListByExtendedResource request.

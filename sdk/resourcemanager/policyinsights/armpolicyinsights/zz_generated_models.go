@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -82,19 +82,22 @@ type AttestationProperties struct {
 // AttestationsClientBeginCreateOrUpdateAtResourceGroupOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtResourceGroup
 // method.
 type AttestationsClientBeginCreateOrUpdateAtResourceGroupOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AttestationsClientBeginCreateOrUpdateAtResourceOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtResource
 // method.
 type AttestationsClientBeginCreateOrUpdateAtResourceOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AttestationsClientBeginCreateOrUpdateAtSubscriptionOptions contains the optional parameters for the AttestationsClient.BeginCreateOrUpdateAtSubscription
 // method.
 type AttestationsClientBeginCreateOrUpdateAtSubscriptionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AttestationsClientDeleteAtResourceGroupOptions contains the optional parameters for the AttestationsClient.DeleteAtResourceGroup
@@ -892,13 +895,15 @@ type PolicyState struct {
 // PolicyStatesClientBeginTriggerResourceGroupEvaluationOptions contains the optional parameters for the PolicyStatesClient.BeginTriggerResourceGroupEvaluation
 // method.
 type PolicyStatesClientBeginTriggerResourceGroupEvaluationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PolicyStatesClientBeginTriggerSubscriptionEvaluationOptions contains the optional parameters for the PolicyStatesClient.BeginTriggerSubscriptionEvaluation
 // method.
 type PolicyStatesClientBeginTriggerSubscriptionEvaluationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PolicyStatesClientListQueryResultsForManagementGroupOptions contains the optional parameters for the PolicyStatesClient.ListQueryResultsForManagementGroup

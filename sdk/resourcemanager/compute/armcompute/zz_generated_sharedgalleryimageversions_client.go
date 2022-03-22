@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -125,16 +125,32 @@ func (client *SharedGalleryImageVersionsClient) getHandleResponse(resp *http.Res
 // galleryImageName - The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
 // options - SharedGalleryImageVersionsClientListOptions contains the optional parameters for the SharedGalleryImageVersionsClient.List
 // method.
-func (client *SharedGalleryImageVersionsClient) List(location string, galleryUniqueName string, galleryImageName string, options *SharedGalleryImageVersionsClientListOptions) *SharedGalleryImageVersionsClientListPager {
-	return &SharedGalleryImageVersionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, location, galleryUniqueName, galleryImageName, options)
+func (client *SharedGalleryImageVersionsClient) List(location string, galleryUniqueName string, galleryImageName string, options *SharedGalleryImageVersionsClientListOptions) *runtime.Pager[SharedGalleryImageVersionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SharedGalleryImageVersionsClientListResponse]{
+		More: func(page SharedGalleryImageVersionsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SharedGalleryImageVersionsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SharedGalleryImageVersionList.NextLink)
+		Fetcher: func(ctx context.Context, page *SharedGalleryImageVersionsClientListResponse) (SharedGalleryImageVersionsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, location, galleryUniqueName, galleryImageName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SharedGalleryImageVersionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SharedGalleryImageVersionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SharedGalleryImageVersionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

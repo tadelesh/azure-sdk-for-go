@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -216,16 +216,32 @@ func (client *SQLServerRegistrationsClient) getHandleResponse(resp *http.Respons
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SQLServerRegistrationsClientListOptions contains the optional parameters for the SQLServerRegistrationsClient.List
 // method.
-func (client *SQLServerRegistrationsClient) List(options *SQLServerRegistrationsClientListOptions) *SQLServerRegistrationsClientListPager {
-	return &SQLServerRegistrationsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *SQLServerRegistrationsClient) List(options *SQLServerRegistrationsClientListOptions) *runtime.Pager[SQLServerRegistrationsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLServerRegistrationsClientListResponse]{
+		More: func(page SQLServerRegistrationsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLServerRegistrationsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLServerRegistrationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLServerRegistrationsClientListResponse) (SQLServerRegistrationsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLServerRegistrationsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLServerRegistrationsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLServerRegistrationsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -261,16 +277,32 @@ func (client *SQLServerRegistrationsClient) listHandleResponse(resp *http.Respon
 // Manager API or the portal.
 // options - SQLServerRegistrationsClientListByResourceGroupOptions contains the optional parameters for the SQLServerRegistrationsClient.ListByResourceGroup
 // method.
-func (client *SQLServerRegistrationsClient) ListByResourceGroup(resourceGroupName string, options *SQLServerRegistrationsClientListByResourceGroupOptions) *SQLServerRegistrationsClientListByResourceGroupPager {
-	return &SQLServerRegistrationsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *SQLServerRegistrationsClient) ListByResourceGroup(resourceGroupName string, options *SQLServerRegistrationsClientListByResourceGroupOptions) *runtime.Pager[SQLServerRegistrationsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SQLServerRegistrationsClientListByResourceGroupResponse]{
+		More: func(page SQLServerRegistrationsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp SQLServerRegistrationsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SQLServerRegistrationListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *SQLServerRegistrationsClientListByResourceGroupResponse) (SQLServerRegistrationsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return SQLServerRegistrationsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SQLServerRegistrationsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SQLServerRegistrationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.

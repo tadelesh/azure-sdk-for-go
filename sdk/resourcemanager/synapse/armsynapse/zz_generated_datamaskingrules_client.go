@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -190,13 +190,26 @@ func (client *DataMaskingRulesClient) getHandleResponse(resp *http.Response) (Da
 // sqlPoolName - SQL pool name
 // options - DataMaskingRulesClientListBySQLPoolOptions contains the optional parameters for the DataMaskingRulesClient.ListBySQLPool
 // method.
-func (client *DataMaskingRulesClient) ListBySQLPool(resourceGroupName string, workspaceName string, sqlPoolName string, options *DataMaskingRulesClientListBySQLPoolOptions) *DataMaskingRulesClientListBySQLPoolPager {
-	return &DataMaskingRulesClientListBySQLPoolPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+func (client *DataMaskingRulesClient) ListBySQLPool(resourceGroupName string, workspaceName string, sqlPoolName string, options *DataMaskingRulesClientListBySQLPoolOptions) *runtime.Pager[DataMaskingRulesClientListBySQLPoolResponse] {
+	return runtime.NewPager(runtime.PageProcessor[DataMaskingRulesClientListBySQLPoolResponse]{
+		More: func(page DataMaskingRulesClientListBySQLPoolResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *DataMaskingRulesClientListBySQLPoolResponse) (DataMaskingRulesClientListBySQLPoolResponse, error) {
+			req, err := client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+			if err != nil {
+				return DataMaskingRulesClientListBySQLPoolResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return DataMaskingRulesClientListBySQLPoolResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return DataMaskingRulesClientListBySQLPoolResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySQLPoolHandleResponse(resp)
+		},
+	})
 }
 
 // listBySQLPoolCreateRequest creates the ListBySQLPool request.

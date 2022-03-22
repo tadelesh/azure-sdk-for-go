@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -75,13 +75,15 @@ type AttachedDatabaseConfigurationsCheckNameRequest struct {
 // AttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.BeginCreateOrUpdate
 // method.
 type AttachedDatabaseConfigurationsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AttachedDatabaseConfigurationsClientBeginDeleteOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.BeginDelete
 // method.
 type AttachedDatabaseConfigurationsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // AttachedDatabaseConfigurationsClientCheckNameAvailabilityOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.CheckNameAvailability
@@ -270,13 +272,15 @@ type ClusterPrincipalAssignmentListResult struct {
 // ClusterPrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
 type ClusterPrincipalAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClusterPrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.BeginDelete
 // method.
 type ClusterPrincipalAssignmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClusterPrincipalAssignmentsClientCheckNameAvailabilityOptions contains the optional parameters for the ClusterPrincipalAssignmentsClient.CheckNameAvailability
@@ -420,7 +424,8 @@ type ClusterUpdate struct {
 // ClustersClientBeginAddLanguageExtensionsOptions contains the optional parameters for the ClustersClient.BeginAddLanguageExtensions
 // method.
 type ClustersClientBeginAddLanguageExtensionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the ClustersClient.BeginCreateOrUpdate method.
@@ -431,39 +436,47 @@ type ClustersClientBeginCreateOrUpdateOptions struct {
 	// Set to '*' to allow a new cluster to be created, but to prevent updating an existing cluster. Other values will result
 	// in a 412 Pre-condition Failed response.
 	IfNoneMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDeleteOptions contains the optional parameters for the ClustersClient.BeginDelete method.
 type ClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDetachFollowerDatabasesOptions contains the optional parameters for the ClustersClient.BeginDetachFollowerDatabases
 // method.
 type ClustersClientBeginDetachFollowerDatabasesOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginDiagnoseVirtualNetworkOptions contains the optional parameters for the ClustersClient.BeginDiagnoseVirtualNetwork
 // method.
 type ClustersClientBeginDiagnoseVirtualNetworkOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginRemoveLanguageExtensionsOptions contains the optional parameters for the ClustersClient.BeginRemoveLanguageExtensions
 // method.
 type ClustersClientBeginRemoveLanguageExtensionsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginStartOptions contains the optional parameters for the ClustersClient.BeginStart method.
 type ClustersClientBeginStartOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginStopOptions contains the optional parameters for the ClustersClient.BeginStop method.
 type ClustersClientBeginStopOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientBeginUpdateOptions contains the optional parameters for the ClustersClient.BeginUpdate method.
@@ -471,6 +484,8 @@ type ClustersClientBeginUpdateOptions struct {
 	// The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the last-seen ETag value to prevent
 	// accidentally overwriting concurrent changes.
 	IfMatch *string
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ClustersClientCheckNameAvailabilityOptions contains the optional parameters for the ClustersClient.CheckNameAvailability
@@ -596,23 +611,27 @@ type DataConnectionValidationResult struct {
 // DataConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the DataConnectionsClient.BeginCreateOrUpdate
 // method.
 type DataConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataConnectionsClientBeginDataConnectionValidationOptions contains the optional parameters for the DataConnectionsClient.BeginDataConnectionValidation
 // method.
 type DataConnectionsClientBeginDataConnectionValidationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataConnectionsClientBeginDeleteOptions contains the optional parameters for the DataConnectionsClient.BeginDelete method.
 type DataConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataConnectionsClientBeginUpdateOptions contains the optional parameters for the DataConnectionsClient.BeginUpdate method.
 type DataConnectionsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DataConnectionsClientCheckNameAvailabilityOptions contains the optional parameters for the DataConnectionsClient.CheckNameAvailability
@@ -722,13 +741,15 @@ type DatabasePrincipalAssignmentListResult struct {
 // DatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.BeginCreateOrUpdate
 // method.
 type DatabasePrincipalAssignmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasePrincipalAssignmentsClientBeginDeleteOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.BeginDelete
 // method.
 type DatabasePrincipalAssignmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasePrincipalAssignmentsClientCheckNameAvailabilityOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.CheckNameAvailability
@@ -800,17 +821,20 @@ type DatabasesClientAddPrincipalsOptions struct {
 // DatabasesClientBeginCreateOrUpdateOptions contains the optional parameters for the DatabasesClient.BeginCreateOrUpdate
 // method.
 type DatabasesClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginDeleteOptions contains the optional parameters for the DatabasesClient.BeginDelete method.
 type DatabasesClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientBeginUpdateOptions contains the optional parameters for the DatabasesClient.BeginUpdate method.
 type DatabasesClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DatabasesClientCheckNameAvailabilityOptions contains the optional parameters for the DatabasesClient.CheckNameAvailability
@@ -1133,19 +1157,22 @@ type ManagedPrivateEndpointsCheckNameRequest struct {
 // ManagedPrivateEndpointsClientBeginCreateOrUpdateOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginCreateOrUpdate
 // method.
 type ManagedPrivateEndpointsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedPrivateEndpointsClientBeginDeleteOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginDelete
 // method.
 type ManagedPrivateEndpointsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedPrivateEndpointsClientBeginUpdateOptions contains the optional parameters for the ManagedPrivateEndpointsClient.BeginUpdate
 // method.
 type ManagedPrivateEndpointsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ManagedPrivateEndpointsClientCheckNameAvailabilityOptions contains the optional parameters for the ManagedPrivateEndpointsClient.CheckNameAvailability
@@ -1358,13 +1385,15 @@ type PrivateEndpointConnectionProperties struct {
 // PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginCreateOrUpdate
 // method.
 type PrivateEndpointConnectionsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
 // method.
 type PrivateEndpointConnectionsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PrivateEndpointConnectionsClientGetOptions contains the optional parameters for the PrivateEndpointConnectionsClient.Get
@@ -1641,17 +1670,20 @@ type ScriptProperties struct {
 
 // ScriptsClientBeginCreateOrUpdateOptions contains the optional parameters for the ScriptsClient.BeginCreateOrUpdate method.
 type ScriptsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ScriptsClientBeginDeleteOptions contains the optional parameters for the ScriptsClient.BeginDelete method.
 type ScriptsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ScriptsClientBeginUpdateOptions contains the optional parameters for the ScriptsClient.BeginUpdate method.
 type ScriptsClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ScriptsClientCheckNameAvailabilityOptions contains the optional parameters for the ScriptsClient.CheckNameAvailability

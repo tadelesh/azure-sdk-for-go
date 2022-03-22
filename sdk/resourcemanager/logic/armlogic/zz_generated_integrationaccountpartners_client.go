@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -231,16 +231,32 @@ func (client *IntegrationAccountPartnersClient) getHandleResponse(resp *http.Res
 // integrationAccountName - The integration account name.
 // options - IntegrationAccountPartnersClientListOptions contains the optional parameters for the IntegrationAccountPartnersClient.List
 // method.
-func (client *IntegrationAccountPartnersClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountPartnersClientListOptions) *IntegrationAccountPartnersClientListPager {
-	return &IntegrationAccountPartnersClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+func (client *IntegrationAccountPartnersClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountPartnersClientListOptions) *runtime.Pager[IntegrationAccountPartnersClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[IntegrationAccountPartnersClientListResponse]{
+		More: func(page IntegrationAccountPartnersClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp IntegrationAccountPartnersClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IntegrationAccountPartnerListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *IntegrationAccountPartnersClientListResponse) (IntegrationAccountPartnersClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return IntegrationAccountPartnersClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return IntegrationAccountPartnersClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return IntegrationAccountPartnersClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

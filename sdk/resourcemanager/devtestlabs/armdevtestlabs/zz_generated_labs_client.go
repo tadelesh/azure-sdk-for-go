@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewLabsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // resourceGroupName - The name of the resource group.
 // name - The name of the lab.
 // options - LabsClientBeginClaimAnyVMOptions contains the optional parameters for the LabsClient.BeginClaimAnyVM method.
-func (client *LabsClient) BeginClaimAnyVM(ctx context.Context, resourceGroupName string, name string, options *LabsClientBeginClaimAnyVMOptions) (LabsClientClaimAnyVMPollerResponse, error) {
-	resp, err := client.claimAnyVM(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return LabsClientClaimAnyVMPollerResponse{}, err
+func (client *LabsClient) BeginClaimAnyVM(ctx context.Context, resourceGroupName string, name string, options *LabsClientBeginClaimAnyVMOptions) (*armruntime.Poller[LabsClientClaimAnyVMResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.claimAnyVM(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientClaimAnyVMResponse]("LabsClient.ClaimAnyVM", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientClaimAnyVMResponse]("LabsClient.ClaimAnyVM", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientClaimAnyVMPollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.ClaimAnyVM", "", resp, client.pl)
-	if err != nil {
-		return LabsClientClaimAnyVMPollerResponse{}, err
-	}
-	result.Poller = &LabsClientClaimAnyVMPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ClaimAnyVM - Claim a random claimable virtual machine in the lab. This operation can take a while to complete.
@@ -121,20 +117,16 @@ func (client *LabsClient) claimAnyVMCreateRequest(ctx context.Context, resourceG
 // labVirtualMachineCreationParameter - Properties for creating a virtual machine.
 // options - LabsClientBeginCreateEnvironmentOptions contains the optional parameters for the LabsClient.BeginCreateEnvironment
 // method.
-func (client *LabsClient) BeginCreateEnvironment(ctx context.Context, resourceGroupName string, name string, labVirtualMachineCreationParameter LabVirtualMachineCreationParameter, options *LabsClientBeginCreateEnvironmentOptions) (LabsClientCreateEnvironmentPollerResponse, error) {
-	resp, err := client.createEnvironment(ctx, resourceGroupName, name, labVirtualMachineCreationParameter, options)
-	if err != nil {
-		return LabsClientCreateEnvironmentPollerResponse{}, err
+func (client *LabsClient) BeginCreateEnvironment(ctx context.Context, resourceGroupName string, name string, labVirtualMachineCreationParameter LabVirtualMachineCreationParameter, options *LabsClientBeginCreateEnvironmentOptions) (*armruntime.Poller[LabsClientCreateEnvironmentResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createEnvironment(ctx, resourceGroupName, name, labVirtualMachineCreationParameter, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientCreateEnvironmentResponse]("LabsClient.CreateEnvironment", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientCreateEnvironmentResponse]("LabsClient.CreateEnvironment", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientCreateEnvironmentPollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.CreateEnvironment", "", resp, client.pl)
-	if err != nil {
-		return LabsClientCreateEnvironmentPollerResponse{}, err
-	}
-	result.Poller = &LabsClientCreateEnvironmentPoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateEnvironment - Create virtual machines in a lab. This operation can take a while to complete.
@@ -187,20 +179,16 @@ func (client *LabsClient) createEnvironmentCreateRequest(ctx context.Context, re
 // lab - A lab.
 // options - LabsClientBeginCreateOrUpdateOptions contains the optional parameters for the LabsClient.BeginCreateOrUpdate
 // method.
-func (client *LabsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, lab Lab, options *LabsClientBeginCreateOrUpdateOptions) (LabsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, name, lab, options)
-	if err != nil {
-		return LabsClientCreateOrUpdatePollerResponse{}, err
+func (client *LabsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, name string, lab Lab, options *LabsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[LabsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, name, lab, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientCreateOrUpdateResponse]("LabsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientCreateOrUpdateResponse]("LabsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return LabsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &LabsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or replace an existing lab. This operation can take a while to complete.
@@ -251,20 +239,16 @@ func (client *LabsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 // resourceGroupName - The name of the resource group.
 // name - The name of the lab.
 // options - LabsClientBeginDeleteOptions contains the optional parameters for the LabsClient.BeginDelete method.
-func (client *LabsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *LabsClientBeginDeleteOptions) (LabsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
-	if err != nil {
-		return LabsClientDeletePollerResponse{}, err
+func (client *LabsClient) BeginDelete(ctx context.Context, resourceGroupName string, name string, options *LabsClientBeginDeleteOptions) (*armruntime.Poller[LabsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, name, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientDeleteResponse]("LabsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientDeleteResponse]("LabsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return LabsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &LabsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete lab. This operation can take a while to complete.
@@ -317,20 +301,16 @@ func (client *LabsClient) deleteCreateRequest(ctx context.Context, resourceGroup
 // exportResourceUsageParameters - The parameters of the export operation.
 // options - LabsClientBeginExportResourceUsageOptions contains the optional parameters for the LabsClient.BeginExportResourceUsage
 // method.
-func (client *LabsClient) BeginExportResourceUsage(ctx context.Context, resourceGroupName string, name string, exportResourceUsageParameters ExportResourceUsageParameters, options *LabsClientBeginExportResourceUsageOptions) (LabsClientExportResourceUsagePollerResponse, error) {
-	resp, err := client.exportResourceUsage(ctx, resourceGroupName, name, exportResourceUsageParameters, options)
-	if err != nil {
-		return LabsClientExportResourceUsagePollerResponse{}, err
+func (client *LabsClient) BeginExportResourceUsage(ctx context.Context, resourceGroupName string, name string, exportResourceUsageParameters ExportResourceUsageParameters, options *LabsClientBeginExportResourceUsageOptions) (*armruntime.Poller[LabsClientExportResourceUsageResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.exportResourceUsage(ctx, resourceGroupName, name, exportResourceUsageParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientExportResourceUsageResponse]("LabsClient.ExportResourceUsage", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientExportResourceUsageResponse]("LabsClient.ExportResourceUsage", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientExportResourceUsagePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.ExportResourceUsage", "", resp, client.pl)
-	if err != nil {
-		return LabsClientExportResourceUsagePollerResponse{}, err
-	}
-	result.Poller = &LabsClientExportResourceUsagePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ExportResourceUsage - Exports the lab resource usage into a storage account This operation can take a while to complete.
@@ -498,20 +478,16 @@ func (client *LabsClient) getHandleResponse(resp *http.Response) (LabsClientGetR
 // into the current one
 // options - LabsClientBeginImportVirtualMachineOptions contains the optional parameters for the LabsClient.BeginImportVirtualMachine
 // method.
-func (client *LabsClient) BeginImportVirtualMachine(ctx context.Context, resourceGroupName string, name string, importLabVirtualMachineRequest ImportLabVirtualMachineRequest, options *LabsClientBeginImportVirtualMachineOptions) (LabsClientImportVirtualMachinePollerResponse, error) {
-	resp, err := client.importVirtualMachine(ctx, resourceGroupName, name, importLabVirtualMachineRequest, options)
-	if err != nil {
-		return LabsClientImportVirtualMachinePollerResponse{}, err
+func (client *LabsClient) BeginImportVirtualMachine(ctx context.Context, resourceGroupName string, name string, importLabVirtualMachineRequest ImportLabVirtualMachineRequest, options *LabsClientBeginImportVirtualMachineOptions) (*armruntime.Poller[LabsClientImportVirtualMachineResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.importVirtualMachine(ctx, resourceGroupName, name, importLabVirtualMachineRequest, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[LabsClientImportVirtualMachineResponse]("LabsClient.ImportVirtualMachine", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[LabsClientImportVirtualMachineResponse]("LabsClient.ImportVirtualMachine", options.ResumeToken, client.pl, nil)
 	}
-	result := LabsClientImportVirtualMachinePollerResponse{}
-	pt, err := armruntime.NewPoller("LabsClient.ImportVirtualMachine", "", resp, client.pl)
-	if err != nil {
-		return LabsClientImportVirtualMachinePollerResponse{}, err
-	}
-	result.Poller = &LabsClientImportVirtualMachinePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ImportVirtualMachine - Import a virtual machine into a different lab. This operation can take a while to complete.
@@ -562,16 +538,32 @@ func (client *LabsClient) importVirtualMachineCreateRequest(ctx context.Context,
 // resourceGroupName - The name of the resource group.
 // options - LabsClientListByResourceGroupOptions contains the optional parameters for the LabsClient.ListByResourceGroup
 // method.
-func (client *LabsClient) ListByResourceGroup(resourceGroupName string, options *LabsClientListByResourceGroupOptions) *LabsClientListByResourceGroupPager {
-	return &LabsClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *LabsClient) ListByResourceGroup(resourceGroupName string, options *LabsClientListByResourceGroupOptions) *runtime.Pager[LabsClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabsClientListByResourceGroupResponse]{
+		More: func(page LabsClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabsClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LabList.NextLink)
+		Fetcher: func(ctx context.Context, page *LabsClientListByResourceGroupResponse) (LabsClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabsClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabsClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -620,16 +612,32 @@ func (client *LabsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // ListBySubscription - List labs in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LabsClientListBySubscriptionOptions contains the optional parameters for the LabsClient.ListBySubscription method.
-func (client *LabsClient) ListBySubscription(options *LabsClientListBySubscriptionOptions) *LabsClientListBySubscriptionPager {
-	return &LabsClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *LabsClient) ListBySubscription(options *LabsClientListBySubscriptionOptions) *runtime.Pager[LabsClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabsClientListBySubscriptionResponse]{
+		More: func(page LabsClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabsClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LabList.NextLink)
+		Fetcher: func(ctx context.Context, page *LabsClientListBySubscriptionResponse) (LabsClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabsClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabsClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -676,16 +684,32 @@ func (client *LabsClient) listBySubscriptionHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group.
 // name - The name of the lab.
 // options - LabsClientListVhdsOptions contains the optional parameters for the LabsClient.ListVhds method.
-func (client *LabsClient) ListVhds(resourceGroupName string, name string, options *LabsClientListVhdsOptions) *LabsClientListVhdsPager {
-	return &LabsClientListVhdsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listVhdsCreateRequest(ctx, resourceGroupName, name, options)
+func (client *LabsClient) ListVhds(resourceGroupName string, name string, options *LabsClientListVhdsOptions) *runtime.Pager[LabsClientListVhdsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[LabsClientListVhdsResponse]{
+		More: func(page LabsClientListVhdsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp LabsClientListVhdsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.LabVhdList.NextLink)
+		Fetcher: func(ctx context.Context, page *LabsClientListVhdsResponse) (LabsClientListVhdsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listVhdsCreateRequest(ctx, resourceGroupName, name, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return LabsClientListVhdsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return LabsClientListVhdsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return LabsClientListVhdsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listVhdsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listVhdsCreateRequest creates the ListVhds request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -111,16 +111,32 @@ func (client *AzureBareMetalInstancesClient) getHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - AzureBareMetalInstancesClientListByResourceGroupOptions contains the optional parameters for the AzureBareMetalInstancesClient.ListByResourceGroup
 // method.
-func (client *AzureBareMetalInstancesClient) ListByResourceGroup(resourceGroupName string, options *AzureBareMetalInstancesClientListByResourceGroupOptions) *AzureBareMetalInstancesClientListByResourceGroupPager {
-	return &AzureBareMetalInstancesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *AzureBareMetalInstancesClient) ListByResourceGroup(resourceGroupName string, options *AzureBareMetalInstancesClientListByResourceGroupOptions) *runtime.Pager[AzureBareMetalInstancesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AzureBareMetalInstancesClientListByResourceGroupResponse]{
+		More: func(page AzureBareMetalInstancesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AzureBareMetalInstancesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AzureBareMetalInstancesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AzureBareMetalInstancesClientListByResourceGroupResponse) (AzureBareMetalInstancesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AzureBareMetalInstancesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AzureBareMetalInstancesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AzureBareMetalInstancesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -159,16 +175,32 @@ func (client *AzureBareMetalInstancesClient) listByResourceGroupHandleResponse(r
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AzureBareMetalInstancesClientListBySubscriptionOptions contains the optional parameters for the AzureBareMetalInstancesClient.ListBySubscription
 // method.
-func (client *AzureBareMetalInstancesClient) ListBySubscription(options *AzureBareMetalInstancesClientListBySubscriptionOptions) *AzureBareMetalInstancesClientListBySubscriptionPager {
-	return &AzureBareMetalInstancesClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AzureBareMetalInstancesClient) ListBySubscription(options *AzureBareMetalInstancesClientListBySubscriptionOptions) *runtime.Pager[AzureBareMetalInstancesClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AzureBareMetalInstancesClientListBySubscriptionResponse]{
+		More: func(page AzureBareMetalInstancesClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AzureBareMetalInstancesClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AzureBareMetalInstancesListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *AzureBareMetalInstancesClientListBySubscriptionResponse) (AzureBareMetalInstancesClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AzureBareMetalInstancesClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AzureBareMetalInstancesClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AzureBareMetalInstancesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

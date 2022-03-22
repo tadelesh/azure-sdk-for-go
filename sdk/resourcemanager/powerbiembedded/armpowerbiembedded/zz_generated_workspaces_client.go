@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,13 +55,26 @@ func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredentia
 // resourceGroupName - Azure resource group
 // workspaceCollectionName - Power BI Embedded Workspace Collection name
 // options - WorkspacesClientListOptions contains the optional parameters for the WorkspacesClient.List method.
-func (client *WorkspacesClient) List(resourceGroupName string, workspaceCollectionName string, options *WorkspacesClientListOptions) *WorkspacesClientListPager {
-	return &WorkspacesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceCollectionName, options)
+func (client *WorkspacesClient) List(resourceGroupName string, workspaceCollectionName string, options *WorkspacesClientListOptions) *runtime.Pager[WorkspacesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspacesClientListResponse]{
+		More: func(page WorkspacesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspacesClientListResponse) (WorkspacesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceCollectionName, options)
+			if err != nil {
+				return WorkspacesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspacesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspacesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

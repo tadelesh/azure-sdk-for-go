@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1268,13 +1268,15 @@ type CertificateOrderProperties struct {
 // CertificateOrdersClientBeginCreateOrUpdateCertificateOptions contains the optional parameters for the CertificateOrdersClient.BeginCreateOrUpdateCertificate
 // method.
 type CertificateOrdersClientBeginCreateOrUpdateCertificateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CertificateOrdersClientBeginCreateOrUpdateOptions contains the optional parameters for the CertificateOrdersClient.BeginCreateOrUpdate
 // method.
 type CertificateOrdersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // CertificateOrdersClientDeleteCertificateOptions contains the optional parameters for the CertificateOrdersClient.DeleteCertificate
@@ -1700,12 +1702,14 @@ type ContainerAppSecret struct {
 // ContainerAppsClientBeginCreateOrUpdateOptions contains the optional parameters for the ContainerAppsClient.BeginCreateOrUpdate
 // method.
 type ContainerAppsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerAppsClientBeginDeleteOptions contains the optional parameters for the ContainerAppsClient.BeginDelete method.
 type ContainerAppsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // ContainerAppsClientGetOptions contains the optional parameters for the ContainerAppsClient.Get method.
@@ -3220,7 +3224,8 @@ type DomainRegistrationProviderClientListOperationsOptions struct {
 
 // DomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainsClient.BeginCreateOrUpdate method.
 type DomainsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // DomainsClientCheckAvailabilityOptions contains the optional parameters for the DomainsClient.CheckAvailability method.
@@ -3455,52 +3460,62 @@ type EnvironmentVar struct {
 // EnvironmentsClientBeginApproveOrRejectPrivateEndpointConnectionOptions contains the optional parameters for the EnvironmentsClient.BeginApproveOrRejectPrivateEndpointConnection
 // method.
 type EnvironmentsClientBeginApproveOrRejectPrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginChangeVnetOptions contains the optional parameters for the EnvironmentsClient.BeginChangeVnet method.
 type EnvironmentsClientBeginChangeVnetOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginCreateOrUpdateMultiRolePoolOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdateMultiRolePool
 // method.
 type EnvironmentsClientBeginCreateOrUpdateMultiRolePoolOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdate
 // method.
 type EnvironmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginCreateOrUpdateWorkerPoolOptions contains the optional parameters for the EnvironmentsClient.BeginCreateOrUpdateWorkerPool
 // method.
 type EnvironmentsClientBeginCreateOrUpdateWorkerPoolOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginDeleteOptions contains the optional parameters for the EnvironmentsClient.BeginDelete method.
 type EnvironmentsClientBeginDeleteOptions struct {
 	// Specify true to force the deletion even if the App Service Environment contains resources. The default is false.
 	ForceDelete *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the EnvironmentsClient.BeginDeletePrivateEndpointConnection
 // method.
 type EnvironmentsClientBeginDeletePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginResumeOptions contains the optional parameters for the EnvironmentsClient.BeginResume method.
 type EnvironmentsClientBeginResumeOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientBeginSuspendOptions contains the optional parameters for the EnvironmentsClient.BeginSuspend method.
 type EnvironmentsClientBeginSuspendOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // EnvironmentsClientGetAseV3NetworkingConfigurationOptions contains the optional parameters for the EnvironmentsClient.GetAseV3NetworkingConfiguration
@@ -4816,12 +4831,14 @@ type KubeEnvironmentProperties struct {
 // KubeEnvironmentsClientBeginCreateOrUpdateOptions contains the optional parameters for the KubeEnvironmentsClient.BeginCreateOrUpdate
 // method.
 type KubeEnvironmentsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KubeEnvironmentsClientBeginDeleteOptions contains the optional parameters for the KubeEnvironmentsClient.BeginDelete method.
 type KubeEnvironmentsClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // KubeEnvironmentsClientGetOptions contains the optional parameters for the KubeEnvironmentsClient.Get method.
@@ -5587,7 +5604,8 @@ type PlanProperties struct {
 
 // PlansClientBeginCreateOrUpdateOptions contains the optional parameters for the PlansClient.BeginCreateOrUpdate method.
 type PlansClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // PlansClientCreateOrUpdateVnetRouteOptions contains the optional parameters for the PlansClient.CreateOrUpdateVnetRoute
@@ -9431,61 +9449,71 @@ type StaticSiteZipDeploymentARMResource struct {
 // StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions contains the optional parameters for the StaticSitesClient.BeginApproveOrRejectPrivateEndpointConnection
 // method.
 type StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions contains the optional parameters for the StaticSitesClient.BeginCreateOrUpdateStaticSiteCustomDomain
 // method.
 type StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginCreateOrUpdateStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginCreateOrUpdateStaticSite
 // method.
 type StaticSitesClientBeginCreateOrUpdateStaticSiteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions contains the optional parameters for the StaticSitesClient.BeginCreateZipDeploymentForStaticSiteBuild
 // method.
 type StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginCreateZipDeploymentForStaticSite
 // method.
 type StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the StaticSitesClient.BeginDeletePrivateEndpointConnection
 // method.
 type StaticSitesClientBeginDeletePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginDeleteStaticSiteBuildOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSiteBuild
 // method.
 type StaticSitesClientBeginDeleteStaticSiteBuildOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSiteCustomDomain
 // method.
 type StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginDeleteStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSite
 // method.
 type StaticSitesClientBeginDeleteStaticSiteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginDetachStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDetachStaticSite
 // method.
 type StaticSitesClientBeginDetachStaticSiteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions contains the optional parameters for the
@@ -9494,6 +9522,8 @@ type StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOpt
 	// Specify true to force the update of the auth configuration on the function app even if an AzureStaticWebApps provider is
 	// already configured on the function app. The default is false.
 	IsForced *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginRegisterUserProvidedFunctionAppWithStaticSite
@@ -9502,12 +9532,15 @@ type StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions 
 	// Specify true to force the update of the auth configuration on the function app even if an AzureStaticWebApps provider is
 	// already configured on the function app. The default is false.
 	IsForced *bool
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginValidateCustomDomainCanBeAddedToStaticSite
 // method.
 type StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // StaticSitesClientCreateOrUpdateStaticSiteAppSettingsOptions contains the optional parameters for the StaticSitesClient.CreateOrUpdateStaticSiteAppSettings
@@ -10837,162 +10870,190 @@ type WebAppsClientBackupSlotOptions struct {
 // WebAppsClientBeginApproveOrRejectPrivateEndpointConnectionOptions contains the optional parameters for the WebAppsClient.BeginApproveOrRejectPrivateEndpointConnection
 // method.
 type WebAppsClientBeginApproveOrRejectPrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginApproveOrRejectPrivateEndpointConnectionSlotOptions contains the optional parameters for the WebAppsClient.BeginApproveOrRejectPrivateEndpointConnectionSlot
 // method.
 type WebAppsClientBeginApproveOrRejectPrivateEndpointConnectionSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateFunctionOptions contains the optional parameters for the WebAppsClient.BeginCreateFunction method.
 type WebAppsClientBeginCreateFunctionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateInstanceFunctionSlotOptions contains the optional parameters for the WebAppsClient.BeginCreateInstanceFunctionSlot
 // method.
 type WebAppsClientBeginCreateInstanceFunctionSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateInstanceMSDeployOperationOptions contains the optional parameters for the WebAppsClient.BeginCreateInstanceMSDeployOperation
 // method.
 type WebAppsClientBeginCreateInstanceMSDeployOperationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateInstanceMSDeployOperationSlotOptions contains the optional parameters for the WebAppsClient.BeginCreateInstanceMSDeployOperationSlot
 // method.
 type WebAppsClientBeginCreateInstanceMSDeployOperationSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateMSDeployOperationOptions contains the optional parameters for the WebAppsClient.BeginCreateMSDeployOperation
 // method.
 type WebAppsClientBeginCreateMSDeployOperationOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateMSDeployOperationSlotOptions contains the optional parameters for the WebAppsClient.BeginCreateMSDeployOperationSlot
 // method.
 type WebAppsClientBeginCreateMSDeployOperationSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateOrUpdateOptions contains the optional parameters for the WebAppsClient.BeginCreateOrUpdate method.
 type WebAppsClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateOrUpdateSlotOptions contains the optional parameters for the WebAppsClient.BeginCreateOrUpdateSlot
 // method.
 type WebAppsClientBeginCreateOrUpdateSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateOrUpdateSourceControlOptions contains the optional parameters for the WebAppsClient.BeginCreateOrUpdateSourceControl
 // method.
 type WebAppsClientBeginCreateOrUpdateSourceControlOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginCreateOrUpdateSourceControlSlotOptions contains the optional parameters for the WebAppsClient.BeginCreateOrUpdateSourceControlSlot
 // method.
 type WebAppsClientBeginCreateOrUpdateSourceControlSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginDeletePrivateEndpointConnectionOptions contains the optional parameters for the WebAppsClient.BeginDeletePrivateEndpointConnection
 // method.
 type WebAppsClientBeginDeletePrivateEndpointConnectionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginDeletePrivateEndpointConnectionSlotOptions contains the optional parameters for the WebAppsClient.BeginDeletePrivateEndpointConnectionSlot
 // method.
 type WebAppsClientBeginDeletePrivateEndpointConnectionSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginInstallSiteExtensionOptions contains the optional parameters for the WebAppsClient.BeginInstallSiteExtension
 // method.
 type WebAppsClientBeginInstallSiteExtensionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginInstallSiteExtensionSlotOptions contains the optional parameters for the WebAppsClient.BeginInstallSiteExtensionSlot
 // method.
 type WebAppsClientBeginInstallSiteExtensionSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginListPublishingCredentialsOptions contains the optional parameters for the WebAppsClient.BeginListPublishingCredentials
 // method.
 type WebAppsClientBeginListPublishingCredentialsOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginListPublishingCredentialsSlotOptions contains the optional parameters for the WebAppsClient.BeginListPublishingCredentialsSlot
 // method.
 type WebAppsClientBeginListPublishingCredentialsSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginMigrateMySQLOptions contains the optional parameters for the WebAppsClient.BeginMigrateMySQL method.
 type WebAppsClientBeginMigrateMySQLOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginMigrateStorageOptions contains the optional parameters for the WebAppsClient.BeginMigrateStorage method.
 type WebAppsClientBeginMigrateStorageOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreFromBackupBlobOptions contains the optional parameters for the WebAppsClient.BeginRestoreFromBackupBlob
 // method.
 type WebAppsClientBeginRestoreFromBackupBlobOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreFromBackupBlobSlotOptions contains the optional parameters for the WebAppsClient.BeginRestoreFromBackupBlobSlot
 // method.
 type WebAppsClientBeginRestoreFromBackupBlobSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreFromDeletedAppOptions contains the optional parameters for the WebAppsClient.BeginRestoreFromDeletedApp
 // method.
 type WebAppsClientBeginRestoreFromDeletedAppOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreFromDeletedAppSlotOptions contains the optional parameters for the WebAppsClient.BeginRestoreFromDeletedAppSlot
 // method.
 type WebAppsClientBeginRestoreFromDeletedAppSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreOptions contains the optional parameters for the WebAppsClient.BeginRestore method.
 type WebAppsClientBeginRestoreOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreSlotOptions contains the optional parameters for the WebAppsClient.BeginRestoreSlot method.
 type WebAppsClientBeginRestoreSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreSnapshotOptions contains the optional parameters for the WebAppsClient.BeginRestoreSnapshot method.
 type WebAppsClientBeginRestoreSnapshotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginRestoreSnapshotSlotOptions contains the optional parameters for the WebAppsClient.BeginRestoreSnapshotSlot
 // method.
 type WebAppsClientBeginRestoreSnapshotSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginStartNetworkTraceOptions contains the optional parameters for the WebAppsClient.BeginStartNetworkTrace
@@ -11002,6 +11063,8 @@ type WebAppsClientBeginStartNetworkTraceOptions struct {
 	DurationInSeconds *int32
 	// The maximum frame length in bytes (Optional).
 	MaxFrameLength *int32
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// The Blob URL to store capture file.
 	SasURL *string
 }
@@ -11013,6 +11076,8 @@ type WebAppsClientBeginStartNetworkTraceSlotOptions struct {
 	DurationInSeconds *int32
 	// The maximum frame length in bytes (Optional).
 	MaxFrameLength *int32
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// The Blob URL to store capture file.
 	SasURL *string
 }
@@ -11024,6 +11089,8 @@ type WebAppsClientBeginStartWebSiteNetworkTraceOperationOptions struct {
 	DurationInSeconds *int32
 	// The maximum frame length in bytes (Optional).
 	MaxFrameLength *int32
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// The Blob URL to store capture file.
 	SasURL *string
 }
@@ -11035,19 +11102,23 @@ type WebAppsClientBeginStartWebSiteNetworkTraceOperationSlotOptions struct {
 	DurationInSeconds *int32
 	// The maximum frame length in bytes (Optional).
 	MaxFrameLength *int32
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 	// The Blob URL to store capture file.
 	SasURL *string
 }
 
 // WebAppsClientBeginSwapSlotOptions contains the optional parameters for the WebAppsClient.BeginSwapSlot method.
 type WebAppsClientBeginSwapSlotOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientBeginSwapSlotWithProductionOptions contains the optional parameters for the WebAppsClient.BeginSwapSlotWithProduction
 // method.
 type WebAppsClientBeginSwapSlotWithProductionOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // WebAppsClientCreateDeploymentOptions contains the optional parameters for the WebAppsClient.CreateDeployment method.

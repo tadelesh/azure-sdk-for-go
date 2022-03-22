@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -55,20 +55,16 @@ func NewAccessControlRecordsClient(subscriptionID string, credential azcore.Toke
 // parameters - The access control record to be added or updated.
 // options - AccessControlRecordsClientBeginCreateOrUpdateOptions contains the optional parameters for the AccessControlRecordsClient.BeginCreateOrUpdate
 // method.
-func (client *AccessControlRecordsClient) BeginCreateOrUpdate(ctx context.Context, accessControlRecordName string, resourceGroupName string, managerName string, parameters AccessControlRecord, options *AccessControlRecordsClientBeginCreateOrUpdateOptions) (AccessControlRecordsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, accessControlRecordName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return AccessControlRecordsClientCreateOrUpdatePollerResponse{}, err
+func (client *AccessControlRecordsClient) BeginCreateOrUpdate(ctx context.Context, accessControlRecordName string, resourceGroupName string, managerName string, parameters AccessControlRecord, options *AccessControlRecordsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AccessControlRecordsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, accessControlRecordName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccessControlRecordsClientCreateOrUpdateResponse]("AccessControlRecordsClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccessControlRecordsClientCreateOrUpdateResponse]("AccessControlRecordsClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := AccessControlRecordsClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("AccessControlRecordsClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return AccessControlRecordsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AccessControlRecordsClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or Updates an access control record.
@@ -113,20 +109,16 @@ func (client *AccessControlRecordsClient) createOrUpdateCreateRequest(ctx contex
 // managerName - The manager name
 // options - AccessControlRecordsClientBeginDeleteOptions contains the optional parameters for the AccessControlRecordsClient.BeginDelete
 // method.
-func (client *AccessControlRecordsClient) BeginDelete(ctx context.Context, accessControlRecordName string, resourceGroupName string, managerName string, options *AccessControlRecordsClientBeginDeleteOptions) (AccessControlRecordsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, accessControlRecordName, resourceGroupName, managerName, options)
-	if err != nil {
-		return AccessControlRecordsClientDeletePollerResponse{}, err
+func (client *AccessControlRecordsClient) BeginDelete(ctx context.Context, accessControlRecordName string, resourceGroupName string, managerName string, options *AccessControlRecordsClientBeginDeleteOptions) (*armruntime.Poller[AccessControlRecordsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, accessControlRecordName, resourceGroupName, managerName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[AccessControlRecordsClientDeleteResponse]("AccessControlRecordsClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[AccessControlRecordsClientDeleteResponse]("AccessControlRecordsClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := AccessControlRecordsClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("AccessControlRecordsClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return AccessControlRecordsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AccessControlRecordsClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the access control record.
@@ -218,13 +210,26 @@ func (client *AccessControlRecordsClient) getHandleResponse(resp *http.Response)
 // managerName - The manager name
 // options - AccessControlRecordsClientListByManagerOptions contains the optional parameters for the AccessControlRecordsClient.ListByManager
 // method.
-func (client *AccessControlRecordsClient) ListByManager(resourceGroupName string, managerName string, options *AccessControlRecordsClientListByManagerOptions) *AccessControlRecordsClientListByManagerPager {
-	return &AccessControlRecordsClientListByManagerPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+func (client *AccessControlRecordsClient) ListByManager(resourceGroupName string, managerName string, options *AccessControlRecordsClientListByManagerOptions) *runtime.Pager[AccessControlRecordsClientListByManagerResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AccessControlRecordsClientListByManagerResponse]{
+		More: func(page AccessControlRecordsClientListByManagerResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *AccessControlRecordsClientListByManagerResponse) (AccessControlRecordsClientListByManagerResponse, error) {
+			req, err := client.listByManagerCreateRequest(ctx, resourceGroupName, managerName, options)
+			if err != nil {
+				return AccessControlRecordsClientListByManagerResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AccessControlRecordsClientListByManagerResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AccessControlRecordsClientListByManagerResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByManagerHandleResponse(resp)
+		},
+	})
 }
 
 // listByManagerCreateRequest creates the ListByManager request.

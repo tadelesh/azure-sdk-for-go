@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -118,20 +118,16 @@ func (client *SnapshotPoliciesClient) createHandleResponse(resp *http.Response) 
 // snapshotPolicyName - The name of the snapshot policy
 // options - SnapshotPoliciesClientBeginDeleteOptions contains the optional parameters for the SnapshotPoliciesClient.BeginDelete
 // method.
-func (client *SnapshotPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, snapshotPolicyName string, options *SnapshotPoliciesClientBeginDeleteOptions) (SnapshotPoliciesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, snapshotPolicyName, options)
-	if err != nil {
-		return SnapshotPoliciesClientDeletePollerResponse{}, err
+func (client *SnapshotPoliciesClient) BeginDelete(ctx context.Context, resourceGroupName string, accountName string, snapshotPolicyName string, options *SnapshotPoliciesClientBeginDeleteOptions) (*armruntime.Poller[SnapshotPoliciesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, accountName, snapshotPolicyName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SnapshotPoliciesClientDeleteResponse]("SnapshotPoliciesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SnapshotPoliciesClientDeleteResponse]("SnapshotPoliciesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := SnapshotPoliciesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("SnapshotPoliciesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return SnapshotPoliciesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &SnapshotPoliciesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Delete snapshot policy
@@ -245,13 +241,26 @@ func (client *SnapshotPoliciesClient) getHandleResponse(resp *http.Response) (Sn
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - SnapshotPoliciesClientListOptions contains the optional parameters for the SnapshotPoliciesClient.List method.
-func (client *SnapshotPoliciesClient) List(resourceGroupName string, accountName string, options *SnapshotPoliciesClientListOptions) *SnapshotPoliciesClientListPager {
-	return &SnapshotPoliciesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+func (client *SnapshotPoliciesClient) List(resourceGroupName string, accountName string, options *SnapshotPoliciesClientListOptions) *runtime.Pager[SnapshotPoliciesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[SnapshotPoliciesClientListResponse]{
+		More: func(page SnapshotPoliciesClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *SnapshotPoliciesClientListResponse) (SnapshotPoliciesClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+			if err != nil {
+				return SnapshotPoliciesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return SnapshotPoliciesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return SnapshotPoliciesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -358,20 +367,16 @@ func (client *SnapshotPoliciesClient) listVolumesHandleResponse(resp *http.Respo
 // body - Snapshot policy object supplied in the body of the operation.
 // options - SnapshotPoliciesClientBeginUpdateOptions contains the optional parameters for the SnapshotPoliciesClient.BeginUpdate
 // method.
-func (client *SnapshotPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, snapshotPolicyName string, body SnapshotPolicyPatch, options *SnapshotPoliciesClientBeginUpdateOptions) (SnapshotPoliciesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, snapshotPolicyName, body, options)
-	if err != nil {
-		return SnapshotPoliciesClientUpdatePollerResponse{}, err
+func (client *SnapshotPoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, snapshotPolicyName string, body SnapshotPolicyPatch, options *SnapshotPoliciesClientBeginUpdateOptions) (*armruntime.Poller[SnapshotPoliciesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, snapshotPolicyName, body, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[SnapshotPoliciesClientUpdateResponse]("SnapshotPoliciesClient.Update", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[SnapshotPoliciesClientUpdateResponse]("SnapshotPoliciesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := SnapshotPoliciesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("SnapshotPoliciesClient.Update", "location", resp, client.pl)
-	if err != nil {
-		return SnapshotPoliciesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &SnapshotPoliciesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Patch a snapshot policy

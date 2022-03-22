@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewHardwareComponentGroupsClient(subscriptionID string, credential azcore.T
 // parameters - The controller power state change request.
 // options - HardwareComponentGroupsClientBeginChangeControllerPowerStateOptions contains the optional parameters for the
 // HardwareComponentGroupsClient.BeginChangeControllerPowerState method.
-func (client *HardwareComponentGroupsClient) BeginChangeControllerPowerState(ctx context.Context, deviceName string, hardwareComponentGroupName string, resourceGroupName string, managerName string, parameters ControllerPowerStateChangeRequest, options *HardwareComponentGroupsClientBeginChangeControllerPowerStateOptions) (HardwareComponentGroupsClientChangeControllerPowerStatePollerResponse, error) {
-	resp, err := client.changeControllerPowerState(ctx, deviceName, hardwareComponentGroupName, resourceGroupName, managerName, parameters, options)
-	if err != nil {
-		return HardwareComponentGroupsClientChangeControllerPowerStatePollerResponse{}, err
+func (client *HardwareComponentGroupsClient) BeginChangeControllerPowerState(ctx context.Context, deviceName string, hardwareComponentGroupName string, resourceGroupName string, managerName string, parameters ControllerPowerStateChangeRequest, options *HardwareComponentGroupsClientBeginChangeControllerPowerStateOptions) (*armruntime.Poller[HardwareComponentGroupsClientChangeControllerPowerStateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.changeControllerPowerState(ctx, deviceName, hardwareComponentGroupName, resourceGroupName, managerName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[HardwareComponentGroupsClientChangeControllerPowerStateResponse]("HardwareComponentGroupsClient.ChangeControllerPowerState", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[HardwareComponentGroupsClientChangeControllerPowerStateResponse]("HardwareComponentGroupsClient.ChangeControllerPowerState", options.ResumeToken, client.pl, nil)
 	}
-	result := HardwareComponentGroupsClientChangeControllerPowerStatePollerResponse{}
-	pt, err := armruntime.NewPoller("HardwareComponentGroupsClient.ChangeControllerPowerState", "", resp, client.pl)
-	if err != nil {
-		return HardwareComponentGroupsClientChangeControllerPowerStatePollerResponse{}, err
-	}
-	result.Poller = &HardwareComponentGroupsClientChangeControllerPowerStatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // ChangeControllerPowerState - Changes the power state of the controller.
@@ -114,13 +110,26 @@ func (client *HardwareComponentGroupsClient) changeControllerPowerStateCreateReq
 // managerName - The manager name
 // options - HardwareComponentGroupsClientListByDeviceOptions contains the optional parameters for the HardwareComponentGroupsClient.ListByDevice
 // method.
-func (client *HardwareComponentGroupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *HardwareComponentGroupsClientListByDeviceOptions) *HardwareComponentGroupsClientListByDevicePager {
-	return &HardwareComponentGroupsClientListByDevicePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+func (client *HardwareComponentGroupsClient) ListByDevice(deviceName string, resourceGroupName string, managerName string, options *HardwareComponentGroupsClientListByDeviceOptions) *runtime.Pager[HardwareComponentGroupsClientListByDeviceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[HardwareComponentGroupsClientListByDeviceResponse]{
+		More: func(page HardwareComponentGroupsClientListByDeviceResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *HardwareComponentGroupsClientListByDeviceResponse) (HardwareComponentGroupsClientListByDeviceResponse, error) {
+			req, err := client.listByDeviceCreateRequest(ctx, deviceName, resourceGroupName, managerName, options)
+			if err != nil {
+				return HardwareComponentGroupsClientListByDeviceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return HardwareComponentGroupsClientListByDeviceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return HardwareComponentGroupsClientListByDeviceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByDeviceHandleResponse(resp)
+		},
+	})
 }
 
 // listByDeviceCreateRequest creates the ListByDevice request.

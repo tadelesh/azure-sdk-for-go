@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewCustomIPPrefixesClient(subscriptionID string, credential azcore.TokenCre
 // parameters - Parameters supplied to the create or update custom IP prefix operation.
 // options - CustomIPPrefixesClientBeginCreateOrUpdateOptions contains the optional parameters for the CustomIPPrefixesClient.BeginCreateOrUpdate
 // method.
-func (client *CustomIPPrefixesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, customIPPrefixName string, parameters CustomIPPrefix, options *CustomIPPrefixesClientBeginCreateOrUpdateOptions) (CustomIPPrefixesClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, customIPPrefixName, parameters, options)
-	if err != nil {
-		return CustomIPPrefixesClientCreateOrUpdatePollerResponse{}, err
+func (client *CustomIPPrefixesClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, customIPPrefixName string, parameters CustomIPPrefix, options *CustomIPPrefixesClientBeginCreateOrUpdateOptions) (*armruntime.Poller[CustomIPPrefixesClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, customIPPrefixName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomIPPrefixesClientCreateOrUpdateResponse]("CustomIPPrefixesClient.CreateOrUpdate", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomIPPrefixesClientCreateOrUpdateResponse]("CustomIPPrefixesClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomIPPrefixesClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomIPPrefixesClient.CreateOrUpdate", "location", resp, client.pl)
-	if err != nil {
-		return CustomIPPrefixesClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &CustomIPPrefixesClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Creates or updates a custom IP prefix.
@@ -122,20 +118,16 @@ func (client *CustomIPPrefixesClient) createOrUpdateCreateRequest(ctx context.Co
 // customIPPrefixName - The name of the CustomIpPrefix.
 // options - CustomIPPrefixesClientBeginDeleteOptions contains the optional parameters for the CustomIPPrefixesClient.BeginDelete
 // method.
-func (client *CustomIPPrefixesClient) BeginDelete(ctx context.Context, resourceGroupName string, customIPPrefixName string, options *CustomIPPrefixesClientBeginDeleteOptions) (CustomIPPrefixesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, customIPPrefixName, options)
-	if err != nil {
-		return CustomIPPrefixesClientDeletePollerResponse{}, err
+func (client *CustomIPPrefixesClient) BeginDelete(ctx context.Context, resourceGroupName string, customIPPrefixName string, options *CustomIPPrefixesClientBeginDeleteOptions) (*armruntime.Poller[CustomIPPrefixesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, customIPPrefixName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[CustomIPPrefixesClientDeleteResponse]("CustomIPPrefixesClient.Delete", "location", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[CustomIPPrefixesClientDeleteResponse]("CustomIPPrefixesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := CustomIPPrefixesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("CustomIPPrefixesClient.Delete", "location", resp, client.pl)
-	if err != nil {
-		return CustomIPPrefixesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &CustomIPPrefixesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes the specified custom IP prefix.
@@ -243,16 +235,32 @@ func (client *CustomIPPrefixesClient) getHandleResponse(resp *http.Response) (Cu
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group.
 // options - CustomIPPrefixesClientListOptions contains the optional parameters for the CustomIPPrefixesClient.List method.
-func (client *CustomIPPrefixesClient) List(resourceGroupName string, options *CustomIPPrefixesClientListOptions) *CustomIPPrefixesClientListPager {
-	return &CustomIPPrefixesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, options)
+func (client *CustomIPPrefixesClient) List(resourceGroupName string, options *CustomIPPrefixesClientListOptions) *runtime.Pager[CustomIPPrefixesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomIPPrefixesClientListResponse]{
+		More: func(page CustomIPPrefixesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomIPPrefixesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomIPPrefixListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomIPPrefixesClientListResponse) (CustomIPPrefixesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomIPPrefixesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomIPPrefixesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomIPPrefixesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -290,16 +298,32 @@ func (client *CustomIPPrefixesClient) listHandleResponse(resp *http.Response) (C
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CustomIPPrefixesClientListAllOptions contains the optional parameters for the CustomIPPrefixesClient.ListAll
 // method.
-func (client *CustomIPPrefixesClient) ListAll(options *CustomIPPrefixesClientListAllOptions) *CustomIPPrefixesClientListAllPager {
-	return &CustomIPPrefixesClientListAllPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listAllCreateRequest(ctx, options)
+func (client *CustomIPPrefixesClient) ListAll(options *CustomIPPrefixesClientListAllOptions) *runtime.Pager[CustomIPPrefixesClientListAllResponse] {
+	return runtime.NewPager(runtime.PageProcessor[CustomIPPrefixesClientListAllResponse]{
+		More: func(page CustomIPPrefixesClientListAllResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp CustomIPPrefixesClientListAllResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomIPPrefixListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *CustomIPPrefixesClientListAllResponse) (CustomIPPrefixesClientListAllResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listAllCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return CustomIPPrefixesClientListAllResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return CustomIPPrefixesClientListAllResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return CustomIPPrefixesClientListAllResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listAllHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listAllCreateRequest creates the ListAll request.

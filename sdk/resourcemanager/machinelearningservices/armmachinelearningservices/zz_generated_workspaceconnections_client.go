@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -230,13 +230,26 @@ func (client *WorkspaceConnectionsClient) getHandleResponse(resp *http.Response)
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspaceConnectionsClientListOptions contains the optional parameters for the WorkspaceConnectionsClient.List
 // method.
-func (client *WorkspaceConnectionsClient) List(resourceGroupName string, workspaceName string, options *WorkspaceConnectionsClientListOptions) *WorkspaceConnectionsClientListPager {
-	return &WorkspaceConnectionsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+func (client *WorkspaceConnectionsClient) List(resourceGroupName string, workspaceName string, options *WorkspaceConnectionsClientListOptions) *runtime.Pager[WorkspaceConnectionsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspaceConnectionsClientListResponse]{
+		More: func(page WorkspaceConnectionsClientListResponse) bool {
+			return false
 		},
-	}
+		Fetcher: func(ctx context.Context, page *WorkspaceConnectionsClientListResponse) (WorkspaceConnectionsClientListResponse, error) {
+			req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+			if err != nil {
+				return WorkspaceConnectionsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspaceConnectionsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspaceConnectionsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
+		},
+	})
 }
 
 // listCreateRequest creates the List request.

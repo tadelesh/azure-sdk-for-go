@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -188,19 +188,22 @@ type OpenShiftClusterUpdate struct {
 // OpenShiftClustersClientBeginCreateOrUpdateOptions contains the optional parameters for the OpenShiftClustersClient.BeginCreateOrUpdate
 // method.
 type OpenShiftClustersClientBeginCreateOrUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OpenShiftClustersClientBeginDeleteOptions contains the optional parameters for the OpenShiftClustersClient.BeginDelete
 // method.
 type OpenShiftClustersClientBeginDeleteOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OpenShiftClustersClientBeginUpdateOptions contains the optional parameters for the OpenShiftClustersClient.BeginUpdate
 // method.
 type OpenShiftClustersClientBeginUpdateOptions struct {
-	// placeholder for future optional parameters
+	// Resumes the LRO from the provided token.
+	ResumeToken string
 }
 
 // OpenShiftClustersClientGetOptions contains the optional parameters for the OpenShiftClustersClient.Get method.

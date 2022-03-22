@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -56,20 +56,16 @@ func NewVideoAnalyzersClient(subscriptionID string, credential azcore.TokenCrede
 // parameters - The request parameters
 // options - VideoAnalyzersClientBeginCreateOrUpdateOptions contains the optional parameters for the VideoAnalyzersClient.BeginCreateOrUpdate
 // method.
-func (client *VideoAnalyzersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters VideoAnalyzer, options *VideoAnalyzersClientBeginCreateOrUpdateOptions) (VideoAnalyzersClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, parameters, options)
-	if err != nil {
-		return VideoAnalyzersClientCreateOrUpdatePollerResponse{}, err
+func (client *VideoAnalyzersClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters VideoAnalyzer, options *VideoAnalyzersClientBeginCreateOrUpdateOptions) (*armruntime.Poller[VideoAnalyzersClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, accountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VideoAnalyzersClientCreateOrUpdateResponse]("VideoAnalyzersClient.CreateOrUpdate", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VideoAnalyzersClientCreateOrUpdateResponse]("VideoAnalyzersClient.CreateOrUpdate", options.ResumeToken, client.pl, nil)
 	}
-	result := VideoAnalyzersClientCreateOrUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VideoAnalyzersClient.CreateOrUpdate", "", resp, client.pl)
-	if err != nil {
-		return VideoAnalyzersClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &VideoAnalyzersClientCreateOrUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create or update an instance of a Video Analyzer account
@@ -319,20 +315,16 @@ func (client *VideoAnalyzersClient) listBySubscriptionHandleResponse(resp *http.
 // parameters - The request parameters
 // options - VideoAnalyzersClientBeginUpdateOptions contains the optional parameters for the VideoAnalyzersClient.BeginUpdate
 // method.
-func (client *VideoAnalyzersClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters Update, options *VideoAnalyzersClientBeginUpdateOptions) (VideoAnalyzersClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, accountName, parameters, options)
-	if err != nil {
-		return VideoAnalyzersClientUpdatePollerResponse{}, err
+func (client *VideoAnalyzersClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters Update, options *VideoAnalyzersClientBeginUpdateOptions) (*armruntime.Poller[VideoAnalyzersClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, accountName, parameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[VideoAnalyzersClientUpdateResponse]("VideoAnalyzersClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[VideoAnalyzersClientUpdateResponse]("VideoAnalyzersClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := VideoAnalyzersClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("VideoAnalyzersClient.Update", "", resp, client.pl)
-	if err != nil {
-		return VideoAnalyzersClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &VideoAnalyzersClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing instance of Video Analyzer account

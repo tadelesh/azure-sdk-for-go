@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -243,16 +243,32 @@ func (client *ProjectsClient) getHandleResponse(resp *http.Response) (ProjectsCl
 // resourceGroupName - The name of the resource group to which the machine learning team account belongs.
 // options - ProjectsClientListByWorkspaceOptions contains the optional parameters for the ProjectsClient.ListByWorkspace
 // method.
-func (client *ProjectsClient) ListByWorkspace(accountName string, workspaceName string, resourceGroupName string, options *ProjectsClientListByWorkspaceOptions) *ProjectsClientListByWorkspacePager {
-	return &ProjectsClientListByWorkspacePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByWorkspaceCreateRequest(ctx, accountName, workspaceName, resourceGroupName, options)
+func (client *ProjectsClient) ListByWorkspace(accountName string, workspaceName string, resourceGroupName string, options *ProjectsClientListByWorkspaceOptions) *runtime.Pager[ProjectsClientListByWorkspaceResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProjectsClientListByWorkspaceResponse]{
+		More: func(page ProjectsClientListByWorkspaceResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProjectsClientListByWorkspaceResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProjectListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProjectsClientListByWorkspaceResponse) (ProjectsClientListByWorkspaceResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByWorkspaceCreateRequest(ctx, accountName, workspaceName, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProjectsClientListByWorkspaceResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProjectsClientListByWorkspaceResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProjectsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByWorkspaceHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.

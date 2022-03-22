@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,90 +8,14 @@
 
 package armhanaonazure
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
 	OperationList
 }
 
-// ProviderInstancesClientCreatePollerResponse contains the response from method ProviderInstancesClient.Create.
-type ProviderInstancesClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProviderInstancesClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProviderInstancesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProviderInstancesClientCreateResponse, error) {
-	respType := ProviderInstancesClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProviderInstance)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProviderInstancesClientCreatePollerResponse from the provided client and resume token.
-func (l *ProviderInstancesClientCreatePollerResponse) Resume(ctx context.Context, client *ProviderInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProviderInstancesClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProviderInstancesClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ProviderInstancesClientCreateResponse contains the response from method ProviderInstancesClient.Create.
 type ProviderInstancesClientCreateResponse struct {
 	ProviderInstance
-}
-
-// ProviderInstancesClientDeletePollerResponse contains the response from method ProviderInstancesClient.Delete.
-type ProviderInstancesClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ProviderInstancesClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ProviderInstancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProviderInstancesClientDeleteResponse, error) {
-	respType := ProviderInstancesClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ProviderInstancesClientDeletePollerResponse from the provided client and resume token.
-func (l *ProviderInstancesClientDeletePollerResponse) Resume(ctx context.Context, client *ProviderInstancesClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ProviderInstancesClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ProviderInstancesClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ProviderInstancesClientDeleteResponse contains the response from method ProviderInstancesClient.Delete.
@@ -109,79 +33,9 @@ type ProviderInstancesClientListResponse struct {
 	ProviderInstanceListResult
 }
 
-// SapMonitorsClientCreatePollerResponse contains the response from method SapMonitorsClient.Create.
-type SapMonitorsClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SapMonitorsClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SapMonitorsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SapMonitorsClientCreateResponse, error) {
-	respType := SapMonitorsClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SapMonitor)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SapMonitorsClientCreatePollerResponse from the provided client and resume token.
-func (l *SapMonitorsClientCreatePollerResponse) Resume(ctx context.Context, client *SapMonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SapMonitorsClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SapMonitorsClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // SapMonitorsClientCreateResponse contains the response from method SapMonitorsClient.Create.
 type SapMonitorsClientCreateResponse struct {
 	SapMonitor
-}
-
-// SapMonitorsClientDeletePollerResponse contains the response from method SapMonitorsClient.Delete.
-type SapMonitorsClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *SapMonitorsClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l SapMonitorsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SapMonitorsClientDeleteResponse, error) {
-	respType := SapMonitorsClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a SapMonitorsClientDeletePollerResponse from the provided client and resume token.
-func (l *SapMonitorsClientDeletePollerResponse) Resume(ctx context.Context, client *SapMonitorsClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("SapMonitorsClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &SapMonitorsClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // SapMonitorsClientDeleteResponse contains the response from method SapMonitorsClient.Delete.

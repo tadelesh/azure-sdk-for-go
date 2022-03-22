@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -236,16 +236,32 @@ func (client *WebSiteManagementClient) getSubscriptionDeploymentLocationsHandleR
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebSiteManagementClientListBillingMetersOptions contains the optional parameters for the WebSiteManagementClient.ListBillingMeters
 // method.
-func (client *WebSiteManagementClient) ListBillingMeters(options *WebSiteManagementClientListBillingMetersOptions) *WebSiteManagementClientListBillingMetersPager {
-	return &WebSiteManagementClientListBillingMetersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBillingMetersCreateRequest(ctx, options)
+func (client *WebSiteManagementClient) ListBillingMeters(options *WebSiteManagementClientListBillingMetersOptions) *runtime.Pager[WebSiteManagementClientListBillingMetersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListBillingMetersResponse]{
+		More: func(page WebSiteManagementClientListBillingMetersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListBillingMetersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.BillingMeterCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListBillingMetersResponse) (WebSiteManagementClientListBillingMetersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBillingMetersCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListBillingMetersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListBillingMetersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListBillingMetersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBillingMetersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBillingMetersCreateRequest creates the ListBillingMeters request.
@@ -285,16 +301,32 @@ func (client *WebSiteManagementClient) listBillingMetersHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebSiteManagementClientListCustomHostNameSitesOptions contains the optional parameters for the WebSiteManagementClient.ListCustomHostNameSites
 // method.
-func (client *WebSiteManagementClient) ListCustomHostNameSites(options *WebSiteManagementClientListCustomHostNameSitesOptions) *WebSiteManagementClientListCustomHostNameSitesPager {
-	return &WebSiteManagementClientListCustomHostNameSitesPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCustomHostNameSitesCreateRequest(ctx, options)
+func (client *WebSiteManagementClient) ListCustomHostNameSites(options *WebSiteManagementClientListCustomHostNameSitesOptions) *runtime.Pager[WebSiteManagementClientListCustomHostNameSitesResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListCustomHostNameSitesResponse]{
+		More: func(page WebSiteManagementClientListCustomHostNameSitesResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListCustomHostNameSitesResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.CustomHostnameSitesCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListCustomHostNameSitesResponse) (WebSiteManagementClientListCustomHostNameSitesResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCustomHostNameSitesCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListCustomHostNameSitesResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListCustomHostNameSitesResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListCustomHostNameSitesResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listCustomHostNameSitesHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCustomHostNameSitesCreateRequest creates the ListCustomHostNameSites request.
@@ -328,16 +360,32 @@ func (client *WebSiteManagementClient) listCustomHostNameSitesHandleResponse(res
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebSiteManagementClientListGeoRegionsOptions contains the optional parameters for the WebSiteManagementClient.ListGeoRegions
 // method.
-func (client *WebSiteManagementClient) ListGeoRegions(options *WebSiteManagementClientListGeoRegionsOptions) *WebSiteManagementClientListGeoRegionsPager {
-	return &WebSiteManagementClientListGeoRegionsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listGeoRegionsCreateRequest(ctx, options)
+func (client *WebSiteManagementClient) ListGeoRegions(options *WebSiteManagementClientListGeoRegionsOptions) *runtime.Pager[WebSiteManagementClientListGeoRegionsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListGeoRegionsResponse]{
+		More: func(page WebSiteManagementClientListGeoRegionsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListGeoRegionsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.GeoRegionCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListGeoRegionsResponse) (WebSiteManagementClientListGeoRegionsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listGeoRegionsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListGeoRegionsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListGeoRegionsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListGeoRegionsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listGeoRegionsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listGeoRegionsCreateRequest creates the ListGeoRegions request.
@@ -383,16 +431,32 @@ func (client *WebSiteManagementClient) listGeoRegionsHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebSiteManagementClientListPremierAddOnOffersOptions contains the optional parameters for the WebSiteManagementClient.ListPremierAddOnOffers
 // method.
-func (client *WebSiteManagementClient) ListPremierAddOnOffers(options *WebSiteManagementClientListPremierAddOnOffersOptions) *WebSiteManagementClientListPremierAddOnOffersPager {
-	return &WebSiteManagementClientListPremierAddOnOffersPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listPremierAddOnOffersCreateRequest(ctx, options)
+func (client *WebSiteManagementClient) ListPremierAddOnOffers(options *WebSiteManagementClientListPremierAddOnOffersOptions) *runtime.Pager[WebSiteManagementClientListPremierAddOnOffersResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListPremierAddOnOffersResponse]{
+		More: func(page WebSiteManagementClientListPremierAddOnOffersResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListPremierAddOnOffersResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.PremierAddOnOfferCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListPremierAddOnOffersResponse) (WebSiteManagementClientListPremierAddOnOffersResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listPremierAddOnOffersCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListPremierAddOnOffersResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListPremierAddOnOffersResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListPremierAddOnOffersResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listPremierAddOnOffersHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listPremierAddOnOffersCreateRequest creates the ListPremierAddOnOffers request.
@@ -473,16 +537,32 @@ func (client *WebSiteManagementClient) listSKUsHandleResponse(resp *http.Respons
 // nameIdentifier - Hostname information.
 // options - WebSiteManagementClientListSiteIdentifiersAssignedToHostNameOptions contains the optional parameters for the
 // WebSiteManagementClient.ListSiteIdentifiersAssignedToHostName method.
-func (client *WebSiteManagementClient) ListSiteIdentifiersAssignedToHostName(nameIdentifier NameIdentifier, options *WebSiteManagementClientListSiteIdentifiersAssignedToHostNameOptions) *WebSiteManagementClientListSiteIdentifiersAssignedToHostNamePager {
-	return &WebSiteManagementClientListSiteIdentifiersAssignedToHostNamePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSiteIdentifiersAssignedToHostNameCreateRequest(ctx, nameIdentifier, options)
+func (client *WebSiteManagementClient) ListSiteIdentifiersAssignedToHostName(nameIdentifier NameIdentifier, options *WebSiteManagementClientListSiteIdentifiersAssignedToHostNameOptions) *runtime.Pager[WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse]{
+		More: func(page WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.IdentifierCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse) (WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSiteIdentifiersAssignedToHostNameCreateRequest(ctx, nameIdentifier, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSiteIdentifiersAssignedToHostNameHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSiteIdentifiersAssignedToHostNameCreateRequest creates the ListSiteIdentifiersAssignedToHostName request.
@@ -516,16 +596,32 @@ func (client *WebSiteManagementClient) listSiteIdentifiersAssignedToHostNameHand
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WebSiteManagementClientListSourceControlsOptions contains the optional parameters for the WebSiteManagementClient.ListSourceControls
 // method.
-func (client *WebSiteManagementClient) ListSourceControls(options *WebSiteManagementClientListSourceControlsOptions) *WebSiteManagementClientListSourceControlsPager {
-	return &WebSiteManagementClientListSourceControlsPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listSourceControlsCreateRequest(ctx, options)
+func (client *WebSiteManagementClient) ListSourceControls(options *WebSiteManagementClientListSourceControlsOptions) *runtime.Pager[WebSiteManagementClientListSourceControlsResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WebSiteManagementClientListSourceControlsResponse]{
+		More: func(page WebSiteManagementClientListSourceControlsResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WebSiteManagementClientListSourceControlsResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SourceControlCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *WebSiteManagementClientListSourceControlsResponse) (WebSiteManagementClientListSourceControlsResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listSourceControlsCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WebSiteManagementClientListSourceControlsResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WebSiteManagementClientListSourceControlsResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WebSiteManagementClientListSourceControlsResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listSourceControlsHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listSourceControlsCreateRequest creates the ListSourceControls request.

@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -245,16 +245,32 @@ func (client *AssessmentsMetadataClient) getInSubscriptionHandleResponse(resp *h
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AssessmentsMetadataClientListOptions contains the optional parameters for the AssessmentsMetadataClient.List
 // method.
-func (client *AssessmentsMetadataClient) List(options *AssessmentsMetadataClientListOptions) *AssessmentsMetadataClientListPager {
-	return &AssessmentsMetadataClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *AssessmentsMetadataClient) List(options *AssessmentsMetadataClientListOptions) *runtime.Pager[AssessmentsMetadataClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessmentsMetadataClientListResponse]{
+		More: func(page AssessmentsMetadataClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AssessmentsMetadataClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AssessmentMetadataResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *AssessmentsMetadataClientListResponse) (AssessmentsMetadataClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AssessmentsMetadataClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessmentsMetadataClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessmentsMetadataClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -284,16 +300,32 @@ func (client *AssessmentsMetadataClient) listHandleResponse(resp *http.Response)
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AssessmentsMetadataClientListBySubscriptionOptions contains the optional parameters for the AssessmentsMetadataClient.ListBySubscription
 // method.
-func (client *AssessmentsMetadataClient) ListBySubscription(options *AssessmentsMetadataClientListBySubscriptionOptions) *AssessmentsMetadataClientListBySubscriptionPager {
-	return &AssessmentsMetadataClientListBySubscriptionPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listBySubscriptionCreateRequest(ctx, options)
+func (client *AssessmentsMetadataClient) ListBySubscription(options *AssessmentsMetadataClientListBySubscriptionOptions) *runtime.Pager[AssessmentsMetadataClientListBySubscriptionResponse] {
+	return runtime.NewPager(runtime.PageProcessor[AssessmentsMetadataClientListBySubscriptionResponse]{
+		More: func(page AssessmentsMetadataClientListBySubscriptionResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AssessmentsMetadataClientListBySubscriptionResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AssessmentMetadataResponseList.NextLink)
+		Fetcher: func(ctx context.Context, page *AssessmentsMetadataClientListBySubscriptionResponse) (AssessmentsMetadataClientListBySubscriptionResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listBySubscriptionCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AssessmentsMetadataClientListBySubscriptionResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AssessmentsMetadataClientListBySubscriptionResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AssessmentsMetadataClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listBySubscriptionHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.

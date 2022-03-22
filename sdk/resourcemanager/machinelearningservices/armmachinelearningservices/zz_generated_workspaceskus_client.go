@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -52,16 +52,32 @@ func NewWorkspaceSKUsClient(subscriptionID string, credential azcore.TokenCreden
 // List - Lists all skus with associated features
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkspaceSKUsClientListOptions contains the optional parameters for the WorkspaceSKUsClient.List method.
-func (client *WorkspaceSKUsClient) List(options *WorkspaceSKUsClientListOptions) *WorkspaceSKUsClientListPager {
-	return &WorkspaceSKUsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *WorkspaceSKUsClient) List(options *WorkspaceSKUsClientListOptions) *runtime.Pager[WorkspaceSKUsClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[WorkspaceSKUsClientListResponse]{
+		More: func(page WorkspaceSKUsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp WorkspaceSKUsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.SKUListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *WorkspaceSKUsClientListResponse) (WorkspaceSKUsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return WorkspaceSKUsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return WorkspaceSKUsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return WorkspaceSKUsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.

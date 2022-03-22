@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -8,85 +8,9 @@
 
 package armhybridkubernetes
 
-import (
-	"context"
-	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"time"
-)
-
-// ConnectedClusterClientCreatePollerResponse contains the response from method ConnectedClusterClient.Create.
-type ConnectedClusterClientCreatePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ConnectedClusterClientCreatePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ConnectedClusterClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ConnectedClusterClientCreateResponse, error) {
-	respType := ConnectedClusterClientCreateResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConnectedCluster)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ConnectedClusterClientCreatePollerResponse from the provided client and resume token.
-func (l *ConnectedClusterClientCreatePollerResponse) Resume(ctx context.Context, client *ConnectedClusterClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ConnectedClusterClient.Create", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ConnectedClusterClientCreatePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
-}
-
 // ConnectedClusterClientCreateResponse contains the response from method ConnectedClusterClient.Create.
 type ConnectedClusterClientCreateResponse struct {
 	ConnectedCluster
-}
-
-// ConnectedClusterClientDeletePollerResponse contains the response from method ConnectedClusterClient.Delete.
-type ConnectedClusterClientDeletePollerResponse struct {
-	// Poller contains an initialized poller.
-	Poller *ConnectedClusterClientDeletePoller
-}
-
-// PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
-// freq: the time to wait between intervals in absence of a Retry-After header. Allowed minimum is one second.
-// A good starting value is 30 seconds. Note that some resources might benefit from a different value.
-func (l ConnectedClusterClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ConnectedClusterClientDeleteResponse, error) {
-	respType := ConnectedClusterClientDeleteResponse{}
-	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
-	if err != nil {
-		return respType, err
-	}
-	return respType, nil
-}
-
-// Resume rehydrates a ConnectedClusterClientDeletePollerResponse from the provided client and resume token.
-func (l *ConnectedClusterClientDeletePollerResponse) Resume(ctx context.Context, client *ConnectedClusterClient, token string) error {
-	pt, err := armruntime.NewPollerFromResumeToken("ConnectedClusterClient.Delete", token, client.pl)
-	if err != nil {
-		return err
-	}
-	poller := &ConnectedClusterClientDeletePoller{
-		pt: pt,
-	}
-	_, err = poller.Poll(ctx)
-	if err != nil {
-		return err
-	}
-	l.Poller = poller
-	return nil
 }
 
 // ConnectedClusterClientDeleteResponse contains the response from method ConnectedClusterClient.Delete.

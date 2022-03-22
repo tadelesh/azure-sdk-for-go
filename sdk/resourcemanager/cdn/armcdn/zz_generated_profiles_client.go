@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -57,20 +57,16 @@ func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential,
 // resource group.
 // profile - Profile properties needed to create a new profile.
 // options - ProfilesClientBeginCreateOptions contains the optional parameters for the ProfilesClient.BeginCreate method.
-func (client *ProfilesClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, profile Profile, options *ProfilesClientBeginCreateOptions) (ProfilesClientCreatePollerResponse, error) {
-	resp, err := client.create(ctx, resourceGroupName, profileName, profile, options)
-	if err != nil {
-		return ProfilesClientCreatePollerResponse{}, err
+func (client *ProfilesClient) BeginCreate(ctx context.Context, resourceGroupName string, profileName string, profile Profile, options *ProfilesClientBeginCreateOptions) (*armruntime.Poller[ProfilesClientCreateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.create(ctx, resourceGroupName, profileName, profile, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProfilesClientCreateResponse]("ProfilesClient.Create", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProfilesClientCreateResponse]("ProfilesClient.Create", options.ResumeToken, client.pl, nil)
 	}
-	result := ProfilesClientCreatePollerResponse{}
-	pt, err := armruntime.NewPoller("ProfilesClient.Create", "", resp, client.pl)
-	if err != nil {
-		return ProfilesClientCreatePollerResponse{}, err
-	}
-	result.Poller = &ProfilesClientCreatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Create - Creates a new Azure Front Door Standard or Azure Front Door Premium or CDN profile with a profile name under the
@@ -125,20 +121,16 @@ func (client *ProfilesClient) createCreateRequest(ctx context.Context, resourceG
 // profileName - Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the
 // resource group.
 // options - ProfilesClientBeginDeleteOptions contains the optional parameters for the ProfilesClient.BeginDelete method.
-func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, options *ProfilesClientBeginDeleteOptions) (ProfilesClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, options)
-	if err != nil {
-		return ProfilesClientDeletePollerResponse{}, err
+func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName string, profileName string, options *ProfilesClientBeginDeleteOptions) (*armruntime.Poller[ProfilesClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, profileName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProfilesClientDeleteResponse]("ProfilesClient.Delete", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProfilesClientDeleteResponse]("ProfilesClient.Delete", options.ResumeToken, client.pl, nil)
 	}
-	result := ProfilesClientDeletePollerResponse{}
-	pt, err := armruntime.NewPoller("ProfilesClient.Delete", "", resp, client.pl)
-	if err != nil {
-		return ProfilesClientDeletePollerResponse{}, err
-	}
-	result.Poller = &ProfilesClientDeletePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Deletes an existing Azure Front Door Standard or Azure Front Door Premium or CDN profile with the specified parameters.
@@ -304,16 +296,32 @@ func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesCl
 // List - Lists all of the Azure Front Door Standard, Azure Front Door Premium, and CDN profiles within an Azure subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProfilesClientListOptions contains the optional parameters for the ProfilesClient.List method.
-func (client *ProfilesClient) List(options *ProfilesClientListOptions) *ProfilesClientListPager {
-	return &ProfilesClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, options)
+func (client *ProfilesClient) List(options *ProfilesClientListOptions) *runtime.Pager[ProfilesClientListResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListResponse]{
+		More: func(page ProfilesClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProfilesClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProfileListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProfilesClientListResponse) (ProfilesClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProfilesClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -349,16 +357,32 @@ func (client *ProfilesClient) listHandleResponse(resp *http.Response) (ProfilesC
 // resourceGroupName - Name of the Resource group within the Azure subscription.
 // options - ProfilesClientListByResourceGroupOptions contains the optional parameters for the ProfilesClient.ListByResourceGroup
 // method.
-func (client *ProfilesClient) ListByResourceGroup(resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) *ProfilesClientListByResourceGroupPager {
-	return &ProfilesClientListByResourceGroupPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+func (client *ProfilesClient) ListByResourceGroup(resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) *runtime.Pager[ProfilesClientListByResourceGroupResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListByResourceGroupResponse]{
+		More: func(page ProfilesClientListByResourceGroupResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProfilesClientListByResourceGroupResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ProfileListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProfilesClientListByResourceGroupResponse) (ProfilesClientListByResourceGroupResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProfilesClientListByResourceGroupResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListByResourceGroupResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listByResourceGroupHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -400,16 +424,32 @@ func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // resource group.
 // options - ProfilesClientListResourceUsageOptions contains the optional parameters for the ProfilesClient.ListResourceUsage
 // method.
-func (client *ProfilesClient) ListResourceUsage(resourceGroupName string, profileName string, options *ProfilesClientListResourceUsageOptions) *ProfilesClientListResourceUsagePager {
-	return &ProfilesClientListResourceUsagePager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, options)
+func (client *ProfilesClient) ListResourceUsage(resourceGroupName string, profileName string, options *ProfilesClientListResourceUsageOptions) *runtime.Pager[ProfilesClientListResourceUsageResponse] {
+	return runtime.NewPager(runtime.PageProcessor[ProfilesClientListResourceUsageResponse]{
+		More: func(page ProfilesClientListResourceUsageResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp ProfilesClientListResourceUsageResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.ResourceUsageListResult.NextLink)
+		Fetcher: func(ctx context.Context, page *ProfilesClientListResourceUsageResponse) (ProfilesClientListResourceUsageResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listResourceUsageCreateRequest(ctx, resourceGroupName, profileName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return ProfilesClientListResourceUsageResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return ProfilesClientListResourceUsageResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return ProfilesClientListResourceUsageResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listResourceUsageHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listResourceUsageCreateRequest creates the ListResourceUsage request.
@@ -513,20 +553,16 @@ func (client *ProfilesClient) listSupportedOptimizationTypesHandleResponse(resp 
 // resource group.
 // profileUpdateParameters - Profile properties needed to update an existing profile.
 // options - ProfilesClientBeginUpdateOptions contains the optional parameters for the ProfilesClient.BeginUpdate method.
-func (client *ProfilesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, profileUpdateParameters ProfileUpdateParameters, options *ProfilesClientBeginUpdateOptions) (ProfilesClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, profileName, profileUpdateParameters, options)
-	if err != nil {
-		return ProfilesClientUpdatePollerResponse{}, err
+func (client *ProfilesClient) BeginUpdate(ctx context.Context, resourceGroupName string, profileName string, profileUpdateParameters ProfileUpdateParameters, options *ProfilesClientBeginUpdateOptions) (*armruntime.Poller[ProfilesClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, profileName, profileUpdateParameters, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller[ProfilesClientUpdateResponse]("ProfilesClient.Update", "", resp, client.pl, nil)
+	} else {
+		return armruntime.NewPollerFromResumeToken[ProfilesClientUpdateResponse]("ProfilesClient.Update", options.ResumeToken, client.pl, nil)
 	}
-	result := ProfilesClientUpdatePollerResponse{}
-	pt, err := armruntime.NewPoller("ProfilesClient.Update", "", resp, client.pl)
-	if err != nil {
-		return ProfilesClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &ProfilesClientUpdatePoller{
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Updates an existing Azure Front Door Standard or Azure Front Door Premium or CDN profile with the specified profile
