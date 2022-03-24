@@ -9,7 +9,7 @@ Param(
 $AUTOREST_TEST_PACKAGE_URL = "D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.gotest"
 $AUTOREST_GO_VERSION = "D:\Workspace\tadelesh\autorest.go"
 $AUTOREST_CONFIG_FILE = "autorest.md"
-$AUTOREST_CORE_VERSION = "3.7.3"
+$AUTOREST_CORE_VERSION = "3.8.1"
 
 function executeSingleGenerate($readmePath, $sepcRPName)
 {

@@ -9,5 +9,3 @@ require (
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/text v0.3.6 // indirect
 )
-
-replace github.com/Azure/azure-sdk-for-go/sdk/azcore => ../../../../../../Azure/azure-sdk-for-go/sdk/azcore

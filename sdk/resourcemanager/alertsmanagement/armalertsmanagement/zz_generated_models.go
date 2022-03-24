@@ -197,10 +197,10 @@ type AlertProperties struct {
 	// This object contains consistent fields across different monitor services.
 	Essentials *Essentials `json:"essentials,omitempty"`
 
-	// READ-ONLY; Anything
+	// READ-ONLY; Information specific to the monitor service that gives more contextual details about the alert.
 	Context interface{} `json:"context,omitempty" azure:"ro"`
 
-	// READ-ONLY; Anything
+	// READ-ONLY; Config which would be used for displaying the data in portal.
 	EgressConfig interface{} `json:"egressConfig,omitempty" azure:"ro"`
 }
 

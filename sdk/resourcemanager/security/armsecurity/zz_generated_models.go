@@ -775,7 +775,7 @@ type AmqpD2CMessagesNotInAllowedRange struct {
 
 // AscLocation - The ASC location of the subscription is in the "name" field
 type AscLocation struct {
-	// Anything
+	// An empty set of properties
 	Properties interface{} `json:"properties,omitempty"`
 
 	// READ-ONLY; Resource Id

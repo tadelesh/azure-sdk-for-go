@@ -56,9 +56,11 @@ func NewQueryKeysClient(subscriptionID string, credential azcore.TokenCredential
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // name - The name of the new query API key.
-// options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *QueryKeysClient) Create(ctx context.Context, resourceGroupName string, searchServiceName string, name string, options *SearchManagementRequestOptions) (QueryKeysClientCreateResponse, error) {
-	req, err := client.createCreateRequest(ctx, resourceGroupName, searchServiceName, name, options)
+// SearchManagementRequestOptions - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get
+// method.
+// options - QueryKeysClientCreateOptions contains the optional parameters for the QueryKeysClient.Create method.
+func (client *QueryKeysClient) Create(ctx context.Context, resourceGroupName string, searchServiceName string, name string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientCreateOptions) (QueryKeysClientCreateResponse, error) {
+	req, err := client.createCreateRequest(ctx, resourceGroupName, searchServiceName, name, searchManagementRequestOptions, options)
 	if err != nil {
 		return QueryKeysClientCreateResponse{}, err
 	}
@@ -73,7 +75,7 @@ func (client *QueryKeysClient) Create(ctx context.Context, resourceGroupName str
 }
 
 // createCreateRequest creates the Create request.
-func (client *QueryKeysClient) createCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, name string, options *SearchManagementRequestOptions) (*policy.Request, error) {
+func (client *QueryKeysClient) createCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, name string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/createQueryKey/{name}"
 	if resourceGroupName == "" {
 		return nil, errors.New("parameter resourceGroupName cannot be empty")
@@ -98,8 +100,8 @@ func (client *QueryKeysClient) createCreateRequest(ctx context.Context, resource
 	reqQP := req.Raw().URL.Query()
 	reqQP.Set("api-version", "2020-08-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
-	if options != nil && options.ClientRequestID != nil {
-		req.Raw().Header.Set("x-ms-client-request-id", *options.ClientRequestID)
+	if searchManagementRequestOptions != nil && searchManagementRequestOptions.ClientRequestID != nil {
+		req.Raw().Header.Set("x-ms-client-request-id", *searchManagementRequestOptions.ClientRequestID)
 	}
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -121,9 +123,11 @@ func (client *QueryKeysClient) createHandleResponse(resp *http.Response) (QueryK
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // key - The query key to be deleted. Query keys are identified by value, not by name.
-// options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *QueryKeysClient) Delete(ctx context.Context, resourceGroupName string, searchServiceName string, key string, options *SearchManagementRequestOptions) (QueryKeysClientDeleteResponse, error) {
-	req, err := client.deleteCreateRequest(ctx, resourceGroupName, searchServiceName, key, options)
+// SearchManagementRequestOptions - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get
+// method.
+// options - QueryKeysClientDeleteOptions contains the optional parameters for the QueryKeysClient.Delete method.
+func (client *QueryKeysClient) Delete(ctx context.Context, resourceGroupName string, searchServiceName string, key string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientDeleteOptions) (QueryKeysClientDeleteResponse, error) {
+	req, err := client.deleteCreateRequest(ctx, resourceGroupName, searchServiceName, key, searchManagementRequestOptions, options)
 	if err != nil {
 		return QueryKeysClientDeleteResponse{}, err
 	}
@@ -138,7 +142,7 @@ func (client *QueryKeysClient) Delete(ctx context.Context, resourceGroupName str
 }
 
 // deleteCreateRequest creates the Delete request.
-func (client *QueryKeysClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, key string, options *SearchManagementRequestOptions) (*policy.Request, error) {
+func (client *QueryKeysClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, key string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/deleteQueryKey/{key}"
 	if resourceGroupName == "" {
 		return nil, errors.New("parameter resourceGroupName cannot be empty")
@@ -163,8 +167,8 @@ func (client *QueryKeysClient) deleteCreateRequest(ctx context.Context, resource
 	reqQP := req.Raw().URL.Query()
 	reqQP.Set("api-version", "2020-08-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
-	if options != nil && options.ClientRequestID != nil {
-		req.Raw().Header.Set("x-ms-client-request-id", *options.ClientRequestID)
+	if searchManagementRequestOptions != nil && searchManagementRequestOptions.ClientRequestID != nil {
+		req.Raw().Header.Set("x-ms-client-request-id", *searchManagementRequestOptions.ClientRequestID)
 	}
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -175,8 +179,11 @@ func (client *QueryKeysClient) deleteCreateRequest(ctx context.Context, resource
 // resourceGroupName - The name of the resource group within the current subscription. You can obtain this value from the
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
-// options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *runtime.Pager[QueryKeysClientListBySearchServiceResponse] {
+// SearchManagementRequestOptions - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get
+// method.
+// options - QueryKeysClientListBySearchServiceOptions contains the optional parameters for the QueryKeysClient.ListBySearchService
+// method.
+func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, searchServiceName string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientListBySearchServiceOptions) *runtime.Pager[QueryKeysClientListBySearchServiceResponse] {
 	return runtime.NewPager(runtime.PageProcessor[QueryKeysClientListBySearchServiceResponse]{
 		More: func(page QueryKeysClientListBySearchServiceResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -185,7 +192,7 @@ func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, sea
 			var req *policy.Request
 			var err error
 			if page == nil {
-				req, err = client.listBySearchServiceCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+				req, err = client.listBySearchServiceCreateRequest(ctx, resourceGroupName, searchServiceName, searchManagementRequestOptions, options)
 			} else {
 				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
 			}
@@ -205,7 +212,7 @@ func (client *QueryKeysClient) ListBySearchService(resourceGroupName string, sea
 }
 
 // listBySearchServiceCreateRequest creates the ListBySearchService request.
-func (client *QueryKeysClient) listBySearchServiceCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) (*policy.Request, error) {
+func (client *QueryKeysClient) listBySearchServiceCreateRequest(ctx context.Context, resourceGroupName string, searchServiceName string, searchManagementRequestOptions *SearchManagementRequestOptions, options *QueryKeysClientListBySearchServiceOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Search/searchServices/{searchServiceName}/listQueryKeys"
 	if resourceGroupName == "" {
 		return nil, errors.New("parameter resourceGroupName cannot be empty")
@@ -226,8 +233,8 @@ func (client *QueryKeysClient) listBySearchServiceCreateRequest(ctx context.Cont
 	reqQP := req.Raw().URL.Query()
 	reqQP.Set("api-version", "2020-08-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
-	if options != nil && options.ClientRequestID != nil {
-		req.Raw().Header.Set("x-ms-client-request-id", *options.ClientRequestID)
+	if searchManagementRequestOptions != nil && searchManagementRequestOptions.ClientRequestID != nil {
+		req.Raw().Header.Set("x-ms-client-request-id", *searchManagementRequestOptions.ClientRequestID)
 	}
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil

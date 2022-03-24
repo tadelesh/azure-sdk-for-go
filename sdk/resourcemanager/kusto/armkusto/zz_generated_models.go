@@ -1202,7 +1202,7 @@ type Operation struct {
 	// The intended executor of the operation.
 	Origin *string `json:"origin,omitempty"`
 
-	// Anything
+	// Properties of the operation.
 	Properties interface{} `json:"properties,omitempty"`
 }
 
