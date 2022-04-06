@@ -29,11 +29,6 @@ func PossibleClusterTypesValues() []ClusterTypes {
 	}
 }
 
-// ToPtr returns a *ClusterTypes pointing to the current value.
-func (c ClusterTypes) ToPtr() *ClusterTypes {
-	return &c
-}
-
 // ComplianceStateType - The compliance state of the configuration.
 type ComplianceStateType string
 
@@ -56,11 +51,6 @@ func PossibleComplianceStateTypeValues() []ComplianceStateType {
 	}
 }
 
-// ToPtr returns a *ComplianceStateType pointing to the current value.
-func (c ComplianceStateType) ToPtr() *ComplianceStateType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -81,11 +71,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 type ExtensionsClusterResourceName string
 
 const (
@@ -101,11 +86,6 @@ func PossibleExtensionsClusterResourceNameValues() []ExtensionsClusterResourceNa
 	}
 }
 
-// ToPtr returns a *ExtensionsClusterResourceName pointing to the current value.
-func (c ExtensionsClusterResourceName) ToPtr() *ExtensionsClusterResourceName {
-	return &c
-}
-
 type ExtensionsClusterRp string
 
 const (
@@ -119,11 +99,6 @@ func PossibleExtensionsClusterRpValues() []ExtensionsClusterRp {
 		ExtensionsClusterRpMicrosoftContainerService,
 		ExtensionsClusterRpMicrosoftKubernetes,
 	}
-}
-
-// ToPtr returns a *ExtensionsClusterRp pointing to the current value.
-func (c ExtensionsClusterRp) ToPtr() *ExtensionsClusterRp {
-	return &c
 }
 
 // FluxComplianceState - Compliance state of the cluster object.
@@ -148,11 +123,6 @@ func PossibleFluxComplianceStateValues() []FluxComplianceState {
 	}
 }
 
-// ToPtr returns a *FluxComplianceState pointing to the current value.
-func (c FluxComplianceState) ToPtr() *FluxComplianceState {
-	return &c
-}
-
 // KustomizationValidationType - Specify whether to validate the Kubernetes objects referenced in the Kustomization before
 // applying them to the cluster.
 type KustomizationValidationType string
@@ -170,11 +140,6 @@ func PossibleKustomizationValidationTypeValues() []KustomizationValidationType {
 		KustomizationValidationTypeNone,
 		KustomizationValidationTypeServer,
 	}
-}
-
-// ToPtr returns a *KustomizationValidationType pointing to the current value.
-func (c KustomizationValidationType) ToPtr() *KustomizationValidationType {
-	return &c
 }
 
 // LevelType - Level of the status.
@@ -195,11 +160,6 @@ func PossibleLevelTypeValues() []LevelType {
 	}
 }
 
-// ToPtr returns a *LevelType pointing to the current value.
-func (c LevelType) ToPtr() *LevelType {
-	return &c
-}
-
 // MessageLevelType - Level of the message.
 type MessageLevelType string
 
@@ -218,11 +178,6 @@ func PossibleMessageLevelTypeValues() []MessageLevelType {
 	}
 }
 
-// ToPtr returns a *MessageLevelType pointing to the current value.
-func (c MessageLevelType) ToPtr() *MessageLevelType {
-	return &c
-}
-
 // OperatorScopeType - Scope at which the operator will be installed.
 type OperatorScopeType string
 
@@ -239,11 +194,6 @@ func PossibleOperatorScopeTypeValues() []OperatorScopeType {
 	}
 }
 
-// ToPtr returns a *OperatorScopeType pointing to the current value.
-func (c OperatorScopeType) ToPtr() *OperatorScopeType {
-	return &c
-}
-
 // OperatorType - Type of the operator
 type OperatorType string
 
@@ -256,11 +206,6 @@ func PossibleOperatorTypeValues() []OperatorType {
 	return []OperatorType{
 		OperatorTypeFlux,
 	}
-}
-
-// ToPtr returns a *OperatorType pointing to the current value.
-func (c OperatorType) ToPtr() *OperatorType {
-	return &c
 }
 
 // ProvisioningState - The provisioning state of the resource.
@@ -287,11 +232,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // ProvisioningStateType - The provisioning state of the resource provider.
 type ProvisioningStateType string
 
@@ -314,11 +254,6 @@ func PossibleProvisioningStateTypeValues() []ProvisioningStateType {
 	}
 }
 
-// ToPtr returns a *ProvisioningStateType pointing to the current value.
-func (c ProvisioningStateType) ToPtr() *ProvisioningStateType {
-	return &c
-}
-
 // ScopeType - Scope at which the configuration will be installed.
 type ScopeType string
 
@@ -335,11 +270,6 @@ func PossibleScopeTypeValues() []ScopeType {
 	}
 }
 
-// ToPtr returns a *ScopeType pointing to the current value.
-func (c ScopeType) ToPtr() *ScopeType {
-	return &c
-}
-
 // SourceKindType - Source Kind to pull the configuration data from.
 type SourceKindType string
 
@@ -354,9 +284,4 @@ func PossibleSourceKindTypeValues() []SourceKindType {
 		SourceKindTypeBucket,
 		SourceKindTypeGitRepository,
 	}
-}
-
-// ToPtr returns a *SourceKindType pointing to the current value.
-func (c SourceKindType) ToPtr() *SourceKindType {
-	return &c
 }

@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // ProvisioningStatus - Provisioning status field
 type ProvisioningStatus string
 
@@ -62,11 +57,6 @@ func PossibleProvisioningStatusValues() []ProvisioningStatus {
 	}
 }
 
-// ToPtr returns a *ProvisioningStatus pointing to the current value.
-func (c ProvisioningStatus) ToPtr() *ProvisioningStatus {
-	return &c
-}
-
 // ResourceIdentityType - The identity type.
 type ResourceIdentityType string
 
@@ -81,11 +71,6 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 		ResourceIdentityTypeNone,
 		ResourceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *ResourceIdentityType pointing to the current value.
-func (c ResourceIdentityType) ToPtr() *ResourceIdentityType {
-	return &c
 }
 
 // Status - Provisioning status field
@@ -112,11 +97,6 @@ func PossibleStatusValues() []Status {
 	}
 }
 
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}
-
 // UsableStatus - Whether the current workspace is ready to accept Jobs.
 type UsableStatus string
 
@@ -133,9 +113,4 @@ func PossibleUsableStatusValues() []UsableStatus {
 		UsableStatusPartial,
 		UsableStatusYes,
 	}
-}
-
-// ToPtr returns a *UsableStatus pointing to the current value.
-func (c UsableStatus) ToPtr() *UsableStatus {
-	return &c
 }

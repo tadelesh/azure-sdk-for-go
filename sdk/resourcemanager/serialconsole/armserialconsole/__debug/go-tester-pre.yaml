@@ -1,0 +1,3781 @@
+info:
+  description: The Azure Serial Console allows you to access the serial console of a Virtual Machine or VM scale set instance
+  title: MicrosoftSerialConsoleClient
+schemas:
+  booleans:
+    - &ref_7
+      type: boolean
+      language:
+        default:
+          name: Boolean
+          description: Whether or not Serial Console is disabled.
+        go:
+          name: bool
+          description: Whether or not Serial Console is disabled.
+      protocol: {}
+    - &ref_10
+      type: boolean
+      language:
+        default:
+          name: Boolean
+          description: Whether or not Serial Console is disabled (enabled).
+        go:
+          name: bool
+          description: Whether or not Serial Console is disabled (enabled).
+      protocol: {}
+  strings:
+    - &ref_0
+      type: string
+      language:
+        default:
+          name: String
+          description: simple string
+        go:
+          name: string
+          description: simple string
+      protocol: {}
+    - &ref_1
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: SerialConsoleOperationsValueItemName
+          description: ''
+        go:
+          name: string
+          description: ''
+      protocol: {}
+    - &ref_2
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: SerialConsoleOperationsValueItemIsDataAction
+          description: ''
+        go:
+          name: string
+          description: ''
+      protocol: {}
+    - &ref_3
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: SerialConsoleOperationsValueProperties
+          description: ''
+        go:
+          name: string
+          description: ''
+      protocol: {}
+    - &ref_4
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: String
+          description: ''
+        go:
+          name: string
+          description: ''
+      protocol: {}
+    - &ref_8
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: GetSerialConsoleSubscriptionNotFoundCode
+          description: Error code
+        go:
+          name: string
+          description: Error code
+      protocol: {}
+    - &ref_9
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: GetSerialConsoleSubscriptionNotFoundMessage
+          description: Subscription not found message
+        go:
+          name: string
+          description: Subscription not found message
+      protocol: {}
+    - &ref_13
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: ResourceId
+          description: Resource Id
+        go:
+          name: string
+          description: Resource Id
+      protocol: {}
+    - &ref_14
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: ResourceName
+          description: Resource name
+        go:
+          name: string
+          description: Resource name
+      protocol: {}
+    - &ref_15
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: ResourceType
+          description: Resource type
+        go:
+          name: string
+          description: Resource type
+      protocol: {}
+    - &ref_19
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: CloudErrorBodyCode
+          description: An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+        go:
+          name: string
+          description: An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+      protocol: {}
+    - &ref_20
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: CloudErrorBodyMessage
+          description: A message describing the error, intended to be suitable for display in a user interface.
+        go:
+          name: string
+          description: A message describing the error, intended to be suitable for display in a user interface.
+      protocol: {}
+    - &ref_21
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: CloudErrorBodyTarget
+          description: The target of the particular error. For example, the name of the property in error.
+        go:
+          name: string
+          description: The target of the particular error. For example, the name of the property in error.
+      protocol: {}
+    - &ref_23
+      type: string
+      apiVersions:
+        - version: '2018-05-01'
+      language:
+        default:
+          name: SerialPortConnectResultConnectionString
+          description: Connection string to the serial port of the resource.
+        go:
+          name: string
+          description: Connection string to the serial port of the resource.
+      protocol: {}
+  sealedChoices:
+    - &ref_17
+      choices:
+        - value: enabled
+          language:
+            default:
+              name: Enabled
+              description: ''
+            go:
+              name: SerialPortStateEnabled
+              description: ''
+        - value: disabled
+          language:
+            default:
+              name: Disabled
+              description: ''
+            go:
+              name: SerialPortStateDisabled
+              description: ''
+      type: sealed-choice
+      apiVersions:
+        - version: '2018-05-01'
+      choiceType: *ref_0
+      language:
+        default:
+          name: SerialPortState
+          description: Specifies whether the port is enabled for a serial console connection.
+        go:
+          name: SerialPortState
+          description: Specifies whether the port is enabled for a serial console connection.
+          possibleValuesFunc: PossibleSerialPortStateValues
+      protocol: {}
+  constants:
+    - &ref_27
+      type: constant
+      value:
+        value: '2018-05-01'
+      valueType: *ref_0
+      language:
+        default:
+          name: ApiVersion20180501
+          description: Api Version (2018-05-01)
+        go:
+          name: string
+          description: Api Version (2018-05-01)
+      protocol: {}
+    - &ref_30
+      type: constant
+      value:
+        value: application/json
+      valueType: *ref_0
+      language:
+        default:
+          name: Accept
+          description: 'Accept: application/json'
+        go:
+          name: string
+          description: 'Accept: application/json'
+      protocol: {}
+  objects:
+    - &ref_31
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: &ref_24
+            type: array
+            apiVersions:
+              - version: '2018-05-01'
+            elementType: &ref_5
+              type: object
+              apiVersions:
+                - version: '2018-05-01'
+              properties:
+                - schema: *ref_1
+                  serializedName: name
+                  language: &ref_122
+                    default:
+                      name: name
+                      description: ''
+                    go:
+                      name: Name
+                      description: ''
+                  protocol: {}
+                - schema: *ref_2
+                  serializedName: isDataAction
+                  language: &ref_128
+                    default:
+                      name: isDataAction
+                      description: ''
+                    go:
+                      name: IsDataAction
+                      description: ''
+                  protocol: {}
+                - schema: &ref_6
+                    type: object
+                    apiVersions:
+                      - version: '2018-05-01'
+                    properties:
+                      - schema: *ref_3
+                        serializedName: provider
+                        language: &ref_125
+                          default:
+                            name: provider
+                            description: ''
+                          go:
+                            name: Provider
+                            description: ''
+                        protocol: {}
+                      - schema: *ref_4
+                        serializedName: resource
+                        language: &ref_126
+                          default:
+                            name: resource
+                            description: ''
+                          go:
+                            name: Resource
+                            description: ''
+                        protocol: {}
+                      - schema: *ref_4
+                        serializedName: operation
+                        language: &ref_124
+                          default:
+                            name: operation
+                            description: ''
+                          go:
+                            name: Operation
+                            description: ''
+                        protocol: {}
+                      - schema: *ref_4
+                        serializedName: description
+                        language: &ref_123
+                          default:
+                            name: description
+                            description: ''
+                          go:
+                            name: Description
+                            description: ''
+                        protocol: {}
+                    serializationFormats:
+                      - json
+                    usage:
+                      - output
+                    extensions:
+                      x-internal-autorest-anonymous-schema:
+                        anonymous: true
+                    language:
+                      default:
+                        name: SerialConsoleOperationsValueItemDisplay
+                        description: ''
+                        namespace: ''
+                      go:
+                        name: OperationsValueItemDisplay
+                        description: ''
+                        marshallingFormat: json
+                        namespace: ''
+                    protocol: {}
+                  serializedName: display
+                  language: &ref_127
+                    default:
+                      name: display
+                      description: ''
+                    go:
+                      name: Display
+                      description: ''
+                  protocol: {}
+              serializationFormats:
+                - json
+              usage:
+                - output
+              language:
+                default:
+                  name: SerialConsoleOperationsValueItem
+                  description: ''
+                  namespace: ''
+                go:
+                  name: OperationsValueItem
+                  description: ''
+                  marshallingFormat: json
+                  namespace: ''
+              protocol: {}
+            language:
+              default:
+                name: SerialConsoleOperationsValue
+                description: A list of Serial Console operations
+              go:
+                name: '[]*OperationsValueItem'
+                description: A list of Serial Console operations
+                elementIsPtr: true
+                marshallingFormat: json
+            protocol: {}
+          serializedName: value
+          language: &ref_129
+            default:
+              name: value
+              description: A list of Serial Console operations
+            go:
+              name: Value
+              description: A list of Serial Console operations
+              byValue: true
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial Console operations
+      usage:
+        - output
+      language:
+        default:
+          name: SerialConsoleOperations
+          description: Serial Console operations
+          namespace: ''
+          summary: Serial Console operations
+        go:
+          name: Operations
+          description: Operations - Serial Console operations
+          hasArrayMap: true
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial Console operations
+      protocol: {}
+    - *ref_5
+    - *ref_6
+    - &ref_39
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: *ref_7
+          serializedName: disabled
+          language: &ref_134
+            default:
+              name: disabled
+              description: Whether or not Serial Console is disabled.
+            go:
+              name: Disabled
+              description: Whether or not Serial Console is disabled.
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial Console GET Result
+      usage:
+        - output
+      language:
+        default:
+          name: SerialConsoleStatus
+          description: Returns whether or not Serial Console is disabled.
+          namespace: ''
+          summary: Serial Console GET Result
+        go:
+          name: Status
+          description: Status - Returns whether or not Serial Console is disabled.
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial Console GET Result
+      protocol: {}
+    - &ref_40
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: *ref_8
+          serializedName: code
+          language: &ref_136
+            default:
+              name: code
+              description: Error code
+            go:
+              name: Code
+              description: Error code
+          protocol: {}
+        - schema: *ref_9
+          serializedName: message
+          language: &ref_137
+            default:
+              name: message
+              description: Subscription not found message
+            go:
+              name: Message
+              description: Subscription not found message
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial Console subscription not found
+      usage:
+        - output
+      language:
+        default:
+          name: GetSerialConsoleSubscriptionNotFound
+          description: Error saying that the provided subscription could not be found
+          namespace: ''
+          summary: Serial Console subscription not found
+        go:
+          name: GetSerialConsoleSubscriptionNotFound
+          description: GetSerialConsoleSubscriptionNotFound - Error saying that the provided subscription could not be found
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial Console subscription not found
+      protocol: {}
+    - &ref_48
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: *ref_7
+          serializedName: disabled
+          language: &ref_141
+            default:
+              name: disabled
+              description: Whether or not Serial Console is disabled.
+            go:
+              name: Disabled
+              description: Whether or not Serial Console is disabled.
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial Console Disable Result
+      usage:
+        - output
+      language:
+        default:
+          name: DisableSerialConsoleResult
+          description: Returns whether or not Serial Console is disabled.
+          namespace: ''
+          summary: Serial Console Disable Result
+        go:
+          name: DisableSerialConsoleResult
+          description: DisableSerialConsoleResult - Returns whether or not Serial Console is disabled.
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial Console Disable Result
+      protocol: {}
+    - &ref_56
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: *ref_10
+          serializedName: disabled
+          language: &ref_146
+            default:
+              name: disabled
+              description: Whether or not Serial Console is disabled (enabled).
+            go:
+              name: Disabled
+              description: Whether or not Serial Console is disabled (enabled).
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial Console Enable Result
+      usage:
+        - output
+      language:
+        default:
+          name: EnableSerialConsoleResult
+          description: Returns whether or not Serial Console is disabled (enabled).
+          namespace: ''
+          summary: Serial Console Enable Result
+        go:
+          name: EnableSerialConsoleResult
+          description: EnableSerialConsoleResult - Returns whether or not Serial Console is disabled (enabled).
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial Console Enable Result
+      protocol: {}
+    - &ref_67
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: &ref_25
+            type: array
+            apiVersions:
+              - version: '2018-05-01'
+            elementType: &ref_11
+              type: object
+              apiVersions:
+                - version: '2018-05-01'
+              parents:
+                all:
+                  - &ref_12
+                    type: object
+                    apiVersions:
+                      - version: '2018-05-01'
+                    children:
+                      all:
+                        - *ref_11
+                      immediate:
+                        - *ref_11
+                    parents:
+                      all:
+                        - &ref_16
+                          type: object
+                          apiVersions:
+                            - version: '2018-05-01'
+                          children:
+                            all:
+                              - *ref_12
+                              - *ref_11
+                            immediate:
+                              - *ref_12
+                          properties:
+                            - schema: *ref_13
+                              readOnly: true
+                              serializedName: id
+                              language: &ref_157
+                                default:
+                                  name: id
+                                  description: Resource Id
+                                go:
+                                  name: ID
+                                  description: READ-ONLY; Resource Id
+                              protocol: {}
+                            - schema: *ref_14
+                              readOnly: true
+                              serializedName: name
+                              language: &ref_155
+                                default:
+                                  name: name
+                                  description: Resource name
+                                go:
+                                  name: Name
+                                  description: READ-ONLY; Resource name
+                              protocol: {}
+                            - schema: *ref_15
+                              readOnly: true
+                              serializedName: type
+                              language: &ref_156
+                                default:
+                                  name: type
+                                  description: Resource type
+                                go:
+                                  name: Type
+                                  description: READ-ONLY; Resource type
+                              protocol: {}
+                          serializationFormats:
+                            - json
+                          usage:
+                            - output
+                            - input
+                          extensions:
+                            x-ms-azure-resource: true
+                          language: &ref_158
+                            default:
+                              name: Resource
+                              description: The Resource model definition.
+                              namespace: ''
+                            go:
+                              name: Resource
+                              description: Resource - The Resource model definition.
+                              marshallingFormat: json
+                              namespace: ''
+                          protocol: {}
+                      immediate:
+                        - *ref_16
+                    serializationFormats:
+                      - json
+                    usage:
+                      - output
+                      - input
+                    language: &ref_159
+                      default:
+                        name: ProxyResource
+                        description: The resource model definition for a ARM proxy resource. It will have everything other than required location and tags
+                        namespace: ''
+                      go:
+                        name: ProxyResource
+                        description: ProxyResource - The resource model definition for a ARM proxy resource. It will have everything other than required location and tags
+                        marshallingFormat: json
+                        namespace: ''
+                    protocol: {}
+                  - *ref_16
+                immediate:
+                  - *ref_12
+              properties:
+                - schema: &ref_18
+                    type: object
+                    apiVersions:
+                      - version: '2018-05-01'
+                    properties:
+                      - schema: *ref_17
+                        serializedName: state
+                        language: &ref_160
+                          default:
+                            name: state
+                            description: Specifies whether the port is enabled for a serial console connection.
+                          go:
+                            name: State
+                            description: Specifies whether the port is enabled for a serial console connection.
+                        protocol: {}
+                    serializationFormats:
+                      - json
+                    usage:
+                      - output
+                      - input
+                    language:
+                      default:
+                        name: SerialPortProperties
+                        description: The properties of the serial port.
+                        namespace: ''
+                      go:
+                        name: SerialPortProperties
+                        description: SerialPortProperties - The properties of the serial port.
+                        marshallingFormat: json
+                        namespace: ''
+                    protocol: {}
+                  serializedName: properties
+                  extensions:
+                    x-ms-client-flatten: true
+                  language: &ref_161
+                    default:
+                      name: properties
+                      description: The properties of the serial port.
+                    go:
+                      name: Properties
+                      description: The properties of the serial port.
+                  protocol: {}
+              serializationFormats:
+                - json
+              summary: Serial port
+              usage:
+                - output
+                - input
+              language:
+                default:
+                  name: SerialPort
+                  description: Represents the serial port of the parent resource.
+                  namespace: ''
+                  summary: Serial port
+                go:
+                  name: SerialPort
+                  description: SerialPort - Represents the serial port of the parent resource.
+                  marshallingFormat: json
+                  namespace: ''
+                  summary: Serial port
+              protocol: {}
+            language:
+              default:
+                name: SerialPortListResultValue
+                description: The list of serial ports.
+              go:
+                name: '[]*SerialPort'
+                description: The list of serial ports.
+                elementIsPtr: true
+                marshallingFormat: json
+            protocol: {}
+          serializedName: value
+          language: &ref_162
+            default:
+              name: value
+              description: The list of serial ports.
+            go:
+              name: Value
+              description: The list of serial ports.
+              byValue: true
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial port list result
+      usage:
+        - output
+      language:
+        default:
+          name: SerialPortListResult
+          description: The list serial ports operation response.
+          namespace: ''
+          summary: Serial port list result
+        go:
+          name: SerialPortListResult
+          description: SerialPortListResult - The list serial ports operation response.
+          hasArrayMap: true
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial port list result
+      protocol: {}
+    - *ref_11
+    - *ref_18
+    - *ref_12
+    - *ref_16
+    - &ref_68
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: &ref_22
+            type: object
+            apiVersions:
+              - version: '2018-05-01'
+            properties:
+              - schema: *ref_19
+                serializedName: code
+                language:
+                  default:
+                    name: code
+                    description: An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+                  go:
+                    name: Code
+                    description: An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+                protocol: {}
+              - schema: *ref_20
+                serializedName: message
+                language:
+                  default:
+                    name: message
+                    description: A message describing the error, intended to be suitable for display in a user interface.
+                  go:
+                    name: Message
+                    description: A message describing the error, intended to be suitable for display in a user interface.
+                protocol: {}
+              - schema: *ref_21
+                serializedName: target
+                language:
+                  default:
+                    name: target
+                    description: The target of the particular error. For example, the name of the property in error.
+                  go:
+                    name: Target
+                    description: The target of the particular error. For example, the name of the property in error.
+                protocol: {}
+              - schema: &ref_26
+                  type: array
+                  apiVersions:
+                    - version: '2018-05-01'
+                  elementType: *ref_22
+                  language:
+                    default:
+                      name: CloudErrorBodyDetails
+                      description: A list of additional details about the error.
+                    go:
+                      name: '[]*CloudErrorBody'
+                      description: A list of additional details about the error.
+                      elementIsPtr: true
+                  protocol: {}
+                serializedName: details
+                language:
+                  default:
+                    name: details
+                    description: A list of additional details about the error.
+                  go:
+                    name: Details
+                    description: A list of additional details about the error.
+                    byValue: true
+                protocol: {}
+            serializationFormats:
+              - json
+            usage:
+              - exception
+            extensions:
+              x-ms-external: true
+            language:
+              default:
+                name: CloudErrorBody
+                description: An error response from the Batch service.
+                namespace: ''
+              go:
+                name: CloudErrorBody
+                description: CloudErrorBody - An error response from the Batch service.
+                hasArrayMap: true
+                marshallingFormat: json
+                namespace: ''
+            protocol: {}
+          serializedName: error
+          language:
+            default:
+              name: error
+              description: Cloud error body.
+            go:
+              name: Error
+              description: Cloud error body.
+          protocol: {}
+      serializationFormats:
+        - json
+      usage:
+        - exception
+      extensions:
+        x-ms-external: true
+      language:
+        default:
+          name: CloudError
+          description: An error response from the service.
+          namespace: ''
+        go:
+          name: CloudError
+          description: CloudError - An error response from the service.
+          marshallingFormat: json
+          namespace: ''
+      protocol: {}
+    - *ref_22
+    - &ref_113
+      type: object
+      apiVersions:
+        - version: '2018-05-01'
+      properties:
+        - schema: *ref_23
+          serializedName: connectionString
+          language: &ref_193
+            default:
+              name: connectionString
+              description: Connection string to the serial port of the resource.
+            go:
+              name: ConnectionString
+              description: Connection string to the serial port of the resource.
+          protocol: {}
+      serializationFormats:
+        - json
+      summary: Serial port connect result
+      usage:
+        - output
+      language:
+        default:
+          name: SerialPortConnectResult
+          description: Returns a connection string to the serial port of the resource.
+          namespace: ''
+          summary: Serial port connect result
+        go:
+          name: SerialPortConnectResult
+          description: SerialPortConnectResult - Returns a connection string to the serial port of the resource.
+          marshallingFormat: json
+          namespace: ''
+          summary: Serial port connect result
+      protocol: {}
+  arrays:
+    - *ref_24
+    - *ref_25
+    - *ref_26
+globalParameters:
+  - &ref_37
+    schema: *ref_4
+    implementation: Client
+    required: true
+    extensions:
+      x-ms-priority: 1
+    language: &ref_131
+      default:
+        name: SubscriptionId
+        description: Subscription ID which uniquely identifies the Microsoft Azure subscription. The subscription ID forms part of the URI for every service call requiring it.
+        serializedName: subscriptionId
+      go:
+        name: subscriptionID
+        description: Subscription ID which uniquely identifies the Microsoft Azure subscription. The subscription ID forms part of the URI for every service call requiring it.
+        serializedName: subscriptionId
+    protocol:
+      http:
+        in: path
+  - &ref_28
+    schema: *ref_0
+    clientDefaultValue: https://management.azure.com
+    implementation: Client
+    origin: modelerfour:synthesized/host
+    required: true
+    extensions:
+      x-ms-skip-url-encoding: true
+    language:
+      default:
+        name: $host
+        description: server parameter
+        serializedName: $host
+      go:
+        name: endpoint
+        description: server parameter
+        serializedName: $host
+    protocol:
+      http:
+        in: uri
+  - &ref_29
+    schema: *ref_27
+    implementation: Client
+    origin: modelerfour:synthesized/api-version
+    required: true
+    language: &ref_119
+      default:
+        name: apiVersion
+        description: Api Version
+        serializedName: api-version
+      go:
+        name: apiVersion
+        description: Api Version
+        serializedName: api-version
+    protocol:
+      http:
+        in: query
+operationGroups:
+  - &ref_121
+    $key: ''
+    operations:
+      - &ref_120
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - *ref_29
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /providers/Microsoft.SerialConsole/operations
+                method: get
+                uri: '{$host}'
+        signatureParameters: []
+        responses:
+          - schema: *ref_31
+            language: &ref_130
+              default:
+                name: ''
+                description: OK - returns a JSON object
+              go:
+                name: ''
+                description: OK - returns a JSON object
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+        extensions:
+          x-ms-examples:
+            List all Serial Console management operations supported by Serial Console RP:
+              parameters:
+                api-version: '2018-05-01'
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/GetOperationsExample.json
+              responses:
+                '200':
+                  body:
+                    value:
+                      - name: Microsoft.SerialConsole/consoleServices/read
+                        display:
+                          description: Retrieves the current subscription state
+                          operation: Default
+                          provider: Microsoft.SerialConsole
+                          resource: Serial Console instance
+                        isDataAction: 'false'
+                      - name: Microsoft.SerialConsole/consoleServices/disableConsole/action
+                        display:
+                          description: Disable Serial Console for a subscription
+                          operation: Disable Console
+                          provider: Microsoft.SerialConsole
+                          resource: Serial Console instance
+                        isDataAction: 'false'
+                      - name: Microsoft.SerialConsole/consoleServices/enableConsole/action
+                        display:
+                          description: Enable Serial Console for a subscription
+                          operation: Enable Console
+                          provider: Microsoft.SerialConsole
+                          resource: Serial Console instance
+                        isDataAction: 'false'
+        language:
+          default:
+            name: ListOperations
+            description: Gets a list of Serial Console API operations.
+          go:
+            name: ListOperations
+            description: |-
+              Gets a list of Serial Console API operations.
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: MicrosoftSerialConsoleClient
+            openApiType: arm
+            optionalParamGroup: &ref_195
+              schema:
+                type: object
+                language:
+                  default: &ref_32
+                    name: MicrosoftSerialConsoleClientListOperationsOptions
+                    description: MicrosoftSerialConsoleClientListOperationsOptions contains the optional parameters for the MicrosoftSerialConsoleClient.ListOperations method.
+                  go: *ref_32
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: MicrosoftSerialConsoleClientListOperationsOptions
+              language:
+                default: &ref_33
+                  name: options
+                  description: MicrosoftSerialConsoleClientListOperationsOptions contains the optional parameters for the MicrosoftSerialConsoleClient.ListOperations method.
+                go: *ref_33
+              protocol: {}
+            protocolNaming:
+              internalMethod: listOperations
+              requestMethod: listOperationsCreateRequest
+              responseMethod: listOperationsHandleResponse
+            responseEnv: &ref_205
+              type: object
+              properties:
+                - &ref_35
+                  schema: *ref_31
+                  serializedName: Operations
+                  language:
+                    default: &ref_34
+                      name: Operations
+                      description: Serial Console operations
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_34
+                  protocol: {}
+              language:
+                default: &ref_36
+                  name: MicrosoftSerialConsoleClientListOperationsResponse
+                  description: MicrosoftSerialConsoleClientListOperationsResponse contains the response from method MicrosoftSerialConsoleClient.ListOperations.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_35
+                go: *ref_36
+              protocol: {}
+        protocol: {}
+      - &ref_133
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - *ref_29
+          - *ref_37
+          - &ref_38
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_132
+              default:
+                name: default
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+              go:
+                name: defaultParam
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+            protocol:
+              http:
+                in: path
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/providers/Microsoft.SerialConsole/consoleServices/{default}
+                method: get
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_38
+        responses:
+          - schema: *ref_39
+            language: &ref_135
+              default:
+                name: ''
+                description: OK - Returns a JSON object
+              go:
+                name: ''
+                description: OK - Returns a JSON object
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+          - schema: *ref_40
+            language: &ref_138
+              default:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+              go:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '404'
+        extensions:
+          x-ms-examples:
+            Get the Serial Console disabled status for a subscription:
+              parameters:
+                default: default
+                api-version: '2018-05-01'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialConsoleStatus.json
+              responses:
+                '200':
+                  body:
+                    disabled: true
+                '404':
+                  body:
+                    code: SubscriptionNotFound
+                    message: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+        language:
+          default:
+            name: GetConsoleStatus
+            description: Gets whether or not Serial Console is disabled for a given subscription
+            summary: Get the disabled status for a subscription
+          go:
+            name: GetConsoleStatus
+            description: |-
+              Gets whether or not Serial Console is disabled for a given subscription
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: MicrosoftSerialConsoleClient
+            openApiType: arm
+            optionalParamGroup: &ref_196
+              schema:
+                type: object
+                language:
+                  default: &ref_41
+                    name: MicrosoftSerialConsoleClientGetConsoleStatusOptions
+                    description: MicrosoftSerialConsoleClientGetConsoleStatusOptions contains the optional parameters for the MicrosoftSerialConsoleClient.GetConsoleStatus method.
+                  go: *ref_41
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: MicrosoftSerialConsoleClientGetConsoleStatusOptions
+              language:
+                default: &ref_42
+                  name: options
+                  description: MicrosoftSerialConsoleClientGetConsoleStatusOptions contains the optional parameters for the MicrosoftSerialConsoleClient.GetConsoleStatus method.
+                go: *ref_42
+              protocol: {}
+            protocolNaming:
+              internalMethod: getConsoleStatus
+              requestMethod: getConsoleStatusCreateRequest
+              responseMethod: getConsoleStatusHandleResponse
+            responseEnv: &ref_206
+              type: object
+              properties:
+                - &ref_45
+                  schema:
+                    type: any
+                    language:
+                      default: &ref_43
+                        name: interface{}
+                        description: multi-response value
+                      go: *ref_43
+                    protocol: {}
+                  serializedName: Value
+                  language:
+                    default: &ref_44
+                      name: Value
+                      description: |
+                        // Possible types are Status, GetSerialConsoleSubscriptionNotFound
+                      byValue: true
+                    go: *ref_44
+                  protocol: {}
+              language:
+                default: &ref_46
+                  name: MicrosoftSerialConsoleClientGetConsoleStatusResponse
+                  description: MicrosoftSerialConsoleClientGetConsoleStatusResponse contains the response from method MicrosoftSerialConsoleClient.GetConsoleStatus.
+                  responseType: true
+                  resultProp: *ref_45
+                go: *ref_46
+              protocol: {}
+            summary: Get the disabled status for a subscription
+        protocol: {}
+      - &ref_140
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - *ref_29
+          - *ref_37
+          - &ref_47
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_139
+              default:
+                name: default
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+              go:
+                name: defaultParam
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+            protocol:
+              http:
+                in: path
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/providers/Microsoft.SerialConsole/consoleServices/{default}/disableConsole
+                method: post
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_47
+        responses:
+          - schema: *ref_48
+            language: &ref_142
+              default:
+                name: ''
+                description: OK - Returns a JSON object
+              go:
+                name: ''
+                description: OK - Returns a JSON object
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+          - schema: *ref_40
+            language: &ref_143
+              default:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+              go:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '404'
+        extensions:
+          x-ms-examples:
+            Disable Serial Console for a subscription:
+              parameters:
+                default: default
+                api-version: '2018-05-01'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/DisableConsoleExamples.json
+              responses:
+                '200':
+                  body:
+                    disabled: true
+                '404':
+                  body:
+                    code: SubscriptionNotFound
+                    message: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+        language:
+          default:
+            name: DisableConsole
+            description: Disables the Serial Console service for all VMs and VM scale sets in the provided subscription
+            summary: Disable Serial Console for a subscription
+          go:
+            name: DisableConsole
+            description: |-
+              Disables the Serial Console service for all VMs and VM scale sets in the provided subscription
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: MicrosoftSerialConsoleClient
+            openApiType: arm
+            optionalParamGroup: &ref_197
+              schema:
+                type: object
+                language:
+                  default: &ref_49
+                    name: MicrosoftSerialConsoleClientDisableConsoleOptions
+                    description: MicrosoftSerialConsoleClientDisableConsoleOptions contains the optional parameters for the MicrosoftSerialConsoleClient.DisableConsole method.
+                  go: *ref_49
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: MicrosoftSerialConsoleClientDisableConsoleOptions
+              language:
+                default: &ref_50
+                  name: options
+                  description: MicrosoftSerialConsoleClientDisableConsoleOptions contains the optional parameters for the MicrosoftSerialConsoleClient.DisableConsole method.
+                go: *ref_50
+              protocol: {}
+            protocolNaming:
+              internalMethod: disableConsole
+              requestMethod: disableConsoleCreateRequest
+              responseMethod: disableConsoleHandleResponse
+            responseEnv: &ref_207
+              type: object
+              properties:
+                - &ref_53
+                  schema:
+                    type: any
+                    language:
+                      default: &ref_51
+                        name: interface{}
+                        description: multi-response value
+                      go: *ref_51
+                    protocol: {}
+                  serializedName: Value
+                  language:
+                    default: &ref_52
+                      name: Value
+                      description: |
+                        // Possible types are DisableSerialConsoleResult, GetSerialConsoleSubscriptionNotFound
+                      byValue: true
+                    go: *ref_52
+                  protocol: {}
+              language:
+                default: &ref_54
+                  name: MicrosoftSerialConsoleClientDisableConsoleResponse
+                  description: MicrosoftSerialConsoleClientDisableConsoleResponse contains the response from method MicrosoftSerialConsoleClient.DisableConsole.
+                  responseType: true
+                  resultProp: *ref_53
+                go: *ref_54
+              protocol: {}
+            summary: Disable Serial Console for a subscription
+        protocol: {}
+      - &ref_145
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - *ref_29
+          - *ref_37
+          - &ref_55
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_144
+              default:
+                name: default
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+              go:
+                name: defaultParam
+                description: Default parameter. Leave the value as "default".
+                serializedName: default
+            protocol:
+              http:
+                in: path
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/providers/Microsoft.SerialConsole/consoleServices/{default}/enableConsole
+                method: post
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_55
+        responses:
+          - schema: *ref_56
+            language: &ref_147
+              default:
+                name: ''
+                description: OK - Serial Console disabled
+              go:
+                name: ''
+                description: OK - Serial Console disabled
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+          - schema: *ref_40
+            language: &ref_148
+              default:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+              go:
+                name: ''
+                description: Subscription not found - returns a JSON object with error details
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '404'
+        extensions:
+          x-ms-examples:
+            Enable Serial Console for a subscription:
+              parameters:
+                default: default
+                api-version: '2018-05-01'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/EnableConsoleExamples.json
+              responses:
+                '200':
+                  body:
+                    disabled: false
+                '404':
+                  body:
+                    code: SubscriptionNotFound
+                    message: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+        language:
+          default:
+            name: EnableConsole
+            description: Enables the Serial Console service for all VMs and VM scale sets in the provided subscription
+            summary: Enable Serial Console for a subscription
+          go:
+            name: EnableConsole
+            description: |-
+              Enables the Serial Console service for all VMs and VM scale sets in the provided subscription
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: MicrosoftSerialConsoleClient
+            openApiType: arm
+            optionalParamGroup: &ref_198
+              schema:
+                type: object
+                language:
+                  default: &ref_57
+                    name: MicrosoftSerialConsoleClientEnableConsoleOptions
+                    description: MicrosoftSerialConsoleClientEnableConsoleOptions contains the optional parameters for the MicrosoftSerialConsoleClient.EnableConsole method.
+                  go: *ref_57
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: MicrosoftSerialConsoleClientEnableConsoleOptions
+              language:
+                default: &ref_58
+                  name: options
+                  description: MicrosoftSerialConsoleClientEnableConsoleOptions contains the optional parameters for the MicrosoftSerialConsoleClient.EnableConsole method.
+                go: *ref_58
+              protocol: {}
+            protocolNaming:
+              internalMethod: enableConsole
+              requestMethod: enableConsoleCreateRequest
+              responseMethod: enableConsoleHandleResponse
+            responseEnv: &ref_208
+              type: object
+              properties:
+                - &ref_61
+                  schema:
+                    type: any
+                    language:
+                      default: &ref_59
+                        name: interface{}
+                        description: multi-response value
+                      go: *ref_59
+                    protocol: {}
+                  serializedName: Value
+                  language:
+                    default: &ref_60
+                      name: Value
+                      description: |
+                        // Possible types are EnableSerialConsoleResult, GetSerialConsoleSubscriptionNotFound
+                      byValue: true
+                    go: *ref_60
+                  protocol: {}
+              language:
+                default: &ref_62
+                  name: MicrosoftSerialConsoleClientEnableConsoleResponse
+                  description: MicrosoftSerialConsoleClientEnableConsoleResponse contains the response from method MicrosoftSerialConsoleClient.EnableConsole.
+                  responseType: true
+                  resultProp: *ref_61
+                go: *ref_62
+              protocol: {}
+            summary: Enable Serial Console for a subscription
+        protocol: {}
+    language:
+      default:
+        name: ''
+        description: ''
+      go:
+        name: MicrosoftSerialConsoleClient
+        description: ''
+        clientCtorName: NewMicrosoftSerialConsoleClient
+        clientName: MicrosoftSerialConsoleClient
+        clientParams:
+          - *ref_37
+    protocol: {}
+  - &ref_154
+    $key: SerialPorts
+    operations:
+      - &ref_153
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - &ref_63
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_149
+              default:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+              go:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+            protocol:
+              http:
+                in: path
+          - &ref_64
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_150
+              default:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+              go:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+            protocol:
+              http:
+                in: path
+          - &ref_65
+            schema: *ref_4
+            implementation: Method
+            required: true
+            extensions:
+              x-ms-skip-url-encoding: true
+            language: &ref_151
+              default:
+                name: parentResourceType
+                description: 'The resource type of the parent resource.  For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+              go:
+                name: parentResourceType
+                description: 'The resource type of the parent resource. For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+            protocol:
+              http:
+                in: path
+          - &ref_66
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_152
+              default:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+              go:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+            protocol:
+              http:
+                in: path
+          - *ref_29
+          - *ref_37
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourceType}/{parentResource}/providers/Microsoft.SerialConsole/serialPorts
+                method: get
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_63
+          - *ref_64
+          - *ref_65
+          - *ref_66
+        responses:
+          - schema: *ref_67
+            language: &ref_163
+              default:
+                name: ''
+                description: OK
+              go:
+                name: ''
+                description: OK
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            List Serial Ports for parent resources:
+              parameters:
+                api-version: '2018-05-01'
+                parentResource: myVM
+                parentResourceType: virtualMachines
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/ListSerialPort.json
+              responses:
+                '200':
+                  body:
+                    value:
+                      - name: '0'
+                        type: Microsoft.SerialConsole/serialPorts
+                        id: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                        properties:
+                          state: enabled
+        language:
+          default:
+            name: List
+            description: 'Lists all of the configured serial ports for a parent resource '
+          go:
+            name: List
+            description: |-
+              Lists all of the configured serial ports for a parent resource
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_199
+              schema:
+                type: object
+                language:
+                  default: &ref_69
+                    name: SerialPortsClientListOptions
+                    description: SerialPortsClientListOptions contains the optional parameters for the SerialPortsClient.List method.
+                  go: *ref_69
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientListOptions
+              language:
+                default: &ref_70
+                  name: options
+                  description: SerialPortsClientListOptions contains the optional parameters for the SerialPortsClient.List method.
+                go: *ref_70
+              protocol: {}
+            protocolNaming:
+              internalMethod: listOperation
+              requestMethod: listCreateRequest
+              responseMethod: listHandleResponse
+            responseEnv: &ref_209
+              type: object
+              properties:
+                - &ref_72
+                  schema: *ref_67
+                  serializedName: SerialPortListResult
+                  language:
+                    default: &ref_71
+                      name: SerialPortListResult
+                      description: The list serial ports operation response.
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_71
+                  protocol: {}
+              language:
+                default: &ref_73
+                  name: SerialPortsClientListResponse
+                  description: SerialPortsClientListResponse contains the response from method SerialPortsClient.List.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_72
+                go: *ref_73
+              protocol: {}
+        protocol: {}
+      - &ref_169
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - &ref_74
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_164
+              default:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+              go:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+            protocol:
+              http:
+                in: path
+          - &ref_75
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_165
+              default:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+              go:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+            protocol:
+              http:
+                in: path
+          - &ref_76
+            schema: *ref_4
+            implementation: Method
+            required: true
+            extensions:
+              x-ms-skip-url-encoding: true
+            language: &ref_166
+              default:
+                name: parentResourceType
+                description: 'The resource type of the parent resource.  For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+              go:
+                name: parentResourceType
+                description: 'The resource type of the parent resource. For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+            protocol:
+              http:
+                in: path
+          - &ref_77
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_167
+              default:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+              go:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+            protocol:
+              http:
+                in: path
+          - &ref_78
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_168
+              default:
+                name: serialPort
+                description: The name of the serial port to connect to.
+                serializedName: serialPort
+              go:
+                name: serialPort
+                description: The name of the serial port to connect to.
+                serializedName: serialPort
+            protocol:
+              http:
+                in: path
+          - *ref_29
+          - *ref_37
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourceType}/{parentResource}/providers/Microsoft.SerialConsole/serialPorts/{serialPort}
+                method: get
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_74
+          - *ref_75
+          - *ref_76
+          - *ref_77
+          - *ref_78
+        responses:
+          - schema: *ref_11
+            language: &ref_170
+              default:
+                name: ''
+                description: OK
+              go:
+                name: ''
+                description: OK
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            Get the serial port for a parent resource:
+              parameters:
+                api-version: '2018-05-01'
+                parentResource: myVM
+                parentResourceType: virtualMachines
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                serialPort: '0'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/GetSerialPort.json
+              responses:
+                '200':
+                  body:
+                    name: '0'
+                    type: Microsoft.SerialConsole/serialPorts
+                    id: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                    properties:
+                      state: enabled
+        language:
+          default:
+            name: Get
+            description: Gets the configured settings for a serial port
+          go:
+            name: Get
+            description: |-
+              Gets the configured settings for a serial port
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_200
+              schema:
+                type: object
+                language:
+                  default: &ref_79
+                    name: SerialPortsClientGetOptions
+                    description: SerialPortsClientGetOptions contains the optional parameters for the SerialPortsClient.Get method.
+                  go: *ref_79
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientGetOptions
+              language:
+                default: &ref_80
+                  name: options
+                  description: SerialPortsClientGetOptions contains the optional parameters for the SerialPortsClient.Get method.
+                go: *ref_80
+              protocol: {}
+            protocolNaming:
+              internalMethod: get
+              requestMethod: getCreateRequest
+              responseMethod: getHandleResponse
+            responseEnv: &ref_210
+              type: object
+              properties:
+                - &ref_82
+                  schema: *ref_11
+                  serializedName: SerialPort
+                  language:
+                    default: &ref_81
+                      name: SerialPort
+                      description: Represents the serial port of the parent resource.
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_81
+                  protocol: {}
+              language:
+                default: &ref_83
+                  name: SerialPortsClientGetResponse
+                  description: SerialPortsClientGetResponse contains the response from method SerialPortsClient.Get.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_82
+                go: *ref_83
+              protocol: {}
+        protocol: {}
+      - &ref_177
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - &ref_85
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_171
+              default:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+              go:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+            protocol:
+              http:
+                in: path
+          - &ref_86
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_172
+              default:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+              go:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+            protocol:
+              http:
+                in: path
+          - &ref_87
+            schema: *ref_4
+            implementation: Method
+            required: true
+            extensions:
+              x-ms-skip-url-encoding: true
+            language: &ref_173
+              default:
+                name: parentResourceType
+                description: 'The resource type of the parent resource.  For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+              go:
+                name: parentResourceType
+                description: 'The resource type of the parent resource. For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+            protocol:
+              http:
+                in: path
+          - &ref_88
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_174
+              default:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+              go:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+            protocol:
+              http:
+                in: path
+          - &ref_89
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_175
+              default:
+                name: serialPort
+                description: The name of the serial port to create.
+                serializedName: serialPort
+              go:
+                name: serialPort
+                description: The name of the serial port to create.
+                serializedName: serialPort
+            protocol:
+              http:
+                in: path
+          - *ref_29
+          - *ref_37
+        requests:
+          - parameters:
+              - &ref_84
+                schema: *ref_11
+                implementation: Method
+                required: true
+                language: &ref_176
+                  default:
+                    name: parameters
+                    description: Parameters supplied to create the serial port.
+                  go:
+                    name: parameters
+                    description: Parameters supplied to create the serial port.
+                protocol:
+                  http:
+                    in: body
+                    style: json
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters:
+              - *ref_84
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourceType}/{parentResource}/providers/Microsoft.SerialConsole/serialPorts/{serialPort}
+                method: put
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_85
+          - *ref_86
+          - *ref_87
+          - *ref_88
+          - *ref_89
+        responses:
+          - schema: *ref_11
+            language: &ref_178
+              default:
+                name: ''
+                description: Created
+              go:
+                name: ''
+                description: Created
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '201'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            Create a new serial port resource.:
+              parameters:
+                api-version: '2018-05-01'
+                parameters:
+                  properties:
+                    state: enabled
+                parentResource: myVM
+                parentResourceType: virtualMachines
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                serialPort: '0'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/CreateSerialPort.json
+              responses:
+                '201':
+                  body:
+                    name: '0'
+                    type: Microsoft.SerialConsole/serialPorts
+                    id: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                    properties:
+                      state: enabled
+        language:
+          default:
+            name: Create
+            description: Creates or updates a serial port
+          go:
+            name: Create
+            description: |-
+              Creates or updates a serial port
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_201
+              schema:
+                type: object
+                language:
+                  default: &ref_90
+                    name: SerialPortsClientCreateOptions
+                    description: SerialPortsClientCreateOptions contains the optional parameters for the SerialPortsClient.Create method.
+                  go: *ref_90
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientCreateOptions
+              language:
+                default: &ref_91
+                  name: options
+                  description: SerialPortsClientCreateOptions contains the optional parameters for the SerialPortsClient.Create method.
+                go: *ref_91
+              protocol: {}
+            protocolNaming:
+              internalMethod: create
+              requestMethod: createCreateRequest
+              responseMethod: createHandleResponse
+            responseEnv: &ref_211
+              type: object
+              properties:
+                - &ref_93
+                  schema: *ref_11
+                  serializedName: SerialPort
+                  language:
+                    default: &ref_92
+                      name: SerialPort
+                      description: Represents the serial port of the parent resource.
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_92
+                  protocol: {}
+              language:
+                default: &ref_94
+                  name: SerialPortsClientCreateResponse
+                  description: SerialPortsClientCreateResponse contains the response from method SerialPortsClient.Create.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_93
+                go: *ref_94
+              protocol: {}
+        protocol: {}
+      - &ref_184
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - &ref_95
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_179
+              default:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+              go:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+            protocol:
+              http:
+                in: path
+          - &ref_96
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_180
+              default:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+              go:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+            protocol:
+              http:
+                in: path
+          - &ref_97
+            schema: *ref_4
+            implementation: Method
+            required: true
+            extensions:
+              x-ms-skip-url-encoding: true
+            language: &ref_181
+              default:
+                name: parentResourceType
+                description: 'The resource type of the parent resource.  For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+              go:
+                name: parentResourceType
+                description: 'The resource type of the parent resource. For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+            protocol:
+              http:
+                in: path
+          - &ref_98
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_182
+              default:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+              go:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+            protocol:
+              http:
+                in: path
+          - &ref_99
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_183
+              default:
+                name: serialPort
+                description: The name of the serial port to delete.
+                serializedName: serialPort
+              go:
+                name: serialPort
+                description: The name of the serial port to delete.
+                serializedName: serialPort
+            protocol:
+              http:
+                in: path
+          - *ref_29
+          - *ref_37
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourceType}/{parentResource}/providers/Microsoft.SerialConsole/serialPorts/{serialPort}
+                method: delete
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_95
+          - *ref_96
+          - *ref_97
+          - *ref_98
+          - *ref_99
+        responses:
+          - language:
+              default:
+                name: ''
+                description: OK
+              go:
+                name: ''
+                description: OK
+            protocol:
+              http:
+                statusCodes:
+                  - '200'
+          - language:
+              default:
+                name: ''
+                description: No Content
+              go:
+                name: ''
+                description: No Content
+            protocol:
+              http:
+                statusCodes:
+                  - '204'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            Delete a serial port resource:
+              parameters:
+                api-version: '2018-05-01'
+                parentResource: myVM
+                parentResourceType: virtualMachines
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                serialPort: '0'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/DeleteSerialPort.json
+              responses:
+                '200': {}
+                '204': {}
+        language:
+          default:
+            name: Delete
+            description: Deletes a serial port
+          go:
+            name: Delete
+            description: |-
+              Deletes a serial port
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_202
+              schema:
+                type: object
+                language:
+                  default: &ref_100
+                    name: SerialPortsClientDeleteOptions
+                    description: SerialPortsClientDeleteOptions contains the optional parameters for the SerialPortsClient.Delete method.
+                  go: *ref_100
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientDeleteOptions
+              language:
+                default: &ref_101
+                  name: options
+                  description: SerialPortsClientDeleteOptions contains the optional parameters for the SerialPortsClient.Delete method.
+                go: *ref_101
+              protocol: {}
+            protocolNaming:
+              internalMethod: deleteOperation
+              requestMethod: deleteCreateRequest
+              responseMethod: deleteHandleResponse
+            responseEnv: &ref_212
+              type: object
+              language:
+                default: &ref_102
+                  name: SerialPortsClientDeleteResponse
+                  description: SerialPortsClientDeleteResponse contains the response from method SerialPortsClient.Delete.
+                  responseType: true
+                go: *ref_102
+              protocol: {}
+        protocol: {}
+      - &ref_185
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - *ref_37
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/providers/Microsoft.SerialConsole/serialPorts
+                method: get
+                uri: '{$host}'
+        signatureParameters: []
+        responses:
+          - schema: *ref_67
+            language: &ref_186
+              default:
+                name: ''
+                description: OK - Return a list of SerialPort resources
+              go:
+                name: ''
+                description: OK - Return a list of SerialPort resources
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            List Serial Ports for subscription:
+              parameters:
+                api-version: '2018-05-01'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/ListSerialPortSubscription.json
+              responses:
+                '200':
+                  body:
+                    value:
+                      - name: '0'
+                        type: Microsoft.SerialConsole/serialPorts
+                        id: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                        properties:
+                          state: enabled
+        language:
+          default:
+            name: ListBySubscriptions
+            description: Handles requests to list all SerialPort resources in a subscription.
+          go:
+            name: ListBySubscriptions
+            description: |-
+              Handles requests to list all SerialPort resources in a subscription.
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_203
+              schema:
+                type: object
+                language:
+                  default: &ref_103
+                    name: SerialPortsClientListBySubscriptionsOptions
+                    description: SerialPortsClientListBySubscriptionsOptions contains the optional parameters for the SerialPortsClient.ListBySubscriptions method.
+                  go: *ref_103
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientListBySubscriptionsOptions
+              language:
+                default: &ref_104
+                  name: options
+                  description: SerialPortsClientListBySubscriptionsOptions contains the optional parameters for the SerialPortsClient.ListBySubscriptions method.
+                go: *ref_104
+              protocol: {}
+            protocolNaming:
+              internalMethod: listBySubscriptions
+              requestMethod: listBySubscriptionsCreateRequest
+              responseMethod: listBySubscriptionsHandleResponse
+            responseEnv: &ref_213
+              type: object
+              properties:
+                - &ref_106
+                  schema: *ref_67
+                  serializedName: SerialPortListResult
+                  language:
+                    default: &ref_105
+                      name: SerialPortListResult
+                      description: The list serial ports operation response.
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_105
+                  protocol: {}
+              language:
+                default: &ref_107
+                  name: SerialPortsClientListBySubscriptionsResponse
+                  description: SerialPortsClientListBySubscriptionsResponse contains the response from method SerialPortsClient.ListBySubscriptions.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_106
+                go: *ref_107
+              protocol: {}
+        protocol: {}
+      - &ref_192
+        apiVersions:
+          - version: '2018-05-01'
+        parameters:
+          - *ref_28
+          - &ref_108
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_187
+              default:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+              go:
+                name: resourceGroupName
+                description: The name of the resource group.
+                serializedName: resourceGroupName
+            protocol:
+              http:
+                in: path
+          - &ref_109
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_188
+              default:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+              go:
+                name: resourceProviderNamespace
+                description: The namespace of the resource provider.
+                serializedName: resourceProviderNamespace
+            protocol:
+              http:
+                in: path
+          - &ref_110
+            schema: *ref_4
+            implementation: Method
+            required: true
+            extensions:
+              x-ms-skip-url-encoding: true
+            language: &ref_189
+              default:
+                name: parentResourceType
+                description: 'The resource type of the parent resource.  For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+              go:
+                name: parentResourceType
+                description: 'The resource type of the parent resource. For example: ''virtualMachines'' or ''virtualMachineScaleSets'''
+                serializedName: parentResourceType
+            protocol:
+              http:
+                in: path
+          - &ref_111
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_190
+              default:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+              go:
+                name: parentResource
+                description: 'The resource name, or subordinate path, for the parent of the serial port. For example: the name of the virtual machine.'
+                serializedName: parentResource
+            protocol:
+              http:
+                in: path
+          - &ref_112
+            schema: *ref_4
+            implementation: Method
+            required: true
+            language: &ref_191
+              default:
+                name: serialPort
+                description: The name of the serial port to connect to.
+                serializedName: serialPort
+              go:
+                name: serialPort
+                description: The name of the serial port to connect to.
+                serializedName: serialPort
+            protocol:
+              http:
+                in: path
+          - *ref_29
+          - *ref_37
+        requests:
+          - parameters:
+              - schema: *ref_30
+                implementation: Method
+                origin: modelerfour:synthesized/accept
+                required: true
+                language:
+                  default:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                  go:
+                    name: accept
+                    description: Accept header
+                    serializedName: Accept
+                protocol:
+                  http:
+                    in: header
+            signatureParameters: []
+            language:
+              default:
+                name: ''
+                description: ''
+              go:
+                name: ''
+                description: ''
+            protocol:
+              http:
+                path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourceType}/{parentResource}/providers/Microsoft.SerialConsole/serialPorts/{serialPort}/connect
+                method: post
+                uri: '{$host}'
+        signatureParameters:
+          - *ref_108
+          - *ref_109
+          - *ref_110
+          - *ref_111
+          - *ref_112
+        responses:
+          - schema: *ref_113
+            language: &ref_194
+              default:
+                name: ''
+                description: OK - Return a connection string
+              go:
+                name: ''
+                description: OK - Return a connection string
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - '200'
+        exceptions:
+          - schema: *ref_68
+            language:
+              default:
+                name: ''
+                description: Error response describing why the operation failed.
+              go:
+                name: ''
+                description: Error response describing why the operation failed.
+            protocol:
+              http:
+                knownMediaType: json
+                mediaTypes:
+                  - application/json
+                statusCodes:
+                  - default
+        extensions:
+          x-ms-examples:
+            Connect to a scale set instance serial port:
+              parameters:
+                api-version: '2018-05-01'
+                parentResource: myscaleset/virtualMachines/2
+                parentResourceType: virtualMachineScaleSets
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                serialPort: '0'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialPortConnectVMSS.json
+              responses:
+                '200':
+                  body:
+                    connectionString: wss://eastus.gateway.serialconsole.azure.com/n/connector/{containerid}/sessions/{sessionId}/client
+            Connect to a virtual machine serial port:
+              parameters:
+                api-version: '2018-05-01'
+                parentResource: myVM
+                parentResourceType: virtualMachines
+                resourceGroupName: myResourceGroup
+                resourceProviderNamespace: Microsoft.Compute
+                serialPort: '0'
+                subscriptionId: 00000000-00000-0000-0000-000000000000
+              x-ms-original-file: https://github.com/Azure/azure-rest-api-specs/blob/4ddb09cf15387bc4ce136675bc08c21e92f11087/specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialPortConnectVM.json
+              responses:
+                '200':
+                  body:
+                    connectionString: wss://eastus.gateway.serialconsole.azure.com/n/connector/{containerid}/sessions/{sessionId}/client
+        language:
+          default:
+            name: Connect
+            description: Connect to serial port of the target resource
+          go:
+            name: Connect
+            description: |-
+              Connect to serial port of the target resource
+              If the operation fails it returns an *azcore.ResponseError type.
+            azureARM: true
+            clientName: SerialPortsClient
+            openApiType: arm
+            optionalParamGroup: &ref_204
+              schema:
+                type: object
+                language:
+                  default: &ref_114
+                    name: SerialPortsClientConnectOptions
+                    description: SerialPortsClientConnectOptions contains the optional parameters for the SerialPortsClient.Connect method.
+                  go: *ref_114
+                protocol: {}
+              originalParameter: []
+              required: false
+              serializedName: SerialPortsClientConnectOptions
+              language:
+                default: &ref_115
+                  name: options
+                  description: SerialPortsClientConnectOptions contains the optional parameters for the SerialPortsClient.Connect method.
+                go: *ref_115
+              protocol: {}
+            protocolNaming:
+              internalMethod: connect
+              requestMethod: connectCreateRequest
+              responseMethod: connectHandleResponse
+            responseEnv: &ref_214
+              type: object
+              properties:
+                - &ref_117
+                  schema: *ref_113
+                  serializedName: SerialPortConnectResult
+                  language:
+                    default: &ref_116
+                      name: SerialPortConnectResult
+                      description: Returns a connection string to the serial port of the resource.
+                      byValue: true
+                      embeddedType: true
+                    go: *ref_116
+                  protocol: {}
+              language:
+                default: &ref_118
+                  name: SerialPortsClientConnectResponse
+                  description: SerialPortsClientConnectResponse contains the response from method SerialPortsClient.Connect.
+                  marshallingFormat: json
+                  responseType: true
+                  resultProp: *ref_117
+                go: *ref_118
+              protocol: {}
+        protocol: {}
+    language:
+      default:
+        name: SerialPorts
+        description: ''
+      go:
+        name: SerialPorts
+        description: ''
+        clientCtorName: NewSerialPortsClient
+        clientName: SerialPortsClient
+        clientParams:
+          - *ref_37
+    protocol: {}
+security:
+  authenticationRequired: true
+  schemes:
+    - type: AADToken
+      scopes:
+        - https://management.azure.com/.default
+testModel:
+  mockTest:
+    exampleGroups:
+      - operationId: _ListOperations
+        examples:
+          - name: List all Serial Console management operations supported by Serial Console RP
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+            methodParameters: []
+            operation: *ref_120
+            operationGroup: *ref_121
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/GetOperationsExample.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_31
+                  parentsValue: {}
+                  properties:
+                    value:
+                      schema: *ref_24
+                      elements:
+                        - schema: *ref_5
+                          parentsValue: {}
+                          properties:
+                            name:
+                              schema: *ref_1
+                              rawValue: Microsoft.SerialConsole/consoleServices/read
+                              language: *ref_122
+                            display:
+                              schema: *ref_6
+                              parentsValue: {}
+                              properties:
+                                description:
+                                  schema: *ref_4
+                                  rawValue: Retrieves the current subscription state
+                                  language: *ref_123
+                                operation:
+                                  schema: *ref_4
+                                  rawValue: Default
+                                  language: *ref_124
+                                provider:
+                                  schema: *ref_3
+                                  rawValue: Microsoft.SerialConsole
+                                  language: *ref_125
+                                resource:
+                                  schema: *ref_4
+                                  rawValue: Serial Console instance
+                                  language: *ref_126
+                              language: *ref_127
+                            isDataAction:
+                              schema: *ref_2
+                              rawValue: 'false'
+                              language: *ref_128
+                        - schema: *ref_5
+                          parentsValue: {}
+                          properties:
+                            name:
+                              schema: *ref_1
+                              rawValue: Microsoft.SerialConsole/consoleServices/disableConsole/action
+                              language: *ref_122
+                            display:
+                              schema: *ref_6
+                              parentsValue: {}
+                              properties:
+                                description:
+                                  schema: *ref_4
+                                  rawValue: Disable Serial Console for a subscription
+                                  language: *ref_123
+                                operation:
+                                  schema: *ref_4
+                                  rawValue: Disable Console
+                                  language: *ref_124
+                                provider:
+                                  schema: *ref_3
+                                  rawValue: Microsoft.SerialConsole
+                                  language: *ref_125
+                                resource:
+                                  schema: *ref_4
+                                  rawValue: Serial Console instance
+                                  language: *ref_126
+                              language: *ref_127
+                            isDataAction:
+                              schema: *ref_2
+                              rawValue: 'false'
+                              language: *ref_128
+                        - schema: *ref_5
+                          parentsValue: {}
+                          properties:
+                            name:
+                              schema: *ref_1
+                              rawValue: Microsoft.SerialConsole/consoleServices/enableConsole/action
+                              language: *ref_122
+                            display:
+                              schema: *ref_6
+                              parentsValue: {}
+                              properties:
+                                description:
+                                  schema: *ref_4
+                                  rawValue: Enable Serial Console for a subscription
+                                  language: *ref_123
+                                operation:
+                                  schema: *ref_4
+                                  rawValue: Enable Console
+                                  language: *ref_124
+                                provider:
+                                  schema: *ref_3
+                                  rawValue: Microsoft.SerialConsole
+                                  language: *ref_125
+                                resource:
+                                  schema: *ref_4
+                                  rawValue: Serial Console instance
+                                  language: *ref_126
+                              language: *ref_127
+                            isDataAction:
+                              schema: *ref_2
+                              rawValue: 'false'
+                              language: *ref_128
+                      language: *ref_129
+                  language: *ref_130
+        operation: *ref_120
+        operationGroup: *ref_121
+      - operationId: _GetConsoleStatus
+        examples:
+          - name: Get the Serial Console disabled status for a subscription
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: default
+                  language: *ref_132
+                parameter: *ref_38
+            operation: *ref_133
+            operationGroup: *ref_121
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialConsoleStatus.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_39
+                  parentsValue: {}
+                  properties:
+                    disabled:
+                      schema: *ref_7
+                      rawValue: true
+                      language: *ref_134
+                  language: *ref_135
+              '404':
+                body:
+                  schema: *ref_40
+                  parentsValue: {}
+                  properties:
+                    code:
+                      schema: *ref_8
+                      rawValue: SubscriptionNotFound
+                      language: *ref_136
+                    message:
+                      schema: *ref_9
+                      rawValue: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+                      language: *ref_137
+                  language: *ref_138
+        operation: *ref_133
+        operationGroup: *ref_121
+      - operationId: _DisableConsole
+        examples:
+          - name: Disable Serial Console for a subscription
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: default
+                  language: *ref_139
+                parameter: *ref_47
+            operation: *ref_140
+            operationGroup: *ref_121
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/DisableConsoleExamples.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_48
+                  parentsValue: {}
+                  properties:
+                    disabled:
+                      schema: *ref_7
+                      rawValue: true
+                      language: *ref_141
+                  language: *ref_142
+              '404':
+                body:
+                  schema: *ref_40
+                  parentsValue: {}
+                  properties:
+                    code:
+                      schema: *ref_8
+                      rawValue: SubscriptionNotFound
+                      language: *ref_136
+                    message:
+                      schema: *ref_9
+                      rawValue: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+                      language: *ref_137
+                  language: *ref_143
+        operation: *ref_140
+        operationGroup: *ref_121
+      - operationId: _EnableConsole
+        examples:
+          - name: Enable Serial Console for a subscription
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: default
+                  language: *ref_144
+                parameter: *ref_55
+            operation: *ref_145
+            operationGroup: *ref_121
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/EnableConsoleExamples.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_56
+                  parentsValue: {}
+                  properties:
+                    disabled:
+                      schema: *ref_10
+                      rawValue: false
+                      language: *ref_146
+                  language: *ref_147
+              '404':
+                body:
+                  schema: *ref_40
+                  parentsValue: {}
+                  properties:
+                    code:
+                      schema: *ref_8
+                      rawValue: SubscriptionNotFound
+                      language: *ref_136
+                    message:
+                      schema: *ref_9
+                      rawValue: The subscription '00000000-00000-0000-0000-000000000000' could not be found.
+                      language: *ref_137
+                  language: *ref_148
+        operation: *ref_145
+        operationGroup: *ref_121
+      - operationId: SerialPorts_List
+        examples:
+          - name: List Serial Ports for parent resources
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_149
+                parameter: *ref_63
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_150
+                parameter: *ref_64
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachines
+                  language: *ref_151
+                parameter: *ref_65
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myVM
+                  language: *ref_152
+                parameter: *ref_66
+            operation: *ref_153
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/ListSerialPort.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_67
+                  parentsValue: {}
+                  properties:
+                    value:
+                      schema: *ref_25
+                      elements:
+                        - schema: *ref_11
+                          parentsValue:
+                            ProxyResource:
+                              schema: *ref_12
+                              parentsValue:
+                                Resource:
+                                  schema: *ref_16
+                                  parentsValue: {}
+                                  properties:
+                                    name:
+                                      schema: *ref_14
+                                      rawValue: '0'
+                                      language: *ref_155
+                                    type:
+                                      schema: *ref_15
+                                      rawValue: Microsoft.SerialConsole/serialPorts
+                                      language: *ref_156
+                                    id:
+                                      schema: *ref_13
+                                      rawValue: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                                      language: *ref_157
+                                  language: *ref_158
+                              properties: {}
+                              language: *ref_159
+                          properties:
+                            properties:
+                              schema: *ref_18
+                              parentsValue: {}
+                              properties:
+                                state:
+                                  schema: *ref_17
+                                  rawValue: enabled
+                                  language: *ref_160
+                              language: *ref_161
+                      language: *ref_162
+                  language: *ref_163
+        operation: *ref_153
+        operationGroup: *ref_154
+      - operationId: SerialPorts_Get
+        examples:
+          - name: Get the serial port for a parent resource
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_164
+                parameter: *ref_74
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_165
+                parameter: *ref_75
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachines
+                  language: *ref_166
+                parameter: *ref_76
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myVM
+                  language: *ref_167
+                parameter: *ref_77
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: '0'
+                  language: *ref_168
+                parameter: *ref_78
+            operation: *ref_169
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/GetSerialPort.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_11
+                  parentsValue:
+                    ProxyResource:
+                      schema: *ref_12
+                      parentsValue:
+                        Resource:
+                          schema: *ref_16
+                          parentsValue: {}
+                          properties:
+                            name:
+                              schema: *ref_14
+                              rawValue: '0'
+                              language: *ref_155
+                            type:
+                              schema: *ref_15
+                              rawValue: Microsoft.SerialConsole/serialPorts
+                              language: *ref_156
+                            id:
+                              schema: *ref_13
+                              rawValue: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                              language: *ref_157
+                          language: *ref_158
+                      properties: {}
+                      language: *ref_159
+                  properties:
+                    properties:
+                      schema: *ref_18
+                      parentsValue: {}
+                      properties:
+                        state:
+                          schema: *ref_17
+                          rawValue: enabled
+                          language: *ref_160
+                      language: *ref_161
+                  language: *ref_170
+        operation: *ref_169
+        operationGroup: *ref_154
+      - operationId: SerialPorts_Create
+        examples:
+          - name: Create a new serial port resource.
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_171
+                parameter: *ref_85
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_172
+                parameter: *ref_86
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachines
+                  language: *ref_173
+                parameter: *ref_87
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myVM
+                  language: *ref_174
+                parameter: *ref_88
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: '0'
+                  language: *ref_175
+                parameter: *ref_89
+              - exampleValue:
+                  schema: *ref_11
+                  parentsValue: {}
+                  properties:
+                    properties:
+                      schema: *ref_18
+                      parentsValue: {}
+                      properties:
+                        state:
+                          schema: *ref_17
+                          rawValue: enabled
+                          language: *ref_160
+                      language: *ref_161
+                  language: *ref_176
+                parameter: *ref_84
+            operation: *ref_177
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/CreateSerialPort.json
+            responses:
+              '201':
+                body:
+                  schema: *ref_11
+                  parentsValue:
+                    ProxyResource:
+                      schema: *ref_12
+                      parentsValue:
+                        Resource:
+                          schema: *ref_16
+                          parentsValue: {}
+                          properties:
+                            name:
+                              schema: *ref_14
+                              rawValue: '0'
+                              language: *ref_155
+                            type:
+                              schema: *ref_15
+                              rawValue: Microsoft.SerialConsole/serialPorts
+                              language: *ref_156
+                            id:
+                              schema: *ref_13
+                              rawValue: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                              language: *ref_157
+                          language: *ref_158
+                      properties: {}
+                      language: *ref_159
+                  properties:
+                    properties:
+                      schema: *ref_18
+                      parentsValue: {}
+                      properties:
+                        state:
+                          schema: *ref_17
+                          rawValue: enabled
+                          language: *ref_160
+                      language: *ref_161
+                  language: *ref_178
+        operation: *ref_177
+        operationGroup: *ref_154
+      - operationId: SerialPorts_Delete
+        examples:
+          - name: Delete a serial port resource
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_179
+                parameter: *ref_95
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_180
+                parameter: *ref_96
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachines
+                  language: *ref_181
+                parameter: *ref_97
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myVM
+                  language: *ref_182
+                parameter: *ref_98
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: '0'
+                  language: *ref_183
+                parameter: *ref_99
+            operation: *ref_184
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/DeleteSerialPort.json
+            responses:
+              '200': {}
+              '204': {}
+        operation: *ref_184
+        operationGroup: *ref_154
+      - operationId: SerialPorts_ListBySubscriptions
+        examples:
+          - name: List Serial Ports for subscription
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters: []
+            operation: *ref_185
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/ListSerialPortSubscription.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_67
+                  parentsValue: {}
+                  properties:
+                    value:
+                      schema: *ref_25
+                      elements:
+                        - schema: *ref_11
+                          parentsValue:
+                            ProxyResource:
+                              schema: *ref_12
+                              parentsValue:
+                                Resource:
+                                  schema: *ref_16
+                                  parentsValue: {}
+                                  properties:
+                                    name:
+                                      schema: *ref_14
+                                      rawValue: '0'
+                                      language: *ref_155
+                                    type:
+                                      schema: *ref_15
+                                      rawValue: Microsoft.SerialConsole/serialPorts
+                                      language: *ref_156
+                                    id:
+                                      schema: *ref_13
+                                      rawValue: /subscriptions/00000000-00000-0000-0000-000000000000/resourcegroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM/providers/Microsoft.SerialConsole/serialPorts/0
+                                      language: *ref_157
+                                  language: *ref_158
+                              properties: {}
+                              language: *ref_159
+                          properties:
+                            properties:
+                              schema: *ref_18
+                              parentsValue: {}
+                              properties:
+                                state:
+                                  schema: *ref_17
+                                  rawValue: enabled
+                                  language: *ref_160
+                              language: *ref_161
+                      language: *ref_162
+                  language: *ref_186
+        operation: *ref_185
+        operationGroup: *ref_154
+      - operationId: SerialPorts_Connect
+        examples:
+          - name: Connect to a scale set instance serial port
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_187
+                parameter: *ref_108
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_188
+                parameter: *ref_109
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachineScaleSets
+                  language: *ref_189
+                parameter: *ref_110
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myscaleset/virtualMachines/2
+                  language: *ref_190
+                parameter: *ref_111
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: '0'
+                  language: *ref_191
+                parameter: *ref_112
+            operation: *ref_192
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialPortConnectVMSS.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_113
+                  parentsValue: {}
+                  properties:
+                    connectionString:
+                      schema: *ref_23
+                      rawValue: wss://eastus.gateway.serialconsole.azure.com/n/connector/{containerid}/sessions/{sessionId}/client
+                      language: *ref_193
+                  language: *ref_194
+          - name: Connect to a virtual machine serial port
+            clientParameters:
+              - exampleValue:
+                  schema: *ref_27
+                  rawValue: '2018-05-01'
+                  language: *ref_119
+                parameter: *ref_29
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: 00000000-00000-0000-0000-000000000000
+                  language: *ref_131
+                parameter: *ref_37
+            methodParameters:
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myResourceGroup
+                  language: *ref_187
+                parameter: *ref_108
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: Microsoft.Compute
+                  language: *ref_188
+                parameter: *ref_109
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: virtualMachines
+                  language: *ref_189
+                parameter: *ref_110
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: myVM
+                  language: *ref_190
+                parameter: *ref_111
+              - exampleValue:
+                  schema: *ref_4
+                  rawValue: '0'
+                  language: *ref_191
+                parameter: *ref_112
+            operation: *ref_192
+            operationGroup: *ref_154
+            originalFile: specification/serialconsole/resource-manager/Microsoft.SerialConsole/stable/2018-05-01/examples/SerialPortConnectVM.json
+            responses:
+              '200':
+                body:
+                  schema: *ref_113
+                  parentsValue: {}
+                  properties:
+                    connectionString:
+                      schema: *ref_23
+                      rawValue: wss://eastus.gateway.serialconsole.azure.com/n/connector/{containerid}/sessions/{sessionId}/client
+                      language: *ref_193
+                  language: *ref_194
+        operation: *ref_192
+        operationGroup: *ref_154
+  scenarioTests: []
+language:
+  default:
+    name: MicrosoftSerialConsoleClient
+    description: ''
+  go:
+    name: MicrosoftSerialConsoleClient
+    description: ''
+    azureARM: true
+    exportClients: false
+    groupParameters: true
+    headAsBoolean: true
+    openApiType: arm
+    packageName: armserialconsole
+    parameterGroups:
+      - *ref_195
+      - *ref_196
+      - *ref_197
+      - *ref_198
+      - *ref_199
+      - *ref_200
+      - *ref_201
+      - *ref_202
+      - *ref_203
+      - *ref_204
+    responseEnvelopes:
+      - *ref_205
+      - *ref_206
+      - *ref_207
+      - *ref_208
+      - *ref_209
+      - *ref_210
+      - *ref_211
+      - *ref_212
+      - *ref_213
+      - *ref_214
+protocol:
+  http: {}

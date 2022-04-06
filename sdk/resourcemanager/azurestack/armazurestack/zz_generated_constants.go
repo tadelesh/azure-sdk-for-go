@@ -29,11 +29,6 @@ func PossibleCategoryValues() []Category {
 	}
 }
 
-// ToPtr returns a *Category pointing to the current value.
-func (c Category) ToPtr() *Category {
-	return &c
-}
-
 // CompatibilityIssue - Compatibility issue
 type CompatibilityIssue string
 
@@ -66,11 +61,6 @@ func PossibleCompatibilityIssueValues() []CompatibilityIssue {
 	}
 }
 
-// ToPtr returns a *CompatibilityIssue pointing to the current value.
-func (c CompatibilityIssue) ToPtr() *CompatibilityIssue {
-	return &c
-}
-
 // ComputeRole - Compute role type (IaaS or PaaS).
 type ComputeRole string
 
@@ -87,11 +77,6 @@ func PossibleComputeRoleValues() []ComputeRole {
 		ComputeRoleNone,
 		ComputeRolePaaS,
 	}
-}
-
-// ToPtr returns a *ComputeRole pointing to the current value.
-func (c ComputeRole) ToPtr() *ComputeRole {
-	return &c
 }
 
 // CreatedByType - The type of identity that created the resource.
@@ -114,11 +99,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // Location - Location of the resource.
 type Location string
 
@@ -131,11 +111,6 @@ func PossibleLocationValues() []Location {
 	return []Location{
 		LocationGlobal,
 	}
-}
-
-// ToPtr returns a *Location pointing to the current value.
-func (c Location) ToPtr() *Location {
-	return &c
 }
 
 // OperatingSystem - Operating system type (Windows or Linux).
@@ -156,11 +131,6 @@ func PossibleOperatingSystemValues() []OperatingSystem {
 	}
 }
 
-// ToPtr returns a *OperatingSystem pointing to the current value.
-func (c OperatingSystem) ToPtr() *OperatingSystem {
-	return &c
-}
-
 // ProvisioningState - The provisioning state of the resource.
 type ProvisioningState string
 
@@ -179,9 +149,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateSucceeded,
 		ProvisioningStateCanceled,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

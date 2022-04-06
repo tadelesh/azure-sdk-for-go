@@ -1207,7 +1207,7 @@ type Operation struct {
 	// The intended executor of the operation.
 	Origin *string `json:"origin,omitempty"`
 
-	// Properties of the operation.
+	// Anything
 	Properties interface{} `json:"properties,omitempty"`
 }
 
@@ -1855,7 +1855,7 @@ type VMExtension struct {
 	// Collection of extension names after which this extension needs to be provisioned.
 	ProvisionAfterExtensions []*string `json:"provisionAfterExtensions,omitempty"`
 
-	// JSON formatted public settings for the extension.
+	// Anything
 	Settings interface{} `json:"settings,omitempty"`
 
 	// The version of script handler.

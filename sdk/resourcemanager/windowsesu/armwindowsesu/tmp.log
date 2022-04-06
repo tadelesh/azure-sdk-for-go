@@ -1,0 +1,109 @@
+=== RUN   TestOperations_List
+    zt_generated_mock_test.go:55: Failed to advance page for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/ListOperations.json: GET https://localhost:8443/providers/Microsoft.WindowsESU/operations
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestOperations_List (0.24s)
+=== RUN   TestMultipleActivationKeys_List
+    zt_generated_mock_test.go:94: Failed to advance page for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/ListMultipleActivationKeys.json: GET https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/providers/Microsoft.WindowsESU/multipleActivationKeys
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_List (0.06s)
+=== RUN   TestMultipleActivationKeys_ListByResourceGroup
+    zt_generated_mock_test.go:157: Failed to advance page for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/ListMultipleActivationKeysByResourceGroup.json: GET https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/testrg1/providers/Microsoft.WindowsESU/multipleActivationKeys
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_ListByResourceGroup (0.05s)
+=== RUN   TestMultipleActivationKeys_Get
+    zt_generated_mock_test.go:220: Failed to get result for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/GetMultipleActivationKey.json: GET https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/testgr1/providers/Microsoft.WindowsESU/multipleActivationKeys/server08-key-2019
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_Get (0.05s)
+=== RUN   TestMultipleActivationKeys_Create
+    zt_generated_mock_test.go:274: Failed to get result for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/CreateMultipleActivationKey.json: PUT https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/testgr1/providers/Microsoft.WindowsESU/multipleActivationKeys/server08-key-2019
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_Create (0.06s)
+=== RUN   TestMultipleActivationKeys_Update
+    zt_generated_mock_test.go:328: Failed to get result for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/UpdateMultipleActivationKey.json: PATCH https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/testgr1/providers/Microsoft.WindowsESU/multipleActivationKeys/server08-key-2019
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_Update (0.06s)
+=== RUN   TestMultipleActivationKeys_Delete
+    zt_generated_mock_test.go:376: Failed to get result for example specification/windowsesu/resource-manager/Microsoft.WindowsESU/preview/2019-09-16-preview/examples/DeleteMultipleActivationKey.json: DELETE https://localhost:8443/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/testgr1/providers/Microsoft.WindowsESU/multipleActivationKeys/server08-key-2019
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-09-16-preview\" don't match example value \"2019-09-16\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestMultipleActivationKeys_Delete (0.05s)
+FAIL
+coverage: 53.7% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/windowsesu/armwindowsesu	1.733s

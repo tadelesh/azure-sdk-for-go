@@ -29,11 +29,6 @@ func PossibleAccuracyValues() []Accuracy {
 	}
 }
 
-// ToPtr returns a *Accuracy pointing to the current value.
-func (c Accuracy) ToPtr() *Accuracy {
-	return &c
-}
-
 // AzureCloudServiceRoleType - Used to specify type of an Azure Cloud Service role
 type AzureCloudServiceRoleType string
 
@@ -52,11 +47,6 @@ func PossibleAzureCloudServiceRoleTypeValues() []AzureCloudServiceRoleType {
 	}
 }
 
-// ToPtr returns a *AzureCloudServiceRoleType pointing to the current value.
-func (c AzureCloudServiceRoleType) ToPtr() *AzureCloudServiceRoleType {
-	return &c
-}
-
 // Bitness - Specifies the bitness of a machine or process.
 type Bitness string
 
@@ -71,11 +61,6 @@ func PossibleBitnessValues() []Bitness {
 		BitnessThirtyTwoBit,
 		BitnessSixtyFourBit,
 	}
-}
-
-// ToPtr returns a *Bitness pointing to the current value.
-func (c Bitness) ToPtr() *Bitness {
-	return &c
 }
 
 // ConnectionFailureState - Connection failure state:
@@ -97,11 +82,6 @@ func PossibleConnectionFailureStateValues() []ConnectionFailureState {
 		ConnectionFailureStateFailed,
 		ConnectionFailureStateMixed,
 	}
-}
-
-// ToPtr returns a *ConnectionFailureState pointing to the current value.
-func (c ConnectionFailureState) ToPtr() *ConnectionFailureState {
-	return &c
 }
 
 // CoreResourceKind - Additional resource type qualifier.
@@ -126,11 +106,6 @@ func PossibleCoreResourceKindValues() []CoreResourceKind {
 	}
 }
 
-// ToPtr returns a *CoreResourceKind pointing to the current value.
-func (c CoreResourceKind) ToPtr() *CoreResourceKind {
-	return &c
-}
-
 // HostingConfigurationKind - Additional hosting configuration type qualifier.
 type HostingConfigurationKind string
 
@@ -143,11 +118,6 @@ func PossibleHostingConfigurationKindValues() []HostingConfigurationKind {
 	return []HostingConfigurationKind{	
 		HostingConfigurationKindProviderAzure,
 	}
-}
-
-// ToPtr returns a *HostingConfigurationKind pointing to the current value.
-func (c HostingConfigurationKind) ToPtr() *HostingConfigurationKind {
-	return &c
 }
 
 // HostingConfigurationProvider - The hosting provider of the VM.
@@ -164,11 +134,6 @@ func PossibleHostingConfigurationProviderValues() []HostingConfigurationProvider
 	}
 }
 
-// ToPtr returns a *HostingConfigurationProvider pointing to the current value.
-func (c HostingConfigurationProvider) ToPtr() *HostingConfigurationProvider {
-	return &c
-}
-
 // HypervisorType - Specifies the hypervisor type of a machine.
 type HypervisorType string
 
@@ -183,11 +148,6 @@ func PossibleHypervisorTypeValues() []HypervisorType {
 		HypervisorTypeUnknown,
 		HypervisorTypeHyperv,
 	}
-}
-
-// ToPtr returns a *HypervisorType pointing to the current value.
-func (c HypervisorType) ToPtr() *HypervisorType {
-	return &c
 }
 
 // MachineGroupType - Type of the machine group
@@ -212,11 +172,6 @@ func PossibleMachineGroupTypeValues() []MachineGroupType {
 	}
 }
 
-// ToPtr returns a *MachineGroupType pointing to the current value.
-func (c MachineGroupType) ToPtr() *MachineGroupType {
-	return &c
-}
-
 // MachineRebootStatus - Specifies if the machine has been rebooted since the installation of the dependency agent.
 type MachineRebootStatus string
 
@@ -233,11 +188,6 @@ func PossibleMachineRebootStatusValues() []MachineRebootStatus {
 		MachineRebootStatusRebooted,
 		MachineRebootStatusNotRebooted,
 	}
-}
-
-// ToPtr returns a *MachineRebootStatus pointing to the current value.
-func (c MachineRebootStatus) ToPtr() *MachineRebootStatus {
-	return &c
 }
 
 // MapRequestKind - The type of map to create.
@@ -258,11 +208,6 @@ func PossibleMapRequestKindValues() []MapRequestKind {
 	}
 }
 
-// ToPtr returns a *MapRequestKind pointing to the current value.
-func (c MapRequestKind) ToPtr() *MapRequestKind {
-	return &c
-}
-
 // MonitoringState - Used to specify if a resources is monitored or discovered.
 type MonitoringState string
 
@@ -277,11 +222,6 @@ func PossibleMonitoringStateValues() []MonitoringState {
 		MonitoringStateMonitored,
 		MonitoringStateDiscovered,
 	}
-}
-
-// ToPtr returns a *MonitoringState pointing to the current value.
-func (c MonitoringState) ToPtr() *MonitoringState {
-	return &c
 }
 
 // OperatingSystemFamily - Specifies the operating system family, e.g., Linux, Windows, etc.
@@ -306,11 +246,6 @@ func PossibleOperatingSystemFamilyValues() []OperatingSystemFamily {
 	}
 }
 
-// ToPtr returns a *OperatingSystemFamily pointing to the current value.
-func (c OperatingSystemFamily) ToPtr() *OperatingSystemFamily {
-	return &c
-}
-
 // ProcessHostingConfigurationKind - Additional hosting configuration type qualifier.
 type ProcessHostingConfigurationKind string
 
@@ -325,11 +260,6 @@ func PossibleProcessHostingConfigurationKindValues() []ProcessHostingConfigurati
 	}
 }
 
-// ToPtr returns a *ProcessHostingConfigurationKind pointing to the current value.
-func (c ProcessHostingConfigurationKind) ToPtr() *ProcessHostingConfigurationKind {
-	return &c
-}
-
 // ProcessHostingConfigurationProvider - The hosting provider of the VM.
 type ProcessHostingConfigurationProvider string
 
@@ -342,11 +272,6 @@ func PossibleProcessHostingConfigurationProviderValues() []ProcessHostingConfigu
 	return []ProcessHostingConfigurationProvider{	
 		ProcessHostingConfigurationProviderAzure,
 	}
-}
-
-// ToPtr returns a *ProcessHostingConfigurationProvider pointing to the current value.
-func (c ProcessHostingConfigurationProvider) ToPtr() *ProcessHostingConfigurationProvider {
-	return &c
 }
 
 // ProcessRole - The inferred role of this process based on its name, command line, etc.
@@ -371,11 +296,6 @@ func PossibleProcessRoleValues() []ProcessRole {
 	}
 }
 
-// ToPtr returns a *ProcessRole pointing to the current value.
-func (c ProcessRole) ToPtr() *ProcessRole {
-	return &c
-}
-
 // RelationshipKind - Additional resource type qualifier.
 type RelationshipKind string
 
@@ -390,11 +310,6 @@ func PossibleRelationshipKindValues() []RelationshipKind {
 		RelationshipKindRelAcceptor,
 		RelationshipKindRelConnection,
 	}
-}
-
-// ToPtr returns a *RelationshipKind pointing to the current value.
-func (c RelationshipKind) ToPtr() *RelationshipKind {
-	return &c
 }
 
 // ResourceReferenceKind - Specifies the sub-class of the reference.
@@ -419,11 +334,6 @@ func PossibleResourceReferenceKindValues() []ResourceReferenceKind {
 		ResourceReferenceKindRefPort,
 		ResourceReferenceKindRefProcess,
 	}
-}
-
-// ToPtr returns a *ResourceReferenceKind pointing to the current value.
-func (c ResourceReferenceKind) ToPtr() *ResourceReferenceKind {
-	return &c
 }
 
 // VirtualMachineType - Specifies the virtualization type of a machine.
@@ -452,11 +362,6 @@ func PossibleVirtualMachineTypeValues() []VirtualMachineType {
 	}
 }
 
-// ToPtr returns a *VirtualMachineType pointing to the current value.
-func (c VirtualMachineType) ToPtr() *VirtualMachineType {
-	return &c
-}
-
 // VirtualizationState - Specifies if the machine is physical, virtual, hypervisor, or unknown.
 type VirtualizationState string
 
@@ -475,10 +380,5 @@ func PossibleVirtualizationStateValues() []VirtualizationState {
 		VirtualizationStateVirtual,
 		VirtualizationStateHypervisor,
 	}
-}
-
-// ToPtr returns a *VirtualizationState pointing to the current value.
-func (c VirtualizationState) ToPtr() *VirtualizationState {
-	return &c
 }
 

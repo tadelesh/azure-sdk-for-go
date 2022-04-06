@@ -29,11 +29,6 @@ func PossibleAFDEndpointProtocolsValues() []AFDEndpointProtocols {
 	}
 }
 
-// ToPtr returns a *AFDEndpointProtocols pointing to the current value.
-func (c AFDEndpointProtocols) ToPtr() *AFDEndpointProtocols {
-	return &c
-}
-
 // ActionType - Defines the action to take on rule match.
 type ActionType string
 
@@ -54,11 +49,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // AfdCertificateType - Defines the source of the SSL certificate.
 type AfdCertificateType string
 
@@ -77,11 +67,6 @@ func PossibleAfdCertificateTypeValues() []AfdCertificateType {
 	}
 }
 
-// ToPtr returns a *AfdCertificateType pointing to the current value.
-func (c AfdCertificateType) ToPtr() *AfdCertificateType {
-	return &c
-}
-
 // AfdMinimumTLSVersion - TLS protocol version that will be used for Https
 type AfdMinimumTLSVersion string
 
@@ -96,11 +81,6 @@ func PossibleAfdMinimumTLSVersionValues() []AfdMinimumTLSVersion {
 		AfdMinimumTLSVersionTLS10,
 		AfdMinimumTLSVersionTLS12,
 	}
-}
-
-// ToPtr returns a *AfdMinimumTLSVersion pointing to the current value.
-func (c AfdMinimumTLSVersion) ToPtr() *AfdMinimumTLSVersion {
-	return &c
 }
 
 // AfdProvisioningState - Provisioning status
@@ -125,11 +105,6 @@ func PossibleAfdProvisioningStateValues() []AfdProvisioningState {
 	}
 }
 
-// ToPtr returns a *AfdProvisioningState pointing to the current value.
-func (c AfdProvisioningState) ToPtr() *AfdProvisioningState {
-	return &c
-}
-
 // AfdQueryStringCachingBehavior - Defines how Frontdoor caches requests that include query strings. You can ignore any query
 // strings when caching, ignore specific query strings, cache every request with a unique URL, or cache specific
 // query strings.
@@ -152,11 +127,6 @@ func PossibleAfdQueryStringCachingBehaviorValues() []AfdQueryStringCachingBehavi
 	}
 }
 
-// ToPtr returns a *AfdQueryStringCachingBehavior pointing to the current value.
-func (c AfdQueryStringCachingBehavior) ToPtr() *AfdQueryStringCachingBehavior {
-	return &c
-}
-
 // Algorithm - Algorithm to use for URL signing
 type Algorithm string
 
@@ -169,11 +139,6 @@ func PossibleAlgorithmValues() []Algorithm {
 	return []Algorithm{
 		AlgorithmSHA256,
 	}
-}
-
-// ToPtr returns a *Algorithm pointing to the current value.
-func (c Algorithm) ToPtr() *Algorithm {
-	return &c
 }
 
 // CacheBehavior - Caching behavior for the requests
@@ -194,11 +159,6 @@ func PossibleCacheBehaviorValues() []CacheBehavior {
 	}
 }
 
-// ToPtr returns a *CacheBehavior pointing to the current value.
-func (c CacheBehavior) ToPtr() *CacheBehavior {
-	return &c
-}
-
 type CacheExpirationActionParametersTypeName string
 
 const (
@@ -212,11 +172,6 @@ func PossibleCacheExpirationActionParametersTypeNameValues() []CacheExpirationAc
 	}
 }
 
-// ToPtr returns a *CacheExpirationActionParametersTypeName pointing to the current value.
-func (c CacheExpirationActionParametersTypeName) ToPtr() *CacheExpirationActionParametersTypeName {
-	return &c
-}
-
 type CacheKeyQueryStringActionParametersTypeName string
 
 const (
@@ -228,11 +183,6 @@ func PossibleCacheKeyQueryStringActionParametersTypeNameValues() []CacheKeyQuery
 	return []CacheKeyQueryStringActionParametersTypeName{
 		CacheKeyQueryStringActionParametersTypeNameDeliveryRuleCacheKeyQueryStringBehaviorActionParameters,
 	}
-}
-
-// ToPtr returns a *CacheKeyQueryStringActionParametersTypeName pointing to the current value.
-func (c CacheKeyQueryStringActionParametersTypeName) ToPtr() *CacheKeyQueryStringActionParametersTypeName {
-	return &c
 }
 
 // CacheType - The level at which the content needs to be cached.
@@ -249,11 +199,6 @@ func PossibleCacheTypeValues() []CacheType {
 	}
 }
 
-// ToPtr returns a *CacheType pointing to the current value.
-func (c CacheType) ToPtr() *CacheType {
-	return &c
-}
-
 type CdnCertificateSourceParametersTypeName string
 
 const (
@@ -265,11 +210,6 @@ func PossibleCdnCertificateSourceParametersTypeNameValues() []CdnCertificateSour
 	return []CdnCertificateSourceParametersTypeName{
 		CdnCertificateSourceParametersTypeNameCdnCertificateSourceParameters,
 	}
-}
-
-// ToPtr returns a *CdnCertificateSourceParametersTypeName pointing to the current value.
-func (c CdnCertificateSourceParametersTypeName) ToPtr() *CdnCertificateSourceParametersTypeName {
-	return &c
 }
 
 // CertificateSource - Defines the source of the SSL certificate.
@@ -288,11 +228,6 @@ func PossibleCertificateSourceValues() []CertificateSource {
 	}
 }
 
-// ToPtr returns a *CertificateSource pointing to the current value.
-func (c CertificateSource) ToPtr() *CertificateSource {
-	return &c
-}
-
 // CertificateType - Type of certificate used
 type CertificateType string
 
@@ -309,11 +244,6 @@ func PossibleCertificateTypeValues() []CertificateType {
 	}
 }
 
-// ToPtr returns a *CertificateType pointing to the current value.
-func (c CertificateType) ToPtr() *CertificateType {
-	return &c
-}
-
 type ClientPortMatchConditionParametersTypeName string
 
 const (
@@ -325,11 +255,6 @@ func PossibleClientPortMatchConditionParametersTypeNameValues() []ClientPortMatc
 	return []ClientPortMatchConditionParametersTypeName{
 		ClientPortMatchConditionParametersTypeNameDeliveryRuleClientPortConditionParameters,
 	}
-}
-
-// ToPtr returns a *ClientPortMatchConditionParametersTypeName pointing to the current value.
-func (c ClientPortMatchConditionParametersTypeName) ToPtr() *ClientPortMatchConditionParametersTypeName {
-	return &c
 }
 
 // ClientPortOperator - Describes operator to be matched
@@ -364,11 +289,6 @@ func PossibleClientPortOperatorValues() []ClientPortOperator {
 	}
 }
 
-// ToPtr returns a *ClientPortOperator pointing to the current value.
-func (c ClientPortOperator) ToPtr() *ClientPortOperator {
-	return &c
-}
-
 type CookiesMatchConditionParametersTypeName string
 
 const (
@@ -380,11 +300,6 @@ func PossibleCookiesMatchConditionParametersTypeNameValues() []CookiesMatchCondi
 	return []CookiesMatchConditionParametersTypeName{
 		CookiesMatchConditionParametersTypeNameDeliveryRuleCookiesConditionParameters,
 	}
-}
-
-// ToPtr returns a *CookiesMatchConditionParametersTypeName pointing to the current value.
-func (c CookiesMatchConditionParametersTypeName) ToPtr() *CookiesMatchConditionParametersTypeName {
-	return &c
 }
 
 // CookiesOperator - Describes operator to be matched
@@ -419,11 +334,6 @@ func PossibleCookiesOperatorValues() []CookiesOperator {
 	}
 }
 
-// ToPtr returns a *CookiesOperator pointing to the current value.
-func (c CookiesOperator) ToPtr() *CookiesOperator {
-	return &c
-}
-
 // CustomDomainResourceState - Resource status of the custom domain.
 type CustomDomainResourceState string
 
@@ -440,11 +350,6 @@ func PossibleCustomDomainResourceStateValues() []CustomDomainResourceState {
 		CustomDomainResourceStateCreating,
 		CustomDomainResourceStateDeleting,
 	}
-}
-
-// ToPtr returns a *CustomDomainResourceState pointing to the current value.
-func (c CustomDomainResourceState) ToPtr() *CustomDomainResourceState {
-	return &c
 }
 
 // CustomHTTPSProvisioningState - Provisioning status of Custom Https of the custom domain.
@@ -467,11 +372,6 @@ func PossibleCustomHTTPSProvisioningStateValues() []CustomHTTPSProvisioningState
 		CustomHTTPSProvisioningStateEnabling,
 		CustomHTTPSProvisioningStateFailed,
 	}
-}
-
-// ToPtr returns a *CustomHTTPSProvisioningState pointing to the current value.
-func (c CustomHTTPSProvisioningState) ToPtr() *CustomHTTPSProvisioningState {
-	return &c
 }
 
 // CustomHTTPSProvisioningSubstate - Provisioning substate shows the progress of custom HTTPS enabling/disabling process step
@@ -507,11 +407,6 @@ func PossibleCustomHTTPSProvisioningSubstateValues() []CustomHTTPSProvisioningSu
 	}
 }
 
-// ToPtr returns a *CustomHTTPSProvisioningSubstate pointing to the current value.
-func (c CustomHTTPSProvisioningSubstate) ToPtr() *CustomHTTPSProvisioningSubstate {
-	return &c
-}
-
 // CustomRuleEnabledState - Describes if the custom rule is in enabled or disabled state. Defaults to Enabled if not specified.
 type CustomRuleEnabledState string
 
@@ -528,11 +423,6 @@ func PossibleCustomRuleEnabledStateValues() []CustomRuleEnabledState {
 	}
 }
 
-// ToPtr returns a *CustomRuleEnabledState pointing to the current value.
-func (c CustomRuleEnabledState) ToPtr() *CustomRuleEnabledState {
-	return &c
-}
-
 // DeleteRule - Describes the action that shall be taken when the certificate is removed from Key Vault.
 type DeleteRule string
 
@@ -545,11 +435,6 @@ func PossibleDeleteRuleValues() []DeleteRule {
 	return []DeleteRule{
 		DeleteRuleNoAction,
 	}
-}
-
-// ToPtr returns a *DeleteRule pointing to the current value.
-func (c DeleteRule) ToPtr() *DeleteRule {
-	return &c
 }
 
 // DeliveryRuleAction - The name of the action for the delivery rule.
@@ -582,11 +467,6 @@ func PossibleDeliveryRuleActionValues() []DeliveryRuleAction {
 	}
 }
 
-// ToPtr returns a *DeliveryRuleAction pointing to the current value.
-func (c DeliveryRuleAction) ToPtr() *DeliveryRuleAction {
-	return &c
-}
-
 type DeploymentStatus string
 
 const (
@@ -606,11 +486,6 @@ func PossibleDeploymentStatusValues() []DeploymentStatus {
 	}
 }
 
-// ToPtr returns a *DeploymentStatus pointing to the current value.
-func (c DeploymentStatus) ToPtr() *DeploymentStatus {
-	return &c
-}
-
 // DestinationProtocol - Protocol to use for the redirect. The default value is MatchRequest
 type DestinationProtocol string
 
@@ -627,11 +502,6 @@ func PossibleDestinationProtocolValues() []DestinationProtocol {
 		DestinationProtocolHTTPS,
 		DestinationProtocolMatchRequest,
 	}
-}
-
-// ToPtr returns a *DestinationProtocol pointing to the current value.
-func (c DestinationProtocol) ToPtr() *DestinationProtocol {
-	return &c
 }
 
 // DomainValidationState - Provisioning substate shows the progress of custom HTTPS enabling/disabling process step by step.
@@ -661,11 +531,6 @@ func PossibleDomainValidationStateValues() []DomainValidationState {
 	}
 }
 
-// ToPtr returns a *DomainValidationState pointing to the current value.
-func (c DomainValidationState) ToPtr() *DomainValidationState {
-	return &c
-}
-
 // EnabledState - Whether to enable use of this rule. Permitted values are 'Enabled' or 'Disabled'
 type EnabledState string
 
@@ -680,11 +545,6 @@ func PossibleEnabledStateValues() []EnabledState {
 		EnabledStateDisabled,
 		EnabledStateEnabled,
 	}
-}
-
-// ToPtr returns a *EnabledState pointing to the current value.
-func (c EnabledState) ToPtr() *EnabledState {
-	return &c
 }
 
 // EndpointResourceState - Resource status of the endpoint.
@@ -711,11 +571,6 @@ func PossibleEndpointResourceStateValues() []EndpointResourceState {
 	}
 }
 
-// ToPtr returns a *EndpointResourceState pointing to the current value.
-func (c EndpointResourceState) ToPtr() *EndpointResourceState {
-	return &c
-}
-
 // ForwardingProtocol - Protocol this rule will use when forwarding traffic to backends.
 type ForwardingProtocol string
 
@@ -734,11 +589,6 @@ func PossibleForwardingProtocolValues() []ForwardingProtocol {
 	}
 }
 
-// ToPtr returns a *ForwardingProtocol pointing to the current value.
-func (c ForwardingProtocol) ToPtr() *ForwardingProtocol {
-	return &c
-}
-
 // GeoFilterActions - Action of the geo filter, i.e. allow or block access.
 type GeoFilterActions string
 
@@ -753,11 +603,6 @@ func PossibleGeoFilterActionsValues() []GeoFilterActions {
 		GeoFilterActionsBlock,
 		GeoFilterActionsAllow,
 	}
-}
-
-// ToPtr returns a *GeoFilterActions pointing to the current value.
-func (c GeoFilterActions) ToPtr() *GeoFilterActions {
-	return &c
 }
 
 // HTTPSRedirect - Whether to automatically redirect HTTP traffic to HTTPS traffic. Note that this is a easy way to set up
@@ -777,11 +622,6 @@ func PossibleHTTPSRedirectValues() []HTTPSRedirect {
 	}
 }
 
-// ToPtr returns a *HTTPSRedirect pointing to the current value.
-func (c HTTPSRedirect) ToPtr() *HTTPSRedirect {
-	return &c
-}
-
 type HTTPVersionMatchConditionParametersTypeName string
 
 const (
@@ -793,11 +633,6 @@ func PossibleHTTPVersionMatchConditionParametersTypeNameValues() []HTTPVersionMa
 	return []HTTPVersionMatchConditionParametersTypeName{
 		HTTPVersionMatchConditionParametersTypeNameDeliveryRuleHTTPVersionConditionParameters,
 	}
-}
-
-// ToPtr returns a *HTTPVersionMatchConditionParametersTypeName pointing to the current value.
-func (c HTTPVersionMatchConditionParametersTypeName) ToPtr() *HTTPVersionMatchConditionParametersTypeName {
-	return &c
 }
 
 // HTTPVersionOperator - Describes operator to be matched
@@ -812,11 +647,6 @@ func PossibleHTTPVersionOperatorValues() []HTTPVersionOperator {
 	return []HTTPVersionOperator{
 		HTTPVersionOperatorEqual,
 	}
-}
-
-// ToPtr returns a *HTTPVersionOperator pointing to the current value.
-func (c HTTPVersionOperator) ToPtr() *HTTPVersionOperator {
-	return &c
 }
 
 // HeaderAction - Action to perform
@@ -837,11 +667,6 @@ func PossibleHeaderActionValues() []HeaderAction {
 	}
 }
 
-// ToPtr returns a *HeaderAction pointing to the current value.
-func (c HeaderAction) ToPtr() *HeaderAction {
-	return &c
-}
-
 type HeaderActionParametersTypeName string
 
 const (
@@ -853,11 +678,6 @@ func PossibleHeaderActionParametersTypeNameValues() []HeaderActionParametersType
 	return []HeaderActionParametersTypeName{
 		HeaderActionParametersTypeNameDeliveryRuleHeaderActionParameters,
 	}
-}
-
-// ToPtr returns a *HeaderActionParametersTypeName pointing to the current value.
-func (c HeaderActionParametersTypeName) ToPtr() *HeaderActionParametersTypeName {
-	return &c
 }
 
 // HealthProbeRequestType - The type of health probe request that is made.
@@ -878,11 +698,6 @@ func PossibleHealthProbeRequestTypeValues() []HealthProbeRequestType {
 	}
 }
 
-// ToPtr returns a *HealthProbeRequestType pointing to the current value.
-func (c HealthProbeRequestType) ToPtr() *HealthProbeRequestType {
-	return &c
-}
-
 type HostNameMatchConditionParametersTypeName string
 
 const (
@@ -894,11 +709,6 @@ func PossibleHostNameMatchConditionParametersTypeNameValues() []HostNameMatchCon
 	return []HostNameMatchConditionParametersTypeName{
 		HostNameMatchConditionParametersTypeNameDeliveryRuleHostNameConditionParameters,
 	}
-}
-
-// ToPtr returns a *HostNameMatchConditionParametersTypeName pointing to the current value.
-func (c HostNameMatchConditionParametersTypeName) ToPtr() *HostNameMatchConditionParametersTypeName {
-	return &c
 }
 
 // HostNameOperator - Describes operator to be matched
@@ -933,11 +743,6 @@ func PossibleHostNameOperatorValues() []HostNameOperator {
 	}
 }
 
-// ToPtr returns a *HostNameOperator pointing to the current value.
-func (c HostNameOperator) ToPtr() *HostNameOperator {
-	return &c
-}
-
 // IdentityType - The type of identity that creates/modifies resources
 type IdentityType string
 
@@ -958,11 +763,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 type IsDeviceMatchConditionParametersMatchValuesItem string
 
 const (
@@ -978,11 +778,6 @@ func PossibleIsDeviceMatchConditionParametersMatchValuesItemValues() []IsDeviceM
 	}
 }
 
-// ToPtr returns a *IsDeviceMatchConditionParametersMatchValuesItem pointing to the current value.
-func (c IsDeviceMatchConditionParametersMatchValuesItem) ToPtr() *IsDeviceMatchConditionParametersMatchValuesItem {
-	return &c
-}
-
 type IsDeviceMatchConditionParametersTypeName string
 
 const (
@@ -994,11 +789,6 @@ func PossibleIsDeviceMatchConditionParametersTypeNameValues() []IsDeviceMatchCon
 	return []IsDeviceMatchConditionParametersTypeName{
 		IsDeviceMatchConditionParametersTypeNameDeliveryRuleIsDeviceConditionParameters,
 	}
-}
-
-// ToPtr returns a *IsDeviceMatchConditionParametersTypeName pointing to the current value.
-func (c IsDeviceMatchConditionParametersTypeName) ToPtr() *IsDeviceMatchConditionParametersTypeName {
-	return &c
 }
 
 // IsDeviceOperator - Describes operator to be matched
@@ -1015,11 +805,6 @@ func PossibleIsDeviceOperatorValues() []IsDeviceOperator {
 	}
 }
 
-// ToPtr returns a *IsDeviceOperator pointing to the current value.
-func (c IsDeviceOperator) ToPtr() *IsDeviceOperator {
-	return &c
-}
-
 type KeyVaultCertificateSourceParametersTypeName string
 
 const (
@@ -1033,11 +818,6 @@ func PossibleKeyVaultCertificateSourceParametersTypeNameValues() []KeyVaultCerti
 	}
 }
 
-// ToPtr returns a *KeyVaultCertificateSourceParametersTypeName pointing to the current value.
-func (c KeyVaultCertificateSourceParametersTypeName) ToPtr() *KeyVaultCertificateSourceParametersTypeName {
-	return &c
-}
-
 type KeyVaultSigningKeyParametersTypeName string
 
 const (
@@ -1049,11 +829,6 @@ func PossibleKeyVaultSigningKeyParametersTypeNameValues() []KeyVaultSigningKeyPa
 	return []KeyVaultSigningKeyParametersTypeName{
 		KeyVaultSigningKeyParametersTypeNameKeyVaultSigningKeyParameters,
 	}
-}
-
-// ToPtr returns a *KeyVaultSigningKeyParametersTypeName pointing to the current value.
-func (c KeyVaultSigningKeyParametersTypeName) ToPtr() *KeyVaultSigningKeyParametersTypeName {
-	return &c
 }
 
 // LinkToDefaultDomain - whether this route will be linked to the default endpoint domain.
@@ -1070,11 +845,6 @@ func PossibleLinkToDefaultDomainValues() []LinkToDefaultDomain {
 		LinkToDefaultDomainDisabled,
 		LinkToDefaultDomainEnabled,
 	}
-}
-
-// ToPtr returns a *LinkToDefaultDomain pointing to the current value.
-func (c LinkToDefaultDomain) ToPtr() *LinkToDefaultDomain {
-	return &c
 }
 
 type LogMetric string
@@ -1100,11 +870,6 @@ func PossibleLogMetricValues() []LogMetric {
 	}
 }
 
-// ToPtr returns a *LogMetric pointing to the current value.
-func (c LogMetric) ToPtr() *LogMetric {
-	return &c
-}
-
 type LogMetricsGranularity string
 
 const (
@@ -1120,11 +885,6 @@ func PossibleLogMetricsGranularityValues() []LogMetricsGranularity {
 		LogMetricsGranularityPT1H,
 		LogMetricsGranularityPT5M,
 	}
-}
-
-// ToPtr returns a *LogMetricsGranularity pointing to the current value.
-func (c LogMetricsGranularity) ToPtr() *LogMetricsGranularity {
-	return &c
 }
 
 type LogMetricsGroupBy string
@@ -1148,11 +908,6 @@ func PossibleLogMetricsGroupByValues() []LogMetricsGroupBy {
 	}
 }
 
-// ToPtr returns a *LogMetricsGroupBy pointing to the current value.
-func (c LogMetricsGroupBy) ToPtr() *LogMetricsGroupBy {
-	return &c
-}
-
 type LogRanking string
 
 const (
@@ -1172,11 +927,6 @@ func PossibleLogRankingValues() []LogRanking {
 		LogRankingURL,
 		LogRankingUserAgent,
 	}
-}
-
-// ToPtr returns a *LogRanking pointing to the current value.
-func (c LogRanking) ToPtr() *LogRanking {
-	return &c
 }
 
 type LogRankingMetric string
@@ -1202,11 +952,6 @@ func PossibleLogRankingMetricValues() []LogRankingMetric {
 	}
 }
 
-// ToPtr returns a *LogRankingMetric pointing to the current value.
-func (c LogRankingMetric) ToPtr() *LogRankingMetric {
-	return &c
-}
-
 // ManagedRuleEnabledState - Describes if the managed rule is in enabled or disabled state. Defaults to Disabled if not specified.
 type ManagedRuleEnabledState string
 
@@ -1221,11 +966,6 @@ func PossibleManagedRuleEnabledStateValues() []ManagedRuleEnabledState {
 		ManagedRuleEnabledStateDisabled,
 		ManagedRuleEnabledStateEnabled,
 	}
-}
-
-// ToPtr returns a *ManagedRuleEnabledState pointing to the current value.
-func (c ManagedRuleEnabledState) ToPtr() *ManagedRuleEnabledState {
-	return &c
 }
 
 // ManagedServiceIdentityType - Type of managed service identity.
@@ -1248,11 +988,6 @@ func PossibleManagedServiceIdentityTypeValues() []ManagedServiceIdentityType {
 	}
 }
 
-// ToPtr returns a *ManagedServiceIdentityType pointing to the current value.
-func (c ManagedServiceIdentityType) ToPtr() *ManagedServiceIdentityType {
-	return &c
-}
-
 // MatchProcessingBehavior - If this rule is a match should the rules engine continue running the remaining rules or stop.
 // If not present, defaults to Continue.
 type MatchProcessingBehavior string
@@ -1268,11 +1003,6 @@ func PossibleMatchProcessingBehaviorValues() []MatchProcessingBehavior {
 		MatchProcessingBehaviorContinue,
 		MatchProcessingBehaviorStop,
 	}
-}
-
-// ToPtr returns a *MatchProcessingBehavior pointing to the current value.
-func (c MatchProcessingBehavior) ToPtr() *MatchProcessingBehavior {
-	return &c
 }
 
 // MatchVariable - The name of the condition for the delivery rule.
@@ -1325,11 +1055,6 @@ func PossibleMatchVariableValues() []MatchVariable {
 	}
 }
 
-// ToPtr returns a *MatchVariable pointing to the current value.
-func (c MatchVariable) ToPtr() *MatchVariable {
-	return &c
-}
-
 type MetricsResponseGranularity string
 
 const (
@@ -1345,11 +1070,6 @@ func PossibleMetricsResponseGranularityValues() []MetricsResponseGranularity {
 		MetricsResponseGranularityPT1H,
 		MetricsResponseGranularityPT5M,
 	}
-}
-
-// ToPtr returns a *MetricsResponseGranularity pointing to the current value.
-func (c MetricsResponseGranularity) ToPtr() *MetricsResponseGranularity {
-	return &c
 }
 
 type MetricsResponseSeriesItemUnit string
@@ -1371,11 +1091,6 @@ func PossibleMetricsResponseSeriesItemUnitValues() []MetricsResponseSeriesItemUn
 	}
 }
 
-// ToPtr returns a *MetricsResponseSeriesItemUnit pointing to the current value.
-func (c MetricsResponseSeriesItemUnit) ToPtr() *MetricsResponseSeriesItemUnit {
-	return &c
-}
-
 // MinimumTLSVersion - TLS protocol version that will be used for Https
 type MinimumTLSVersion string
 
@@ -1392,11 +1107,6 @@ func PossibleMinimumTLSVersionValues() []MinimumTLSVersion {
 		MinimumTLSVersionTLS10,
 		MinimumTLSVersionTLS12,
 	}
-}
-
-// ToPtr returns a *MinimumTLSVersion pointing to the current value.
-func (c MinimumTLSVersion) ToPtr() *MinimumTLSVersion {
-	return &c
 }
 
 // Operator - Describes operator to be matched
@@ -1435,11 +1145,6 @@ func PossibleOperatorValues() []Operator {
 	}
 }
 
-// ToPtr returns a *Operator pointing to the current value.
-func (c Operator) ToPtr() *Operator {
-	return &c
-}
-
 // OptimizationType - Specifies what scenario the customer wants this CDN endpoint to optimize, e.g. Download, Media services.
 // With this information we can apply scenario driven optimization.
 type OptimizationType string
@@ -1463,11 +1168,6 @@ func PossibleOptimizationTypeValues() []OptimizationType {
 	}
 }
 
-// ToPtr returns a *OptimizationType pointing to the current value.
-func (c OptimizationType) ToPtr() *OptimizationType {
-	return &c
-}
-
 type OriginGroupOverrideActionParametersTypeName string
 
 const (
@@ -1479,11 +1179,6 @@ func PossibleOriginGroupOverrideActionParametersTypeNameValues() []OriginGroupOv
 	return []OriginGroupOverrideActionParametersTypeName{
 		OriginGroupOverrideActionParametersTypeNameDeliveryRuleOriginGroupOverrideActionParameters,
 	}
-}
-
-// ToPtr returns a *OriginGroupOverrideActionParametersTypeName pointing to the current value.
-func (c OriginGroupOverrideActionParametersTypeName) ToPtr() *OriginGroupOverrideActionParametersTypeName {
-	return &c
 }
 
 // OriginGroupResourceState - Resource status of the origin group.
@@ -1504,11 +1199,6 @@ func PossibleOriginGroupResourceStateValues() []OriginGroupResourceState {
 	}
 }
 
-// ToPtr returns a *OriginGroupResourceState pointing to the current value.
-func (c OriginGroupResourceState) ToPtr() *OriginGroupResourceState {
-	return &c
-}
-
 // OriginResourceState - Resource status of the origin.
 type OriginResourceState string
 
@@ -1525,11 +1215,6 @@ func PossibleOriginResourceStateValues() []OriginResourceState {
 		OriginResourceStateCreating,
 		OriginResourceStateDeleting,
 	}
-}
-
-// ToPtr returns a *OriginResourceState pointing to the current value.
-func (c OriginResourceState) ToPtr() *OriginResourceState {
-	return &c
 }
 
 // ParamIndicator - Indicates the purpose of the parameter
@@ -1550,11 +1235,6 @@ func PossibleParamIndicatorValues() []ParamIndicator {
 	}
 }
 
-// ToPtr returns a *ParamIndicator pointing to the current value.
-func (c ParamIndicator) ToPtr() *ParamIndicator {
-	return &c
-}
-
 // PolicyEnabledState - describes if the policy is in enabled state or disabled state
 type PolicyEnabledState string
 
@@ -1571,11 +1251,6 @@ func PossiblePolicyEnabledStateValues() []PolicyEnabledState {
 	}
 }
 
-// ToPtr returns a *PolicyEnabledState pointing to the current value.
-func (c PolicyEnabledState) ToPtr() *PolicyEnabledState {
-	return &c
-}
-
 // PolicyMode - Describes if it is in detection mode or prevention mode at policy level.
 type PolicyMode string
 
@@ -1590,11 +1265,6 @@ func PossiblePolicyModeValues() []PolicyMode {
 		PolicyModeDetection,
 		PolicyModePrevention,
 	}
-}
-
-// ToPtr returns a *PolicyMode pointing to the current value.
-func (c PolicyMode) ToPtr() *PolicyMode {
-	return &c
 }
 
 // PolicyResourceState - Resource status of the policy.
@@ -1621,11 +1291,6 @@ func PossiblePolicyResourceStateValues() []PolicyResourceState {
 	}
 }
 
-// ToPtr returns a *PolicyResourceState pointing to the current value.
-func (c PolicyResourceState) ToPtr() *PolicyResourceState {
-	return &c
-}
-
 // PolicySettingsDefaultCustomBlockResponseStatusCode - If the action type is block, this field defines the default customer
 // overridable http response status code.
 type PolicySettingsDefaultCustomBlockResponseStatusCode int32
@@ -1649,11 +1314,6 @@ func PossiblePolicySettingsDefaultCustomBlockResponseStatusCodeValues() []Policy
 	}
 }
 
-// ToPtr returns a *PolicySettingsDefaultCustomBlockResponseStatusCode pointing to the current value.
-func (c PolicySettingsDefaultCustomBlockResponseStatusCode) ToPtr() *PolicySettingsDefaultCustomBlockResponseStatusCode {
-	return &c
-}
-
 type PostArgsMatchConditionParametersTypeName string
 
 const (
@@ -1665,11 +1325,6 @@ func PossiblePostArgsMatchConditionParametersTypeNameValues() []PostArgsMatchCon
 	return []PostArgsMatchConditionParametersTypeName{
 		PostArgsMatchConditionParametersTypeNameDeliveryRulePostArgsConditionParameters,
 	}
-}
-
-// ToPtr returns a *PostArgsMatchConditionParametersTypeName pointing to the current value.
-func (c PostArgsMatchConditionParametersTypeName) ToPtr() *PostArgsMatchConditionParametersTypeName {
-	return &c
 }
 
 // PostArgsOperator - Describes operator to be matched
@@ -1704,11 +1359,6 @@ func PossiblePostArgsOperatorValues() []PostArgsOperator {
 	}
 }
 
-// ToPtr returns a *PostArgsOperator pointing to the current value.
-func (c PostArgsOperator) ToPtr() *PostArgsOperator {
-	return &c
-}
-
 // PrivateEndpointStatus - The approval status for the connection to the Private Link
 type PrivateEndpointStatus string
 
@@ -1731,11 +1381,6 @@ func PossiblePrivateEndpointStatusValues() []PrivateEndpointStatus {
 	}
 }
 
-// ToPtr returns a *PrivateEndpointStatus pointing to the current value.
-func (c PrivateEndpointStatus) ToPtr() *PrivateEndpointStatus {
-	return &c
-}
-
 // ProbeProtocol - Protocol to use for health probe.
 type ProbeProtocol string
 
@@ -1752,11 +1397,6 @@ func PossibleProbeProtocolValues() []ProbeProtocol {
 		ProbeProtocolHTTP,
 		ProbeProtocolHTTPS,
 	}
-}
-
-// ToPtr returns a *ProbeProtocol pointing to the current value.
-func (c ProbeProtocol) ToPtr() *ProbeProtocol {
-	return &c
 }
 
 // ProfileResourceState - Resource status of the profile.
@@ -1779,11 +1419,6 @@ func PossibleProfileResourceStateValues() []ProfileResourceState {
 	}
 }
 
-// ToPtr returns a *ProfileResourceState pointing to the current value.
-func (c ProfileResourceState) ToPtr() *ProfileResourceState {
-	return &c
-}
-
 // ProtocolType - Defines the TLS extension protocol that is used for secure delivery.
 type ProtocolType string
 
@@ -1798,11 +1433,6 @@ func PossibleProtocolTypeValues() []ProtocolType {
 		ProtocolTypeIPBased,
 		ProtocolTypeServerNameIndication,
 	}
-}
-
-// ToPtr returns a *ProtocolType pointing to the current value.
-func (c ProtocolType) ToPtr() *ProtocolType {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the WebApplicationFirewallPolicy.
@@ -1823,11 +1453,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // QueryStringBehavior - Caching behavior for the requests
 type QueryStringBehavior string
 
@@ -1846,11 +1471,6 @@ func PossibleQueryStringBehaviorValues() []QueryStringBehavior {
 		QueryStringBehaviorInclude,
 		QueryStringBehaviorIncludeAll,
 	}
-}
-
-// ToPtr returns a *QueryStringBehavior pointing to the current value.
-func (c QueryStringBehavior) ToPtr() *QueryStringBehavior {
-	return &c
 }
 
 // QueryStringCachingBehavior - Defines how CDN caches requests that include query strings. You can ignore any query strings
@@ -1875,11 +1495,6 @@ func PossibleQueryStringCachingBehaviorValues() []QueryStringCachingBehavior {
 	}
 }
 
-// ToPtr returns a *QueryStringCachingBehavior pointing to the current value.
-func (c QueryStringCachingBehavior) ToPtr() *QueryStringCachingBehavior {
-	return &c
-}
-
 type QueryStringMatchConditionParametersTypeName string
 
 const (
@@ -1891,11 +1506,6 @@ func PossibleQueryStringMatchConditionParametersTypeNameValues() []QueryStringMa
 	return []QueryStringMatchConditionParametersTypeName{
 		QueryStringMatchConditionParametersTypeNameDeliveryRuleQueryStringConditionParameters,
 	}
-}
-
-// ToPtr returns a *QueryStringMatchConditionParametersTypeName pointing to the current value.
-func (c QueryStringMatchConditionParametersTypeName) ToPtr() *QueryStringMatchConditionParametersTypeName {
-	return &c
 }
 
 // QueryStringOperator - Describes operator to be matched
@@ -1930,11 +1540,6 @@ func PossibleQueryStringOperatorValues() []QueryStringOperator {
 	}
 }
 
-// ToPtr returns a *QueryStringOperator pointing to the current value.
-func (c QueryStringOperator) ToPtr() *QueryStringOperator {
-	return &c
-}
-
 // RedirectType - The redirect type the rule will use when redirecting traffic.
 type RedirectType string
 
@@ -1955,11 +1560,6 @@ func PossibleRedirectTypeValues() []RedirectType {
 	}
 }
 
-// ToPtr returns a *RedirectType pointing to the current value.
-func (c RedirectType) ToPtr() *RedirectType {
-	return &c
-}
-
 type RemoteAddressMatchConditionParametersTypeName string
 
 const (
@@ -1971,11 +1571,6 @@ func PossibleRemoteAddressMatchConditionParametersTypeNameValues() []RemoteAddre
 	return []RemoteAddressMatchConditionParametersTypeName{
 		RemoteAddressMatchConditionParametersTypeNameDeliveryRuleRemoteAddressConditionParameters,
 	}
-}
-
-// ToPtr returns a *RemoteAddressMatchConditionParametersTypeName pointing to the current value.
-func (c RemoteAddressMatchConditionParametersTypeName) ToPtr() *RemoteAddressMatchConditionParametersTypeName {
-	return &c
 }
 
 // RemoteAddressOperator - Describes operator to be matched
@@ -1996,11 +1591,6 @@ func PossibleRemoteAddressOperatorValues() []RemoteAddressOperator {
 	}
 }
 
-// ToPtr returns a *RemoteAddressOperator pointing to the current value.
-func (c RemoteAddressOperator) ToPtr() *RemoteAddressOperator {
-	return &c
-}
-
 type RequestBodyMatchConditionParametersTypeName string
 
 const (
@@ -2012,11 +1602,6 @@ func PossibleRequestBodyMatchConditionParametersTypeNameValues() []RequestBodyMa
 	return []RequestBodyMatchConditionParametersTypeName{
 		RequestBodyMatchConditionParametersTypeNameDeliveryRuleRequestBodyConditionParameters,
 	}
-}
-
-// ToPtr returns a *RequestBodyMatchConditionParametersTypeName pointing to the current value.
-func (c RequestBodyMatchConditionParametersTypeName) ToPtr() *RequestBodyMatchConditionParametersTypeName {
-	return &c
 }
 
 // RequestBodyOperator - Describes operator to be matched
@@ -2051,11 +1636,6 @@ func PossibleRequestBodyOperatorValues() []RequestBodyOperator {
 	}
 }
 
-// ToPtr returns a *RequestBodyOperator pointing to the current value.
-func (c RequestBodyOperator) ToPtr() *RequestBodyOperator {
-	return &c
-}
-
 type RequestHeaderMatchConditionParametersTypeName string
 
 const (
@@ -2067,11 +1647,6 @@ func PossibleRequestHeaderMatchConditionParametersTypeNameValues() []RequestHead
 	return []RequestHeaderMatchConditionParametersTypeName{
 		RequestHeaderMatchConditionParametersTypeNameDeliveryRuleRequestHeaderConditionParameters,
 	}
-}
-
-// ToPtr returns a *RequestHeaderMatchConditionParametersTypeName pointing to the current value.
-func (c RequestHeaderMatchConditionParametersTypeName) ToPtr() *RequestHeaderMatchConditionParametersTypeName {
-	return &c
 }
 
 // RequestHeaderOperator - Describes operator to be matched
@@ -2106,11 +1681,6 @@ func PossibleRequestHeaderOperatorValues() []RequestHeaderOperator {
 	}
 }
 
-// ToPtr returns a *RequestHeaderOperator pointing to the current value.
-func (c RequestHeaderOperator) ToPtr() *RequestHeaderOperator {
-	return &c
-}
-
 type RequestMethodMatchConditionParametersMatchValuesItem string
 
 const (
@@ -2136,11 +1706,6 @@ func PossibleRequestMethodMatchConditionParametersMatchValuesItemValues() []Requ
 	}
 }
 
-// ToPtr returns a *RequestMethodMatchConditionParametersMatchValuesItem pointing to the current value.
-func (c RequestMethodMatchConditionParametersMatchValuesItem) ToPtr() *RequestMethodMatchConditionParametersMatchValuesItem {
-	return &c
-}
-
 type RequestMethodMatchConditionParametersTypeName string
 
 const (
@@ -2152,11 +1717,6 @@ func PossibleRequestMethodMatchConditionParametersTypeNameValues() []RequestMeth
 	return []RequestMethodMatchConditionParametersTypeName{
 		RequestMethodMatchConditionParametersTypeNameDeliveryRuleRequestMethodConditionParameters,
 	}
-}
-
-// ToPtr returns a *RequestMethodMatchConditionParametersTypeName pointing to the current value.
-func (c RequestMethodMatchConditionParametersTypeName) ToPtr() *RequestMethodMatchConditionParametersTypeName {
-	return &c
 }
 
 // RequestMethodOperator - Describes operator to be matched
@@ -2171,11 +1731,6 @@ func PossibleRequestMethodOperatorValues() []RequestMethodOperator {
 	return []RequestMethodOperator{
 		RequestMethodOperatorEqual,
 	}
-}
-
-// ToPtr returns a *RequestMethodOperator pointing to the current value.
-func (c RequestMethodOperator) ToPtr() *RequestMethodOperator {
-	return &c
 }
 
 type RequestSchemeMatchConditionParametersMatchValuesItem string
@@ -2193,11 +1748,6 @@ func PossibleRequestSchemeMatchConditionParametersMatchValuesItemValues() []Requ
 	}
 }
 
-// ToPtr returns a *RequestSchemeMatchConditionParametersMatchValuesItem pointing to the current value.
-func (c RequestSchemeMatchConditionParametersMatchValuesItem) ToPtr() *RequestSchemeMatchConditionParametersMatchValuesItem {
-	return &c
-}
-
 // RequestSchemeMatchConditionParametersOperator - Describes operator to be matched
 type RequestSchemeMatchConditionParametersOperator string
 
@@ -2210,11 +1760,6 @@ func PossibleRequestSchemeMatchConditionParametersOperatorValues() []RequestSche
 	return []RequestSchemeMatchConditionParametersOperator{
 		RequestSchemeMatchConditionParametersOperatorEqual,
 	}
-}
-
-// ToPtr returns a *RequestSchemeMatchConditionParametersOperator pointing to the current value.
-func (c RequestSchemeMatchConditionParametersOperator) ToPtr() *RequestSchemeMatchConditionParametersOperator {
-	return &c
 }
 
 type RequestSchemeMatchConditionParametersTypeName string
@@ -2230,11 +1775,6 @@ func PossibleRequestSchemeMatchConditionParametersTypeNameValues() []RequestSche
 	}
 }
 
-// ToPtr returns a *RequestSchemeMatchConditionParametersTypeName pointing to the current value.
-func (c RequestSchemeMatchConditionParametersTypeName) ToPtr() *RequestSchemeMatchConditionParametersTypeName {
-	return &c
-}
-
 type RequestURIMatchConditionParametersTypeName string
 
 const (
@@ -2246,11 +1786,6 @@ func PossibleRequestURIMatchConditionParametersTypeNameValues() []RequestURIMatc
 	return []RequestURIMatchConditionParametersTypeName{
 		RequestURIMatchConditionParametersTypeNameDeliveryRuleRequestURIConditionParameters,
 	}
-}
-
-// ToPtr returns a *RequestURIMatchConditionParametersTypeName pointing to the current value.
-func (c RequestURIMatchConditionParametersTypeName) ToPtr() *RequestURIMatchConditionParametersTypeName {
-	return &c
 }
 
 // RequestURIOperator - Describes operator to be matched
@@ -2285,11 +1820,6 @@ func PossibleRequestURIOperatorValues() []RequestURIOperator {
 	}
 }
 
-// ToPtr returns a *RequestURIOperator pointing to the current value.
-func (c RequestURIOperator) ToPtr() *RequestURIOperator {
-	return &c
-}
-
 // ResourceType - Type of CDN resource used in CheckNameAvailability.
 type ResourceType string
 
@@ -2304,11 +1834,6 @@ func PossibleResourceTypeValues() []ResourceType {
 		ResourceTypeMicrosoftCdnProfilesAfdEndpoints,
 		ResourceTypeMicrosoftCdnProfilesEndpoints,
 	}
-}
-
-// ToPtr returns a *ResourceType pointing to the current value.
-func (c ResourceType) ToPtr() *ResourceType {
-	return &c
 }
 
 // ResponseBasedDetectedErrorTypes - Type of response errors for real user requests for which origin will be deemed unhealthy
@@ -2329,11 +1854,6 @@ func PossibleResponseBasedDetectedErrorTypesValues() []ResponseBasedDetectedErro
 	}
 }
 
-// ToPtr returns a *ResponseBasedDetectedErrorTypes pointing to the current value.
-func (c ResponseBasedDetectedErrorTypes) ToPtr() *ResponseBasedDetectedErrorTypes {
-	return &c
-}
-
 type RouteConfigurationOverrideActionParametersTypeName string
 
 const (
@@ -2345,11 +1865,6 @@ func PossibleRouteConfigurationOverrideActionParametersTypeNameValues() []RouteC
 	return []RouteConfigurationOverrideActionParametersTypeName{
 		RouteConfigurationOverrideActionParametersTypeNameDeliveryRuleRouteConfigurationOverrideActionParameters,
 	}
-}
-
-// ToPtr returns a *RouteConfigurationOverrideActionParametersTypeName pointing to the current value.
-func (c RouteConfigurationOverrideActionParametersTypeName) ToPtr() *RouteConfigurationOverrideActionParametersTypeName {
-	return &c
 }
 
 // RuleCacheBehavior - Caching behavior for the requests
@@ -2370,11 +1885,6 @@ func PossibleRuleCacheBehaviorValues() []RuleCacheBehavior {
 	}
 }
 
-// ToPtr returns a *RuleCacheBehavior pointing to the current value.
-func (c RuleCacheBehavior) ToPtr() *RuleCacheBehavior {
-	return &c
-}
-
 // RuleIsCompressionEnabled - Indicates whether content compression is enabled. If compression is enabled, content will be
 // served as compressed if user requests for a compressed version. Content won't be compressed on
 // AzureFrontDoor when requested content is smaller than 1 byte or larger than 1 MB.
@@ -2391,11 +1901,6 @@ func PossibleRuleIsCompressionEnabledValues() []RuleIsCompressionEnabled {
 		RuleIsCompressionEnabledDisabled,
 		RuleIsCompressionEnabledEnabled,
 	}
-}
-
-// ToPtr returns a *RuleIsCompressionEnabled pointing to the current value.
-func (c RuleIsCompressionEnabled) ToPtr() *RuleIsCompressionEnabled {
-	return &c
 }
 
 // RuleQueryStringCachingBehavior - Defines how Frontdoor caches requests that include query strings. You can ignore any query
@@ -2418,11 +1923,6 @@ func PossibleRuleQueryStringCachingBehaviorValues() []RuleQueryStringCachingBeha
 		RuleQueryStringCachingBehaviorIncludeSpecifiedQueryStrings,
 		RuleQueryStringCachingBehaviorUseQueryString,
 	}
-}
-
-// ToPtr returns a *RuleQueryStringCachingBehavior pointing to the current value.
-func (c RuleQueryStringCachingBehavior) ToPtr() *RuleQueryStringCachingBehavior {
-	return &c
 }
 
 // SKUName - Name of the pricing tier.
@@ -2463,11 +1963,6 @@ func PossibleSKUNameValues() []SKUName {
 	}
 }
 
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
-}
-
 // SSLProtocol - The protocol of an established TLS connection.
 type SSLProtocol string
 
@@ -2486,11 +1981,6 @@ func PossibleSSLProtocolValues() []SSLProtocol {
 	}
 }
 
-// ToPtr returns a *SSLProtocol pointing to the current value.
-func (c SSLProtocol) ToPtr() *SSLProtocol {
-	return &c
-}
-
 type SSLProtocolMatchConditionParametersTypeName string
 
 const (
@@ -2502,11 +1992,6 @@ func PossibleSSLProtocolMatchConditionParametersTypeNameValues() []SSLProtocolMa
 	return []SSLProtocolMatchConditionParametersTypeName{
 		SSLProtocolMatchConditionParametersTypeNameDeliveryRuleSSLProtocolConditionParameters,
 	}
-}
-
-// ToPtr returns a *SSLProtocolMatchConditionParametersTypeName pointing to the current value.
-func (c SSLProtocolMatchConditionParametersTypeName) ToPtr() *SSLProtocolMatchConditionParametersTypeName {
-	return &c
 }
 
 // SSLProtocolOperator - Describes operator to be matched
@@ -2521,11 +2006,6 @@ func PossibleSSLProtocolOperatorValues() []SSLProtocolOperator {
 	return []SSLProtocolOperator{
 		SSLProtocolOperatorEqual,
 	}
-}
-
-// ToPtr returns a *SSLProtocolOperator pointing to the current value.
-func (c SSLProtocolOperator) ToPtr() *SSLProtocolOperator {
-	return &c
 }
 
 // SecretType - The type of the secret resource.
@@ -2548,11 +2028,6 @@ func PossibleSecretTypeValues() []SecretType {
 	}
 }
 
-// ToPtr returns a *SecretType pointing to the current value.
-func (c SecretType) ToPtr() *SecretType {
-	return &c
-}
-
 // SecurityPolicyType - The type of the Security policy to create.
 type SecurityPolicyType string
 
@@ -2567,11 +2042,6 @@ func PossibleSecurityPolicyTypeValues() []SecurityPolicyType {
 	}
 }
 
-// ToPtr returns a *SecurityPolicyType pointing to the current value.
-func (c SecurityPolicyType) ToPtr() *SecurityPolicyType {
-	return &c
-}
-
 type ServerPortMatchConditionParametersTypeName string
 
 const (
@@ -2583,11 +2053,6 @@ func PossibleServerPortMatchConditionParametersTypeNameValues() []ServerPortMatc
 	return []ServerPortMatchConditionParametersTypeName{
 		ServerPortMatchConditionParametersTypeNameDeliveryRuleServerPortConditionParameters,
 	}
-}
-
-// ToPtr returns a *ServerPortMatchConditionParametersTypeName pointing to the current value.
-func (c ServerPortMatchConditionParametersTypeName) ToPtr() *ServerPortMatchConditionParametersTypeName {
-	return &c
 }
 
 // ServerPortOperator - Describes operator to be matched
@@ -2622,11 +2087,6 @@ func PossibleServerPortOperatorValues() []ServerPortOperator {
 	}
 }
 
-// ToPtr returns a *ServerPortOperator pointing to the current value.
-func (c ServerPortOperator) ToPtr() *ServerPortOperator {
-	return &c
-}
-
 // SharedPrivateLinkResourceStatus - Status of the shared private link resource. Can be Pending, Approved, Rejected, Disconnected,
 // or Timeout.
 type SharedPrivateLinkResourceStatus string
@@ -2650,11 +2110,6 @@ func PossibleSharedPrivateLinkResourceStatusValues() []SharedPrivateLinkResource
 	}
 }
 
-// ToPtr returns a *SharedPrivateLinkResourceStatus pointing to the current value.
-func (c SharedPrivateLinkResourceStatus) ToPtr() *SharedPrivateLinkResourceStatus {
-	return &c
-}
-
 type SocketAddrMatchConditionParametersTypeName string
 
 const (
@@ -2666,11 +2121,6 @@ func PossibleSocketAddrMatchConditionParametersTypeNameValues() []SocketAddrMatc
 	return []SocketAddrMatchConditionParametersTypeName{
 		SocketAddrMatchConditionParametersTypeNameDeliveryRuleSocketAddrConditionParameters,
 	}
-}
-
-// ToPtr returns a *SocketAddrMatchConditionParametersTypeName pointing to the current value.
-func (c SocketAddrMatchConditionParametersTypeName) ToPtr() *SocketAddrMatchConditionParametersTypeName {
-	return &c
 }
 
 // SocketAddrOperator - Describes operator to be matched
@@ -2687,11 +2137,6 @@ func PossibleSocketAddrOperatorValues() []SocketAddrOperator {
 		SocketAddrOperatorAny,
 		SocketAddrOperatorIPMatch,
 	}
-}
-
-// ToPtr returns a *SocketAddrOperator pointing to the current value.
-func (c SocketAddrOperator) ToPtr() *SocketAddrOperator {
-	return &c
 }
 
 // Status - The validation status.
@@ -2712,11 +2157,6 @@ func PossibleStatusValues() []Status {
 		StatusInvalid,
 		StatusValid,
 	}
-}
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
 }
 
 // Transform - Describes what transforms are applied before matching
@@ -2743,11 +2183,6 @@ func PossibleTransformValues() []Transform {
 	}
 }
 
-// ToPtr returns a *Transform pointing to the current value.
-func (c Transform) ToPtr() *Transform {
-	return &c
-}
-
 // TransformType - Describes what transforms were applied before matching.
 type TransformType string
 
@@ -2772,11 +2207,6 @@ func PossibleTransformTypeValues() []TransformType {
 	}
 }
 
-// ToPtr returns a *TransformType pointing to the current value.
-func (c TransformType) ToPtr() *TransformType {
-	return &c
-}
-
 type URLFileExtensionMatchConditionParametersTypeName string
 
 const (
@@ -2788,11 +2218,6 @@ func PossibleURLFileExtensionMatchConditionParametersTypeNameValues() []URLFileE
 	return []URLFileExtensionMatchConditionParametersTypeName{
 		URLFileExtensionMatchConditionParametersTypeNameDeliveryRuleURLFileExtensionMatchConditionParameters,
 	}
-}
-
-// ToPtr returns a *URLFileExtensionMatchConditionParametersTypeName pointing to the current value.
-func (c URLFileExtensionMatchConditionParametersTypeName) ToPtr() *URLFileExtensionMatchConditionParametersTypeName {
-	return &c
 }
 
 // URLFileExtensionOperator - Describes operator to be matched
@@ -2827,11 +2252,6 @@ func PossibleURLFileExtensionOperatorValues() []URLFileExtensionOperator {
 	}
 }
 
-// ToPtr returns a *URLFileExtensionOperator pointing to the current value.
-func (c URLFileExtensionOperator) ToPtr() *URLFileExtensionOperator {
-	return &c
-}
-
 type URLFileNameMatchConditionParametersTypeName string
 
 const (
@@ -2843,11 +2263,6 @@ func PossibleURLFileNameMatchConditionParametersTypeNameValues() []URLFileNameMa
 	return []URLFileNameMatchConditionParametersTypeName{
 		URLFileNameMatchConditionParametersTypeNameDeliveryRuleURLFilenameConditionParameters,
 	}
-}
-
-// ToPtr returns a *URLFileNameMatchConditionParametersTypeName pointing to the current value.
-func (c URLFileNameMatchConditionParametersTypeName) ToPtr() *URLFileNameMatchConditionParametersTypeName {
-	return &c
 }
 
 // URLFileNameOperator - Describes operator to be matched
@@ -2882,11 +2297,6 @@ func PossibleURLFileNameOperatorValues() []URLFileNameOperator {
 	}
 }
 
-// ToPtr returns a *URLFileNameOperator pointing to the current value.
-func (c URLFileNameOperator) ToPtr() *URLFileNameOperator {
-	return &c
-}
-
 type URLPathMatchConditionParametersTypeName string
 
 const (
@@ -2898,11 +2308,6 @@ func PossibleURLPathMatchConditionParametersTypeNameValues() []URLPathMatchCondi
 	return []URLPathMatchConditionParametersTypeName{
 		URLPathMatchConditionParametersTypeNameDeliveryRuleURLPathMatchConditionParameters,
 	}
-}
-
-// ToPtr returns a *URLPathMatchConditionParametersTypeName pointing to the current value.
-func (c URLPathMatchConditionParametersTypeName) ToPtr() *URLPathMatchConditionParametersTypeName {
-	return &c
 }
 
 // URLPathOperator - Describes operator to be matched
@@ -2939,11 +2344,6 @@ func PossibleURLPathOperatorValues() []URLPathOperator {
 	}
 }
 
-// ToPtr returns a *URLPathOperator pointing to the current value.
-func (c URLPathOperator) ToPtr() *URLPathOperator {
-	return &c
-}
-
 type URLRedirectActionParametersTypeName string
 
 const (
@@ -2955,11 +2355,6 @@ func PossibleURLRedirectActionParametersTypeNameValues() []URLRedirectActionPara
 	return []URLRedirectActionParametersTypeName{
 		URLRedirectActionParametersTypeNameDeliveryRuleURLRedirectActionParameters,
 	}
-}
-
-// ToPtr returns a *URLRedirectActionParametersTypeName pointing to the current value.
-func (c URLRedirectActionParametersTypeName) ToPtr() *URLRedirectActionParametersTypeName {
-	return &c
 }
 
 type URLRewriteActionParametersTypeName string
@@ -2975,11 +2370,6 @@ func PossibleURLRewriteActionParametersTypeNameValues() []URLRewriteActionParame
 	}
 }
 
-// ToPtr returns a *URLRewriteActionParametersTypeName pointing to the current value.
-func (c URLRewriteActionParametersTypeName) ToPtr() *URLRewriteActionParametersTypeName {
-	return &c
-}
-
 type URLSigningActionParametersTypeName string
 
 const (
@@ -2991,11 +2381,6 @@ func PossibleURLSigningActionParametersTypeNameValues() []URLSigningActionParame
 	return []URLSigningActionParametersTypeName{
 		URLSigningActionParametersTypeNameDeliveryRuleURLSigningActionParameters,
 	}
-}
-
-// ToPtr returns a *URLSigningActionParametersTypeName pointing to the current value.
-func (c URLSigningActionParametersTypeName) ToPtr() *URLSigningActionParametersTypeName {
-	return &c
 }
 
 // UpdateRule - Describes the action that shall be taken when the certificate is updated in Key Vault.
@@ -3012,11 +2397,6 @@ func PossibleUpdateRuleValues() []UpdateRule {
 	}
 }
 
-// ToPtr returns a *UpdateRule pointing to the current value.
-func (c UpdateRule) ToPtr() *UpdateRule {
-	return &c
-}
-
 // UsageUnit - An enum describing the unit of measurement.
 type UsageUnit string
 
@@ -3029,11 +2409,6 @@ func PossibleUsageUnitValues() []UsageUnit {
 	return []UsageUnit{
 		UsageUnitCount,
 	}
-}
-
-// ToPtr returns a *UsageUnit pointing to the current value.
-func (c UsageUnit) ToPtr() *UsageUnit {
-	return &c
 }
 
 type WafAction string
@@ -3055,11 +2430,6 @@ func PossibleWafActionValues() []WafAction {
 	}
 }
 
-// ToPtr returns a *WafAction pointing to the current value.
-func (c WafAction) ToPtr() *WafAction {
-	return &c
-}
-
 type WafGranularity string
 
 const (
@@ -3075,11 +2445,6 @@ func PossibleWafGranularityValues() []WafGranularity {
 		WafGranularityPT1H,
 		WafGranularityPT5M,
 	}
-}
-
-// ToPtr returns a *WafGranularity pointing to the current value.
-func (c WafGranularity) ToPtr() *WafGranularity {
-	return &c
 }
 
 // WafMatchVariable - Match variable to compare against.
@@ -3112,11 +2477,6 @@ func PossibleWafMatchVariableValues() []WafMatchVariable {
 	}
 }
 
-// ToPtr returns a *WafMatchVariable pointing to the current value.
-func (c WafMatchVariable) ToPtr() *WafMatchVariable {
-	return &c
-}
-
 type WafMetric string
 
 const (
@@ -3128,11 +2488,6 @@ func PossibleWafMetricValues() []WafMetric {
 	return []WafMetric{
 		WafMetricClientRequestCount,
 	}
-}
-
-// ToPtr returns a *WafMetric pointing to the current value.
-func (c WafMetric) ToPtr() *WafMetric {
-	return &c
 }
 
 type WafMetricsResponseGranularity string
@@ -3152,11 +2507,6 @@ func PossibleWafMetricsResponseGranularityValues() []WafMetricsResponseGranulari
 	}
 }
 
-// ToPtr returns a *WafMetricsResponseGranularity pointing to the current value.
-func (c WafMetricsResponseGranularity) ToPtr() *WafMetricsResponseGranularity {
-	return &c
-}
-
 type WafMetricsResponseSeriesItemUnit string
 
 const (
@@ -3168,11 +2518,6 @@ func PossibleWafMetricsResponseSeriesItemUnitValues() []WafMetricsResponseSeries
 	return []WafMetricsResponseSeriesItemUnit{
 		WafMetricsResponseSeriesItemUnitCount,
 	}
-}
-
-// ToPtr returns a *WafMetricsResponseSeriesItemUnit pointing to the current value.
-func (c WafMetricsResponseSeriesItemUnit) ToPtr() *WafMetricsResponseSeriesItemUnit {
-	return &c
 }
 
 type WafRankingGroupBy string
@@ -3188,11 +2533,6 @@ func PossibleWafRankingGroupByValues() []WafRankingGroupBy {
 		WafRankingGroupByCustomDomain,
 		WafRankingGroupByHTTPStatusCode,
 	}
-}
-
-// ToPtr returns a *WafRankingGroupBy pointing to the current value.
-func (c WafRankingGroupBy) ToPtr() *WafRankingGroupBy {
-	return &c
 }
 
 type WafRankingType string
@@ -3222,11 +2562,6 @@ func PossibleWafRankingTypeValues() []WafRankingType {
 	}
 }
 
-// ToPtr returns a *WafRankingType pointing to the current value.
-func (c WafRankingType) ToPtr() *WafRankingType {
-	return &c
-}
-
 type WafRuleType string
 
 const (
@@ -3242,9 +2577,4 @@ func PossibleWafRuleTypeValues() []WafRuleType {
 		WafRuleTypeCustom,
 		WafRuleTypeManaged,
 	}
-}
-
-// ToPtr returns a *WafRuleType pointing to the current value.
-func (c WafRuleType) ToPtr() *WafRuleType {
-	return &c
 }

@@ -28,8 +28,3 @@ func PossibleSKUTypeValues() []SKUType {
 		SKUTypeStandard,
 	}
 }
-
-// ToPtr returns a *SKUType pointing to the current value.
-func (c SKUType) ToPtr() *SKUType {
-	return &c
-}

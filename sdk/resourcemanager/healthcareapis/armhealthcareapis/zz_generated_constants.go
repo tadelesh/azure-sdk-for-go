@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -52,11 +47,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // FhirServiceKind - The kind of the service.
 type FhirServiceKind string
 
@@ -73,11 +63,6 @@ func PossibleFhirServiceKindValues() []FhirServiceKind {
 	}
 }
 
-// ToPtr returns a *FhirServiceKind pointing to the current value.
-func (c FhirServiceKind) ToPtr() *FhirServiceKind {
-	return &c
-}
-
 // IotIdentityResolutionType - The type of IoT identity resolution to use with the destination.
 type IotIdentityResolutionType string
 
@@ -92,11 +77,6 @@ func PossibleIotIdentityResolutionTypeValues() []IotIdentityResolutionType {
 		IotIdentityResolutionTypeCreate,
 		IotIdentityResolutionTypeLookup,
 	}
-}
-
-// ToPtr returns a *IotIdentityResolutionType pointing to the current value.
-func (c IotIdentityResolutionType) ToPtr() *IotIdentityResolutionType {
-	return &c
 }
 
 // Kind - The kind of the service.
@@ -117,11 +97,6 @@ func PossibleKindValues() []Kind {
 	}
 }
 
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
-}
-
 // ManagedServiceIdentityType - Type of identity being specified, currently SystemAssigned and None are allowed.
 type ManagedServiceIdentityType string
 
@@ -136,11 +111,6 @@ func PossibleManagedServiceIdentityTypeValues() []ManagedServiceIdentityType {
 		ManagedServiceIdentityTypeNone,
 		ManagedServiceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *ManagedServiceIdentityType pointing to the current value.
-func (c ManagedServiceIdentityType) ToPtr() *ManagedServiceIdentityType {
-	return &c
 }
 
 // OperationResultStatus - The status of the operation being performed.
@@ -165,11 +135,6 @@ func PossibleOperationResultStatusValues() []OperationResultStatus {
 	}
 }
 
-// ToPtr returns a *OperationResultStatus pointing to the current value.
-func (c OperationResultStatus) ToPtr() *OperationResultStatus {
-	return &c
-}
-
 // PrivateEndpointConnectionProvisioningState - The current provisioning state.
 type PrivateEndpointConnectionProvisioningState string
 
@@ -190,11 +155,6 @@ func PossiblePrivateEndpointConnectionProvisioningStateValues() []PrivateEndpoin
 	}
 }
 
-// ToPtr returns a *PrivateEndpointConnectionProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionProvisioningState) ToPtr() *PrivateEndpointConnectionProvisioningState {
-	return &c
-}
-
 // PrivateEndpointServiceConnectionStatus - The private endpoint connection status.
 type PrivateEndpointServiceConnectionStatus string
 
@@ -211,11 +171,6 @@ func PossiblePrivateEndpointServiceConnectionStatusValues() []PrivateEndpointSer
 		PrivateEndpointServiceConnectionStatusPending,
 		PrivateEndpointServiceConnectionStatusRejected,
 	}
-}
-
-// ToPtr returns a *PrivateEndpointServiceConnectionStatus pointing to the current value.
-func (c PrivateEndpointServiceConnectionStatus) ToPtr() *PrivateEndpointServiceConnectionStatus {
-	return &c
 }
 
 // ProvisioningState - The provisioning state.
@@ -256,11 +211,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // PublicNetworkAccess - Control permission for data plane traffic coming from public networks while private endpoint is enabled.
 type PublicNetworkAccess string
 
@@ -277,11 +227,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 	}
 }
 
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
-}
-
 // ServiceNameUnavailabilityReason - The reason for unavailability.
 type ServiceNameUnavailabilityReason string
 
@@ -296,9 +241,4 @@ func PossibleServiceNameUnavailabilityReasonValues() []ServiceNameUnavailability
 		ServiceNameUnavailabilityReasonInvalid,
 		ServiceNameUnavailabilityReasonAlreadyExists,
 	}
-}
-
-// ToPtr returns a *ServiceNameUnavailabilityReason pointing to the current value.
-func (c ServiceNameUnavailabilityReason) ToPtr() *ServiceNameUnavailabilityReason {
-	return &c
 }

@@ -28,8 +28,3 @@ func PossibleServiceNameUnavailabilityReasonValues() []ServiceNameUnavailability
 		ServiceNameUnavailabilityReasonAlreadyExists,
 	}
 }
-
-// ToPtr returns a *ServiceNameUnavailabilityReason pointing to the current value.
-func (c ServiceNameUnavailabilityReason) ToPtr() *ServiceNameUnavailabilityReason {
-	return &c
-}

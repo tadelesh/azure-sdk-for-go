@@ -121,11 +121,6 @@ func PossibleAgentVMSizeTypesValues() []AgentVMSizeTypes {
 	}
 }
 
-// ToPtr returns a *AgentVMSizeTypes pointing to the current value.
-func (c AgentVMSizeTypes) ToPtr() *AgentVMSizeTypes {
-	return &c
-}
-
 // ClusterType - The cluster type.
 type ClusterType string
 
@@ -140,11 +135,6 @@ func PossibleClusterTypeValues() []ClusterType {
 		ClusterTypeACS,
 		ClusterTypeLocal,
 	}
-}
-
-// ToPtr returns a *ClusterType pointing to the current value.
-func (c ClusterType) ToPtr() *ClusterType {
-	return &c
 }
 
 // OperationStatus - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and
@@ -174,11 +164,6 @@ func PossibleOperationStatusValues() []OperationStatus {
 	}
 }
 
-// ToPtr returns a *OperationStatus pointing to the current value.
-func (c OperationStatus) ToPtr() *OperationStatus {
-	return &c
-}
-
 // OrchestratorType - Type of orchestrator. It cannot be changed once the cluster is created.
 type OrchestratorType string
 
@@ -195,11 +180,6 @@ func PossibleOrchestratorTypeValues() []OrchestratorType {
 	}
 }
 
-// ToPtr returns a *OrchestratorType pointing to the current value.
-func (c OrchestratorType) ToPtr() *OrchestratorType {
-	return &c
-}
-
 // Status - SSL status. Allowed values are Enabled and Disabled.
 type Status string
 
@@ -214,11 +194,6 @@ func PossibleStatusValues() []Status {
 		StatusDisabled,
 		StatusEnabled,
 	}
-}
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
 }
 
 // SystemServiceType - The system service type
@@ -239,11 +214,6 @@ func PossibleSystemServiceTypeValues() []SystemServiceType {
 	}
 }
 
-// ToPtr returns a *SystemServiceType pointing to the current value.
-func (c SystemServiceType) ToPtr() *SystemServiceType {
-	return &c
-}
-
 // UpdatesAvailable - Yes if updates are available for the system services, No if not.
 type UpdatesAvailable string
 
@@ -258,9 +228,4 @@ func PossibleUpdatesAvailableValues() []UpdatesAvailable {
 		UpdatesAvailableNo,
 		UpdatesAvailableYes,
 	}
-}
-
-// ToPtr returns a *UpdatesAvailable pointing to the current value.
-func (c UpdatesAvailable) ToPtr() *UpdatesAvailable {
-	return &c
 }

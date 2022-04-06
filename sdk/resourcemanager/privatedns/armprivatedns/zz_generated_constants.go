@@ -38,11 +38,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 type RecordType string
 
 const (
@@ -70,11 +65,6 @@ func PossibleRecordTypeValues() []RecordType {
 	}
 }
 
-// ToPtr returns a *RecordType pointing to the current value.
-func (c RecordType) ToPtr() *RecordType {
-	return &c
-}
-
 // VirtualNetworkLinkState - The status of the virtual network link to the Private DNS zone. Possible values are 'InProgress'
 // and 'Done'. This is a read-only property and any attempt to set this value will be ignored.
 type VirtualNetworkLinkState string
@@ -90,9 +80,4 @@ func PossibleVirtualNetworkLinkStateValues() []VirtualNetworkLinkState {
 		VirtualNetworkLinkStateCompleted,
 		VirtualNetworkLinkStateInProgress,
 	}
-}
-
-// ToPtr returns a *VirtualNetworkLinkState pointing to the current value.
-func (c VirtualNetworkLinkState) ToPtr() *VirtualNetworkLinkState {
-	return &c
 }

@@ -29,11 +29,6 @@ func PossibleIsJobCancellableValues() []IsJobCancellable {
 	}
 }
 
-// ToPtr returns a *IsJobCancellable pointing to the current value.
-func (c IsJobCancellable) ToPtr() *IsJobCancellable {
-	return &c
-}
-
 // JobStatus - Status of the job.
 type JobStatus string
 
@@ -60,11 +55,6 @@ func PossibleJobStatusValues() []JobStatus {
 		JobStatusCancelling,
 		JobStatusPartiallySucceeded,
 	}
-}
-
-// ToPtr returns a *JobStatus pointing to the current value.
-func (c JobStatus) ToPtr() *JobStatus {
-	return &c
 }
 
 // RunLocation - This is the preferred geo location for the job to run.
@@ -133,11 +123,6 @@ func PossibleRunLocationValues() []RunLocation {
 	}
 }
 
-// ToPtr returns a *RunLocation pointing to the current value.
-func (c RunLocation) ToPtr() *RunLocation {
-	return &c
-}
-
 // State - State of the data service.
 type State string
 
@@ -154,11 +139,6 @@ func PossibleStateValues() []State {
 		StateEnabled,
 		StateSupported,
 	}
-}
-
-// ToPtr returns a *State pointing to the current value.
-func (c State) ToPtr() *State {
-	return &c
 }
 
 // SupportedAlgorithm - The encryption algorithm used to encrypt data.
@@ -181,11 +161,6 @@ func PossibleSupportedAlgorithmValues() []SupportedAlgorithm {
 	}
 }
 
-// ToPtr returns a *SupportedAlgorithm pointing to the current value.
-func (c SupportedAlgorithm) ToPtr() *SupportedAlgorithm {
-	return &c
-}
-
 // UserConfirmation - Enum to detect if user confirmation is required. If not passed will default to NotRequired.
 type UserConfirmation string
 
@@ -200,9 +175,4 @@ func PossibleUserConfirmationValues() []UserConfirmation {
 		UserConfirmationNotRequired,
 		UserConfirmationRequired,
 	}
-}
-
-// ToPtr returns a *UserConfirmation pointing to the current value.
-func (c UserConfirmation) ToPtr() *UserConfirmation {
-	return &c
 }

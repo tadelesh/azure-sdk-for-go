@@ -1,0 +1,67 @@
+=== RUN   TestOperations_List
+--- PASS: TestOperations_List (4.84s)
+=== RUN   TestWebPubSub_CheckNameAvailability
+--- PASS: TestWebPubSub_CheckNameAvailability (0.10s)
+=== RUN   TestWebPubSub_ListBySubscription
+--- PASS: TestWebPubSub_ListBySubscription (0.10s)
+=== RUN   TestWebPubSub_ListByResourceGroup
+--- PASS: TestWebPubSub_ListByResourceGroup (0.11s)
+=== RUN   TestWebPubSub_Get
+--- PASS: TestWebPubSub_Get (0.16s)
+=== RUN   TestWebPubSub_CreateOrUpdate
+--- PASS: TestWebPubSub_CreateOrUpdate (0.14s)
+=== RUN   TestWebPubSub_Delete
+--- PASS: TestWebPubSub_Delete (0.14s)
+=== RUN   TestWebPubSub_Update
+--- PASS: TestWebPubSub_Update (0.19s)
+=== RUN   TestWebPubSub_ListKeys
+--- PASS: TestWebPubSub_ListKeys (0.07s)
+=== RUN   TestWebPubSub_RegenerateKey
+    zt_generated_mock_test.go:902: Failed to get LRO result for example specification/webpubsub/resource-manager/Microsoft.SignalRService/stable/2021-10-01/examples/WebPubSub_RegenerateKey.json: GET https://localhost:8443/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.SignalRService/webPubSub/myWebPubSubService
+        --------------------------------------------------------------------------------
+        RESPONSE 461: 461 unknown
+        ERROR CODE: 461
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "461",
+            "message": "Wrong response example for operation",
+            "target": ""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestWebPubSub_RegenerateKey (0.11s)
+=== RUN   TestWebPubSub_Restart
+--- PASS: TestWebPubSub_Restart (0.07s)
+=== RUN   TestUsages_List
+--- PASS: TestUsages_List (0.09s)
+=== RUN   TestWebPubSubHubs_List
+--- PASS: TestWebPubSubHubs_List (0.08s)
+=== RUN   TestWebPubSubHubs_Get
+--- PASS: TestWebPubSubHubs_Get (0.03s)
+=== RUN   TestWebPubSubHubs_CreateOrUpdate
+--- PASS: TestWebPubSubHubs_CreateOrUpdate (0.28s)
+=== RUN   TestWebPubSubHubs_Delete
+--- PASS: TestWebPubSubHubs_Delete (0.19s)
+=== RUN   TestWebPubSubPrivateEndpointConnections_List
+--- PASS: TestWebPubSubPrivateEndpointConnections_List (0.11s)
+=== RUN   TestWebPubSubPrivateEndpointConnections_Get
+--- PASS: TestWebPubSubPrivateEndpointConnections_Get (0.09s)
+=== RUN   TestWebPubSubPrivateEndpointConnections_Update
+--- PASS: TestWebPubSubPrivateEndpointConnections_Update (0.08s)
+=== RUN   TestWebPubSubPrivateEndpointConnections_Delete
+--- PASS: TestWebPubSubPrivateEndpointConnections_Delete (0.11s)
+=== RUN   TestWebPubSubPrivateLinkResources_List
+--- PASS: TestWebPubSubPrivateLinkResources_List (13.48s)
+=== RUN   TestWebPubSubSharedPrivateLinkResources_List
+--- PASS: TestWebPubSubSharedPrivateLinkResources_List (0.07s)
+=== RUN   TestWebPubSubSharedPrivateLinkResources_Get
+--- PASS: TestWebPubSubSharedPrivateLinkResources_Get (0.06s)
+=== RUN   TestWebPubSubSharedPrivateLinkResources_CreateOrUpdate
+--- PASS: TestWebPubSubSharedPrivateLinkResources_CreateOrUpdate (0.24s)
+=== RUN   TestWebPubSubSharedPrivateLinkResources_Delete
+--- PASS: TestWebPubSubSharedPrivateLinkResources_Delete (0.20s)
+FAIL
+coverage: 66.8% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/webpubsub/armwebpubsub	21.627s

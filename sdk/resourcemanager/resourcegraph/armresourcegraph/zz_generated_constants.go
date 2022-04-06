@@ -34,11 +34,6 @@ func PossibleAuthorizationScopeFilterValues() []AuthorizationScopeFilter {
 	}
 }
 
-// ToPtr returns a *AuthorizationScopeFilter pointing to the current value.
-func (c AuthorizationScopeFilter) ToPtr() *AuthorizationScopeFilter {
-	return &c
-}
-
 // ColumnDataType - Data type of a column in a table.
 type ColumnDataType string
 
@@ -63,11 +58,6 @@ func PossibleColumnDataTypeValues() []ColumnDataType {
 	}
 }
 
-// ToPtr returns a *ColumnDataType pointing to the current value.
-func (c ColumnDataType) ToPtr() *ColumnDataType {
-	return &c
-}
-
 // FacetSortOrder - The sorting order by the selected column (count by default).
 type FacetSortOrder string
 
@@ -82,11 +72,6 @@ func PossibleFacetSortOrderValues() []FacetSortOrder {
 		FacetSortOrderAsc,
 		FacetSortOrderDesc,
 	}
-}
-
-// ToPtr returns a *FacetSortOrder pointing to the current value.
-func (c FacetSortOrder) ToPtr() *FacetSortOrder {
-	return &c
 }
 
 // ResultFormat - Defines in which format query result returned.
@@ -105,11 +90,6 @@ func PossibleResultFormatValues() []ResultFormat {
 	}
 }
 
-// ToPtr returns a *ResultFormat pointing to the current value.
-func (c ResultFormat) ToPtr() *ResultFormat {
-	return &c
-}
-
 // ResultTruncated - Indicates whether the query results are truncated.
 type ResultTruncated string
 
@@ -124,9 +104,4 @@ func PossibleResultTruncatedValues() []ResultTruncated {
 		ResultTruncatedTrue,
 		ResultTruncatedFalse,
 	}
-}
-
-// ToPtr returns a *ResultTruncated pointing to the current value.
-func (c ResultTruncated) ToPtr() *ResultTruncated {
-	return &c
 }

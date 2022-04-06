@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 type OfferType string
 
 const (
@@ -49,9 +44,4 @@ func PossibleOfferTypeValues() []OfferType {
 	return []OfferType{
 		OfferTypeVirtualmachine,
 	}
-}
-
-// ToPtr returns a *OfferType pointing to the current value.
-func (c OfferType) ToPtr() *OfferType {
-	return &c
 }

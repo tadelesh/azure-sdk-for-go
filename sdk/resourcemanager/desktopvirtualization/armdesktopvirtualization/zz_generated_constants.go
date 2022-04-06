@@ -29,11 +29,6 @@ func PossibleApplicationGroupTypeValues() []ApplicationGroupType {
 	}
 }
 
-// ToPtr returns a *ApplicationGroupType pointing to the current value.
-func (c ApplicationGroupType) ToPtr() *ApplicationGroupType {
-	return &c
-}
-
 // ApplicationType - Application type of application.
 type ApplicationType string
 
@@ -48,11 +43,6 @@ func PossibleApplicationTypeValues() []ApplicationType {
 		ApplicationTypeDesktop,
 		ApplicationTypeRemoteApp,
 	}
-}
-
-// ToPtr returns a *ApplicationType pointing to the current value.
-func (c ApplicationType) ToPtr() *ApplicationType {
-	return &c
 }
 
 // CommandLineSetting - Specifies whether this published application can be launched with command line arguments provided
@@ -74,11 +64,6 @@ func PossibleCommandLineSettingValues() []CommandLineSetting {
 	}
 }
 
-// ToPtr returns a *CommandLineSetting pointing to the current value.
-func (c CommandLineSetting) ToPtr() *CommandLineSetting {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -97,11 +82,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 		CreatedByTypeManagedIdentity,
 		CreatedByTypeUser,
 	}
-}
-
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
 }
 
 // HealthCheckName - Represents the name of the health check operation performed.
@@ -171,11 +151,6 @@ func PossibleHealthCheckNameValues() []HealthCheckName {
 	}
 }
 
-// ToPtr returns a *HealthCheckName pointing to the current value.
-func (c HealthCheckName) ToPtr() *HealthCheckName {
-	return &c
-}
-
 // HealthCheckResult - Represents the Health state of the health check we performed.
 type HealthCheckResult string
 
@@ -198,11 +173,6 @@ func PossibleHealthCheckResultValues() []HealthCheckResult {
 		HealthCheckResultSessionHostShutdown,
 		HealthCheckResultUnknown,
 	}
-}
-
-// ToPtr returns a *HealthCheckResult pointing to the current value.
-func (c HealthCheckResult) ToPtr() *HealthCheckResult {
-	return &c
 }
 
 // HostPoolType - HostPool type for desktop.
@@ -229,11 +199,6 @@ func PossibleHostPoolTypeValues() []HostPoolType {
 	}
 }
 
-// ToPtr returns a *HostPoolType pointing to the current value.
-func (c HostPoolType) ToPtr() *HostPoolType {
-	return &c
-}
-
 // LoadBalancerType - The type of the load balancer.
 type LoadBalancerType string
 
@@ -250,11 +215,6 @@ func PossibleLoadBalancerTypeValues() []LoadBalancerType {
 		LoadBalancerTypeDepthFirst,
 		LoadBalancerTypePersistent,
 	}
-}
-
-// ToPtr returns a *LoadBalancerType pointing to the current value.
-func (c LoadBalancerType) ToPtr() *LoadBalancerType {
-	return &c
 }
 
 // Operation - The type of operation for migration.
@@ -284,11 +244,6 @@ func PossibleOperationValues() []Operation {
 	}
 }
 
-// ToPtr returns a *Operation pointing to the current value.
-func (c Operation) ToPtr() *Operation {
-	return &c
-}
-
 // PersonalDesktopAssignmentType - PersonalDesktopAssignment type for HostPool.
 type PersonalDesktopAssignmentType string
 
@@ -303,11 +258,6 @@ func PossiblePersonalDesktopAssignmentTypeValues() []PersonalDesktopAssignmentTy
 		PersonalDesktopAssignmentTypeAutomatic,
 		PersonalDesktopAssignmentTypeDirect,
 	}
-}
-
-// ToPtr returns a *PersonalDesktopAssignmentType pointing to the current value.
-func (c PersonalDesktopAssignmentType) ToPtr() *PersonalDesktopAssignmentType {
-	return &c
 }
 
 // PreferredAppGroupType - The type of preferred application group type, default to Desktop Application Group
@@ -326,11 +276,6 @@ func PossiblePreferredAppGroupTypeValues() []PreferredAppGroupType {
 		PreferredAppGroupTypeNone,
 		PreferredAppGroupTypeRailApplications,
 	}
-}
-
-// ToPtr returns a *PreferredAppGroupType pointing to the current value.
-func (c PreferredAppGroupType) ToPtr() *PreferredAppGroupType {
-	return &c
 }
 
 // PrivateEndpointConnectionProvisioningState - The current provisioning state.
@@ -353,11 +298,6 @@ func PossiblePrivateEndpointConnectionProvisioningStateValues() []PrivateEndpoin
 	}
 }
 
-// ToPtr returns a *PrivateEndpointConnectionProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionProvisioningState) ToPtr() *PrivateEndpointConnectionProvisioningState {
-	return &c
-}
-
 // PrivateEndpointServiceConnectionStatus - The private endpoint connection status.
 type PrivateEndpointServiceConnectionStatus string
 
@@ -376,11 +316,6 @@ func PossiblePrivateEndpointServiceConnectionStatusValues() []PrivateEndpointSer
 	}
 }
 
-// ToPtr returns a *PrivateEndpointServiceConnectionStatus pointing to the current value.
-func (c PrivateEndpointServiceConnectionStatus) ToPtr() *PrivateEndpointServiceConnectionStatus {
-	return &c
-}
-
 // PublicNetworkAccess - Enabled allows this resource to be accessed from both public and private networks, Disabled allows
 // this resource to only be accessed via private endpoints
 type PublicNetworkAccess string
@@ -396,11 +331,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 		PublicNetworkAccessDisabled,
 		PublicNetworkAccessEnabled,
 	}
-}
-
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
 }
 
 // RegistrationTokenOperation - The type of resetting the token.
@@ -421,11 +351,6 @@ func PossibleRegistrationTokenOperationValues() []RegistrationTokenOperation {
 	}
 }
 
-// ToPtr returns a *RegistrationTokenOperation pointing to the current value.
-func (c RegistrationTokenOperation) ToPtr() *RegistrationTokenOperation {
-	return &c
-}
-
 // RemoteApplicationType - Resource Type of Application.
 type RemoteApplicationType string
 
@@ -440,11 +365,6 @@ func PossibleRemoteApplicationTypeValues() []RemoteApplicationType {
 		RemoteApplicationTypeInBuilt,
 		RemoteApplicationTypeMsixApplication,
 	}
-}
-
-// ToPtr returns a *RemoteApplicationType pointing to the current value.
-func (c RemoteApplicationType) ToPtr() *RemoteApplicationType {
-	return &c
 }
 
 // SKUTier - This field is required to be implemented by the Resource Provider if the service has more than one tier, but
@@ -468,11 +388,6 @@ func PossibleSKUTierValues() []SKUTier {
 	}
 }
 
-// ToPtr returns a *SKUTier pointing to the current value.
-func (c SKUTier) ToPtr() *SKUTier {
-	return &c
-}
-
 // SSOSecretType - The type of single sign on Secret Type.
 type SSOSecretType string
 
@@ -493,11 +408,6 @@ func PossibleSSOSecretTypeValues() []SSOSecretType {
 	}
 }
 
-// ToPtr returns a *SSOSecretType pointing to the current value.
-func (c SSOSecretType) ToPtr() *SSOSecretType {
-	return &c
-}
-
 // ScalingHostPoolType - HostPool type for desktop.
 type ScalingHostPoolType string
 
@@ -511,11 +421,6 @@ func PossibleScalingHostPoolTypeValues() []ScalingHostPoolType {
 	return []ScalingHostPoolType{
 		ScalingHostPoolTypePooled,
 	}
-}
-
-// ToPtr returns a *ScalingHostPoolType pointing to the current value.
-func (c ScalingHostPoolType) ToPtr() *ScalingHostPoolType {
-	return &c
 }
 
 type ScalingScheduleDaysOfWeekItem string
@@ -543,11 +448,6 @@ func PossibleScalingScheduleDaysOfWeekItemValues() []ScalingScheduleDaysOfWeekIt
 	}
 }
 
-// ToPtr returns a *ScalingScheduleDaysOfWeekItem pointing to the current value.
-func (c ScalingScheduleDaysOfWeekItem) ToPtr() *ScalingScheduleDaysOfWeekItem {
-	return &c
-}
-
 // SessionHostLoadBalancingAlgorithm - Load balancing algorithm for ramp up period.
 type SessionHostLoadBalancingAlgorithm string
 
@@ -562,11 +462,6 @@ func PossibleSessionHostLoadBalancingAlgorithmValues() []SessionHostLoadBalancin
 		SessionHostLoadBalancingAlgorithmBreadthFirst,
 		SessionHostLoadBalancingAlgorithmDepthFirst,
 	}
-}
-
-// ToPtr returns a *SessionHostLoadBalancingAlgorithm pointing to the current value.
-func (c SessionHostLoadBalancingAlgorithm) ToPtr() *SessionHostLoadBalancingAlgorithm {
-	return &c
 }
 
 // SessionState - State of user session.
@@ -591,11 +486,6 @@ func PossibleSessionStateValues() []SessionState {
 		SessionStateUnknown,
 		SessionStateUserProfileDiskMounted,
 	}
-}
-
-// ToPtr returns a *SessionState pointing to the current value.
-func (c SessionState) ToPtr() *SessionState {
-	return &c
 }
 
 // Status - Status for a SessionHost.
@@ -650,11 +540,6 @@ func PossibleStatusValues() []Status {
 	}
 }
 
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}
-
 // StopHostsWhen - Specifies when to stop hosts during ramp down period.
 type StopHostsWhen string
 
@@ -669,11 +554,6 @@ func PossibleStopHostsWhenValues() []StopHostsWhen {
 		StopHostsWhenZeroActiveSessions,
 		StopHostsWhenZeroSessions,
 	}
-}
-
-// ToPtr returns a *StopHostsWhen pointing to the current value.
-func (c StopHostsWhen) ToPtr() *StopHostsWhen {
-	return &c
 }
 
 // UpdateState - Update state of a SessionHost.
@@ -696,9 +576,4 @@ func PossibleUpdateStateValues() []UpdateState {
 		UpdateStateStarted,
 		UpdateStateSucceeded,
 	}
-}
-
-// ToPtr returns a *UpdateState pointing to the current value.
-func (c UpdateState) ToPtr() *UpdateState {
-	return &c
 }

@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -52,11 +47,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
 // value is "user,system"
 type Origin string
@@ -74,11 +64,6 @@ func PossibleOriginValues() []Origin {
 		OriginUser,
 		OriginUserSystem,
 	}
-}
-
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
 }
 
 // ResourceState - Load Test resources provisioning states.
@@ -101,11 +86,6 @@ func PossibleResourceStateValues() []ResourceState {
 	}
 }
 
-// ToPtr returns a *ResourceState pointing to the current value.
-func (c ResourceState) ToPtr() *ResourceState {
-	return &c
-}
-
 // SystemAssignedServiceIdentityType - Type of managed service identity (either system assigned, or none).
 type SystemAssignedServiceIdentityType string
 
@@ -120,9 +100,4 @@ func PossibleSystemAssignedServiceIdentityTypeValues() []SystemAssignedServiceId
 		SystemAssignedServiceIdentityTypeNone,
 		SystemAssignedServiceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *SystemAssignedServiceIdentityType pointing to the current value.
-func (c SystemAssignedServiceIdentityType) ToPtr() *SystemAssignedServiceIdentityType {
-	return &c
 }

@@ -54,8 +54,3 @@ func PossibleStatusValues() []Status {
 		StatusUnknown,
 	}
 }
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}

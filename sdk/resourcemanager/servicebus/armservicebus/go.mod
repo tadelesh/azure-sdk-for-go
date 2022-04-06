@@ -1,9 +1,5 @@
 module github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/servicebus/armservicebus
 
-go 1.16
+go 1.18
 
-require (
-	github.com/Azure/azure-sdk-for-go v61.1.0+incompatible
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v0.21.0
-	github.com/Azure/azure-sdk-for-go/sdk/azidentity v0.13.0
-)
+require github.com/Azure/azure-sdk-for-go/sdk/azcore v0.22.1-0.20220315231014-ed309e73db6b

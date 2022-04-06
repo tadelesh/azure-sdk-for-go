@@ -38,8 +38,3 @@ func PossibleHanaProvisioningStatesEnumValues() []HanaProvisioningStatesEnum {
 		HanaProvisioningStatesEnumUpdating,
 	}
 }
-
-// ToPtr returns a *HanaProvisioningStatesEnum pointing to the current value.
-func (c HanaProvisioningStatesEnum) ToPtr() *HanaProvisioningStatesEnum {
-	return &c
-}

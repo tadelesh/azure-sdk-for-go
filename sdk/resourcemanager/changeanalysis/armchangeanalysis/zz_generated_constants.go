@@ -29,11 +29,6 @@ func PossibleChangeCategoryValues() []ChangeCategory {
 	}
 }
 
-// ToPtr returns a *ChangeCategory pointing to the current value.
-func (c ChangeCategory) ToPtr() *ChangeCategory {
-	return &c
-}
-
 // ChangeType - The type of the change.
 type ChangeType string
 
@@ -52,11 +47,6 @@ func PossibleChangeTypeValues() []ChangeType {
 	}
 }
 
-// ToPtr returns a *ChangeType pointing to the current value.
-func (c ChangeType) ToPtr() *ChangeType {
-	return &c
-}
-
 type Level string
 
 const (
@@ -72,9 +62,4 @@ func PossibleLevelValues() []Level {
 		LevelNoisy,
 		LevelNormal,
 	}
-}
-
-// ToPtr returns a *Level pointing to the current value.
-func (c Level) ToPtr() *Level {
-	return &c
 }

@@ -1,0 +1,951 @@
+=== RUN   TestRecoverableDatabases_Get
+--- PASS: TestRecoverableDatabases_Get (0.08s)
+=== RUN   TestRecoverableDatabases_ListByServer
+--- PASS: TestRecoverableDatabases_ListByServer (0.04s)
+=== RUN   TestDataMaskingPolicies_CreateOrUpdate
+--- PASS: TestDataMaskingPolicies_CreateOrUpdate (0.13s)
+=== RUN   TestDataMaskingPolicies_Get
+--- PASS: TestDataMaskingPolicies_Get (0.05s)
+=== RUN   TestDataMaskingRules_CreateOrUpdate
+--- PASS: TestDataMaskingRules_CreateOrUpdate (0.19s)
+=== RUN   TestDataMaskingRules_ListByDatabase
+--- PASS: TestDataMaskingRules_ListByDatabase (0.05s)
+=== RUN   TestGeoBackupPolicies_CreateOrUpdate
+--- PASS: TestGeoBackupPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestGeoBackupPolicies_Get
+--- PASS: TestGeoBackupPolicies_Get (0.04s)
+=== RUN   TestGeoBackupPolicies_ListByDatabase
+--- PASS: TestGeoBackupPolicies_ListByDatabase (0.04s)
+=== RUN   TestDatabases_ListMetrics
+--- PASS: TestDatabases_ListMetrics (0.07s)
+=== RUN   TestDatabases_ListMetricDefinitions
+--- PASS: TestDatabases_ListMetricDefinitions (0.10s)
+=== RUN   TestDatabases_ListByServer
+--- PASS: TestDatabases_ListByServer (0.07s)
+=== RUN   TestDatabases_Get
+--- PASS: TestDatabases_Get (0.05s)
+=== RUN   TestDatabases_CreateOrUpdate
+--- PASS: TestDatabases_CreateOrUpdate (1.60s)
+=== RUN   TestDatabases_Delete
+--- PASS: TestDatabases_Delete (0.08s)
+=== RUN   TestDatabases_Update
+--- PASS: TestDatabases_Update (0.26s)
+=== RUN   TestDatabases_ListByElasticPool
+--- PASS: TestDatabases_ListByElasticPool (0.05s)
+=== RUN   TestDatabases_Failover
+--- PASS: TestDatabases_Failover (0.09s)
+=== RUN   TestDatabases_ListInaccessibleByServer
+--- PASS: TestDatabases_ListInaccessibleByServer (0.04s)
+=== RUN   TestDatabases_Pause
+--- PASS: TestDatabases_Pause (0.08s)
+=== RUN   TestDatabases_Resume
+--- PASS: TestDatabases_Resume (0.09s)
+=== RUN   TestDatabases_UpgradeDataWarehouse
+--- PASS: TestDatabases_UpgradeDataWarehouse (0.08s)
+=== RUN   TestDatabases_Rename
+--- PASS: TestDatabases_Rename (0.04s)
+=== RUN   TestDatabases_Import
+--- PASS: TestDatabases_Import (0.18s)
+=== RUN   TestDatabases_Export
+--- PASS: TestDatabases_Export (0.22s)
+=== RUN   TestElasticPools_ListMetrics
+--- PASS: TestElasticPools_ListMetrics (0.05s)
+=== RUN   TestElasticPools_ListMetricDefinitions
+--- PASS: TestElasticPools_ListMetricDefinitions (0.09s)
+=== RUN   TestElasticPools_ListByServer
+--- PASS: TestElasticPools_ListByServer (0.07s)
+=== RUN   TestElasticPools_Get
+--- PASS: TestElasticPools_Get (0.08s)
+=== RUN   TestElasticPools_CreateOrUpdate
+--- PASS: TestElasticPools_CreateOrUpdate (0.54s)
+=== RUN   TestElasticPools_Delete
+--- PASS: TestElasticPools_Delete (0.09s)
+=== RUN   TestElasticPools_Update
+--- PASS: TestElasticPools_Update (0.45s)
+=== RUN   TestElasticPools_Failover
+--- PASS: TestElasticPools_Failover (0.09s)
+=== RUN   TestReplicationLinks_Delete
+--- PASS: TestReplicationLinks_Delete (0.07s)
+=== RUN   TestReplicationLinks_Failover
+--- PASS: TestReplicationLinks_Failover (0.09s)
+=== RUN   TestReplicationLinks_FailoverAllowDataLoss
+--- PASS: TestReplicationLinks_FailoverAllowDataLoss (0.07s)
+=== RUN   TestReplicationLinks_Unlink
+--- PASS: TestReplicationLinks_Unlink (0.08s)
+=== RUN   TestReplicationLinks_ListByDatabase
+--- PASS: TestReplicationLinks_ListByDatabase (0.06s)
+=== RUN   TestReplicationLinks_Get
+--- PASS: TestReplicationLinks_Get (0.05s)
+=== RUN   TestReplicationLinks_ListByServer
+--- PASS: TestReplicationLinks_ListByServer (0.04s)
+=== RUN   TestServerCommunicationLinks_Delete
+--- PASS: TestServerCommunicationLinks_Delete (0.04s)
+=== RUN   TestServerCommunicationLinks_Get
+--- PASS: TestServerCommunicationLinks_Get (0.05s)
+=== RUN   TestServerCommunicationLinks_CreateOrUpdate
+    zt_generated_mock_test.go:4471: Failed to get LRO result for example specification/sql/resource-manager/Microsoft.Sql/stable/2014-04-01/examples/ServerCommunicationLinkCreateOrUpdate.json: GET https://localhost:8443/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/sqlcrudtest-7398/providers/Microsoft.Sql/servers/sqlcrudtest-4645/communicationLinks/link1
+        --------------------------------------------------------------------------------
+        RESPONSE 461: 461 unknown
+        ERROR CODE: 461
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "461",
+            "message": "Wrong response example for operation",
+            "target": ""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestServerCommunicationLinks_CreateOrUpdate (0.08s)
+=== RUN   TestServerCommunicationLinks_ListByServer
+--- PASS: TestServerCommunicationLinks_ListByServer (0.03s)
+=== RUN   TestServiceObjectives_Get
+--- PASS: TestServiceObjectives_Get (0.06s)
+=== RUN   TestServiceObjectives_ListByServer
+--- PASS: TestServiceObjectives_ListByServer (0.17s)
+=== RUN   TestElasticPoolActivities_ListByElasticPool
+--- PASS: TestElasticPoolActivities_ListByElasticPool (0.06s)
+=== RUN   TestElasticPoolDatabaseActivities_ListByElasticPool
+--- PASS: TestElasticPoolDatabaseActivities_ListByElasticPool (0.05s)
+=== RUN   TestServerUsages_ListByServer
+--- PASS: TestServerUsages_ListByServer (0.04s)
+=== RUN   TestExtendedDatabaseBlobAuditingPolicies_Get
+--- PASS: TestExtendedDatabaseBlobAuditingPolicies_Get (0.05s)
+=== RUN   TestExtendedDatabaseBlobAuditingPolicies_CreateOrUpdate
+--- PASS: TestExtendedDatabaseBlobAuditingPolicies_CreateOrUpdate (0.12s)
+=== RUN   TestExtendedDatabaseBlobAuditingPolicies_ListByDatabase
+--- PASS: TestExtendedDatabaseBlobAuditingPolicies_ListByDatabase (0.04s)
+=== RUN   TestExtendedServerBlobAuditingPolicies_Get
+--- PASS: TestExtendedServerBlobAuditingPolicies_Get (0.05s)
+=== RUN   TestExtendedServerBlobAuditingPolicies_CreateOrUpdate
+--- PASS: TestExtendedServerBlobAuditingPolicies_CreateOrUpdate (0.16s)
+=== RUN   TestExtendedServerBlobAuditingPolicies_ListByServer
+--- PASS: TestExtendedServerBlobAuditingPolicies_ListByServer (0.05s)
+=== RUN   TestServerBlobAuditingPolicies_Get
+--- PASS: TestServerBlobAuditingPolicies_Get (0.04s)
+=== RUN   TestServerBlobAuditingPolicies_CreateOrUpdate
+--- PASS: TestServerBlobAuditingPolicies_CreateOrUpdate (0.17s)
+=== RUN   TestServerBlobAuditingPolicies_ListByServer
+--- PASS: TestServerBlobAuditingPolicies_ListByServer (0.08s)
+=== RUN   TestDatabaseBlobAuditingPolicies_Get
+--- PASS: TestDatabaseBlobAuditingPolicies_Get (0.04s)
+=== RUN   TestDatabaseBlobAuditingPolicies_CreateOrUpdate
+--- PASS: TestDatabaseBlobAuditingPolicies_CreateOrUpdate (0.13s)
+=== RUN   TestDatabaseBlobAuditingPolicies_ListByDatabase
+--- PASS: TestDatabaseBlobAuditingPolicies_ListByDatabase (0.04s)
+=== RUN   TestDatabaseAdvisors_ListByDatabase
+--- PASS: TestDatabaseAdvisors_ListByDatabase (0.18s)
+=== RUN   TestDatabaseAdvisors_Get
+--- PASS: TestDatabaseAdvisors_Get (0.03s)
+=== RUN   TestDatabaseAdvisors_Update
+--- PASS: TestDatabaseAdvisors_Update (0.07s)
+=== RUN   TestDatabaseAutomaticTuning_Get
+--- PASS: TestDatabaseAutomaticTuning_Get (0.07s)
+=== RUN   TestDatabaseAutomaticTuning_Update
+--- PASS: TestDatabaseAutomaticTuning_Update (0.08s)
+=== RUN   TestDatabaseColumns_ListByDatabase
+    zt_generated_mock_test.go:7223: Failed to advance page for example specification/sql/resource-manager/Microsoft.Sql/preview/2020-11-01-preview/examples/ColumnsListByDatabaseMax.json: GET https://localhost:8443/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/myRG/providers/Microsoft.Sql/servers/serverName/databases/myDatabase/columns
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"isSuccessful\":false,\"operationInfo\":{\"apiVersion\":\"2020-11-01-preview\",\"operationId\":\"DatabaseColumns_ListByDatabase\"},\"errors\":[{\"code\":\"INVALID_TYPE\",\"severity\":0,\"message\":\"Expected type array but found type string\",\"params\":[\"array\",\"string\"],\"jsonPathsInPayload\":[\".query.schema\"],\"schemaPath\":\"#/properties/query/properties/schema/type\",\"source\":{\"url\":\"specification\\\\sql\\\\resource-manager\\\\Microsoft.Sql\\\\preview\\\\2020-11-01-preview\\\\DatabaseColumns.json\",\"position\":{\"line\":36,\"column\":11}},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/query/schema\"]},{\"code\":\"INVALID_TYPE\",\"severity\":0,\"message\":\"Expected type array but found type string\",\"params\":[\"array\",\"string\"],\"jsonPathsInPayload\":[\".query.column\"],\"schemaPath\":\"#/properties/query/properties/column/type\",\"source\":{\"url\":\"specification\\\\sql\\\\resource-manager\\\\Microsoft.Sql\\\\preview\\\\2020-11-01-preview\\\\DatabaseColumns.json\",\"position\":{\"line\":56,\"column\":11}},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/query/column\"]}]}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestDatabaseColumns_ListByDatabase (0.01s)
+=== RUN   TestDatabaseColumns_ListByTable
+--- PASS: TestDatabaseColumns_ListByTable (0.05s)
+=== RUN   TestDatabaseColumns_Get
+--- PASS: TestDatabaseColumns_Get (0.03s)
+=== RUN   TestDatabaseRecommendedActions_ListByDatabaseAdvisor
+--- PASS: TestDatabaseRecommendedActions_ListByDatabaseAdvisor (0.08s)
+=== RUN   TestDatabaseRecommendedActions_Get
+--- PASS: TestDatabaseRecommendedActions_Get (0.05s)
+=== RUN   TestDatabaseRecommendedActions_Update
+--- PASS: TestDatabaseRecommendedActions_Update (0.06s)
+=== RUN   TestDatabaseSchemas_ListByDatabase
+--- PASS: TestDatabaseSchemas_ListByDatabase (0.05s)
+=== RUN   TestDatabaseSchemas_Get
+--- PASS: TestDatabaseSchemas_Get (0.05s)
+=== RUN   TestDatabaseSecurityAlertPolicies_Get
+--- PASS: TestDatabaseSecurityAlertPolicies_Get (0.06s)
+=== RUN   TestDatabaseSecurityAlertPolicies_CreateOrUpdate
+--- PASS: TestDatabaseSecurityAlertPolicies_CreateOrUpdate (0.09s)
+=== RUN   TestDatabaseSecurityAlertPolicies_ListByDatabase
+--- PASS: TestDatabaseSecurityAlertPolicies_ListByDatabase (0.05s)
+=== RUN   TestDatabaseTables_ListBySchema
+--- PASS: TestDatabaseTables_ListBySchema (0.04s)
+=== RUN   TestDatabaseTables_Get
+--- PASS: TestDatabaseTables_Get (0.03s)
+=== RUN   TestDatabaseVulnerabilityAssessmentRuleBaselines_Get
+--- PASS: TestDatabaseVulnerabilityAssessmentRuleBaselines_Get (0.06s)
+=== RUN   TestDatabaseVulnerabilityAssessmentRuleBaselines_CreateOrUpdate
+--- PASS: TestDatabaseVulnerabilityAssessmentRuleBaselines_CreateOrUpdate (0.04s)
+=== RUN   TestDatabaseVulnerabilityAssessmentRuleBaselines_Delete
+--- PASS: TestDatabaseVulnerabilityAssessmentRuleBaselines_Delete (0.04s)
+=== RUN   TestDatabaseVulnerabilityAssessments_Get
+--- PASS: TestDatabaseVulnerabilityAssessments_Get (0.04s)
+=== RUN   TestDatabaseVulnerabilityAssessments_CreateOrUpdate
+--- PASS: TestDatabaseVulnerabilityAssessments_CreateOrUpdate (0.10s)
+=== RUN   TestDatabaseVulnerabilityAssessments_Delete
+--- PASS: TestDatabaseVulnerabilityAssessments_Delete (0.03s)
+=== RUN   TestDatabaseVulnerabilityAssessments_ListByDatabase
+--- PASS: TestDatabaseVulnerabilityAssessments_ListByDatabase (0.03s)
+=== RUN   TestDatabaseVulnerabilityAssessmentScans_InitiateScan
+--- PASS: TestDatabaseVulnerabilityAssessmentScans_InitiateScan (0.08s)
+=== RUN   TestDatabaseVulnerabilityAssessmentScans_ListByDatabase
+--- PASS: TestDatabaseVulnerabilityAssessmentScans_ListByDatabase (0.04s)
+=== RUN   TestDatabaseVulnerabilityAssessmentScans_Get
+--- PASS: TestDatabaseVulnerabilityAssessmentScans_Get (0.03s)
+=== RUN   TestDatabaseVulnerabilityAssessmentScans_Export
+--- PASS: TestDatabaseVulnerabilityAssessmentScans_Export (0.06s)
+=== RUN   TestDataWarehouseUserActivities_Get
+--- PASS: TestDataWarehouseUserActivities_Get (0.06s)
+=== RUN   TestDataWarehouseUserActivities_ListByDatabase
+--- PASS: TestDataWarehouseUserActivities_ListByDatabase (0.04s)
+=== RUN   TestDeletedServers_List
+--- PASS: TestDeletedServers_List (0.04s)
+=== RUN   TestDeletedServers_Get
+--- PASS: TestDeletedServers_Get (0.03s)
+=== RUN   TestDeletedServers_ListByLocation
+--- PASS: TestDeletedServers_ListByLocation (0.03s)
+=== RUN   TestDeletedServers_Recover
+--- PASS: TestDeletedServers_Recover (0.07s)
+=== RUN   TestElasticPoolOperations_Cancel
+--- PASS: TestElasticPoolOperations_Cancel (0.03s)
+=== RUN   TestElasticPoolOperations_ListByElasticPool
+--- PASS: TestElasticPoolOperations_ListByElasticPool (0.03s)
+=== RUN   TestEncryptionProtectors_ListByServer
+--- PASS: TestEncryptionProtectors_ListByServer (0.03s)
+=== RUN   TestEncryptionProtectors_Get
+--- PASS: TestEncryptionProtectors_Get (0.03s)
+=== RUN   TestEncryptionProtectors_CreateOrUpdate
+--- PASS: TestEncryptionProtectors_CreateOrUpdate (0.12s)
+=== RUN   TestEncryptionProtectors_Revalidate
+--- PASS: TestEncryptionProtectors_Revalidate (0.08s)
+=== RUN   TestFailoverGroups_Get
+--- PASS: TestFailoverGroups_Get (0.05s)
+=== RUN   TestFailoverGroups_CreateOrUpdate
+--- PASS: TestFailoverGroups_CreateOrUpdate (0.12s)
+=== RUN   TestFailoverGroups_Delete
+--- PASS: TestFailoverGroups_Delete (0.07s)
+=== RUN   TestFailoverGroups_Update
+--- PASS: TestFailoverGroups_Update (0.08s)
+=== RUN   TestFailoverGroups_ListByServer
+--- PASS: TestFailoverGroups_ListByServer (0.04s)
+=== RUN   TestFailoverGroups_Failover
+--- PASS: TestFailoverGroups_Failover (0.12s)
+=== RUN   TestFailoverGroups_ForceFailoverAllowDataLoss
+--- PASS: TestFailoverGroups_ForceFailoverAllowDataLoss (0.08s)
+=== RUN   TestFirewallRules_Get
+--- PASS: TestFirewallRules_Get (0.03s)
+=== RUN   TestFirewallRules_CreateOrUpdate
+--- PASS: TestFirewallRules_CreateOrUpdate (0.08s)
+=== RUN   TestFirewallRules_Delete
+--- PASS: TestFirewallRules_Delete (0.03s)
+=== RUN   TestFirewallRules_ListByServer
+--- PASS: TestFirewallRules_ListByServer (0.04s)
+=== RUN   TestFirewallRules_Replace
+--- PASS: TestFirewallRules_Replace (0.04s)
+=== RUN   TestInstanceFailoverGroups_Get
+--- PASS: TestInstanceFailoverGroups_Get (0.05s)
+=== RUN   TestInstanceFailoverGroups_CreateOrUpdate
+--- PASS: TestInstanceFailoverGroups_CreateOrUpdate (0.11s)
+=== RUN   TestInstanceFailoverGroups_Delete
+--- PASS: TestInstanceFailoverGroups_Delete (0.07s)
+=== RUN   TestInstanceFailoverGroups_ListByLocation
+--- PASS: TestInstanceFailoverGroups_ListByLocation (0.09s)
+=== RUN   TestInstanceFailoverGroups_Failover
+--- PASS: TestInstanceFailoverGroups_Failover (0.10s)
+=== RUN   TestInstanceFailoverGroups_ForceFailoverAllowDataLoss
+--- PASS: TestInstanceFailoverGroups_ForceFailoverAllowDataLoss (0.08s)
+=== RUN   TestInstancePools_Get
+--- PASS: TestInstancePools_Get (0.04s)
+=== RUN   TestInstancePools_CreateOrUpdate
+--- PASS: TestInstancePools_CreateOrUpdate (0.26s)
+=== RUN   TestInstancePools_Delete
+--- PASS: TestInstancePools_Delete (0.06s)
+=== RUN   TestInstancePools_Update
+--- PASS: TestInstancePools_Update (0.08s)
+=== RUN   TestInstancePools_ListByResourceGroup
+--- PASS: TestInstancePools_ListByResourceGroup (0.04s)
+=== RUN   TestInstancePools_List
+--- PASS: TestInstancePools_List (0.04s)
+=== RUN   TestJobAgents_ListByServer
+--- PASS: TestJobAgents_ListByServer (0.03s)
+=== RUN   TestJobAgents_Get
+--- PASS: TestJobAgents_Get (0.03s)
+=== RUN   TestJobAgents_CreateOrUpdate
+--- PASS: TestJobAgents_CreateOrUpdate (0.11s)
+=== RUN   TestJobAgents_Delete
+--- PASS: TestJobAgents_Delete (0.06s)
+=== RUN   TestJobAgents_Update
+--- PASS: TestJobAgents_Update (0.08s)
+=== RUN   TestJobCredentials_ListByAgent
+--- PASS: TestJobCredentials_ListByAgent (0.07s)
+=== RUN   TestJobCredentials_Get
+--- PASS: TestJobCredentials_Get (0.04s)
+=== RUN   TestJobCredentials_CreateOrUpdate
+--- PASS: TestJobCredentials_CreateOrUpdate (0.03s)
+=== RUN   TestJobCredentials_Delete
+--- PASS: TestJobCredentials_Delete (0.04s)
+=== RUN   TestJobExecutions_ListByAgent
+--- PASS: TestJobExecutions_ListByAgent (0.09s)
+=== RUN   TestJobExecutions_Cancel
+--- PASS: TestJobExecutions_Cancel (0.04s)
+=== RUN   TestJobExecutions_Create
+--- PASS: TestJobExecutions_Create (0.10s)
+=== RUN   TestJobExecutions_ListByJob
+--- PASS: TestJobExecutions_ListByJob (0.04s)
+=== RUN   TestJobExecutions_Get
+--- PASS: TestJobExecutions_Get (0.03s)
+=== RUN   TestJobExecutions_CreateOrUpdate
+--- PASS: TestJobExecutions_CreateOrUpdate (0.07s)
+=== RUN   TestJobs_ListByAgent
+--- PASS: TestJobs_ListByAgent (0.04s)
+=== RUN   TestJobs_Get
+--- PASS: TestJobs_Get (0.03s)
+=== RUN   TestJobs_CreateOrUpdate
+--- PASS: TestJobs_CreateOrUpdate (0.07s)
+=== RUN   TestJobs_Delete
+--- PASS: TestJobs_Delete (0.03s)
+=== RUN   TestJobStepExecutions_ListByJobExecution
+--- PASS: TestJobStepExecutions_ListByJobExecution (0.03s)
+=== RUN   TestJobStepExecutions_Get
+--- PASS: TestJobStepExecutions_Get (0.03s)
+=== RUN   TestJobSteps_ListByVersion
+--- PASS: TestJobSteps_ListByVersion (0.05s)
+=== RUN   TestJobSteps_GetByVersion
+--- PASS: TestJobSteps_GetByVersion (0.03s)
+=== RUN   TestJobSteps_ListByJob
+--- PASS: TestJobSteps_ListByJob (0.04s)
+=== RUN   TestJobSteps_Get
+--- PASS: TestJobSteps_Get (0.06s)
+=== RUN   TestJobSteps_CreateOrUpdate
+--- PASS: TestJobSteps_CreateOrUpdate (0.13s)
+=== RUN   TestJobSteps_Delete
+--- PASS: TestJobSteps_Delete (0.03s)
+=== RUN   TestJobTargetExecutions_ListByJobExecution
+--- PASS: TestJobTargetExecutions_ListByJobExecution (0.04s)
+=== RUN   TestJobTargetExecutions_ListByStep
+--- PASS: TestJobTargetExecutions_ListByStep (0.04s)
+=== RUN   TestJobTargetExecutions_Get
+--- PASS: TestJobTargetExecutions_Get (0.04s)
+=== RUN   TestJobTargetGroups_ListByAgent
+--- PASS: TestJobTargetGroups_ListByAgent (0.04s)
+=== RUN   TestJobTargetGroups_Get
+--- PASS: TestJobTargetGroups_Get (0.04s)
+=== RUN   TestJobTargetGroups_CreateOrUpdate
+--- PASS: TestJobTargetGroups_CreateOrUpdate (0.11s)
+=== RUN   TestJobTargetGroups_Delete
+--- PASS: TestJobTargetGroups_Delete (0.04s)
+=== RUN   TestJobVersions_ListByJob
+--- PASS: TestJobVersions_ListByJob (0.04s)
+=== RUN   TestJobVersions_Get
+--- PASS: TestJobVersions_Get (0.03s)
+=== RUN   TestCapabilities_ListByLocation
+--- PASS: TestCapabilities_ListByLocation (0.44s)
+=== RUN   TestLongTermRetentionPolicies_Get
+--- PASS: TestLongTermRetentionPolicies_Get (0.12s)
+=== RUN   TestLongTermRetentionPolicies_CreateOrUpdate
+--- PASS: TestLongTermRetentionPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestLongTermRetentionPolicies_ListByDatabase
+--- PASS: TestLongTermRetentionPolicies_ListByDatabase (0.04s)
+=== RUN   TestMaintenanceWindowOptions_Get
+--- PASS: TestMaintenanceWindowOptions_Get (0.07s)
+=== RUN   TestMaintenanceWindows_Get
+--- PASS: TestMaintenanceWindows_Get (0.05s)
+=== RUN   TestMaintenanceWindows_CreateOrUpdate
+--- PASS: TestMaintenanceWindows_CreateOrUpdate (0.04s)
+=== RUN   TestManagedBackupShortTermRetentionPolicies_Get
+--- PASS: TestManagedBackupShortTermRetentionPolicies_Get (0.07s)
+=== RUN   TestManagedBackupShortTermRetentionPolicies_CreateOrUpdate
+--- PASS: TestManagedBackupShortTermRetentionPolicies_CreateOrUpdate (0.07s)
+=== RUN   TestManagedBackupShortTermRetentionPolicies_Update
+--- PASS: TestManagedBackupShortTermRetentionPolicies_Update (0.09s)
+=== RUN   TestManagedBackupShortTermRetentionPolicies_ListByDatabase
+--- PASS: TestManagedBackupShortTermRetentionPolicies_ListByDatabase (0.04s)
+=== RUN   TestManagedDatabaseColumns_ListByDatabase
+    zt_generated_mock_test.go:16415: Failed to advance page for example specification/sql/resource-manager/Microsoft.Sql/preview/2020-11-01-preview/examples/ManagedColumnsListByDatabaseMax.json: GET https://localhost:8443/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/myRG/providers/Microsoft.Sql/managedInstances/serverName/databases/myDatabase/columns
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"isSuccessful\":false,\"operationInfo\":{\"apiVersion\":\"2020-11-01-preview\",\"operationId\":\"ManagedDatabaseColumns_ListByDatabase\"},\"errors\":[{\"code\":\"INVALID_TYPE\",\"severity\":0,\"message\":\"Expected type array but found type string\",\"params\":[\"array\",\"string\"],\"jsonPathsInPayload\":[\".query.schema\"],\"schemaPath\":\"#/properties/query/properties/schema/type\",\"source\":{\"url\":\"specification\\\\sql\\\\resource-manager\\\\Microsoft.Sql\\\\preview\\\\2020-11-01-preview\\\\ManagedDatabaseColumns.json\",\"position\":{\"line\":36,\"column\":11}},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/query/schema\"]},{\"code\":\"INVALID_TYPE\",\"severity\":0,\"message\":\"Expected type array but found type string\",\"params\":[\"array\",\"string\"],\"jsonPathsInPayload\":[\".query.column\"],\"schemaPath\":\"#/properties/query/properties/column/type\",\"source\":{\"url\":\"specification\\\\sql\\\\resource-manager\\\\Microsoft.Sql\\\\preview\\\\2020-11-01-preview\\\\ManagedDatabaseColumns.json\",\"position\":{\"line\":56,\"column\":11}},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/query/column\"]}]}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestManagedDatabaseColumns_ListByDatabase (0.01s)
+=== RUN   TestManagedDatabaseColumns_ListByTable
+--- PASS: TestManagedDatabaseColumns_ListByTable (0.04s)
+=== RUN   TestManagedDatabaseColumns_Get
+--- PASS: TestManagedDatabaseColumns_Get (0.04s)
+=== RUN   TestManagedDatabaseQueries_Get
+--- PASS: TestManagedDatabaseQueries_Get (0.04s)
+=== RUN   TestManagedDatabaseQueries_ListByQuery
+--- PASS: TestManagedDatabaseQueries_ListByQuery (0.77s)
+=== RUN   TestManagedDatabaseRestoreDetails_Get
+--- PASS: TestManagedDatabaseRestoreDetails_Get (0.05s)
+=== RUN   TestManagedDatabases_ListByInstance
+--- PASS: TestManagedDatabases_ListByInstance (0.04s)
+=== RUN   TestManagedDatabases_Get
+--- PASS: TestManagedDatabases_Get (0.03s)
+=== RUN   TestManagedDatabases_CreateOrUpdate
+--- PASS: TestManagedDatabases_CreateOrUpdate (0.77s)
+=== RUN   TestManagedDatabases_Delete
+--- PASS: TestManagedDatabases_Delete (0.07s)
+=== RUN   TestManagedDatabases_Update
+--- PASS: TestManagedDatabases_Update (0.14s)
+=== RUN   TestManagedDatabases_CompleteRestore
+--- PASS: TestManagedDatabases_CompleteRestore (0.07s)
+=== RUN   TestManagedDatabases_ListInaccessibleByInstance
+--- PASS: TestManagedDatabases_ListInaccessibleByInstance (0.04s)
+=== RUN   TestManagedDatabaseSchemas_ListByDatabase
+--- PASS: TestManagedDatabaseSchemas_ListByDatabase (0.05s)
+=== RUN   TestManagedDatabaseSchemas_Get
+--- PASS: TestManagedDatabaseSchemas_Get (0.04s)
+=== RUN   TestManagedDatabaseSecurityAlertPolicies_Get
+--- PASS: TestManagedDatabaseSecurityAlertPolicies_Get (0.08s)
+=== RUN   TestManagedDatabaseSecurityAlertPolicies_CreateOrUpdate
+--- PASS: TestManagedDatabaseSecurityAlertPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestManagedDatabaseSecurityAlertPolicies_ListByDatabase
+--- PASS: TestManagedDatabaseSecurityAlertPolicies_ListByDatabase (0.04s)
+=== RUN   TestManagedDatabaseSecurityEvents_ListByDatabase
+    zt_generated_mock_test.go:18048: Failed to advance page for example specification/sql/resource-manager/Microsoft.Sql/preview/2020-11-01-preview/examples/ManagedDatabaseSecurityEventsGetMax.json: GET https://localhost:8443/subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/testrg/providers/Microsoft.Sql/managedInstances/testcl/databases/database1/securityEvents
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter $skip=0 don't match example value \"0\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestManagedDatabaseSecurityEvents_ListByDatabase (0.04s)
+=== RUN   TestManagedDatabaseSensitivityLabels_Get
+--- PASS: TestManagedDatabaseSensitivityLabels_Get (0.05s)
+=== RUN   TestManagedDatabaseSensitivityLabels_CreateOrUpdate
+--- PASS: TestManagedDatabaseSensitivityLabels_CreateOrUpdate (0.04s)
+=== RUN   TestManagedDatabaseSensitivityLabels_Delete
+--- PASS: TestManagedDatabaseSensitivityLabels_Delete (0.03s)
+=== RUN   TestManagedDatabaseSensitivityLabels_DisableRecommendation
+--- PASS: TestManagedDatabaseSensitivityLabels_DisableRecommendation (0.04s)
+=== RUN   TestManagedDatabaseSensitivityLabels_EnableRecommendation
+--- PASS: TestManagedDatabaseSensitivityLabels_EnableRecommendation (0.04s)
+=== RUN   TestManagedDatabaseSensitivityLabels_ListCurrentByDatabase
+--- PASS: TestManagedDatabaseSensitivityLabels_ListCurrentByDatabase (0.05s)
+=== RUN   TestManagedDatabaseSensitivityLabels_Update
+--- PASS: TestManagedDatabaseSensitivityLabels_Update (0.04s)
+=== RUN   TestManagedDatabaseSensitivityLabels_ListRecommendedByDatabase
+--- PASS: TestManagedDatabaseSensitivityLabels_ListRecommendedByDatabase (0.04s)
+=== RUN   TestManagedDatabaseRecommendedSensitivityLabels_Update
+--- PASS: TestManagedDatabaseRecommendedSensitivityLabels_Update (0.04s)
+=== RUN   TestManagedDatabaseTables_ListBySchema
+--- PASS: TestManagedDatabaseTables_ListBySchema (0.03s)
+=== RUN   TestManagedDatabaseTables_Get
+--- PASS: TestManagedDatabaseTables_Get (0.03s)
+=== RUN   TestManagedDatabaseTransparentDataEncryption_Get
+--- PASS: TestManagedDatabaseTransparentDataEncryption_Get (0.04s)
+=== RUN   TestManagedDatabaseTransparentDataEncryption_CreateOrUpdate
+--- PASS: TestManagedDatabaseTransparentDataEncryption_CreateOrUpdate (0.04s)
+=== RUN   TestManagedDatabaseTransparentDataEncryption_ListByDatabase
+--- PASS: TestManagedDatabaseTransparentDataEncryption_ListByDatabase (0.03s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_Get
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_Get (0.04s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_CreateOrUpdate
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_CreateOrUpdate (0.04s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_Delete
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentRuleBaselines_Delete (0.03s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessments_Get
+--- PASS: TestManagedDatabaseVulnerabilityAssessments_Get (0.06s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessments_CreateOrUpdate
+--- PASS: TestManagedDatabaseVulnerabilityAssessments_CreateOrUpdate (0.10s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessments_Delete
+--- PASS: TestManagedDatabaseVulnerabilityAssessments_Delete (0.03s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessments_ListByDatabase
+--- PASS: TestManagedDatabaseVulnerabilityAssessments_ListByDatabase (0.04s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentScans_InitiateScan
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentScans_InitiateScan (0.13s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentScans_Export
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentScans_Export (0.04s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentScans_ListByDatabase
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentScans_ListByDatabase (0.04s)
+=== RUN   TestManagedDatabaseVulnerabilityAssessmentScans_Get
+--- PASS: TestManagedDatabaseVulnerabilityAssessmentScans_Get (0.04s)
+=== RUN   TestManagedInstanceAdministrators_ListByInstance
+--- PASS: TestManagedInstanceAdministrators_ListByInstance (0.04s)
+=== RUN   TestManagedInstanceAdministrators_Get
+--- PASS: TestManagedInstanceAdministrators_Get (0.04s)
+=== RUN   TestManagedInstanceAdministrators_CreateOrUpdate
+--- PASS: TestManagedInstanceAdministrators_CreateOrUpdate (0.23s)
+=== RUN   TestManagedInstanceAdministrators_Delete
+--- PASS: TestManagedInstanceAdministrators_Delete (0.07s)
+=== RUN   TestManagedInstanceAzureADOnlyAuthentications_Get
+--- PASS: TestManagedInstanceAzureADOnlyAuthentications_Get (0.03s)
+=== RUN   TestManagedInstanceAzureADOnlyAuthentications_CreateOrUpdate
+--- PASS: TestManagedInstanceAzureADOnlyAuthentications_CreateOrUpdate (0.11s)
+=== RUN   TestManagedInstanceAzureADOnlyAuthentications_Delete
+--- PASS: TestManagedInstanceAzureADOnlyAuthentications_Delete (0.07s)
+=== RUN   TestManagedInstanceAzureADOnlyAuthentications_ListByInstance
+--- PASS: TestManagedInstanceAzureADOnlyAuthentications_ListByInstance (0.05s)
+=== RUN   TestManagedInstanceEncryptionProtectors_Revalidate
+--- PASS: TestManagedInstanceEncryptionProtectors_Revalidate (0.11s)
+=== RUN   TestManagedInstanceEncryptionProtectors_ListByInstance
+--- PASS: TestManagedInstanceEncryptionProtectors_ListByInstance (0.13s)
+=== RUN   TestManagedInstanceEncryptionProtectors_Get
+--- PASS: TestManagedInstanceEncryptionProtectors_Get (0.06s)
+=== RUN   TestManagedInstanceEncryptionProtectors_CreateOrUpdate
+--- PASS: TestManagedInstanceEncryptionProtectors_CreateOrUpdate (0.21s)
+=== RUN   TestManagedInstanceKeys_ListByInstance
+--- PASS: TestManagedInstanceKeys_ListByInstance (0.05s)
+=== RUN   TestManagedInstanceKeys_Get
+--- PASS: TestManagedInstanceKeys_Get (0.04s)
+=== RUN   TestManagedInstanceKeys_CreateOrUpdate
+--- PASS: TestManagedInstanceKeys_CreateOrUpdate (0.15s)
+=== RUN   TestManagedInstanceKeys_Delete
+--- PASS: TestManagedInstanceKeys_Delete (0.07s)
+=== RUN   TestManagedInstanceLongTermRetentionPolicies_Get
+--- PASS: TestManagedInstanceLongTermRetentionPolicies_Get (0.06s)
+=== RUN   TestManagedInstanceLongTermRetentionPolicies_CreateOrUpdate
+--- PASS: TestManagedInstanceLongTermRetentionPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestManagedInstanceLongTermRetentionPolicies_ListByDatabase
+--- PASS: TestManagedInstanceLongTermRetentionPolicies_ListByDatabase (0.04s)
+=== RUN   TestManagedInstanceOperations_ListByManagedInstance
+--- PASS: TestManagedInstanceOperations_ListByManagedInstance (0.08s)
+=== RUN   TestManagedInstanceOperations_Get
+--- PASS: TestManagedInstanceOperations_Get (0.04s)
+=== RUN   TestManagedInstanceOperations_Cancel
+--- PASS: TestManagedInstanceOperations_Cancel (0.04s)
+=== RUN   TestManagedInstancePrivateEndpointConnections_Get
+--- PASS: TestManagedInstancePrivateEndpointConnections_Get (0.04s)
+=== RUN   TestManagedInstancePrivateEndpointConnections_CreateOrUpdate
+--- PASS: TestManagedInstancePrivateEndpointConnections_CreateOrUpdate (0.08s)
+=== RUN   TestManagedInstancePrivateEndpointConnections_Delete
+--- PASS: TestManagedInstancePrivateEndpointConnections_Delete (0.07s)
+=== RUN   TestManagedInstancePrivateEndpointConnections_ListByManagedInstance
+--- PASS: TestManagedInstancePrivateEndpointConnections_ListByManagedInstance (0.04s)
+=== RUN   TestManagedInstancePrivateLinkResources_ListByManagedInstance
+--- PASS: TestManagedInstancePrivateLinkResources_ListByManagedInstance (0.05s)
+=== RUN   TestManagedInstancePrivateLinkResources_Get
+--- PASS: TestManagedInstancePrivateLinkResources_Get (0.03s)
+=== RUN   TestManagedInstanceTdeCertificates_Create
+--- PASS: TestManagedInstanceTdeCertificates_Create (0.07s)
+=== RUN   TestManagedInstanceVulnerabilityAssessments_Get
+--- PASS: TestManagedInstanceVulnerabilityAssessments_Get (0.04s)
+=== RUN   TestManagedInstanceVulnerabilityAssessments_CreateOrUpdate
+--- PASS: TestManagedInstanceVulnerabilityAssessments_CreateOrUpdate (0.16s)
+=== RUN   TestManagedInstanceVulnerabilityAssessments_Delete
+--- PASS: TestManagedInstanceVulnerabilityAssessments_Delete (0.04s)
+=== RUN   TestManagedInstanceVulnerabilityAssessments_ListByInstance
+--- PASS: TestManagedInstanceVulnerabilityAssessments_ListByInstance (0.05s)
+=== RUN   TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_Get
+--- PASS: TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_Get (0.05s)
+=== RUN   TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_CreateOrUpdate
+--- PASS: TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_Update
+--- PASS: TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_Update (0.07s)
+=== RUN   TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_ListByRestorableDroppedDatabase
+--- PASS: TestManagedRestorableDroppedDatabaseBackupShortTermRetentionPolicies_ListByRestorableDroppedDatabase (0.04s)
+=== RUN   TestManagedServerSecurityAlertPolicies_Get
+--- PASS: TestManagedServerSecurityAlertPolicies_Get (0.04s)
+=== RUN   TestManagedServerSecurityAlertPolicies_CreateOrUpdate
+--- PASS: TestManagedServerSecurityAlertPolicies_CreateOrUpdate (0.17s)
+=== RUN   TestManagedServerSecurityAlertPolicies_ListByInstance
+--- PASS: TestManagedServerSecurityAlertPolicies_ListByInstance (0.03s)
+=== RUN   TestOperations_List
+    zt_generated_mock_test.go:21435: Warning: No test steps for this operation!
+--- SKIP: TestOperations_List (0.00s)
+=== RUN   TestPrivateEndpointConnections_Get
+--- PASS: TestPrivateEndpointConnections_Get (0.07s)
+=== RUN   TestPrivateEndpointConnections_CreateOrUpdate
+--- PASS: TestPrivateEndpointConnections_CreateOrUpdate (0.09s)
+=== RUN   TestPrivateEndpointConnections_Delete
+--- PASS: TestPrivateEndpointConnections_Delete (0.08s)
+=== RUN   TestPrivateEndpointConnections_ListByServer
+--- PASS: TestPrivateEndpointConnections_ListByServer (0.04s)
+=== RUN   TestPrivateLinkResources_ListByServer
+--- PASS: TestPrivateLinkResources_ListByServer (0.05s)
+=== RUN   TestPrivateLinkResources_Get
+--- PASS: TestPrivateLinkResources_Get (0.04s)
+=== RUN   TestRecoverableManagedDatabases_ListByInstance
+--- PASS: TestRecoverableManagedDatabases_ListByInstance (0.05s)
+=== RUN   TestRecoverableManagedDatabases_Get
+--- PASS: TestRecoverableManagedDatabases_Get (0.05s)
+=== RUN   TestRestorePoints_ListByDatabase
+--- PASS: TestRestorePoints_ListByDatabase (0.09s)
+=== RUN   TestRestorePoints_Create
+--- PASS: TestRestorePoints_Create (0.17s)
+=== RUN   TestRestorePoints_Get
+--- PASS: TestRestorePoints_Get (0.11s)
+=== RUN   TestRestorePoints_Delete
+--- PASS: TestRestorePoints_Delete (0.05s)
+=== RUN   TestSensitivityLabels_ListCurrentByDatabase
+--- PASS: TestSensitivityLabels_ListCurrentByDatabase (0.06s)
+=== RUN   TestSensitivityLabels_Update
+--- PASS: TestSensitivityLabels_Update (0.10s)
+=== RUN   TestSensitivityLabels_ListRecommendedByDatabase
+--- PASS: TestSensitivityLabels_ListRecommendedByDatabase (0.09s)
+=== RUN   TestSensitivityLabels_EnableRecommendation
+--- PASS: TestSensitivityLabels_EnableRecommendation (0.04s)
+=== RUN   TestSensitivityLabels_DisableRecommendation
+--- PASS: TestSensitivityLabels_DisableRecommendation (0.05s)
+=== RUN   TestSensitivityLabels_Get
+--- PASS: TestSensitivityLabels_Get (0.04s)
+=== RUN   TestSensitivityLabels_CreateOrUpdate
+--- PASS: TestSensitivityLabels_CreateOrUpdate (0.04s)
+=== RUN   TestSensitivityLabels_Delete
+--- PASS: TestSensitivityLabels_Delete (0.04s)
+=== RUN   TestRecommendedSensitivityLabels_Update
+--- PASS: TestRecommendedSensitivityLabels_Update (0.04s)
+=== RUN   TestServerAdvisors_ListByServer
+--- PASS: TestServerAdvisors_ListByServer (0.14s)
+=== RUN   TestServerAdvisors_Get
+--- PASS: TestServerAdvisors_Get (0.04s)
+=== RUN   TestServerAdvisors_Update
+--- PASS: TestServerAdvisors_Update (0.04s)
+=== RUN   TestServerAutomaticTuning_Get
+--- PASS: TestServerAutomaticTuning_Get (0.05s)
+=== RUN   TestServerAutomaticTuning_Update
+--- PASS: TestServerAutomaticTuning_Update (0.08s)
+=== RUN   TestServerAzureADAdministrators_Get
+--- PASS: TestServerAzureADAdministrators_Get (0.05s)
+=== RUN   TestServerAzureADAdministrators_CreateOrUpdate
+--- PASS: TestServerAzureADAdministrators_CreateOrUpdate (0.11s)
+=== RUN   TestServerAzureADAdministrators_Delete
+--- PASS: TestServerAzureADAdministrators_Delete (0.07s)
+=== RUN   TestServerAzureADAdministrators_ListByServer
+--- PASS: TestServerAzureADAdministrators_ListByServer (0.04s)
+=== RUN   TestServerAzureADOnlyAuthentications_Get
+--- PASS: TestServerAzureADOnlyAuthentications_Get (0.04s)
+=== RUN   TestServerAzureADOnlyAuthentications_CreateOrUpdate
+--- PASS: TestServerAzureADOnlyAuthentications_CreateOrUpdate (0.12s)
+=== RUN   TestServerAzureADOnlyAuthentications_Delete
+--- PASS: TestServerAzureADOnlyAuthentications_Delete (0.06s)
+=== RUN   TestServerAzureADOnlyAuthentications_ListByServer
+--- PASS: TestServerAzureADOnlyAuthentications_ListByServer (0.04s)
+=== RUN   TestServerDevOpsAuditSettings_Get
+--- PASS: TestServerDevOpsAuditSettings_Get (0.04s)
+=== RUN   TestServerDevOpsAuditSettings_CreateOrUpdate
+--- PASS: TestServerDevOpsAuditSettings_CreateOrUpdate (0.15s)
+=== RUN   TestServerDevOpsAuditSettings_ListByServer
+--- PASS: TestServerDevOpsAuditSettings_ListByServer (0.04s)
+=== RUN   TestServerDNSAliases_Get
+--- PASS: TestServerDNSAliases_Get (0.05s)
+=== RUN   TestServerDNSAliases_CreateOrUpdate
+--- PASS: TestServerDNSAliases_CreateOrUpdate (0.10s)
+=== RUN   TestServerDNSAliases_Delete
+--- PASS: TestServerDNSAliases_Delete (0.05s)
+=== RUN   TestServerDNSAliases_ListByServer
+--- PASS: TestServerDNSAliases_ListByServer (0.03s)
+=== RUN   TestServerDNSAliases_Acquire
+--- PASS: TestServerDNSAliases_Acquire (0.06s)
+=== RUN   TestServerKeys_ListByServer
+--- PASS: TestServerKeys_ListByServer (0.05s)
+=== RUN   TestServerKeys_Get
+--- PASS: TestServerKeys_Get (0.04s)
+=== RUN   TestServerKeys_CreateOrUpdate
+--- PASS: TestServerKeys_CreateOrUpdate (0.09s)
+=== RUN   TestServerKeys_Delete
+--- PASS: TestServerKeys_Delete (0.05s)
+=== RUN   TestServerOperations_ListByServer
+--- PASS: TestServerOperations_ListByServer (0.03s)
+=== RUN   TestServerSecurityAlertPolicies_Get
+--- PASS: TestServerSecurityAlertPolicies_Get (0.03s)
+=== RUN   TestServerSecurityAlertPolicies_CreateOrUpdate
+--- PASS: TestServerSecurityAlertPolicies_CreateOrUpdate (0.10s)
+=== RUN   TestServerSecurityAlertPolicies_ListByServer
+--- PASS: TestServerSecurityAlertPolicies_ListByServer (0.02s)
+=== RUN   TestServerTrustGroups_Get
+--- PASS: TestServerTrustGroups_Get (0.03s)
+=== RUN   TestServerTrustGroups_CreateOrUpdate
+--- PASS: TestServerTrustGroups_CreateOrUpdate (0.08s)
+=== RUN   TestServerTrustGroups_Delete
+--- PASS: TestServerTrustGroups_Delete (0.05s)
+=== RUN   TestServerTrustGroups_ListByLocation
+--- PASS: TestServerTrustGroups_ListByLocation (0.02s)
+=== RUN   TestServerTrustGroups_ListByInstance
+--- PASS: TestServerTrustGroups_ListByInstance (0.03s)
+=== RUN   TestServerVulnerabilityAssessments_Get
+--- PASS: TestServerVulnerabilityAssessments_Get (0.03s)
+=== RUN   TestServerVulnerabilityAssessments_CreateOrUpdate
+--- PASS: TestServerVulnerabilityAssessments_CreateOrUpdate (0.10s)
+=== RUN   TestServerVulnerabilityAssessments_Delete
+--- PASS: TestServerVulnerabilityAssessments_Delete (0.04s)
+=== RUN   TestServerVulnerabilityAssessments_ListByServer
+--- PASS: TestServerVulnerabilityAssessments_ListByServer (0.03s)
+=== RUN   TestSQLAgent_Get
+--- PASS: TestSQLAgent_Get (0.03s)
+=== RUN   TestSQLAgent_CreateOrUpdate
+--- PASS: TestSQLAgent_CreateOrUpdate (0.03s)
+=== RUN   TestSubscriptionUsages_ListByLocation
+--- PASS: TestSubscriptionUsages_ListByLocation (0.03s)
+=== RUN   TestSubscriptionUsages_Get
+--- PASS: TestSubscriptionUsages_Get (0.03s)
+=== RUN   TestSyncAgents_Get
+--- PASS: TestSyncAgents_Get (0.03s)
+=== RUN   TestSyncAgents_CreateOrUpdate
+--- PASS: TestSyncAgents_CreateOrUpdate (1.01s)
+=== RUN   TestSyncAgents_Delete
+--- PASS: TestSyncAgents_Delete (0.09s)
+=== RUN   TestSyncAgents_ListByServer
+--- PASS: TestSyncAgents_ListByServer (0.06s)
+=== RUN   TestSyncAgents_GenerateKey
+--- PASS: TestSyncAgents_GenerateKey (0.05s)
+=== RUN   TestSyncAgents_ListLinkedDatabases
+--- PASS: TestSyncAgents_ListLinkedDatabases (0.04s)
+=== RUN   TestSyncGroups_RefreshHubSchema
+--- PASS: TestSyncGroups_RefreshHubSchema (0.09s)
+=== RUN   TestSyncGroups_ListHubSchemas
+--- PASS: TestSyncGroups_ListHubSchemas (0.05s)
+=== RUN   TestSyncGroups_ListLogs
+--- PASS: TestSyncGroups_ListLogs (0.05s)
+=== RUN   TestSyncGroups_CancelSync
+--- PASS: TestSyncGroups_CancelSync (0.04s)
+=== RUN   TestSyncGroups_TriggerSync
+--- PASS: TestSyncGroups_TriggerSync (0.05s)
+=== RUN   TestSyncGroups_Get
+--- PASS: TestSyncGroups_Get (0.06s)
+=== RUN   TestSyncGroups_CreateOrUpdate
+--- PASS: TestSyncGroups_CreateOrUpdate (0.24s)
+=== RUN   TestSyncGroups_Delete
+--- PASS: TestSyncGroups_Delete (0.07s)
+=== RUN   TestSyncGroups_Update
+--- PASS: TestSyncGroups_Update (0.11s)
+=== RUN   TestSyncGroups_ListByDatabase
+--- PASS: TestSyncGroups_ListByDatabase (0.04s)
+=== RUN   TestSyncMembers_Get
+--- PASS: TestSyncMembers_Get (0.04s)
+=== RUN   TestSyncMembers_CreateOrUpdate
+--- PASS: TestSyncMembers_CreateOrUpdate (0.22s)
+=== RUN   TestSyncMembers_Delete
+--- PASS: TestSyncMembers_Delete (0.09s)
+=== RUN   TestSyncMembers_Update
+--- PASS: TestSyncMembers_Update (0.10s)
+=== RUN   TestSyncMembers_ListBySyncGroup
+--- PASS: TestSyncMembers_ListBySyncGroup (0.05s)
+=== RUN   TestSyncMembers_ListMemberSchemas
+--- PASS: TestSyncMembers_ListMemberSchemas (0.04s)
+=== RUN   TestSyncMembers_RefreshMemberSchema
+--- PASS: TestSyncMembers_RefreshMemberSchema (0.07s)
+=== RUN   TestTdeCertificates_Create
+--- PASS: TestTdeCertificates_Create (0.14s)
+=== RUN   TestTimeZones_ListByLocation
+--- PASS: TestTimeZones_ListByLocation (0.22s)
+=== RUN   TestTimeZones_Get
+--- PASS: TestTimeZones_Get (0.04s)
+=== RUN   TestVirtualClusters_List
+--- PASS: TestVirtualClusters_List (0.05s)
+=== RUN   TestVirtualClusters_ListByResourceGroup
+--- PASS: TestVirtualClusters_ListByResourceGroup (0.04s)
+=== RUN   TestVirtualClusters_Get
+--- PASS: TestVirtualClusters_Get (0.04s)
+=== RUN   TestVirtualClusters_Delete
+--- PASS: TestVirtualClusters_Delete (0.08s)
+=== RUN   TestVirtualClusters_Update
+--- PASS: TestVirtualClusters_Update (0.07s)
+=== RUN   TestVirtualNetworkRules_Get
+--- PASS: TestVirtualNetworkRules_Get (0.04s)
+=== RUN   TestVirtualNetworkRules_CreateOrUpdate
+--- PASS: TestVirtualNetworkRules_CreateOrUpdate (0.13s)
+=== RUN   TestVirtualNetworkRules_Delete
+--- PASS: TestVirtualNetworkRules_Delete (0.07s)
+=== RUN   TestVirtualNetworkRules_ListByServer
+--- PASS: TestVirtualNetworkRules_ListByServer (0.04s)
+=== RUN   TestWorkloadClassifiers_Get
+--- PASS: TestWorkloadClassifiers_Get (0.04s)
+=== RUN   TestWorkloadClassifiers_CreateOrUpdate
+--- PASS: TestWorkloadClassifiers_CreateOrUpdate (0.23s)
+=== RUN   TestWorkloadClassifiers_Delete
+--- PASS: TestWorkloadClassifiers_Delete (0.07s)
+=== RUN   TestWorkloadClassifiers_ListByWorkloadGroup
+--- PASS: TestWorkloadClassifiers_ListByWorkloadGroup (0.05s)
+=== RUN   TestWorkloadGroups_Get
+--- PASS: TestWorkloadGroups_Get (0.04s)
+=== RUN   TestWorkloadGroups_CreateOrUpdate
+--- PASS: TestWorkloadGroups_CreateOrUpdate (0.27s)
+=== RUN   TestWorkloadGroups_Delete
+--- PASS: TestWorkloadGroups_Delete (0.08s)
+=== RUN   TestWorkloadGroups_ListByDatabase
+--- PASS: TestWorkloadGroups_ListByDatabase (0.04s)
+=== RUN   TestTransparentDataEncryptions_Get
+--- PASS: TestTransparentDataEncryptions_Get (0.06s)
+=== RUN   TestTransparentDataEncryptions_CreateOrUpdate
+--- PASS: TestTransparentDataEncryptions_CreateOrUpdate (0.04s)
+=== RUN   TestTransparentDataEncryptions_ListByDatabase
+--- PASS: TestTransparentDataEncryptions_ListByDatabase (0.04s)
+=== RUN   TestBackupShortTermRetentionPolicies_Get
+--- PASS: TestBackupShortTermRetentionPolicies_Get (0.06s)
+=== RUN   TestBackupShortTermRetentionPolicies_CreateOrUpdate
+--- PASS: TestBackupShortTermRetentionPolicies_CreateOrUpdate (0.07s)
+=== RUN   TestBackupShortTermRetentionPolicies_Update
+--- PASS: TestBackupShortTermRetentionPolicies_Update (0.08s)
+=== RUN   TestBackupShortTermRetentionPolicies_ListByDatabase
+--- PASS: TestBackupShortTermRetentionPolicies_ListByDatabase (0.03s)
+=== RUN   TestDatabaseExtensions_Get
+--- PASS: TestDatabaseExtensions_Get (0.03s)
+=== RUN   TestDatabaseExtensions_CreateOrUpdate
+--- PASS: TestDatabaseExtensions_CreateOrUpdate (0.09s)
+=== RUN   TestDatabaseExtensions_ListByDatabase
+--- PASS: TestDatabaseExtensions_ListByDatabase (0.04s)
+=== RUN   TestDatabaseOperations_Cancel
+--- PASS: TestDatabaseOperations_Cancel (0.04s)
+=== RUN   TestDatabaseOperations_ListByDatabase
+--- PASS: TestDatabaseOperations_ListByDatabase (11.93s)
+=== RUN   TestDatabaseUsages_ListByDatabase
+--- PASS: TestDatabaseUsages_ListByDatabase (0.06s)
+=== RUN   TestLedgerDigestUploads_Get
+--- PASS: TestLedgerDigestUploads_Get (0.06s)
+=== RUN   TestLedgerDigestUploads_CreateOrUpdate
+--- PASS: TestLedgerDigestUploads_CreateOrUpdate (0.07s)
+=== RUN   TestLedgerDigestUploads_ListByDatabase
+--- PASS: TestLedgerDigestUploads_ListByDatabase (0.03s)
+=== RUN   TestLedgerDigestUploads_Disable
+--- PASS: TestLedgerDigestUploads_Disable (0.07s)
+=== RUN   TestOutboundFirewallRules_Get
+--- PASS: TestOutboundFirewallRules_Get (0.06s)
+=== RUN   TestOutboundFirewallRules_CreateOrUpdate
+--- PASS: TestOutboundFirewallRules_CreateOrUpdate (0.07s)
+=== RUN   TestOutboundFirewallRules_Delete
+--- PASS: TestOutboundFirewallRules_Delete (0.07s)
+=== RUN   TestOutboundFirewallRules_ListByServer
+--- PASS: TestOutboundFirewallRules_ListByServer (0.04s)
+=== RUN   TestServers_ListByResourceGroup
+--- PASS: TestServers_ListByResourceGroup (0.11s)
+=== RUN   TestServers_Get
+--- PASS: TestServers_Get (0.08s)
+=== RUN   TestServers_CreateOrUpdate
+--- PASS: TestServers_CreateOrUpdate (0.15s)
+=== RUN   TestServers_Delete
+--- PASS: TestServers_Delete (0.06s)
+=== RUN   TestServers_Update
+--- PASS: TestServers_Update (0.12s)
+=== RUN   TestServers_List
+--- PASS: TestServers_List (0.09s)
+=== RUN   TestServers_ImportDatabase
+--- PASS: TestServers_ImportDatabase (0.15s)
+=== RUN   TestServers_CheckNameAvailability
+--- PASS: TestServers_CheckNameAvailability (0.12s)
+=== RUN   TestUsages_ListByInstancePool
+--- PASS: TestUsages_ListByInstancePool (0.10s)
+=== RUN   TestLongTermRetentionBackups_Copy
+--- PASS: TestLongTermRetentionBackups_Copy (0.11s)
+=== RUN   TestLongTermRetentionBackups_Update
+--- PASS: TestLongTermRetentionBackups_Update (0.08s)
+=== RUN   TestLongTermRetentionBackups_Get
+--- PASS: TestLongTermRetentionBackups_Get (0.04s)
+=== RUN   TestLongTermRetentionBackups_Delete
+--- PASS: TestLongTermRetentionBackups_Delete (0.09s)
+=== RUN   TestLongTermRetentionBackups_ListByDatabase
+--- PASS: TestLongTermRetentionBackups_ListByDatabase (0.04s)
+=== RUN   TestLongTermRetentionBackups_ListByLocation
+--- PASS: TestLongTermRetentionBackups_ListByLocation (0.04s)
+=== RUN   TestLongTermRetentionBackups_ListByServer
+--- PASS: TestLongTermRetentionBackups_ListByServer (0.05s)
+=== RUN   TestLongTermRetentionBackups_CopyByResourceGroup
+--- PASS: TestLongTermRetentionBackups_CopyByResourceGroup (0.09s)
+=== RUN   TestLongTermRetentionBackups_UpdateByResourceGroup
+--- PASS: TestLongTermRetentionBackups_UpdateByResourceGroup (0.08s)
+=== RUN   TestLongTermRetentionBackups_GetByResourceGroup
+--- PASS: TestLongTermRetentionBackups_GetByResourceGroup (0.04s)
+=== RUN   TestLongTermRetentionBackups_DeleteByResourceGroup
+--- PASS: TestLongTermRetentionBackups_DeleteByResourceGroup (0.07s)
+=== RUN   TestLongTermRetentionBackups_ListByResourceGroupDatabase
+--- PASS: TestLongTermRetentionBackups_ListByResourceGroupDatabase (0.05s)
+=== RUN   TestLongTermRetentionBackups_ListByResourceGroupLocation
+--- PASS: TestLongTermRetentionBackups_ListByResourceGroupLocation (0.04s)
+=== RUN   TestLongTermRetentionBackups_ListByResourceGroupServer
+--- PASS: TestLongTermRetentionBackups_ListByResourceGroupServer (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_Get
+--- PASS: TestLongTermRetentionManagedInstanceBackups_Get (0.05s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_Delete
+--- PASS: TestLongTermRetentionManagedInstanceBackups_Delete (0.08s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByDatabase
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByDatabase (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByInstance
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByInstance (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByLocation
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByLocation (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_GetByResourceGroup
+--- PASS: TestLongTermRetentionManagedInstanceBackups_GetByResourceGroup (0.03s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_DeleteByResourceGroup
+--- PASS: TestLongTermRetentionManagedInstanceBackups_DeleteByResourceGroup (0.06s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupDatabase
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupDatabase (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupInstance
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupInstance (0.04s)
+=== RUN   TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupLocation
+--- PASS: TestLongTermRetentionManagedInstanceBackups_ListByResourceGroupLocation (0.04s)
+=== RUN   TestManagedInstances_ListByInstancePool
+--- PASS: TestManagedInstances_ListByInstancePool (0.12s)
+=== RUN   TestManagedInstances_List
+--- PASS: TestManagedInstances_List (0.11s)
+=== RUN   TestManagedInstances_ListByResourceGroup
+--- PASS: TestManagedInstances_ListByResourceGroup (0.10s)
+=== RUN   TestManagedInstances_Get
+--- PASS: TestManagedInstances_Get (0.08s)
+=== RUN   TestManagedInstances_CreateOrUpdate
+--- PASS: TestManagedInstances_CreateOrUpdate (0.21s)
+=== RUN   TestManagedInstances_Delete
+--- PASS: TestManagedInstances_Delete (0.07s)
+=== RUN   TestManagedInstances_Update
+--- PASS: TestManagedInstances_Update (0.24s)
+=== RUN   TestManagedInstances_ListByManagedInstance
+--- PASS: TestManagedInstances_ListByManagedInstance (5.26s)
+=== RUN   TestManagedInstances_Failover
+--- PASS: TestManagedInstances_Failover (0.07s)
+=== RUN   TestRestorableDroppedDatabases_ListByServer
+--- PASS: TestRestorableDroppedDatabases_ListByServer (0.06s)
+=== RUN   TestRestorableDroppedDatabases_Get
+--- PASS: TestRestorableDroppedDatabases_Get (0.03s)
+=== RUN   TestRestorableDroppedManagedDatabases_ListByInstance
+--- PASS: TestRestorableDroppedManagedDatabases_ListByInstance (0.07s)
+=== RUN   TestRestorableDroppedManagedDatabases_Get
+--- PASS: TestRestorableDroppedManagedDatabases_Get (0.03s)
+=== RUN   TestServerConnectionPolicies_Get
+--- PASS: TestServerConnectionPolicies_Get (0.05s)
+=== RUN   TestServerConnectionPolicies_CreateOrUpdate
+--- PASS: TestServerConnectionPolicies_CreateOrUpdate (0.08s)
+=== RUN   TestServerConnectionPolicies_ListByServer
+--- PASS: TestServerConnectionPolicies_ListByServer (0.03s)
+=== RUN   TestDistributedAvailabilityGroups_ListByInstance
+--- PASS: TestDistributedAvailabilityGroups_ListByInstance (0.05s)
+=== RUN   TestDistributedAvailabilityGroups_Get
+--- PASS: TestDistributedAvailabilityGroups_Get (0.04s)
+=== RUN   TestDistributedAvailabilityGroups_CreateOrUpdate
+--- PASS: TestDistributedAvailabilityGroups_CreateOrUpdate (0.11s)
+=== RUN   TestDistributedAvailabilityGroups_Delete
+--- PASS: TestDistributedAvailabilityGroups_Delete (0.08s)
+=== RUN   TestDistributedAvailabilityGroups_Update
+--- PASS: TestDistributedAvailabilityGroups_Update (0.07s)
+=== RUN   TestServerTrustCertificates_Get
+--- PASS: TestServerTrustCertificates_Get (0.05s)
+=== RUN   TestServerTrustCertificates_CreateOrUpdate
+--- PASS: TestServerTrustCertificates_CreateOrUpdate (0.11s)
+=== RUN   TestServerTrustCertificates_Delete
+--- PASS: TestServerTrustCertificates_Delete (0.07s)
+=== RUN   TestServerTrustCertificates_ListByInstance
+--- PASS: TestServerTrustCertificates_ListByInstance (0.05s)
+=== RUN   TestIPv6FirewallRules_Get
+--- PASS: TestIPv6FirewallRules_Get (0.05s)
+=== RUN   TestIPv6FirewallRules_CreateOrUpdate
+--- PASS: TestIPv6FirewallRules_CreateOrUpdate (0.08s)
+=== RUN   TestIPv6FirewallRules_Delete
+--- PASS: TestIPv6FirewallRules_Delete (0.04s)
+=== RUN   TestIPv6FirewallRules_ListByServer
+--- PASS: TestIPv6FirewallRules_ListByServer (0.04s)
+FAIL
+coverage: 69.7% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/sql/armsql	52.464s

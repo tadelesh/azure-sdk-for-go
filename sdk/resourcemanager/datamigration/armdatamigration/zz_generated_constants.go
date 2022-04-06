@@ -35,11 +35,6 @@ func PossibleAuthenticationTypeValues() []AuthenticationType {
 	}
 }
 
-// ToPtr returns a *AuthenticationType pointing to the current value.
-func (c AuthenticationType) ToPtr() *AuthenticationType {
-	return &c
-}
-
 // BackupFileStatus - An enumeration of Status of the log backup file.
 type BackupFileStatus string
 
@@ -66,11 +61,6 @@ func PossibleBackupFileStatusValues() []BackupFileStatus {
 	}
 }
 
-// ToPtr returns a *BackupFileStatus pointing to the current value.
-func (c BackupFileStatus) ToPtr() *BackupFileStatus {
-	return &c
-}
-
 // BackupMode - An enumeration of backup modes
 type BackupMode string
 
@@ -85,11 +75,6 @@ func PossibleBackupModeValues() []BackupMode {
 		BackupModeCreateBackup,
 		BackupModeExistingBackup,
 	}
-}
-
-// ToPtr returns a *BackupMode pointing to the current value.
-func (c BackupMode) ToPtr() *BackupMode {
-	return &c
 }
 
 // BackupType - Enum of the different backup types.
@@ -118,11 +103,6 @@ func PossibleBackupTypeValues() []BackupType {
 	}
 }
 
-// ToPtr returns a *BackupType pointing to the current value.
-func (c BackupType) ToPtr() *BackupType {
-	return &c
-}
-
 // CommandState - The state of the command. This is ignored if submitted.
 type CommandState string
 
@@ -143,11 +123,6 @@ func PossibleCommandStateValues() []CommandState {
 		CommandStateSucceeded,
 		CommandStateUnknown,
 	}
-}
-
-// ToPtr returns a *CommandState pointing to the current value.
-func (c CommandState) ToPtr() *CommandState {
-	return &c
 }
 
 // CommandType - Command type.
@@ -172,11 +147,6 @@ func PossibleCommandTypeValues() []CommandType {
 	}
 }
 
-// ToPtr returns a *CommandType pointing to the current value.
-func (c CommandType) ToPtr() *CommandType {
-	return &c
-}
-
 type CreatedByType string
 
 const (
@@ -194,11 +164,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 		CreatedByTypeManagedIdentity,
 		CreatedByTypeUser,
 	}
-}
-
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
 }
 
 // DataMigrationResultCode - Result code of the data migration
@@ -223,11 +188,6 @@ func PossibleDataMigrationResultCodeValues() []DataMigrationResultCode {
 		DataMigrationResultCodeObjectNotExistsInTarget,
 		DataMigrationResultCodeTargetObjectIsInaccessible,
 	}
-}
-
-// ToPtr returns a *DataMigrationResultCode pointing to the current value.
-func (c DataMigrationResultCode) ToPtr() *DataMigrationResultCode {
-	return &c
 }
 
 // DatabaseCompatLevel - An enumeration of SQL Server database compatibility levels
@@ -256,11 +216,6 @@ func PossibleDatabaseCompatLevelValues() []DatabaseCompatLevel {
 	}
 }
 
-// ToPtr returns a *DatabaseCompatLevel pointing to the current value.
-func (c DatabaseCompatLevel) ToPtr() *DatabaseCompatLevel {
-	return &c
-}
-
 // DatabaseFileType - An enumeration of SQL Server database file types
 type DatabaseFileType string
 
@@ -281,11 +236,6 @@ func PossibleDatabaseFileTypeValues() []DatabaseFileType {
 		DatabaseFileTypeNotSupported,
 		DatabaseFileTypeRows,
 	}
-}
-
-// ToPtr returns a *DatabaseFileType pointing to the current value.
-func (c DatabaseFileType) ToPtr() *DatabaseFileType {
-	return &c
 }
 
 // DatabaseMigrationStage - Current stage of migration
@@ -310,11 +260,6 @@ func PossibleDatabaseMigrationStageValues() []DatabaseMigrationStage {
 		DatabaseMigrationStageNone,
 		DatabaseMigrationStageRestore,
 	}
-}
-
-// ToPtr returns a *DatabaseMigrationStage pointing to the current value.
-func (c DatabaseMigrationStage) ToPtr() *DatabaseMigrationStage {
-	return &c
 }
 
 // DatabaseMigrationState - Database level migration state.
@@ -349,11 +294,6 @@ func PossibleDatabaseMigrationStateValues() []DatabaseMigrationState {
 	}
 }
 
-// ToPtr returns a *DatabaseMigrationState pointing to the current value.
-func (c DatabaseMigrationState) ToPtr() *DatabaseMigrationState {
-	return &c
-}
-
 // DatabaseState - An enumeration of SQL Server Database states
 type DatabaseState string
 
@@ -384,11 +324,6 @@ func PossibleDatabaseStateValues() []DatabaseState {
 	}
 }
 
-// ToPtr returns a *DatabaseState pointing to the current value.
-func (c DatabaseState) ToPtr() *DatabaseState {
-	return &c
-}
-
 // ErrorType - Error type
 type ErrorType string
 
@@ -405,11 +340,6 @@ func PossibleErrorTypeValues() []ErrorType {
 		ErrorTypeError,
 		ErrorTypeWarning,
 	}
-}
-
-// ToPtr returns a *ErrorType pointing to the current value.
-func (c ErrorType) ToPtr() *ErrorType {
-	return &c
 }
 
 // LoginMigrationStage - Enum of the different stage of login migration.
@@ -442,11 +372,6 @@ func PossibleLoginMigrationStageValues() []LoginMigrationStage {
 	}
 }
 
-// ToPtr returns a *LoginMigrationStage pointing to the current value.
-func (c LoginMigrationStage) ToPtr() *LoginMigrationStage {
-	return &c
-}
-
 // LoginType - Enum mapping of SMO LoginType.
 type LoginType string
 
@@ -473,11 +398,6 @@ func PossibleLoginTypeValues() []LoginType {
 	}
 }
 
-// ToPtr returns a *LoginType pointing to the current value.
-func (c LoginType) ToPtr() *LoginType {
-	return &c
-}
-
 // MigrationState - Current state of migration
 type MigrationState string
 
@@ -502,11 +422,6 @@ func PossibleMigrationStateValues() []MigrationState {
 		MigrationStateStopped,
 		MigrationStateWarning,
 	}
-}
-
-// ToPtr returns a *MigrationState pointing to the current value.
-func (c MigrationState) ToPtr() *MigrationState {
-	return &c
 }
 
 // MigrationStatus - Current status of migration
@@ -541,11 +456,6 @@ func PossibleMigrationStatusValues() []MigrationStatus {
 	}
 }
 
-// ToPtr returns a *MigrationStatus pointing to the current value.
-func (c MigrationStatus) ToPtr() *MigrationStatus {
-	return &c
-}
-
 // MongoDbClusterType - The type of data source
 type MongoDbClusterType string
 
@@ -564,11 +474,6 @@ func PossibleMongoDbClusterTypeValues() []MongoDbClusterType {
 	}
 }
 
-// ToPtr returns a *MongoDbClusterType pointing to the current value.
-func (c MongoDbClusterType) ToPtr() *MongoDbClusterType {
-	return &c
-}
-
 // MongoDbErrorType - The type of error or warning
 type MongoDbErrorType string
 
@@ -585,11 +490,6 @@ func PossibleMongoDbErrorTypeValues() []MongoDbErrorType {
 		MongoDbErrorTypeValidationError,
 		MongoDbErrorTypeWarning,
 	}
-}
-
-// ToPtr returns a *MongoDbErrorType pointing to the current value.
-func (c MongoDbErrorType) ToPtr() *MongoDbErrorType {
-	return &c
 }
 
 type MongoDbMigrationState string
@@ -625,11 +525,6 @@ func PossibleMongoDbMigrationStateValues() []MongoDbMigrationState {
 	}
 }
 
-// ToPtr returns a *MongoDbMigrationState pointing to the current value.
-func (c MongoDbMigrationState) ToPtr() *MongoDbMigrationState {
-	return &c
-}
-
 // MongoDbProgressResultType - The type of progress object
 type MongoDbProgressResultType string
 
@@ -646,11 +541,6 @@ func PossibleMongoDbProgressResultTypeValues() []MongoDbProgressResultType {
 		MongoDbProgressResultTypeDatabase,
 		MongoDbProgressResultTypeMigration,
 	}
-}
-
-// ToPtr returns a *MongoDbProgressResultType pointing to the current value.
-func (c MongoDbProgressResultType) ToPtr() *MongoDbProgressResultType {
-	return &c
 }
 
 // MongoDbReplication - Describes how changes will be replicated from the source to the target. The default is OneTime.
@@ -671,11 +561,6 @@ func PossibleMongoDbReplicationValues() []MongoDbReplication {
 	}
 }
 
-// ToPtr returns a *MongoDbReplication pointing to the current value.
-func (c MongoDbReplication) ToPtr() *MongoDbReplication {
-	return &c
-}
-
 // MongoDbShardKeyOrder - The field ordering
 type MongoDbShardKeyOrder string
 
@@ -694,11 +579,6 @@ func PossibleMongoDbShardKeyOrderValues() []MongoDbShardKeyOrder {
 	}
 }
 
-// ToPtr returns a *MongoDbShardKeyOrder pointing to the current value.
-func (c MongoDbShardKeyOrder) ToPtr() *MongoDbShardKeyOrder {
-	return &c
-}
-
 // MySQLTargetPlatformType - An enumeration of possible target types when migrating from MySQL
 type MySQLTargetPlatformType string
 
@@ -715,11 +595,6 @@ func PossibleMySQLTargetPlatformTypeValues() []MySQLTargetPlatformType {
 	}
 }
 
-// ToPtr returns a *MySQLTargetPlatformType pointing to the current value.
-func (c MySQLTargetPlatformType) ToPtr() *MySQLTargetPlatformType {
-	return &c
-}
-
 // NameCheckFailureReason - The reason why the name is not available, if nameAvailable is false
 type NameCheckFailureReason string
 
@@ -734,11 +609,6 @@ func PossibleNameCheckFailureReasonValues() []NameCheckFailureReason {
 		NameCheckFailureReasonAlreadyExists,
 		NameCheckFailureReasonInvalid,
 	}
-}
-
-// ToPtr returns a *NameCheckFailureReason pointing to the current value.
-func (c NameCheckFailureReason) ToPtr() *NameCheckFailureReason {
-	return &c
 }
 
 // ObjectType - An enumeration of type of objects
@@ -763,11 +633,6 @@ func PossibleObjectTypeValues() []ObjectType {
 	}
 }
 
-// ToPtr returns a *ObjectType pointing to the current value.
-func (c ObjectType) ToPtr() *ObjectType {
-	return &c
-}
-
 type OperationOrigin string
 
 const (
@@ -781,11 +646,6 @@ func PossibleOperationOriginValues() []OperationOrigin {
 		OperationOriginSystem,
 		OperationOriginUser,
 	}
-}
-
-// ToPtr returns a *OperationOrigin pointing to the current value.
-func (c OperationOrigin) ToPtr() *OperationOrigin {
-	return &c
 }
 
 // ProjectProvisioningState - The project's provisioning state
@@ -802,11 +662,6 @@ func PossibleProjectProvisioningStateValues() []ProjectProvisioningState {
 		ProjectProvisioningStateDeleting,
 		ProjectProvisioningStateSucceeded,
 	}
-}
-
-// ToPtr returns a *ProjectProvisioningState pointing to the current value.
-func (c ProjectProvisioningState) ToPtr() *ProjectProvisioningState {
-	return &c
 }
 
 // ProjectSourcePlatform - Source platform of the project
@@ -829,11 +684,6 @@ func PossibleProjectSourcePlatformValues() []ProjectSourcePlatform {
 		ProjectSourcePlatformSQL,
 		ProjectSourcePlatformUnknown,
 	}
-}
-
-// ToPtr returns a *ProjectSourcePlatform pointing to the current value.
-func (c ProjectSourcePlatform) ToPtr() *ProjectSourcePlatform {
-	return &c
 }
 
 // ProjectTargetPlatform - Target platform of the project
@@ -860,11 +710,6 @@ func PossibleProjectTargetPlatformValues() []ProjectTargetPlatform {
 	}
 }
 
-// ToPtr returns a *ProjectTargetPlatform pointing to the current value.
-func (c ProjectTargetPlatform) ToPtr() *ProjectTargetPlatform {
-	return &c
-}
-
 // ReplicateMigrationState - Wrapper for replicate reported migration states.
 type ReplicateMigrationState string
 
@@ -889,11 +734,6 @@ func PossibleReplicateMigrationStateValues() []ReplicateMigrationState {
 	}
 }
 
-// ToPtr returns a *ReplicateMigrationState pointing to the current value.
-func (c ReplicateMigrationState) ToPtr() *ReplicateMigrationState {
-	return &c
-}
-
 // ResourceSKUCapacityScaleType - The scale type applicable to the SKU.
 type ResourceSKUCapacityScaleType string
 
@@ -912,11 +752,6 @@ func PossibleResourceSKUCapacityScaleTypeValues() []ResourceSKUCapacityScaleType
 	}
 }
 
-// ToPtr returns a *ResourceSKUCapacityScaleType pointing to the current value.
-func (c ResourceSKUCapacityScaleType) ToPtr() *ResourceSKUCapacityScaleType {
-	return &c
-}
-
 // ResourceSKURestrictionsReasonCode - The reason code for restriction.
 type ResourceSKURestrictionsReasonCode string
 
@@ -933,11 +768,6 @@ func PossibleResourceSKURestrictionsReasonCodeValues() []ResourceSKURestrictions
 	}
 }
 
-// ToPtr returns a *ResourceSKURestrictionsReasonCode pointing to the current value.
-func (c ResourceSKURestrictionsReasonCode) ToPtr() *ResourceSKURestrictionsReasonCode {
-	return &c
-}
-
 // ResourceSKURestrictionsType - The type of restrictions.
 type ResourceSKURestrictionsType string
 
@@ -950,11 +780,6 @@ func PossibleResourceSKURestrictionsTypeValues() []ResourceSKURestrictionsType {
 	return []ResourceSKURestrictionsType{
 		ResourceSKURestrictionsTypeLocation,
 	}
-}
-
-// ToPtr returns a *ResourceSKURestrictionsType pointing to the current value.
-func (c ResourceSKURestrictionsType) ToPtr() *ResourceSKURestrictionsType {
-	return &c
 }
 
 type ResourceType string
@@ -972,11 +797,6 @@ func PossibleResourceTypeValues() []ResourceType {
 	}
 }
 
-// ToPtr returns a *ResourceType pointing to the current value.
-func (c ResourceType) ToPtr() *ResourceType {
-	return &c
-}
-
 // SQLSourcePlatform - An enumeration of source platform types
 type SQLSourcePlatform string
 
@@ -989,11 +809,6 @@ func PossibleSQLSourcePlatformValues() []SQLSourcePlatform {
 	return []SQLSourcePlatform{
 		SQLSourcePlatformSQLOnPrem,
 	}
-}
-
-// ToPtr returns a *SQLSourcePlatform pointing to the current value.
-func (c SQLSourcePlatform) ToPtr() *SQLSourcePlatform {
-	return &c
 }
 
 // ScenarioSource - An enumeration of source type
@@ -1030,11 +845,6 @@ func PossibleScenarioSourceValues() []ScenarioSource {
 	}
 }
 
-// ToPtr returns a *ScenarioSource pointing to the current value.
-func (c ScenarioSource) ToPtr() *ScenarioSource {
-	return &c
-}
-
 // ScenarioTarget - An enumeration of target type
 type ScenarioTarget string
 
@@ -1061,11 +871,6 @@ func PossibleScenarioTargetValues() []ScenarioTarget {
 	}
 }
 
-// ToPtr returns a *ScenarioTarget pointing to the current value.
-func (c ScenarioTarget) ToPtr() *ScenarioTarget {
-	return &c
-}
-
 // SchemaMigrationOption - Option for how schema is extracted and applied to target
 type SchemaMigrationOption string
 
@@ -1082,11 +887,6 @@ func PossibleSchemaMigrationOptionValues() []SchemaMigrationOption {
 		SchemaMigrationOptionNone,
 		SchemaMigrationOptionUseStorageFile,
 	}
-}
-
-// ToPtr returns a *SchemaMigrationOption pointing to the current value.
-func (c SchemaMigrationOption) ToPtr() *SchemaMigrationOption {
-	return &c
 }
 
 // SchemaMigrationStage - Current stage of schema migration
@@ -1121,11 +921,6 @@ func PossibleSchemaMigrationStageValues() []SchemaMigrationStage {
 	}
 }
 
-// ToPtr returns a *SchemaMigrationStage pointing to the current value.
-func (c SchemaMigrationStage) ToPtr() *SchemaMigrationStage {
-	return &c
-}
-
 // ServerLevelPermissionsGroup - Permission group for validations. These groups will run a set of permissions for validating
 // user activity. Select the permission group for the activity that you are performing.
 type ServerLevelPermissionsGroup string
@@ -1145,11 +940,6 @@ func PossibleServerLevelPermissionsGroupValues() []ServerLevelPermissionsGroup {
 		ServerLevelPermissionsGroupMigrationFromSQLServerToAzureMI,
 		ServerLevelPermissionsGroupMigrationFromMySQLToAzureDBForMySQL,
 	}
-}
-
-// ToPtr returns a *ServerLevelPermissionsGroup pointing to the current value.
-func (c ServerLevelPermissionsGroup) ToPtr() *ServerLevelPermissionsGroup {
-	return &c
 }
 
 // ServiceProvisioningState - The resource's provisioning state
@@ -1184,11 +974,6 @@ func PossibleServiceProvisioningStateValues() []ServiceProvisioningState {
 	}
 }
 
-// ToPtr returns a *ServiceProvisioningState pointing to the current value.
-func (c ServiceProvisioningState) ToPtr() *ServiceProvisioningState {
-	return &c
-}
-
 // ServiceScalability - The scalability approach
 type ServiceScalability string
 
@@ -1205,11 +990,6 @@ func PossibleServiceScalabilityValues() []ServiceScalability {
 		ServiceScalabilityManual,
 		ServiceScalabilityNone,
 	}
-}
-
-// ToPtr returns a *ServiceScalability pointing to the current value.
-func (c ServiceScalability) ToPtr() *ServiceScalability {
-	return &c
 }
 
 // Severity - Severity of the validation error
@@ -1230,11 +1010,6 @@ func PossibleSeverityValues() []Severity {
 	}
 }
 
-// ToPtr returns a *Severity pointing to the current value.
-func (c Severity) ToPtr() *Severity {
-	return &c
-}
-
 // SsisMigrationOverwriteOption - The overwrite option for SSIS object migration, only ignore and overwrite are supported
 // in DMS now and future may add Reuse option for container object
 type SsisMigrationOverwriteOption string
@@ -1250,11 +1025,6 @@ func PossibleSsisMigrationOverwriteOptionValues() []SsisMigrationOverwriteOption
 		SsisMigrationOverwriteOptionIgnore,
 		SsisMigrationOverwriteOptionOverwrite,
 	}
-}
-
-// ToPtr returns a *SsisMigrationOverwriteOption pointing to the current value.
-func (c SsisMigrationOverwriteOption) ToPtr() *SsisMigrationOverwriteOption {
-	return &c
 }
 
 // SsisMigrationStage - Current stage of SSIS migration
@@ -1277,11 +1047,6 @@ func PossibleSsisMigrationStageValues() []SsisMigrationStage {
 	}
 }
 
-// ToPtr returns a *SsisMigrationStage pointing to the current value.
-func (c SsisMigrationStage) ToPtr() *SsisMigrationStage {
-	return &c
-}
-
 // SsisStoreType - An enumeration of supported source SSIS store type in DMS
 type SsisStoreType string
 
@@ -1294,11 +1059,6 @@ func PossibleSsisStoreTypeValues() []SsisStoreType {
 	return []SsisStoreType{
 		SsisStoreTypeSsisCatalog,
 	}
-}
-
-// ToPtr returns a *SsisStoreType pointing to the current value.
-func (c SsisStoreType) ToPtr() *SsisStoreType {
-	return &c
 }
 
 // SyncDatabaseMigrationReportingState - Enum of the different state of database level online migration.
@@ -1349,11 +1109,6 @@ func PossibleSyncDatabaseMigrationReportingStateValues() []SyncDatabaseMigration
 	}
 }
 
-// ToPtr returns a *SyncDatabaseMigrationReportingState pointing to the current value.
-func (c SyncDatabaseMigrationReportingState) ToPtr() *SyncDatabaseMigrationReportingState {
-	return &c
-}
-
 // SyncTableMigrationState - Enum of the different state of table level online migration.
 type SyncTableMigrationState string
 
@@ -1376,11 +1131,6 @@ func PossibleSyncTableMigrationStateValues() []SyncTableMigrationState {
 		SyncTableMigrationStateFAILED,
 		SyncTableMigrationStateFULLLOAD,
 	}
-}
-
-// ToPtr returns a *SyncTableMigrationState pointing to the current value.
-func (c SyncTableMigrationState) ToPtr() *SyncTableMigrationState {
-	return &c
 }
 
 // TaskState - The state of the task. This is ignored if submitted.
@@ -1409,11 +1159,6 @@ func PossibleTaskStateValues() []TaskState {
 		TaskStateSucceeded,
 		TaskStateUnknown,
 	}
-}
-
-// ToPtr returns a *TaskState pointing to the current value.
-func (c TaskState) ToPtr() *TaskState {
-	return &c
 }
 
 // TaskType - Task type.
@@ -1504,11 +1249,6 @@ func PossibleTaskTypeValues() []TaskType {
 	}
 }
 
-// ToPtr returns a *TaskType pointing to the current value.
-func (c TaskType) ToPtr() *TaskType {
-	return &c
-}
-
 // UpdateActionType - Type of the actual difference for the compared object, while performing schema comparison
 type UpdateActionType string
 
@@ -1525,11 +1265,6 @@ func PossibleUpdateActionTypeValues() []UpdateActionType {
 		UpdateActionTypeChangedOnTarget,
 		UpdateActionTypeDeletedOnTarget,
 	}
-}
-
-// ToPtr returns a *UpdateActionType pointing to the current value.
-func (c UpdateActionType) ToPtr() *UpdateActionType {
-	return &c
 }
 
 // ValidationStatus - Current status of the validation
@@ -1558,9 +1293,4 @@ func PossibleValidationStatusValues() []ValidationStatus {
 		ValidationStatusNotStarted,
 		ValidationStatusStopped,
 	}
-}
-
-// ToPtr returns a *ValidationStatus pointing to the current value.
-func (c ValidationStatus) ToPtr() *ValidationStatus {
-	return &c
 }

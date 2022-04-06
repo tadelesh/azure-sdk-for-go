@@ -29,11 +29,6 @@ func PossibleMultiFactorAuthProviderValues() []MultiFactorAuthProvider {
 	}
 }
 
-// ToPtr returns a *MultiFactorAuthProvider pointing to the current value.
-func (c MultiFactorAuthProvider) ToPtr() *MultiFactorAuthProvider {
-	return &c
-}
-
 // ProvisioningState - The current provisioning state of the registration definition.
 type ProvisioningState string
 
@@ -68,9 +63,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateSucceeded,
 		ProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

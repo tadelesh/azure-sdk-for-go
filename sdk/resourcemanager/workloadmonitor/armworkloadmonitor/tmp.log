@@ -1,0 +1,13 @@
+=== RUN   TestOperations_List
+--- PASS: TestOperations_List (0.18s)
+=== RUN   TestHealthMonitors_List
+--- PASS: TestHealthMonitors_List (0.23s)
+=== RUN   TestHealthMonitors_Get
+--- PASS: TestHealthMonitors_Get (0.10s)
+=== RUN   TestHealthMonitors_ListStateChanges
+--- PASS: TestHealthMonitors_ListStateChanges (0.19s)
+=== RUN   TestHealthMonitors_GetStateChange
+--- PASS: TestHealthMonitors_GetStateChange (0.10s)
+PASS
+coverage: 68.5% of statements
+ok  	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/workloadmonitor/armworkloadmonitor	1.182s

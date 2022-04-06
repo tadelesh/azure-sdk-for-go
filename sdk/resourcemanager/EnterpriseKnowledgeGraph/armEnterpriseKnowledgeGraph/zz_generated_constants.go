@@ -9,7 +9,7 @@
 package armEnterpriseKnowledgeGraph
 
 const (
-	moduleName    = "armEnterpriseKnowledgeGraph"
+	moduleName = "armEnterpriseKnowledgeGraph"
 	moduleVersion = "v0.2.0"
 )
 
@@ -17,25 +17,20 @@ const (
 type EnterpriseKnowledgeGraphPropertiesProvisioningState string
 
 const (
-	EnterpriseKnowledgeGraphPropertiesProvisioningStateCreating  EnterpriseKnowledgeGraphPropertiesProvisioningState = "Creating"
-	EnterpriseKnowledgeGraphPropertiesProvisioningStateDeleting  EnterpriseKnowledgeGraphPropertiesProvisioningState = "Deleting"
-	EnterpriseKnowledgeGraphPropertiesProvisioningStateFailed    EnterpriseKnowledgeGraphPropertiesProvisioningState = "Failed"
+	EnterpriseKnowledgeGraphPropertiesProvisioningStateCreating EnterpriseKnowledgeGraphPropertiesProvisioningState = "Creating"
+	EnterpriseKnowledgeGraphPropertiesProvisioningStateDeleting EnterpriseKnowledgeGraphPropertiesProvisioningState = "Deleting"
+	EnterpriseKnowledgeGraphPropertiesProvisioningStateFailed EnterpriseKnowledgeGraphPropertiesProvisioningState = "Failed"
 	EnterpriseKnowledgeGraphPropertiesProvisioningStateSucceeded EnterpriseKnowledgeGraphPropertiesProvisioningState = "Succeeded"
 )
 
 // PossibleEnterpriseKnowledgeGraphPropertiesProvisioningStateValues returns the possible values for the EnterpriseKnowledgeGraphPropertiesProvisioningState const type.
 func PossibleEnterpriseKnowledgeGraphPropertiesProvisioningStateValues() []EnterpriseKnowledgeGraphPropertiesProvisioningState {
-	return []EnterpriseKnowledgeGraphPropertiesProvisioningState{
+	return []EnterpriseKnowledgeGraphPropertiesProvisioningState{	
 		EnterpriseKnowledgeGraphPropertiesProvisioningStateCreating,
 		EnterpriseKnowledgeGraphPropertiesProvisioningStateDeleting,
 		EnterpriseKnowledgeGraphPropertiesProvisioningStateFailed,
 		EnterpriseKnowledgeGraphPropertiesProvisioningStateSucceeded,
 	}
-}
-
-// ToPtr returns a *EnterpriseKnowledgeGraphPropertiesProvisioningState pointing to the current value.
-func (c EnterpriseKnowledgeGraphPropertiesProvisioningState) ToPtr() *EnterpriseKnowledgeGraphPropertiesProvisioningState {
-	return &c
 }
 
 // SKUName - The name of SKU.
@@ -48,13 +43,9 @@ const (
 
 // PossibleSKUNameValues returns the possible values for the SKUName const type.
 func PossibleSKUNameValues() []SKUName {
-	return []SKUName{
+	return []SKUName{	
 		SKUNameF0,
 		SKUNameS1,
 	}
 }
 
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
-}

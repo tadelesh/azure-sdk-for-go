@@ -29,11 +29,6 @@ func PossibleBackupScheduleTypeValues() []BackupScheduleType {
 	}
 }
 
-// ToPtr returns a *BackupScheduleType pointing to the current value.
-func (c BackupScheduleType) ToPtr() *BackupScheduleType {
-	return &c
-}
-
 // ClusterConfiguration - Cluster type.
 type ClusterConfiguration string
 
@@ -46,11 +41,6 @@ func PossibleClusterConfigurationValues() []ClusterConfiguration {
 	return []ClusterConfiguration{
 		ClusterConfigurationDomainful,
 	}
-}
-
-// ToPtr returns a *ClusterConfiguration pointing to the current value.
-func (c ClusterConfiguration) ToPtr() *ClusterConfiguration {
-	return &c
 }
 
 // ClusterManagerType - Type of cluster manager: Windows Server Failover Cluster (WSFC), implied by the scale type of the
@@ -66,11 +56,6 @@ func PossibleClusterManagerTypeValues() []ClusterManagerType {
 	return []ClusterManagerType{
 		ClusterManagerTypeWSFC,
 	}
-}
-
-// ToPtr returns a *ClusterManagerType pointing to the current value.
-func (c ClusterManagerType) ToPtr() *ClusterManagerType {
-	return &c
 }
 
 // ConnectivityType - SQL Server connectivity option.
@@ -89,11 +74,6 @@ func PossibleConnectivityTypeValues() []ConnectivityType {
 		ConnectivityTypePRIVATE,
 		ConnectivityTypePUBLIC,
 	}
-}
-
-// ToPtr returns a *ConnectivityType pointing to the current value.
-func (c ConnectivityType) ToPtr() *ConnectivityType {
-	return &c
 }
 
 // DayOfWeek - Day of week to apply the patch on.
@@ -122,11 +102,6 @@ func PossibleDayOfWeekValues() []DayOfWeek {
 	}
 }
 
-// ToPtr returns a *DayOfWeek pointing to the current value.
-func (c DayOfWeek) ToPtr() *DayOfWeek {
-	return &c
-}
-
 // DiskConfigurationType - Disk configuration to apply to SQL Server.
 type DiskConfigurationType string
 
@@ -145,11 +120,6 @@ func PossibleDiskConfigurationTypeValues() []DiskConfigurationType {
 	}
 }
 
-// ToPtr returns a *DiskConfigurationType pointing to the current value.
-func (c DiskConfigurationType) ToPtr() *DiskConfigurationType {
-	return &c
-}
-
 // FullBackupFrequencyType - Frequency of full backups. In both cases, full backups begin during the next scheduled time window.
 type FullBackupFrequencyType string
 
@@ -164,11 +134,6 @@ func PossibleFullBackupFrequencyTypeValues() []FullBackupFrequencyType {
 		FullBackupFrequencyTypeDaily,
 		FullBackupFrequencyTypeWeekly,
 	}
-}
-
-// ToPtr returns a *FullBackupFrequencyType pointing to the current value.
-func (c FullBackupFrequencyType) ToPtr() *FullBackupFrequencyType {
-	return &c
 }
 
 // IdentityType - The identity type. Set this to 'SystemAssigned' in order to automatically create and assign an Azure Active
@@ -186,11 +151,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 // OperationOrigin - The intended executor of the operation.
 type OperationOrigin string
 
@@ -205,11 +165,6 @@ func PossibleOperationOriginValues() []OperationOrigin {
 		OperationOriginSystem,
 		OperationOriginUser,
 	}
-}
-
-// ToPtr returns a *OperationOrigin pointing to the current value.
-func (c OperationOrigin) ToPtr() *OperationOrigin {
-	return &c
 }
 
 // SQLImageSKU - SQL Server edition type.
@@ -234,11 +189,6 @@ func PossibleSQLImageSKUValues() []SQLImageSKU {
 	}
 }
 
-// ToPtr returns a *SQLImageSKU pointing to the current value.
-func (c SQLImageSKU) ToPtr() *SQLImageSKU {
-	return &c
-}
-
 // SQLManagementMode - SQL Server Management type.
 type SQLManagementMode string
 
@@ -255,11 +205,6 @@ func PossibleSQLManagementModeValues() []SQLManagementMode {
 		SQLManagementModeLightWeight,
 		SQLManagementModeNoAgent,
 	}
-}
-
-// ToPtr returns a *SQLManagementMode pointing to the current value.
-func (c SQLManagementMode) ToPtr() *SQLManagementMode {
-	return &c
 }
 
 // SQLServerLicenseType - SQL Server license type.
@@ -280,11 +225,6 @@ func PossibleSQLServerLicenseTypeValues() []SQLServerLicenseType {
 	}
 }
 
-// ToPtr returns a *SQLServerLicenseType pointing to the current value.
-func (c SQLServerLicenseType) ToPtr() *SQLServerLicenseType {
-	return &c
-}
-
 // SQLVMGroupImageSKU - SQL image sku.
 type SQLVMGroupImageSKU string
 
@@ -299,11 +239,6 @@ func PossibleSQLVMGroupImageSKUValues() []SQLVMGroupImageSKU {
 		SQLVMGroupImageSKUDeveloper,
 		SQLVMGroupImageSKUEnterprise,
 	}
-}
-
-// ToPtr returns a *SQLVMGroupImageSKU pointing to the current value.
-func (c SQLVMGroupImageSKU) ToPtr() *SQLVMGroupImageSKU {
-	return &c
 }
 
 // SQLWorkloadType - SQL Server workload type.
@@ -324,11 +259,6 @@ func PossibleSQLWorkloadTypeValues() []SQLWorkloadType {
 	}
 }
 
-// ToPtr returns a *SQLWorkloadType pointing to the current value.
-func (c SQLWorkloadType) ToPtr() *SQLWorkloadType {
-	return &c
-}
-
 // ScaleType - Scale type.
 type ScaleType string
 
@@ -341,11 +271,6 @@ func PossibleScaleTypeValues() []ScaleType {
 	return []ScaleType{
 		ScaleTypeHA,
 	}
-}
-
-// ToPtr returns a *ScaleType pointing to the current value.
-func (c ScaleType) ToPtr() *ScaleType {
-	return &c
 }
 
 // StorageWorkloadType - Storage workload type.
@@ -364,9 +289,4 @@ func PossibleStorageWorkloadTypeValues() []StorageWorkloadType {
 		StorageWorkloadTypeGENERAL,
 		StorageWorkloadTypeOLTP,
 	}
-}
-
-// ToPtr returns a *StorageWorkloadType pointing to the current value.
-func (c StorageWorkloadType) ToPtr() *StorageWorkloadType {
-	return &c
 }

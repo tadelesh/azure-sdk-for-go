@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DriveState - The drive's current state.
 type DriveState string
 
@@ -64,11 +59,6 @@ func PossibleDriveStateValues() []DriveState {
 	}
 }
 
-// ToPtr returns a *DriveState pointing to the current value.
-func (c DriveState) ToPtr() *DriveState {
-	return &c
-}
-
 // EncryptionKekType - The type of kek encryption key
 type EncryptionKekType string
 
@@ -83,11 +73,6 @@ func PossibleEncryptionKekTypeValues() []EncryptionKekType {
 		EncryptionKekTypeCustomerManaged,
 		EncryptionKekTypeMicrosoftManaged,
 	}
-}
-
-// ToPtr returns a *EncryptionKekType pointing to the current value.
-func (c EncryptionKekType) ToPtr() *EncryptionKekType {
-	return &c
 }
 
 // IdentityType - The type of identity
@@ -106,9 +91,4 @@ func PossibleIdentityTypeValues() []IdentityType {
 		IdentityTypeSystemAssigned,
 		IdentityTypeUserAssigned,
 	}
-}
-
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
 }

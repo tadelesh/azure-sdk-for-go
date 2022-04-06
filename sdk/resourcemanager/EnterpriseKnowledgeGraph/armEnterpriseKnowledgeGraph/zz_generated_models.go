@@ -168,3 +168,4 @@ type SKU struct {
 	// REQUIRED; The sku name
 	Name *SKUName `json:"name,omitempty"`
 }
+

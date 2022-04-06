@@ -33,11 +33,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 // JSONWebKeyType - Provisioning state.
 type JSONWebKeyType string
 
@@ -69,11 +64,6 @@ func PossibleJSONWebKeyTypeValues() []JSONWebKeyType {
 		JSONWebKeyTypeProvisioning,
 		JSONWebKeyTypeSucceeded,
 	}
-}
-
-// ToPtr returns a *JSONWebKeyType pointing to the current value.
-func (c JSONWebKeyType) ToPtr() *JSONWebKeyType {
-	return &c
 }
 
 // SKUName - SKU of the dedicated HSM
@@ -113,9 +103,4 @@ func PossibleSKUNameValues() []SKUName {
 		SKUNamePayShield10KLMK2CPS60,
 		SKUNameSafeNetLunaNetworkHSMA790,
 	}
-}
-
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
 }

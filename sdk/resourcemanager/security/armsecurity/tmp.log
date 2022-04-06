@@ -1,0 +1,727 @@
+=== RUN   TestMdeOnboardings_List
+    zt_generated_mock_test.go:54: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2021-10-01-preview/examples/MdeOnboardings/ListMdeOnboardings_example.json: unmarshalling type *armsecurity.MdeOnboardingDataList: illegal base64 data at input byte 20976
+--- FAIL: TestMdeOnboardings_List (0.18s)
+=== RUN   TestMdeOnboardings_Get
+    zt_generated_mock_test.go:92: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2021-10-01-preview/examples/MdeOnboardings/GetMdeOnboardings_example.json: unmarshalling type *armsecurity.MdeOnboardingData: illegal base64 data at input byte 20976
+--- FAIL: TestMdeOnboardings_Get (0.11s)
+=== RUN   TestCustomAssessmentAutomations_Get
+--- PASS: TestCustomAssessmentAutomations_Get (0.08s)
+=== RUN   TestCustomAssessmentAutomations_Create
+--- PASS: TestCustomAssessmentAutomations_Create (0.07s)
+=== RUN   TestCustomAssessmentAutomations_Delete
+--- PASS: TestCustomAssessmentAutomations_Delete (0.09s)
+=== RUN   TestCustomAssessmentAutomations_ListByResourceGroup
+--- PASS: TestCustomAssessmentAutomations_ListByResourceGroup (0.05s)
+=== RUN   TestCustomAssessmentAutomations_ListBySubscription
+--- PASS: TestCustomAssessmentAutomations_ListBySubscription (0.05s)
+=== RUN   TestCustomEntityStoreAssignments_Get
+--- PASS: TestCustomEntityStoreAssignments_Get (0.05s)
+=== RUN   TestCustomEntityStoreAssignments_Create
+--- PASS: TestCustomEntityStoreAssignments_Create (0.04s)
+=== RUN   TestCustomEntityStoreAssignments_Delete
+--- PASS: TestCustomEntityStoreAssignments_Delete (0.04s)
+=== RUN   TestCustomEntityStoreAssignments_ListByResourceGroup
+--- PASS: TestCustomEntityStoreAssignments_ListByResourceGroup (0.04s)
+=== RUN   TestCustomEntityStoreAssignments_ListBySubscription
+--- PASS: TestCustomEntityStoreAssignments_ListBySubscription (0.05s)
+=== RUN   TestComplianceResults_List
+--- PASS: TestComplianceResults_List (0.05s)
+=== RUN   TestComplianceResults_Get
+--- PASS: TestComplianceResults_Get (0.04s)
+=== RUN   TestPricings_List
+--- PASS: TestPricings_List (0.04s)
+=== RUN   TestPricings_Get
+--- PASS: TestPricings_Get (0.05s)
+=== RUN   TestPricings_Update
+    zt_generated_mock_test.go:838: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2018-06-01/examples/Pricings/PutPricingByName_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/pricings/VirtualMachines
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter pricing={\"properties\":{\"pricingTier\":\"Standard\"}} don't match example value {\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/pricings/VirtualMachines\",\"name\":\"VirtualMachines\",\"type\":\"Microsoft.Security/pricings\",\"properties\":{\"pricingTier\":\"Standard\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPricings_Update (0.03s)
+=== RUN   TestAdvancedThreatProtection_Get
+--- PASS: TestAdvancedThreatProtection_Get (0.04s)
+=== RUN   TestAdvancedThreatProtection_Create
+    zt_generated_mock_test.go:918: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2019-01-01/examples/AdvancedThreatProtection/PutAdvancedThreatProtectionSettings_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/SampleRG/providers/Microsoft.Storage/storageAccounts/samplestorageaccount/providers/Microsoft.Security/advancedThreatProtectionSettings/current
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter advancedThreatProtectionSetting={\"properties\":{\"isEnabled\":true}} don't match example value {\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/SampleRG/providers/Microsoft.Storage/storageAccounts/samplestorageaccount/providers/Microsoft.Security/advancedThreatProtectionSettings/current\",\"name\":\"current\",\"type\":\"Microsoft.Security/advancedThreatProtectionSettings\",\"properties\":{\"isEnabled\":true}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAdvancedThreatProtection_Create (0.03s)
+=== RUN   TestDeviceSecurityGroups_List
+--- PASS: TestDeviceSecurityGroups_List (0.06s)
+=== RUN   TestDeviceSecurityGroups_Get
+--- PASS: TestDeviceSecurityGroups_Get (0.06s)
+=== RUN   TestDeviceSecurityGroups_CreateOrUpdate
+--- PASS: TestDeviceSecurityGroups_CreateOrUpdate (0.06s)
+=== RUN   TestDeviceSecurityGroups_Delete
+--- PASS: TestDeviceSecurityGroups_Delete (0.04s)
+=== RUN   TestIotSecuritySolution_ListBySubscription
+--- PASS: TestIotSecuritySolution_ListBySubscription (0.14s)
+=== RUN   TestIotSecuritySolution_ListByResourceGroup
+--- PASS: TestIotSecuritySolution_ListByResourceGroup (0.11s)
+=== RUN   TestIotSecuritySolution_Get
+--- PASS: TestIotSecuritySolution_Get (0.05s)
+=== RUN   TestIotSecuritySolution_CreateOrUpdate
+--- PASS: TestIotSecuritySolution_CreateOrUpdate (0.05s)
+=== RUN   TestIotSecuritySolution_Update
+--- PASS: TestIotSecuritySolution_Update (12.32s)
+=== RUN   TestIotSecuritySolution_Delete
+--- PASS: TestIotSecuritySolution_Delete (0.12s)
+=== RUN   TestIotSecuritySolutionAnalytics_List
+--- PASS: TestIotSecuritySolutionAnalytics_List (0.09s)
+=== RUN   TestIotSecuritySolutionAnalytics_Get
+--- PASS: TestIotSecuritySolutionAnalytics_Get (0.08s)
+=== RUN   TestIotSecuritySolutionsAnalyticsAggregatedAlert_List
+--- PASS: TestIotSecuritySolutionsAnalyticsAggregatedAlert_List (0.06s)
+=== RUN   TestIotSecuritySolutionsAnalyticsAggregatedAlert_Get
+--- PASS: TestIotSecuritySolutionsAnalyticsAggregatedAlert_Get (0.04s)
+=== RUN   TestIotSecuritySolutionsAnalyticsAggregatedAlert_Dismiss
+--- PASS: TestIotSecuritySolutionsAnalyticsAggregatedAlert_Dismiss (0.05s)
+=== RUN   TestIotSecuritySolutionsAnalyticsRecommendation_Get
+--- PASS: TestIotSecuritySolutionsAnalyticsRecommendation_Get (0.05s)
+=== RUN   TestIotSecuritySolutionsAnalyticsRecommendation_List
+--- PASS: TestIotSecuritySolutionsAnalyticsRecommendation_List (0.05s)
+=== RUN   TestLocations_List
+--- PASS: TestLocations_List (0.05s)
+=== RUN   TestLocations_Get
+--- PASS: TestLocations_Get (0.04s)
+=== RUN   TestOperations_List
+    zt_generated_mock_test.go:3338: Warning: No test steps for this operation!
+--- SKIP: TestOperations_List (0.00s)
+=== RUN   TestTasks_List
+--- PASS: TestTasks_List (0.07s)
+=== RUN   TestTasks_ListByHomeRegion
+--- PASS: TestTasks_ListByHomeRegion (0.05s)
+=== RUN   TestTasks_GetSubscriptionLevelTask
+--- PASS: TestTasks_GetSubscriptionLevelTask (0.04s)
+=== RUN   TestTasks_UpdateSubscriptionLevelTaskState
+--- PASS: TestTasks_UpdateSubscriptionLevelTaskState (0.04s)
+=== RUN   TestTasks_ListByResourceGroup
+--- PASS: TestTasks_ListByResourceGroup (0.08s)
+=== RUN   TestTasks_GetResourceGroupLevelTask
+--- PASS: TestTasks_GetResourceGroupLevelTask (0.06s)
+=== RUN   TestTasks_UpdateResourceGroupLevelTaskState
+--- PASS: TestTasks_UpdateResourceGroupLevelTaskState (0.04s)
+=== RUN   TestAutoProvisioningSettings_List
+--- PASS: TestAutoProvisioningSettings_List (0.06s)
+=== RUN   TestAutoProvisioningSettings_Get
+--- PASS: TestAutoProvisioningSettings_Get (0.03s)
+=== RUN   TestAutoProvisioningSettings_Create
+    zt_generated_mock_test.go:3792: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2017-08-01-preview/examples/AutoProvisioningSettings/CreateAutoProvisioningSettingsSubscription_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/autoProvisioningSettings/default
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter setting={\"properties\":{\"autoProvision\":\"On\"}} don't match example value {\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/autoProvisioningSettings/default\",\"name\":\"default\",\"type\":\"Microsoft.Security/autoProvisioningSettings\",\"properties\":{\"autoProvision\":\"On\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAutoProvisioningSettings_Create (0.04s)
+=== RUN   TestCompliances_List
+--- PASS: TestCompliances_List (0.06s)
+=== RUN   TestCompliances_Get
+--- PASS: TestCompliances_Get (0.04s)
+=== RUN   TestInformationProtectionPolicies_Get
+--- PASS: TestInformationProtectionPolicies_Get (0.11s)
+=== RUN   TestInformationProtectionPolicies_CreateOrUpdate
+--- PASS: TestInformationProtectionPolicies_CreateOrUpdate (0.06s)
+=== RUN   TestInformationProtectionPolicies_List
+--- PASS: TestInformationProtectionPolicies_List (0.06s)
+=== RUN   TestSecurityContacts_List
+--- PASS: TestSecurityContacts_List (0.17s)
+=== RUN   TestSecurityContacts_Get
+--- PASS: TestSecurityContacts_Get (0.09s)
+=== RUN   TestSecurityContacts_Create
+    zt_generated_mock_test.go:4609: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2017-08-01-preview/examples/SecurityContacts/CreateSecurityContact_full_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/securityContacts/default1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter securityContact={\"properties\":{\"alertNotifications\":\"On\",\"alertsToAdmins\":\"On\",\"email\":\"john@contoso.com\",\"phone\":\"(214)275-4038\"}} don't match example value {\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/securityContacts/default1\",\"name\":\"default1\",\"type\":\"Microsoft.Security/securityContacts\",\"properties\":{\"email\":\"john@contoso.com\",\"phone\":\"(214)275-4038\",\"alertNotifications\":\"On\",\"alertsToAdmins\":\"On\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestSecurityContacts_Create (0.03s)
+=== RUN   TestSecurityContacts_Delete
+--- PASS: TestSecurityContacts_Delete (0.03s)
+=== RUN   TestSecurityContacts_Update
+    zt_generated_mock_test.go:4715: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2017-08-01-preview/examples/SecurityContacts/UpdateSecurityContact_full_example.json: PATCH https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/securityContacts/john
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"isSuccessful\":false,\"operationInfo\":{\"apiVersion\":\"2017-08-01-preview\",\"operationId\":\"SecurityContacts_Update\"},\"errors\":[{\"code\":\"OBJECT_MISSING_REQUIRED_PROPERTY\",\"severity\":0,\"message\":\"Missing required property: email\",\"params\":[\"email\"],\"jsonPathsInPayload\":[\"$.properties.email\"],\"schemaPath\":\"#/required\",\"source\":{\"url\":\"specification\\\\security\\\\resource-manager\\\\Microsoft.Security\\\\preview\\\\2017-08-01-preview\\\\securityContacts.json\",\"position\":{\"line\":278,\"column\":34},\"jsonRef\":\"#/definitions/SecurityContactProperties\"},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/properties/email\"]},{\"code\":\"OBJECT_MISSING_REQUIRED_PROPERTY\",\"severity\":0,\"message\":\"Missing required property: alertsToAdmins\",\"params\":[\"alertsToAdmins\"],\"jsonPathsInPayload\":[\"$.properties.alertsToAdmins\"],\"schemaPath\":\"#/required\",\"source\":{\"url\":\"specification\\\\security\\\\resource-manager\\\\Microsoft.Security\\\\preview\\\\2017-08-01-preview\\\\securityContacts.json\",\"position\":{\"line\":278,\"column\":34},\"jsonRef\":\"#/definitions/SecurityContactProperties\"},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/properties/alertsToAdmins\"]}]}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestSecurityContacts_Update (0.01s)
+=== RUN   TestWorkspaceSettings_List
+--- PASS: TestWorkspaceSettings_List (0.08s)
+=== RUN   TestWorkspaceSettings_Get
+--- PASS: TestWorkspaceSettings_Get (0.03s)
+=== RUN   TestWorkspaceSettings_Create
+    zt_generated_mock_test.go:4884: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2017-08-01-preview/examples/WorkspaceSettings/CreateWorkspaceSetting_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/workspaceSettings/default
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter workspaceSetting={\"properties\":{\"scope\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23\",\"workspaceId\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg/providers/Microsoft.OperationalInsights/workspaces/myWorkspace\"}} don't match example value {\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/workspaceSettings/default\",\"name\":\"default\",\"type\":\"Microsoft.Security/workspaceSettings\",\"properties\":{\"workspaceId\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg/providers/Microsoft.OperationalInsights/workspaces/myWorkspace\",\"scope\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestWorkspaceSettings_Create (0.04s)
+=== RUN   TestWorkspaceSettings_Update
+    zt_generated_mock_test.go:4928: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2017-08-01-preview/examples/WorkspaceSettings/UpdateWorkspaceSetting_example.json: PATCH https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/workspaceSettings/default
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"isSuccessful\":false,\"operationInfo\":{\"apiVersion\":\"2017-08-01-preview\",\"operationId\":\"WorkspaceSettings_Update\"},\"errors\":[{\"code\":\"OBJECT_MISSING_REQUIRED_PROPERTY\",\"severity\":0,\"message\":\"Missing required property: scope\",\"params\":[\"scope\"],\"jsonPathsInPayload\":[\"$.properties.scope\"],\"schemaPath\":\"#/required\",\"source\":{\"url\":\"specification\\\\security\\\\resource-manager\\\\Microsoft.Security\\\\preview\\\\2017-08-01-preview\\\\workspaceSettings.json\",\"position\":{\"line\":267,\"column\":35},\"jsonRef\":\"#/definitions/WorkspaceSettingProperties\"},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/properties/scope\"]}]}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestWorkspaceSettings_Update (0.01s)
+=== RUN   TestWorkspaceSettings_Delete
+--- PASS: TestWorkspaceSettings_Delete (0.03s)
+=== RUN   TestRegulatoryComplianceStandards_List
+    zt_generated_mock_test.go:4983: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceStandardList_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceStandards_List (0.07s)
+=== RUN   TestRegulatoryComplianceStandards_Get
+    zt_generated_mock_test.go:5061: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceStandard_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards/PCI-DSS-3.2
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceStandards_Get (0.03s)
+=== RUN   TestRegulatoryComplianceControls_List
+    zt_generated_mock_test.go:5101: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceControlList_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards/PCI-DSS-3.2/regulatoryComplianceControls
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceControls_List (0.04s)
+=== RUN   TestRegulatoryComplianceControls_Get
+    zt_generated_mock_test.go:5168: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceControl_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards/PCI-DSS-3.2/regulatoryComplianceControls/1.1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceControls_Get (0.04s)
+=== RUN   TestRegulatoryComplianceAssessments_List
+    zt_generated_mock_test.go:5209: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceAssessmentList_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards/PCI-DSS-3.2/regulatoryComplianceControls/1.1/regulatoryComplianceAssessments
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceAssessments_List (0.04s)
+=== RUN   TestRegulatoryComplianceAssessments_Get
+    zt_generated_mock_test.go:5283: Failed to get result for example specification/security/resource-manager/Microsoft.Security/preview/2019-01-01-preview/examples/RegulatoryCompliance/getRegulatoryComplianceAssessment_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/regulatoryComplianceStandards/PCI-DSS-3.2/regulatoryComplianceControls/1.1/regulatoryComplianceAssessments/968548cb-02b3-8cd2-11f8-0cf64ab1a347
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2019-01-01-preview\" don't match example value \"2019-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestRegulatoryComplianceAssessments_Get (0.03s)
+=== RUN   TestSubAssessments_ListAll
+--- PASS: TestSubAssessments_ListAll (0.09s)
+=== RUN   TestSubAssessments_List
+--- PASS: TestSubAssessments_List (0.04s)
+=== RUN   TestSubAssessments_Get
+--- PASS: TestSubAssessments_Get (0.05s)
+=== RUN   TestAutomations_List
+--- PASS: TestAutomations_List (0.08s)
+=== RUN   TestAutomations_ListByResourceGroup
+--- PASS: TestAutomations_ListByResourceGroup (0.03s)
+=== RUN   TestAutomations_Get
+--- PASS: TestAutomations_Get (0.04s)
+=== RUN   TestAutomations_CreateOrUpdate
+--- PASS: TestAutomations_CreateOrUpdate (0.14s)
+=== RUN   TestAutomations_Delete
+--- PASS: TestAutomations_Delete (0.03s)
+=== RUN   TestAutomations_Validate
+--- PASS: TestAutomations_Validate (0.04s)
+=== RUN   TestAlertsSuppressionRules_List
+--- PASS: TestAlertsSuppressionRules_List (0.09s)
+=== RUN   TestAlertsSuppressionRules_Get
+--- PASS: TestAlertsSuppressionRules_Get (0.03s)
+=== RUN   TestAlertsSuppressionRules_Update
+--- PASS: TestAlertsSuppressionRules_Update (0.05s)
+=== RUN   TestAlertsSuppressionRules_Delete
+--- PASS: TestAlertsSuppressionRules_Delete (0.04s)
+=== RUN   TestServerVulnerabilityAssessment_ListByExtendedResource
+--- PASS: TestServerVulnerabilityAssessment_ListByExtendedResource (0.10s)
+=== RUN   TestServerVulnerabilityAssessment_Get
+--- PASS: TestServerVulnerabilityAssessment_Get (0.04s)
+=== RUN   TestServerVulnerabilityAssessment_CreateOrUpdate
+--- PASS: TestServerVulnerabilityAssessment_CreateOrUpdate (0.03s)
+=== RUN   TestServerVulnerabilityAssessment_Delete
+--- PASS: TestServerVulnerabilityAssessment_Delete (0.07s)
+=== RUN   TestAssessmentsMetadata_List
+--- PASS: TestAssessmentsMetadata_List (0.10s)
+=== RUN   TestAssessmentsMetadata_Get
+--- PASS: TestAssessmentsMetadata_Get (0.08s)
+=== RUN   TestAssessmentsMetadata_ListBySubscription
+--- PASS: TestAssessmentsMetadata_ListBySubscription (0.06s)
+=== RUN   TestAssessmentsMetadata_GetInSubscription
+--- PASS: TestAssessmentsMetadata_GetInSubscription (0.04s)
+=== RUN   TestAssessmentsMetadata_CreateInSubscription
+--- PASS: TestAssessmentsMetadata_CreateInSubscription (0.07s)
+=== RUN   TestAssessmentsMetadata_DeleteInSubscription
+--- PASS: TestAssessmentsMetadata_DeleteInSubscription (0.04s)
+=== RUN   TestAssessments_List
+--- PASS: TestAssessments_List (0.06s)
+=== RUN   TestAssessments_Get
+--- PASS: TestAssessments_Get (0.08s)
+=== RUN   TestAssessments_CreateOrUpdate
+--- PASS: TestAssessments_CreateOrUpdate (0.06s)
+=== RUN   TestAssessments_Delete
+--- PASS: TestAssessments_Delete (0.03s)
+=== RUN   TestAdaptiveApplicationControls_List
+--- PASS: TestAdaptiveApplicationControls_List (0.24s)
+=== RUN   TestAdaptiveApplicationControls_Get
+--- PASS: TestAdaptiveApplicationControls_Get (0.04s)
+=== RUN   TestAdaptiveApplicationControls_Put
+--- PASS: TestAdaptiveApplicationControls_Put (0.07s)
+=== RUN   TestAdaptiveApplicationControls_Delete
+--- PASS: TestAdaptiveApplicationControls_Delete (0.04s)
+=== RUN   TestAdaptiveNetworkHardenings_ListByExtendedResource
+--- PASS: TestAdaptiveNetworkHardenings_ListByExtendedResource (0.11s)
+=== RUN   TestAdaptiveNetworkHardenings_Get
+--- PASS: TestAdaptiveNetworkHardenings_Get (0.04s)
+=== RUN   TestAdaptiveNetworkHardenings_Enforce
+--- PASS: TestAdaptiveNetworkHardenings_Enforce (0.08s)
+=== RUN   TestAllowedConnections_List
+--- PASS: TestAllowedConnections_List (0.07s)
+=== RUN   TestAllowedConnections_ListByHomeRegion
+--- PASS: TestAllowedConnections_ListByHomeRegion (0.05s)
+=== RUN   TestAllowedConnections_Get
+--- PASS: TestAllowedConnections_Get (0.04s)
+=== RUN   TestTopology_List
+--- PASS: TestTopology_List (0.07s)
+=== RUN   TestTopology_ListByHomeRegion
+--- PASS: TestTopology_ListByHomeRegion (0.04s)
+=== RUN   TestTopology_Get
+--- PASS: TestTopology_Get (0.03s)
+=== RUN   TestJitNetworkAccessPolicies_List
+--- PASS: TestJitNetworkAccessPolicies_List (0.11s)
+=== RUN   TestJitNetworkAccessPolicies_ListByRegion
+--- PASS: TestJitNetworkAccessPolicies_ListByRegion (0.04s)
+=== RUN   TestJitNetworkAccessPolicies_ListByResourceGroup
+--- PASS: TestJitNetworkAccessPolicies_ListByResourceGroup (0.11s)
+=== RUN   TestJitNetworkAccessPolicies_ListByResourceGroupAndRegion
+--- PASS: TestJitNetworkAccessPolicies_ListByResourceGroupAndRegion (0.04s)
+=== RUN   TestJitNetworkAccessPolicies_Get
+--- PASS: TestJitNetworkAccessPolicies_Get (0.05s)
+=== RUN   TestJitNetworkAccessPolicies_CreateOrUpdate
+    zt_generated_mock_test.go:9549: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2020-01-01/examples/JitNetworkAccessPolicies/CreateJitNetworkAccessPolicy_example.json: PUT https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/locations/westeurope/jitNetworkAccessPolicies/default
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter body={\"properties\":{\"requests\":[{\"requestor\":\"barbara@contoso.com\",\"startTimeUtc\":\"2018-05-17T08:06:45.5691611Z\",\"virtualMachines\":[{\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Compute/virtualMachines/vm1\",\"ports\":[{\"allowedSourceAddressPrefix\":\"192.127.0.2\",\"endTimeUtc\":\"2018-05-17T09:06:45.5691611Z\",\"number\":3389,\"status\":\"Initiated\",\"statusReason\":\"UserRequested\"}]}]}],\"virtualMachines\":[{\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Compute/virtualMachines/vm1\",\"ports\":[{\"allowedSourceAddressPrefix\":\"*\",\"maxRequestAccessDuration\":\"PT3H\",\"number\":22,\"protocol\":\"*\"},{\"allowedSourceAddressPrefix\":\"*\",\"maxRequestAccessDuration\":\"PT3H\",\"number\":3389,\"protocol\":\"*\"}]}]},\"kind\":\"Basic\"} don't match example value {\"kind\":\"Basic\",\"properties\":{\"virtualMachines\":[{\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Compute/virtualMachines/vm1\",\"ports\":[{\"number\":22,\"protocol\":\"*\",\"allowedSourceAddressPrefix\":\"*\",\"maxRequestAccessDuration\":\"PT3H\"},{\"number\":3389,\"protocol\":\"*\",\"allowedSourceAddressPrefix\":\"*\",\"maxRequestAccessDuration\":\"PT3H\"}]}],\"requests\":[{\"virtualMachines\":[{\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Compute/virtualMachines/vm1\",\"ports\":[{\"number\":3389,\"allowedSourceAddressPrefix\":\"192.127.0.2\",\"endTimeUtc\":\"2018-05-17T09:06:45.5691611Z\",\"status\":\"Initiated\",\"statusReason\":\"UserRequested\"}]}],\"startTimeUtc\":\"2018-05-17T08:06:45.5691611Z\",\"requestor\":\"barbara@contoso.com\"}],\"provisioningState\":\"Succeeded\"},\"id\":\"/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/locations/westeurope/jitNetworkAccessPolicies/default\",\"name\":\"default\",\"type\":\"Microsoft.Security/locations/jitNetworkAccessPolicies\",\"location\":\"westeurope\"}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestJitNetworkAccessPolicies_CreateOrUpdate (0.06s)
+=== RUN   TestJitNetworkAccessPolicies_Delete
+--- PASS: TestJitNetworkAccessPolicies_Delete (0.03s)
+=== RUN   TestJitNetworkAccessPolicies_Initiate
+    zt_generated_mock_test.go:9656: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2020-01-01/examples/JitNetworkAccessPolicies/InitiateJitNetworkAccessPolicy_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/locations/westeurope/jitNetworkAccessPolicies/default/initiate
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"isSuccessful\":false,\"operationInfo\":{\"apiVersion\":\"2020-01-01\",\"operationId\":\"JitNetworkAccessPolicies_Initiate\"},\"errors\":[{\"code\":\"OBJECT_MISSING_REQUIRED_PROPERTY\",\"severity\":0,\"message\":\"Missing required property: endTimeUtc\",\"params\":[\"endTimeUtc\"],\"jsonPathsInPayload\":[\"$.virtualMachines[0].ports[0].endTimeUtc\"],\"schemaPath\":\"#/required\",\"source\":{\"url\":\"specification\\\\security\\\\resource-manager\\\\Microsoft.Security\\\\stable\\\\2020-01-01\\\\jitNetworkAccessPolicies.json\",\"position\":{\"line\":704,\"column\":43},\"jsonRef\":\"#/definitions/JitNetworkAccessPolicyInitiatePort\"},\"documentationUrl\":\"\",\"pathsInPayload\":[\"/virtualMachines/0/ports/0/endTimeUtc\"]}]}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestJitNetworkAccessPolicies_Initiate (0.01s)
+=== RUN   TestDiscoveredSecuritySolutions_List
+--- PASS: TestDiscoveredSecuritySolutions_List (0.05s)
+=== RUN   TestDiscoveredSecuritySolutions_ListByHomeRegion
+--- PASS: TestDiscoveredSecuritySolutions_ListByHomeRegion (0.04s)
+=== RUN   TestDiscoveredSecuritySolutions_Get
+--- PASS: TestDiscoveredSecuritySolutions_Get (0.03s)
+=== RUN   TestSecuritySolutionsReferenceData_List
+--- PASS: TestSecuritySolutionsReferenceData_List (0.05s)
+=== RUN   TestSecuritySolutionsReferenceData_ListByHomeRegion
+--- PASS: TestSecuritySolutionsReferenceData_ListByHomeRegion (0.04s)
+=== RUN   TestExternalSecuritySolutions_List
+--- PASS: TestExternalSecuritySolutions_List (0.07s)
+=== RUN   TestExternalSecuritySolutions_ListByHomeRegion
+--- PASS: TestExternalSecuritySolutions_ListByHomeRegion (0.05s)
+=== RUN   TestExternalSecuritySolutions_Get
+--- PASS: TestExternalSecuritySolutions_Get (0.03s)
+=== RUN   TestSecureScores_List
+--- PASS: TestSecureScores_List (0.06s)
+=== RUN   TestSecureScores_Get
+--- PASS: TestSecureScores_Get (0.03s)
+=== RUN   TestSecureScoreControls_ListBySecureScore
+--- PASS: TestSecureScoreControls_ListBySecureScore (0.29s)
+=== RUN   TestSecureScoreControls_List
+--- PASS: TestSecureScoreControls_List (0.05s)
+=== RUN   TestSecureScoreControlDefinitions_List
+--- PASS: TestSecureScoreControlDefinitions_List (0.03s)
+=== RUN   TestSecureScoreControlDefinitions_ListBySubscription
+--- PASS: TestSecureScoreControlDefinitions_ListBySubscription (0.05s)
+=== RUN   TestSecuritySolutions_List
+--- PASS: TestSecuritySolutions_List (0.05s)
+=== RUN   TestSecuritySolutions_Get
+--- PASS: TestSecuritySolutions_Get (0.03s)
+=== RUN   TestAccountConnectors_List
+--- PASS: TestAccountConnectors_List (0.09s)
+=== RUN   TestAccountConnectors_Get
+--- PASS: TestAccountConnectors_Get (0.04s)
+=== RUN   TestAccountConnectors_CreateOrUpdate
+--- PASS: TestAccountConnectors_CreateOrUpdate (0.17s)
+=== RUN   TestAccountConnectors_Delete
+--- PASS: TestAccountConnectors_Delete (0.04s)
+=== RUN   TestSQLVulnerabilityAssessmentScans_Get
+--- PASS: TestSQLVulnerabilityAssessmentScans_Get (0.10s)
+=== RUN   TestSQLVulnerabilityAssessmentScans_List
+--- PASS: TestSQLVulnerabilityAssessmentScans_List (0.03s)
+=== RUN   TestSQLVulnerabilityAssessmentScanResults_Get
+--- PASS: TestSQLVulnerabilityAssessmentScanResults_Get (0.10s)
+=== RUN   TestSQLVulnerabilityAssessmentScanResults_List
+--- PASS: TestSQLVulnerabilityAssessmentScanResults_List (0.11s)
+=== RUN   TestSQLVulnerabilityAssessmentBaselineRules_CreateOrUpdate
+--- PASS: TestSQLVulnerabilityAssessmentBaselineRules_CreateOrUpdate (0.10s)
+=== RUN   TestSQLVulnerabilityAssessmentBaselineRules_Get
+--- PASS: TestSQLVulnerabilityAssessmentBaselineRules_Get (0.07s)
+=== RUN   TestSQLVulnerabilityAssessmentBaselineRules_Delete
+--- PASS: TestSQLVulnerabilityAssessmentBaselineRules_Delete (0.03s)
+=== RUN   TestSQLVulnerabilityAssessmentBaselineRules_List
+--- PASS: TestSQLVulnerabilityAssessmentBaselineRules_List (0.05s)
+=== RUN   TestSQLVulnerabilityAssessmentBaselineRules_Add
+--- PASS: TestSQLVulnerabilityAssessmentBaselineRules_Add (0.08s)
+=== RUN   TestAlerts_List
+    zt_generated_mock_test.go:13388: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertsSubscription_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/alerts
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_List (0.09s)
+=== RUN   TestAlerts_ListByResourceGroup
+    zt_generated_mock_test.go:13598: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertsResourceGroup_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/alerts
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_ListByResourceGroup (0.03s)
+=== RUN   TestAlerts_ListSubscriptionLevelByRegion
+    zt_generated_mock_test.go:13693: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertsSubscriptionsLocation_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/westeurope/alerts
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_ListSubscriptionLevelByRegion (0.03s)
+=== RUN   TestAlerts_ListResourceGroupLevelByRegion
+    zt_generated_mock_test.go:13903: Failed to advance page for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertsResourceGroupLocation_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/locations/westeurope/alerts
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_ListResourceGroupLevelByRegion (0.04s)
+=== RUN   TestAlerts_GetSubscriptionLevel
+    zt_generated_mock_test.go:13998: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertSubscriptionLocation_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/westeurope/alerts/2518770965529163669_F144EE95-A3E5-42DA-A279-967D115809AA
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_GetSubscriptionLevel (0.03s)
+=== RUN   TestAlerts_GetResourceGroupLevel
+    zt_generated_mock_test.go:14091: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/GetAlertResourceGroupLocation_example.json: GET https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg1/providers/Microsoft.Security/locations/westeurope/alerts/2518298467986649999_4d25bfef-2d77-4a08-adc0-3e35715cc92a
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_GetResourceGroupLevel (0.03s)
+=== RUN   TestAlerts_UpdateSubscriptionLevelStateToDismiss
+    zt_generated_mock_test.go:14183: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertSubscriptionLocation_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/westeurope/alerts/2518298467986649999_4d25bfef-2d77-4a08-adc0-3e35715cc92a/dismiss
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateSubscriptionLevelStateToDismiss (0.04s)
+=== RUN   TestAlerts_UpdateSubscriptionLevelStateToResolve
+    zt_generated_mock_test.go:14203: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertSubscriptionLocation_resolve_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/westeurope/alerts/2518298467986649999_4d25bfef-2d77-4a08-adc0-3e35715cc92a/resolve
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateSubscriptionLevelStateToResolve (0.03s)
+=== RUN   TestAlerts_UpdateSubscriptionLevelStateToActivate
+    zt_generated_mock_test.go:14223: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertSubscriptionLocation_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/westeurope/alerts/2518298467986649999_4d25bfef-2d77-4a08-adc0-3e35715cc92a/activate
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateSubscriptionLevelStateToActivate (0.03s)
+=== RUN   TestAlerts_UpdateResourceGroupLevelStateToResolve
+    zt_generated_mock_test.go:14244: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertResourceGroupLocation_resolve_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg2/providers/Microsoft.Security/locations/westeurope/alerts/2518765996949954086_2325cf9e-42a2-4f72-ae7f-9b863cba2d22/resolve
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateResourceGroupLevelStateToResolve (0.04s)
+=== RUN   TestAlerts_UpdateResourceGroupLevelStateToDismiss
+    zt_generated_mock_test.go:14265: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertResourceGroupLocation_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg2/providers/Microsoft.Security/locations/westeurope/alerts/2518765996949954086_2325cf9e-42a2-4f72-ae7f-9b863cba2d22/dismiss
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateResourceGroupLevelStateToDismiss (0.04s)
+=== RUN   TestAlerts_UpdateResourceGroupLevelStateToActivate
+    zt_generated_mock_test.go:14286: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/UpdateAlertResourceGroupLocation_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/resourceGroups/myRg2/providers/Microsoft.Security/locations/westeurope/alerts/2518765996949954086_2325cf9e-42a2-4f72-ae7f-9b863cba2d22/activate
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_UpdateResourceGroupLevelStateToActivate (0.04s)
+=== RUN   TestAlerts_Simulate
+    zt_generated_mock_test.go:14319: Failed to get result for example specification/security/resource-manager/Microsoft.Security/stable/2021-01-01/examples/Alerts/SimulateAlerts_example.json: POST https://localhost:8443/subscriptions/20ff7fc3-e762-44dd-bd96-b71116dcdc23/providers/Microsoft.Security/locations/centralus/alerts/default/simulate
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-01-01\" don't match example value \"2020-01-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAlerts_Simulate (0.07s)
+=== RUN   TestSettings_List
+--- PASS: TestSettings_List (0.04s)
+=== RUN   TestSettings_Get
+--- PASS: TestSettings_Get (0.04s)
+=== RUN   TestSettings_Update
+--- PASS: TestSettings_Update (0.03s)
+=== RUN   TestIngestionSettings_List
+--- PASS: TestIngestionSettings_List (0.03s)
+=== RUN   TestIngestionSettings_Get
+--- PASS: TestIngestionSettings_Get (0.05s)
+=== RUN   TestIngestionSettings_Create
+--- PASS: TestIngestionSettings_Create (0.03s)
+=== RUN   TestIngestionSettings_Delete
+--- PASS: TestIngestionSettings_Delete (0.03s)
+=== RUN   TestIngestionSettings_ListTokens
+--- PASS: TestIngestionSettings_ListTokens (0.04s)
+=== RUN   TestIngestionSettings_ListConnectionStrings
+--- PASS: TestIngestionSettings_ListConnectionStrings (0.04s)
+=== RUN   TestSoftwareInventories_ListByExtendedResource
+--- PASS: TestSoftwareInventories_ListByExtendedResource (0.04s)
+=== RUN   TestSoftwareInventories_ListBySubscription
+--- PASS: TestSoftwareInventories_ListBySubscription (0.05s)
+=== RUN   TestSoftwareInventories_Get
+--- PASS: TestSoftwareInventories_Get (0.04s)
+=== RUN   TestSecurityConnectors_List
+--- PASS: TestSecurityConnectors_List (0.07s)
+=== RUN   TestSecurityConnectors_ListByResourceGroup
+--- PASS: TestSecurityConnectors_ListByResourceGroup (0.03s)
+=== RUN   TestSecurityConnectors_Get
+--- PASS: TestSecurityConnectors_Get (0.04s)
+=== RUN   TestSecurityConnectors_CreateOrUpdate
+--- PASS: TestSecurityConnectors_CreateOrUpdate (0.05s)
+=== RUN   TestSecurityConnectors_Update
+--- PASS: TestSecurityConnectors_Update (0.04s)
+=== RUN   TestSecurityConnectors_Delete
+--- PASS: TestSecurityConnectors_Delete (0.03s)
+FAIL
+coverage: 62.3% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity	22.907s

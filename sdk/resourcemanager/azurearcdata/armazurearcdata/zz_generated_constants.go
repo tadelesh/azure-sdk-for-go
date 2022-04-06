@@ -31,11 +31,6 @@ func PossibleArcSQLManagedInstanceLicenseTypeValues() []ArcSQLManagedInstanceLic
 	}
 }
 
-// ToPtr returns a *ArcSQLManagedInstanceLicenseType pointing to the current value.
-func (c ArcSQLManagedInstanceLicenseType) ToPtr() *ArcSQLManagedInstanceLicenseType {
-	return &c
-}
-
 // ArcSQLServerLicenseType - SQL Server license type.
 type ArcSQLServerLicenseType string
 
@@ -56,11 +51,6 @@ func PossibleArcSQLServerLicenseTypeValues() []ArcSQLServerLicenseType {
 	}
 }
 
-// ToPtr returns a *ArcSQLServerLicenseType pointing to the current value.
-func (c ArcSQLServerLicenseType) ToPtr() *ArcSQLServerLicenseType {
-	return &c
-}
-
 // ConnectionStatus - The cloud connectivity status.
 type ConnectionStatus string
 
@@ -77,11 +67,6 @@ func PossibleConnectionStatusValues() []ConnectionStatus {
 		ConnectionStatusDisconnected,
 		ConnectionStatusUnknown,
 	}
-}
-
-// ToPtr returns a *ConnectionStatus pointing to the current value.
-func (c ConnectionStatus) ToPtr() *ConnectionStatus {
-	return &c
 }
 
 // CreatedByType - The type of identity that created the resource.
@@ -104,11 +89,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DefenderStatus - Status of Azure Defender.
 type DefenderStatus string
 
@@ -125,11 +105,6 @@ func PossibleDefenderStatusValues() []DefenderStatus {
 		DefenderStatusUnknown,
 		DefenderStatusUnprotected,
 	}
-}
-
-// ToPtr returns a *DefenderStatus pointing to the current value.
-func (c DefenderStatus) ToPtr() *DefenderStatus {
-	return &c
 }
 
 // EditionType - SQL Server edition.
@@ -156,11 +131,6 @@ func PossibleEditionTypeValues() []EditionType {
 	}
 }
 
-// ToPtr returns a *EditionType pointing to the current value.
-func (c EditionType) ToPtr() *EditionType {
-	return &c
-}
-
 // ExtendedLocationTypes - The type of extendedLocation.
 type ExtendedLocationTypes string
 
@@ -173,11 +143,6 @@ func PossibleExtendedLocationTypesValues() []ExtendedLocationTypes {
 	return []ExtendedLocationTypes{
 		ExtendedLocationTypesCustomLocation,
 	}
-}
-
-// ToPtr returns a *ExtendedLocationTypes pointing to the current value.
-func (c ExtendedLocationTypes) ToPtr() *ExtendedLocationTypes {
-	return &c
 }
 
 // Infrastructure - The infrastructure the data controller is running on.
@@ -204,11 +169,6 @@ func PossibleInfrastructureValues() []Infrastructure {
 	}
 }
 
-// ToPtr returns a *Infrastructure pointing to the current value.
-func (c Infrastructure) ToPtr() *Infrastructure {
-	return &c
-}
-
 // OperationOrigin - The intended executor of the operation.
 type OperationOrigin string
 
@@ -225,11 +185,6 @@ func PossibleOperationOriginValues() []OperationOrigin {
 	}
 }
 
-// ToPtr returns a *OperationOrigin pointing to the current value.
-func (c OperationOrigin) ToPtr() *OperationOrigin {
-	return &c
-}
-
 // SQLManagedInstanceSKUName - The name of the SKU.
 type SQLManagedInstanceSKUName string
 
@@ -242,11 +197,6 @@ func PossibleSQLManagedInstanceSKUNameValues() []SQLManagedInstanceSKUName {
 	return []SQLManagedInstanceSKUName{
 		SQLManagedInstanceSKUNameVCore,
 	}
-}
-
-// ToPtr returns a *SQLManagedInstanceSKUName pointing to the current value.
-func (c SQLManagedInstanceSKUName) ToPtr() *SQLManagedInstanceSKUName {
-	return &c
 }
 
 // SQLManagedInstanceSKUTier - The pricing tier for the instance.
@@ -265,11 +215,6 @@ func PossibleSQLManagedInstanceSKUTierValues() []SQLManagedInstanceSKUTier {
 	}
 }
 
-// ToPtr returns a *SQLManagedInstanceSKUTier pointing to the current value.
-func (c SQLManagedInstanceSKUTier) ToPtr() *SQLManagedInstanceSKUTier {
-	return &c
-}
-
 // SQLVersion - SQL Server version.
 type SQLVersion string
 
@@ -286,9 +231,4 @@ func PossibleSQLVersionValues() []SQLVersion {
 		SQLVersionSQLServer2017,
 		SQLVersionSQLServer2019,
 	}
-}
-
-// ToPtr returns a *SQLVersion pointing to the current value.
-func (c SQLVersion) ToPtr() *SQLVersion {
-	return &c
 }

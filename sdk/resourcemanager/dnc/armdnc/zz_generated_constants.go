@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // ControllerState - The current state of dnc controller resource.
 type ControllerState string
 
@@ -50,11 +45,6 @@ func PossibleControllerStateValues() []ControllerState {
 		ControllerStateProvisioning,
 		ControllerStateSucceeded,
 	}
-}
-
-// ToPtr returns a *ControllerState pointing to the current value.
-func (c ControllerState) ToPtr() *ControllerState {
-	return &c
 }
 
 // DelegatedSubnetState - The current state of dnc delegated subnet resource.
@@ -77,11 +67,6 @@ func PossibleDelegatedSubnetStateValues() []DelegatedSubnetState {
 	}
 }
 
-// ToPtr returns a *DelegatedSubnetState pointing to the current value.
-func (c DelegatedSubnetState) ToPtr() *DelegatedSubnetState {
-	return &c
-}
-
 // OrchestratorInstanceState - The current state of orchestratorInstance resource.
 type OrchestratorInstanceState string
 
@@ -102,11 +87,6 @@ func PossibleOrchestratorInstanceStateValues() []OrchestratorInstanceState {
 	}
 }
 
-// ToPtr returns a *OrchestratorInstanceState pointing to the current value.
-func (c OrchestratorInstanceState) ToPtr() *OrchestratorInstanceState {
-	return &c
-}
-
 // OrchestratorKind - The kind of workbook. Choices are user and shared.
 type OrchestratorKind string
 
@@ -119,11 +99,6 @@ func PossibleOrchestratorKindValues() []OrchestratorKind {
 	return []OrchestratorKind{
 		OrchestratorKindKubernetes,
 	}
-}
-
-// ToPtr returns a *OrchestratorKind pointing to the current value.
-func (c OrchestratorKind) ToPtr() *OrchestratorKind {
-	return &c
 }
 
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
@@ -145,11 +120,6 @@ func PossibleOriginValues() []Origin {
 	}
 }
 
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
-}
-
 // ResourceIdentityType - The type of identity used for orchestrator cluster. Type 'SystemAssigned' will use an implicitly
 // created identity orchestrator clusters
 type ResourceIdentityType string
@@ -165,9 +135,4 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 		ResourceIdentityTypeSystemAssigned,
 		ResourceIdentityTypeNone,
 	}
-}
-
-// ToPtr returns a *ResourceIdentityType pointing to the current value.
-func (c ResourceIdentityType) ToPtr() *ResourceIdentityType {
-	return &c
 }

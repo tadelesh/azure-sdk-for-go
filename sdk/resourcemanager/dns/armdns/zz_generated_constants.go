@@ -44,11 +44,6 @@ func PossibleRecordTypeValues() []RecordType {
 	}
 }
 
-// ToPtr returns a *RecordType pointing to the current value.
-func (c RecordType) ToPtr() *RecordType {
-	return &c
-}
-
 // ZoneType - The type of this DNS zone (Public or Private).
 type ZoneType string
 
@@ -63,9 +58,4 @@ func PossibleZoneTypeValues() []ZoneType {
 		ZoneTypePublic,
 		ZoneTypePrivate,
 	}
-}
-
-// ToPtr returns a *ZoneType pointing to the current value.
-func (c ZoneType) ToPtr() *ZoneType {
-	return &c
 }

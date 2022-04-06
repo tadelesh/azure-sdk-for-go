@@ -31,11 +31,6 @@ func PossibleAccessRecommendationTypeValues() []AccessRecommendationType {
 	}
 }
 
-// ToPtr returns a *AccessRecommendationType pointing to the current value.
-func (c AccessRecommendationType) ToPtr() *AccessRecommendationType {
-	return &c
-}
-
 // AccessReviewActorIdentityType - The identity type : user/servicePrincipal
 type AccessReviewActorIdentityType string
 
@@ -50,11 +45,6 @@ func PossibleAccessReviewActorIdentityTypeValues() []AccessReviewActorIdentityTy
 		AccessReviewActorIdentityTypeServicePrincipal,
 		AccessReviewActorIdentityTypeUser,
 	}
-}
-
-// ToPtr returns a *AccessReviewActorIdentityType pointing to the current value.
-func (c AccessReviewActorIdentityType) ToPtr() *AccessReviewActorIdentityType {
-	return &c
 }
 
 // AccessReviewApplyResult - The outcome of applying the decision.
@@ -81,11 +71,6 @@ func PossibleAccessReviewApplyResultValues() []AccessReviewApplyResult {
 	}
 }
 
-// ToPtr returns a *AccessReviewApplyResult pointing to the current value.
-func (c AccessReviewApplyResult) ToPtr() *AccessReviewApplyResult {
-	return &c
-}
-
 // AccessReviewHistoryDefinitionStatus - This read-only field specifies the of the requested review history data. This is
 // either requested, in-progress, done or error.
 type AccessReviewHistoryDefinitionStatus string
@@ -107,11 +92,6 @@ func PossibleAccessReviewHistoryDefinitionStatusValues() []AccessReviewHistoryDe
 	}
 }
 
-// ToPtr returns a *AccessReviewHistoryDefinitionStatus pointing to the current value.
-func (c AccessReviewHistoryDefinitionStatus) ToPtr() *AccessReviewHistoryDefinitionStatus {
-	return &c
-}
-
 // AccessReviewInstanceReviewersType - This field specifies the type of reviewers for a review. Usually for a review, reviewers
 // are explicitly assigned. However, in some cases, the reviewers may not be assigned and instead be chosen
 // dynamically. For example managers review or self review.
@@ -130,11 +110,6 @@ func PossibleAccessReviewInstanceReviewersTypeValues() []AccessReviewInstanceRev
 		AccessReviewInstanceReviewersTypeManagers,
 		AccessReviewInstanceReviewersTypeSelf,
 	}
-}
-
-// ToPtr returns a *AccessReviewInstanceReviewersType pointing to the current value.
-func (c AccessReviewInstanceReviewersType) ToPtr() *AccessReviewInstanceReviewersType {
-	return &c
 }
 
 // AccessReviewInstanceStatus - This read-only field specifies the status of an access review instance.
@@ -171,11 +146,6 @@ func PossibleAccessReviewInstanceStatusValues() []AccessReviewInstanceStatus {
 	}
 }
 
-// ToPtr returns a *AccessReviewInstanceStatus pointing to the current value.
-func (c AccessReviewInstanceStatus) ToPtr() *AccessReviewInstanceStatus {
-	return &c
-}
-
 // AccessReviewRecurrencePatternType - The recurrence type : weekly, monthly, etc.
 type AccessReviewRecurrencePatternType string
 
@@ -190,11 +160,6 @@ func PossibleAccessReviewRecurrencePatternTypeValues() []AccessReviewRecurrenceP
 		AccessReviewRecurrencePatternTypeAbsoluteMonthly,
 		AccessReviewRecurrencePatternTypeWeekly,
 	}
-}
-
-// ToPtr returns a *AccessReviewRecurrencePatternType pointing to the current value.
-func (c AccessReviewRecurrencePatternType) ToPtr() *AccessReviewRecurrencePatternType {
-	return &c
 }
 
 // AccessReviewRecurrenceRangeType - The recurrence range type. The possible values are: endDate, noEnd, numbered.
@@ -213,11 +178,6 @@ func PossibleAccessReviewRecurrenceRangeTypeValues() []AccessReviewRecurrenceRan
 		AccessReviewRecurrenceRangeTypeNoEnd,
 		AccessReviewRecurrenceRangeTypeNumbered,
 	}
-}
-
-// ToPtr returns a *AccessReviewRecurrenceRangeType pointing to the current value.
-func (c AccessReviewRecurrenceRangeType) ToPtr() *AccessReviewRecurrenceRangeType {
-	return &c
 }
 
 // AccessReviewResult - Represents a reviewer's decision for a given review
@@ -242,11 +202,6 @@ func PossibleAccessReviewResultValues() []AccessReviewResult {
 	}
 }
 
-// ToPtr returns a *AccessReviewResult pointing to the current value.
-func (c AccessReviewResult) ToPtr() *AccessReviewResult {
-	return &c
-}
-
 // AccessReviewReviewerType - The identity type : user/servicePrincipal
 type AccessReviewReviewerType string
 
@@ -261,11 +216,6 @@ func PossibleAccessReviewReviewerTypeValues() []AccessReviewReviewerType {
 		AccessReviewReviewerTypeServicePrincipal,
 		AccessReviewReviewerTypeUser,
 	}
-}
-
-// ToPtr returns a *AccessReviewReviewerType pointing to the current value.
-func (c AccessReviewReviewerType) ToPtr() *AccessReviewReviewerType {
-	return &c
 }
 
 // AccessReviewScheduleDefinitionReviewersType - This field specifies the type of reviewers for a review. Usually for a review,
@@ -286,11 +236,6 @@ func PossibleAccessReviewScheduleDefinitionReviewersTypeValues() []AccessReviewS
 		AccessReviewScheduleDefinitionReviewersTypeManagers,
 		AccessReviewScheduleDefinitionReviewersTypeSelf,
 	}
-}
-
-// ToPtr returns a *AccessReviewScheduleDefinitionReviewersType pointing to the current value.
-func (c AccessReviewScheduleDefinitionReviewersType) ToPtr() *AccessReviewScheduleDefinitionReviewersType {
-	return &c
 }
 
 // AccessReviewScheduleDefinitionStatus - This read-only field specifies the status of an accessReview.
@@ -327,11 +272,6 @@ func PossibleAccessReviewScheduleDefinitionStatusValues() []AccessReviewSchedule
 	}
 }
 
-// ToPtr returns a *AccessReviewScheduleDefinitionStatus pointing to the current value.
-func (c AccessReviewScheduleDefinitionStatus) ToPtr() *AccessReviewScheduleDefinitionStatus {
-	return &c
-}
-
 // AccessReviewScopeAssignmentState - The role assignment state eligible/active to review
 type AccessReviewScopeAssignmentState string
 
@@ -346,11 +286,6 @@ func PossibleAccessReviewScopeAssignmentStateValues() []AccessReviewScopeAssignm
 		AccessReviewScopeAssignmentStateActive,
 		AccessReviewScopeAssignmentStateEligible,
 	}
-}
-
-// ToPtr returns a *AccessReviewScopeAssignmentState pointing to the current value.
-func (c AccessReviewScopeAssignmentState) ToPtr() *AccessReviewScopeAssignmentState {
-	return &c
 }
 
 // AccessReviewScopePrincipalType - The identity type user/servicePrincipal to review
@@ -375,11 +310,6 @@ func PossibleAccessReviewScopePrincipalTypeValues() []AccessReviewScopePrincipal
 	}
 }
 
-// ToPtr returns a *AccessReviewScopePrincipalType pointing to the current value.
-func (c AccessReviewScopePrincipalType) ToPtr() *AccessReviewScopePrincipalType {
-	return &c
-}
-
 // DecisionResourceType - The type of resource: azureRole
 type DecisionResourceType string
 
@@ -392,11 +322,6 @@ func PossibleDecisionResourceTypeValues() []DecisionResourceType {
 	return []DecisionResourceType{
 		DecisionResourceTypeAzureRole,
 	}
-}
-
-// ToPtr returns a *DecisionResourceType pointing to the current value.
-func (c DecisionResourceType) ToPtr() *DecisionResourceType {
-	return &c
 }
 
 // DecisionTargetType - The type of decision target : User/ServicePrincipal
@@ -415,11 +340,6 @@ func PossibleDecisionTargetTypeValues() []DecisionTargetType {
 	}
 }
 
-// ToPtr returns a *DecisionTargetType pointing to the current value.
-func (c DecisionTargetType) ToPtr() *DecisionTargetType {
-	return &c
-}
-
 // DefaultDecisionType - This specifies the behavior for the autoReview feature when an access review completes.
 type DefaultDecisionType string
 
@@ -436,9 +356,4 @@ func PossibleDefaultDecisionTypeValues() []DefaultDecisionType {
 		DefaultDecisionTypeDeny,
 		DefaultDecisionTypeRecommendation,
 	}
-}
-
-// ToPtr returns a *DefaultDecisionType pointing to the current value.
-func (c DefaultDecisionType) ToPtr() *DefaultDecisionType {
-	return &c
 }

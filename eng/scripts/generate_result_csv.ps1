@@ -253,6 +253,10 @@ function getLogResults($sdkPath, $specPath, $logPath)
                     {
                         $listOfFailCaseType += "LRO response not contains 200 response"
                     }
+                    elseif ($errorDetail -match "Wrong response example for operation")
+                    {
+                        $listOfFailCaseType += "Wrong response example for operation"
+                    }
                     elseif ($errorDetail -match "parsing time")
                     {
                         $listOfFailCaseType += "Response has wrong datetime value"

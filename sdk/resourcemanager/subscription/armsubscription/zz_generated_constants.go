@@ -31,11 +31,6 @@ func PossibleAcceptOwnershipValues() []AcceptOwnership {
 	}
 }
 
-// ToPtr returns a *AcceptOwnership pointing to the current value.
-func (c AcceptOwnership) ToPtr() *AcceptOwnership {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -56,11 +51,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // ProvisioningState - The provisioning state of the resource.
 type ProvisioningState string
 
@@ -79,11 +69,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // SpendingLimit - The subscription spending limit.
 type SpendingLimit string
 
@@ -100,11 +85,6 @@ func PossibleSpendingLimitValues() []SpendingLimit {
 		SpendingLimitOff,
 		SpendingLimitCurrentPeriodOff,
 	}
-}
-
-// ToPtr returns a *SpendingLimit pointing to the current value.
-func (c SpendingLimit) ToPtr() *SpendingLimit {
-	return &c
 }
 
 // SubscriptionState - The subscription state. Possible values are Enabled, Warned, PastDue, Disabled, and Deleted.
@@ -129,11 +109,6 @@ func PossibleSubscriptionStateValues() []SubscriptionState {
 	}
 }
 
-// ToPtr returns a *SubscriptionState pointing to the current value.
-func (c SubscriptionState) ToPtr() *SubscriptionState {
-	return &c
-}
-
 // Workload - The workload type of the subscription. It can be either Production or DevTest.
 type Workload string
 
@@ -148,9 +123,4 @@ func PossibleWorkloadValues() []Workload {
 		WorkloadDevTest,
 		WorkloadProduction,
 	}
-}
-
-// ToPtr returns a *Workload pointing to the current value.
-func (c Workload) ToPtr() *Workload {
-	return &c
 }

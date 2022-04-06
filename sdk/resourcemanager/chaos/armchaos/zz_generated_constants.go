@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -50,11 +45,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 		CreatedByTypeManagedIdentity,
 		CreatedByTypeUser,
 	}
-}
-
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
 }
 
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
@@ -76,11 +66,6 @@ func PossibleOriginValues() []Origin {
 	}
 }
 
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
-}
-
 // ResourceIdentityType - String of the resource identity type.
 type ResourceIdentityType string
 
@@ -95,11 +80,6 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 		ResourceIdentityTypeNone,
 		ResourceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *ResourceIdentityType pointing to the current value.
-func (c ResourceIdentityType) ToPtr() *ResourceIdentityType {
-	return &c
 }
 
 // SelectorType - Enum of the selector type.
@@ -120,9 +100,4 @@ func PossibleSelectorTypeValues() []SelectorType {
 		SelectorTypeTag,
 		SelectorTypeList,
 	}
-}
-
-// ToPtr returns a *SelectorType pointing to the current value.
-func (c SelectorType) ToPtr() *SelectorType {
-	return &c
 }

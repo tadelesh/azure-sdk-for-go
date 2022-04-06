@@ -37,11 +37,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // VMSize - VMSize represents a VM size.
 type VMSize string
 
@@ -60,11 +55,6 @@ func PossibleVMSizeValues() []VMSize {
 	}
 }
 
-// ToPtr returns a *VMSize pointing to the current value.
-func (c VMSize) ToPtr() *VMSize {
-	return &c
-}
-
 // Visibility - Visibility represents visibility.
 type Visibility string
 
@@ -79,9 +69,4 @@ func PossibleVisibilityValues() []Visibility {
 		VisibilityPrivate,
 		VisibilityPublic,
 	}
-}
-
-// ToPtr returns a *Visibility pointing to the current value.
-func (c Visibility) ToPtr() *Visibility {
-	return &c
 }

@@ -1,0 +1,1797 @@
+=== RUN   TestAppServiceCertificateOrders_List
+    zt_generated_mock_test.go:41: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_List (0.00s)
+=== RUN   TestAppServiceCertificateOrders_ValidatePurchaseInformation
+    zt_generated_mock_test.go:45: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_ValidatePurchaseInformation (0.00s)
+=== RUN   TestAppServiceCertificateOrders_ListByResourceGroup
+    zt_generated_mock_test.go:49: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_ListByResourceGroup (0.00s)
+=== RUN   TestAppServiceCertificateOrders_Get
+    zt_generated_mock_test.go:53: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_Get (0.00s)
+=== RUN   TestAppServiceCertificateOrders_CreateOrUpdate
+    zt_generated_mock_test.go:57: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_CreateOrUpdate (0.00s)
+=== RUN   TestAppServiceCertificateOrders_Delete
+    zt_generated_mock_test.go:61: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_Delete (0.00s)
+=== RUN   TestAppServiceCertificateOrders_Update
+    zt_generated_mock_test.go:65: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_Update (0.00s)
+=== RUN   TestAppServiceCertificateOrders_ListCertificates
+    zt_generated_mock_test.go:69: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_ListCertificates (0.00s)
+=== RUN   TestAppServiceCertificateOrders_GetCertificate
+    zt_generated_mock_test.go:73: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_GetCertificate (0.00s)
+=== RUN   TestAppServiceCertificateOrders_CreateOrUpdateCertificate
+    zt_generated_mock_test.go:77: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_CreateOrUpdateCertificate (0.00s)
+=== RUN   TestAppServiceCertificateOrders_DeleteCertificate
+    zt_generated_mock_test.go:81: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_DeleteCertificate (0.00s)
+=== RUN   TestAppServiceCertificateOrders_UpdateCertificate
+    zt_generated_mock_test.go:85: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_UpdateCertificate (0.00s)
+=== RUN   TestAppServiceCertificateOrders_Reissue
+    zt_generated_mock_test.go:89: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_Reissue (0.00s)
+=== RUN   TestAppServiceCertificateOrders_Renew
+    zt_generated_mock_test.go:93: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_Renew (0.00s)
+=== RUN   TestAppServiceCertificateOrders_ResendEmail
+    zt_generated_mock_test.go:97: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_ResendEmail (0.00s)
+=== RUN   TestAppServiceCertificateOrders_ResendRequestEmails
+    zt_generated_mock_test.go:101: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_ResendRequestEmails (0.00s)
+=== RUN   TestAppServiceCertificateOrders_RetrieveSiteSeal
+    zt_generated_mock_test.go:105: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_RetrieveSiteSeal (0.00s)
+=== RUN   TestAppServiceCertificateOrders_VerifyDomainOwnership
+    zt_generated_mock_test.go:109: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_VerifyDomainOwnership (0.00s)
+=== RUN   TestAppServiceCertificateOrders_RetrieveCertificateActions
+    zt_generated_mock_test.go:113: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_RetrieveCertificateActions (0.00s)
+=== RUN   TestAppServiceCertificateOrders_RetrieveCertificateEmailHistory
+    zt_generated_mock_test.go:117: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceCertificateOrders_RetrieveCertificateEmailHistory (0.00s)
+=== RUN   TestCertificateOrdersDiagnostics_ListAppServiceCertificateOrderDetectorResponse
+--- PASS: TestCertificateOrdersDiagnostics_ListAppServiceCertificateOrderDetectorResponse (0.12s)
+=== RUN   TestCertificateOrdersDiagnostics_GetAppServiceCertificateOrderDetectorResponse
+--- PASS: TestCertificateOrdersDiagnostics_GetAppServiceCertificateOrderDetectorResponse (0.07s)
+=== RUN   TestCertificateRegistrationProvider_ListOperations
+--- PASS: TestCertificateRegistrationProvider_ListOperations (0.09s)
+=== RUN   TestDomains_CheckAvailability
+    zt_generated_mock_test.go:464: Warning: No test steps for this operation!
+--- SKIP: TestDomains_CheckAvailability (0.00s)
+=== RUN   TestDomains_List
+    zt_generated_mock_test.go:468: Warning: No test steps for this operation!
+--- SKIP: TestDomains_List (0.00s)
+=== RUN   TestDomains_GetControlCenterSsoRequest
+    zt_generated_mock_test.go:472: Warning: No test steps for this operation!
+--- SKIP: TestDomains_GetControlCenterSsoRequest (0.00s)
+=== RUN   TestDomains_ListRecommendations
+    zt_generated_mock_test.go:476: Warning: No test steps for this operation!
+--- SKIP: TestDomains_ListRecommendations (0.00s)
+=== RUN   TestDomains_ListByResourceGroup
+    zt_generated_mock_test.go:480: Warning: No test steps for this operation!
+--- SKIP: TestDomains_ListByResourceGroup (0.00s)
+=== RUN   TestDomains_Get
+    zt_generated_mock_test.go:484: Warning: No test steps for this operation!
+--- SKIP: TestDomains_Get (0.00s)
+=== RUN   TestDomains_CreateOrUpdate
+    zt_generated_mock_test.go:488: Warning: No test steps for this operation!
+--- SKIP: TestDomains_CreateOrUpdate (0.00s)
+=== RUN   TestDomains_Delete
+    zt_generated_mock_test.go:492: Warning: No test steps for this operation!
+--- SKIP: TestDomains_Delete (0.00s)
+=== RUN   TestDomains_Update
+    zt_generated_mock_test.go:496: Warning: No test steps for this operation!
+--- SKIP: TestDomains_Update (0.00s)
+=== RUN   TestDomains_ListOwnershipIdentifiers
+    zt_generated_mock_test.go:500: Warning: No test steps for this operation!
+--- SKIP: TestDomains_ListOwnershipIdentifiers (0.00s)
+=== RUN   TestDomains_GetOwnershipIdentifier
+    zt_generated_mock_test.go:504: Warning: No test steps for this operation!
+--- SKIP: TestDomains_GetOwnershipIdentifier (0.00s)
+=== RUN   TestDomains_CreateOrUpdateOwnershipIdentifier
+    zt_generated_mock_test.go:508: Warning: No test steps for this operation!
+--- SKIP: TestDomains_CreateOrUpdateOwnershipIdentifier (0.00s)
+=== RUN   TestDomains_DeleteOwnershipIdentifier
+    zt_generated_mock_test.go:512: Warning: No test steps for this operation!
+--- SKIP: TestDomains_DeleteOwnershipIdentifier (0.00s)
+=== RUN   TestDomains_UpdateOwnershipIdentifier
+    zt_generated_mock_test.go:516: Warning: No test steps for this operation!
+--- SKIP: TestDomains_UpdateOwnershipIdentifier (0.00s)
+=== RUN   TestDomains_Renew
+--- PASS: TestDomains_Renew (0.06s)
+=== RUN   TestDomains_TransferOut
+--- PASS: TestDomains_TransferOut (0.05s)
+=== RUN   TestTopLevelDomains_List
+--- PASS: TestTopLevelDomains_List (0.05s)
+=== RUN   TestTopLevelDomains_Get
+--- PASS: TestTopLevelDomains_Get (0.08s)
+=== RUN   TestTopLevelDomains_ListAgreements
+--- PASS: TestTopLevelDomains_ListAgreements (0.49s)
+=== RUN   TestDomainRegistrationProvider_ListOperations
+--- PASS: TestDomainRegistrationProvider_ListOperations (0.06s)
+=== RUN   TestAppServiceEnvironments_List
+    zt_generated_mock_test.go:896: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_List (0.00s)
+=== RUN   TestAppServiceEnvironments_ListByResourceGroup
+    zt_generated_mock_test.go:900: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListByResourceGroup (0.00s)
+=== RUN   TestAppServiceEnvironments_Get
+    zt_generated_mock_test.go:904: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Get (0.00s)
+=== RUN   TestAppServiceEnvironments_CreateOrUpdate
+    zt_generated_mock_test.go:908: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_CreateOrUpdate (0.00s)
+=== RUN   TestAppServiceEnvironments_Delete
+    zt_generated_mock_test.go:912: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Delete (0.00s)
+=== RUN   TestAppServiceEnvironments_Update
+    zt_generated_mock_test.go:916: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Update (0.00s)
+=== RUN   TestAppServiceEnvironments_ListCapacities
+    zt_generated_mock_test.go:920: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListCapacities (0.00s)
+=== RUN   TestAppServiceEnvironments_GetVipInfo
+    zt_generated_mock_test.go:924: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetVipInfo (0.00s)
+=== RUN   TestAppServiceEnvironments_ChangeVnet
+    zt_generated_mock_test.go:928: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ChangeVnet (0.00s)
+=== RUN   TestAppServiceEnvironments_GetAseV3NetworkingConfiguration
+    zt_generated_mock_test.go:932: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetAseV3NetworkingConfiguration (0.00s)
+=== RUN   TestAppServiceEnvironments_UpdateAseNetworkingConfiguration
+    zt_generated_mock_test.go:936: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_UpdateAseNetworkingConfiguration (0.00s)
+=== RUN   TestAppServiceEnvironments_ListDiagnostics
+    zt_generated_mock_test.go:940: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListDiagnostics (0.00s)
+=== RUN   TestAppServiceEnvironments_GetDiagnosticsItem
+    zt_generated_mock_test.go:944: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetDiagnosticsItem (0.00s)
+=== RUN   TestAppServiceEnvironments_GetInboundNetworkDependenciesEndpoints
+--- PASS: TestAppServiceEnvironments_GetInboundNetworkDependenciesEndpoints (0.14s)
+=== RUN   TestAppServiceEnvironments_ListMultiRolePools
+    zt_generated_mock_test.go:1036: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListMultiRolePools (0.00s)
+=== RUN   TestAppServiceEnvironments_GetMultiRolePool
+    zt_generated_mock_test.go:1040: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetMultiRolePool (0.00s)
+=== RUN   TestAppServiceEnvironments_CreateOrUpdateMultiRolePool
+    zt_generated_mock_test.go:1044: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_CreateOrUpdateMultiRolePool (0.00s)
+=== RUN   TestAppServiceEnvironments_UpdateMultiRolePool
+    zt_generated_mock_test.go:1048: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_UpdateMultiRolePool (0.00s)
+=== RUN   TestAppServiceEnvironments_ListMultiRolePoolInstanceMetricDefinitions
+    zt_generated_mock_test.go:1052: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListMultiRolePoolInstanceMetricDefinitions (0.00s)
+=== RUN   TestAppServiceEnvironments_ListMultiRoleMetricDefinitions
+    zt_generated_mock_test.go:1056: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListMultiRoleMetricDefinitions (0.00s)
+=== RUN   TestAppServiceEnvironments_ListMultiRoleUsages
+    zt_generated_mock_test.go:1060: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListMultiRoleUsages (0.00s)
+=== RUN   TestAppServiceEnvironments_ListOperations
+    zt_generated_mock_test.go:1064: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListOperations (0.00s)
+=== RUN   TestAppServiceEnvironments_GetOutboundNetworkDependenciesEndpoints
+--- PASS: TestAppServiceEnvironments_GetOutboundNetworkDependenciesEndpoints (0.13s)
+=== RUN   TestAppServiceEnvironments_GetPrivateEndpointConnectionList
+    zt_generated_mock_test.go:1836: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetPrivateEndpointConnectionList (0.00s)
+=== RUN   TestAppServiceEnvironments_GetPrivateEndpointConnection
+    zt_generated_mock_test.go:1840: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetPrivateEndpointConnection (0.00s)
+=== RUN   TestAppServiceEnvironments_ApproveOrRejectPrivateEndpointConnection
+    zt_generated_mock_test.go:1844: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ApproveOrRejectPrivateEndpointConnection (0.00s)
+=== RUN   TestAppServiceEnvironments_DeletePrivateEndpointConnection
+    zt_generated_mock_test.go:1848: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_DeletePrivateEndpointConnection (0.00s)
+=== RUN   TestAppServiceEnvironments_GetPrivateLinkResources
+    zt_generated_mock_test.go:1852: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetPrivateLinkResources (0.00s)
+=== RUN   TestAppServiceEnvironments_Reboot
+    zt_generated_mock_test.go:1856: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Reboot (0.00s)
+=== RUN   TestAppServiceEnvironments_Resume
+    zt_generated_mock_test.go:1860: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Resume (0.00s)
+=== RUN   TestAppServiceEnvironments_ListAppServicePlans
+    zt_generated_mock_test.go:1864: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListAppServicePlans (0.00s)
+=== RUN   TestAppServiceEnvironments_ListWebApps
+    zt_generated_mock_test.go:1868: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListWebApps (0.00s)
+=== RUN   TestAppServiceEnvironments_Suspend
+    zt_generated_mock_test.go:1872: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_Suspend (0.00s)
+=== RUN   TestAppServiceEnvironments_ListUsages
+    zt_generated_mock_test.go:1876: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListUsages (0.00s)
+=== RUN   TestAppServiceEnvironments_ListWorkerPools
+    zt_generated_mock_test.go:1880: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListWorkerPools (0.00s)
+=== RUN   TestAppServiceEnvironments_GetWorkerPool
+    zt_generated_mock_test.go:1884: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_GetWorkerPool (0.00s)
+=== RUN   TestAppServiceEnvironments_CreateOrUpdateWorkerPool
+    zt_generated_mock_test.go:1888: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_CreateOrUpdateWorkerPool (0.00s)
+=== RUN   TestAppServiceEnvironments_UpdateWorkerPool
+    zt_generated_mock_test.go:1892: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_UpdateWorkerPool (0.00s)
+=== RUN   TestAppServiceEnvironments_ListWorkerPoolInstanceMetricDefinitions
+    zt_generated_mock_test.go:1896: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListWorkerPoolInstanceMetricDefinitions (0.00s)
+=== RUN   TestAppServiceEnvironments_ListWebWorkerMetricDefinitions
+    zt_generated_mock_test.go:1900: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListWebWorkerMetricDefinitions (0.00s)
+=== RUN   TestAppServiceEnvironments_ListWebWorkerUsages
+    zt_generated_mock_test.go:1904: Warning: No test steps for this operation!
+--- SKIP: TestAppServiceEnvironments_ListWebWorkerUsages (0.00s)
+=== RUN   TestAppServicePlans_List
+--- PASS: TestAppServicePlans_List (0.08s)
+=== RUN   TestAppServicePlans_ListByResourceGroup
+--- PASS: TestAppServicePlans_ListByResourceGroup (0.05s)
+=== RUN   TestAppServicePlans_Get
+--- PASS: TestAppServicePlans_Get (0.06s)
+=== RUN   TestAppServicePlans_CreateOrUpdate
+--- PASS: TestAppServicePlans_CreateOrUpdate (0.10s)
+=== RUN   TestAppServicePlans_Delete
+--- PASS: TestAppServicePlans_Delete (0.04s)
+=== RUN   TestAppServicePlans_Update
+--- PASS: TestAppServicePlans_Update (0.05s)
+=== RUN   TestAppServicePlans_ListCapabilities
+    zt_generated_mock_test.go:2266: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListCapabilities (0.00s)
+=== RUN   TestAppServicePlans_GetHybridConnection
+    zt_generated_mock_test.go:2270: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_GetHybridConnection (0.00s)
+=== RUN   TestAppServicePlans_DeleteHybridConnection
+    zt_generated_mock_test.go:2274: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_DeleteHybridConnection (0.00s)
+=== RUN   TestAppServicePlans_ListHybridConnectionKeys
+    zt_generated_mock_test.go:2278: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListHybridConnectionKeys (0.00s)
+=== RUN   TestAppServicePlans_ListWebAppsByHybridConnection
+    zt_generated_mock_test.go:2282: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListWebAppsByHybridConnection (0.00s)
+=== RUN   TestAppServicePlans_GetHybridConnectionPlanLimit
+    zt_generated_mock_test.go:2286: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_GetHybridConnectionPlanLimit (0.00s)
+=== RUN   TestAppServicePlans_ListHybridConnections
+    zt_generated_mock_test.go:2290: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListHybridConnections (0.00s)
+=== RUN   TestAppServicePlans_RestartWebApps
+    zt_generated_mock_test.go:2294: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_RestartWebApps (0.00s)
+=== RUN   TestAppServicePlans_ListWebApps
+    zt_generated_mock_test.go:2298: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListWebApps (0.00s)
+=== RUN   TestAppServicePlans_ListUsages
+    zt_generated_mock_test.go:2302: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListUsages (0.00s)
+=== RUN   TestAppServicePlans_ListVnets
+    zt_generated_mock_test.go:2306: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListVnets (0.00s)
+=== RUN   TestAppServicePlans_GetVnetFromServerFarm
+    zt_generated_mock_test.go:2310: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_GetVnetFromServerFarm (0.00s)
+=== RUN   TestAppServicePlans_GetVnetGateway
+    zt_generated_mock_test.go:2314: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_GetVnetGateway (0.00s)
+=== RUN   TestAppServicePlans_UpdateVnetGateway
+    zt_generated_mock_test.go:2318: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_UpdateVnetGateway (0.00s)
+=== RUN   TestAppServicePlans_ListRoutesForVnet
+    zt_generated_mock_test.go:2322: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_ListRoutesForVnet (0.00s)
+=== RUN   TestAppServicePlans_GetRouteForVnet
+    zt_generated_mock_test.go:2326: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_GetRouteForVnet (0.00s)
+=== RUN   TestAppServicePlans_CreateOrUpdateVnetRoute
+    zt_generated_mock_test.go:2330: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_CreateOrUpdateVnetRoute (0.00s)
+=== RUN   TestAppServicePlans_DeleteVnetRoute
+    zt_generated_mock_test.go:2334: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_DeleteVnetRoute (0.00s)
+=== RUN   TestAppServicePlans_UpdateVnetRoute
+    zt_generated_mock_test.go:2338: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_UpdateVnetRoute (0.00s)
+=== RUN   TestAppServicePlans_RebootWorker
+    zt_generated_mock_test.go:2342: Warning: No test steps for this operation!
+--- SKIP: TestAppServicePlans_RebootWorker (0.00s)
+=== RUN   TestCertificates_List
+--- PASS: TestCertificates_List (0.08s)
+=== RUN   TestCertificates_ListByResourceGroup
+--- PASS: TestCertificates_ListByResourceGroup (0.06s)
+=== RUN   TestCertificates_Get
+--- PASS: TestCertificates_Get (0.04s)
+=== RUN   TestCertificates_CreateOrUpdate
+--- PASS: TestCertificates_CreateOrUpdate (0.06s)
+=== RUN   TestCertificates_Delete
+--- PASS: TestCertificates_Delete (0.04s)
+=== RUN   TestCertificates_Update
+--- PASS: TestCertificates_Update (0.05s)
+=== RUN   TestContainerApps_ListBySubscription
+--- PASS: TestContainerApps_ListBySubscription (0.07s)
+=== RUN   TestContainerApps_ListByResourceGroup
+--- PASS: TestContainerApps_ListByResourceGroup (0.05s)
+=== RUN   TestContainerApps_Get
+--- PASS: TestContainerApps_Get (53.83s)
+=== RUN   TestContainerApps_CreateOrUpdate
+--- PASS: TestContainerApps_CreateOrUpdate (0.26s)
+=== RUN   TestContainerApps_Delete
+--- PASS: TestContainerApps_Delete (0.19s)
+=== RUN   TestContainerApps_ListSecrets
+--- PASS: TestContainerApps_ListSecrets (0.15s)
+=== RUN   TestContainerAppsRevisions_ListRevisions
+--- PASS: TestContainerAppsRevisions_ListRevisions (0.32s)
+=== RUN   TestContainerAppsRevisions_GetRevision
+--- PASS: TestContainerAppsRevisions_GetRevision (0.09s)
+=== RUN   TestContainerAppsRevisions_ActivateRevision
+--- PASS: TestContainerAppsRevisions_ActivateRevision (0.09s)
+=== RUN   TestContainerAppsRevisions_DeactivateRevision
+--- PASS: TestContainerAppsRevisions_DeactivateRevision (0.08s)
+=== RUN   TestContainerAppsRevisions_RestartRevision
+--- PASS: TestContainerAppsRevisions_RestartRevision (0.09s)
+=== RUN   TestDeletedWebApps_List
+    zt_generated_mock_test.go:3253: Warning: No test steps for this operation!
+--- SKIP: TestDeletedWebApps_List (0.00s)
+=== RUN   TestDeletedWebApps_ListByLocation
+--- PASS: TestDeletedWebApps_ListByLocation (0.18s)
+=== RUN   TestDeletedWebApps_GetDeletedWebAppByLocation
+--- PASS: TestDeletedWebApps_GetDeletedWebAppByLocation (0.08s)
+=== RUN   TestDiagnostics_ListHostingEnvironmentDetectorResponses
+--- PASS: TestDiagnostics_ListHostingEnvironmentDetectorResponses (0.32s)
+=== RUN   TestDiagnostics_GetHostingEnvironmentDetectorResponse
+--- PASS: TestDiagnostics_GetHostingEnvironmentDetectorResponse (0.07s)
+=== RUN   TestDiagnostics_ListSiteDetectorResponses
+--- PASS: TestDiagnostics_ListSiteDetectorResponses (0.21s)
+=== RUN   TestDiagnostics_GetSiteDetectorResponse
+--- PASS: TestDiagnostics_GetSiteDetectorResponse (0.17s)
+=== RUN   TestDiagnostics_ListSiteDiagnosticCategories
+--- PASS: TestDiagnostics_ListSiteDiagnosticCategories (0.12s)
+=== RUN   TestDiagnostics_GetSiteDiagnosticCategory
+--- PASS: TestDiagnostics_GetSiteDiagnosticCategory (13.70s)
+=== RUN   TestDiagnostics_ListSiteAnalyses
+--- PASS: TestDiagnostics_ListSiteAnalyses (0.24s)
+=== RUN   TestDiagnostics_GetSiteAnalysis
+--- PASS: TestDiagnostics_GetSiteAnalysis (0.20s)
+=== RUN   TestDiagnostics_ExecuteSiteAnalysis
+--- PASS: TestDiagnostics_ExecuteSiteAnalysis (0.12s)
+=== RUN   TestDiagnostics_ListSiteDetectors
+--- PASS: TestDiagnostics_ListSiteDetectors (0.12s)
+=== RUN   TestDiagnostics_GetSiteDetector
+--- PASS: TestDiagnostics_GetSiteDetector (0.11s)
+=== RUN   TestDiagnostics_ExecuteSiteDetector
+--- PASS: TestDiagnostics_ExecuteSiteDetector (0.10s)
+=== RUN   TestDiagnostics_ListSiteDetectorResponsesSlot
+--- PASS: TestDiagnostics_ListSiteDetectorResponsesSlot (0.08s)
+=== RUN   TestDiagnostics_GetSiteDetectorResponseSlot
+--- PASS: TestDiagnostics_GetSiteDetectorResponseSlot (0.11s)
+=== RUN   TestDiagnostics_ListSiteDiagnosticCategoriesSlot
+--- PASS: TestDiagnostics_ListSiteDiagnosticCategoriesSlot (0.09s)
+=== RUN   TestDiagnostics_GetSiteDiagnosticCategorySlot
+--- PASS: TestDiagnostics_GetSiteDiagnosticCategorySlot (0.08s)
+=== RUN   TestDiagnostics_ListSiteAnalysesSlot
+--- PASS: TestDiagnostics_ListSiteAnalysesSlot (0.10s)
+=== RUN   TestDiagnostics_GetSiteAnalysisSlot
+--- PASS: TestDiagnostics_GetSiteAnalysisSlot (0.10s)
+=== RUN   TestDiagnostics_ExecuteSiteAnalysisSlot
+--- PASS: TestDiagnostics_ExecuteSiteAnalysisSlot (0.11s)
+=== RUN   TestDiagnostics_ListSiteDetectorsSlot
+--- PASS: TestDiagnostics_ListSiteDetectorsSlot (0.13s)
+=== RUN   TestDiagnostics_GetSiteDetectorSlot
+--- PASS: TestDiagnostics_GetSiteDetectorSlot (0.08s)
+=== RUN   TestDiagnostics_ExecuteSiteDetectorSlot
+--- PASS: TestDiagnostics_ExecuteSiteDetectorSlot (0.08s)
+=== RUN   TestGlobal_GetDeletedWebApp
+--- PASS: TestGlobal_GetDeletedWebApp (0.06s)
+=== RUN   TestGlobal_GetDeletedWebAppSnapshots
+--- PASS: TestGlobal_GetDeletedWebAppSnapshots (0.04s)
+=== RUN   TestGlobal_GetSubscriptionOperationWithAsyncResponse
+--- PASS: TestGlobal_GetSubscriptionOperationWithAsyncResponse (0.04s)
+=== RUN   TestKubeEnvironments_ListBySubscription
+--- PASS: TestKubeEnvironments_ListBySubscription (0.08s)
+=== RUN   TestKubeEnvironments_ListByResourceGroup
+--- PASS: TestKubeEnvironments_ListByResourceGroup (0.05s)
+=== RUN   TestKubeEnvironments_Get
+--- PASS: TestKubeEnvironments_Get (0.04s)
+=== RUN   TestKubeEnvironments_CreateOrUpdate
+--- PASS: TestKubeEnvironments_CreateOrUpdate (0.13s)
+=== RUN   TestKubeEnvironments_Delete
+--- PASS: TestKubeEnvironments_Delete (0.08s)
+=== RUN   TestKubeEnvironments_Update
+--- PASS: TestKubeEnvironments_Update (0.05s)
+=== RUN   TestProvider_GetAvailableStacks
+    zt_generated_mock_test.go:6652: Warning: No test steps for this operation!
+--- SKIP: TestProvider_GetAvailableStacks (0.00s)
+=== RUN   TestProvider_GetFunctionAppStacks
+--- PASS: TestProvider_GetFunctionAppStacks (0.18s)
+=== RUN   TestProvider_GetFunctionAppStacksForLocation
+--- PASS: TestProvider_GetFunctionAppStacksForLocation (0.12s)
+=== RUN   TestProvider_GetWebAppStacksForLocation
+--- PASS: TestProvider_GetWebAppStacksForLocation (1.42s)
+=== RUN   TestProvider_ListOperations
+--- PASS: TestProvider_ListOperations (1.82s)
+=== RUN   TestProvider_GetWebAppStacks
+--- PASS: TestProvider_GetWebAppStacks (0.36s)
+=== RUN   TestProvider_GetAvailableStacksOnPrem
+    zt_generated_mock_test.go:19662: Warning: No test steps for this operation!
+--- SKIP: TestProvider_GetAvailableStacksOnPrem (0.00s)
+=== RUN   TestRecommendations_List
+    zt_generated_mock_test.go:19666: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_List (0.00s)
+=== RUN   TestRecommendations_ResetAllFilters
+    zt_generated_mock_test.go:19670: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ResetAllFilters (0.00s)
+=== RUN   TestRecommendations_DisableRecommendationForSubscription
+    zt_generated_mock_test.go:19674: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_DisableRecommendationForSubscription (0.00s)
+=== RUN   TestRecommendations_ListHistoryForHostingEnvironment
+    zt_generated_mock_test.go:19678: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ListHistoryForHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_ListRecommendedRulesForHostingEnvironment
+    zt_generated_mock_test.go:19682: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ListRecommendedRulesForHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_DisableAllForHostingEnvironment
+    zt_generated_mock_test.go:19686: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_DisableAllForHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_ResetAllFiltersForHostingEnvironment
+    zt_generated_mock_test.go:19690: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ResetAllFiltersForHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_GetRuleDetailsByHostingEnvironment
+    zt_generated_mock_test.go:19694: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_GetRuleDetailsByHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_DisableRecommendationForHostingEnvironment
+    zt_generated_mock_test.go:19698: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_DisableRecommendationForHostingEnvironment (0.00s)
+=== RUN   TestRecommendations_ListHistoryForWebApp
+    zt_generated_mock_test.go:19702: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ListHistoryForWebApp (0.00s)
+=== RUN   TestRecommendations_ListRecommendedRulesForWebApp
+    zt_generated_mock_test.go:19706: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ListRecommendedRulesForWebApp (0.00s)
+=== RUN   TestRecommendations_DisableAllForWebApp
+    zt_generated_mock_test.go:19710: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_DisableAllForWebApp (0.00s)
+=== RUN   TestRecommendations_ResetAllFiltersForWebApp
+    zt_generated_mock_test.go:19714: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_ResetAllFiltersForWebApp (0.00s)
+=== RUN   TestRecommendations_GetRuleDetailsByWebApp
+    zt_generated_mock_test.go:19718: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_GetRuleDetailsByWebApp (0.00s)
+=== RUN   TestRecommendations_DisableRecommendationForSite
+    zt_generated_mock_test.go:19722: Warning: No test steps for this operation!
+--- SKIP: TestRecommendations_DisableRecommendationForSite (0.00s)
+=== RUN   TestResourceHealthMetadata_List
+--- PASS: TestResourceHealthMetadata_List (0.07s)
+=== RUN   TestResourceHealthMetadata_ListByResourceGroup
+--- PASS: TestResourceHealthMetadata_ListByResourceGroup (0.04s)
+=== RUN   TestResourceHealthMetadata_ListBySite
+--- PASS: TestResourceHealthMetadata_ListBySite (0.03s)
+=== RUN   TestResourceHealthMetadata_GetBySite
+--- PASS: TestResourceHealthMetadata_GetBySite (0.04s)
+=== RUN   TestResourceHealthMetadata_ListBySiteSlot
+--- PASS: TestResourceHealthMetadata_ListBySiteSlot (0.17s)
+=== RUN   TestResourceHealthMetadata_GetBySiteSlot
+--- PASS: TestResourceHealthMetadata_GetBySiteSlot (0.25s)
+=== RUN   TestWebSiteManagementClient_GetPublishingUser
+    zt_generated_mock_test.go:19963: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_GetPublishingUser (0.00s)
+=== RUN   TestWebSiteManagementClient_UpdatePublishingUser
+    zt_generated_mock_test.go:19967: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_UpdatePublishingUser (0.00s)
+=== RUN   TestWebSiteManagementClient_ListSourceControls
+    zt_generated_mock_test.go:19971: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ListSourceControls (0.00s)
+=== RUN   TestWebSiteManagementClient_GetSourceControl
+    zt_generated_mock_test.go:19975: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_GetSourceControl (0.00s)
+=== RUN   TestWebSiteManagementClient_UpdateSourceControl
+    zt_generated_mock_test.go:19979: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_UpdateSourceControl (0.00s)
+=== RUN   TestWebSiteManagementClient_ListBillingMeters
+    zt_generated_mock_test.go:19983: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ListBillingMeters (0.00s)
+=== RUN   TestWebSiteManagementClient_CheckNameAvailability
+    zt_generated_mock_test.go:19987: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_CheckNameAvailability (0.00s)
+=== RUN   TestWebSiteManagementClient_ListCustomHostNameSites
+--- PASS: TestWebSiteManagementClient_ListCustomHostNameSites (1.46s)
+=== RUN   TestWebSiteManagementClient_GetSubscriptionDeploymentLocations
+    zt_generated_mock_test.go:20047: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_GetSubscriptionDeploymentLocations (0.00s)
+=== RUN   TestWebSiteManagementClient_ListGeoRegions
+    zt_generated_mock_test.go:20051: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ListGeoRegions (0.00s)
+=== RUN   TestWebSiteManagementClient_ListSiteIdentifiersAssignedToHostName
+    zt_generated_mock_test.go:20055: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ListSiteIdentifiersAssignedToHostName (0.00s)
+=== RUN   TestWebSiteManagementClient_ListPremierAddOnOffers
+    zt_generated_mock_test.go:20059: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ListPremierAddOnOffers (0.00s)
+=== RUN   TestWebSiteManagementClient_VerifyHostingEnvironmentVnet
+--- PASS: TestWebSiteManagementClient_VerifyHostingEnvironmentVnet (0.62s)
+=== RUN   TestWebSiteManagementClient_Move
+    zt_generated_mock_test.go:20103: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_Move (0.00s)
+=== RUN   TestWebSiteManagementClient_Validate
+    zt_generated_mock_test.go:20107: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_Validate (0.00s)
+=== RUN   TestWebSiteManagementClient_ValidateMove
+    zt_generated_mock_test.go:20111: Warning: No test steps for this operation!
+--- SKIP: TestWebSiteManagementClient_ValidateMove (0.00s)
+=== RUN   TestStaticSites_PreviewWorkflow
+--- PASS: TestStaticSites_PreviewWorkflow (0.30s)
+=== RUN   TestStaticSites_List
+--- PASS: TestStaticSites_List (0.07s)
+=== RUN   TestStaticSites_GetStaticSitesByResourceGroup
+--- PASS: TestStaticSites_GetStaticSitesByResourceGroup (0.06s)
+=== RUN   TestStaticSites_GetStaticSite
+--- PASS: TestStaticSites_GetStaticSite (0.05s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSite
+--- PASS: TestStaticSites_CreateOrUpdateStaticSite (0.15s)
+=== RUN   TestStaticSites_DeleteStaticSite
+--- PASS: TestStaticSites_DeleteStaticSite (0.09s)
+=== RUN   TestStaticSites_UpdateStaticSite
+--- PASS: TestStaticSites_UpdateStaticSite (0.07s)
+=== RUN   TestStaticSites_ListStaticSiteUsers
+--- PASS: TestStaticSites_ListStaticSiteUsers (0.05s)
+=== RUN   TestStaticSites_DeleteStaticSiteUser
+--- PASS: TestStaticSites_DeleteStaticSiteUser (0.04s)
+=== RUN   TestStaticSites_UpdateStaticSiteUser
+--- PASS: TestStaticSites_UpdateStaticSiteUser (0.05s)
+=== RUN   TestStaticSites_GetStaticSiteBuilds
+--- PASS: TestStaticSites_GetStaticSiteBuilds (0.05s)
+=== RUN   TestStaticSites_GetStaticSiteBuild
+--- PASS: TestStaticSites_GetStaticSiteBuild (0.04s)
+=== RUN   TestStaticSites_DeleteStaticSiteBuild
+--- PASS: TestStaticSites_DeleteStaticSiteBuild (0.07s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSiteBuildAppSettings
+--- PASS: TestStaticSites_CreateOrUpdateStaticSiteBuildAppSettings (0.04s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSiteBuildFunctionAppSettings
+--- PASS: TestStaticSites_CreateOrUpdateStaticSiteBuildFunctionAppSettings (0.04s)
+=== RUN   TestStaticSites_ListStaticSiteBuildFunctions
+--- PASS: TestStaticSites_ListStaticSiteBuildFunctions (0.03s)
+=== RUN   TestStaticSites_ListStaticSiteBuildAppSettings
+--- PASS: TestStaticSites_ListStaticSiteBuildAppSettings (0.04s)
+=== RUN   TestStaticSites_ListStaticSiteBuildFunctionAppSettings
+--- PASS: TestStaticSites_ListStaticSiteBuildFunctionAppSettings (0.04s)
+=== RUN   TestStaticSites_GetUserProvidedFunctionAppsForStaticSiteBuild
+--- PASS: TestStaticSites_GetUserProvidedFunctionAppsForStaticSiteBuild (0.06s)
+=== RUN   TestStaticSites_GetUserProvidedFunctionAppForStaticSiteBuild
+--- PASS: TestStaticSites_GetUserProvidedFunctionAppForStaticSiteBuild (0.04s)
+=== RUN   TestStaticSites_RegisterUserProvidedFunctionAppWithStaticSiteBuild
+    zt_generated_mock_test.go:20986: Failed to get result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/RegisterUserProvidedFunctionAppWithStaticSiteBuild.json: PUT https://localhost:8443/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter isForced=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestStaticSites_RegisterUserProvidedFunctionAppWithStaticSiteBuild (0.05s)
+=== RUN   TestStaticSites_DetachUserProvidedFunctionAppFromStaticSiteBuild
+--- PASS: TestStaticSites_DetachUserProvidedFunctionAppFromStaticSiteBuild (0.03s)
+=== RUN   TestStaticSites_CreateZipDeploymentForStaticSiteBuild
+--- PASS: TestStaticSites_CreateZipDeploymentForStaticSiteBuild (0.09s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSiteAppSettings
+--- PASS: TestStaticSites_CreateOrUpdateStaticSiteAppSettings (0.04s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSiteFunctionAppSettings
+--- PASS: TestStaticSites_CreateOrUpdateStaticSiteFunctionAppSettings (0.03s)
+=== RUN   TestStaticSites_CreateUserRolesInvitationLink
+--- PASS: TestStaticSites_CreateUserRolesInvitationLink (0.05s)
+=== RUN   TestStaticSites_ListStaticSiteCustomDomains
+--- PASS: TestStaticSites_ListStaticSiteCustomDomains (0.03s)
+=== RUN   TestStaticSites_GetStaticSiteCustomDomain
+--- PASS: TestStaticSites_GetStaticSiteCustomDomain (0.03s)
+=== RUN   TestStaticSites_CreateOrUpdateStaticSiteCustomDomain
+--- PASS: TestStaticSites_CreateOrUpdateStaticSiteCustomDomain (0.08s)
+=== RUN   TestStaticSites_DeleteStaticSiteCustomDomain
+--- PASS: TestStaticSites_DeleteStaticSiteCustomDomain (0.06s)
+=== RUN   TestStaticSites_ValidateCustomDomainCanBeAddedToStaticSite
+--- PASS: TestStaticSites_ValidateCustomDomainCanBeAddedToStaticSite (0.09s)
+=== RUN   TestStaticSites_DetachStaticSite
+--- PASS: TestStaticSites_DetachStaticSite (0.08s)
+=== RUN   TestStaticSites_ListStaticSiteFunctions
+--- PASS: TestStaticSites_ListStaticSiteFunctions (0.04s)
+=== RUN   TestStaticSites_ListStaticSiteAppSettings
+--- PASS: TestStaticSites_ListStaticSiteAppSettings (0.05s)
+=== RUN   TestStaticSites_ListStaticSiteConfiguredRoles
+--- PASS: TestStaticSites_ListStaticSiteConfiguredRoles (0.05s)
+=== RUN   TestStaticSites_ListStaticSiteFunctionAppSettings
+--- PASS: TestStaticSites_ListStaticSiteFunctionAppSettings (0.04s)
+=== RUN   TestStaticSites_ListStaticSiteSecrets
+--- PASS: TestStaticSites_ListStaticSiteSecrets (0.04s)
+=== RUN   TestStaticSites_GetPrivateEndpointConnectionList
+--- PASS: TestStaticSites_GetPrivateEndpointConnectionList (0.05s)
+=== RUN   TestStaticSites_GetPrivateEndpointConnection
+--- PASS: TestStaticSites_GetPrivateEndpointConnection (0.06s)
+=== RUN   TestStaticSites_ApproveOrRejectPrivateEndpointConnection
+--- PASS: TestStaticSites_ApproveOrRejectPrivateEndpointConnection (0.08s)
+=== RUN   TestStaticSites_DeletePrivateEndpointConnection
+    zt_generated_mock_test.go:21725: Mock response is not equal to example response for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/DeleteSitePrivateEndpointConnection.json:
+        mock response: {"status":"Succeeded"}
+        example response: {}
+--- FAIL: TestStaticSites_DeletePrivateEndpointConnection (0.08s)
+=== RUN   TestStaticSites_GetPrivateLinkResources
+--- PASS: TestStaticSites_GetPrivateLinkResources (0.04s)
+=== RUN   TestStaticSites_GetUserProvidedFunctionAppsForStaticSite
+--- PASS: TestStaticSites_GetUserProvidedFunctionAppsForStaticSite (0.05s)
+=== RUN   TestStaticSites_GetUserProvidedFunctionAppForStaticSite
+--- PASS: TestStaticSites_GetUserProvidedFunctionAppForStaticSite (0.04s)
+=== RUN   TestStaticSites_RegisterUserProvidedFunctionAppWithStaticSite
+    zt_generated_mock_test.go:21879: Failed to get result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/RegisterUserProvidedFunctionAppWithStaticSite.json: PUT https://localhost:8443/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/userProvidedFunctionApps/testFunctionApp
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter isForced=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestStaticSites_RegisterUserProvidedFunctionAppWithStaticSite (0.05s)
+=== RUN   TestStaticSites_DetachUserProvidedFunctionAppFromStaticSite
+--- PASS: TestStaticSites_DetachUserProvidedFunctionAppFromStaticSite (0.04s)
+=== RUN   TestStaticSites_CreateZipDeploymentForStaticSite
+--- PASS: TestStaticSites_CreateZipDeploymentForStaticSite (0.07s)
+=== RUN   TestWebApps_List
+    zt_generated_mock_test.go:21960: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_List (0.00s)
+=== RUN   TestWebApps_ListByResourceGroup
+    zt_generated_mock_test.go:21964: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListByResourceGroup (0.00s)
+=== RUN   TestWebApps_Get
+    zt_generated_mock_test.go:21968: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Get (0.00s)
+=== RUN   TestWebApps_CreateOrUpdate
+    zt_generated_mock_test.go:21972: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdate (0.00s)
+=== RUN   TestWebApps_Delete
+    zt_generated_mock_test.go:21976: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Delete (0.00s)
+=== RUN   TestWebApps_Update
+    zt_generated_mock_test.go:21980: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Update (0.00s)
+=== RUN   TestWebApps_AnalyzeCustomHostname
+    zt_generated_mock_test.go:21984: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_AnalyzeCustomHostname (0.00s)
+=== RUN   TestWebApps_ApplySlotConfigToProduction
+    zt_generated_mock_test.go:21988: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ApplySlotConfigToProduction (0.00s)
+=== RUN   TestWebApps_Backup
+    zt_generated_mock_test.go:21992: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Backup (0.00s)
+=== RUN   TestWebApps_ListBackups
+    zt_generated_mock_test.go:21996: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListBackups (0.00s)
+=== RUN   TestWebApps_GetBackupStatus
+    zt_generated_mock_test.go:22000: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetBackupStatus (0.00s)
+=== RUN   TestWebApps_DeleteBackup
+    zt_generated_mock_test.go:22004: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteBackup (0.00s)
+=== RUN   TestWebApps_ListBackupStatusSecrets
+    zt_generated_mock_test.go:22008: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListBackupStatusSecrets (0.00s)
+=== RUN   TestWebApps_Restore
+    zt_generated_mock_test.go:22012: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Restore (0.00s)
+=== RUN   TestWebApps_ListBasicPublishingCredentialsPolicies
+--- PASS: TestWebApps_ListBasicPublishingCredentialsPolicies (1.26s)
+=== RUN   TestWebApps_GetFtpAllowed
+--- PASS: TestWebApps_GetFtpAllowed (0.43s)
+=== RUN   TestWebApps_UpdateFtpAllowed
+--- PASS: TestWebApps_UpdateFtpAllowed (0.67s)
+=== RUN   TestWebApps_GetScmAllowed
+--- PASS: TestWebApps_GetScmAllowed (0.35s)
+=== RUN   TestWebApps_UpdateScmAllowed
+--- PASS: TestWebApps_UpdateScmAllowed (0.05s)
+=== RUN   TestWebApps_ListConfigurations
+    zt_generated_mock_test.go:22206: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConfigurations (0.00s)
+=== RUN   TestWebApps_UpdateApplicationSettings
+    zt_generated_mock_test.go:22210: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateApplicationSettings (0.00s)
+=== RUN   TestWebApps_ListApplicationSettings
+    zt_generated_mock_test.go:22214: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListApplicationSettings (0.00s)
+=== RUN   TestWebApps_UpdateAuthSettings
+    zt_generated_mock_test.go:22218: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAuthSettings (0.00s)
+=== RUN   TestWebApps_GetAuthSettings
+    zt_generated_mock_test.go:22222: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetAuthSettings (0.00s)
+=== RUN   TestWebApps_GetAuthSettingsV2WithoutSecrets
+    zt_generated_mock_test.go:22226: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetAuthSettingsV2WithoutSecrets (0.00s)
+=== RUN   TestWebApps_UpdateAuthSettingsV2
+    zt_generated_mock_test.go:22230: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAuthSettingsV2 (0.00s)
+=== RUN   TestWebApps_GetAuthSettingsV2
+    zt_generated_mock_test.go:22234: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetAuthSettingsV2 (0.00s)
+=== RUN   TestWebApps_UpdateAzureStorageAccounts
+    zt_generated_mock_test.go:22238: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAzureStorageAccounts (0.00s)
+=== RUN   TestWebApps_ListAzureStorageAccounts
+    zt_generated_mock_test.go:22242: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListAzureStorageAccounts (0.00s)
+=== RUN   TestWebApps_UpdateBackupConfiguration
+    zt_generated_mock_test.go:22246: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateBackupConfiguration (0.00s)
+=== RUN   TestWebApps_DeleteBackupConfiguration
+    zt_generated_mock_test.go:22250: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteBackupConfiguration (0.00s)
+=== RUN   TestWebApps_GetBackupConfiguration
+    zt_generated_mock_test.go:22254: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetBackupConfiguration (0.00s)
+=== RUN   TestWebApps_GetAppSettingsKeyVaultReferences
+--- PASS: TestWebApps_GetAppSettingsKeyVaultReferences (0.06s)
+=== RUN   TestWebApps_GetAppSettingKeyVaultReference
+--- PASS: TestWebApps_GetAppSettingKeyVaultReference (0.08s)
+=== RUN   TestWebApps_GetSiteConnectionStringKeyVaultReferences
+    zt_generated_mock_test.go:22340: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteConnectionStringKeyVaultReferences (0.00s)
+=== RUN   TestWebApps_GetSiteConnectionStringKeyVaultReference
+    zt_generated_mock_test.go:22344: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteConnectionStringKeyVaultReference (0.00s)
+=== RUN   TestWebApps_UpdateConnectionStrings
+    zt_generated_mock_test.go:22348: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateConnectionStrings (0.00s)
+=== RUN   TestWebApps_ListConnectionStrings
+    zt_generated_mock_test.go:22352: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConnectionStrings (0.00s)
+=== RUN   TestWebApps_GetDiagnosticLogsConfiguration
+    zt_generated_mock_test.go:22356: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDiagnosticLogsConfiguration (0.00s)
+=== RUN   TestWebApps_UpdateDiagnosticLogsConfig
+    zt_generated_mock_test.go:22360: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateDiagnosticLogsConfig (0.00s)
+=== RUN   TestWebApps_UpdateMetadata
+    zt_generated_mock_test.go:22364: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateMetadata (0.00s)
+=== RUN   TestWebApps_ListMetadata
+    zt_generated_mock_test.go:22368: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListMetadata (0.00s)
+=== RUN   TestWebApps_ListPublishingCredentials
+    zt_generated_mock_test.go:22372: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPublishingCredentials (0.00s)
+=== RUN   TestWebApps_UpdateSitePushSettings
+    zt_generated_mock_test.go:22376: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSitePushSettings (0.00s)
+=== RUN   TestWebApps_ListSitePushSettings
+    zt_generated_mock_test.go:22380: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSitePushSettings (0.00s)
+=== RUN   TestWebApps_ListSlotConfigurationNames
+    zt_generated_mock_test.go:22384: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSlotConfigurationNames (0.00s)
+=== RUN   TestWebApps_UpdateSlotConfigurationNames
+    zt_generated_mock_test.go:22388: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSlotConfigurationNames (0.00s)
+=== RUN   TestWebApps_GetConfiguration
+    zt_generated_mock_test.go:22392: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetConfiguration (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateConfiguration
+    zt_generated_mock_test.go:22396: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateConfiguration (0.00s)
+=== RUN   TestWebApps_UpdateConfiguration
+    zt_generated_mock_test.go:22400: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateConfiguration (0.00s)
+=== RUN   TestWebApps_ListConfigurationSnapshotInfo
+    zt_generated_mock_test.go:22404: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConfigurationSnapshotInfo (0.00s)
+=== RUN   TestWebApps_GetConfigurationSnapshot
+    zt_generated_mock_test.go:22408: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetConfigurationSnapshot (0.00s)
+=== RUN   TestWebApps_RecoverSiteConfigurationSnapshot
+    zt_generated_mock_test.go:22412: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RecoverSiteConfigurationSnapshot (0.00s)
+=== RUN   TestWebApps_GetWebSiteContainerLogs
+    zt_generated_mock_test.go:22416: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetWebSiteContainerLogs (0.00s)
+=== RUN   TestWebApps_GetContainerLogsZip
+    zt_generated_mock_test.go:22420: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetContainerLogsZip (0.00s)
+=== RUN   TestWebApps_ListContinuousWebJobs
+    zt_generated_mock_test.go:22424: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListContinuousWebJobs (0.00s)
+=== RUN   TestWebApps_GetContinuousWebJob
+    zt_generated_mock_test.go:22428: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetContinuousWebJob (0.00s)
+=== RUN   TestWebApps_DeleteContinuousWebJob
+    zt_generated_mock_test.go:22432: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteContinuousWebJob (0.00s)
+=== RUN   TestWebApps_StartContinuousWebJob
+    zt_generated_mock_test.go:22436: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StartContinuousWebJob (0.00s)
+=== RUN   TestWebApps_StopContinuousWebJob
+    zt_generated_mock_test.go:22440: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StopContinuousWebJob (0.00s)
+=== RUN   TestWebApps_ListDeployments
+    zt_generated_mock_test.go:22444: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDeployments (0.00s)
+=== RUN   TestWebApps_GetDeployment
+    zt_generated_mock_test.go:22448: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDeployment (0.00s)
+=== RUN   TestWebApps_CreateDeployment
+    zt_generated_mock_test.go:22452: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateDeployment (0.00s)
+=== RUN   TestWebApps_DeleteDeployment
+    zt_generated_mock_test.go:22456: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteDeployment (0.00s)
+=== RUN   TestWebApps_ListDeploymentLog
+    zt_generated_mock_test.go:22460: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDeploymentLog (0.00s)
+=== RUN   TestWebApps_DiscoverBackup
+    zt_generated_mock_test.go:22464: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DiscoverBackup (0.00s)
+=== RUN   TestWebApps_ListDomainOwnershipIdentifiers
+    zt_generated_mock_test.go:22468: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDomainOwnershipIdentifiers (0.00s)
+=== RUN   TestWebApps_GetDomainOwnershipIdentifier
+    zt_generated_mock_test.go:22472: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDomainOwnershipIdentifier (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateDomainOwnershipIdentifier
+    zt_generated_mock_test.go:22476: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateDomainOwnershipIdentifier (0.00s)
+=== RUN   TestWebApps_DeleteDomainOwnershipIdentifier
+    zt_generated_mock_test.go:22480: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteDomainOwnershipIdentifier (0.00s)
+=== RUN   TestWebApps_UpdateDomainOwnershipIdentifier
+    zt_generated_mock_test.go:22484: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateDomainOwnershipIdentifier (0.00s)
+=== RUN   TestWebApps_GetMSDeployStatus
+    zt_generated_mock_test.go:22488: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetMSDeployStatus (0.00s)
+=== RUN   TestWebApps_CreateMSDeployOperation
+    zt_generated_mock_test.go:22492: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateMSDeployOperation (0.00s)
+=== RUN   TestWebApps_GetMSDeployLog
+    zt_generated_mock_test.go:22496: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetMSDeployLog (0.00s)
+=== RUN   TestWebApps_GetOneDeployStatus
+    zt_generated_mock_test.go:22500: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetOneDeployStatus (0.00s)
+=== RUN   TestWebApps_CreateOneDeployOperation
+    zt_generated_mock_test.go:22504: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOneDeployOperation (0.00s)
+=== RUN   TestWebApps_ListFunctions
+    zt_generated_mock_test.go:22508: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListFunctions (0.00s)
+=== RUN   TestWebApps_GetFunctionsAdminToken
+    zt_generated_mock_test.go:22512: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetFunctionsAdminToken (0.00s)
+=== RUN   TestWebApps_GetFunction
+    zt_generated_mock_test.go:22516: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetFunction (0.00s)
+=== RUN   TestWebApps_CreateFunction
+    zt_generated_mock_test.go:22520: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateFunction (0.00s)
+=== RUN   TestWebApps_DeleteFunction
+    zt_generated_mock_test.go:22524: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteFunction (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateFunctionSecret
+    zt_generated_mock_test.go:22528: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateFunctionSecret (0.00s)
+=== RUN   TestWebApps_DeleteFunctionSecret
+    zt_generated_mock_test.go:22532: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteFunctionSecret (0.00s)
+=== RUN   TestWebApps_ListFunctionKeys
+    zt_generated_mock_test.go:22536: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListFunctionKeys (0.00s)
+=== RUN   TestWebApps_ListFunctionSecrets
+    zt_generated_mock_test.go:22540: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListFunctionSecrets (0.00s)
+=== RUN   TestWebApps_ListHostKeys
+    zt_generated_mock_test.go:22544: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHostKeys (0.00s)
+=== RUN   TestWebApps_ListSyncStatus
+    zt_generated_mock_test.go:22548: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSyncStatus (0.00s)
+=== RUN   TestWebApps_SyncFunctions
+    zt_generated_mock_test.go:22552: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncFunctions (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHostSecret
+    zt_generated_mock_test.go:22556: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHostSecret (0.00s)
+=== RUN   TestWebApps_DeleteHostSecret
+    zt_generated_mock_test.go:22560: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHostSecret (0.00s)
+=== RUN   TestWebApps_ListHostNameBindings
+    zt_generated_mock_test.go:22564: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHostNameBindings (0.00s)
+=== RUN   TestWebApps_GetHostNameBinding
+    zt_generated_mock_test.go:22568: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetHostNameBinding (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHostNameBinding
+    zt_generated_mock_test.go:22572: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHostNameBinding (0.00s)
+=== RUN   TestWebApps_DeleteHostNameBinding
+    zt_generated_mock_test.go:22576: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHostNameBinding (0.00s)
+=== RUN   TestWebApps_GetHybridConnection
+    zt_generated_mock_test.go:22580: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetHybridConnection (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHybridConnection
+    zt_generated_mock_test.go:22584: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHybridConnection (0.00s)
+=== RUN   TestWebApps_DeleteHybridConnection
+    zt_generated_mock_test.go:22588: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHybridConnection (0.00s)
+=== RUN   TestWebApps_UpdateHybridConnection
+    zt_generated_mock_test.go:22592: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateHybridConnection (0.00s)
+=== RUN   TestWebApps_ListHybridConnections
+    zt_generated_mock_test.go:22596: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHybridConnections (0.00s)
+=== RUN   TestWebApps_ListRelayServiceConnections
+    zt_generated_mock_test.go:22600: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListRelayServiceConnections (0.00s)
+=== RUN   TestWebApps_GetRelayServiceConnection
+    zt_generated_mock_test.go:22604: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetRelayServiceConnection (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateRelayServiceConnection
+    zt_generated_mock_test.go:22608: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateRelayServiceConnection (0.00s)
+=== RUN   TestWebApps_DeleteRelayServiceConnection
+    zt_generated_mock_test.go:22612: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteRelayServiceConnection (0.00s)
+=== RUN   TestWebApps_UpdateRelayServiceConnection
+    zt_generated_mock_test.go:22616: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateRelayServiceConnection (0.00s)
+=== RUN   TestWebApps_ListInstanceIdentifiers
+    zt_generated_mock_test.go:22620: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceIdentifiers (0.00s)
+=== RUN   TestWebApps_GetInstanceInfo
+--- PASS: TestWebApps_GetInstanceInfo (0.06s)
+=== RUN   TestWebApps_GetInstanceMsDeployStatus
+    zt_generated_mock_test.go:22668: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceMsDeployStatus (0.00s)
+=== RUN   TestWebApps_CreateInstanceMSDeployOperation
+    zt_generated_mock_test.go:22672: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateInstanceMSDeployOperation (0.00s)
+=== RUN   TestWebApps_GetInstanceMSDeployLog
+    zt_generated_mock_test.go:22676: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceMSDeployLog (0.00s)
+=== RUN   TestWebApps_ListInstanceProcesses
+    zt_generated_mock_test.go:22680: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcesses (0.00s)
+=== RUN   TestWebApps_GetInstanceProcess
+    zt_generated_mock_test.go:22684: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcess (0.00s)
+=== RUN   TestWebApps_DeleteInstanceProcess
+    zt_generated_mock_test.go:22688: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteInstanceProcess (0.00s)
+=== RUN   TestWebApps_GetInstanceProcessDump
+    zt_generated_mock_test.go:22692: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcessDump (0.00s)
+=== RUN   TestWebApps_ListInstanceProcessModules
+    zt_generated_mock_test.go:22696: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcessModules (0.00s)
+=== RUN   TestWebApps_GetInstanceProcessModule
+    zt_generated_mock_test.go:22700: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcessModule (0.00s)
+=== RUN   TestWebApps_ListInstanceProcessThreads
+    zt_generated_mock_test.go:22704: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcessThreads (0.00s)
+=== RUN   TestWebApps_IsCloneable
+    zt_generated_mock_test.go:22708: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_IsCloneable (0.00s)
+=== RUN   TestWebApps_ListSiteBackups
+--- PASS: TestWebApps_ListSiteBackups (0.06s)
+=== RUN   TestWebApps_ListSyncFunctionTriggers
+    zt_generated_mock_test.go:22754: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSyncFunctionTriggers (0.00s)
+=== RUN   TestWebApps_MigrateStorage
+    zt_generated_mock_test.go:22758: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_MigrateStorage (0.00s)
+=== RUN   TestWebApps_GetSwiftVirtualNetworkConnection
+    zt_generated_mock_test.go:22762: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSwiftVirtualNetworkConnection (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateSwiftVirtualNetworkConnectionWithCheck
+    zt_generated_mock_test.go:22766: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateSwiftVirtualNetworkConnectionWithCheck (0.00s)
+=== RUN   TestWebApps_DeleteSwiftVirtualNetwork
+    zt_generated_mock_test.go:22770: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSwiftVirtualNetwork (0.00s)
+=== RUN   TestWebApps_UpdateSwiftVirtualNetworkConnectionWithCheck
+    zt_generated_mock_test.go:22774: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSwiftVirtualNetworkConnectionWithCheck (0.00s)
+=== RUN   TestWebApps_ListNetworkFeatures
+    zt_generated_mock_test.go:22778: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListNetworkFeatures (0.00s)
+=== RUN   TestWebApps_GetNetworkTraceOperation
+--- PASS: TestWebApps_GetNetworkTraceOperation (0.06s)
+=== RUN   TestWebApps_StartWebSiteNetworkTrace
+    zt_generated_mock_test.go:22817: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StartWebSiteNetworkTrace (0.00s)
+=== RUN   TestWebApps_StartWebSiteNetworkTraceOperation
+    zt_generated_mock_test.go:22844: Failed to get LRO result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/StartWebSiteNetworkTraceOperation.json: json: cannot unmarshal array into Go value of type map[string]interface {}
+--- FAIL: TestWebApps_StartWebSiteNetworkTraceOperation (0.15s)
+=== RUN   TestWebApps_StopWebSiteNetworkTrace
+--- PASS: TestWebApps_StopWebSiteNetworkTrace (0.05s)
+=== RUN   TestWebApps_GetNetworkTraces
+--- PASS: TestWebApps_GetNetworkTraces (0.06s)
+=== RUN   TestWebApps_GetNetworkTraceOperationV2
+--- PASS: TestWebApps_GetNetworkTraceOperationV2 (0.05s)
+=== RUN   TestWebApps_GetNetworkTracesV2
+--- PASS: TestWebApps_GetNetworkTracesV2 (0.05s)
+=== RUN   TestWebApps_GenerateNewSitePublishingPassword
+    zt_generated_mock_test.go:22988: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GenerateNewSitePublishingPassword (0.00s)
+=== RUN   TestWebApps_ListPerfMonCounters
+    zt_generated_mock_test.go:22992: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPerfMonCounters (0.00s)
+=== RUN   TestWebApps_GetSitePhpErrorLogFlag
+    zt_generated_mock_test.go:22996: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSitePhpErrorLogFlag (0.00s)
+=== RUN   TestWebApps_ListPremierAddOns
+    zt_generated_mock_test.go:23000: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPremierAddOns (0.00s)
+=== RUN   TestWebApps_GetPremierAddOn
+    zt_generated_mock_test.go:23004: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPremierAddOn (0.00s)
+=== RUN   TestWebApps_AddPremierAddOn
+    zt_generated_mock_test.go:23008: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_AddPremierAddOn (0.00s)
+=== RUN   TestWebApps_DeletePremierAddOn
+    zt_generated_mock_test.go:23012: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeletePremierAddOn (0.00s)
+=== RUN   TestWebApps_UpdatePremierAddOn
+    zt_generated_mock_test.go:23016: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdatePremierAddOn (0.00s)
+=== RUN   TestWebApps_GetPrivateAccess
+    zt_generated_mock_test.go:23020: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPrivateAccess (0.00s)
+=== RUN   TestWebApps_PutPrivateAccessVnet
+    zt_generated_mock_test.go:23024: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_PutPrivateAccessVnet (0.00s)
+=== RUN   TestWebApps_GetPrivateEndpointConnectionList
+    zt_generated_mock_test.go:23028: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPrivateEndpointConnectionList (0.00s)
+=== RUN   TestWebApps_GetPrivateEndpointConnection
+--- PASS: TestWebApps_GetPrivateEndpointConnection (0.08s)
+=== RUN   TestWebApps_ApproveOrRejectPrivateEndpointConnection
+--- PASS: TestWebApps_ApproveOrRejectPrivateEndpointConnection (0.10s)
+=== RUN   TestWebApps_DeletePrivateEndpointConnection
+    zt_generated_mock_test.go:23157: Mock response is not equal to example response for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/DeleteSitePrivateEndpointConnection.json:
+        mock response: {"status":"Succeeded"}
+        example response: {}
+--- FAIL: TestWebApps_DeletePrivateEndpointConnection (0.08s)
+=== RUN   TestWebApps_GetPrivateLinkResources
+--- PASS: TestWebApps_GetPrivateLinkResources (0.05s)
+=== RUN   TestWebApps_ListProcesses
+    zt_generated_mock_test.go:23206: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcesses (0.00s)
+=== RUN   TestWebApps_GetProcess
+    zt_generated_mock_test.go:23210: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcess (0.00s)
+=== RUN   TestWebApps_DeleteProcess
+    zt_generated_mock_test.go:23214: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteProcess (0.00s)
+=== RUN   TestWebApps_GetProcessDump
+    zt_generated_mock_test.go:23218: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcessDump (0.00s)
+=== RUN   TestWebApps_ListProcessModules
+    zt_generated_mock_test.go:23222: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcessModules (0.00s)
+=== RUN   TestWebApps_GetProcessModule
+    zt_generated_mock_test.go:23226: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcessModule (0.00s)
+=== RUN   TestWebApps_ListProcessThreads
+    zt_generated_mock_test.go:23230: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcessThreads (0.00s)
+=== RUN   TestWebApps_ListPublicCertificates
+    zt_generated_mock_test.go:23234: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPublicCertificates (0.00s)
+=== RUN   TestWebApps_GetPublicCertificate
+    zt_generated_mock_test.go:23238: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPublicCertificate (0.00s)
+=== RUN   TestWebApps_CreateOrUpdatePublicCertificate
+    zt_generated_mock_test.go:23242: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdatePublicCertificate (0.00s)
+=== RUN   TestWebApps_DeletePublicCertificate
+    zt_generated_mock_test.go:23246: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeletePublicCertificate (0.00s)
+=== RUN   TestWebApps_ResetProductionSlotConfig
+    zt_generated_mock_test.go:23250: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ResetProductionSlotConfig (0.00s)
+=== RUN   TestWebApps_Restart
+    zt_generated_mock_test.go:23254: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Restart (0.00s)
+=== RUN   TestWebApps_RestoreFromBackupBlob
+    zt_generated_mock_test.go:23258: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreFromBackupBlob (0.00s)
+=== RUN   TestWebApps_RestoreFromDeletedApp
+    zt_generated_mock_test.go:23262: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreFromDeletedApp (0.00s)
+=== RUN   TestWebApps_RestoreSnapshot
+    zt_generated_mock_test.go:23266: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreSnapshot (0.00s)
+=== RUN   TestWebApps_ListSiteExtensions
+    zt_generated_mock_test.go:23270: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSiteExtensions (0.00s)
+=== RUN   TestWebApps_GetSiteExtension
+    zt_generated_mock_test.go:23274: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteExtension (0.00s)
+=== RUN   TestWebApps_InstallSiteExtension
+    zt_generated_mock_test.go:23278: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_InstallSiteExtension (0.00s)
+=== RUN   TestWebApps_DeleteSiteExtension
+    zt_generated_mock_test.go:23282: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSiteExtension (0.00s)
+=== RUN   TestWebApps_ListSlots
+    zt_generated_mock_test.go:23286: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSlots (0.00s)
+=== RUN   TestWebApps_GetSlot
+    zt_generated_mock_test.go:23290: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateSlot
+    zt_generated_mock_test.go:23294: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateSlot (0.00s)
+=== RUN   TestWebApps_DeleteSlot
+    zt_generated_mock_test.go:23298: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSlot (0.00s)
+=== RUN   TestWebApps_UpdateSlot
+    zt_generated_mock_test.go:23302: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSlot (0.00s)
+=== RUN   TestWebApps_AnalyzeCustomHostnameSlot
+    zt_generated_mock_test.go:23306: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_AnalyzeCustomHostnameSlot (0.00s)
+=== RUN   TestWebApps_ApplySlotConfigurationSlot
+    zt_generated_mock_test.go:23310: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ApplySlotConfigurationSlot (0.00s)
+=== RUN   TestWebApps_BackupSlot
+    zt_generated_mock_test.go:23314: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_BackupSlot (0.00s)
+=== RUN   TestWebApps_ListBackupsSlot
+    zt_generated_mock_test.go:23318: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListBackupsSlot (0.00s)
+=== RUN   TestWebApps_GetBackupStatusSlot
+    zt_generated_mock_test.go:23322: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetBackupStatusSlot (0.00s)
+=== RUN   TestWebApps_DeleteBackupSlot
+    zt_generated_mock_test.go:23326: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteBackupSlot (0.00s)
+=== RUN   TestWebApps_ListBackupStatusSecretsSlot
+    zt_generated_mock_test.go:23330: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListBackupStatusSecretsSlot (0.00s)
+=== RUN   TestWebApps_RestoreSlot
+    zt_generated_mock_test.go:23334: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreSlot (0.01s)
+=== RUN   TestWebApps_ListBasicPublishingCredentialsPoliciesSlot
+--- PASS: TestWebApps_ListBasicPublishingCredentialsPoliciesSlot (0.05s)
+=== RUN   TestWebApps_GetFtpAllowedSlot
+--- PASS: TestWebApps_GetFtpAllowedSlot (0.04s)
+=== RUN   TestWebApps_UpdateFtpAllowedSlot
+--- PASS: TestWebApps_UpdateFtpAllowedSlot (0.05s)
+=== RUN   TestWebApps_GetScmAllowedSlot
+--- PASS: TestWebApps_GetScmAllowedSlot (0.05s)
+=== RUN   TestWebApps_UpdateScmAllowedSlot
+--- PASS: TestWebApps_UpdateScmAllowedSlot (0.09s)
+=== RUN   TestWebApps_ListConfigurationsSlot
+    zt_generated_mock_test.go:23533: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConfigurationsSlot (0.00s)
+=== RUN   TestWebApps_UpdateApplicationSettingsSlot
+    zt_generated_mock_test.go:23537: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateApplicationSettingsSlot (0.00s)
+=== RUN   TestWebApps_ListApplicationSettingsSlot
+    zt_generated_mock_test.go:23541: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListApplicationSettingsSlot (0.00s)
+=== RUN   TestWebApps_UpdateAuthSettingsSlot
+    zt_generated_mock_test.go:23545: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAuthSettingsSlot (0.00s)
+=== RUN   TestWebApps_GetAuthSettingsSlot
+    zt_generated_mock_test.go:23549: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetAuthSettingsSlot (0.00s)
+=== RUN   TestWebApps_UpdateAuthSettingsV2Slot
+    zt_generated_mock_test.go:23553: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAuthSettingsV2Slot (0.00s)
+=== RUN   TestWebApps_GetAuthSettingsV2Slot
+    zt_generated_mock_test.go:23557: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetAuthSettingsV2Slot (0.00s)
+=== RUN   TestWebApps_UpdateAzureStorageAccountsSlot
+    zt_generated_mock_test.go:23561: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateAzureStorageAccountsSlot (0.00s)
+=== RUN   TestWebApps_ListAzureStorageAccountsSlot
+    zt_generated_mock_test.go:23565: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListAzureStorageAccountsSlot (0.00s)
+=== RUN   TestWebApps_UpdateBackupConfigurationSlot
+    zt_generated_mock_test.go:23569: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateBackupConfigurationSlot (0.00s)
+=== RUN   TestWebApps_DeleteBackupConfigurationSlot
+    zt_generated_mock_test.go:23573: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteBackupConfigurationSlot (0.00s)
+=== RUN   TestWebApps_GetBackupConfigurationSlot
+    zt_generated_mock_test.go:23577: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetBackupConfigurationSlot (0.00s)
+=== RUN   TestWebApps_GetAppSettingsKeyVaultReferencesSlot
+--- PASS: TestWebApps_GetAppSettingsKeyVaultReferencesSlot (0.07s)
+=== RUN   TestWebApps_GetAppSettingKeyVaultReferenceSlot
+--- PASS: TestWebApps_GetAppSettingKeyVaultReferenceSlot (0.06s)
+=== RUN   TestWebApps_GetSiteConnectionStringKeyVaultReferencesSlot
+    zt_generated_mock_test.go:23665: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteConnectionStringKeyVaultReferencesSlot (0.00s)
+=== RUN   TestWebApps_GetSiteConnectionStringKeyVaultReferenceSlot
+    zt_generated_mock_test.go:23669: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteConnectionStringKeyVaultReferenceSlot (0.00s)
+=== RUN   TestWebApps_UpdateConnectionStringsSlot
+    zt_generated_mock_test.go:23673: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateConnectionStringsSlot (0.00s)
+=== RUN   TestWebApps_ListConnectionStringsSlot
+    zt_generated_mock_test.go:23677: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConnectionStringsSlot (0.00s)
+=== RUN   TestWebApps_GetDiagnosticLogsConfigurationSlot
+    zt_generated_mock_test.go:23681: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDiagnosticLogsConfigurationSlot (0.00s)
+=== RUN   TestWebApps_UpdateDiagnosticLogsConfigSlot
+    zt_generated_mock_test.go:23685: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateDiagnosticLogsConfigSlot (0.00s)
+=== RUN   TestWebApps_UpdateMetadataSlot
+    zt_generated_mock_test.go:23689: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateMetadataSlot (0.00s)
+=== RUN   TestWebApps_ListMetadataSlot
+    zt_generated_mock_test.go:23693: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListMetadataSlot (0.00s)
+=== RUN   TestWebApps_ListPublishingCredentialsSlot
+    zt_generated_mock_test.go:23697: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPublishingCredentialsSlot (0.00s)
+=== RUN   TestWebApps_UpdateSitePushSettingsSlot
+    zt_generated_mock_test.go:23701: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSitePushSettingsSlot (0.00s)
+=== RUN   TestWebApps_ListSitePushSettingsSlot
+    zt_generated_mock_test.go:23705: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSitePushSettingsSlot (0.00s)
+=== RUN   TestWebApps_GetConfigurationSlot
+    zt_generated_mock_test.go:23709: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetConfigurationSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateConfigurationSlot
+    zt_generated_mock_test.go:23713: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateConfigurationSlot (0.00s)
+=== RUN   TestWebApps_UpdateConfigurationSlot
+    zt_generated_mock_test.go:23717: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateConfigurationSlot (0.00s)
+=== RUN   TestWebApps_ListConfigurationSnapshotInfoSlot
+    zt_generated_mock_test.go:23721: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListConfigurationSnapshotInfoSlot (0.00s)
+=== RUN   TestWebApps_GetConfigurationSnapshotSlot
+    zt_generated_mock_test.go:23725: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetConfigurationSnapshotSlot (0.00s)
+=== RUN   TestWebApps_RecoverSiteConfigurationSnapshotSlot
+    zt_generated_mock_test.go:23729: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RecoverSiteConfigurationSnapshotSlot (0.00s)
+=== RUN   TestWebApps_GetWebSiteContainerLogsSlot
+    zt_generated_mock_test.go:23733: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetWebSiteContainerLogsSlot (0.00s)
+=== RUN   TestWebApps_GetContainerLogsZipSlot
+    zt_generated_mock_test.go:23737: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetContainerLogsZipSlot (0.00s)
+=== RUN   TestWebApps_ListContinuousWebJobsSlot
+    zt_generated_mock_test.go:23741: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListContinuousWebJobsSlot (0.00s)
+=== RUN   TestWebApps_GetContinuousWebJobSlot
+    zt_generated_mock_test.go:23745: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetContinuousWebJobSlot (0.00s)
+=== RUN   TestWebApps_DeleteContinuousWebJobSlot
+    zt_generated_mock_test.go:23749: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteContinuousWebJobSlot (0.00s)
+=== RUN   TestWebApps_StartContinuousWebJobSlot
+    zt_generated_mock_test.go:23753: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StartContinuousWebJobSlot (0.00s)
+=== RUN   TestWebApps_StopContinuousWebJobSlot
+    zt_generated_mock_test.go:23757: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StopContinuousWebJobSlot (0.00s)
+=== RUN   TestWebApps_ListDeploymentsSlot
+    zt_generated_mock_test.go:23761: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDeploymentsSlot (0.00s)
+=== RUN   TestWebApps_GetDeploymentSlot
+    zt_generated_mock_test.go:23765: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDeploymentSlot (0.00s)
+=== RUN   TestWebApps_CreateDeploymentSlot
+    zt_generated_mock_test.go:23769: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateDeploymentSlot (0.00s)
+=== RUN   TestWebApps_DeleteDeploymentSlot
+    zt_generated_mock_test.go:23773: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteDeploymentSlot (0.00s)
+=== RUN   TestWebApps_ListDeploymentLogSlot
+    zt_generated_mock_test.go:23777: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDeploymentLogSlot (0.00s)
+=== RUN   TestWebApps_DiscoverBackupSlot
+    zt_generated_mock_test.go:23781: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DiscoverBackupSlot (0.00s)
+=== RUN   TestWebApps_ListDomainOwnershipIdentifiersSlot
+    zt_generated_mock_test.go:23785: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListDomainOwnershipIdentifiersSlot (0.00s)
+=== RUN   TestWebApps_GetDomainOwnershipIdentifierSlot
+    zt_generated_mock_test.go:23789: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetDomainOwnershipIdentifierSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateDomainOwnershipIdentifierSlot
+    zt_generated_mock_test.go:23793: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateDomainOwnershipIdentifierSlot (0.00s)
+=== RUN   TestWebApps_DeleteDomainOwnershipIdentifierSlot
+    zt_generated_mock_test.go:23797: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteDomainOwnershipIdentifierSlot (0.00s)
+=== RUN   TestWebApps_UpdateDomainOwnershipIdentifierSlot
+    zt_generated_mock_test.go:23801: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateDomainOwnershipIdentifierSlot (0.00s)
+=== RUN   TestWebApps_GetMSDeployStatusSlot
+    zt_generated_mock_test.go:23805: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetMSDeployStatusSlot (0.00s)
+=== RUN   TestWebApps_CreateMSDeployOperationSlot
+    zt_generated_mock_test.go:23809: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateMSDeployOperationSlot (0.00s)
+=== RUN   TestWebApps_GetMSDeployLogSlot
+    zt_generated_mock_test.go:23813: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetMSDeployLogSlot (0.00s)
+=== RUN   TestWebApps_ListInstanceFunctionsSlot
+    zt_generated_mock_test.go:23817: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceFunctionsSlot (0.00s)
+=== RUN   TestWebApps_GetFunctionsAdminTokenSlot
+    zt_generated_mock_test.go:23821: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetFunctionsAdminTokenSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceFunctionSlot
+    zt_generated_mock_test.go:23825: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceFunctionSlot (0.00s)
+=== RUN   TestWebApps_CreateInstanceFunctionSlot
+    zt_generated_mock_test.go:23829: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateInstanceFunctionSlot (0.00s)
+=== RUN   TestWebApps_DeleteInstanceFunctionSlot
+    zt_generated_mock_test.go:23833: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteInstanceFunctionSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateFunctionSecretSlot
+    zt_generated_mock_test.go:23837: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateFunctionSecretSlot (0.00s)
+=== RUN   TestWebApps_DeleteFunctionSecretSlot
+    zt_generated_mock_test.go:23841: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteFunctionSecretSlot (0.00s)
+=== RUN   TestWebApps_ListFunctionKeysSlot
+    zt_generated_mock_test.go:23845: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListFunctionKeysSlot (0.00s)
+=== RUN   TestWebApps_ListFunctionSecretsSlot
+    zt_generated_mock_test.go:23849: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListFunctionSecretsSlot (0.00s)
+=== RUN   TestWebApps_ListHostKeysSlot
+    zt_generated_mock_test.go:23853: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHostKeysSlot (0.00s)
+=== RUN   TestWebApps_ListSyncStatusSlot
+    zt_generated_mock_test.go:23857: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSyncStatusSlot (0.00s)
+=== RUN   TestWebApps_SyncFunctionsSlot
+    zt_generated_mock_test.go:23861: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncFunctionsSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHostSecretSlot
+    zt_generated_mock_test.go:23865: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHostSecretSlot (0.00s)
+=== RUN   TestWebApps_DeleteHostSecretSlot
+    zt_generated_mock_test.go:23869: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHostSecretSlot (0.00s)
+=== RUN   TestWebApps_ListHostNameBindingsSlot
+    zt_generated_mock_test.go:23873: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHostNameBindingsSlot (0.00s)
+=== RUN   TestWebApps_GetHostNameBindingSlot
+    zt_generated_mock_test.go:23877: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetHostNameBindingSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHostNameBindingSlot
+    zt_generated_mock_test.go:23881: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHostNameBindingSlot (0.00s)
+=== RUN   TestWebApps_DeleteHostNameBindingSlot
+    zt_generated_mock_test.go:23885: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHostNameBindingSlot (0.00s)
+=== RUN   TestWebApps_GetHybridConnectionSlot
+    zt_generated_mock_test.go:23889: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetHybridConnectionSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateHybridConnectionSlot
+    zt_generated_mock_test.go:23893: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateHybridConnectionSlot (0.00s)
+=== RUN   TestWebApps_DeleteHybridConnectionSlot
+    zt_generated_mock_test.go:23897: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteHybridConnectionSlot (0.00s)
+=== RUN   TestWebApps_UpdateHybridConnectionSlot
+    zt_generated_mock_test.go:23901: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateHybridConnectionSlot (0.00s)
+=== RUN   TestWebApps_ListHybridConnectionsSlot
+    zt_generated_mock_test.go:23905: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListHybridConnectionsSlot (0.00s)
+=== RUN   TestWebApps_ListRelayServiceConnectionsSlot
+    zt_generated_mock_test.go:23909: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListRelayServiceConnectionsSlot (0.00s)
+=== RUN   TestWebApps_GetRelayServiceConnectionSlot
+    zt_generated_mock_test.go:23913: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetRelayServiceConnectionSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateRelayServiceConnectionSlot
+    zt_generated_mock_test.go:23917: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateRelayServiceConnectionSlot (0.00s)
+=== RUN   TestWebApps_DeleteRelayServiceConnectionSlot
+    zt_generated_mock_test.go:23921: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteRelayServiceConnectionSlot (0.00s)
+=== RUN   TestWebApps_UpdateRelayServiceConnectionSlot
+    zt_generated_mock_test.go:23925: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateRelayServiceConnectionSlot (0.00s)
+=== RUN   TestWebApps_ListInstanceIdentifiersSlot
+    zt_generated_mock_test.go:23929: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceIdentifiersSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceInfoSlot
+--- PASS: TestWebApps_GetInstanceInfoSlot (0.05s)
+=== RUN   TestWebApps_GetInstanceMsDeployStatusSlot
+    zt_generated_mock_test.go:23978: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceMsDeployStatusSlot (0.00s)
+=== RUN   TestWebApps_CreateInstanceMSDeployOperationSlot
+    zt_generated_mock_test.go:23982: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateInstanceMSDeployOperationSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceMSDeployLogSlot
+    zt_generated_mock_test.go:23986: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceMSDeployLogSlot (0.00s)
+=== RUN   TestWebApps_ListInstanceProcessesSlot
+    zt_generated_mock_test.go:23990: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcessesSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceProcessSlot
+    zt_generated_mock_test.go:23994: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcessSlot (0.00s)
+=== RUN   TestWebApps_DeleteInstanceProcessSlot
+    zt_generated_mock_test.go:23998: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteInstanceProcessSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceProcessDumpSlot
+    zt_generated_mock_test.go:24002: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcessDumpSlot (0.00s)
+=== RUN   TestWebApps_ListInstanceProcessModulesSlot
+    zt_generated_mock_test.go:24006: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcessModulesSlot (0.00s)
+=== RUN   TestWebApps_GetInstanceProcessModuleSlot
+    zt_generated_mock_test.go:24010: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetInstanceProcessModuleSlot (0.00s)
+=== RUN   TestWebApps_ListInstanceProcessThreadsSlot
+    zt_generated_mock_test.go:24014: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListInstanceProcessThreadsSlot (0.00s)
+=== RUN   TestWebApps_IsCloneableSlot
+    zt_generated_mock_test.go:24018: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_IsCloneableSlot (0.00s)
+=== RUN   TestWebApps_ListSiteBackupsSlot
+--- PASS: TestWebApps_ListSiteBackupsSlot (0.04s)
+=== RUN   TestWebApps_ListSyncFunctionTriggersSlot
+    zt_generated_mock_test.go:24065: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSyncFunctionTriggersSlot (0.00s)
+=== RUN   TestWebApps_GetSwiftVirtualNetworkConnectionSlot
+    zt_generated_mock_test.go:24069: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSwiftVirtualNetworkConnectionSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlot
+    zt_generated_mock_test.go:24073: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlot (0.00s)
+=== RUN   TestWebApps_DeleteSwiftVirtualNetworkSlot
+    zt_generated_mock_test.go:24077: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSwiftVirtualNetworkSlot (0.00s)
+=== RUN   TestWebApps_UpdateSwiftVirtualNetworkConnectionWithCheckSlot
+    zt_generated_mock_test.go:24081: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSwiftVirtualNetworkConnectionWithCheckSlot (0.00s)
+=== RUN   TestWebApps_ListNetworkFeaturesSlot
+    zt_generated_mock_test.go:24085: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListNetworkFeaturesSlot (0.00s)
+=== RUN   TestWebApps_GetNetworkTraceOperationSlot
+--- PASS: TestWebApps_GetNetworkTraceOperationSlot (0.05s)
+=== RUN   TestWebApps_StartWebSiteNetworkTraceSlot
+    zt_generated_mock_test.go:24125: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StartWebSiteNetworkTraceSlot (0.00s)
+=== RUN   TestWebApps_StartWebSiteNetworkTraceOperationSlot
+    zt_generated_mock_test.go:24153: Failed to get LRO result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/StartWebSiteNetworkTraceOperation.json: json: cannot unmarshal array into Go value of type map[string]interface {}
+--- FAIL: TestWebApps_StartWebSiteNetworkTraceOperationSlot (0.08s)
+=== RUN   TestWebApps_StopWebSiteNetworkTraceSlot
+--- PASS: TestWebApps_StopWebSiteNetworkTraceSlot (0.05s)
+=== RUN   TestWebApps_GetNetworkTracesSlot
+--- PASS: TestWebApps_GetNetworkTracesSlot (0.04s)
+=== RUN   TestWebApps_GetNetworkTraceOperationSlotV2
+--- PASS: TestWebApps_GetNetworkTraceOperationSlotV2 (0.05s)
+=== RUN   TestWebApps_GetNetworkTracesSlotV2
+--- PASS: TestWebApps_GetNetworkTracesSlotV2 (0.05s)
+=== RUN   TestWebApps_GenerateNewSitePublishingPasswordSlot
+    zt_generated_mock_test.go:24301: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GenerateNewSitePublishingPasswordSlot (0.00s)
+=== RUN   TestWebApps_ListPerfMonCountersSlot
+    zt_generated_mock_test.go:24305: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPerfMonCountersSlot (0.00s)
+=== RUN   TestWebApps_GetSitePhpErrorLogFlagSlot
+    zt_generated_mock_test.go:24309: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSitePhpErrorLogFlagSlot (0.00s)
+=== RUN   TestWebApps_ListPremierAddOnsSlot
+    zt_generated_mock_test.go:24313: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPremierAddOnsSlot (0.00s)
+=== RUN   TestWebApps_GetPremierAddOnSlot
+    zt_generated_mock_test.go:24317: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPremierAddOnSlot (0.00s)
+=== RUN   TestWebApps_AddPremierAddOnSlot
+    zt_generated_mock_test.go:24321: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_AddPremierAddOnSlot (0.00s)
+=== RUN   TestWebApps_DeletePremierAddOnSlot
+    zt_generated_mock_test.go:24325: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeletePremierAddOnSlot (0.00s)
+=== RUN   TestWebApps_UpdatePremierAddOnSlot
+    zt_generated_mock_test.go:24329: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdatePremierAddOnSlot (0.00s)
+=== RUN   TestWebApps_GetPrivateAccessSlot
+    zt_generated_mock_test.go:24333: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPrivateAccessSlot (0.00s)
+=== RUN   TestWebApps_PutPrivateAccessVnetSlot
+    zt_generated_mock_test.go:24337: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_PutPrivateAccessVnetSlot (0.00s)
+=== RUN   TestWebApps_GetPrivateEndpointConnectionListSlot
+    zt_generated_mock_test.go:24341: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPrivateEndpointConnectionListSlot (0.00s)
+=== RUN   TestWebApps_GetPrivateEndpointConnectionSlot
+--- PASS: TestWebApps_GetPrivateEndpointConnectionSlot (0.08s)
+=== RUN   TestWebApps_ApproveOrRejectPrivateEndpointConnectionSlot
+--- PASS: TestWebApps_ApproveOrRejectPrivateEndpointConnectionSlot (0.11s)
+=== RUN   TestWebApps_DeletePrivateEndpointConnectionSlot
+    zt_generated_mock_test.go:24473: Mock response is not equal to example response for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/DeleteSitePrivateEndpointConnectionSlot.json:
+        mock response: {"status":"Succeeded"}
+        example response: {}
+--- FAIL: TestWebApps_DeletePrivateEndpointConnectionSlot (0.14s)
+=== RUN   TestWebApps_GetPrivateLinkResourcesSlot
+--- PASS: TestWebApps_GetPrivateLinkResourcesSlot (0.07s)
+=== RUN   TestWebApps_ListProcessesSlot
+    zt_generated_mock_test.go:24523: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcessesSlot (0.00s)
+=== RUN   TestWebApps_GetProcessSlot
+    zt_generated_mock_test.go:24527: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcessSlot (0.00s)
+=== RUN   TestWebApps_DeleteProcessSlot
+    zt_generated_mock_test.go:24531: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteProcessSlot (0.00s)
+=== RUN   TestWebApps_GetProcessDumpSlot
+    zt_generated_mock_test.go:24535: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcessDumpSlot (0.00s)
+=== RUN   TestWebApps_ListProcessModulesSlot
+    zt_generated_mock_test.go:24539: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcessModulesSlot (0.00s)
+=== RUN   TestWebApps_GetProcessModuleSlot
+    zt_generated_mock_test.go:24543: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetProcessModuleSlot (0.00s)
+=== RUN   TestWebApps_ListProcessThreadsSlot
+    zt_generated_mock_test.go:24547: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListProcessThreadsSlot (0.00s)
+=== RUN   TestWebApps_ListPublicCertificatesSlot
+    zt_generated_mock_test.go:24551: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListPublicCertificatesSlot (0.00s)
+=== RUN   TestWebApps_GetPublicCertificateSlot
+    zt_generated_mock_test.go:24555: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetPublicCertificateSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdatePublicCertificateSlot
+    zt_generated_mock_test.go:24559: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdatePublicCertificateSlot (0.00s)
+=== RUN   TestWebApps_DeletePublicCertificateSlot
+    zt_generated_mock_test.go:24563: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeletePublicCertificateSlot (0.00s)
+=== RUN   TestWebApps_ResetSlotConfigurationSlot
+    zt_generated_mock_test.go:24567: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ResetSlotConfigurationSlot (0.00s)
+=== RUN   TestWebApps_RestartSlot
+    zt_generated_mock_test.go:24571: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestartSlot (0.00s)
+=== RUN   TestWebApps_RestoreFromBackupBlobSlot
+    zt_generated_mock_test.go:24575: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreFromBackupBlobSlot (0.00s)
+=== RUN   TestWebApps_RestoreFromDeletedAppSlot
+    zt_generated_mock_test.go:24579: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreFromDeletedAppSlot (0.00s)
+=== RUN   TestWebApps_RestoreSnapshotSlot
+    zt_generated_mock_test.go:24583: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RestoreSnapshotSlot (0.00s)
+=== RUN   TestWebApps_ListSiteExtensionsSlot
+    zt_generated_mock_test.go:24587: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSiteExtensionsSlot (0.00s)
+=== RUN   TestWebApps_GetSiteExtensionSlot
+    zt_generated_mock_test.go:24591: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSiteExtensionSlot (0.00s)
+=== RUN   TestWebApps_InstallSiteExtensionSlot
+    zt_generated_mock_test.go:24595: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_InstallSiteExtensionSlot (0.00s)
+=== RUN   TestWebApps_DeleteSiteExtensionSlot
+    zt_generated_mock_test.go:24599: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSiteExtensionSlot (0.00s)
+=== RUN   TestWebApps_ListSlotDifferencesSlot
+    zt_generated_mock_test.go:24603: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSlotDifferencesSlot (0.00s)
+=== RUN   TestWebApps_SwapSlot
+    zt_generated_mock_test.go:24607: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SwapSlot (0.00s)
+=== RUN   TestWebApps_ListSnapshotsSlot
+    zt_generated_mock_test.go:24611: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSnapshotsSlot (0.00s)
+=== RUN   TestWebApps_ListSnapshotsFromDRSecondarySlot
+    zt_generated_mock_test.go:24615: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSnapshotsFromDRSecondarySlot (0.00s)
+=== RUN   TestWebApps_GetSourceControlSlot
+    zt_generated_mock_test.go:24619: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSourceControlSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateSourceControlSlot
+    zt_generated_mock_test.go:24623: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateSourceControlSlot (0.00s)
+=== RUN   TestWebApps_DeleteSourceControlSlot
+    zt_generated_mock_test.go:24627: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSourceControlSlot (0.00s)
+=== RUN   TestWebApps_UpdateSourceControlSlot
+    zt_generated_mock_test.go:24631: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSourceControlSlot (0.00s)
+=== RUN   TestWebApps_StartSlot
+    zt_generated_mock_test.go:24635: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StartSlot (0.00s)
+=== RUN   TestWebApps_StartNetworkTraceSlot
+    zt_generated_mock_test.go:24663: Failed to get LRO result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/StartWebSiteNetworkTraceOperation.json: json: cannot unmarshal array into Go value of type map[string]interface {}
+--- FAIL: TestWebApps_StartNetworkTraceSlot (0.11s)
+=== RUN   TestWebApps_StopSlot
+    zt_generated_mock_test.go:24682: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_StopSlot (0.00s)
+=== RUN   TestWebApps_StopNetworkTraceSlot
+--- PASS: TestWebApps_StopNetworkTraceSlot (0.06s)
+=== RUN   TestWebApps_SyncRepositorySlot
+    zt_generated_mock_test.go:24707: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncRepositorySlot (0.00s)
+=== RUN   TestWebApps_SyncFunctionTriggersSlot
+    zt_generated_mock_test.go:24711: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncFunctionTriggersSlot (0.00s)
+=== RUN   TestWebApps_ListTriggeredWebJobsSlot
+    zt_generated_mock_test.go:24715: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListTriggeredWebJobsSlot (0.00s)
+=== RUN   TestWebApps_GetTriggeredWebJobSlot
+    zt_generated_mock_test.go:24719: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetTriggeredWebJobSlot (0.00s)
+=== RUN   TestWebApps_DeleteTriggeredWebJobSlot
+    zt_generated_mock_test.go:24723: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteTriggeredWebJobSlot (0.00s)
+=== RUN   TestWebApps_ListTriggeredWebJobHistorySlot
+    zt_generated_mock_test.go:24727: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListTriggeredWebJobHistorySlot (0.00s)
+=== RUN   TestWebApps_GetTriggeredWebJobHistorySlot
+    zt_generated_mock_test.go:24731: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetTriggeredWebJobHistorySlot (0.00s)
+=== RUN   TestWebApps_RunTriggeredWebJobSlot
+    zt_generated_mock_test.go:24735: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RunTriggeredWebJobSlot (0.00s)
+=== RUN   TestWebApps_ListUsagesSlot
+    zt_generated_mock_test.go:24739: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListUsagesSlot (0.00s)
+=== RUN   TestWebApps_ListVnetConnectionsSlot
+    zt_generated_mock_test.go:24743: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListVnetConnectionsSlot (0.00s)
+=== RUN   TestWebApps_GetVnetConnectionSlot
+    zt_generated_mock_test.go:24747: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetVnetConnectionSlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateVnetConnectionSlot
+    zt_generated_mock_test.go:24751: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateVnetConnectionSlot (0.00s)
+=== RUN   TestWebApps_DeleteVnetConnectionSlot
+    zt_generated_mock_test.go:24755: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteVnetConnectionSlot (0.00s)
+=== RUN   TestWebApps_UpdateVnetConnectionSlot
+    zt_generated_mock_test.go:24759: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateVnetConnectionSlot (0.00s)
+=== RUN   TestWebApps_GetVnetConnectionGatewaySlot
+    zt_generated_mock_test.go:24763: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetVnetConnectionGatewaySlot (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateVnetConnectionGatewaySlot
+    zt_generated_mock_test.go:24767: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateVnetConnectionGatewaySlot (0.00s)
+=== RUN   TestWebApps_UpdateVnetConnectionGatewaySlot
+    zt_generated_mock_test.go:24771: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateVnetConnectionGatewaySlot (0.00s)
+=== RUN   TestWebApps_ListWebJobsSlot
+    zt_generated_mock_test.go:24775: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListWebJobsSlot (0.00s)
+=== RUN   TestWebApps_GetWebJobSlot
+    zt_generated_mock_test.go:24779: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetWebJobSlot (0.00s)
+=== RUN   TestWebApps_ListSlotDifferencesFromProduction
+    zt_generated_mock_test.go:24783: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSlotDifferencesFromProduction (0.00s)
+=== RUN   TestWebApps_SwapSlotWithProduction
+    zt_generated_mock_test.go:24787: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SwapSlotWithProduction (0.00s)
+=== RUN   TestWebApps_ListSnapshots
+    zt_generated_mock_test.go:24791: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSnapshots (0.00s)
+=== RUN   TestWebApps_ListSnapshotsFromDRSecondary
+    zt_generated_mock_test.go:24795: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListSnapshotsFromDRSecondary (0.00s)
+=== RUN   TestWebApps_GetSourceControl
+    zt_generated_mock_test.go:24799: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetSourceControl (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateSourceControl
+    zt_generated_mock_test.go:24803: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateSourceControl (0.00s)
+=== RUN   TestWebApps_DeleteSourceControl
+    zt_generated_mock_test.go:24807: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteSourceControl (0.00s)
+=== RUN   TestWebApps_UpdateSourceControl
+    zt_generated_mock_test.go:24811: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateSourceControl (0.00s)
+=== RUN   TestWebApps_Start
+    zt_generated_mock_test.go:24815: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Start (0.00s)
+=== RUN   TestWebApps_StartNetworkTrace
+    zt_generated_mock_test.go:24842: Failed to get LRO result for example specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/StartWebSiteNetworkTraceOperation.json: json: cannot unmarshal array into Go value of type map[string]interface {}
+--- FAIL: TestWebApps_StartNetworkTrace (0.10s)
+=== RUN   TestWebApps_Stop
+    zt_generated_mock_test.go:24861: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_Stop (0.00s)
+=== RUN   TestWebApps_StopNetworkTrace
+--- PASS: TestWebApps_StopNetworkTrace (0.05s)
+=== RUN   TestWebApps_SyncRepository
+    zt_generated_mock_test.go:24885: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncRepository (0.00s)
+=== RUN   TestWebApps_SyncFunctionTriggers
+    zt_generated_mock_test.go:24889: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_SyncFunctionTriggers (0.00s)
+=== RUN   TestWebApps_ListTriggeredWebJobs
+    zt_generated_mock_test.go:24893: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListTriggeredWebJobs (0.00s)
+=== RUN   TestWebApps_GetTriggeredWebJob
+    zt_generated_mock_test.go:24897: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetTriggeredWebJob (0.00s)
+=== RUN   TestWebApps_DeleteTriggeredWebJob
+    zt_generated_mock_test.go:24901: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteTriggeredWebJob (0.00s)
+=== RUN   TestWebApps_ListTriggeredWebJobHistory
+    zt_generated_mock_test.go:24905: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListTriggeredWebJobHistory (0.00s)
+=== RUN   TestWebApps_GetTriggeredWebJobHistory
+    zt_generated_mock_test.go:24909: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetTriggeredWebJobHistory (0.00s)
+=== RUN   TestWebApps_RunTriggeredWebJob
+    zt_generated_mock_test.go:24913: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_RunTriggeredWebJob (0.00s)
+=== RUN   TestWebApps_ListUsages
+    zt_generated_mock_test.go:24917: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListUsages (0.00s)
+=== RUN   TestWebApps_ListVnetConnections
+    zt_generated_mock_test.go:24921: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListVnetConnections (0.00s)
+=== RUN   TestWebApps_GetVnetConnection
+    zt_generated_mock_test.go:24925: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetVnetConnection (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateVnetConnection
+    zt_generated_mock_test.go:24929: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateVnetConnection (0.00s)
+=== RUN   TestWebApps_DeleteVnetConnection
+    zt_generated_mock_test.go:24933: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_DeleteVnetConnection (0.00s)
+=== RUN   TestWebApps_UpdateVnetConnection
+    zt_generated_mock_test.go:24937: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateVnetConnection (0.00s)
+=== RUN   TestWebApps_GetVnetConnectionGateway
+    zt_generated_mock_test.go:24941: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetVnetConnectionGateway (0.00s)
+=== RUN   TestWebApps_CreateOrUpdateVnetConnectionGateway
+    zt_generated_mock_test.go:24945: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_CreateOrUpdateVnetConnectionGateway (0.00s)
+=== RUN   TestWebApps_UpdateVnetConnectionGateway
+    zt_generated_mock_test.go:24949: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_UpdateVnetConnectionGateway (0.00s)
+=== RUN   TestWebApps_ListWebJobs
+    zt_generated_mock_test.go:24953: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_ListWebJobs (0.00s)
+=== RUN   TestWebApps_GetWebJob
+    zt_generated_mock_test.go:24957: Warning: No test steps for this operation!
+--- SKIP: TestWebApps_GetWebJob (0.00s)
+FAIL
+coverage: 19.3% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/appservice/armappservice	89.786s

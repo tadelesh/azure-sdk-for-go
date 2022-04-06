@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -50,11 +45,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 		CreatedByTypeManagedIdentity,
 		CreatedByTypeUser,
 	}
-}
-
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
 }
 
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
@@ -76,11 +66,6 @@ func PossibleOriginValues() []Origin {
 	}
 }
 
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
-}
-
 // Type - The type of endpoint.
 type Type string
 
@@ -95,9 +80,4 @@ func PossibleTypeValues() []Type {
 		TypeCustom,
 		TypeDefault,
 	}
-}
-
-// ToPtr returns a *Type pointing to the current value.
-func (c Type) ToPtr() *Type {
-	return &c
 }

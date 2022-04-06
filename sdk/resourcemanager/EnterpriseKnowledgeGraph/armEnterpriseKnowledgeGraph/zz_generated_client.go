@@ -24,9 +24,9 @@ import (
 // Client contains the methods for the EnterpriseKnowledgeGraph group.
 // Don't use this type directly, use NewClient() instead.
 type Client struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewClient creates a new instance of Client with the specified values.
@@ -43,8 +43,8 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host:           string(ep),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -210,7 +210,7 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // List - Returns all the resources of a particular type belonging to a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListOptions contains the optional parameters for the Client.List method.
-func (client *Client) List(options *ClientListOptions) *runtime.Pager[ClientListResponse] {
+func (client *Client) List(options *ClientListOptions) (*runtime.Pager[ClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ClientListResponse]{
 		More: func(page ClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -269,7 +269,7 @@ func (client *Client) listHandleResponse(resp *http.Response) (ClientListRespons
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the EnterpriseKnowledgeGraph resource group in the user subscription.
 // options - ClientListByResourceGroupOptions contains the optional parameters for the Client.ListByResourceGroup method.
-func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *runtime.Pager[ClientListByResourceGroupResponse] {
+func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) (*runtime.Pager[ClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ClientListByResourceGroupResponse]{
 		More: func(page ClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -383,3 +383,4 @@ func (client *Client) updateHandleResponse(resp *http.Response) (ClientUpdateRes
 	}
 	return result, nil
 }
+

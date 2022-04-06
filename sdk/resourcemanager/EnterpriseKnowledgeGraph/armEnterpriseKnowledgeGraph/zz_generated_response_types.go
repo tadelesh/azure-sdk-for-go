@@ -42,3 +42,4 @@ type ClientUpdateResponse struct {
 type OperationsClientListResponse struct {
 	OperationEntityListResult
 }
+

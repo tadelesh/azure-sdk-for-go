@@ -1,9 +1,9 @@
 Param(
     [string] $sdkPath,
     [string] $specPath,
-    [bool] $generateSDK = $true,
-    [bool] $generateTest = $false,
-    [bool] $executeMockTest = $false
+    [bool] $generateSDK = $false,
+    [bool] $generateTest = $true,
+    [bool] $executeMockTest = $true
 )
 
 $AUTOREST_TEST_PACKAGE_URL = "D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.gotest"
@@ -39,7 +39,7 @@ modelerfour:
     {
         $content -match "module-name: sdk\/resourcemanager\/(?<rpName>.*)\/(?<packageName>.*)"
         $rpName = $matches["rpName"]
-        $packageName = $matches["packageName"] -replace "`n", "" -replace "`r", ""
+        $packageName = $matches["packageName"] -replace "`n", "" -replace "`r", "" -replace "`t", "" -replace " ", ""
     }
     
     if ($generateSDK)
@@ -49,7 +49,7 @@ modelerfour:
         #generator release-v2 $sdkPath $specPath $rpName $packageName --spec-rp-name=$sepcRPName --skip-create-branch=true --skip-generate-example=true
         Set-Location (Join-Path $sdkPath "sdk" "resourcemanager" $rpName $packageName)
         Remove-Item "*.go"
-        autorest --version=$AUTOREST_CORE_VERSION --use=$AUTOREST_GO_VERSION --go --track2 --output-folder=. --file-prefix="zz_generated_" --clear-output-folder=false ./autorest.md
+        autorest --version=$AUTOREST_CORE_VERSION --use=D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.testmodeler --use=$AUTOREST_GO_VERSION --go --track2 --output-folder=. --file-prefix="zz_generated_" --clear-output-folder=false ./autorest.md
         if ($LASTEXITCODE)
         {
             Write-Host "##[error] generate sdk code error for RP $rpName with Package $packageName"
@@ -66,6 +66,7 @@ modelerfour:
     {
         Write-Host "Generate test code for RP $rpName with Package $packageName ..."
         Set-Location (Join-Path $sdkPath "sdk" "resourcemanager" $rpName $packageName)
+        Remove-Item "*.go"
         Write-Host "autorest --version=$AUTOREST_CORE_VERSION --use=$AUTOREST_GO_VERSION --use=$AUTOREST_TEST_PACKAGE_URL --file-prefix=zz_generated_ --track2 --go --output-folder=. --clear-output-folder=false --testmodeler.generate-mock-test --testmodeler.generate-sdk-example --testmodeler.generate-scenario-test --generate-sdk=false .\$AUTOREST_CONFIG_FILE"
         autorest --version=$AUTOREST_CORE_VERSION --use=$AUTOREST_GO_VERSION --use=D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.testmodeler --use=$AUTOREST_TEST_PACKAGE_URL --file-prefix=zz_generated_ --track2 --go --output-folder=. --clear-output-folder=false --testmodeler.generate-mock-test --testmodeler.generate-sdk-example --testmodeler.generate-scenario-test --generate-sdk=true .\$AUTOREST_CONFIG_FILE
         if ($LASTEXITCODE)
@@ -121,7 +122,7 @@ function checkResult($checkName, $rpName, $packageName)
 }
 
 Get-ChildItem -recurse -path (Join-Path $specPath "specification") -filter readme.go.md | ForEach-Object {
-    if ($_.FullName -match "[\/|\\]specification[\/|\\](?<specRPName>.*)[\/|\\]resource-manager[\/|\\]readme.go.md")
+    if ($_.FullName -match "[\/|\\]specification[\/|\\](?<specRPName>serialconsole)[\/|\\]resource-manager[\/|\\]readme.go.md")
     {
         executeSingleGenerate $_ $matches["specRPName"]
     }

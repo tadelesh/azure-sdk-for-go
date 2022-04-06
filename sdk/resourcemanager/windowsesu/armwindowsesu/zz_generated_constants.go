@@ -31,11 +31,6 @@ func PossibleOsTypeValues() []OsType {
 	}
 }
 
-// ToPtr returns a *OsType pointing to the current value.
-func (c OsType) ToPtr() *OsType {
-	return &c
-}
-
 type ProvisioningState string
 
 const (
@@ -57,11 +52,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // SupportType - Type of support
 type SupportType string
 
@@ -76,9 +66,4 @@ func PossibleSupportTypeValues() []SupportType {
 		SupportTypePremiumAssurance,
 		SupportTypeSupplementalServicing,
 	}
-}
-
-// ToPtr returns a *SupportType pointing to the current value.
-func (c SupportType) ToPtr() *SupportType {
-	return &c
 }

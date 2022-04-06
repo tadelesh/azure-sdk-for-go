@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // AuthType - The authentication type.
 type AuthType string
 
@@ -52,11 +47,6 @@ func PossibleAuthTypeValues() []AuthType {
 		AuthTypeSystemAssignedIdentity,
 		AuthTypeUserAssignedIdentity,
 	}
-}
-
-// ToPtr returns a *AuthType pointing to the current value.
-func (c AuthType) ToPtr() *AuthType {
-	return &c
 }
 
 // ClientType - The application client type
@@ -91,11 +81,6 @@ func PossibleClientTypeValues() []ClientType {
 	}
 }
 
-// ToPtr returns a *ClientType pointing to the current value.
-func (c ClientType) ToPtr() *ClientType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -116,11 +101,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // LinkerStatus - Specifies if the linker is healthy.
 type LinkerStatus string
 
@@ -135,11 +115,6 @@ func PossibleLinkerStatusValues() []LinkerStatus {
 		LinkerStatusHealthy,
 		LinkerStatusNotHealthy,
 	}
-}
-
-// ToPtr returns a *LinkerStatus pointing to the current value.
-func (c LinkerStatus) ToPtr() *LinkerStatus {
-	return &c
 }
 
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
@@ -159,9 +134,4 @@ func PossibleOriginValues() []Origin {
 		OriginUser,
 		OriginUserSystem,
 	}
-}
-
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
 }

@@ -29,11 +29,6 @@ func PossiblePaymentChannelTypeValues() []PaymentChannelType {
 	}
 }
 
-// ToPtr returns a *PaymentChannelType pointing to the current value.
-func (c PaymentChannelType) ToPtr() *PaymentChannelType {
-	return &c
-}
-
 // SaasAppStatus - the Saas resource status.
 type SaasAppStatus string
 
@@ -56,11 +51,6 @@ func PossibleSaasAppStatusValues() []SaasAppStatus {
 	}
 }
 
-// ToPtr returns a *SaasAppStatus pointing to the current value.
-func (c SaasAppStatus) ToPtr() *SaasAppStatus {
-	return &c
-}
-
 // SaasResourceStatus - The SaaS Subscription Status.
 type SaasResourceStatus string
 
@@ -81,9 +71,4 @@ func PossibleSaasResourceStatusValues() []SaasResourceStatus {
 		SaasResourceStatusSuspended,
 		SaasResourceStatusUnsubscribed,
 	}
-}
-
-// ToPtr returns a *SaasResourceStatus pointing to the current value.
-func (c SaasResourceStatus) ToPtr() *SaasResourceStatus {
-	return &c
 }

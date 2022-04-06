@@ -29,11 +29,6 @@ func PossibleCheckNameAvailabilityReasonValues() []CheckNameAvailabilityReason {
 	}
 }
 
-// ToPtr returns a *CheckNameAvailabilityReason pointing to the current value.
-func (c CheckNameAvailabilityReason) ToPtr() *CheckNameAvailabilityReason {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -54,11 +49,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // LedgerRoleName - LedgerRole associated with the Security Principal of Ledger
 type LedgerRoleName string
 
@@ -77,11 +67,6 @@ func PossibleLedgerRoleNameValues() []LedgerRoleName {
 	}
 }
 
-// ToPtr returns a *LedgerRoleName pointing to the current value.
-func (c LedgerRoleName) ToPtr() *LedgerRoleName {
-	return &c
-}
-
 // LedgerType - Type of the ledger. Private means transaction data is encrypted.
 type LedgerType string
 
@@ -98,11 +83,6 @@ func PossibleLedgerTypeValues() []LedgerType {
 		LedgerTypePublic,
 		LedgerTypeUnknown,
 	}
-}
-
-// ToPtr returns a *LedgerType pointing to the current value.
-func (c LedgerType) ToPtr() *LedgerType {
-	return &c
 }
 
 // ProvisioningState - Object representing ProvisioningState for Confidential Ledger.
@@ -129,9 +109,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateUnknown,
 		ProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

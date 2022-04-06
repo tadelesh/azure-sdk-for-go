@@ -1,0 +1,734 @@
+=== RUN   TestOperations_List
+--- PASS: TestOperations_List (0.40s)
+=== RUN   TestAvailabilitySets_CreateOrUpdate
+--- PASS: TestAvailabilitySets_CreateOrUpdate (0.05s)
+=== RUN   TestAvailabilitySets_Update
+--- PASS: TestAvailabilitySets_Update (0.11s)
+=== RUN   TestAvailabilitySets_Delete
+--- PASS: TestAvailabilitySets_Delete (0.10s)
+=== RUN   TestAvailabilitySets_Get
+--- PASS: TestAvailabilitySets_Get (0.10s)
+=== RUN   TestAvailabilitySets_ListBySubscription
+--- PASS: TestAvailabilitySets_ListBySubscription (0.06s)
+=== RUN   TestAvailabilitySets_List
+--- PASS: TestAvailabilitySets_List (0.16s)
+=== RUN   TestAvailabilitySets_ListAvailableSizes
+--- PASS: TestAvailabilitySets_ListAvailableSizes (0.11s)
+=== RUN   TestProximityPlacementGroups_CreateOrUpdate
+--- PASS: TestProximityPlacementGroups_CreateOrUpdate (0.05s)
+=== RUN   TestProximityPlacementGroups_Update
+--- PASS: TestProximityPlacementGroups_Update (0.05s)
+=== RUN   TestProximityPlacementGroups_Delete
+--- PASS: TestProximityPlacementGroups_Delete (0.05s)
+=== RUN   TestProximityPlacementGroups_Get
+--- PASS: TestProximityPlacementGroups_Get (0.06s)
+=== RUN   TestProximityPlacementGroups_ListBySubscription
+--- PASS: TestProximityPlacementGroups_ListBySubscription (0.11s)
+=== RUN   TestProximityPlacementGroups_ListByResourceGroup
+--- PASS: TestProximityPlacementGroups_ListByResourceGroup (0.08s)
+=== RUN   TestDedicatedHostGroups_CreateOrUpdate
+--- PASS: TestDedicatedHostGroups_CreateOrUpdate (0.05s)
+=== RUN   TestDedicatedHostGroups_Update
+    zt_generated_mock_test.go:1093: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DedicatedHostGroups_Update_MaximumSet_Gen.json: PATCH https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/rgcompute/providers/Microsoft.Compute/hostGroups/aaaa
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"properties\":{\"platformFaultDomainCount\":3,\"supportAutomaticPlacement\":true},\"tags\":{\"key9921\":\"aaaaaaaaaa\"},\"zones\":[\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"]} don't match example value {\"properties\":{\"platformFaultDomainCount\":3,\"supportAutomaticPlacement\":true,\"instanceView\":{\"hosts\":[{\"availableCapacity\":{\"allocatableVMs\":[{\"vmSize\":\"aaaaaaaaaaaaaaaaaaaa\",\"count\":26}]},\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]}]}},\"zones\":[\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"],\"tags\":{\"key9921\":\"aaaaaaaaaa\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestDedicatedHostGroups_Update (0.06s)
+=== RUN   TestDedicatedHostGroups_Delete
+--- PASS: TestDedicatedHostGroups_Delete (0.09s)
+=== RUN   TestDedicatedHostGroups_Get
+--- PASS: TestDedicatedHostGroups_Get (0.06s)
+=== RUN   TestDedicatedHostGroups_ListByResourceGroup
+--- PASS: TestDedicatedHostGroups_ListByResourceGroup (0.13s)
+=== RUN   TestDedicatedHostGroups_ListBySubscription
+--- PASS: TestDedicatedHostGroups_ListBySubscription (0.11s)
+=== RUN   TestDedicatedHosts_CreateOrUpdate
+--- PASS: TestDedicatedHosts_CreateOrUpdate (0.15s)
+=== RUN   TestDedicatedHosts_Update
+    zt_generated_mock_test.go:1595: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DedicatedHosts_Update_MaximumSet_Gen.json: PATCH https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/rgcompute/providers/Microsoft.Compute/hostGroups/aaaaaaaaa/hosts/aaaaaaaaaaaaaaaaaaaaa
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"properties\":{\"autoReplaceOnFailure\":true,\"licenseType\":\"Windows_Server_Hybrid\",\"platformFaultDomain\":1},\"tags\":{\"key8813\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\"}} don't match example value {\"properties\":{\"platformFaultDomain\":1,\"autoReplaceOnFailure\":true,\"licenseType\":\"Windows_Server_Hybrid\",\"instanceView\":{\"availableCapacity\":{\"allocatableVMs\":[{\"vmSize\":\"aaaaaaaaaaaaaaaaaaaa\",\"count\":26}]},\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]}},\"tags\":{\"key8813\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestDedicatedHosts_Update (0.06s)
+=== RUN   TestDedicatedHosts_Delete
+--- PASS: TestDedicatedHosts_Delete (0.18s)
+=== RUN   TestDedicatedHosts_Get
+--- PASS: TestDedicatedHosts_Get (0.04s)
+=== RUN   TestDedicatedHosts_ListByHostGroup
+--- PASS: TestDedicatedHosts_ListByHostGroup (0.26s)
+=== RUN   TestDedicatedHosts_Restart
+--- PASS: TestDedicatedHosts_Restart (0.19s)
+=== RUN   TestSSHPublicKeys_ListBySubscription
+--- PASS: TestSSHPublicKeys_ListBySubscription (0.10s)
+=== RUN   TestSSHPublicKeys_ListByResourceGroup
+--- PASS: TestSSHPublicKeys_ListByResourceGroup (0.10s)
+=== RUN   TestSSHPublicKeys_Create
+--- PASS: TestSSHPublicKeys_Create (0.06s)
+=== RUN   TestSSHPublicKeys_Update
+--- PASS: TestSSHPublicKeys_Update (0.11s)
+=== RUN   TestSSHPublicKeys_Delete
+--- PASS: TestSSHPublicKeys_Delete (0.12s)
+=== RUN   TestSSHPublicKeys_Get
+--- PASS: TestSSHPublicKeys_Get (0.05s)
+=== RUN   TestSSHPublicKeys_GenerateKeyPair
+--- PASS: TestSSHPublicKeys_GenerateKeyPair (0.04s)
+=== RUN   TestVirtualMachineExtensionImages_Get
+--- PASS: TestVirtualMachineExtensionImages_Get (0.10s)
+=== RUN   TestVirtualMachineExtensionImages_ListTypes
+--- PASS: TestVirtualMachineExtensionImages_ListTypes (0.10s)
+=== RUN   TestVirtualMachineExtensionImages_ListVersions
+--- PASS: TestVirtualMachineExtensionImages_ListVersions (0.10s)
+=== RUN   TestVirtualMachineExtensions_CreateOrUpdate
+--- PASS: TestVirtualMachineExtensions_CreateOrUpdate (0.27s)
+=== RUN   TestVirtualMachineExtensions_Update
+--- PASS: TestVirtualMachineExtensions_Update (0.17s)
+=== RUN   TestVirtualMachineExtensions_Delete
+--- PASS: TestVirtualMachineExtensions_Delete (0.15s)
+=== RUN   TestVirtualMachineExtensions_Get
+--- PASS: TestVirtualMachineExtensions_Get (0.08s)
+=== RUN   TestVirtualMachineExtensions_List
+--- PASS: TestVirtualMachineExtensions_List (0.09s)
+=== RUN   TestVirtualMachineImages_Get
+--- PASS: TestVirtualMachineImages_Get (0.09s)
+=== RUN   TestVirtualMachineImages_List
+--- PASS: TestVirtualMachineImages_List (0.09s)
+=== RUN   TestVirtualMachineImages_ListOffers
+--- PASS: TestVirtualMachineImages_ListOffers (0.09s)
+=== RUN   TestVirtualMachineImages_ListPublishers
+--- PASS: TestVirtualMachineImages_ListPublishers (0.10s)
+=== RUN   TestVirtualMachineImagesEdgeZone_Get
+--- PASS: TestVirtualMachineImagesEdgeZone_Get (0.10s)
+=== RUN   TestVirtualMachineImagesEdgeZone_List
+--- PASS: TestVirtualMachineImagesEdgeZone_List (0.09s)
+=== RUN   TestVirtualMachineImagesEdgeZone_ListOffers
+--- PASS: TestVirtualMachineImagesEdgeZone_ListOffers (0.10s)
+=== RUN   TestVirtualMachineImagesEdgeZone_ListPublishers
+--- PASS: TestVirtualMachineImagesEdgeZone_ListPublishers (0.16s)
+=== RUN   TestUsage_List
+--- PASS: TestUsage_List (0.08s)
+=== RUN   TestVirtualMachines_ListByLocation
+--- PASS: TestVirtualMachines_ListByLocation (0.05s)
+=== RUN   TestVirtualMachines_Capture
+--- PASS: TestVirtualMachines_Capture (0.18s)
+=== RUN   TestVirtualMachines_CreateOrUpdate
+    zt_generated_mock_test.go:4891: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/CreateOrUpdateAVmWithVMSizeProperties.json: PUT https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-11-01\" don't match example value \"2021-03-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualMachines_CreateOrUpdate (1.24s)
+=== RUN   TestVirtualMachines_Update
+--- PASS: TestVirtualMachines_Update (0.33s)
+=== RUN   TestVirtualMachines_Delete
+    zt_generated_mock_test.go:9169: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/ForceDeleteVirtualMachine.json: DELETE https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter forceDeletion=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualMachines_Delete (0.05s)
+=== RUN   TestVirtualMachines_Get
+--- PASS: TestVirtualMachines_Get (0.20s)
+=== RUN   TestVirtualMachines_InstanceView
+--- PASS: TestVirtualMachines_InstanceView (0.13s)
+=== RUN   TestVirtualMachines_ConvertToManagedDisks
+--- PASS: TestVirtualMachines_ConvertToManagedDisks (0.19s)
+=== RUN   TestVirtualMachines_Deallocate
+--- PASS: TestVirtualMachines_Deallocate (0.18s)
+=== RUN   TestVirtualMachines_Generalize
+--- PASS: TestVirtualMachines_Generalize (0.04s)
+=== RUN   TestVirtualMachines_List
+--- PASS: TestVirtualMachines_List (0.19s)
+=== RUN   TestVirtualMachines_ListAll
+--- PASS: TestVirtualMachines_ListAll (0.26s)
+=== RUN   TestVirtualMachines_ListAvailableSizes
+--- PASS: TestVirtualMachines_ListAvailableSizes (0.06s)
+=== RUN   TestVirtualMachines_PowerOff
+--- PASS: TestVirtualMachines_PowerOff (0.17s)
+=== RUN   TestVirtualMachines_Reapply
+--- PASS: TestVirtualMachines_Reapply (0.10s)
+=== RUN   TestVirtualMachines_Restart
+--- PASS: TestVirtualMachines_Restart (0.19s)
+=== RUN   TestVirtualMachines_Start
+--- PASS: TestVirtualMachines_Start (0.20s)
+=== RUN   TestVirtualMachines_Redeploy
+--- PASS: TestVirtualMachines_Redeploy (0.19s)
+=== RUN   TestVirtualMachines_Reimage
+--- PASS: TestVirtualMachines_Reimage (0.10s)
+=== RUN   TestVirtualMachines_RetrieveBootDiagnosticsData
+--- PASS: TestVirtualMachines_RetrieveBootDiagnosticsData (0.04s)
+=== RUN   TestVirtualMachines_PerformMaintenance
+--- PASS: TestVirtualMachines_PerformMaintenance (0.17s)
+=== RUN   TestVirtualMachines_SimulateEviction
+--- PASS: TestVirtualMachines_SimulateEviction (0.05s)
+=== RUN   TestVirtualMachines_AssessPatches
+--- PASS: TestVirtualMachines_AssessPatches (0.09s)
+=== RUN   TestVirtualMachines_InstallPatches
+--- PASS: TestVirtualMachines_InstallPatches (0.10s)
+=== RUN   TestVirtualMachines_RunCommand
+--- PASS: TestVirtualMachines_RunCommand (0.08s)
+=== RUN   TestVirtualMachineScaleSets_ListByLocation
+--- PASS: TestVirtualMachineScaleSets_ListByLocation (0.05s)
+=== RUN   TestVirtualMachineScaleSets_CreateOrUpdate
+--- PASS: TestVirtualMachineScaleSets_CreateOrUpdate (85.33s)
+=== RUN   TestVirtualMachineScaleSets_Update
+--- PASS: TestVirtualMachineScaleSets_Update (0.57s)
+=== RUN   TestVirtualMachineScaleSets_Delete
+    zt_generated_mock_test.go:18892: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/ForceDeleteVirtualMachineScaleSets.json: DELETE https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachineScaleSets/myvmScaleSet
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter forceDeletion=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualMachineScaleSets_Delete (0.06s)
+=== RUN   TestVirtualMachineScaleSets_Get
+--- PASS: TestVirtualMachineScaleSets_Get (0.18s)
+=== RUN   TestVirtualMachineScaleSets_Deallocate
+--- PASS: TestVirtualMachineScaleSets_Deallocate (0.19s)
+=== RUN   TestVirtualMachineScaleSets_DeleteInstances
+--- PASS: TestVirtualMachineScaleSets_DeleteInstances (0.17s)
+=== RUN   TestVirtualMachineScaleSets_GetInstanceView
+--- PASS: TestVirtualMachineScaleSets_GetInstanceView (0.07s)
+=== RUN   TestVirtualMachineScaleSets_List
+--- PASS: TestVirtualMachineScaleSets_List (0.12s)
+=== RUN   TestVirtualMachineScaleSets_ListAll
+--- PASS: TestVirtualMachineScaleSets_ListAll (57.45s)
+=== RUN   TestVirtualMachineScaleSets_GetOSUpgradeHistory
+--- PASS: TestVirtualMachineScaleSets_GetOSUpgradeHistory (5.99s)
+=== RUN   TestVirtualMachineScaleSets_PowerOff
+--- PASS: TestVirtualMachineScaleSets_PowerOff (2.72s)
+=== RUN   TestVirtualMachineScaleSets_Restart
+--- PASS: TestVirtualMachineScaleSets_Restart (0.81s)
+=== RUN   TestVirtualMachineScaleSets_Start
+--- PASS: TestVirtualMachineScaleSets_Start (0.23s)
+=== RUN   TestVirtualMachineScaleSets_Redeploy
+--- PASS: TestVirtualMachineScaleSets_Redeploy (0.19s)
+=== RUN   TestVirtualMachineScaleSets_PerformMaintenance
+--- PASS: TestVirtualMachineScaleSets_PerformMaintenance (0.23s)
+=== RUN   TestVirtualMachineScaleSets_UpdateInstances
+--- PASS: TestVirtualMachineScaleSets_UpdateInstances (0.23s)
+=== RUN   TestVirtualMachineScaleSets_Reimage
+--- PASS: TestVirtualMachineScaleSets_Reimage (0.22s)
+=== RUN   TestVirtualMachineScaleSets_ReimageAll
+--- PASS: TestVirtualMachineScaleSets_ReimageAll (0.23s)
+=== RUN   TestVirtualMachineScaleSets_ForceRecoveryServiceFabricPlatformUpdateDomainWalk
+--- PASS: TestVirtualMachineScaleSets_ForceRecoveryServiceFabricPlatformUpdateDomainWalk (0.11s)
+=== RUN   TestVirtualMachineScaleSets_ConvertToSinglePlacementGroup
+--- PASS: TestVirtualMachineScaleSets_ConvertToSinglePlacementGroup (0.10s)
+=== RUN   TestVirtualMachineScaleSets_SetOrchestrationServiceState
+--- PASS: TestVirtualMachineScaleSets_SetOrchestrationServiceState (0.24s)
+=== RUN   TestVirtualMachineSizes_List
+--- PASS: TestVirtualMachineSizes_List (0.13s)
+=== RUN   TestImages_CreateOrUpdate
+--- PASS: TestImages_CreateOrUpdate (1.99s)
+=== RUN   TestImages_Update
+--- PASS: TestImages_Update (0.36s)
+=== RUN   TestImages_Delete
+--- PASS: TestImages_Delete (0.30s)
+=== RUN   TestImages_Get
+--- PASS: TestImages_Get (0.12s)
+=== RUN   TestImages_ListByResourceGroup
+--- PASS: TestImages_ListByResourceGroup (0.06s)
+=== RUN   TestImages_List
+--- PASS: TestImages_List (0.10s)
+=== RUN   TestRestorePointCollections_CreateOrUpdate
+--- PASS: TestRestorePointCollections_CreateOrUpdate (0.11s)
+=== RUN   TestRestorePointCollections_Update
+--- PASS: TestRestorePointCollections_Update (0.32s)
+=== RUN   TestRestorePointCollections_Delete
+--- PASS: TestRestorePointCollections_Delete (0.19s)
+=== RUN   TestRestorePointCollections_Get
+--- PASS: TestRestorePointCollections_Get (0.11s)
+=== RUN   TestRestorePointCollections_List
+--- PASS: TestRestorePointCollections_List (0.27s)
+=== RUN   TestRestorePointCollections_ListAll
+--- PASS: TestRestorePointCollections_ListAll (0.13s)
+=== RUN   TestRestorePoints_Create
+--- PASS: TestRestorePoints_Create (0.36s)
+=== RUN   TestRestorePoints_Delete
+--- PASS: TestRestorePoints_Delete (0.28s)
+=== RUN   TestRestorePoints_Get
+--- PASS: TestRestorePoints_Get (0.17s)
+=== RUN   TestCapacityReservationGroups_CreateOrUpdate
+--- PASS: TestCapacityReservationGroups_CreateOrUpdate (0.09s)
+=== RUN   TestCapacityReservationGroups_Update
+    zt_generated_mock_test.go:23217: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/CapacityReservationGroups_Update_MaximumSet_Gen.json: PATCH https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/rgcompute/providers/Microsoft.Compute/capacityReservationGroups/aaaaaaaaaaaaaaaaaaaaaa
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"properties\":{},\"tags\":{\"key5355\":\"aaa\"}} don't match example value {\"properties\":{\"instanceView\":{}},\"tags\":{\"key5355\":\"aaa\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestCapacityReservationGroups_Update (0.05s)
+=== RUN   TestCapacityReservationGroups_Delete
+--- PASS: TestCapacityReservationGroups_Delete (0.08s)
+=== RUN   TestCapacityReservationGroups_Get
+--- PASS: TestCapacityReservationGroups_Get (0.05s)
+=== RUN   TestCapacityReservationGroups_ListByResourceGroup
+--- PASS: TestCapacityReservationGroups_ListByResourceGroup (0.14s)
+=== RUN   TestCapacityReservationGroups_ListBySubscription
+--- PASS: TestCapacityReservationGroups_ListBySubscription (0.12s)
+=== RUN   TestCapacityReservations_CreateOrUpdate
+--- PASS: TestCapacityReservations_CreateOrUpdate (0.12s)
+=== RUN   TestCapacityReservations_Update
+    zt_generated_mock_test.go:23660: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/CapacityReservations_Update_MaximumSet_Gen.json: PATCH https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/rgcompute/providers/Microsoft.Compute/capacityReservationGroups/aaaaaaaaaa/capacityReservations/aaaaaaaaaaaaaaaaaaa
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"properties\":{},\"sku\":{\"capacity\":7,\"name\":\"DSv3-Type1\",\"tier\":\"aaa\"},\"tags\":{\"key4974\":\"aaaaaaaaaaaaaaaa\"}} don't match example value {\"properties\":{\"instanceView\":{\"utilizationInfo\":{},\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]}},\"sku\":{\"name\":\"DSv3-Type1\",\"tier\":\"aaa\",\"capacity\":7},\"tags\":{\"key4974\":\"aaaaaaaaaaaaaaaa\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestCapacityReservations_Update (0.10s)
+=== RUN   TestCapacityReservations_Delete
+--- PASS: TestCapacityReservations_Delete (0.19s)
+=== RUN   TestCapacityReservations_Get
+--- PASS: TestCapacityReservations_Get (0.06s)
+=== RUN   TestCapacityReservations_ListByCapacityReservationGroup
+--- PASS: TestCapacityReservations_ListByCapacityReservationGroup (0.05s)
+=== RUN   TestVirtualMachineScaleSetExtensions_CreateOrUpdate
+--- PASS: TestVirtualMachineScaleSetExtensions_CreateOrUpdate (0.27s)
+=== RUN   TestVirtualMachineScaleSetExtensions_Update
+--- PASS: TestVirtualMachineScaleSetExtensions_Update (0.22s)
+=== RUN   TestVirtualMachineScaleSetExtensions_Delete
+--- PASS: TestVirtualMachineScaleSetExtensions_Delete (0.47s)
+=== RUN   TestVirtualMachineScaleSetExtensions_Get
+--- PASS: TestVirtualMachineScaleSetExtensions_Get (0.10s)
+=== RUN   TestVirtualMachineScaleSetExtensions_List
+--- PASS: TestVirtualMachineScaleSetExtensions_List (0.18s)
+=== RUN   TestVirtualMachineScaleSetRollingUpgrades_Cancel
+--- PASS: TestVirtualMachineScaleSetRollingUpgrades_Cancel (0.16s)
+=== RUN   TestVirtualMachineScaleSetRollingUpgrades_StartOSUpgrade
+--- PASS: TestVirtualMachineScaleSetRollingUpgrades_StartOSUpgrade (0.19s)
+=== RUN   TestVirtualMachineScaleSetRollingUpgrades_StartExtensionUpgrade
+--- PASS: TestVirtualMachineScaleSetRollingUpgrades_StartExtensionUpgrade (0.16s)
+=== RUN   TestVirtualMachineScaleSetRollingUpgrades_GetLatest
+--- PASS: TestVirtualMachineScaleSetRollingUpgrades_GetLatest (0.09s)
+=== RUN   TestVirtualMachineScaleSetVMExtensions_CreateOrUpdate
+--- PASS: TestVirtualMachineScaleSetVMExtensions_CreateOrUpdate (0.07s)
+=== RUN   TestVirtualMachineScaleSetVMExtensions_Update
+--- PASS: TestVirtualMachineScaleSetVMExtensions_Update (0.15s)
+=== RUN   TestVirtualMachineScaleSetVMExtensions_Delete
+--- PASS: TestVirtualMachineScaleSetVMExtensions_Delete (0.11s)
+=== RUN   TestVirtualMachineScaleSetVMExtensions_Get
+--- PASS: TestVirtualMachineScaleSetVMExtensions_Get (0.04s)
+=== RUN   TestVirtualMachineScaleSetVMExtensions_List
+--- PASS: TestVirtualMachineScaleSetVMExtensions_List (0.05s)
+=== RUN   TestVirtualMachineScaleSetVMs_Reimage
+--- PASS: TestVirtualMachineScaleSetVMs_Reimage (0.22s)
+=== RUN   TestVirtualMachineScaleSetVMs_ReimageAll
+--- PASS: TestVirtualMachineScaleSetVMs_ReimageAll (0.15s)
+=== RUN   TestVirtualMachineScaleSetVMs_Deallocate
+--- PASS: TestVirtualMachineScaleSetVMs_Deallocate (0.16s)
+=== RUN   TestVirtualMachineScaleSetVMs_Update
+    zt_generated_mock_test.go:25380: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineScaleSetVMs_Update_MaximumSet_Gen.json: PUT https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/rgcompute/providers/Microsoft.Compute/virtualMachineScaleSets/aaaaaaaaaaaaaa/virtualMachines/aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"location\":\"westus\",\"plan\":{\"name\":\"aaaaaaaaaa\",\"product\":\"aaaaaaaaaaaaaaaaaaaa\",\"promotionCode\":\"aaaaaaaaaaaaaaaaaaaa\",\"publisher\":\"aaaaaaaaaaaaaaaaaaaaaa\"},\"properties\":{\"additionalCapabilities\":{\"hibernationEnabled\":true,\"ultraSSDEnabled\":true},\"availabilitySet\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"diagnosticsProfile\":{\"bootDiagnostics\":{\"enabled\":true,\"storageUri\":\"aaaaaaaaaaaaa\"}},\"hardwareProfile\":{\"vmSize\":\"Basic_A0\",\"vmSizeProperties\":{\"vCPUsAvailable\":9,\"vCPUsPerCore\":12}},\"licenseType\":\"aaaaaaaaaa\",\"networkProfile\":{\"networkApiVersion\":\"2020-11-01\",\"networkInterfaceConfigurations\":[{\"name\":\"aaaaaaaaaaa\",\"properties\":{\"deleteOption\":\"Delete\",\"dnsSettings\":{\"dnsServers\":[\"aaaaaa\"]},\"dscpConfiguration\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"enableAcceleratedNetworking\":true,\"enableFpga\":true,\"enableIPForwarding\":true,\"ipConfigurations\":[{\"name\":\"aa\",\"properties\":{\"applicationGatewayBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"applicationSecurityGroups\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"primary\":true,\"privateIPAddressVersion\":\"IPv4\",\"publicIPAddressConfiguration\":{\"name\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"properties\":{\"deleteOption\":\"Delete\",\"dnsSettings\":{\"domainNameLabel\":\"aaaaaaaaaaaaaaaaaaaaaaaaa\"},\"idleTimeoutInMinutes\":2,\"ipTags\":[{\"ipTagType\":\"aaaaaaaaaaaaaaaaaaaaaaaaa\",\"tag\":\"aaaaaaaaaaaaaaaaaaaa\"}],\"publicIPAddressVersion\":\"IPv4\",\"publicIPAllocationMethod\":\"Dynamic\",\"publicIPPrefix\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"sku\":{\"name\":\"Basic\",\"tier\":\"Regional\"}},\"subnet\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}}}],\"networkSecurityGroup\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"primary\":true}}],\"networkInterfaces\":[{\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachineScaleSets/{vmss-name}/virtualMachines/0/networkInterfaces/vmsstestnetconfig5415\",\"properties\":{\"deleteOption\":\"Delete\",\"primary\":true}}]},\"networkProfileConfiguration\":{\"networkInterfaceConfigurations\":[{\"name\":\"vmsstestnetconfig5415\",\"id\":\"aaaaaaaa\",\"properties\":{\"deleteOption\":\"Delete\",\"dnsSettings\":{\"dnsServers\":[]},\"enableAcceleratedNetworking\":true,\"enableFpga\":true,\"enableIPForwarding\":true,\"ipConfigurations\":[{\"name\":\"vmsstestnetconfig9693\",\"id\":\"aaaaaaaaa\",\"properties\":{\"applicationGatewayBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"applicationSecurityGroups\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerInboundNatPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"primary\":true,\"privateIPAddressVersion\":\"IPv4\",\"publicIPAddressConfiguration\":{\"name\":\"aaaaaaaaaaaaaaaaaa\",\"properties\":{\"deleteOption\":\"Delete\",\"dnsSettings\":{\"domainNameLabel\":\"aaaaaaaaaaaaaaaaaa\"},\"idleTimeoutInMinutes\":18,\"ipTags\":[{\"ipTagType\":\"aaaaaaa\",\"tag\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\"}],\"publicIPAddressVersion\":\"IPv4\",\"publicIPPrefix\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"sku\":{\"name\":\"Basic\",\"tier\":\"Regional\"}},\"subnet\":{\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/vn4071/subnets/sn5503\"}}}],\"networkSecurityGroup\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"primary\":true}}]},\"osProfile\":{\"adminPassword\":\"aaaaaaaaaaaaaaaa\",\"adminUsername\":\"Foo12\",\"allowExtensionOperations\":true,\"computerName\":\"test000000\",\"customData\":\"aaaa\",\"linuxConfiguration\":{\"disablePasswordAuthentication\":true,\"patchSettings\":{\"assessmentMode\":\"ImageDefault\",\"patchMode\":\"ImageDefault\"},\"provisionVMAgent\":true,\"ssh\":{\"publicKeys\":[{\"keyData\":\"aaaaaa\",\"path\":\"aaa\"}]}},\"requireGuestProvisionSignal\":true,\"secrets\":[],\"windowsConfiguration\":{\"additionalUnattendContent\":[{\"componentName\":\"Microsoft-Windows-Shell-Setup\",\"content\":\"aaaaaaaaaaaaaaaaaaaa\",\"passName\":\"OobeSystem\",\"settingName\":\"AutoLogon\"}],\"enableAutomaticUpdates\":true,\"patchSettings\":{\"assessmentMode\":\"ImageDefault\",\"enableHotpatching\":true,\"patchMode\":\"Manual\"},\"provisionVMAgent\":true,\"timeZone\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"winRM\":{\"listeners\":[{\"certificateUrl\":\"aaaaaaaaaaaaaaaaaaaaaa\",\"protocol\":\"Http\"}]}}},\"protectionPolicy\":{\"protectFromScaleIn\":true,\"protectFromScaleSetActions\":true},\"securityProfile\":{\"encryptionAtHost\":true,\"securityType\":\"TrustedLaunch\",\"uefiSettings\":{\"secureBootEnabled\":true,\"vTpmEnabled\":true}},\"storageProfile\":{\"dataDisks\":[{\"createOption\":\"Empty\",\"lun\":1,\"caching\":\"None\",\"deleteOption\":\"Delete\",\"detachOption\":\"ForceDetach\",\"diskSizeGB\":128,\"image\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"managedDisk\":{\"diskEncryptionSet\":{\"id\":\"aaaaaaaaaaaa\"},\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/vmss3176_vmss3176_0_disk2_6c4f554bdafa49baa780eb2d128ff39d\",\"storageAccountType\":\"Standard_LRS\"},\"name\":\"vmss3176_vmss3176_0_disk2_6c4f554bdafa49baa780eb2d128ff39d\",\"toBeDetached\":true,\"vhd\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"writeAcceleratorEnabled\":true}],\"imageReference\":{\"id\":\"a\",\"offer\":\"WindowsServer\",\"publisher\":\"MicrosoftWindowsServer\",\"sku\":\"2012-R2-Datacenter\",\"sharedGalleryImageId\":\"aaaaaaaaaaaaaaaaaaaa\",\"version\":\"4.127.20180315\"},\"osDisk\":{\"createOption\":\"FromImage\",\"caching\":\"None\",\"deleteOption\":\"Delete\",\"diffDiskSettings\":{\"option\":\"Local\",\"placement\":\"CacheDisk\"},\"diskSizeGB\":127,\"encryptionSettings\":{\"diskEncryptionKey\":{\"secretUrl\":\"aaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"enabled\":true,\"keyEncryptionKey\":{\"keyUrl\":\"aaaaaaaaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}}},\"image\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"managedDisk\":{\"diskEncryptionSet\":{\"id\":\"aaaaaaaaaaaa\"},\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/vmss3176_vmss3176_0_OsDisk_1_6d72b805e50e4de6830303c5055077fc\",\"storageAccountType\":\"Standard_LRS\"},\"name\":\"vmss3176_vmss3176_0_OsDisk_1_6d72b805e50e4de6830303c5055077fc\",\"osType\":\"Windows\",\"vhd\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"writeAcceleratorEnabled\":true}},\"userData\":\"RXhhbXBsZSBVc2VyRGF0YQ==\"},\"tags\":{}} don't match example value {\"location\":\"westus\",\"tags\":{},\"properties\":{\"networkProfileConfiguration\":{\"networkInterfaceConfigurations\":[{\"name\":\"vmsstestnetconfig5415\",\"properties\":{\"primary\":true,\"enableAcceleratedNetworking\":true,\"dnsSettings\":{\"dnsServers\":[]},\"enableIPForwarding\":true,\"ipConfigurations\":[{\"name\":\"vmsstestnetconfig9693\",\"properties\":{\"subnet\":{\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/vn4071/subnets/sn5503\"},\"privateIPAddressVersion\":\"IPv4\",\"primary\":true,\"publicIPAddressConfiguration\":{\"name\":\"aaaaaaaaaaaaaaaaaa\",\"properties\":{\"idleTimeoutInMinutes\":18,\"dnsSettings\":{\"domainNameLabel\":\"aaaaaaaaaaaaaaaaaa\"},\"ipTags\":[{\"ipTagType\":\"aaaaaaa\",\"tag\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\"}],\"publicIPPrefix\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"publicIPAddressVersion\":\"IPv4\",\"deleteOption\":\"Delete\"},\"sku\":{\"name\":\"Basic\",\"tier\":\"Regional\"}},\"applicationGatewayBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"applicationSecurityGroups\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerInboundNatPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}]},\"id\":\"aaaaaaaaa\"}],\"enableFpga\":true,\"networkSecurityGroup\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"deleteOption\":\"Delete\"},\"id\":\"aaaaaaaa\"}]},\"hardwareProfile\":{\"vmSize\":\"Basic_A0\",\"vmSizeProperties\":{\"vCPUsAvailable\":9,\"vCPUsPerCore\":12}},\"storageProfile\":{\"imageReference\":{\"publisher\":\"MicrosoftWindowsServer\",\"offer\":\"WindowsServer\",\"sku\":\"2012-R2-Datacenter\",\"version\":\"4.127.20180315\",\"sharedGalleryImageId\":\"aaaaaaaaaaaaaaaaaaaa\",\"id\":\"a\"},\"osDisk\":{\"osType\":\"Windows\",\"name\":\"vmss3176_vmss3176_0_OsDisk_1_6d72b805e50e4de6830303c5055077fc\",\"createOption\":\"FromImage\",\"caching\":\"None\",\"managedDisk\":{\"storageAccountType\":\"Standard_LRS\",\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/vmss3176_vmss3176_0_OsDisk_1_6d72b805e50e4de6830303c5055077fc\",\"diskEncryptionSet\":{\"id\":\"aaaaaaaaaaaa\"}},\"diskSizeGB\":127,\"encryptionSettings\":{\"diskEncryptionKey\":{\"secretUrl\":\"aaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"keyEncryptionKey\":{\"keyUrl\":\"aaaaaaaaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"enabled\":true},\"vhd\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"image\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"writeAcceleratorEnabled\":true,\"diffDiskSettings\":{\"option\":\"Local\",\"placement\":\"CacheDisk\"},\"deleteOption\":\"Delete\"},\"dataDisks\":[{\"lun\":1,\"name\":\"vmss3176_vmss3176_0_disk2_6c4f554bdafa49baa780eb2d128ff39d\",\"createOption\":\"Empty\",\"caching\":\"None\",\"managedDisk\":{\"storageAccountType\":\"Standard_LRS\",\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/vmss3176_vmss3176_0_disk2_6c4f554bdafa49baa780eb2d128ff39d\",\"diskEncryptionSet\":{\"id\":\"aaaaaaaaaaaa\"}},\"diskSizeGB\":128,\"toBeDetached\":true,\"vhd\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"image\":{\"uri\":\"https://{storageAccountName}.blob.core.windows.net/{containerName}/{vhdName}.vhd\"},\"writeAcceleratorEnabled\":true,\"detachOption\":\"ForceDetach\",\"deleteOption\":\"Delete\"}]},\"osProfile\":{\"computerName\":\"test000000\",\"adminUsername\":\"Foo12\",\"windowsConfiguration\":{\"provisionVMAgent\":true,\"enableAutomaticUpdates\":true,\"timeZone\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"additionalUnattendContent\":[{\"passName\":\"OobeSystem\",\"componentName\":\"Microsoft-Windows-Shell-Setup\",\"settingName\":\"AutoLogon\",\"content\":\"aaaaaaaaaaaaaaaaaaaa\"}],\"patchSettings\":{\"patchMode\":\"Manual\",\"enableHotpatching\":true,\"assessmentMode\":\"ImageDefault\"},\"winRM\":{\"listeners\":[{\"protocol\":\"Http\",\"certificateUrl\":\"aaaaaaaaaaaaaaaaaaaaaa\"}]}},\"secrets\":[],\"allowExtensionOperations\":true,\"requireGuestProvisionSignal\":true,\"adminPassword\":\"aaaaaaaaaaaaaaaa\",\"customData\":\"aaaa\",\"linuxConfiguration\":{\"disablePasswordAuthentication\":true,\"ssh\":{\"publicKeys\":[{\"path\":\"aaa\",\"keyData\":\"aaaaaa\"}]},\"provisionVMAgent\":true,\"patchSettings\":{\"patchMode\":\"ImageDefault\",\"assessmentMode\":\"ImageDefault\"}}},\"userData\":\"RXhhbXBsZSBVc2VyRGF0YQ==\",\"networkProfile\":{\"networkInterfaces\":[{\"id\":\"/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachineScaleSets/{vmss-name}/virtualMachines/0/networkInterfaces/vmsstestnetconfig5415\",\"properties\":{\"primary\":true,\"deleteOption\":\"Delete\"}}],\"networkApiVersion\":\"2020-11-01\",\"networkInterfaceConfigurations\":[{\"name\":\"aaaaaaaaaaa\",\"properties\":{\"primary\":true,\"deleteOption\":\"Delete\",\"enableAcceleratedNetworking\":true,\"enableFpga\":true,\"enableIPForwarding\":true,\"networkSecurityGroup\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"dnsSettings\":{\"dnsServers\":[\"aaaaaa\"]},\"ipConfigurations\":[{\"name\":\"aa\",\"properties\":{\"subnet\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"primary\":true,\"publicIPAddressConfiguration\":{\"name\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"properties\":{\"idleTimeoutInMinutes\":2,\"deleteOption\":\"Delete\",\"dnsSettings\":{\"domainNameLabel\":\"aaaaaaaaaaaaaaaaaaaaaaaaa\"},\"ipTags\":[{\"ipTagType\":\"aaaaaaaaaaaaaaaaaaaaaaaaa\",\"tag\":\"aaaaaaaaaaaaaaaaaaaa\"}],\"publicIPPrefix\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"publicIPAddressVersion\":\"IPv4\",\"publicIPAllocationMethod\":\"Dynamic\"},\"sku\":{\"name\":\"Basic\",\"tier\":\"Regional\"}},\"privateIPAddressVersion\":\"IPv4\",\"applicationSecurityGroups\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"applicationGatewayBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}],\"loadBalancerBackendAddressPools\":[{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}]}}],\"dscpConfiguration\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}}}]},\"diagnosticsProfile\":{\"bootDiagnostics\":{\"enabled\":true,\"storageUri\":\"aaaaaaaaaaaaa\"}},\"instanceView\":{\"platformUpdateDomain\":23,\"platformFaultDomain\":14,\"rdpThumbPrint\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"vmAgent\":{\"vmAgentVersion\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"extensionHandlers\":[{\"type\":\"aaaaaaaaaaaaa\",\"typeHandlerVersion\":\"aaaaa\",\"status\":{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}}],\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]},\"maintenanceRedeployStatus\":{\"isCustomerInitiatedMaintenanceAllowed\":true,\"preMaintenanceWindowStartTime\":\"2021-11-30T12:58:26.531Z\",\"preMaintenanceWindowEndTime\":\"2021-11-30T12:58:26.531Z\",\"maintenanceWindowStartTime\":\"2021-11-30T12:58:26.531Z\",\"maintenanceWindowEndTime\":\"2021-11-30T12:58:26.531Z\",\"lastOperationResultCode\":\"None\",\"lastOperationMessage\":\"aaaaaa\"},\"disks\":[{\"name\":\"aaaaaaaaaaa\",\"encryptionSettings\":[{\"diskEncryptionKey\":{\"secretUrl\":\"aaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"keyEncryptionKey\":{\"keyUrl\":\"aaaaaaaaaaaaaa\",\"sourceVault\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"}},\"enabled\":true}],\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]}],\"extensions\":[{\"name\":\"aaaaaaaaaaaaaaaaa\",\"type\":\"aaaaaaaaa\",\"typeHandlerVersion\":\"aaaaaaaaaaaaaaaaaaaaaaaaaa\",\"substatuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}],\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}]}],\"vmHealth\":{\"status\":{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}},\"bootDiagnostics\":{\"status\":{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}},\"statuses\":[{\"code\":\"aaaaaaaaaaaaaaaaaaaaaaa\",\"level\":\"Info\",\"displayStatus\":\"aaaaaa\",\"message\":\"a\",\"time\":\"2021-11-30T12:58:26.522Z\"}],\"placementGroupId\":\"aaa\"},\"additionalCapabilities\":{\"ultraSSDEnabled\":true,\"hibernationEnabled\":true},\"securityProfile\":{\"uefiSettings\":{\"secureBootEnabled\":true,\"vTpmEnabled\":true},\"encryptionAtHost\":true,\"securityType\":\"TrustedLaunch\"},\"availabilitySet\":{\"id\":\"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}\"},\"licenseType\":\"aaaaaaaaaa\",\"protectionPolicy\":{\"protectFromScaleIn\":true,\"protectFromScaleSetActions\":true}},\"sku\":{\"name\":\"Classic\",\"tier\":\"aaaaaaaaaaaaaa\",\"capacity\":29},\"plan\":{\"name\":\"aaaaaaaaaa\",\"publisher\":\"aaaaaaaaaaaaaaaaaaaaaa\",\"product\":\"aaaaaaaaaaaaaaaaaaaa\",\"promotionCode\":\"aaaaaaaaaaaaaaaaaaaa\"}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualMachineScaleSetVMs_Update (0.49s)
+=== RUN   TestVirtualMachineScaleSetVMs_Delete
+    zt_generated_mock_test.go:25943: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/ForceDeleteVirtualMachineScaleSetVM.json: DELETE https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachineScaleSets/myvmScaleSet/virtualMachines/0
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter forceDeletion=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualMachineScaleSetVMs_Delete (0.05s)
+=== RUN   TestVirtualMachineScaleSetVMs_Get
+--- PASS: TestVirtualMachineScaleSetVMs_Get (0.27s)
+=== RUN   TestVirtualMachineScaleSetVMs_GetInstanceView
+--- PASS: TestVirtualMachineScaleSetVMs_GetInstanceView (0.11s)
+=== RUN   TestVirtualMachineScaleSetVMs_List
+--- PASS: TestVirtualMachineScaleSetVMs_List (0.24s)
+=== RUN   TestVirtualMachineScaleSetVMs_PowerOff
+--- PASS: TestVirtualMachineScaleSetVMs_PowerOff (0.36s)
+=== RUN   TestVirtualMachineScaleSetVMs_Restart
+--- PASS: TestVirtualMachineScaleSetVMs_Restart (0.20s)
+=== RUN   TestVirtualMachineScaleSetVMs_Start
+--- PASS: TestVirtualMachineScaleSetVMs_Start (0.50s)
+=== RUN   TestVirtualMachineScaleSetVMs_Redeploy
+--- PASS: TestVirtualMachineScaleSetVMs_Redeploy (0.34s)
+=== RUN   TestVirtualMachineScaleSetVMs_RetrieveBootDiagnosticsData
+--- PASS: TestVirtualMachineScaleSetVMs_RetrieveBootDiagnosticsData (0.05s)
+=== RUN   TestVirtualMachineScaleSetVMs_PerformMaintenance
+--- PASS: TestVirtualMachineScaleSetVMs_PerformMaintenance (0.20s)
+=== RUN   TestVirtualMachineScaleSetVMs_SimulateEviction
+--- PASS: TestVirtualMachineScaleSetVMs_SimulateEviction (0.04s)
+=== RUN   TestVirtualMachineScaleSetVMs_RunCommand
+--- PASS: TestVirtualMachineScaleSetVMs_RunCommand (0.17s)
+=== RUN   TestLogAnalytics_ExportRequestRateByInterval
+    zt_generated_mock_test.go:27213: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/LogAnalyticsRequestRateByInterval.json: POST https://localhost:8443/subscriptions/{subscription-id}/providers/Microsoft.Compute/locations/westus/logAnalytics/apiAccess/getRequestRateByInterval
+        --------------------------------------------------------------------------------
+        RESPONSE 460: 460 unknown
+        ERROR CODE: 460
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "460",
+            "message": "Can't find a GET operation nearby this lro operation to work as callback url",
+            "target": "Lro operation: POST /subscriptions/%7Bsubscription-id%7D/providers/Microsoft.Compute/locations/westus/logAnalytics/apiAccess/getRequestRateByInterval?api-version=2021-11-01"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestLogAnalytics_ExportRequestRateByInterval (0.01s)
+=== RUN   TestLogAnalytics_ExportThrottledRequests
+    zt_generated_mock_test.go:27258: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/LogAnalyticsThrottledRequests.json: POST https://localhost:8443/subscriptions/{subscription-id}/providers/Microsoft.Compute/locations/westus/logAnalytics/apiAccess/getThrottledRequests
+        --------------------------------------------------------------------------------
+        RESPONSE 460: 460 unknown
+        ERROR CODE: 460
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "460",
+            "message": "Can't find a GET operation nearby this lro operation to work as callback url",
+            "target": "Lro operation: POST /subscriptions/%7Bsubscription-id%7D/providers/Microsoft.Compute/locations/westus/logAnalytics/apiAccess/getThrottledRequests?api-version=2021-11-01"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestLogAnalytics_ExportThrottledRequests (0.02s)
+=== RUN   TestVirtualMachineRunCommands_List
+--- PASS: TestVirtualMachineRunCommands_List (0.08s)
+=== RUN   TestVirtualMachineRunCommands_Get
+--- PASS: TestVirtualMachineRunCommands_Get (0.05s)
+=== RUN   TestVirtualMachineRunCommands_CreateOrUpdate
+--- PASS: TestVirtualMachineRunCommands_CreateOrUpdate (0.08s)
+=== RUN   TestVirtualMachineRunCommands_Update
+--- PASS: TestVirtualMachineRunCommands_Update (0.07s)
+=== RUN   TestVirtualMachineRunCommands_Delete
+--- PASS: TestVirtualMachineRunCommands_Delete (0.07s)
+=== RUN   TestVirtualMachineRunCommands_GetByVirtualMachine
+--- PASS: TestVirtualMachineRunCommands_GetByVirtualMachine (0.04s)
+=== RUN   TestVirtualMachineRunCommands_ListByVirtualMachine
+--- PASS: TestVirtualMachineRunCommands_ListByVirtualMachine (0.04s)
+=== RUN   TestVirtualMachineScaleSetVMRunCommands_CreateOrUpdate
+--- PASS: TestVirtualMachineScaleSetVMRunCommands_CreateOrUpdate (0.08s)
+=== RUN   TestVirtualMachineScaleSetVMRunCommands_Update
+--- PASS: TestVirtualMachineScaleSetVMRunCommands_Update (0.07s)
+=== RUN   TestVirtualMachineScaleSetVMRunCommands_Delete
+--- PASS: TestVirtualMachineScaleSetVMRunCommands_Delete (0.07s)
+=== RUN   TestVirtualMachineScaleSetVMRunCommands_Get
+--- PASS: TestVirtualMachineScaleSetVMRunCommands_Get (0.04s)
+=== RUN   TestVirtualMachineScaleSetVMRunCommands_List
+--- PASS: TestVirtualMachineScaleSetVMRunCommands_List (0.04s)
+=== RUN   TestResourceSKUs_List
+    zt_generated_mock_test.go:28410: Failed to advance page for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-07-01/examples/skus/ListAvailableResourceSkusWithExtendedLocations.json: GET https://localhost:8443/subscriptions/{subscription-id}/providers/Microsoft.Compute/skus
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-07-01\" don't match example value \"2020-10-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestResourceSKUs_List (0.29s)
+=== RUN   TestDisks_CreateOrUpdate
+--- PASS: TestDisks_CreateOrUpdate (1.32s)
+=== RUN   TestDisks_Update
+--- PASS: TestDisks_Update (1.27s)
+=== RUN   TestDisks_Get
+--- PASS: TestDisks_Get (0.10s)
+=== RUN   TestDisks_Delete
+--- PASS: TestDisks_Delete (0.08s)
+=== RUN   TestDisks_ListByResourceGroup
+--- PASS: TestDisks_ListByResourceGroup (0.05s)
+=== RUN   TestDisks_List
+--- PASS: TestDisks_List (0.14s)
+=== RUN   TestDisks_GrantAccess
+--- PASS: TestDisks_GrantAccess (0.16s)
+=== RUN   TestDisks_RevokeAccess
+--- PASS: TestDisks_RevokeAccess (0.09s)
+=== RUN   TestSnapshots_CreateOrUpdate
+--- PASS: TestSnapshots_CreateOrUpdate (0.49s)
+=== RUN   TestSnapshots_Update
+--- PASS: TestSnapshots_Update (0.27s)
+=== RUN   TestSnapshots_Get
+--- PASS: TestSnapshots_Get (0.05s)
+=== RUN   TestSnapshots_Delete
+--- PASS: TestSnapshots_Delete (0.07s)
+=== RUN   TestSnapshots_ListByResourceGroup
+--- PASS: TestSnapshots_ListByResourceGroup (0.05s)
+=== RUN   TestSnapshots_List
+--- PASS: TestSnapshots_List (0.06s)
+=== RUN   TestSnapshots_GrantAccess
+--- PASS: TestSnapshots_GrantAccess (0.07s)
+=== RUN   TestSnapshots_RevokeAccess
+--- PASS: TestSnapshots_RevokeAccess (0.07s)
+=== RUN   TestDiskEncryptionSets_CreateOrUpdate
+--- PASS: TestDiskEncryptionSets_CreateOrUpdate (0.32s)
+=== RUN   TestDiskEncryptionSets_Update
+--- PASS: TestDiskEncryptionSets_Update (0.42s)
+=== RUN   TestDiskEncryptionSets_Get
+--- PASS: TestDiskEncryptionSets_Get (0.15s)
+=== RUN   TestDiskEncryptionSets_Delete
+--- PASS: TestDiskEncryptionSets_Delete (0.06s)
+=== RUN   TestDiskEncryptionSets_ListByResourceGroup
+--- PASS: TestDiskEncryptionSets_ListByResourceGroup (0.05s)
+=== RUN   TestDiskEncryptionSets_List
+--- PASS: TestDiskEncryptionSets_List (0.04s)
+=== RUN   TestDiskEncryptionSets_ListAssociatedResources
+--- PASS: TestDiskEncryptionSets_ListAssociatedResources (0.04s)
+=== RUN   TestDiskAccesses_CreateOrUpdate
+--- PASS: TestDiskAccesses_CreateOrUpdate (0.07s)
+=== RUN   TestDiskAccesses_Update
+--- PASS: TestDiskAccesses_Update (0.08s)
+=== RUN   TestDiskAccesses_Get
+--- PASS: TestDiskAccesses_Get (0.10s)
+=== RUN   TestDiskAccesses_Delete
+--- PASS: TestDiskAccesses_Delete (0.07s)
+=== RUN   TestDiskAccesses_ListByResourceGroup
+--- PASS: TestDiskAccesses_ListByResourceGroup (0.09s)
+=== RUN   TestDiskAccesses_List
+--- PASS: TestDiskAccesses_List (0.05s)
+=== RUN   TestDiskAccesses_GetPrivateLinkResources
+--- PASS: TestDiskAccesses_GetPrivateLinkResources (0.07s)
+=== RUN   TestDiskAccesses_UpdateAPrivateEndpointConnection
+--- PASS: TestDiskAccesses_UpdateAPrivateEndpointConnection (0.07s)
+=== RUN   TestDiskAccesses_GetAPrivateEndpointConnection
+--- PASS: TestDiskAccesses_GetAPrivateEndpointConnection (0.04s)
+=== RUN   TestDiskAccesses_DeleteAPrivateEndpointConnection
+--- PASS: TestDiskAccesses_DeleteAPrivateEndpointConnection (0.12s)
+=== RUN   TestDiskAccesses_ListPrivateEndpointConnections
+--- PASS: TestDiskAccesses_ListPrivateEndpointConnections (0.06s)
+=== RUN   TestDiskRestorePoint_Get
+--- PASS: TestDiskRestorePoint_Get (0.09s)
+=== RUN   TestDiskRestorePoint_ListByRestorePoint
+--- PASS: TestDiskRestorePoint_ListByRestorePoint (0.03s)
+=== RUN   TestDiskRestorePoint_GrantAccess
+--- PASS: TestDiskRestorePoint_GrantAccess (0.20s)
+=== RUN   TestDiskRestorePoint_RevokeAccess
+--- PASS: TestDiskRestorePoint_RevokeAccess (0.07s)
+=== RUN   TestGalleries_CreateOrUpdate
+--- PASS: TestGalleries_CreateOrUpdate (0.34s)
+=== RUN   TestGalleries_Update
+--- PASS: TestGalleries_Update (0.18s)
+=== RUN   TestGalleries_Get
+--- PASS: TestGalleries_Get (0.08s)
+=== RUN   TestGalleries_Delete
+--- PASS: TestGalleries_Delete (0.09s)
+=== RUN   TestGalleries_ListByResourceGroup
+--- PASS: TestGalleries_ListByResourceGroup (0.03s)
+=== RUN   TestGalleries_List
+--- PASS: TestGalleries_List (0.03s)
+=== RUN   TestGalleryImages_CreateOrUpdate
+--- PASS: TestGalleryImages_CreateOrUpdate (0.08s)
+=== RUN   TestGalleryImages_Update
+--- PASS: TestGalleryImages_Update (0.07s)
+=== RUN   TestGalleryImages_Get
+--- PASS: TestGalleryImages_Get (0.04s)
+=== RUN   TestGalleryImages_Delete
+--- PASS: TestGalleryImages_Delete (0.05s)
+=== RUN   TestGalleryImages_ListByGallery
+--- PASS: TestGalleryImages_ListByGallery (0.03s)
+=== RUN   TestGalleryImageVersions_CreateOrUpdate
+--- PASS: TestGalleryImageVersions_CreateOrUpdate (0.75s)
+=== RUN   TestGalleryImageVersions_Update
+--- PASS: TestGalleryImageVersions_Update (0.17s)
+=== RUN   TestGalleryImageVersions_Get
+    zt_generated_mock_test.go:34126: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-07-01/examples/gallery/GetAGalleryImageVersionWithSnapshotsAsSource.json: unmarshalling type *armcompute.GalleryImageVersion: json: cannot unmarshal string into Go struct field GalleryOSDiskImage.properties.storageProfile.osDiskImage.source of type armcompute.GalleryArtifactVersionSource
+--- FAIL: TestGalleryImageVersions_Get (0.09s)
+=== RUN   TestGalleryImageVersions_Delete
+--- PASS: TestGalleryImageVersions_Delete (0.07s)
+=== RUN   TestGalleryImageVersions_ListByGalleryImage
+--- PASS: TestGalleryImageVersions_ListByGalleryImage (0.05s)
+=== RUN   TestGalleryApplications_CreateOrUpdate
+--- PASS: TestGalleryApplications_CreateOrUpdate (0.11s)
+=== RUN   TestGalleryApplications_Update
+--- PASS: TestGalleryApplications_Update (0.16s)
+=== RUN   TestGalleryApplications_Get
+--- PASS: TestGalleryApplications_Get (0.13s)
+=== RUN   TestGalleryApplications_Delete
+--- PASS: TestGalleryApplications_Delete (0.06s)
+=== RUN   TestGalleryApplications_ListByGallery
+--- PASS: TestGalleryApplications_ListByGallery (0.05s)
+=== RUN   TestGalleryApplicationVersions_CreateOrUpdate
+--- PASS: TestGalleryApplicationVersions_CreateOrUpdate (0.08s)
+=== RUN   TestGalleryApplicationVersions_Update
+--- PASS: TestGalleryApplicationVersions_Update (0.14s)
+=== RUN   TestGalleryApplicationVersions_Get
+--- PASS: TestGalleryApplicationVersions_Get (0.07s)
+=== RUN   TestGalleryApplicationVersions_Delete
+--- PASS: TestGalleryApplicationVersions_Delete (0.06s)
+=== RUN   TestGalleryApplicationVersions_ListByGalleryApplication
+--- PASS: TestGalleryApplicationVersions_ListByGalleryApplication (0.03s)
+=== RUN   TestGallerySharingProfile_Update
+--- PASS: TestGallerySharingProfile_Update (0.15s)
+=== RUN   TestSharedGalleries_List
+--- PASS: TestSharedGalleries_List (0.05s)
+=== RUN   TestSharedGalleries_Get
+--- PASS: TestSharedGalleries_Get (0.03s)
+=== RUN   TestSharedGalleryImages_List
+--- PASS: TestSharedGalleryImages_List (0.04s)
+=== RUN   TestSharedGalleryImages_Get
+--- PASS: TestSharedGalleryImages_Get (0.04s)
+=== RUN   TestSharedGalleryImageVersions_List
+--- PASS: TestSharedGalleryImageVersions_List (0.04s)
+=== RUN   TestSharedGalleryImageVersions_Get
+--- PASS: TestSharedGalleryImageVersions_Get (0.04s)
+=== RUN   TestCommunityGalleries_Get
+--- PASS: TestCommunityGalleries_Get (0.05s)
+=== RUN   TestCommunityGalleryImages_Get
+--- PASS: TestCommunityGalleryImages_Get (0.05s)
+=== RUN   TestCommunityGalleryImageVersions_Get
+--- PASS: TestCommunityGalleryImageVersions_Get (0.03s)
+=== RUN   TestCloudServiceRoleInstances_Delete
+--- PASS: TestCloudServiceRoleInstances_Delete (0.08s)
+=== RUN   TestCloudServiceRoleInstances_Get
+--- PASS: TestCloudServiceRoleInstances_Get (0.04s)
+=== RUN   TestCloudServiceRoleInstances_GetInstanceView
+--- PASS: TestCloudServiceRoleInstances_GetInstanceView (0.04s)
+=== RUN   TestCloudServiceRoleInstances_List
+--- PASS: TestCloudServiceRoleInstances_List (0.03s)
+=== RUN   TestCloudServiceRoleInstances_Restart
+--- PASS: TestCloudServiceRoleInstances_Restart (0.06s)
+=== RUN   TestCloudServiceRoleInstances_Reimage
+--- PASS: TestCloudServiceRoleInstances_Reimage (0.06s)
+=== RUN   TestCloudServiceRoleInstances_Rebuild
+--- PASS: TestCloudServiceRoleInstances_Rebuild (0.07s)
+=== RUN   TestCloudServiceRoleInstances_GetRemoteDesktopFile
+    zt_generated_mock_test.go:35811: Warning: No test steps for this operation!
+--- SKIP: TestCloudServiceRoleInstances_GetRemoteDesktopFile (0.00s)
+=== RUN   TestCloudServiceRoles_Get
+--- PASS: TestCloudServiceRoles_Get (0.03s)
+=== RUN   TestCloudServiceRoles_List
+--- PASS: TestCloudServiceRoles_List (0.04s)
+=== RUN   TestCloudServices_CreateOrUpdate
+--- PASS: TestCloudServices_CreateOrUpdate (0.44s)
+=== RUN   TestCloudServices_Update
+--- PASS: TestCloudServices_Update (0.07s)
+=== RUN   TestCloudServices_Delete
+--- PASS: TestCloudServices_Delete (0.09s)
+=== RUN   TestCloudServices_Get
+--- PASS: TestCloudServices_Get (0.04s)
+=== RUN   TestCloudServices_GetInstanceView
+--- PASS: TestCloudServices_GetInstanceView (0.04s)
+=== RUN   TestCloudServices_ListAll
+--- PASS: TestCloudServices_ListAll (0.04s)
+=== RUN   TestCloudServices_List
+--- PASS: TestCloudServices_List (0.04s)
+=== RUN   TestCloudServices_Start
+--- PASS: TestCloudServices_Start (0.07s)
+=== RUN   TestCloudServices_PowerOff
+--- PASS: TestCloudServices_PowerOff (0.09s)
+=== RUN   TestCloudServices_Restart
+--- PASS: TestCloudServices_Restart (0.07s)
+=== RUN   TestCloudServices_Reimage
+--- PASS: TestCloudServices_Reimage (0.08s)
+=== RUN   TestCloudServices_Rebuild
+--- PASS: TestCloudServices_Rebuild (0.07s)
+=== RUN   TestCloudServices_DeleteInstances
+--- PASS: TestCloudServices_DeleteInstances (0.08s)
+=== RUN   TestCloudServicesUpdateDomain_WalkUpdateDomain
+    zt_generated_mock_test.go:37079: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/UpdateCloudServiceUpdateDomain.json: PUT https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/ConstosoRG/providers/Microsoft.Compute/cloudServices/{cs-name}/updateDomains/1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "path parameter updateDomain=\"1\" don't match example value 1"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestCloudServicesUpdateDomain_WalkUpdateDomain (0.04s)
+=== RUN   TestCloudServicesUpdateDomain_GetUpdateDomain
+    zt_generated_mock_test.go:37104: Failed to get result for example specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/GetCloudServiceUpdateDomain.json: GET https://localhost:8443/subscriptions/{subscription-id}/resourceGroups/ConstosoRG/providers/Microsoft.Compute/cloudServices/{cs-name}/updateDomains/1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "path parameter updateDomain=\"1\" don't match example value 1"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestCloudServicesUpdateDomain_GetUpdateDomain (0.03s)
+=== RUN   TestCloudServicesUpdateDomain_ListUpdateDomains
+--- PASS: TestCloudServicesUpdateDomain_ListUpdateDomains (0.03s)
+=== RUN   TestCloudServiceOperatingSystems_GetOSVersion
+--- PASS: TestCloudServiceOperatingSystems_GetOSVersion (0.04s)
+=== RUN   TestCloudServiceOperatingSystems_ListOSVersions
+--- PASS: TestCloudServiceOperatingSystems_ListOSVersions (0.03s)
+=== RUN   TestCloudServiceOperatingSystems_GetOSFamily
+--- PASS: TestCloudServiceOperatingSystems_GetOSFamily (0.03s)
+=== RUN   TestCloudServiceOperatingSystems_ListOSFamilies
+--- PASS: TestCloudServiceOperatingSystems_ListOSFamilies (0.04s)
+FAIL
+coverage: 70.0% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute	191.321s

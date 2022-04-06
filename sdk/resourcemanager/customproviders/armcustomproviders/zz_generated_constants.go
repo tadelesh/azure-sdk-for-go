@@ -27,11 +27,6 @@ func PossibleActionRoutingValues() []ActionRouting {
 	}
 }
 
-// ToPtr returns a *ActionRouting pointing to the current value.
-func (c ActionRouting) ToPtr() *ActionRouting {
-	return &c
-}
-
 // ProvisioningState - The provisioning state of the resource provider.
 type ProvisioningState string
 
@@ -54,11 +49,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // ResourceTypeRouting - The routing types that are supported for resource requests.
 type ResourceTypeRouting string
 
@@ -75,11 +65,6 @@ func PossibleResourceTypeRoutingValues() []ResourceTypeRouting {
 	}
 }
 
-// ToPtr returns a *ResourceTypeRouting pointing to the current value.
-func (c ResourceTypeRouting) ToPtr() *ResourceTypeRouting {
-	return &c
-}
-
 // ValidationType - The type of validation to run against a matching request.
 type ValidationType string
 
@@ -92,9 +77,4 @@ func PossibleValidationTypeValues() []ValidationType {
 	return []ValidationType{
 		ValidationTypeSwagger,
 	}
-}
-
-// ToPtr returns a *ValidationType pointing to the current value.
-func (c ValidationType) ToPtr() *ValidationType {
-	return &c
 }

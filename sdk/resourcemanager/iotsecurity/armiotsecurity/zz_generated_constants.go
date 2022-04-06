@@ -29,11 +29,6 @@ func PossibleAuthorizedStateValues() []AuthorizedState {
 	}
 }
 
-// ToPtr returns a *AuthorizedState pointing to the current value.
-func (c AuthorizedState) ToPtr() *AuthorizedState {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -54,11 +49,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // Criticality - Device criticality.
 type Criticality string
 
@@ -75,11 +65,6 @@ func PossibleCriticalityValues() []Criticality {
 		CriticalityLow,
 		CriticalityNormal,
 	}
-}
-
-// ToPtr returns a *Criticality pointing to the current value.
-func (c Criticality) ToPtr() *Criticality {
-	return &c
 }
 
 // DeviceDataSource - Device data source
@@ -104,11 +89,6 @@ func PossibleDeviceDataSourceValues() []DeviceDataSource {
 	}
 }
 
-// ToPtr returns a *DeviceDataSource pointing to the current value.
-func (c DeviceDataSource) ToPtr() *DeviceDataSource {
-	return &c
-}
-
 // DeviceStatus - Device status.
 type DeviceStatus string
 
@@ -129,11 +109,6 @@ func PossibleDeviceStatusValues() []DeviceStatus {
 	}
 }
 
-// ToPtr returns a *DeviceStatus pointing to the current value.
-func (c DeviceStatus) ToPtr() *DeviceStatus {
-	return &c
-}
-
 // MacCertainty - Indicates whether the association of the mac to the ip address is certain or a guess.
 type MacCertainty string
 
@@ -150,11 +125,6 @@ func PossibleMacCertaintyValues() []MacCertainty {
 	}
 }
 
-// ToPtr returns a *MacCertainty pointing to the current value.
-func (c MacCertainty) ToPtr() *MacCertainty {
-	return &c
-}
-
 // MdeIntegration - Integration status
 type MdeIntegration string
 
@@ -169,11 +139,6 @@ func PossibleMdeIntegrationValues() []MdeIntegration {
 		MdeIntegrationDisabled,
 		MdeIntegrationEnabled,
 	}
-}
-
-// ToPtr returns a *MdeIntegration pointing to the current value.
-func (c MdeIntegration) ToPtr() *MdeIntegration {
-	return &c
 }
 
 // OnboardingKind - The kind of onboarding for the subscription
@@ -196,11 +161,6 @@ func PossibleOnboardingKindValues() []OnboardingKind {
 	}
 }
 
-// ToPtr returns a *OnboardingKind pointing to the current value.
-func (c OnboardingKind) ToPtr() *OnboardingKind {
-	return &c
-}
-
 // OnboardingStatus - Device onboarding status.
 type OnboardingStatus string
 
@@ -221,11 +181,6 @@ func PossibleOnboardingStatusValues() []OnboardingStatus {
 	}
 }
 
-// ToPtr returns a *OnboardingStatus pointing to the current value.
-func (c OnboardingStatus) ToPtr() *OnboardingStatus {
-	return &c
-}
-
 // ProgrammingState - Indicates whether this device is programming
 type ProgrammingState string
 
@@ -240,11 +195,6 @@ func PossibleProgrammingStateValues() []ProgrammingState {
 		ProgrammingStateNotProgrammingDevice,
 		ProgrammingStateProgrammingDevice,
 	}
-}
-
-// ToPtr returns a *ProgrammingState pointing to the current value.
-func (c ProgrammingState) ToPtr() *ProgrammingState {
-	return &c
 }
 
 // PurdueLevel - Purdue level of the device.
@@ -265,11 +215,6 @@ func PossiblePurdueLevelValues() []PurdueLevel {
 	}
 }
 
-// ToPtr returns a *PurdueLevel pointing to the current value.
-func (c PurdueLevel) ToPtr() *PurdueLevel {
-	return &c
-}
-
 // SensorStatus - Status of the IoT sensor
 type SensorStatus string
 
@@ -288,11 +233,6 @@ func PossibleSensorStatusValues() []SensorStatus {
 	}
 }
 
-// ToPtr returns a *SensorStatus pointing to the current value.
-func (c SensorStatus) ToPtr() *SensorStatus {
-	return &c
-}
-
 // SensorType - Type of sensor
 type SensorType string
 
@@ -307,11 +247,6 @@ func PossibleSensorTypeValues() []SensorType {
 		SensorTypeEnterprise,
 		SensorTypeOt,
 	}
-}
-
-// ToPtr returns a *SensorType pointing to the current value.
-func (c SensorType) ToPtr() *SensorType {
-	return &c
 }
 
 // SlotType - Slot type.
@@ -340,11 +275,6 @@ func PossibleSlotTypeValues() []SlotType {
 	}
 }
 
-// ToPtr returns a *SlotType pointing to the current value.
-func (c SlotType) ToPtr() *SlotType {
-	return &c
-}
-
 // TiStatus - TI Status of the IoT sensor
 type TiStatus string
 
@@ -365,11 +295,6 @@ func PossibleTiStatusValues() []TiStatus {
 	}
 }
 
-// ToPtr returns a *TiStatus pointing to the current value.
-func (c TiStatus) ToPtr() *TiStatus {
-	return &c
-}
-
 // VersionKind - Kind of the version
 type VersionKind string
 
@@ -386,9 +311,4 @@ func PossibleVersionKindValues() []VersionKind {
 		VersionKindPreview,
 		VersionKindPrevious,
 	}
-}
-
-// ToPtr returns a *VersionKind pointing to the current value.
-func (c VersionKind) ToPtr() *VersionKind {
-	return &c
 }

@@ -29,11 +29,6 @@ func PossibleAccessPolicyRoleValues() []AccessPolicyRole {
 	}
 }
 
-// ToPtr returns a *AccessPolicyRole pointing to the current value.
-func (c AccessPolicyRole) ToPtr() *AccessPolicyRole {
-	return &c
-}
-
 // DataStringComparisonBehavior - The reference data set key comparison behavior can be set using this property. By default,
 // the value is 'Ordinal' - which means case sensitive key comparison will be performed while joining reference
 // data with events or while adding new reference data. When 'OrdinalIgnoreCase' is set, case insensitive comparison will
@@ -53,11 +48,6 @@ func PossibleDataStringComparisonBehaviorValues() []DataStringComparisonBehavior
 	}
 }
 
-// ToPtr returns a *DataStringComparisonBehavior pointing to the current value.
-func (c DataStringComparisonBehavior) ToPtr() *DataStringComparisonBehavior {
-	return &c
-}
-
 // EnvironmentKind - The kind of the environment.
 type EnvironmentKind string
 
@@ -72,11 +62,6 @@ func PossibleEnvironmentKindValues() []EnvironmentKind {
 		EnvironmentKindGen1,
 		EnvironmentKindGen2,
 	}
-}
-
-// ToPtr returns a *EnvironmentKind pointing to the current value.
-func (c EnvironmentKind) ToPtr() *EnvironmentKind {
-	return &c
 }
 
 // EnvironmentResourceKind - The kind of the environment.
@@ -95,11 +80,6 @@ func PossibleEnvironmentResourceKindValues() []EnvironmentResourceKind {
 	}
 }
 
-// ToPtr returns a *EnvironmentResourceKind pointing to the current value.
-func (c EnvironmentResourceKind) ToPtr() *EnvironmentResourceKind {
-	return &c
-}
-
 // EventSourceKind - The kind of the event source.
 type EventSourceKind string
 
@@ -114,11 +94,6 @@ func PossibleEventSourceKindValues() []EventSourceKind {
 		EventSourceKindMicrosoftEventHub,
 		EventSourceKindMicrosoftIoTHub,
 	}
-}
-
-// ToPtr returns a *EventSourceKind pointing to the current value.
-func (c EventSourceKind) ToPtr() *EventSourceKind {
-	return &c
 }
 
 // EventSourceResourceKind - The kind of the event source.
@@ -137,11 +112,6 @@ func PossibleEventSourceResourceKindValues() []EventSourceResourceKind {
 	}
 }
 
-// ToPtr returns a *EventSourceResourceKind pointing to the current value.
-func (c EventSourceResourceKind) ToPtr() *EventSourceResourceKind {
-	return &c
-}
-
 // IngressStartAtType - The type of the ingressStartAt, It can be "EarliestAvailable", "EventSourceCreationTime", "CustomEnqueuedTime".
 type IngressStartAtType string
 
@@ -158,11 +128,6 @@ func PossibleIngressStartAtTypeValues() []IngressStartAtType {
 		IngressStartAtTypeEarliestAvailable,
 		IngressStartAtTypeEventSourceCreationTime,
 	}
-}
-
-// ToPtr returns a *IngressStartAtType pointing to the current value.
-func (c IngressStartAtType) ToPtr() *IngressStartAtType {
-	return &c
 }
 
 // IngressState - This string represents the state of ingress operations on an environment. It can be "Disabled", "Ready",
@@ -188,11 +153,6 @@ func PossibleIngressStateValues() []IngressState {
 	}
 }
 
-// ToPtr returns a *IngressState pointing to the current value.
-func (c IngressState) ToPtr() *IngressState {
-	return &c
-}
-
 // LocalTimestampFormat - An enum that represents the format of the local timestamp property that needs to be set.
 type LocalTimestampFormat string
 
@@ -205,11 +165,6 @@ func PossibleLocalTimestampFormatValues() []LocalTimestampFormat {
 	return []LocalTimestampFormat{
 		LocalTimestampFormatEmbedded,
 	}
-}
-
-// ToPtr returns a *LocalTimestampFormat pointing to the current value.
-func (c LocalTimestampFormat) ToPtr() *LocalTimestampFormat {
-	return &c
 }
 
 // PrivateEndpointConnectionProvisioningState - The current provisioning state.
@@ -232,11 +187,6 @@ func PossiblePrivateEndpointConnectionProvisioningStateValues() []PrivateEndpoin
 	}
 }
 
-// ToPtr returns a *PrivateEndpointConnectionProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionProvisioningState) ToPtr() *PrivateEndpointConnectionProvisioningState {
-	return &c
-}
-
 // PrivateEndpointServiceConnectionStatus - The private endpoint connection status.
 type PrivateEndpointServiceConnectionStatus string
 
@@ -255,11 +205,6 @@ func PossiblePrivateEndpointServiceConnectionStatusValues() []PrivateEndpointSer
 	}
 }
 
-// ToPtr returns a *PrivateEndpointServiceConnectionStatus pointing to the current value.
-func (c PrivateEndpointServiceConnectionStatus) ToPtr() *PrivateEndpointServiceConnectionStatus {
-	return &c
-}
-
 // PropertyType - The type of the property.
 type PropertyType string
 
@@ -272,11 +217,6 @@ func PossiblePropertyTypeValues() []PropertyType {
 	return []PropertyType{
 		PropertyTypeString,
 	}
-}
-
-// ToPtr returns a *PropertyType pointing to the current value.
-func (c PropertyType) ToPtr() *PropertyType {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the resource.
@@ -303,11 +243,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // PublicNetworkAccess - This value can be set to 'enabled' to avoid breaking changes on existing customer resources and templates.
 // If set to 'disabled', traffic over public interface is not allowed, and private endpoint
 // connections would be the exclusive access method.
@@ -324,11 +259,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 		PublicNetworkAccessDisabled,
 		PublicNetworkAccessEnabled,
 	}
-}
-
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
 }
 
 // ReferenceDataKeyPropertyType - The type of the key property.
@@ -351,11 +281,6 @@ func PossibleReferenceDataKeyPropertyTypeValues() []ReferenceDataKeyPropertyType
 	}
 }
 
-// ToPtr returns a *ReferenceDataKeyPropertyType pointing to the current value.
-func (c ReferenceDataKeyPropertyType) ToPtr() *ReferenceDataKeyPropertyType {
-	return &c
-}
-
 // SKUName - The name of this SKU.
 type SKUName string
 
@@ -374,11 +299,6 @@ func PossibleSKUNameValues() []SKUName {
 		SKUNameS1,
 		SKUNameS2,
 	}
-}
-
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
 }
 
 // StorageLimitExceededBehavior - The behavior the Time Series Insights service should take when the environment's capacity
@@ -400,11 +320,6 @@ func PossibleStorageLimitExceededBehaviorValues() []StorageLimitExceededBehavior
 	}
 }
 
-// ToPtr returns a *StorageLimitExceededBehavior pointing to the current value.
-func (c StorageLimitExceededBehavior) ToPtr() *StorageLimitExceededBehavior {
-	return &c
-}
-
 // WarmStoragePropertiesState - This string represents the state of warm storage properties usage. It can be "Ok", "Error",
 // "Unknown".
 type WarmStoragePropertiesState string
@@ -422,9 +337,4 @@ func PossibleWarmStoragePropertiesStateValues() []WarmStoragePropertiesState {
 		WarmStoragePropertiesStateOk,
 		WarmStoragePropertiesStateUnknown,
 	}
-}
-
-// ToPtr returns a *WarmStoragePropertiesState pointing to the current value.
-func (c WarmStoragePropertiesState) ToPtr() *WarmStoragePropertiesState {
-	return &c
 }

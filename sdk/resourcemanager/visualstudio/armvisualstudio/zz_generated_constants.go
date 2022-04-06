@@ -32,8 +32,3 @@ func PossibleAccountResourceRequestOperationTypeValues() []AccountResourceReques
 		AccountResourceRequestOperationTypeLink,
 	}
 }
-
-// ToPtr returns a *AccountResourceRequestOperationType pointing to the current value.
-func (c AccountResourceRequestOperationType) ToPtr() *AccountResourceRequestOperationType {
-	return &c
-}

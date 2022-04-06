@@ -29,11 +29,6 @@ func PossibleAccessTierValues() []AccessTier {
 	}
 }
 
-// ToPtr returns a *AccessTier pointing to the current value.
-func (c AccessTier) ToPtr() *AccessTier {
-	return &c
-}
-
 // AccountImmutabilityPolicyState - The ImmutabilityPolicy state defines the mode of the policy. Disabled state disables the
 // policy, Unlocked state allows increase and decrease of immutability retention time and also allows toggling
 // allowProtectedAppendWrites property, Locked state only allows the increase of the immutability retention time. A policy
@@ -56,11 +51,6 @@ func PossibleAccountImmutabilityPolicyStateValues() []AccountImmutabilityPolicyS
 	}
 }
 
-// ToPtr returns a *AccountImmutabilityPolicyState pointing to the current value.
-func (c AccountImmutabilityPolicyState) ToPtr() *AccountImmutabilityPolicyState {
-	return &c
-}
-
 // AccountStatus - Gets the status indicating whether the primary location of the storage account is available or unavailable.
 type AccountStatus string
 
@@ -75,11 +65,6 @@ func PossibleAccountStatusValues() []AccountStatus {
 		AccountStatusAvailable,
 		AccountStatusUnavailable,
 	}
-}
-
-// ToPtr returns a *AccountStatus pointing to the current value.
-func (c AccountStatus) ToPtr() *AccountStatus {
-	return &c
 }
 
 // ActiveDirectoryPropertiesAccountType - Specifies the Active Directory account type for Azure Storage.
@@ -98,11 +83,6 @@ func PossibleActiveDirectoryPropertiesAccountTypeValues() []ActiveDirectoryPrope
 	}
 }
 
-// ToPtr returns a *ActiveDirectoryPropertiesAccountType pointing to the current value.
-func (c ActiveDirectoryPropertiesAccountType) ToPtr() *ActiveDirectoryPropertiesAccountType {
-	return &c
-}
-
 // AllowedCopyScope - Restrict copy to and from Storage Accounts within an AAD tenant or with Private Links to the same VNet.
 type AllowedCopyScope string
 
@@ -119,11 +99,6 @@ func PossibleAllowedCopyScopeValues() []AllowedCopyScope {
 	}
 }
 
-// ToPtr returns a *AllowedCopyScope pointing to the current value.
-func (c AllowedCopyScope) ToPtr() *AllowedCopyScope {
-	return &c
-}
-
 type BlobInventoryPolicyName string
 
 const (
@@ -135,11 +110,6 @@ func PossibleBlobInventoryPolicyNameValues() []BlobInventoryPolicyName {
 	return []BlobInventoryPolicyName{
 		BlobInventoryPolicyNameDefault,
 	}
-}
-
-// ToPtr returns a *BlobInventoryPolicyName pointing to the current value.
-func (c BlobInventoryPolicyName) ToPtr() *BlobInventoryPolicyName {
-	return &c
 }
 
 // BlobRestoreProgressStatus - The status of blob restore progress. Possible values are: - InProgress: Indicates that blob
@@ -162,11 +132,6 @@ func PossibleBlobRestoreProgressStatusValues() []BlobRestoreProgressStatus {
 	}
 }
 
-// ToPtr returns a *BlobRestoreProgressStatus pointing to the current value.
-func (c BlobRestoreProgressStatus) ToPtr() *BlobRestoreProgressStatus {
-	return &c
-}
-
 // Bypass - Specifies whether traffic is bypassed for Logging/Metrics/AzureServices. Possible values are any combination of
 // Logging|Metrics|AzureServices (For example, "Logging, Metrics"), or None to bypass none
 // of those traffics.
@@ -187,11 +152,6 @@ func PossibleBypassValues() []Bypass {
 		BypassMetrics,
 		BypassNone,
 	}
-}
-
-// ToPtr returns a *Bypass pointing to the current value.
-func (c Bypass) ToPtr() *Bypass {
-	return &c
 }
 
 type CorsRuleAllowedMethodsItem string
@@ -219,11 +179,6 @@ func PossibleCorsRuleAllowedMethodsItemValues() []CorsRuleAllowedMethodsItem {
 	}
 }
 
-// ToPtr returns a *CorsRuleAllowedMethodsItem pointing to the current value.
-func (c CorsRuleAllowedMethodsItem) ToPtr() *CorsRuleAllowedMethodsItem {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -244,11 +199,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DefaultAction - Specifies the default action of allow or deny when no other rules match.
 type DefaultAction string
 
@@ -263,11 +213,6 @@ func PossibleDefaultActionValues() []DefaultAction {
 		DefaultActionAllow,
 		DefaultActionDeny,
 	}
-}
-
-// ToPtr returns a *DefaultAction pointing to the current value.
-func (c DefaultAction) ToPtr() *DefaultAction {
-	return &c
 }
 
 // DefaultSharePermission - Default share permission for users using Kerberos authentication if RBAC role is not assigned.
@@ -290,11 +235,6 @@ func PossibleDefaultSharePermissionValues() []DefaultSharePermission {
 	}
 }
 
-// ToPtr returns a *DefaultSharePermission pointing to the current value.
-func (c DefaultSharePermission) ToPtr() *DefaultSharePermission {
-	return &c
-}
-
 // DirectoryServiceOptions - Indicates the directory service used.
 type DirectoryServiceOptions string
 
@@ -313,11 +253,6 @@ func PossibleDirectoryServiceOptionsValues() []DirectoryServiceOptions {
 	}
 }
 
-// ToPtr returns a *DirectoryServiceOptions pointing to the current value.
-func (c DirectoryServiceOptions) ToPtr() *DirectoryServiceOptions {
-	return &c
-}
-
 // EnabledProtocols - The authentication protocol that is used for the file share. Can only be specified when creating a share.
 type EnabledProtocols string
 
@@ -332,11 +267,6 @@ func PossibleEnabledProtocolsValues() []EnabledProtocols {
 		EnabledProtocolsNFS,
 		EnabledProtocolsSMB,
 	}
-}
-
-// ToPtr returns a *EnabledProtocols pointing to the current value.
-func (c EnabledProtocols) ToPtr() *EnabledProtocols {
-	return &c
 }
 
 // EncryptionScopeSource - The provider for the encryption scope. Possible values (case-insensitive): Microsoft.Storage, Microsoft.KeyVault.
@@ -355,11 +285,6 @@ func PossibleEncryptionScopeSourceValues() []EncryptionScopeSource {
 	}
 }
 
-// ToPtr returns a *EncryptionScopeSource pointing to the current value.
-func (c EncryptionScopeSource) ToPtr() *EncryptionScopeSource {
-	return &c
-}
-
 // EncryptionScopeState - The state of the encryption scope. Possible values (case-insensitive): Enabled, Disabled.
 type EncryptionScopeState string
 
@@ -376,11 +301,6 @@ func PossibleEncryptionScopeStateValues() []EncryptionScopeState {
 	}
 }
 
-// ToPtr returns a *EncryptionScopeState pointing to the current value.
-func (c EncryptionScopeState) ToPtr() *EncryptionScopeState {
-	return &c
-}
-
 // ExpirationAction - The SAS expiration action. Can only be Log.
 type ExpirationAction string
 
@@ -393,11 +313,6 @@ func PossibleExpirationActionValues() []ExpirationAction {
 	return []ExpirationAction{
 		ExpirationActionLog,
 	}
-}
-
-// ToPtr returns a *ExpirationAction pointing to the current value.
-func (c ExpirationAction) ToPtr() *ExpirationAction {
-	return &c
 }
 
 // ExtendedLocationTypes - The type of extendedLocation.
@@ -414,11 +329,6 @@ func PossibleExtendedLocationTypesValues() []ExtendedLocationTypes {
 	}
 }
 
-// ToPtr returns a *ExtendedLocationTypes pointing to the current value.
-func (c ExtendedLocationTypes) ToPtr() *ExtendedLocationTypes {
-	return &c
-}
-
 // Format - This is a required field, it specifies the format for the inventory files.
 type Format string
 
@@ -433,11 +343,6 @@ func PossibleFormatValues() []Format {
 		FormatCSV,
 		FormatParquet,
 	}
-}
-
-// ToPtr returns a *Format pointing to the current value.
-func (c Format) ToPtr() *Format {
-	return &c
 }
 
 // GeoReplicationStatus - The status of the secondary location. Possible values are: - Live: Indicates that the secondary
@@ -461,11 +366,6 @@ func PossibleGeoReplicationStatusValues() []GeoReplicationStatus {
 	}
 }
 
-// ToPtr returns a *GeoReplicationStatus pointing to the current value.
-func (c GeoReplicationStatus) ToPtr() *GeoReplicationStatus {
-	return &c
-}
-
 // HTTPProtocol - The protocol permitted for a request made with the account SAS.
 type HTTPProtocol string
 
@@ -480,11 +380,6 @@ func PossibleHTTPProtocolValues() []HTTPProtocol {
 		HTTPProtocolHTTPSHTTP,
 		HTTPProtocolHTTPS,
 	}
-}
-
-// ToPtr returns a *HTTPProtocol pointing to the current value.
-func (c HTTPProtocol) ToPtr() *HTTPProtocol {
-	return &c
 }
 
 // IdentityType - The identity type.
@@ -507,11 +402,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 // ImmutabilityPolicyState - The ImmutabilityPolicy state of a blob container, possible values include: Locked and Unlocked.
 type ImmutabilityPolicyState string
 
@@ -526,11 +416,6 @@ func PossibleImmutabilityPolicyStateValues() []ImmutabilityPolicyState {
 		ImmutabilityPolicyStateLocked,
 		ImmutabilityPolicyStateUnlocked,
 	}
-}
-
-// ToPtr returns a *ImmutabilityPolicyState pointing to the current value.
-func (c ImmutabilityPolicyState) ToPtr() *ImmutabilityPolicyState {
-	return &c
 }
 
 // ImmutabilityPolicyUpdateType - The ImmutabilityPolicy update type of a blob container, possible values include: put, lock
@@ -552,11 +437,6 @@ func PossibleImmutabilityPolicyUpdateTypeValues() []ImmutabilityPolicyUpdateType
 	}
 }
 
-// ToPtr returns a *ImmutabilityPolicyUpdateType pointing to the current value.
-func (c ImmutabilityPolicyUpdateType) ToPtr() *ImmutabilityPolicyUpdateType {
-	return &c
-}
-
 // InventoryRuleType - The valid value is Inventory
 type InventoryRuleType string
 
@@ -569,11 +449,6 @@ func PossibleInventoryRuleTypeValues() []InventoryRuleType {
 	return []InventoryRuleType{
 		InventoryRuleTypeInventory,
 	}
-}
-
-// ToPtr returns a *InventoryRuleType pointing to the current value.
-func (c InventoryRuleType) ToPtr() *InventoryRuleType {
-	return &c
 }
 
 // KeyPermission - Permissions for the key -- read-only or full permissions.
@@ -592,11 +467,6 @@ func PossibleKeyPermissionValues() []KeyPermission {
 	}
 }
 
-// ToPtr returns a *KeyPermission pointing to the current value.
-func (c KeyPermission) ToPtr() *KeyPermission {
-	return &c
-}
-
 // KeySource - The encryption keySource (provider). Possible values (case-insensitive): Microsoft.Storage, Microsoft.Keyvault
 type KeySource string
 
@@ -611,11 +481,6 @@ func PossibleKeySourceValues() []KeySource {
 		KeySourceMicrosoftKeyvault,
 		KeySourceMicrosoftStorage,
 	}
-}
-
-// ToPtr returns a *KeySource pointing to the current value.
-func (c KeySource) ToPtr() *KeySource {
-	return &c
 }
 
 // KeyType - Encryption key type to be used for the encryption service. 'Account' key type implies that an account-scoped
@@ -633,11 +498,6 @@ func PossibleKeyTypeValues() []KeyType {
 		KeyTypeAccount,
 		KeyTypeService,
 	}
-}
-
-// ToPtr returns a *KeyType pointing to the current value.
-func (c KeyType) ToPtr() *KeyType {
-	return &c
 }
 
 // Kind - Indicates the type of storage account.
@@ -662,11 +522,6 @@ func PossibleKindValues() []Kind {
 	}
 }
 
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
-}
-
 // LargeFileSharesState - Allow large file shares if sets to Enabled. It cannot be disabled once it is enabled.
 type LargeFileSharesState string
 
@@ -681,11 +536,6 @@ func PossibleLargeFileSharesStateValues() []LargeFileSharesState {
 		LargeFileSharesStateDisabled,
 		LargeFileSharesStateEnabled,
 	}
-}
-
-// ToPtr returns a *LargeFileSharesState pointing to the current value.
-func (c LargeFileSharesState) ToPtr() *LargeFileSharesState {
-	return &c
 }
 
 // LeaseContainerRequestAction - Specifies the lease action. Can be one of the available actions.
@@ -710,11 +560,6 @@ func PossibleLeaseContainerRequestActionValues() []LeaseContainerRequestAction {
 	}
 }
 
-// ToPtr returns a *LeaseContainerRequestAction pointing to the current value.
-func (c LeaseContainerRequestAction) ToPtr() *LeaseContainerRequestAction {
-	return &c
-}
-
 // LeaseDuration - Specifies whether the lease on a container is of infinite or fixed duration, only when the container is
 // leased.
 type LeaseDuration string
@@ -730,11 +575,6 @@ func PossibleLeaseDurationValues() []LeaseDuration {
 		LeaseDurationFixed,
 		LeaseDurationInfinite,
 	}
-}
-
-// ToPtr returns a *LeaseDuration pointing to the current value.
-func (c LeaseDuration) ToPtr() *LeaseDuration {
-	return &c
 }
 
 // LeaseShareAction - Specifies the lease action. Can be one of the available actions.
@@ -759,11 +599,6 @@ func PossibleLeaseShareActionValues() []LeaseShareAction {
 	}
 }
 
-// ToPtr returns a *LeaseShareAction pointing to the current value.
-func (c LeaseShareAction) ToPtr() *LeaseShareAction {
-	return &c
-}
-
 // LeaseState - Lease state of the container.
 type LeaseState string
 
@@ -786,11 +621,6 @@ func PossibleLeaseStateValues() []LeaseState {
 	}
 }
 
-// ToPtr returns a *LeaseState pointing to the current value.
-func (c LeaseState) ToPtr() *LeaseState {
-	return &c
-}
-
 // LeaseStatus - The lease status of the container.
 type LeaseStatus string
 
@@ -807,11 +637,6 @@ func PossibleLeaseStatusValues() []LeaseStatus {
 	}
 }
 
-// ToPtr returns a *LeaseStatus pointing to the current value.
-func (c LeaseStatus) ToPtr() *LeaseStatus {
-	return &c
-}
-
 type ListContainersInclude string
 
 const (
@@ -825,11 +650,6 @@ func PossibleListContainersIncludeValues() []ListContainersInclude {
 	}
 }
 
-// ToPtr returns a *ListContainersInclude pointing to the current value.
-func (c ListContainersInclude) ToPtr() *ListContainersInclude {
-	return &c
-}
-
 type ManagementPolicyName string
 
 const (
@@ -841,11 +661,6 @@ func PossibleManagementPolicyNameValues() []ManagementPolicyName {
 	return []ManagementPolicyName{
 		ManagementPolicyNameDefault,
 	}
-}
-
-// ToPtr returns a *ManagementPolicyName pointing to the current value.
-func (c ManagementPolicyName) ToPtr() *ManagementPolicyName {
-	return &c
 }
 
 // MigrationState - This property denotes the container level immutability to object level immutability migration state.
@@ -862,11 +677,6 @@ func PossibleMigrationStateValues() []MigrationState {
 		MigrationStateCompleted,
 		MigrationStateInProgress,
 	}
-}
-
-// ToPtr returns a *MigrationState pointing to the current value.
-func (c MigrationState) ToPtr() *MigrationState {
-	return &c
 }
 
 // MinimumTLSVersion - Set the minimum TLS version to be permitted on requests to storage. The default interpretation is TLS
@@ -888,11 +698,6 @@ func PossibleMinimumTLSVersionValues() []MinimumTLSVersion {
 	}
 }
 
-// ToPtr returns a *MinimumTLSVersion pointing to the current value.
-func (c MinimumTLSVersion) ToPtr() *MinimumTLSVersion {
-	return &c
-}
-
 // Name - Name of the policy. The valid value is AccessTimeTracking. This field is currently read only
 type Name string
 
@@ -905,11 +710,6 @@ func PossibleNameValues() []Name {
 	return []Name{
 		NameAccessTimeTracking,
 	}
-}
-
-// ToPtr returns a *Name pointing to the current value.
-func (c Name) ToPtr() *Name {
-	return &c
 }
 
 // ObjectType - This is a required field. This field specifies the scope of the inventory created either at the blob or container
@@ -927,11 +727,6 @@ func PossibleObjectTypeValues() []ObjectType {
 		ObjectTypeBlob,
 		ObjectTypeContainer,
 	}
-}
-
-// ToPtr returns a *ObjectType pointing to the current value.
-func (c ObjectType) ToPtr() *ObjectType {
-	return &c
 }
 
 // Permissions - The signed permissions for the account SAS. Possible values include: Read (r), Write (w), Delete (d), List
@@ -963,11 +758,6 @@ func PossiblePermissionsValues() []Permissions {
 	}
 }
 
-// ToPtr returns a *Permissions pointing to the current value.
-func (c Permissions) ToPtr() *Permissions {
-	return &c
-}
-
 // PrivateEndpointConnectionProvisioningState - The current provisioning state.
 type PrivateEndpointConnectionProvisioningState string
 
@@ -988,11 +778,6 @@ func PossiblePrivateEndpointConnectionProvisioningStateValues() []PrivateEndpoin
 	}
 }
 
-// ToPtr returns a *PrivateEndpointConnectionProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionProvisioningState) ToPtr() *PrivateEndpointConnectionProvisioningState {
-	return &c
-}
-
 // PrivateEndpointServiceConnectionStatus - The private endpoint connection status.
 type PrivateEndpointServiceConnectionStatus string
 
@@ -1009,11 +794,6 @@ func PossiblePrivateEndpointServiceConnectionStatusValues() []PrivateEndpointSer
 		PrivateEndpointServiceConnectionStatusPending,
 		PrivateEndpointServiceConnectionStatusRejected,
 	}
-}
-
-// ToPtr returns a *PrivateEndpointServiceConnectionStatus pointing to the current value.
-func (c PrivateEndpointServiceConnectionStatus) ToPtr() *PrivateEndpointServiceConnectionStatus {
-	return &c
 }
 
 // ProvisioningState - Gets the status of the storage account at the time the operation was called.
@@ -1034,11 +814,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // PublicAccess - Specifies whether data in the container may be accessed publicly and the level of access.
 type PublicAccess string
 
@@ -1055,11 +830,6 @@ func PossiblePublicAccessValues() []PublicAccess {
 		PublicAccessBlob,
 		PublicAccessNone,
 	}
-}
-
-// ToPtr returns a *PublicAccess pointing to the current value.
-func (c PublicAccess) ToPtr() *PublicAccess {
-	return &c
 }
 
 // PublicNetworkAccess - Allow or disallow public network access to Storage Account. Value is optional but if passed in, must
@@ -1079,11 +849,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 	}
 }
 
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
-}
-
 // Reason - Gets the reason that a storage account name could not be used. The Reason element is only returned if NameAvailable
 // is false.
 type Reason string
@@ -1099,11 +864,6 @@ func PossibleReasonValues() []Reason {
 		ReasonAccountNameInvalid,
 		ReasonAlreadyExists,
 	}
-}
-
-// ToPtr returns a *Reason pointing to the current value.
-func (c Reason) ToPtr() *Reason {
-	return &c
 }
 
 // ReasonCode - The reason for the restriction. As of now this can be "QuotaId" or "NotAvailableForSubscription". Quota Id
@@ -1124,11 +884,6 @@ func PossibleReasonCodeValues() []ReasonCode {
 	}
 }
 
-// ToPtr returns a *ReasonCode pointing to the current value.
-func (c ReasonCode) ToPtr() *ReasonCode {
-	return &c
-}
-
 // RootSquashType - The property is for NFS share only. The default is NoRootSquash.
 type RootSquashType string
 
@@ -1147,11 +902,6 @@ func PossibleRootSquashTypeValues() []RootSquashType {
 	}
 }
 
-// ToPtr returns a *RootSquashType pointing to the current value.
-func (c RootSquashType) ToPtr() *RootSquashType {
-	return &c
-}
-
 // RoutingChoice - Routing Choice defines the kind of network routing opted by the user.
 type RoutingChoice string
 
@@ -1168,11 +918,6 @@ func PossibleRoutingChoiceValues() []RoutingChoice {
 	}
 }
 
-// ToPtr returns a *RoutingChoice pointing to the current value.
-func (c RoutingChoice) ToPtr() *RoutingChoice {
-	return &c
-}
-
 // RuleType - The valid value is Lifecycle
 type RuleType string
 
@@ -1185,11 +930,6 @@ func PossibleRuleTypeValues() []RuleType {
 	return []RuleType{
 		RuleTypeLifecycle,
 	}
-}
-
-// ToPtr returns a *RuleType pointing to the current value.
-func (c RuleType) ToPtr() *RuleType {
-	return &c
 }
 
 // SKUName - The SKU name. Required for account creation; optional for update. Note that in older versions, SKU name was called
@@ -1221,11 +961,6 @@ func PossibleSKUNameValues() []SKUName {
 	}
 }
 
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
-}
-
 // SKUTier - The SKU tier. This is based on the SKU name.
 type SKUTier string
 
@@ -1242,11 +977,6 @@ func PossibleSKUTierValues() []SKUTier {
 	}
 }
 
-// ToPtr returns a *SKUTier pointing to the current value.
-func (c SKUTier) ToPtr() *SKUTier {
-	return &c
-}
-
 // Schedule - This is a required field. This field is used to schedule an inventory formation.
 type Schedule string
 
@@ -1261,11 +991,6 @@ func PossibleScheduleValues() []Schedule {
 		ScheduleDaily,
 		ScheduleWeekly,
 	}
-}
-
-// ToPtr returns a *Schedule pointing to the current value.
-func (c Schedule) ToPtr() *Schedule {
-	return &c
 }
 
 // Services - The signed services accessible with the account SAS. Possible values include: Blob (b), Queue (q), Table (t),
@@ -1289,11 +1014,6 @@ func PossibleServicesValues() []Services {
 	}
 }
 
-// ToPtr returns a *Services pointing to the current value.
-func (c Services) ToPtr() *Services {
-	return &c
-}
-
 // ShareAccessTier - Access tier for specific share. GpV2 account can choose between TransactionOptimized (default), Hot,
 // and Cool. FileStorage account can choose Premium.
 type ShareAccessTier string
@@ -1313,11 +1033,6 @@ func PossibleShareAccessTierValues() []ShareAccessTier {
 		ShareAccessTierPremium,
 		ShareAccessTierTransactionOptimized,
 	}
-}
-
-// ToPtr returns a *ShareAccessTier pointing to the current value.
-func (c ShareAccessTier) ToPtr() *ShareAccessTier {
-	return &c
 }
 
 // SignedResource - The signed services accessible with the service SAS. Possible values include: Blob (b), Container (c),
@@ -1341,11 +1056,6 @@ func PossibleSignedResourceValues() []SignedResource {
 	}
 }
 
-// ToPtr returns a *SignedResource pointing to the current value.
-func (c SignedResource) ToPtr() *SignedResource {
-	return &c
-}
-
 // SignedResourceTypes - The signed resource types that are accessible with the account SAS. Service (s): Access to service-level
 // APIs; Container (c): Access to container-level APIs; Object (o): Access to object-level APIs
 // for blobs, queue messages, table entities, and files.
@@ -1364,11 +1074,6 @@ func PossibleSignedResourceTypesValues() []SignedResourceTypes {
 		SignedResourceTypesO,
 		SignedResourceTypesS,
 	}
-}
-
-// ToPtr returns a *SignedResourceTypes pointing to the current value.
-func (c SignedResourceTypes) ToPtr() *SignedResourceTypes {
-	return &c
 }
 
 // State - Gets the state of virtual network rule.
@@ -1393,11 +1098,6 @@ func PossibleStateValues() []State {
 	}
 }
 
-// ToPtr returns a *State pointing to the current value.
-func (c State) ToPtr() *State {
-	return &c
-}
-
 type StorageAccountExpand string
 
 const (
@@ -1411,11 +1111,6 @@ func PossibleStorageAccountExpandValues() []StorageAccountExpand {
 		StorageAccountExpandGeoReplicationStats,
 		StorageAccountExpandBlobRestoreStatus,
 	}
-}
-
-// ToPtr returns a *StorageAccountExpand pointing to the current value.
-func (c StorageAccountExpand) ToPtr() *StorageAccountExpand {
-	return &c
 }
 
 // UsageUnit - Gets the unit of measurement.
@@ -1440,9 +1135,4 @@ func PossibleUsageUnitValues() []UsageUnit {
 		UsageUnitCountsPerSecond,
 		UsageUnitBytesPerSecond,
 	}
-}
-
-// ToPtr returns a *UsageUnit pointing to the current value.
-func (c UsageUnit) ToPtr() *UsageUnit {
-	return &c
 }

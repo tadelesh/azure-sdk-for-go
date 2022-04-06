@@ -1,0 +1,1424 @@
+=== RUN   TestApplicationGateways_Delete
+--- PASS: TestApplicationGateways_Delete (0.16s)
+=== RUN   TestApplicationGateways_Get
+    zt_generated_mock_test.go:80: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ApplicationGatewayGet.json: unmarshalling type *armnetwork.ApplicationGateway: json: cannot unmarshal string into Go struct field ApplicationGatewayBackendAddressPoolPropertiesFormat.properties.backendAddressPools.properties.backendAddresses of type armnetwork.ApplicationGatewayBackendAddress
+--- FAIL: TestApplicationGateways_Get (0.11s)
+=== RUN   TestApplicationGateways_CreateOrUpdate
+    zt_generated_mock_test.go:761: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ApplicationGatewayCreate.json: PUT https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"identity\":{\"type\":\"UserAssigned\",\"userAssignedIdentities\":{\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity1\":{}}},\"location\":\"eastus\",\"properties\":{\"backendAddressPools\":[{\"name\":\"appgwpool\",\"properties\":{\"backendAddresses\":[{\"ipAddress\":\"10.0.1.1\"},{\"ipAddress\":\"10.0.1.2\"}]}},{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool1\",\"name\":\"appgwpool1\",\"properties\":{\"backendAddresses\":[{},{}]}}],\"backendHttpSettingsCollection\":[{\"name\":\"appgwbhs\",\"properties\":{\"cookieBasedAffinity\":\"Disabled\",\"port\":80,\"protocol\":\"Http\",\"requestTimeout\":30}}],\"frontendIPConfigurations\":[{\"name\":\"appgwfip\",\"properties\":{\"publicIPAddress\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/publicIPAddresses/appgwpip\"}}}],\"frontendPorts\":[{\"name\":\"appgwfp\",\"properties\":{\"port\":443}},{\"name\":\"appgwfp80\",\"properties\":{\"port\":80}}],\"gatewayIPConfigurations\":[{\"name\":\"appgwipc\",\"properties\":{\"subnet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworks/vnet/subnets/appgwsubnet\"}}}],\"globalConfiguration\":{\"enableRequestBuffering\":true,\"enableResponseBuffering\":true},\"httpListeners\":[{\"name\":\"appgwhl\",\"properties\":{\"frontendIPConfiguration\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendIPConfigurations/appgwfip\"},\"frontendPort\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendPorts/appgwfp\"},\"protocol\":\"Https\",\"requireServerNameIndication\":false,\"sslCertificate\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/sslCertificates/sslcert\"},\"sslProfile\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/sslProfiles/sslProfile1\"}}},{\"name\":\"appgwhttplistener\",\"properties\":{\"frontendIPConfiguration\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendIPConfigurations/appgwfip\"},\"frontendPort\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendPorts/appgwfp80\"},\"protocol\":\"Http\"}}],\"loadDistributionPolicies\":[{\"name\":\"ldp1\",\"properties\":{\"loadDistributionAlgorithm\":\"RoundRobin\",\"loadDistributionTargets\":[{\"name\":\"ld11\",\"properties\":{\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"weightPerServer\":40}},{\"name\":\"ld11\",\"properties\":{\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool1\"},\"weightPerServer\":60}}]}}],\"requestRoutingRules\":[{\"name\":\"appgwrule\",\"properties\":{\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"backendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"httpListener\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/httpListeners/appgwhl\"},\"loadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"},\"priority\":10,\"rewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"},\"ruleType\":\"Basic\"}},{\"name\":\"appgwPathBasedRule\",\"properties\":{\"httpListener\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/httpListeners/appgwhttplistener\"},\"priority\":20,\"ruleType\":\"PathBasedRouting\",\"urlPathMap\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/urlPathMaps/pathMap1\"}}}],\"rewriteRuleSets\":[{\"name\":\"rewriteRuleSet1\",\"properties\":{\"rewriteRules\":[{\"actionSet\":{\"requestHeaderConfigurations\":[{\"headerName\":\"X-Forwarded-For\",\"headerValue\":\"{var_add_x_forwarded_for_proxy}\"}],\"responseHeaderConfigurations\":[{\"headerName\":\"Strict-Transport-Security\",\"headerValue\":\"max-age=31536000\"}],\"urlConfiguration\":{\"modifiedPath\":\"/abc\"}},\"conditions\":[{\"ignoreCase\":true,\"negate\":false,\"pattern\":\"^Bearer\",\"variable\":\"http_req_Authorization\"}],\"name\":\"Set X-Forwarded-For\",\"ruleSequence\":102}]}}],\"sku\":{\"capacity\":3,\"name\":\"Standard_v2\",\"tier\":\"Standard_v2\"},\"sslCertificates\":[{\"name\":\"sslcert\",\"properties\":{\"data\":\"****\",\"password\":\"****\"}},{\"name\":\"sslcert2\",\"properties\":{\"keyVaultSecretId\":\"https://kv/secret\"}}],\"sslProfiles\":[{\"name\":\"sslProfile1\",\"properties\":{\"clientAuthConfiguration\":{\"verifyClientCertIssuerDN\":true},\"sslPolicy\":{\"cipherSuites\":[\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256\"],\"minProtocolVersion\":\"TLSv1_1\",\"policyType\":\"Custom\"},\"trustedClientCertificates\":[{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/trustedClientCertificates/clientcert\"}]}}],\"trustedClientCertificates\":[{\"name\":\"clientcert\",\"properties\":{\"data\":\"****\"}}],\"trustedRootCertificates\":[{\"name\":\"rootcert\",\"properties\":{\"data\":\"****\"}},{\"name\":\"rootcert1\",\"properties\":{\"keyVaultSecretId\":\"https://kv/secret\"}}],\"urlPathMaps\":[{\"name\":\"pathMap1\",\"properties\":{\"defaultBackendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"defaultBackendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"defaultLoadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"},\"defaultRewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"},\"pathRules\":[{\"name\":\"apiPaths\",\"properties\":{\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"backendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"loadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"},\"paths\":[\"/api\",\"/v1/api\"],\"rewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"}}}]}}]}} don't match example value {\"identity\":{\"type\":\"UserAssigned\",\"userAssignedIdentities\":{\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity1\":{}}},\"location\":\"eastus\",\"properties\":{\"sku\":{\"name\":\"Standard_v2\",\"tier\":\"Standard_v2\",\"capacity\":3},\"gatewayIPConfigurations\":[{\"name\":\"appgwipc\",\"properties\":{\"subnet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworks/vnet/subnets/appgwsubnet\"}}}],\"sslCertificates\":[{\"name\":\"sslcert\",\"properties\":{\"data\":\"****\",\"password\":\"****\"}},{\"name\":\"sslcert2\",\"properties\":{\"keyVaultSecretId\":\"https://kv/secret\"}}],\"trustedRootCertificates\":[{\"name\":\"rootcert\",\"properties\":{\"data\":\"****\"}},{\"name\":\"rootcert1\",\"properties\":{\"keyVaultSecretId\":\"https://kv/secret\"}}],\"trustedClientCertificates\":[{\"name\":\"clientcert\",\"properties\":{\"data\":\"****\"}}],\"frontendIPConfigurations\":[{\"name\":\"appgwfip\",\"properties\":{\"publicIPAddress\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/publicIPAddresses/appgwpip\"}}}],\"frontendPorts\":[{\"name\":\"appgwfp\",\"properties\":{\"port\":443}},{\"name\":\"appgwfp80\",\"properties\":{\"port\":80}}],\"backendAddressPools\":[{\"name\":\"appgwpool\",\"properties\":{\"backendAddresses\":[{\"ipAddress\":\"10.0.1.1\"},{\"ipAddress\":\"10.0.1.2\"}]}},{\"name\":\"appgwpool1\",\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool1\",\"properties\":{\"backendAddresses\":[\"10.0.0.1\",\"10.0.0.2\"]}}],\"backendHttpSettingsCollection\":[{\"name\":\"appgwbhs\",\"properties\":{\"port\":80,\"protocol\":\"Http\",\"cookieBasedAffinity\":\"Disabled\",\"requestTimeout\":30}}],\"sslProfiles\":[{\"name\":\"sslProfile1\",\"properties\":{\"sslPolicy\":{\"policyType\":\"Custom\",\"minProtocolVersion\":\"TLSv1_1\",\"cipherSuites\":[\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256\"]},\"clientAuthConfiguration\":{\"verifyClientCertIssuerDN\":true},\"trustedClientCertificates\":[{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/trustedClientCertificates/clientcert\"}]}}],\"httpListeners\":[{\"name\":\"appgwhl\",\"properties\":{\"frontendIPConfiguration\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendIPConfigurations/appgwfip\"},\"frontendPort\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendPorts/appgwfp\"},\"protocol\":\"Https\",\"sslCertificate\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/sslCertificates/sslcert\"},\"sslProfile\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/sslProfiles/sslProfile1\"},\"requireServerNameIndication\":false}},{\"name\":\"appgwhttplistener\",\"properties\":{\"frontendIPConfiguration\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendIPConfigurations/appgwfip\"},\"frontendPort\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/frontendPorts/appgwfp80\"},\"protocol\":\"Http\"}}],\"urlPathMaps\":[{\"name\":\"pathMap1\",\"properties\":{\"defaultBackendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"defaultBackendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"defaultRewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"},\"defaultLoadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"},\"pathRules\":[{\"name\":\"apiPaths\",\"properties\":{\"paths\":[\"/api\",\"/v1/api\"],\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"backendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"rewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"},\"loadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"}}}]}}],\"requestRoutingRules\":[{\"name\":\"appgwrule\",\"properties\":{\"ruleType\":\"Basic\",\"priority\":10,\"httpListener\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/httpListeners/appgwhl\"},\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"},\"backendHttpSettings\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendHttpSettingsCollection/appgwbhs\"},\"rewriteRuleSet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/rewriteRuleSets/rewriteRuleSet1\"},\"loadDistributionPolicy\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/loadDistributionPolicies/ldp1\"}}},{\"name\":\"appgwPathBasedRule\",\"properties\":{\"ruleType\":\"PathBasedRouting\",\"priority\":20,\"httpListener\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/httpListeners/appgwhttplistener\"},\"urlPathMap\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/urlPathMaps/pathMap1\"}}}],\"rewriteRuleSets\":[{\"name\":\"rewriteRuleSet1\",\"properties\":{\"rewriteRules\":[{\"name\":\"Set X-Forwarded-For\",\"ruleSequence\":102,\"conditions\":[{\"variable\":\"http_req_Authorization\",\"pattern\":\"^Bearer\",\"ignoreCase\":true,\"negate\":false}],\"actionSet\":{\"requestHeaderConfigurations\":[{\"headerName\":\"X-Forwarded-For\",\"headerValue\":\"{var_add_x_forwarded_for_proxy}\"}],\"responseHeaderConfigurations\":[{\"headerName\":\"Strict-Transport-Security\",\"headerValue\":\"max-age=31536000\"}],\"urlConfiguration\":{\"modifiedPath\":\"/abc\"}}}]}}],\"loadDistributionPolicies\":[{\"name\":\"ldp1\",\"properties\":{\"loadDistributionAlgorithm\":\"RoundRobin\",\"loadDistributionTargets\":[{\"name\":\"ld11\",\"properties\":{\"weightPerServer\":40,\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool\"}}},{\"name\":\"ld11\",\"properties\":{\"weightPerServer\":60,\"backendAddressPool\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/backendAddressPools/appgwpool1\"}}}]}}],\"globalConfiguration\":{\"enableRequestBuffering\":true,\"enableResponseBuffering\":true}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestApplicationGateways_CreateOrUpdate (0.25s)
+=== RUN   TestApplicationGateways_UpdateTags
+--- PASS: TestApplicationGateways_UpdateTags (0.07s)
+=== RUN   TestApplicationGateways_List
+--- PASS: TestApplicationGateways_List (0.06s)
+=== RUN   TestApplicationGateways_ListAll
+--- PASS: TestApplicationGateways_ListAll (0.08s)
+=== RUN   TestApplicationGateways_Start
+--- PASS: TestApplicationGateways_Start (0.12s)
+=== RUN   TestApplicationGateways_Stop
+--- PASS: TestApplicationGateways_Stop (0.09s)
+=== RUN   TestApplicationGateways_BackendHealth
+--- PASS: TestApplicationGateways_BackendHealth (0.09s)
+=== RUN   TestApplicationGateways_BackendHealthOnDemand
+--- PASS: TestApplicationGateways_BackendHealthOnDemand (0.10s)
+=== RUN   TestApplicationGateways_ListAvailableServerVariables
+--- PASS: TestApplicationGateways_ListAvailableServerVariables (0.04s)
+=== RUN   TestApplicationGateways_ListAvailableRequestHeaders
+--- PASS: TestApplicationGateways_ListAvailableRequestHeaders (0.05s)
+=== RUN   TestApplicationGateways_ListAvailableResponseHeaders
+--- PASS: TestApplicationGateways_ListAvailableResponseHeaders (0.05s)
+=== RUN   TestApplicationGateways_ListAvailableWafRuleSets
+--- PASS: TestApplicationGateways_ListAvailableWafRuleSets (0.05s)
+=== RUN   TestApplicationGatewayPrivateLinkResources_List
+--- PASS: TestApplicationGatewayPrivateLinkResources_List (0.04s)
+=== RUN   TestApplicationGatewayPrivateEndpointConnections_Delete
+--- PASS: TestApplicationGatewayPrivateEndpointConnections_Delete (0.08s)
+=== RUN   TestApplicationGatewayPrivateEndpointConnections_Update
+    zt_generated_mock_test.go:1928: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ApplicationGatewayPrivateEndpointConnectionUpdate.json: PUT https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/applicationGateways/appgw/privateEndpointConnections/connection1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"name\":\"connection1\",\"properties\":{\"privateLinkServiceConnectionState\":{\"description\":\"approved it for some reason.\",\"status\":\"Approved\"}}} don't match example value {\"name\":\"connection1\",\"properties\":{\"privateEndpoint\":{\"id\":\"/subscriptions/subId2/resourceGroups/rg1/providers/Microsoft.Network/privateEndpoints/testPe\"},\"privateLinkServiceConnectionState\":{\"status\":\"Approved\",\"description\":\"approved it for some reason.\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestApplicationGatewayPrivateEndpointConnections_Update (0.04s)
+=== RUN   TestApplicationGatewayPrivateEndpointConnections_Get
+--- PASS: TestApplicationGatewayPrivateEndpointConnections_Get (0.04s)
+=== RUN   TestApplicationGatewayPrivateEndpointConnections_List
+--- PASS: TestApplicationGatewayPrivateEndpointConnections_List (0.06s)
+=== RUN   TestApplicationSecurityGroups_Delete
+--- PASS: TestApplicationSecurityGroups_Delete (0.11s)
+=== RUN   TestApplicationSecurityGroups_Get
+--- PASS: TestApplicationSecurityGroups_Get (0.04s)
+=== RUN   TestApplicationSecurityGroups_CreateOrUpdate
+--- PASS: TestApplicationSecurityGroups_CreateOrUpdate (0.08s)
+=== RUN   TestApplicationSecurityGroups_UpdateTags
+--- PASS: TestApplicationSecurityGroups_UpdateTags (0.03s)
+=== RUN   TestApplicationSecurityGroups_ListAll
+--- PASS: TestApplicationSecurityGroups_ListAll (0.04s)
+=== RUN   TestApplicationSecurityGroups_List
+--- PASS: TestApplicationSecurityGroups_List (0.05s)
+=== RUN   TestAvailableDelegations_List
+--- PASS: TestAvailableDelegations_List (0.04s)
+=== RUN   TestAvailableResourceGroupDelegations_List
+--- PASS: TestAvailableResourceGroupDelegations_List (0.04s)
+=== RUN   TestAvailableServiceAliases_List
+--- PASS: TestAvailableServiceAliases_List (0.04s)
+=== RUN   TestAvailableServiceAliases_ListByResourceGroup
+--- PASS: TestAvailableServiceAliases_ListByResourceGroup (0.04s)
+=== RUN   TestAzureFirewalls_Delete
+--- PASS: TestAzureFirewalls_Delete (0.08s)
+=== RUN   TestAzureFirewalls_Get
+--- PASS: TestAzureFirewalls_Get (0.36s)
+=== RUN   TestAzureFirewalls_CreateOrUpdate
+    zt_generated_mock_test.go:3774: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/AzureFirewallPutWithAdditionalProperties.json: PUT https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/azureFirewalls/azurefirewall
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"location\":\"West US\",\"properties\":{\"additionalProperties\":{\"key1\":\"value1\",\"key2\":\"value2\"},\"applicationRuleCollections\":[{\"name\":\"apprulecoll\",\"properties\":{\"action\":{\"type\":\"Deny\"},\"priority\":110,\"rules\":[{\"description\":\"Deny inbound rule\",\"name\":\"rule1\",\"protocols\":[{\"port\":443,\"protocolType\":\"Https\"}],\"sourceAddresses\":[\"216.58.216.164\",\"10.0.0.0/24\"],\"targetFqdns\":[\"www.test.com\"]}]}}],\"ipConfigurations\":[{\"name\":\"azureFirewallIpConfiguration\",\"properties\":{\"publicIPAddress\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/publicIPAddresses/pipName\"},\"subnet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworks/vnet2/subnets/AzureFirewallSubnet\"}}}],\"natRuleCollections\":[{\"name\":\"natrulecoll\",\"properties\":{\"action\":{\"type\":\"Dnat\"},\"priority\":112,\"rules\":[{\"description\":\"D-NAT all outbound web traffic for inspection\",\"destinationAddresses\":[\"1.2.3.4\"],\"destinationPorts\":[\"443\"],\"name\":\"DNAT-HTTPS-traffic\",\"protocols\":[\"TCP\"],\"sourceAddresses\":[\"*\"],\"translatedAddress\":\"1.2.3.5\",\"translatedPort\":\"8443\"},{\"description\":\"D-NAT all inbound web traffic for inspection\",\"destinationAddresses\":[\"1.2.3.4\"],\"destinationPorts\":[\"80\"],\"name\":\"DNAT-HTTP-traffic-With-FQDN\",\"protocols\":[\"TCP\"],\"sourceAddresses\":[\"*\"],\"translatedFqdn\":\"internalhttpserver\",\"translatedPort\":\"880\"}]}}],\"networkRuleCollections\":[{\"name\":\"netrulecoll\",\"properties\":{\"action\":{\"type\":\"Deny\"},\"priority\":112,\"rules\":[{\"description\":\"Block traffic based on source IPs and ports\",\"destinationAddresses\":[\"*\"],\"destinationPorts\":[\"443-444\",\"8443\"],\"name\":\"L4-traffic\",\"protocols\":[\"TCP\"],\"sourceAddresses\":[\"192.168.1.1-192.168.1.12\",\"10.1.4.12-10.1.4.255\"]},{\"description\":\"Block traffic based on source IPs and ports to amazon\",\"destinationFqdns\":[\"www.amazon.com\"],\"destinationPorts\":[\"443-444\",\"8443\"],\"name\":\"L4-traffic-with-FQDN\",\"protocols\":[\"TCP\"],\"sourceAddresses\":[\"10.2.4.12-10.2.4.255\"]}]}}],\"sku\":{\"name\":\"AZFW_VNet\",\"tier\":\"Standard\"},\"threatIntelMode\":\"Alert\"},\"tags\":{\"key1\":\"value1\"},\"zones\":[]} don't match example value {\"tags\":{\"key1\":\"value1\"},\"location\":\"West US\",\"zones\":[],\"properties\":{\"sku\":{\"name\":\"AZFW_VNet\",\"tier\":\"Standard\"},\"threatIntelMode\":\"Alert\",\"ipConfigurations\":[{\"name\":\"azureFirewallIpConfiguration\",\"properties\":{\"subnet\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworks/vnet2/subnets/AzureFirewallSubnet\"},\"publicIPAddress\":{\"id\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/publicIPAddresses/pipName\"}}}],\"applicationRuleCollections\":[{\"name\":\"apprulecoll\",\"properties\":{\"priority\":110,\"action\":{\"type\":\"Deny\"},\"rules\":[{\"name\":\"rule1\",\"description\":\"Deny inbound rule\",\"protocols\":[{\"protocolType\":\"Https\",\"port\":443}],\"targetFqdns\":[\"www.test.com\"],\"sourceAddresses\":[\"216.58.216.164\",\"10.0.0.0/24\"]}]}}],\"natRuleCollections\":[{\"name\":\"natrulecoll\",\"properties\":{\"priority\":112,\"action\":{\"type\":\"Dnat\"},\"rules\":[{\"name\":\"DNAT-HTTPS-traffic\",\"description\":\"D-NAT all outbound web traffic for inspection\",\"sourceAddresses\":[\"*\"],\"destinationAddresses\":[\"1.2.3.4\"],\"destinationPorts\":[\"443\"],\"protocols\":[\"TCP\"],\"translatedAddress\":\"1.2.3.5\",\"translatedPort\":\"8443\"},{\"name\":\"DNAT-HTTP-traffic-With-FQDN\",\"description\":\"D-NAT all inbound web traffic for inspection\",\"sourceAddresses\":[\"*\"],\"destinationAddresses\":[\"1.2.3.4\"],\"destinationPorts\":[\"80\"],\"protocols\":[\"TCP\"],\"translatedFqdn\":\"internalhttpserver\",\"translatedPort\":\"880\"}]}}],\"networkRuleCollections\":[{\"name\":\"netrulecoll\",\"properties\":{\"priority\":112,\"action\":{\"type\":\"Deny\"},\"rules\":[{\"name\":\"L4-traffic\",\"description\":\"Block traffic based on source IPs and ports\",\"sourceAddresses\":[\"192.168.1.1-192.168.1.12\",\"10.1.4.12-10.1.4.255\"],\"destinationPorts\":[\"443-444\",\"8443\"],\"destinationAddresses\":[\"*\"],\"protocols\":[\"TCP\"]},{\"name\":\"L4-traffic-with-FQDN\",\"description\":\"Block traffic based on source IPs and ports to amazon\",\"sourceAddresses\":[\"10.2.4.12-10.2.4.255\"],\"destinationPorts\":[\"443-444\",\"8443\"],\"destinationFqdns\":[\"www.amazon.com\"],\"protocols\":[\"TCP\"]}]}}],\"ipGroups\":[],\"additionalProperties\":{\"key1\":\"value1\",\"key2\":\"value2\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestAzureFirewalls_CreateOrUpdate (0.27s)
+=== RUN   TestAzureFirewalls_UpdateTags
+--- PASS: TestAzureFirewalls_UpdateTags (0.08s)
+=== RUN   TestAzureFirewalls_List
+--- PASS: TestAzureFirewalls_List (0.06s)
+=== RUN   TestAzureFirewalls_ListAll
+--- PASS: TestAzureFirewalls_ListAll (0.05s)
+=== RUN   TestAzureFirewallFqdnTags_ListAll
+--- PASS: TestAzureFirewallFqdnTags_ListAll (0.04s)
+=== RUN   TestWebCategories_Get
+--- PASS: TestWebCategories_Get (0.05s)
+=== RUN   TestWebCategories_ListBySubscription
+--- PASS: TestWebCategories_ListBySubscription (0.03s)
+=== RUN   TestBastionHosts_Delete
+--- PASS: TestBastionHosts_Delete (0.08s)
+=== RUN   TestBastionHosts_Get
+--- PASS: TestBastionHosts_Get (0.05s)
+=== RUN   TestBastionHosts_CreateOrUpdate
+--- PASS: TestBastionHosts_CreateOrUpdate (0.10s)
+=== RUN   TestBastionHosts_UpdateTags
+--- PASS: TestBastionHosts_UpdateTags (0.08s)
+=== RUN   TestBastionHosts_List
+--- PASS: TestBastionHosts_List (0.04s)
+=== RUN   TestBastionHosts_ListByResourceGroup
+--- PASS: TestBastionHosts_ListByResourceGroup (0.03s)
+=== RUN   TestNetworkManagementClient_PutBastionShareableLink
+--- PASS: TestNetworkManagementClient_PutBastionShareableLink (0.09s)
+=== RUN   TestNetworkManagementClient_DeleteBastionShareableLink
+--- PASS: TestNetworkManagementClient_DeleteBastionShareableLink (0.11s)
+=== RUN   TestNetworkManagementClient_GetBastionShareableLink
+--- PASS: TestNetworkManagementClient_GetBastionShareableLink (0.06s)
+=== RUN   TestNetworkManagementClient_GetActiveSessions
+--- PASS: TestNetworkManagementClient_GetActiveSessions (0.08s)
+=== RUN   TestNetworkManagementClient_DisconnectActiveSessions
+    zt_generated_mock_test.go:6040: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/BastionSessionDelete.json: POST https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/bastionHosts/bastionhosttenant/disconnectActiveSessions
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter sessionIds={} don't match example value [\"session1\",\"session2\",\"session3\"]"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestNetworkManagementClient_DisconnectActiveSessions (0.04s)
+=== RUN   TestNetworkManagementClient_SupportedSecurityProviders
+--- PASS: TestNetworkManagementClient_SupportedSecurityProviders (0.08s)
+=== RUN   TestNetworkManagementClient_Generatevirtualwanvpnserverconfigurationvpnprofile
+--- PASS: TestNetworkManagementClient_Generatevirtualwanvpnserverconfigurationvpnprofile (0.09s)
+=== RUN   TestNetworkInterfaces_ListCloudServiceRoleInstanceNetworkInterfaces
+--- PASS: TestNetworkInterfaces_ListCloudServiceRoleInstanceNetworkInterfaces (5.57s)
+=== RUN   TestNetworkInterfaces_ListCloudServiceNetworkInterfaces
+--- PASS: TestNetworkInterfaces_ListCloudServiceNetworkInterfaces (0.05s)
+=== RUN   TestNetworkInterfaces_GetCloudServiceNetworkInterface
+--- PASS: TestNetworkInterfaces_GetCloudServiceNetworkInterface (0.04s)
+=== RUN   TestNetworkInterfaces_Delete
+--- PASS: TestNetworkInterfaces_Delete (0.10s)
+=== RUN   TestNetworkInterfaces_Get
+--- PASS: TestNetworkInterfaces_Get (0.05s)
+=== RUN   TestNetworkInterfaces_CreateOrUpdate
+--- PASS: TestNetworkInterfaces_CreateOrUpdate (0.18s)
+=== RUN   TestNetworkInterfaces_UpdateTags
+--- PASS: TestNetworkInterfaces_UpdateTags (0.06s)
+=== RUN   TestNetworkInterfaces_ListAll
+--- PASS: TestNetworkInterfaces_ListAll (0.04s)
+=== RUN   TestNetworkInterfaces_List
+--- PASS: TestNetworkInterfaces_List (0.05s)
+=== RUN   TestNetworkInterfaces_GetEffectiveRouteTable
+--- PASS: TestNetworkInterfaces_GetEffectiveRouteTable (0.08s)
+=== RUN   TestNetworkInterfaces_ListEffectiveNetworkSecurityGroups
+--- PASS: TestNetworkInterfaces_ListEffectiveNetworkSecurityGroups (0.07s)
+=== RUN   TestNetworkInterfaces_ListVirtualMachineScaleSetVMNetworkInterfaces
+--- PASS: TestNetworkInterfaces_ListVirtualMachineScaleSetVMNetworkInterfaces (0.07s)
+=== RUN   TestNetworkInterfaces_ListVirtualMachineScaleSetNetworkInterfaces
+--- PASS: TestNetworkInterfaces_ListVirtualMachineScaleSetNetworkInterfaces (0.06s)
+=== RUN   TestNetworkInterfaces_GetVirtualMachineScaleSetNetworkInterface
+--- PASS: TestNetworkInterfaces_GetVirtualMachineScaleSetNetworkInterface (0.05s)
+=== RUN   TestPublicIPAddresses_ListCloudServicePublicIPAddresses
+--- PASS: TestPublicIPAddresses_ListCloudServicePublicIPAddresses (0.05s)
+=== RUN   TestPublicIPAddresses_ListCloudServiceRoleInstancePublicIPAddresses
+--- PASS: TestPublicIPAddresses_ListCloudServiceRoleInstancePublicIPAddresses (0.05s)
+=== RUN   TestPublicIPAddresses_GetCloudServicePublicIPAddress
+--- PASS: TestPublicIPAddresses_GetCloudServicePublicIPAddress (0.04s)
+=== RUN   TestPublicIPAddresses_Delete
+--- PASS: TestPublicIPAddresses_Delete (0.10s)
+=== RUN   TestPublicIPAddresses_Get
+--- PASS: TestPublicIPAddresses_Get (0.05s)
+=== RUN   TestPublicIPAddresses_CreateOrUpdate
+--- PASS: TestPublicIPAddresses_CreateOrUpdate (0.25s)
+=== RUN   TestPublicIPAddresses_UpdateTags
+--- PASS: TestPublicIPAddresses_UpdateTags (0.04s)
+=== RUN   TestPublicIPAddresses_ListAll
+--- PASS: TestPublicIPAddresses_ListAll (0.04s)
+=== RUN   TestPublicIPAddresses_List
+--- PASS: TestPublicIPAddresses_List (0.05s)
+=== RUN   TestPublicIPAddresses_ListVirtualMachineScaleSetPublicIPAddresses
+--- PASS: TestPublicIPAddresses_ListVirtualMachineScaleSetPublicIPAddresses (0.06s)
+=== RUN   TestPublicIPAddresses_ListVirtualMachineScaleSetVMPublicIPAddresses
+    zt_generated_mock_test.go:8122: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VmssVmPublicIpList.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/vmss-tester/providers/Microsoft.Compute/virtualMachineScaleSets/vmss1/virtualMachines/1/networkInterfaces/nic1/ipconfigurations/ip1/publicipaddresses
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "path parameter virtualmachineIndex=\"1\" don't match example value 1"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPublicIPAddresses_ListVirtualMachineScaleSetVMPublicIPAddresses (0.05s)
+=== RUN   TestPublicIPAddresses_GetVirtualMachineScaleSetPublicIPAddress
+    zt_generated_mock_test.go:8175: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VmssPublicIpGet.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/vmss-tester/providers/Microsoft.Compute/virtualMachineScaleSets/vmss1/virtualMachines/1/networkInterfaces/nic1/ipconfigurations/ip1/publicipaddresses/pub1
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "path parameter virtualmachineIndex=\"1\" don't match example value 1"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPublicIPAddresses_GetVirtualMachineScaleSetPublicIPAddress (0.04s)
+=== RUN   TestCustomIPPrefixes_Delete
+--- PASS: TestCustomIPPrefixes_Delete (0.11s)
+=== RUN   TestCustomIPPrefixes_Get
+--- PASS: TestCustomIPPrefixes_Get (0.05s)
+=== RUN   TestCustomIPPrefixes_CreateOrUpdate
+--- PASS: TestCustomIPPrefixes_CreateOrUpdate (0.07s)
+=== RUN   TestCustomIPPrefixes_UpdateTags
+--- PASS: TestCustomIPPrefixes_UpdateTags (0.03s)
+=== RUN   TestCustomIPPrefixes_ListAll
+--- PASS: TestCustomIPPrefixes_ListAll (0.05s)
+=== RUN   TestCustomIPPrefixes_List
+--- PASS: TestCustomIPPrefixes_List (0.04s)
+=== RUN   TestDdosCustomPolicies_Delete
+--- PASS: TestDdosCustomPolicies_Delete (0.07s)
+=== RUN   TestDdosCustomPolicies_Get
+--- PASS: TestDdosCustomPolicies_Get (0.04s)
+=== RUN   TestDdosCustomPolicies_CreateOrUpdate
+--- PASS: TestDdosCustomPolicies_CreateOrUpdate (0.07s)
+=== RUN   TestDdosCustomPolicies_UpdateTags
+--- PASS: TestDdosCustomPolicies_UpdateTags (0.03s)
+=== RUN   TestDdosProtectionPlans_Delete
+--- PASS: TestDdosProtectionPlans_Delete (0.07s)
+=== RUN   TestDdosProtectionPlans_Get
+--- PASS: TestDdosProtectionPlans_Get (0.05s)
+=== RUN   TestDdosProtectionPlans_CreateOrUpdate
+--- PASS: TestDdosProtectionPlans_CreateOrUpdate (0.12s)
+=== RUN   TestDdosProtectionPlans_UpdateTags
+--- PASS: TestDdosProtectionPlans_UpdateTags (0.03s)
+=== RUN   TestDdosProtectionPlans_List
+--- PASS: TestDdosProtectionPlans_List (0.03s)
+=== RUN   TestDdosProtectionPlans_ListByResourceGroup
+--- PASS: TestDdosProtectionPlans_ListByResourceGroup (0.03s)
+=== RUN   TestDscpConfiguration_CreateOrUpdate
+--- PASS: TestDscpConfiguration_CreateOrUpdate (0.09s)
+=== RUN   TestDscpConfiguration_Delete
+--- PASS: TestDscpConfiguration_Delete (0.05s)
+=== RUN   TestDscpConfiguration_Get
+    zt_generated_mock_test.go:9297: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/DscpConfigurationGet.json: unmarshalling type *armnetwork.DscpConfiguration: json: cannot unmarshal string into Go struct field DscpConfigurationPropertiesFormat.properties.associatedNetworkInterfaces of type armnetwork.Interface
+--- FAIL: TestDscpConfiguration_Get (0.04s)
+=== RUN   TestDscpConfiguration_List
+    zt_generated_mock_test.go:9389: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/DscpConfigurationList.json: unmarshalling type *armnetwork.DscpConfigurationListResult: json: cannot unmarshal string into Go struct field DscpConfigurationPropertiesFormat.value.properties.associatedNetworkInterfaces of type armnetwork.Interface
+--- FAIL: TestDscpConfiguration_List (0.04s)
+=== RUN   TestDscpConfiguration_ListAll
+    zt_generated_mock_test.go:9547: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/DscpConfigurationListAll.json: unmarshalling type *armnetwork.DscpConfigurationListResult: json: cannot unmarshal string into Go struct field DscpConfigurationPropertiesFormat.value.properties.associatedNetworkInterfaces of type armnetwork.Interface
+--- FAIL: TestDscpConfiguration_ListAll (0.04s)
+=== RUN   TestAvailableEndpointServices_List
+--- PASS: TestAvailableEndpointServices_List (0.04s)
+=== RUN   TestExpressRouteCircuitAuthorizations_Delete
+--- PASS: TestExpressRouteCircuitAuthorizations_Delete (0.12s)
+=== RUN   TestExpressRouteCircuitAuthorizations_Get
+--- PASS: TestExpressRouteCircuitAuthorizations_Get (0.04s)
+=== RUN   TestExpressRouteCircuitAuthorizations_CreateOrUpdate
+--- PASS: TestExpressRouteCircuitAuthorizations_CreateOrUpdate (0.07s)
+=== RUN   TestExpressRouteCircuitAuthorizations_List
+--- PASS: TestExpressRouteCircuitAuthorizations_List (0.05s)
+=== RUN   TestExpressRouteCircuitPeerings_Delete
+--- PASS: TestExpressRouteCircuitPeerings_Delete (0.12s)
+=== RUN   TestExpressRouteCircuitPeerings_Get
+--- PASS: TestExpressRouteCircuitPeerings_Get (0.05s)
+=== RUN   TestExpressRouteCircuitPeerings_CreateOrUpdate
+    zt_generated_mock_test.go:10017: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ExpressRouteCircuitPeeringCreate.json: json: cannot unmarshal string into Go struct field ExpressRouteCircuitPeeringPropertiesFormat.properties.expressRouteConnection of type armnetwork.ExpressRouteConnectionID
+--- FAIL: TestExpressRouteCircuitPeerings_CreateOrUpdate (0.10s)
+=== RUN   TestExpressRouteCircuitPeerings_List
+    zt_generated_mock_test.go:10071: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ExpressRouteCircuitPeeringList.json: unmarshalling type *armnetwork.ExpressRouteCircuitPeeringListResult: json: cannot unmarshal string into Go struct field ExpressRouteCircuitPeeringPropertiesFormat.value.properties.expressRouteConnection of type armnetwork.ExpressRouteConnectionID
+--- FAIL: TestExpressRouteCircuitPeerings_List (0.06s)
+=== RUN   TestExpressRouteCircuitConnections_Delete
+--- PASS: TestExpressRouteCircuitConnections_Delete (0.07s)
+=== RUN   TestExpressRouteCircuitConnections_Get
+--- PASS: TestExpressRouteCircuitConnections_Get (0.04s)
+=== RUN   TestExpressRouteCircuitConnections_CreateOrUpdate
+--- PASS: TestExpressRouteCircuitConnections_CreateOrUpdate (0.08s)
+=== RUN   TestExpressRouteCircuitConnections_List
+--- PASS: TestExpressRouteCircuitConnections_List (0.04s)
+=== RUN   TestPeerExpressRouteCircuitConnections_Get
+--- PASS: TestPeerExpressRouteCircuitConnections_Get (0.05s)
+=== RUN   TestPeerExpressRouteCircuitConnections_List
+--- PASS: TestPeerExpressRouteCircuitConnections_List (0.04s)
+=== RUN   TestExpressRouteCircuits_Delete
+--- PASS: TestExpressRouteCircuits_Delete (0.08s)
+=== RUN   TestExpressRouteCircuits_Get
+--- PASS: TestExpressRouteCircuits_Get (0.04s)
+=== RUN   TestExpressRouteCircuits_CreateOrUpdate
+--- PASS: TestExpressRouteCircuits_CreateOrUpdate (0.16s)
+=== RUN   TestExpressRouteCircuits_UpdateTags
+--- PASS: TestExpressRouteCircuits_UpdateTags (0.04s)
+=== RUN   TestExpressRouteCircuits_ListArpTable
+--- PASS: TestExpressRouteCircuits_ListArpTable (0.08s)
+=== RUN   TestExpressRouteCircuits_ListRoutesTable
+--- PASS: TestExpressRouteCircuits_ListRoutesTable (0.09s)
+=== RUN   TestExpressRouteCircuits_ListRoutesTableSummary
+--- PASS: TestExpressRouteCircuits_ListRoutesTableSummary (0.22s)
+=== RUN   TestExpressRouteCircuits_GetStats
+--- PASS: TestExpressRouteCircuits_GetStats (0.06s)
+=== RUN   TestExpressRouteCircuits_GetPeeringStats
+--- PASS: TestExpressRouteCircuits_GetPeeringStats (0.04s)
+=== RUN   TestExpressRouteCircuits_List
+--- PASS: TestExpressRouteCircuits_List (0.04s)
+=== RUN   TestExpressRouteCircuits_ListAll
+--- PASS: TestExpressRouteCircuits_ListAll (0.04s)
+=== RUN   TestExpressRouteServiceProviders_List
+--- PASS: TestExpressRouteServiceProviders_List (0.04s)
+=== RUN   TestExpressRouteCrossConnections_List
+--- PASS: TestExpressRouteCrossConnections_List (0.06s)
+=== RUN   TestExpressRouteCrossConnections_ListByResourceGroup
+--- PASS: TestExpressRouteCrossConnections_ListByResourceGroup (0.03s)
+=== RUN   TestExpressRouteCrossConnections_Get
+--- PASS: TestExpressRouteCrossConnections_Get (0.03s)
+=== RUN   TestExpressRouteCrossConnections_CreateOrUpdate
+--- PASS: TestExpressRouteCrossConnections_CreateOrUpdate (0.07s)
+=== RUN   TestExpressRouteCrossConnections_UpdateTags
+--- PASS: TestExpressRouteCrossConnections_UpdateTags (0.03s)
+=== RUN   TestExpressRouteCrossConnections_ListArpTable
+--- PASS: TestExpressRouteCrossConnections_ListArpTable (0.08s)
+=== RUN   TestExpressRouteCrossConnections_ListRoutesTableSummary
+--- PASS: TestExpressRouteCrossConnections_ListRoutesTableSummary (0.07s)
+=== RUN   TestExpressRouteCrossConnections_ListRoutesTable
+--- PASS: TestExpressRouteCrossConnections_ListRoutesTable (0.08s)
+=== RUN   TestExpressRouteCrossConnectionPeerings_List
+--- PASS: TestExpressRouteCrossConnectionPeerings_List (0.04s)
+=== RUN   TestExpressRouteCrossConnectionPeerings_Delete
+--- PASS: TestExpressRouteCrossConnectionPeerings_Delete (0.07s)
+=== RUN   TestExpressRouteCrossConnectionPeerings_Get
+--- PASS: TestExpressRouteCrossConnectionPeerings_Get (0.07s)
+=== RUN   TestExpressRouteCrossConnectionPeerings_CreateOrUpdate
+--- PASS: TestExpressRouteCrossConnectionPeerings_CreateOrUpdate (0.09s)
+=== RUN   TestExpressRoutePortsLocations_List
+--- PASS: TestExpressRoutePortsLocations_List (0.05s)
+=== RUN   TestExpressRoutePortsLocations_Get
+--- PASS: TestExpressRoutePortsLocations_Get (0.04s)
+=== RUN   TestExpressRoutePorts_Delete
+--- PASS: TestExpressRoutePorts_Delete (0.08s)
+=== RUN   TestExpressRoutePorts_Get
+--- PASS: TestExpressRoutePorts_Get (0.04s)
+=== RUN   TestExpressRoutePorts_CreateOrUpdate
+--- PASS: TestExpressRoutePorts_CreateOrUpdate (0.15s)
+=== RUN   TestExpressRoutePorts_UpdateTags
+--- PASS: TestExpressRoutePorts_UpdateTags (0.04s)
+=== RUN   TestExpressRoutePorts_ListByResourceGroup
+--- PASS: TestExpressRoutePorts_ListByResourceGroup (0.04s)
+=== RUN   TestExpressRoutePorts_List
+--- PASS: TestExpressRoutePorts_List (0.04s)
+=== RUN   TestExpressRoutePorts_GenerateLOA
+--- PASS: TestExpressRoutePorts_GenerateLOA (0.03s)
+=== RUN   TestExpressRouteLinks_Get
+--- PASS: TestExpressRouteLinks_Get (0.03s)
+=== RUN   TestExpressRouteLinks_List
+--- PASS: TestExpressRouteLinks_List (0.03s)
+=== RUN   TestFirewallPolicies_Delete
+--- PASS: TestFirewallPolicies_Delete (0.14s)
+=== RUN   TestFirewallPolicies_Get
+--- PASS: TestFirewallPolicies_Get (0.04s)
+=== RUN   TestFirewallPolicies_CreateOrUpdate
+--- PASS: TestFirewallPolicies_CreateOrUpdate (0.12s)
+=== RUN   TestFirewallPolicies_List
+--- PASS: TestFirewallPolicies_List (0.03s)
+=== RUN   TestFirewallPolicies_ListAll
+--- PASS: TestFirewallPolicies_ListAll (0.04s)
+=== RUN   TestFirewallPolicyRuleCollectionGroups_Delete
+--- PASS: TestFirewallPolicyRuleCollectionGroups_Delete (0.10s)
+=== RUN   TestFirewallPolicyRuleCollectionGroups_Get
+--- PASS: TestFirewallPolicyRuleCollectionGroups_Get (0.20s)
+=== RUN   TestFirewallPolicyRuleCollectionGroups_CreateOrUpdate
+--- PASS: TestFirewallPolicyRuleCollectionGroups_CreateOrUpdate (0.42s)
+=== RUN   TestFirewallPolicyRuleCollectionGroups_List
+--- PASS: TestFirewallPolicyRuleCollectionGroups_List (0.14s)
+=== RUN   TestFirewallPolicyIdpsSignatures_List
+    zt_generated_mock_test.go:13889: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicyQuerySignatureOverrides.json: POST https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsSignatures
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"post\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsSignatures\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsSignatures\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignatures_List (0.01s)
+=== RUN   TestFirewallPolicyIdpsSignaturesOverrides_Patch
+    zt_generated_mock_test.go:13962: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicySignatureOverridesPatch.json: PATCH https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"patch\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignaturesOverrides_Patch (0.01s)
+=== RUN   TestFirewallPolicyIdpsSignaturesOverrides_Put
+    zt_generated_mock_test.go:14012: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicySignatureOverridesPut.json: PUT https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"put\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignaturesOverrides_Put (0.01s)
+=== RUN   TestFirewallPolicyIdpsSignaturesOverrides_Get
+    zt_generated_mock_test.go:14051: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicySignatureOverridesGet.json: GET https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"get\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides/default\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignaturesOverrides_Get (0.01s)
+=== RUN   TestFirewallPolicyIdpsSignaturesOverrides_List
+    zt_generated_mock_test.go:14090: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicySignatureOverridesList.json: GET https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"get\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/signatureOverrides\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignaturesOverrides_List (0.01s)
+=== RUN   TestFirewallPolicyIdpsSignaturesFilterValues_List
+    zt_generated_mock_test.go:14135: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/FirewallPolicyQuerySignatureOverridesFilterValues.json: POST https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsFilterOptions
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE_WITH_API\",\"message\":\"Could not find exact api-version \\\"unknown-api-version\\\" for provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"firewallPolicies\",\"apiVersion\":\"unknown-api-version\",\"requestMethod\":\"post\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsFilterOptions\",\"query\":{},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/e747cc13-97d4-4a79-b463-42d7f4e558f2/resourceGroups/rg1/providers/Microsoft.Network/firewallPolicies/firewallPolicy/listIdpsFilterOptions\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestFirewallPolicyIdpsSignaturesFilterValues_List (0.01s)
+=== RUN   TestIPAllocations_Delete
+--- PASS: TestIPAllocations_Delete (0.09s)
+=== RUN   TestIPAllocations_Get
+--- PASS: TestIPAllocations_Get (0.09s)
+=== RUN   TestIPAllocations_CreateOrUpdate
+--- PASS: TestIPAllocations_CreateOrUpdate (0.12s)
+=== RUN   TestIPAllocations_UpdateTags
+--- PASS: TestIPAllocations_UpdateTags (0.04s)
+=== RUN   TestIPAllocations_List
+--- PASS: TestIPAllocations_List (0.04s)
+=== RUN   TestIPAllocations_ListByResourceGroup
+--- PASS: TestIPAllocations_ListByResourceGroup (0.04s)
+=== RUN   TestIPGroups_Get
+--- PASS: TestIPGroups_Get (0.05s)
+=== RUN   TestIPGroups_CreateOrUpdate
+--- PASS: TestIPGroups_CreateOrUpdate (0.13s)
+=== RUN   TestIPGroups_UpdateGroups
+--- PASS: TestIPGroups_UpdateGroups (0.07s)
+=== RUN   TestIPGroups_Delete
+--- PASS: TestIPGroups_Delete (0.07s)
+=== RUN   TestIPGroups_ListByResourceGroup
+--- PASS: TestIPGroups_ListByResourceGroup (0.05s)
+=== RUN   TestIPGroups_List
+--- PASS: TestIPGroups_List (0.04s)
+=== RUN   TestLoadBalancers_Delete
+--- PASS: TestLoadBalancers_Delete (0.11s)
+=== RUN   TestLoadBalancers_Get
+--- PASS: TestLoadBalancers_Get (0.15s)
+=== RUN   TestLoadBalancers_CreateOrUpdate
+--- PASS: TestLoadBalancers_CreateOrUpdate (1.19s)
+=== RUN   TestLoadBalancers_UpdateTags
+--- PASS: TestLoadBalancers_UpdateTags (0.05s)
+=== RUN   TestLoadBalancers_ListAll
+--- PASS: TestLoadBalancers_ListAll (0.05s)
+=== RUN   TestLoadBalancers_List
+--- PASS: TestLoadBalancers_List (0.05s)
+=== RUN   TestLoadBalancers_ListInboundNatRulePortMappings
+--- PASS: TestLoadBalancers_ListInboundNatRulePortMappings (0.10s)
+=== RUN   TestLoadBalancerBackendAddressPools_List
+--- PASS: TestLoadBalancerBackendAddressPools_List (0.08s)
+=== RUN   TestLoadBalancerBackendAddressPools_Get
+--- PASS: TestLoadBalancerBackendAddressPools_Get (0.08s)
+=== RUN   TestLoadBalancerBackendAddressPools_CreateOrUpdate
+--- PASS: TestLoadBalancerBackendAddressPools_CreateOrUpdate (0.84s)
+=== RUN   TestLoadBalancerBackendAddressPools_Delete
+--- PASS: TestLoadBalancerBackendAddressPools_Delete (2.18s)
+=== RUN   TestLoadBalancerFrontendIPConfigurations_List
+--- PASS: TestLoadBalancerFrontendIPConfigurations_List (0.04s)
+=== RUN   TestLoadBalancerFrontendIPConfigurations_Get
+--- PASS: TestLoadBalancerFrontendIPConfigurations_Get (0.04s)
+=== RUN   TestInboundNatRules_List
+--- PASS: TestInboundNatRules_List (0.04s)
+=== RUN   TestInboundNatRules_Delete
+--- PASS: TestInboundNatRules_Delete (0.07s)
+=== RUN   TestInboundNatRules_Get
+--- PASS: TestInboundNatRules_Get (0.04s)
+=== RUN   TestInboundNatRules_CreateOrUpdate
+--- PASS: TestInboundNatRules_CreateOrUpdate (0.74s)
+=== RUN   TestLoadBalancerLoadBalancingRules_List
+--- PASS: TestLoadBalancerLoadBalancingRules_List (0.03s)
+=== RUN   TestLoadBalancerLoadBalancingRules_Get
+--- PASS: TestLoadBalancerLoadBalancingRules_Get (0.04s)
+=== RUN   TestLoadBalancerOutboundRules_List
+--- PASS: TestLoadBalancerOutboundRules_List (0.04s)
+=== RUN   TestLoadBalancerOutboundRules_Get
+--- PASS: TestLoadBalancerOutboundRules_Get (0.04s)
+=== RUN   TestLoadBalancerNetworkInterfaces_List
+--- PASS: TestLoadBalancerNetworkInterfaces_List (0.12s)
+=== RUN   TestLoadBalancerProbes_List
+--- PASS: TestLoadBalancerProbes_List (0.08s)
+=== RUN   TestLoadBalancerProbes_Get
+--- PASS: TestLoadBalancerProbes_Get (0.03s)
+=== RUN   TestNatGateways_Delete
+--- PASS: TestNatGateways_Delete (0.10s)
+=== RUN   TestNatGateways_Get
+--- PASS: TestNatGateways_Get (0.04s)
+=== RUN   TestNatGateways_CreateOrUpdate
+--- PASS: TestNatGateways_CreateOrUpdate (0.08s)
+=== RUN   TestNatGateways_UpdateTags
+--- PASS: TestNatGateways_UpdateTags (0.04s)
+=== RUN   TestNatGateways_ListAll
+--- PASS: TestNatGateways_ListAll (0.04s)
+=== RUN   TestNatGateways_List
+--- PASS: TestNatGateways_List (0.05s)
+=== RUN   TestNetworkInterfaceIPConfigurations_List
+--- PASS: TestNetworkInterfaceIPConfigurations_List (0.07s)
+=== RUN   TestNetworkInterfaceIPConfigurations_Get
+--- PASS: TestNetworkInterfaceIPConfigurations_Get (0.04s)
+=== RUN   TestNetworkInterfaceLoadBalancers_List
+--- PASS: TestNetworkInterfaceLoadBalancers_List (0.08s)
+=== RUN   TestNetworkInterfaceTapConfigurations_Delete
+--- PASS: TestNetworkInterfaceTapConfigurations_Delete (0.15s)
+=== RUN   TestNetworkInterfaceTapConfigurations_Get
+--- PASS: TestNetworkInterfaceTapConfigurations_Get (0.04s)
+=== RUN   TestNetworkInterfaceTapConfigurations_CreateOrUpdate
+--- PASS: TestNetworkInterfaceTapConfigurations_CreateOrUpdate (0.87s)
+=== RUN   TestNetworkInterfaceTapConfigurations_List
+--- PASS: TestNetworkInterfaceTapConfigurations_List (0.08s)
+=== RUN   TestNetworkProfiles_Delete
+--- PASS: TestNetworkProfiles_Delete (0.09s)
+=== RUN   TestNetworkProfiles_Get
+--- PASS: TestNetworkProfiles_Get (0.12s)
+=== RUN   TestNetworkProfiles_CreateOrUpdate
+--- PASS: TestNetworkProfiles_CreateOrUpdate (0.63s)
+=== RUN   TestNetworkProfiles_UpdateTags
+--- PASS: TestNetworkProfiles_UpdateTags (0.05s)
+=== RUN   TestNetworkProfiles_ListAll
+--- PASS: TestNetworkProfiles_ListAll (0.04s)
+=== RUN   TestNetworkProfiles_List
+--- PASS: TestNetworkProfiles_List (0.04s)
+=== RUN   TestNetworkSecurityGroups_Delete
+--- PASS: TestNetworkSecurityGroups_Delete (0.10s)
+=== RUN   TestNetworkSecurityGroups_Get
+--- PASS: TestNetworkSecurityGroups_Get (0.05s)
+=== RUN   TestNetworkSecurityGroups_CreateOrUpdate
+--- PASS: TestNetworkSecurityGroups_CreateOrUpdate (1.44s)
+=== RUN   TestNetworkSecurityGroups_UpdateTags
+--- PASS: TestNetworkSecurityGroups_UpdateTags (0.05s)
+=== RUN   TestNetworkSecurityGroups_ListAll
+--- PASS: TestNetworkSecurityGroups_ListAll (0.09s)
+=== RUN   TestNetworkSecurityGroups_List
+--- PASS: TestNetworkSecurityGroups_List (0.05s)
+=== RUN   TestSecurityRules_Delete
+--- PASS: TestSecurityRules_Delete (0.10s)
+=== RUN   TestSecurityRules_Get
+--- PASS: TestSecurityRules_Get (0.04s)
+=== RUN   TestSecurityRules_CreateOrUpdate
+--- PASS: TestSecurityRules_CreateOrUpdate (0.09s)
+=== RUN   TestSecurityRules_List
+--- PASS: TestSecurityRules_List (0.04s)
+=== RUN   TestDefaultSecurityRules_List
+--- PASS: TestDefaultSecurityRules_List (0.05s)
+=== RUN   TestDefaultSecurityRules_Get
+--- PASS: TestDefaultSecurityRules_Get (0.03s)
+=== RUN   TestNetworkVirtualAppliances_Delete
+--- PASS: TestNetworkVirtualAppliances_Delete (0.21s)
+=== RUN   TestNetworkVirtualAppliances_Get
+--- PASS: TestNetworkVirtualAppliances_Get (0.04s)
+=== RUN   TestNetworkVirtualAppliances_UpdateTags
+--- PASS: TestNetworkVirtualAppliances_UpdateTags (0.04s)
+=== RUN   TestNetworkVirtualAppliances_CreateOrUpdate
+--- PASS: TestNetworkVirtualAppliances_CreateOrUpdate (0.11s)
+=== RUN   TestNetworkVirtualAppliances_ListByResourceGroup
+--- PASS: TestNetworkVirtualAppliances_ListByResourceGroup (0.04s)
+=== RUN   TestNetworkVirtualAppliances_List
+--- PASS: TestNetworkVirtualAppliances_List (0.04s)
+=== RUN   TestVirtualApplianceSites_Delete
+--- PASS: TestVirtualApplianceSites_Delete (0.07s)
+=== RUN   TestVirtualApplianceSites_Get
+--- PASS: TestVirtualApplianceSites_Get (0.03s)
+=== RUN   TestVirtualApplianceSites_CreateOrUpdate
+--- PASS: TestVirtualApplianceSites_CreateOrUpdate (0.14s)
+=== RUN   TestVirtualApplianceSites_List
+--- PASS: TestVirtualApplianceSites_List (0.06s)
+=== RUN   TestVirtualApplianceSKUs_List
+--- PASS: TestVirtualApplianceSKUs_List (0.03s)
+=== RUN   TestVirtualApplianceSKUs_Get
+--- PASS: TestVirtualApplianceSKUs_Get (0.04s)
+=== RUN   TestInboundSecurityRule_CreateOrUpdate
+    zt_generated_mock_test.go:22345: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/InboundSecurityRulePut.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/networkVirtualAppliances/nva/inboundSecurityRules/rule1
+        --------------------------------------------------------------------------------
+        RESPONSE 453: 453 unknown
+        ERROR CODE: 453
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "453",
+            "message": "Request Validation Failed",
+            "target": "{\"errors\":[],\"runtimeException\":{\"code\":\"OPERATION_NOT_FOUND_IN_CACHE\",\"message\":\"Could not find best match operation for verb \\\"get\\\" for api-version \\\"2021-05-01\\\" and provider \\\"microsoft.network\\\" in the cache.\"},\"operationInfo\":{\"apiVersion\":\"unknown-api-version\",\"operationId\":\"unknownOperationId\",\"validationRequest\":{\"providerNamespace\":\"microsoft.network\",\"resourceType\":\"networkVirtualAppliances\",\"apiVersion\":\"2021-05-01\",\"requestMethod\":\"get\",\"host\":\"localhost:8443\",\"pathStr\":\"/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/networkVirtualAppliances/nva/inboundSecurityRules/rule1\",\"query\":{\"api-version\":\"2021-05-01\"},\"correlationId\":\"\",\"requestUrl\":\"https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/networkVirtualAppliances/nva/inboundSecurityRules/rule1?api-version=2021-05-01\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestInboundSecurityRule_CreateOrUpdate (0.05s)
+=== RUN   TestNetworkWatchers_CreateOrUpdate
+--- PASS: TestNetworkWatchers_CreateOrUpdate (0.08s)
+=== RUN   TestNetworkWatchers_Get
+--- PASS: TestNetworkWatchers_Get (0.05s)
+=== RUN   TestNetworkWatchers_Delete
+--- PASS: TestNetworkWatchers_Delete (0.07s)
+=== RUN   TestNetworkWatchers_UpdateTags
+--- PASS: TestNetworkWatchers_UpdateTags (0.04s)
+=== RUN   TestNetworkWatchers_List
+--- PASS: TestNetworkWatchers_List (0.04s)
+=== RUN   TestNetworkWatchers_ListAll
+--- PASS: TestNetworkWatchers_ListAll (0.04s)
+=== RUN   TestNetworkWatchers_GetTopology
+--- PASS: TestNetworkWatchers_GetTopology (0.04s)
+=== RUN   TestNetworkWatchers_VerifyIPFlow
+--- PASS: TestNetworkWatchers_VerifyIPFlow (0.08s)
+=== RUN   TestNetworkWatchers_GetNextHop
+--- PASS: TestNetworkWatchers_GetNextHop (0.08s)
+=== RUN   TestNetworkWatchers_GetVMSecurityRules
+--- PASS: TestNetworkWatchers_GetVMSecurityRules (0.09s)
+=== RUN   TestNetworkWatchers_GetTroubleshooting
+--- PASS: TestNetworkWatchers_GetTroubleshooting (0.08s)
+=== RUN   TestNetworkWatchers_GetTroubleshootingResult
+--- PASS: TestNetworkWatchers_GetTroubleshootingResult (0.09s)
+=== RUN   TestNetworkWatchers_SetFlowLogConfiguration
+--- PASS: TestNetworkWatchers_SetFlowLogConfiguration (0.12s)
+=== RUN   TestNetworkWatchers_GetFlowLogStatus
+--- PASS: TestNetworkWatchers_GetFlowLogStatus (0.09s)
+=== RUN   TestNetworkWatchers_CheckConnectivity
+--- PASS: TestNetworkWatchers_CheckConnectivity (0.10s)
+=== RUN   TestNetworkWatchers_GetAzureReachabilityReport
+--- PASS: TestNetworkWatchers_GetAzureReachabilityReport (0.09s)
+=== RUN   TestNetworkWatchers_ListAvailableProviders
+--- PASS: TestNetworkWatchers_ListAvailableProviders (0.06s)
+=== RUN   TestNetworkWatchers_GetNetworkConfigurationDiagnostic
+--- PASS: TestNetworkWatchers_GetNetworkConfigurationDiagnostic (0.09s)
+=== RUN   TestPacketCaptures_Create
+--- PASS: TestPacketCaptures_Create (0.09s)
+=== RUN   TestPacketCaptures_Get
+--- PASS: TestPacketCaptures_Get (0.04s)
+=== RUN   TestPacketCaptures_Delete
+--- PASS: TestPacketCaptures_Delete (0.07s)
+=== RUN   TestPacketCaptures_Stop
+--- PASS: TestPacketCaptures_Stop (0.09s)
+=== RUN   TestPacketCaptures_GetStatus
+--- PASS: TestPacketCaptures_GetStatus (0.07s)
+=== RUN   TestPacketCaptures_List
+--- PASS: TestPacketCaptures_List (0.04s)
+=== RUN   TestConnectionMonitors_CreateOrUpdate
+--- PASS: TestConnectionMonitors_CreateOrUpdate (0.21s)
+=== RUN   TestConnectionMonitors_Get
+--- PASS: TestConnectionMonitors_Get (0.11s)
+=== RUN   TestConnectionMonitors_Delete
+--- PASS: TestConnectionMonitors_Delete (0.07s)
+=== RUN   TestConnectionMonitors_UpdateTags
+--- PASS: TestConnectionMonitors_UpdateTags (0.04s)
+=== RUN   TestConnectionMonitors_Stop
+--- PASS: TestConnectionMonitors_Stop (0.08s)
+=== RUN   TestConnectionMonitors_Start
+--- PASS: TestConnectionMonitors_Start (0.07s)
+=== RUN   TestConnectionMonitors_Query
+--- PASS: TestConnectionMonitors_Query (0.13s)
+=== RUN   TestConnectionMonitors_List
+--- PASS: TestConnectionMonitors_List (0.05s)
+=== RUN   TestFlowLogs_CreateOrUpdate
+--- PASS: TestFlowLogs_CreateOrUpdate (0.09s)
+=== RUN   TestFlowLogs_UpdateTags
+--- PASS: TestFlowLogs_UpdateTags (0.04s)
+=== RUN   TestFlowLogs_Get
+--- PASS: TestFlowLogs_Get (0.03s)
+=== RUN   TestFlowLogs_Delete
+--- PASS: TestFlowLogs_Delete (0.08s)
+=== RUN   TestFlowLogs_List
+--- PASS: TestFlowLogs_List (0.04s)
+=== RUN   TestOperations_List
+--- PASS: TestOperations_List (0.09s)
+=== RUN   TestPrivateEndpoints_Delete
+--- PASS: TestPrivateEndpoints_Delete (0.54s)
+=== RUN   TestPrivateEndpoints_Get
+--- PASS: TestPrivateEndpoints_Get (0.78s)
+=== RUN   TestPrivateEndpoints_CreateOrUpdate
+--- PASS: TestPrivateEndpoints_CreateOrUpdate (2.35s)
+=== RUN   TestPrivateEndpoints_List
+--- PASS: TestPrivateEndpoints_List (0.10s)
+=== RUN   TestPrivateEndpoints_ListBySubscription
+--- PASS: TestPrivateEndpoints_ListBySubscription (0.07s)
+=== RUN   TestAvailablePrivateEndpointTypes_List
+--- PASS: TestAvailablePrivateEndpointTypes_List (0.06s)
+=== RUN   TestAvailablePrivateEndpointTypes_ListByResourceGroup
+--- PASS: TestAvailablePrivateEndpointTypes_ListByResourceGroup (0.04s)
+=== RUN   TestPrivateDNSZoneGroups_Delete
+--- PASS: TestPrivateDNSZoneGroups_Delete (0.19s)
+=== RUN   TestPrivateDNSZoneGroups_Get
+--- PASS: TestPrivateDNSZoneGroups_Get (0.04s)
+=== RUN   TestPrivateDNSZoneGroups_CreateOrUpdate
+--- PASS: TestPrivateDNSZoneGroups_CreateOrUpdate (0.09s)
+=== RUN   TestPrivateDNSZoneGroups_List
+--- PASS: TestPrivateDNSZoneGroups_List (0.08s)
+=== RUN   TestPrivateLinkServices_Delete
+--- PASS: TestPrivateLinkServices_Delete (0.09s)
+=== RUN   TestPrivateLinkServices_Get
+--- PASS: TestPrivateLinkServices_Get (0.04s)
+=== RUN   TestPrivateLinkServices_CreateOrUpdate
+--- PASS: TestPrivateLinkServices_CreateOrUpdate (2.43s)
+=== RUN   TestPrivateLinkServices_List
+--- PASS: TestPrivateLinkServices_List (0.05s)
+=== RUN   TestPrivateLinkServices_ListBySubscription
+--- PASS: TestPrivateLinkServices_ListBySubscription (0.05s)
+=== RUN   TestPrivateLinkServices_GetPrivateEndpointConnection
+--- PASS: TestPrivateLinkServices_GetPrivateEndpointConnection (0.05s)
+=== RUN   TestPrivateLinkServices_UpdatePrivateEndpointConnection
+    zt_generated_mock_test.go:26553: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/PrivateLinkServiceUpdatePrivateEndpointConnection.json: PUT https://localhost:8443/subscriptions/subId/resourceGroups/rg1/providers/Microsoft.Network/privateLinkServices/testPls/privateEndpointConnections/testPlePeConnection
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "body parameter parameters={\"name\":\"testPlePeConnection\",\"properties\":{\"privateLinkServiceConnectionState\":{\"description\":\"approved it for some reason.\",\"status\":\"Approved\"}}} don't match example value {\"name\":\"testPlePeConnection\",\"properties\":{\"privateEndpoint\":{\"id\":\"/subscriptions/subId/resourceGroups/rg1/providers/Microsoft.Network/privateEndpoints/testPe\"},\"privateLinkServiceConnectionState\":{\"status\":\"Approved\",\"description\":\"approved it for some reason.\"}}}"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPrivateLinkServices_UpdatePrivateEndpointConnection (0.74s)
+=== RUN   TestPrivateLinkServices_DeletePrivateEndpointConnection
+--- PASS: TestPrivateLinkServices_DeletePrivateEndpointConnection (0.07s)
+=== RUN   TestPrivateLinkServices_ListPrivateEndpointConnections
+--- PASS: TestPrivateLinkServices_ListPrivateEndpointConnections (0.04s)
+=== RUN   TestPrivateLinkServices_CheckPrivateLinkServiceVisibility
+    zt_generated_mock_test.go:26676: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/CheckPrivateLinkServiceVisibility.json: POST https://localhost:8443/subscriptions/subid/providers/Microsoft.Network/locations/westus/checkPrivateLinkServiceVisibility
+        --------------------------------------------------------------------------------
+        RESPONSE 460: 460 unknown
+        ERROR CODE: 460
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "460",
+            "message": "Can't find a GET operation nearby this lro operation to work as callback url",
+            "target": "Lro operation: POST /subscriptions/subid/providers/Microsoft.Network/locations/westus/checkPrivateLinkServiceVisibility?api-version=2021-05-01"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPrivateLinkServices_CheckPrivateLinkServiceVisibility (0.02s)
+=== RUN   TestPrivateLinkServices_CheckPrivateLinkServiceVisibilityByResourceGroup
+    zt_generated_mock_test.go:26714: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/CheckPrivateLinkServiceVisibilityByResourceGroup.json: POST https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/locations/westus/checkPrivateLinkServiceVisibility
+        --------------------------------------------------------------------------------
+        RESPONSE 460: 460 unknown
+        ERROR CODE: 460
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "460",
+            "message": "Can't find a GET operation nearby this lro operation to work as callback url",
+            "target": "Lro operation: POST /subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/locations/westus/checkPrivateLinkServiceVisibility?api-version=2021-05-01"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestPrivateLinkServices_CheckPrivateLinkServiceVisibilityByResourceGroup (0.02s)
+=== RUN   TestPrivateLinkServices_ListAutoApprovedPrivateLinkServices
+--- PASS: TestPrivateLinkServices_ListAutoApprovedPrivateLinkServices (0.06s)
+=== RUN   TestPrivateLinkServices_ListAutoApprovedPrivateLinkServicesByResourceGroup
+--- PASS: TestPrivateLinkServices_ListAutoApprovedPrivateLinkServicesByResourceGroup (0.04s)
+=== RUN   TestPublicIPPrefixes_Delete
+--- PASS: TestPublicIPPrefixes_Delete (0.18s)
+=== RUN   TestPublicIPPrefixes_Get
+--- PASS: TestPublicIPPrefixes_Get (0.06s)
+=== RUN   TestPublicIPPrefixes_CreateOrUpdate
+--- PASS: TestPublicIPPrefixes_CreateOrUpdate (0.16s)
+=== RUN   TestPublicIPPrefixes_UpdateTags
+--- PASS: TestPublicIPPrefixes_UpdateTags (0.03s)
+=== RUN   TestPublicIPPrefixes_ListAll
+--- PASS: TestPublicIPPrefixes_ListAll (0.04s)
+=== RUN   TestPublicIPPrefixes_List
+--- PASS: TestPublicIPPrefixes_List (0.04s)
+=== RUN   TestRouteFilters_Delete
+--- PASS: TestRouteFilters_Delete (0.12s)
+=== RUN   TestRouteFilters_Get
+--- PASS: TestRouteFilters_Get (0.04s)
+=== RUN   TestRouteFilters_CreateOrUpdate
+--- PASS: TestRouteFilters_CreateOrUpdate (0.09s)
+=== RUN   TestRouteFilters_UpdateTags
+--- PASS: TestRouteFilters_UpdateTags (0.04s)
+=== RUN   TestRouteFilters_ListByResourceGroup
+--- PASS: TestRouteFilters_ListByResourceGroup (0.06s)
+=== RUN   TestRouteFilters_List
+--- PASS: TestRouteFilters_List (0.13s)
+=== RUN   TestRouteFilterRules_Delete
+--- PASS: TestRouteFilterRules_Delete (0.15s)
+=== RUN   TestRouteFilterRules_Get
+--- PASS: TestRouteFilterRules_Get (0.09s)
+=== RUN   TestRouteFilterRules_CreateOrUpdate
+--- PASS: TestRouteFilterRules_CreateOrUpdate (0.08s)
+=== RUN   TestRouteFilterRules_ListByRouteFilter
+--- PASS: TestRouteFilterRules_ListByRouteFilter (0.03s)
+=== RUN   TestRouteTables_Delete
+--- PASS: TestRouteTables_Delete (0.09s)
+=== RUN   TestRouteTables_Get
+--- PASS: TestRouteTables_Get (0.05s)
+=== RUN   TestRouteTables_CreateOrUpdate
+--- PASS: TestRouteTables_CreateOrUpdate (0.52s)
+=== RUN   TestRouteTables_UpdateTags
+--- PASS: TestRouteTables_UpdateTags (0.04s)
+=== RUN   TestRouteTables_List
+--- PASS: TestRouteTables_List (0.05s)
+=== RUN   TestRouteTables_ListAll
+--- PASS: TestRouteTables_ListAll (0.05s)
+=== RUN   TestRoutes_Delete
+--- PASS: TestRoutes_Delete (0.07s)
+=== RUN   TestRoutes_Get
+--- PASS: TestRoutes_Get (0.04s)
+=== RUN   TestRoutes_CreateOrUpdate
+--- PASS: TestRoutes_CreateOrUpdate (0.08s)
+=== RUN   TestRoutes_List
+--- PASS: TestRoutes_List (0.04s)
+=== RUN   TestSecurityPartnerProviders_Delete
+--- PASS: TestSecurityPartnerProviders_Delete (0.14s)
+=== RUN   TestSecurityPartnerProviders_Get
+--- PASS: TestSecurityPartnerProviders_Get (0.03s)
+=== RUN   TestSecurityPartnerProviders_CreateOrUpdate
+--- PASS: TestSecurityPartnerProviders_CreateOrUpdate (0.09s)
+=== RUN   TestSecurityPartnerProviders_UpdateTags
+--- PASS: TestSecurityPartnerProviders_UpdateTags (0.04s)
+=== RUN   TestSecurityPartnerProviders_ListByResourceGroup
+--- PASS: TestSecurityPartnerProviders_ListByResourceGroup (0.04s)
+=== RUN   TestSecurityPartnerProviders_List
+--- PASS: TestSecurityPartnerProviders_List (0.04s)
+=== RUN   TestBgpServiceCommunities_List
+--- PASS: TestBgpServiceCommunities_List (0.06s)
+=== RUN   TestServiceEndpointPolicies_Delete
+--- PASS: TestServiceEndpointPolicies_Delete (0.10s)
+=== RUN   TestServiceEndpointPolicies_Get
+--- PASS: TestServiceEndpointPolicies_Get (0.07s)
+=== RUN   TestServiceEndpointPolicies_CreateOrUpdate
+--- PASS: TestServiceEndpointPolicies_CreateOrUpdate (0.54s)
+=== RUN   TestServiceEndpointPolicies_UpdateTags
+--- PASS: TestServiceEndpointPolicies_UpdateTags (0.04s)
+=== RUN   TestServiceEndpointPolicies_List
+--- PASS: TestServiceEndpointPolicies_List (0.04s)
+=== RUN   TestServiceEndpointPolicies_ListByResourceGroup
+--- PASS: TestServiceEndpointPolicies_ListByResourceGroup (0.04s)
+=== RUN   TestServiceEndpointPolicyDefinitions_Delete
+--- PASS: TestServiceEndpointPolicyDefinitions_Delete (0.11s)
+=== RUN   TestServiceEndpointPolicyDefinitions_Get
+--- PASS: TestServiceEndpointPolicyDefinitions_Get (0.03s)
+=== RUN   TestServiceEndpointPolicyDefinitions_CreateOrUpdate
+--- PASS: TestServiceEndpointPolicyDefinitions_CreateOrUpdate (0.11s)
+=== RUN   TestServiceEndpointPolicyDefinitions_ListByResourceGroup
+--- PASS: TestServiceEndpointPolicyDefinitions_ListByResourceGroup (0.04s)
+=== RUN   TestServiceTags_List
+--- PASS: TestServiceTags_List (0.06s)
+=== RUN   TestServiceTagInformation_List
+    zt_generated_mock_test.go:29307: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/ServiceTagInformationListResultWithNoAddressPrefixes.json: GET https://localhost:8443/subscriptions/subid/providers/Microsoft.Network/locations/westeurope/serviceTagDetails
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter noAddressPrefixes=true don't match example value \"true\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestServiceTagInformation_List (0.07s)
+=== RUN   TestUsages_List
+--- PASS: TestUsages_List (0.19s)
+=== RUN   TestVirtualNetworks_Delete
+--- PASS: TestVirtualNetworks_Delete (0.16s)
+=== RUN   TestVirtualNetworks_Get
+--- PASS: TestVirtualNetworks_Get (0.18s)
+=== RUN   TestVirtualNetworks_CreateOrUpdate
+--- PASS: TestVirtualNetworks_CreateOrUpdate (3.59s)
+=== RUN   TestVirtualNetworks_UpdateTags
+--- PASS: TestVirtualNetworks_UpdateTags (0.03s)
+=== RUN   TestVirtualNetworks_ListAll
+--- PASS: TestVirtualNetworks_ListAll (0.04s)
+=== RUN   TestVirtualNetworks_List
+--- PASS: TestVirtualNetworks_List (0.04s)
+=== RUN   TestVirtualNetworks_CheckIPAddressAvailability
+--- PASS: TestVirtualNetworks_CheckIPAddressAvailability (0.03s)
+=== RUN   TestVirtualNetworks_ListUsage
+--- PASS: TestVirtualNetworks_ListUsage (0.03s)
+=== RUN   TestSubnets_Delete
+--- PASS: TestSubnets_Delete (0.07s)
+=== RUN   TestSubnets_Get
+--- PASS: TestSubnets_Get (0.07s)
+=== RUN   TestSubnets_CreateOrUpdate
+--- PASS: TestSubnets_CreateOrUpdate (0.64s)
+=== RUN   TestSubnets_PrepareNetworkPolicies
+--- PASS: TestSubnets_PrepareNetworkPolicies (0.07s)
+=== RUN   TestSubnets_UnprepareNetworkPolicies
+--- PASS: TestSubnets_UnprepareNetworkPolicies (0.08s)
+=== RUN   TestSubnets_List
+--- PASS: TestSubnets_List (0.04s)
+=== RUN   TestResourceNavigationLinks_List
+--- PASS: TestResourceNavigationLinks_List (0.04s)
+=== RUN   TestServiceAssociationLinks_List
+--- PASS: TestServiceAssociationLinks_List (0.04s)
+=== RUN   TestVirtualNetworkPeerings_Delete
+--- PASS: TestVirtualNetworkPeerings_Delete (0.07s)
+=== RUN   TestVirtualNetworkPeerings_Get
+--- PASS: TestVirtualNetworkPeerings_Get (0.08s)
+=== RUN   TestVirtualNetworkPeerings_CreateOrUpdate
+--- PASS: TestVirtualNetworkPeerings_CreateOrUpdate (0.27s)
+=== RUN   TestVirtualNetworkPeerings_List
+--- PASS: TestVirtualNetworkPeerings_List (0.09s)
+=== RUN   TestVirtualNetworkGateways_CreateOrUpdate
+--- PASS: TestVirtualNetworkGateways_CreateOrUpdate (0.16s)
+=== RUN   TestVirtualNetworkGateways_Get
+--- PASS: TestVirtualNetworkGateways_Get (0.06s)
+=== RUN   TestVirtualNetworkGateways_Delete
+--- PASS: TestVirtualNetworkGateways_Delete (0.07s)
+=== RUN   TestVirtualNetworkGateways_UpdateTags
+--- PASS: TestVirtualNetworkGateways_UpdateTags (0.09s)
+=== RUN   TestVirtualNetworkGateways_List
+--- PASS: TestVirtualNetworkGateways_List (0.06s)
+=== RUN   TestVirtualNetworkGateways_ListConnections
+--- PASS: TestVirtualNetworkGateways_ListConnections (0.04s)
+=== RUN   TestVirtualNetworkGateways_Reset
+--- PASS: TestVirtualNetworkGateways_Reset (0.15s)
+=== RUN   TestVirtualNetworkGateways_Generatevpnclientpackage
+    zt_generated_mock_test.go:32907: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayGenerateVpnClientPackage.json: json: cannot unmarshal object into Go value of type string
+--- FAIL: TestVirtualNetworkGateways_Generatevpnclientpackage (0.09s)
+=== RUN   TestVirtualNetworkGateways_GetBgpPeerStatus
+--- PASS: TestVirtualNetworkGateways_GetBgpPeerStatus (0.08s)
+=== RUN   TestVirtualNetworkGateways_GetLearnedRoutes
+--- PASS: TestVirtualNetworkGateways_GetLearnedRoutes (0.07s)
+=== RUN   TestVirtualNetworkGateways_GetAdvertisedRoutes
+--- PASS: TestVirtualNetworkGateways_GetAdvertisedRoutes (0.07s)
+=== RUN   TestVirtualNetworkGateways_StartPacketCapture
+    zt_generated_mock_test.go:33046: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayStartPacketCaptureFilterData.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworkGateways/vpngw
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGateways_StartPacketCapture (51.60s)
+=== RUN   TestVirtualNetworkGateways_StopPacketCapture
+    zt_generated_mock_test.go:33110: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayStopPacketCapture.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/virtualNetworkGateways/vpngw
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGateways_StopPacketCapture (45.53s)
+=== RUN   TestVirtualNetworkGateways_GetVpnclientConnectionHealth
+--- PASS: TestVirtualNetworkGateways_GetVpnclientConnectionHealth (3.67s)
+=== RUN   TestVirtualNetworkGatewayConnections_CreateOrUpdate
+--- PASS: TestVirtualNetworkGatewayConnections_CreateOrUpdate (0.23s)
+=== RUN   TestVirtualNetworkGatewayConnections_Get
+--- PASS: TestVirtualNetworkGatewayConnections_Get (0.06s)
+=== RUN   TestVirtualNetworkGatewayConnections_Delete
+--- PASS: TestVirtualNetworkGatewayConnections_Delete (0.09s)
+=== RUN   TestVirtualNetworkGatewayConnections_UpdateTags
+--- PASS: TestVirtualNetworkGatewayConnections_UpdateTags (0.09s)
+=== RUN   TestVirtualNetworkGatewayConnections_SetSharedKey
+--- PASS: TestVirtualNetworkGatewayConnections_SetSharedKey (0.13s)
+=== RUN   TestVirtualNetworkGatewayConnections_GetSharedKey
+--- PASS: TestVirtualNetworkGatewayConnections_GetSharedKey (0.04s)
+=== RUN   TestVirtualNetworkGatewayConnections_List
+--- PASS: TestVirtualNetworkGatewayConnections_List (0.05s)
+=== RUN   TestVirtualNetworkGatewayConnections_ResetSharedKey
+--- PASS: TestVirtualNetworkGatewayConnections_ResetSharedKey (0.09s)
+=== RUN   TestVirtualNetworkGatewayConnections_StartPacketCapture
+    zt_generated_mock_test.go:33737: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayConnectionStartPacketCaptureFilterData.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/connections/vpngwcn1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGatewayConnections_StartPacketCapture (44.72s)
+=== RUN   TestVirtualNetworkGatewayConnections_StopPacketCapture
+    zt_generated_mock_test.go:33801: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayConnectionStopPacketCapture.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/connections/vpngwcn1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGatewayConnections_StopPacketCapture (47.58s)
+=== RUN   TestVirtualNetworkGatewayConnections_GetIkeSas
+    zt_generated_mock_test.go:33834: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayConnectionGetIkeSas.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/connections/vpngwcn1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGatewayConnections_GetIkeSas (42.29s)
+=== RUN   TestVirtualNetworkGatewayConnections_ResetConnection
+    zt_generated_mock_test.go:33863: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayConnectionReset.json: POST https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/connections/conn1/resetconnection
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-05-01\" don't match example value \"2020-08-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVirtualNetworkGatewayConnections_ResetConnection (0.08s)
+=== RUN   TestLocalNetworkGateways_CreateOrUpdate
+--- PASS: TestLocalNetworkGateways_CreateOrUpdate (0.16s)
+=== RUN   TestLocalNetworkGateways_Get
+--- PASS: TestLocalNetworkGateways_Get (0.05s)
+=== RUN   TestLocalNetworkGateways_Delete
+--- PASS: TestLocalNetworkGateways_Delete (0.09s)
+=== RUN   TestLocalNetworkGateways_UpdateTags
+--- PASS: TestLocalNetworkGateways_UpdateTags (0.05s)
+=== RUN   TestLocalNetworkGateways_List
+--- PASS: TestLocalNetworkGateways_List (0.06s)
+=== RUN   TestVirtualNetworkGatewayNatRules_Get
+--- PASS: TestVirtualNetworkGatewayNatRules_Get (0.06s)
+=== RUN   TestVirtualNetworkGatewayNatRules_CreateOrUpdate
+--- PASS: TestVirtualNetworkGatewayNatRules_CreateOrUpdate (0.11s)
+=== RUN   TestVirtualNetworkGatewayNatRules_Delete
+--- PASS: TestVirtualNetworkGatewayNatRules_Delete (0.12s)
+=== RUN   TestVirtualNetworkGatewayNatRules_ListByVirtualNetworkGateway
+    zt_generated_mock_test.go:34277: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualNetworkGatewayNatRuleList.json: unmarshalling type *armnetwork.ListVirtualNetworkGatewayNatRulesResult: json: cannot unmarshal array into Go value of type armnetwork.ListVirtualNetworkGatewayNatRulesResult
+--- FAIL: TestVirtualNetworkGatewayNatRules_ListByVirtualNetworkGateway (0.05s)
+=== RUN   TestVirtualNetworkTaps_Delete
+--- PASS: TestVirtualNetworkTaps_Delete (0.11s)
+=== RUN   TestVirtualNetworkTaps_Get
+--- PASS: TestVirtualNetworkTaps_Get (0.04s)
+=== RUN   TestVirtualNetworkTaps_CreateOrUpdate
+--- PASS: TestVirtualNetworkTaps_CreateOrUpdate (0.72s)
+=== RUN   TestVirtualNetworkTaps_UpdateTags
+--- PASS: TestVirtualNetworkTaps_UpdateTags (0.07s)
+=== RUN   TestVirtualNetworkTaps_ListAll
+--- PASS: TestVirtualNetworkTaps_ListAll (0.06s)
+=== RUN   TestVirtualNetworkTaps_ListByResourceGroup
+--- PASS: TestVirtualNetworkTaps_ListByResourceGroup (0.12s)
+=== RUN   TestVirtualRouters_Delete
+--- PASS: TestVirtualRouters_Delete (0.11s)
+=== RUN   TestVirtualRouters_Get
+--- PASS: TestVirtualRouters_Get (0.04s)
+=== RUN   TestVirtualRouters_CreateOrUpdate
+--- PASS: TestVirtualRouters_CreateOrUpdate (0.11s)
+=== RUN   TestVirtualRouters_ListByResourceGroup
+--- PASS: TestVirtualRouters_ListByResourceGroup (0.11s)
+=== RUN   TestVirtualRouters_List
+--- PASS: TestVirtualRouters_List (0.05s)
+=== RUN   TestVirtualRouterPeerings_Delete
+--- PASS: TestVirtualRouterPeerings_Delete (0.06s)
+=== RUN   TestVirtualRouterPeerings_Get
+--- PASS: TestVirtualRouterPeerings_Get (0.04s)
+=== RUN   TestVirtualRouterPeerings_CreateOrUpdate
+--- PASS: TestVirtualRouterPeerings_CreateOrUpdate (0.08s)
+=== RUN   TestVirtualRouterPeerings_List
+--- PASS: TestVirtualRouterPeerings_List (0.04s)
+=== RUN   TestVirtualWans_Get
+    zt_generated_mock_test.go:35035: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualWANGet.json: unmarshalling type *armnetwork.VirtualWAN: json: cannot unmarshal string into Go struct field VirtualWanProperties.properties.virtualHubs of type armnetwork.SubResource
+--- FAIL: TestVirtualWans_Get (0.04s)
+=== RUN   TestVirtualWans_CreateOrUpdate
+    zt_generated_mock_test.go:35098: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualWANPut.json: json: cannot unmarshal string into Go struct field VirtualWanProperties.properties.virtualHubs of type armnetwork.SubResource
+--- FAIL: TestVirtualWans_CreateOrUpdate (0.09s)
+=== RUN   TestVirtualWans_UpdateTags
+    zt_generated_mock_test.go:35153: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualWANUpdateTags.json: unmarshalling type *armnetwork.VirtualWAN: json: cannot unmarshal string into Go struct field VirtualWanProperties.properties.virtualHubs of type armnetwork.SubResource
+--- FAIL: TestVirtualWans_UpdateTags (0.03s)
+=== RUN   TestVirtualWans_Delete
+--- PASS: TestVirtualWans_Delete (0.12s)
+=== RUN   TestVirtualWans_ListByResourceGroup
+    zt_generated_mock_test.go:35227: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualWANListByResourceGroup.json: unmarshalling type *armnetwork.ListVirtualWANsResult: json: cannot unmarshal string into Go struct field VirtualWanProperties.value.properties.virtualHubs of type armnetwork.SubResource
+--- FAIL: TestVirtualWans_ListByResourceGroup (0.06s)
+=== RUN   TestVirtualWans_List
+    zt_generated_mock_test.go:35299: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualWANList.json: unmarshalling type *armnetwork.ListVirtualWANsResult: json: cannot unmarshal string into Go struct field VirtualWanProperties.value.properties.virtualHubs of type armnetwork.SubResource
+--- FAIL: TestVirtualWans_List (0.04s)
+=== RUN   TestVPNSites_Get
+--- PASS: TestVPNSites_Get (0.11s)
+=== RUN   TestVPNSites_CreateOrUpdate
+--- PASS: TestVPNSites_CreateOrUpdate (0.16s)
+=== RUN   TestVPNSites_UpdateTags
+    zt_generated_mock_test.go:35563: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnSiteUpdateTags.json: unmarshalling type *armnetwork.VPNSite: json: cannot unmarshal string into Go struct field VPNSiteProperties.properties.virtualWan of type armnetwork.SubResource
+--- FAIL: TestVPNSites_UpdateTags (0.09s)
+=== RUN   TestVPNSites_Delete
+--- PASS: TestVPNSites_Delete (0.08s)
+=== RUN   TestVPNSites_ListByResourceGroup
+    zt_generated_mock_test.go:35644: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnSiteListByResourceGroup.json: unmarshalling type *armnetwork.ListVPNSitesResult: json: cannot unmarshal string into Go struct field VPNSiteProperties.value.properties.virtualWan of type armnetwork.SubResource
+--- FAIL: TestVPNSites_ListByResourceGroup (0.07s)
+=== RUN   TestVPNSites_List
+    zt_generated_mock_test.go:35744: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnSiteList.json: unmarshalling type *armnetwork.ListVPNSitesResult: json: cannot unmarshal string into Go struct field VPNSiteProperties.value.properties.virtualWan of type armnetwork.SubResource
+--- FAIL: TestVPNSites_List (0.08s)
+=== RUN   TestVPNSiteLinks_Get
+--- PASS: TestVPNSiteLinks_Get (0.06s)
+=== RUN   TestVPNSitesConfiguration_Download
+--- PASS: TestVPNSitesConfiguration_Download (0.07s)
+=== RUN   TestVPNServerConfigurations_Get
+--- PASS: TestVPNServerConfigurations_Get (0.07s)
+=== RUN   TestVPNServerConfigurations_CreateOrUpdate
+--- PASS: TestVPNServerConfigurations_CreateOrUpdate (0.21s)
+=== RUN   TestVPNServerConfigurations_UpdateTags
+--- PASS: TestVPNServerConfigurations_UpdateTags (0.06s)
+=== RUN   TestVPNServerConfigurations_Delete
+--- PASS: TestVPNServerConfigurations_Delete (0.08s)
+=== RUN   TestVPNServerConfigurations_ListByResourceGroup
+--- PASS: TestVPNServerConfigurations_ListByResourceGroup (0.07s)
+=== RUN   TestVPNServerConfigurations_List
+--- PASS: TestVPNServerConfigurations_List (0.15s)
+=== RUN   TestVirtualHubs_Get
+--- PASS: TestVirtualHubs_Get (0.12s)
+=== RUN   TestVirtualHubs_CreateOrUpdate
+--- PASS: TestVirtualHubs_CreateOrUpdate (0.19s)
+=== RUN   TestVirtualHubs_UpdateTags
+--- PASS: TestVirtualHubs_UpdateTags (0.03s)
+=== RUN   TestVirtualHubs_Delete
+--- PASS: TestVirtualHubs_Delete (0.10s)
+=== RUN   TestVirtualHubs_ListByResourceGroup
+--- PASS: TestVirtualHubs_ListByResourceGroup (0.09s)
+=== RUN   TestVirtualHubs_List
+--- PASS: TestVirtualHubs_List (0.06s)
+=== RUN   TestVirtualHubs_GetEffectiveVirtualHubRoutes
+--- PASS: TestVirtualHubs_GetEffectiveVirtualHubRoutes (0.27s)
+=== RUN   TestHubVirtualNetworkConnections_CreateOrUpdate
+--- PASS: TestHubVirtualNetworkConnections_CreateOrUpdate (0.10s)
+=== RUN   TestHubVirtualNetworkConnections_Delete
+--- PASS: TestHubVirtualNetworkConnections_Delete (0.18s)
+=== RUN   TestHubVirtualNetworkConnections_Get
+--- PASS: TestHubVirtualNetworkConnections_Get (0.04s)
+=== RUN   TestHubVirtualNetworkConnections_List
+    zt_generated_mock_test.go:37269: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/HubVirtualNetworkConnectionList.json: unmarshalling type *armnetwork.ListHubVirtualNetworkConnectionsResult: json: cannot unmarshal array into Go value of type armnetwork.ListHubVirtualNetworkConnectionsResult
+--- FAIL: TestHubVirtualNetworkConnections_List (0.12s)
+=== RUN   TestVPNGateways_Get
+--- PASS: TestVPNGateways_Get (0.15s)
+=== RUN   TestVPNGateways_CreateOrUpdate
+--- PASS: TestVPNGateways_CreateOrUpdate (0.44s)
+=== RUN   TestVPNGateways_UpdateTags
+--- PASS: TestVPNGateways_UpdateTags (0.13s)
+=== RUN   TestVPNGateways_Delete
+--- PASS: TestVPNGateways_Delete (0.12s)
+=== RUN   TestVPNGateways_Reset
+--- PASS: TestVPNGateways_Reset (0.08s)
+=== RUN   TestVPNGateways_StartPacketCapture
+    zt_generated_mock_test.go:38001: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnGatewayStartPacketCaptureFilterData.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/vpngw
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNGateways_StartPacketCapture (41.04s)
+=== RUN   TestVPNGateways_StopPacketCapture
+    zt_generated_mock_test.go:38066: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnGatewayStopPacketCapture.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/vpngw
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNGateways_StopPacketCapture (50.01s)
+=== RUN   TestVPNGateways_ListByResourceGroup
+--- PASS: TestVPNGateways_ListByResourceGroup (0.18s)
+=== RUN   TestVPNGateways_List
+--- PASS: TestVPNGateways_List (0.10s)
+=== RUN   TestVPNLinkConnections_ResetConnection
+    zt_generated_mock_test.go:38655: Failed to get result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnSiteLinkConnectionReset.json: POST https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/gateway1/vpnConnections/vpnConnection1/vpnLinkConnections/Connection-Link1/resetconnection
+        --------------------------------------------------------------------------------
+        RESPONSE 455: 455 unknown
+        ERROR CODE: 455
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "455",
+            "message": "Example Not Match",
+            "target": "query parameter api-version=\"2021-05-01\" don't match example value \"2020-08-01\""
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNLinkConnections_ResetConnection (0.11s)
+=== RUN   TestVPNLinkConnections_GetIkeSas
+    zt_generated_mock_test.go:38685: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnSiteLinkConnectionGetIkeSas.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/gateway1/vpnConnections/vpnConnection1/vpnLinkConnections/Connection-Link1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNLinkConnections_GetIkeSas (43.72s)
+=== RUN   TestVPNConnections_Get
+--- PASS: TestVPNConnections_Get (0.12s)
+=== RUN   TestVPNConnections_CreateOrUpdate
+--- PASS: TestVPNConnections_CreateOrUpdate (0.15s)
+=== RUN   TestVPNConnections_Delete
+--- PASS: TestVPNConnections_Delete (0.10s)
+=== RUN   TestVPNConnections_StartPacketCapture
+    zt_generated_mock_test.go:38985: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnConnectionStartPacketCaptureFilterData.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/gateway1/vpnConnections/vpnConnection1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNConnections_StartPacketCapture (48.86s)
+=== RUN   TestVPNConnections_StopPacketCapture
+    zt_generated_mock_test.go:39059: Failed to get LRO result for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VpnConnectionStopPacketCapture.json: GET https://localhost:8443/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/vpnGateways/gateway1/vpnConnections/vpnConnection1
+        --------------------------------------------------------------------------------
+        RESPONSE 500: 500 Internal Server Error
+        ERROR CODE: 500
+        --------------------------------------------------------------------------------
+        {
+          "error": {
+            "code": "500",
+            "message": "TypeError: Cannot create property 'status' on string '\"{\"Status\":\"Successful\",\"Data\":null}\"'"
+          }
+        }
+        --------------------------------------------------------------------------------
+--- FAIL: TestVPNConnections_StopPacketCapture (56.47s)
+=== RUN   TestVPNSiteLinkConnections_Get
+--- PASS: TestVPNSiteLinkConnections_Get (0.07s)
+=== RUN   TestNatRules_Get
+--- PASS: TestNatRules_Get (0.07s)
+=== RUN   TestNatRules_CreateOrUpdate
+--- PASS: TestNatRules_CreateOrUpdate (0.13s)
+=== RUN   TestNatRules_Delete
+--- PASS: TestNatRules_Delete (0.15s)
+=== RUN   TestP2SVPNGateways_Get
+--- PASS: TestP2SVPNGateways_Get (0.11s)
+=== RUN   TestP2SVPNGateways_CreateOrUpdate
+--- PASS: TestP2SVPNGateways_CreateOrUpdate (0.37s)
+=== RUN   TestP2SVPNGateways_UpdateTags
+--- PASS: TestP2SVPNGateways_UpdateTags (0.11s)
+=== RUN   TestP2SVPNGateways_Delete
+--- PASS: TestP2SVPNGateways_Delete (0.09s)
+=== RUN   TestP2SVPNGateways_ListByResourceGroup
+--- PASS: TestP2SVPNGateways_ListByResourceGroup (0.06s)
+=== RUN   TestP2SVPNGateways_List
+--- PASS: TestP2SVPNGateways_List (0.16s)
+=== RUN   TestP2SVPNGateways_Reset
+--- PASS: TestP2SVPNGateways_Reset (0.18s)
+=== RUN   TestVPNServerConfigurationsAssociatedWithVirtualWan_List
+--- PASS: TestVPNServerConfigurationsAssociatedWithVirtualWan_List (0.13s)
+=== RUN   TestVirtualHubRouteTableV2S_Get
+--- PASS: TestVirtualHubRouteTableV2S_Get (0.06s)
+=== RUN   TestVirtualHubRouteTableV2S_CreateOrUpdate
+--- PASS: TestVirtualHubRouteTableV2S_CreateOrUpdate (0.18s)
+=== RUN   TestVirtualHubRouteTableV2S_Delete
+--- PASS: TestVirtualHubRouteTableV2S_Delete (0.11s)
+=== RUN   TestVirtualHubRouteTableV2S_List
+    zt_generated_mock_test.go:40254: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/VirtualHubRouteTableV2List.json: unmarshalling type *armnetwork.ListVirtualHubRouteTableV2SResult: json: cannot unmarshal array into Go value of type armnetwork.ListVirtualHubRouteTableV2SResult
+--- FAIL: TestVirtualHubRouteTableV2S_List (0.06s)
+=== RUN   TestExpressRouteGateways_ListBySubscription
+--- PASS: TestExpressRouteGateways_ListBySubscription (0.11s)
+=== RUN   TestExpressRouteGateways_ListByResourceGroup
+--- PASS: TestExpressRouteGateways_ListByResourceGroup (0.09s)
+=== RUN   TestExpressRouteGateways_CreateOrUpdate
+--- PASS: TestExpressRouteGateways_CreateOrUpdate (0.11s)
+=== RUN   TestExpressRouteGateways_UpdateTags
+--- PASS: TestExpressRouteGateways_UpdateTags (0.18s)
+=== RUN   TestExpressRouteGateways_Get
+--- PASS: TestExpressRouteGateways_Get (0.04s)
+=== RUN   TestExpressRouteGateways_Delete
+--- PASS: TestExpressRouteGateways_Delete (0.09s)
+=== RUN   TestExpressRouteConnections_CreateOrUpdate
+--- PASS: TestExpressRouteConnections_CreateOrUpdate (0.10s)
+=== RUN   TestExpressRouteConnections_Get
+--- PASS: TestExpressRouteConnections_Get (0.05s)
+=== RUN   TestExpressRouteConnections_Delete
+--- PASS: TestExpressRouteConnections_Delete (0.09s)
+=== RUN   TestExpressRouteConnections_List
+--- PASS: TestExpressRouteConnections_List (0.05s)
+=== RUN   TestVirtualHubBgpConnection_Get
+--- PASS: TestVirtualHubBgpConnection_Get (0.09s)
+=== RUN   TestVirtualHubBgpConnection_CreateOrUpdate
+--- PASS: TestVirtualHubBgpConnection_CreateOrUpdate (0.11s)
+=== RUN   TestVirtualHubBgpConnection_Delete
+--- PASS: TestVirtualHubBgpConnection_Delete (0.11s)
+=== RUN   TestVirtualHubBgpConnections_List
+--- PASS: TestVirtualHubBgpConnections_List (0.18s)
+=== RUN   TestVirtualHubBgpConnections_ListLearnedRoutes
+--- PASS: TestVirtualHubBgpConnections_ListLearnedRoutes (0.22s)
+=== RUN   TestVirtualHubBgpConnections_ListAdvertisedRoutes
+--- PASS: TestVirtualHubBgpConnections_ListAdvertisedRoutes (0.10s)
+=== RUN   TestVirtualHubIPConfiguration_Get
+--- PASS: TestVirtualHubIPConfiguration_Get (0.05s)
+=== RUN   TestVirtualHubIPConfiguration_CreateOrUpdate
+--- PASS: TestVirtualHubIPConfiguration_CreateOrUpdate (0.57s)
+=== RUN   TestVirtualHubIPConfiguration_Delete
+--- PASS: TestVirtualHubIPConfiguration_Delete (0.08s)
+=== RUN   TestVirtualHubIPConfiguration_List
+--- PASS: TestVirtualHubIPConfiguration_List (0.05s)
+=== RUN   TestHubRouteTables_CreateOrUpdate
+--- PASS: TestHubRouteTables_CreateOrUpdate (0.11s)
+=== RUN   TestHubRouteTables_Get
+--- PASS: TestHubRouteTables_Get (0.04s)
+=== RUN   TestHubRouteTables_Delete
+--- PASS: TestHubRouteTables_Delete (0.07s)
+=== RUN   TestHubRouteTables_List
+    zt_generated_mock_test.go:41488: Failed to advance page for example specification/network/resource-manager/Microsoft.Network/stable/2021-05-01/examples/HubRouteTableList.json: unmarshalling type *armnetwork.ListHubRouteTablesResult: json: cannot unmarshal array into Go value of type armnetwork.ListHubRouteTablesResult
+--- FAIL: TestHubRouteTables_List (0.13s)
+=== RUN   TestRoutingIntent_CreateOrUpdate
+--- PASS: TestRoutingIntent_CreateOrUpdate (0.25s)
+=== RUN   TestRoutingIntent_Get
+--- PASS: TestRoutingIntent_Get (0.04s)
+=== RUN   TestRoutingIntent_Delete
+--- PASS: TestRoutingIntent_Delete (0.08s)
+=== RUN   TestRoutingIntent_List
+--- PASS: TestRoutingIntent_List (0.06s)
+=== RUN   TestWebApplicationFirewallPolicies_List
+--- PASS: TestWebApplicationFirewallPolicies_List (0.18s)
+=== RUN   TestWebApplicationFirewallPolicies_ListAll
+--- PASS: TestWebApplicationFirewallPolicies_ListAll (0.14s)
+=== RUN   TestWebApplicationFirewallPolicies_Get
+--- PASS: TestWebApplicationFirewallPolicies_Get (0.07s)
+=== RUN   TestWebApplicationFirewallPolicies_CreateOrUpdate
+--- PASS: TestWebApplicationFirewallPolicies_CreateOrUpdate (1.40s)
+=== RUN   TestWebApplicationFirewallPolicies_Delete
+--- PASS: TestWebApplicationFirewallPolicies_Delete (0.09s)
+FAIL
+coverage: 68.7% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork	543.121s

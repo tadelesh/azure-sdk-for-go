@@ -28,11 +28,6 @@ func PossibleAggregationGranularityValues() []AggregationGranularity {
 	}
 }
 
-// ToPtr returns a *AggregationGranularity pointing to the current value.
-func (c AggregationGranularity) ToPtr() *AggregationGranularity {
-	return &c
-}
-
 // OfferTermInfo - Name of the offer term
 type OfferTermInfo string
 
@@ -49,9 +44,4 @@ func PossibleOfferTermInfoValues() []OfferTermInfo {
 		OfferTermInfoMonetaryCommitment,
 		OfferTermInfoMonetaryCredit,
 	}
-}
-
-// ToPtr returns a *OfferTermInfo pointing to the current value.
-func (c OfferTermInfo) ToPtr() *OfferTermInfo {
-	return &c
 }

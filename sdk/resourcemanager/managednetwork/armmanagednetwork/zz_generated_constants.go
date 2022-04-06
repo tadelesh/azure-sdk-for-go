@@ -27,11 +27,6 @@ func PossibleKindValues() []Kind {
 	}
 }
 
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
-}
-
 // ProvisioningState - Provisioning state of the ManagedNetwork resource.
 type ProvisioningState string
 
@@ -52,11 +47,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // Type - Gets or sets the connectivity type of a network structure policy
 type Type string
 
@@ -71,9 +61,4 @@ func PossibleTypeValues() []Type {
 		TypeHubAndSpokeTopology,
 		TypeMeshTopology,
 	}
-}
-
-// ToPtr returns a *Type pointing to the current value.
-func (c Type) ToPtr() *Type {
-	return &c
 }

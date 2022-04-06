@@ -35,11 +35,6 @@ func PossibleCalculationWindowTypesValues() []CalculationWindowTypes {
 	}
 }
 
-// ToPtr returns a *CalculationWindowTypes pointing to the current value.
-func (c CalculationWindowTypes) ToPtr() *CalculationWindowTypes {
-	return &c
-}
-
 // CanonicalPropertyValueType - Type of canonical property value.
 type CanonicalPropertyValueType string
 
@@ -60,11 +55,6 @@ func PossibleCanonicalPropertyValueTypeValues() []CanonicalPropertyValueType {
 	}
 }
 
-// ToPtr returns a *CanonicalPropertyValueType pointing to the current value.
-func (c CanonicalPropertyValueType) ToPtr() *CanonicalPropertyValueType {
-	return &c
-}
-
 // CardinalityTypes - The Relationship Cardinality.
 type CardinalityTypes string
 
@@ -83,11 +73,6 @@ func PossibleCardinalityTypesValues() []CardinalityTypes {
 	}
 }
 
-// ToPtr returns a *CardinalityTypes pointing to the current value.
-func (c CardinalityTypes) ToPtr() *CardinalityTypes {
-	return &c
-}
-
 // CompletionOperationTypes - The type of completion operation.
 type CompletionOperationTypes string
 
@@ -104,11 +89,6 @@ func PossibleCompletionOperationTypesValues() []CompletionOperationTypes {
 		CompletionOperationTypesDeleteFile,
 		CompletionOperationTypesMoveFile,
 	}
-}
-
-// ToPtr returns a *CompletionOperationTypes pointing to the current value.
-func (c CompletionOperationTypes) ToPtr() *CompletionOperationTypes {
-	return &c
 }
 
 // ConnectorMappingStates - State of connector mapping.
@@ -137,11 +117,6 @@ func PossibleConnectorMappingStatesValues() []ConnectorMappingStates {
 	}
 }
 
-// ToPtr returns a *ConnectorMappingStates pointing to the current value.
-func (c ConnectorMappingStates) ToPtr() *ConnectorMappingStates {
-	return &c
-}
-
 // ConnectorStates - State of connector.
 type ConnectorStates string
 
@@ -164,11 +139,6 @@ func PossibleConnectorStatesValues() []ConnectorStates {
 		ConnectorStatesDeleting,
 		ConnectorStatesFailed,
 	}
-}
-
-// ToPtr returns a *ConnectorStates pointing to the current value.
-func (c ConnectorStates) ToPtr() *ConnectorStates {
-	return &c
 }
 
 // ConnectorTypes - Type of connector.
@@ -195,11 +165,6 @@ func PossibleConnectorTypesValues() []ConnectorTypes {
 	}
 }
 
-// ToPtr returns a *ConnectorTypes pointing to the current value.
-func (c ConnectorTypes) ToPtr() *ConnectorTypes {
-	return &c
-}
-
 // DataSourceType - The data source type.
 type DataSourceType string
 
@@ -216,11 +181,6 @@ func PossibleDataSourceTypeValues() []DataSourceType {
 		DataSourceTypeLinkInteraction,
 		DataSourceTypeSystemDefault,
 	}
-}
-
-// ToPtr returns a *DataSourceType pointing to the current value.
-func (c DataSourceType) ToPtr() *DataSourceType {
-	return &c
 }
 
 // EntityType - Type of source entity.
@@ -243,11 +203,6 @@ func PossibleEntityTypeValues() []EntityType {
 	}
 }
 
-// ToPtr returns a *EntityType pointing to the current value.
-func (c EntityType) ToPtr() *EntityType {
-	return &c
-}
-
 // EntityTypes - Type of entity.
 type EntityTypes string
 
@@ -268,11 +223,6 @@ func PossibleEntityTypesValues() []EntityTypes {
 	}
 }
 
-// ToPtr returns a *EntityTypes pointing to the current value.
-func (c EntityTypes) ToPtr() *EntityTypes {
-	return &c
-}
-
 // ErrorManagementTypes - The type of error management to use for the mapping.
 type ErrorManagementTypes string
 
@@ -289,11 +239,6 @@ func PossibleErrorManagementTypesValues() []ErrorManagementTypes {
 		ErrorManagementTypesStopImport,
 		ErrorManagementTypesRejectUntilLimit,
 	}
-}
-
-// ToPtr returns a *ErrorManagementTypes pointing to the current value.
-func (c ErrorManagementTypes) ToPtr() *ErrorManagementTypes {
-	return &c
 }
 
 // FrequencyTypes - The frequency to update.
@@ -318,11 +263,6 @@ func PossibleFrequencyTypesValues() []FrequencyTypes {
 	}
 }
 
-// ToPtr returns a *FrequencyTypes pointing to the current value.
-func (c FrequencyTypes) ToPtr() *FrequencyTypes {
-	return &c
-}
-
 // InstanceOperationType - Determines whether this link is supposed to create or delete instances if Link is NOT Reference
 // Only.
 type InstanceOperationType string
@@ -338,11 +278,6 @@ func PossibleInstanceOperationTypeValues() []InstanceOperationType {
 		InstanceOperationTypeUpsert,
 		InstanceOperationTypeDelete,
 	}
-}
-
-// ToPtr returns a *InstanceOperationType pointing to the current value.
-func (c InstanceOperationType) ToPtr() *InstanceOperationType {
-	return &c
 }
 
 // KpiFunctions - The computation function for the KPI.
@@ -373,11 +308,6 @@ func PossibleKpiFunctionsValues() []KpiFunctions {
 	}
 }
 
-// ToPtr returns a *KpiFunctions pointing to the current value.
-func (c KpiFunctions) ToPtr() *KpiFunctions {
-	return &c
-}
-
 // LinkTypes - Link type.
 type LinkTypes string
 
@@ -392,11 +322,6 @@ func PossibleLinkTypesValues() []LinkTypes {
 		LinkTypesUpdateAlways,
 		LinkTypesCopyIfNull,
 	}
-}
-
-// ToPtr returns a *LinkTypes pointing to the current value.
-func (c LinkTypes) ToPtr() *LinkTypes {
-	return &c
 }
 
 // PermissionTypes - Supported permission types.
@@ -415,11 +340,6 @@ func PossiblePermissionTypesValues() []PermissionTypes {
 		PermissionTypesWrite,
 		PermissionTypesManage,
 	}
-}
-
-// ToPtr returns a *PermissionTypes pointing to the current value.
-func (c PermissionTypes) ToPtr() *PermissionTypes {
-	return &c
 }
 
 // PredictionModelLifeCycle - Prediction model life cycle. When prediction is in PendingModelConfirmation status, it is allowed
@@ -471,11 +391,6 @@ func PossiblePredictionModelLifeCycleValues() []PredictionModelLifeCycle {
 	}
 }
 
-// ToPtr returns a *PredictionModelLifeCycle pointing to the current value.
-func (c PredictionModelLifeCycle) ToPtr() *PredictionModelLifeCycle {
-	return &c
-}
-
 // ProvisioningStates - Provisioning state.
 type ProvisioningStates string
 
@@ -498,11 +413,6 @@ func PossibleProvisioningStatesValues() []ProvisioningStates {
 		ProvisioningStatesProvisioning,
 		ProvisioningStatesSucceeded,
 	}
-}
-
-// ToPtr returns a *ProvisioningStates pointing to the current value.
-func (c ProvisioningStates) ToPtr() *ProvisioningStates {
-	return &c
 }
 
 // RoleTypes - Type of roles.
@@ -529,11 +439,6 @@ func PossibleRoleTypesValues() []RoleTypes {
 	}
 }
 
-// ToPtr returns a *RoleTypes pointing to the current value.
-func (c RoleTypes) ToPtr() *RoleTypes {
-	return &c
-}
-
 // Status - The data source status.
 type Status string
 
@@ -550,9 +455,4 @@ func PossibleStatusValues() []Status {
 		StatusDeleted,
 		StatusNone,
 	}
-}
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
 }

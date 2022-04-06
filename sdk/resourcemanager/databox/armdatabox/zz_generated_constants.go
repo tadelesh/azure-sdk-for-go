@@ -30,11 +30,6 @@ func PossibleAccessProtocolValues() []AccessProtocol {
 	}
 }
 
-// ToPtr returns a *AccessProtocol pointing to the current value.
-func (c AccessProtocol) ToPtr() *AccessProtocol {
-	return &c
-}
-
 // AddressType - Type of address.
 type AddressType string
 
@@ -56,11 +51,6 @@ func PossibleAddressTypeValues() []AddressType {
 	}
 }
 
-// ToPtr returns a *AddressType pointing to the current value.
-func (c AddressType) ToPtr() *AddressType {
-	return &c
-}
-
 // AddressValidationStatus - The address validation status.
 type AddressValidationStatus string
 
@@ -80,11 +70,6 @@ func PossibleAddressValidationStatusValues() []AddressValidationStatus {
 		AddressValidationStatusInvalid,
 		AddressValidationStatusAmbiguous,
 	}
-}
-
-// ToPtr returns a *AddressValidationStatus pointing to the current value.
-func (c AddressValidationStatus) ToPtr() *AddressValidationStatus {
-	return &c
 }
 
 // ClassDiscriminator - Indicates the type of job details.
@@ -109,11 +94,6 @@ func PossibleClassDiscriminatorValues() []ClassDiscriminator {
 		ClassDiscriminatorDataBoxHeavy,
 		ClassDiscriminatorDataBoxCustomerDisk,
 	}
-}
-
-// ToPtr returns a *ClassDiscriminator pointing to the current value.
-func (c ClassDiscriminator) ToPtr() *ClassDiscriminator {
-	return &c
 }
 
 // CopyStatus - The Status of the copy
@@ -182,11 +162,6 @@ func PossibleCopyStatusValues() []CopyStatus {
 	}
 }
 
-// ToPtr returns a *CopyStatus pointing to the current value.
-func (c CopyStatus) ToPtr() *CopyStatus {
-	return &c
-}
-
 // CustomerResolutionCode - Resolution code provided by customer
 type CustomerResolutionCode string
 
@@ -208,11 +183,6 @@ func PossibleCustomerResolutionCodeValues() []CustomerResolutionCode {
 	}
 }
 
-// ToPtr returns a *CustomerResolutionCode pointing to the current value.
-func (c CustomerResolutionCode) ToPtr() *CustomerResolutionCode {
-	return &c
-}
-
 // DataAccountType - Type of the account.
 type DataAccountType string
 
@@ -229,11 +199,6 @@ func PossibleDataAccountTypeValues() []DataAccountType {
 		DataAccountTypeStorageAccount,
 		DataAccountTypeManagedDisk,
 	}
-}
-
-// ToPtr returns a *DataAccountType pointing to the current value.
-func (c DataAccountType) ToPtr() *DataAccountType {
-	return &c
 }
 
 // DataCenterCode - DataCenter code.
@@ -354,11 +319,6 @@ func PossibleDataCenterCodeValues() []DataCenterCode {
 	}
 }
 
-// ToPtr returns a *DataCenterCode pointing to the current value.
-func (c DataCenterCode) ToPtr() *DataCenterCode {
-	return &c
-}
-
 // DatacenterAddressType - Data center address type
 type DatacenterAddressType string
 
@@ -375,11 +335,6 @@ func PossibleDatacenterAddressTypeValues() []DatacenterAddressType {
 		DatacenterAddressTypeDatacenterAddressLocation,
 		DatacenterAddressTypeDatacenterAddressInstruction,
 	}
-}
-
-// ToPtr returns a *DatacenterAddressType pointing to the current value.
-func (c DatacenterAddressType) ToPtr() *DatacenterAddressType {
-	return &c
 }
 
 // DoubleEncryption - Defines secondary layer of software-based encryption enablement.
@@ -400,11 +355,6 @@ func PossibleDoubleEncryptionValues() []DoubleEncryption {
 	}
 }
 
-// ToPtr returns a *DoubleEncryption pointing to the current value.
-func (c DoubleEncryption) ToPtr() *DoubleEncryption {
-	return &c
-}
-
 // FilterFileType - Type of the filter file.
 type FilterFileType string
 
@@ -421,11 +371,6 @@ func PossibleFilterFileTypeValues() []FilterFileType {
 		FilterFileTypeAzureBlob,
 		FilterFileTypeAzureFile,
 	}
-}
-
-// ToPtr returns a *FilterFileType pointing to the current value.
-func (c FilterFileType) ToPtr() *FilterFileType {
-	return &c
 }
 
 // JobDeliveryType - Delivery type of Job.
@@ -446,11 +391,6 @@ func PossibleJobDeliveryTypeValues() []JobDeliveryType {
 	}
 }
 
-// ToPtr returns a *JobDeliveryType pointing to the current value.
-func (c JobDeliveryType) ToPtr() *JobDeliveryType {
-	return &c
-}
-
 // KekType - Type of encryption key used for key encryption.
 type KekType string
 
@@ -469,11 +409,6 @@ func PossibleKekTypeValues() []KekType {
 	}
 }
 
-// ToPtr returns a *KekType pointing to the current value.
-func (c KekType) ToPtr() *KekType {
-	return &c
-}
-
 // LogCollectionLevel - Level of the logs to be collected.
 type LogCollectionLevel string
 
@@ -490,11 +425,6 @@ func PossibleLogCollectionLevelValues() []LogCollectionLevel {
 		LogCollectionLevelError,
 		LogCollectionLevelVerbose,
 	}
-}
-
-// ToPtr returns a *LogCollectionLevel pointing to the current value.
-func (c LogCollectionLevel) ToPtr() *LogCollectionLevel {
-	return &c
 }
 
 // NotificationStageName - Name of the stage.
@@ -533,11 +463,6 @@ func PossibleNotificationStageNameValues() []NotificationStageName {
 	}
 }
 
-// ToPtr returns a *NotificationStageName pointing to the current value.
-func (c NotificationStageName) ToPtr() *NotificationStageName {
-	return &c
-}
-
 // OverallValidationStatus - Overall validation status.
 type OverallValidationStatus string
 
@@ -557,11 +482,6 @@ func PossibleOverallValidationStatusValues() []OverallValidationStatus {
 		OverallValidationStatusInputsRevisitRequired,
 		OverallValidationStatusCertainInputValidationsSkipped,
 	}
-}
-
-// ToPtr returns a *OverallValidationStatus pointing to the current value.
-func (c OverallValidationStatus) ToPtr() *OverallValidationStatus {
-	return &c
 }
 
 // SKUDisabledReason - Reason why the Sku is disabled.
@@ -595,11 +515,6 @@ func PossibleSKUDisabledReasonValues() []SKUDisabledReason {
 	}
 }
 
-// ToPtr returns a *SKUDisabledReason pointing to the current value.
-func (c SKUDisabledReason) ToPtr() *SKUDisabledReason {
-	return &c
-}
-
 type SKUName string
 
 const (
@@ -621,11 +536,6 @@ func PossibleSKUNameValues() []SKUName {
 		SKUNameDataBoxHeavy,
 		SKUNameDataBoxCustomerDisk,
 	}
-}
-
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
 }
 
 // ShareDestinationFormatType - Type of the share.
@@ -656,11 +566,6 @@ func PossibleShareDestinationFormatTypeValues() []ShareDestinationFormatType {
 		ShareDestinationFormatTypeAzureFile,
 		ShareDestinationFormatTypeManagedDisk,
 	}
-}
-
-// ToPtr returns a *ShareDestinationFormatType pointing to the current value.
-func (c ShareDestinationFormatType) ToPtr() *ShareDestinationFormatType {
-	return &c
 }
 
 // StageName - Name of the stage which is in progress.
@@ -738,11 +643,6 @@ func PossibleStageNameValues() []StageName {
 	}
 }
 
-// ToPtr returns a *StageName pointing to the current value.
-func (c StageName) ToPtr() *StageName {
-	return &c
-}
-
 // StageStatus - Status of the job stage.
 type StageStatus string
 
@@ -791,11 +691,6 @@ func PossibleStageStatusValues() []StageStatus {
 	}
 }
 
-// ToPtr returns a *StageStatus pointing to the current value.
-func (c StageStatus) ToPtr() *StageStatus {
-	return &c
-}
-
 // TransferConfigurationType - Type of the configuration for transfer.
 type TransferConfigurationType string
 
@@ -812,11 +707,6 @@ func PossibleTransferConfigurationTypeValues() []TransferConfigurationType {
 		TransferConfigurationTypeTransferAll,
 		TransferConfigurationTypeTransferUsingFilter,
 	}
-}
-
-// ToPtr returns a *TransferConfigurationType pointing to the current value.
-func (c TransferConfigurationType) ToPtr() *TransferConfigurationType {
-	return &c
 }
 
 // TransferType - Type of the transfer.
@@ -837,11 +727,6 @@ func PossibleTransferTypeValues() []TransferType {
 	}
 }
 
-// ToPtr returns a *TransferType pointing to the current value.
-func (c TransferType) ToPtr() *TransferType {
-	return &c
-}
-
 // TransportShipmentTypes - Transport Shipment Type supported for given region.
 type TransportShipmentTypes string
 
@@ -858,11 +743,6 @@ func PossibleTransportShipmentTypesValues() []TransportShipmentTypes {
 		TransportShipmentTypesCustomerManaged,
 		TransportShipmentTypesMicrosoftManaged,
 	}
-}
-
-// ToPtr returns a *TransportShipmentTypes pointing to the current value.
-func (c TransportShipmentTypes) ToPtr() *TransportShipmentTypes {
-	return &c
 }
 
 // ValidationInputDiscriminator - Identifies the type of validation request.
@@ -897,11 +777,6 @@ func PossibleValidationInputDiscriminatorValues() []ValidationInputDiscriminator
 	}
 }
 
-// ToPtr returns a *ValidationInputDiscriminator pointing to the current value.
-func (c ValidationInputDiscriminator) ToPtr() *ValidationInputDiscriminator {
-	return &c
-}
-
 // ValidationStatus - Create order limit validation status.
 type ValidationStatus string
 
@@ -921,9 +796,4 @@ func PossibleValidationStatusValues() []ValidationStatus {
 		ValidationStatusInvalid,
 		ValidationStatusSkipped,
 	}
-}
-
-// ToPtr returns a *ValidationStatus pointing to the current value.
-func (c ValidationStatus) ToPtr() *ValidationStatus {
-	return &c
 }

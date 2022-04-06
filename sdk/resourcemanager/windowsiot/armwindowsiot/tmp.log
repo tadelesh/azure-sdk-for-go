@@ -1,0 +1,26 @@
+=== RUN   TestOperations_List
+--- PASS: TestOperations_List (0.14s)
+=== RUN   TestServices_Get
+    zt_generated_mock_test.go:136: Failed to get result for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_GetProperties.json: unmarshalling type *armwindowsiot.DeviceService: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_Get (0.06s)
+=== RUN   TestServices_CreateOrUpdate
+    zt_generated_mock_test.go:186: Failed to get result for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_Create.json: unmarshalling type *armwindowsiot.DeviceService: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_CreateOrUpdate (0.06s)
+=== RUN   TestServices_Update
+    zt_generated_mock_test.go:234: Failed to get result for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_Update.json: unmarshalling type *armwindowsiot.DeviceService: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_Update (0.05s)
+=== RUN   TestServices_Delete
+    zt_generated_mock_test.go:273: Failed to get result for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_Delete.json: unmarshalling type *armwindowsiot.DeviceService: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_Delete (0.05s)
+=== RUN   TestServices_ListByResourceGroup
+    zt_generated_mock_test.go:311: Failed to advance page for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_ListByResourceGroup.json: unmarshalling type *armwindowsiot.DeviceServiceDescriptionListResult: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_ListByResourceGroup (0.04s)
+=== RUN   TestServices_List
+    zt_generated_mock_test.go:365: Failed to advance page for example specification/windowsiot/resource-manager/Microsoft.WindowsIoT/stable/2019-06-01/examples/Service_List.json: unmarshalling type *armwindowsiot.DeviceServiceDescriptionListResult: parsing time "\"2018-01-01T12:00:00000Z\"" as "\"2006-01-02T15:04:05.999999999Z07:00\"": cannot parse "000Z\"" as "Z07:00"
+--- FAIL: TestServices_List (0.05s)
+=== RUN   TestServices_CheckDeviceServiceNameAvailability
+--- PASS: TestServices_CheckDeviceServiceNameAvailability (0.05s)
+FAIL
+coverage: 70.0% of statements
+exit status 1
+FAIL	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/windowsiot/armwindowsiot	1.122s

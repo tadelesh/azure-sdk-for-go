@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // NameUnavailableReason - reason of name unavailable.
 type NameUnavailableReason string
 
@@ -52,11 +47,6 @@ func PossibleNameUnavailableReasonValues() []NameUnavailableReason {
 		NameUnavailableReasonAlreadyExists,
 		NameUnavailableReasonInvalid,
 	}
-}
-
-// ToPtr returns a *NameUnavailableReason pointing to the current value.
-func (c NameUnavailableReason) ToPtr() *NameUnavailableReason {
-	return &c
 }
 
 // SKUTier - This field is required to be implemented by the Resource Provider if the service has more than one tier, but
@@ -80,11 +70,6 @@ func PossibleSKUTierValues() []SKUTier {
 	}
 }
 
-// ToPtr returns a *SKUTier pointing to the current value.
-func (c SKUTier) ToPtr() *SKUTier {
-	return &c
-}
-
 // Serial - Serial of key to be regenerated
 type Serial int32
 
@@ -101,9 +86,4 @@ func PossibleSerialValues() []Serial {
 		SerialPrimary,
 		SerialSecondary,
 	}
-}
-
-// ToPtr returns a *Serial pointing to the current value.
-func (c Serial) ToPtr() *Serial {
-	return &c
 }

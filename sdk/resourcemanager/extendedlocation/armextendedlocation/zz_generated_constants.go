@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // HostType - Type of host the Custom Locations is referencing (Kubernetes, etc…).
 type HostType string
 
@@ -50,11 +45,6 @@ func PossibleHostTypeValues() []HostType {
 	return []HostType{
 		HostTypeKubernetes,
 	}
-}
-
-// ToPtr returns a *HostType pointing to the current value.
-func (c HostType) ToPtr() *HostType {
-	return &c
 }
 
 // ResourceIdentityType - The identity type.
@@ -71,9 +61,4 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 		ResourceIdentityTypeNone,
 		ResourceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *ResourceIdentityType pointing to the current value.
-func (c ResourceIdentityType) ToPtr() *ResourceIdentityType {
-	return &c
 }

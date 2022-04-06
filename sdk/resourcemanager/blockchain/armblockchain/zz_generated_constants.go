@@ -37,11 +37,6 @@ func PossibleBlockchainMemberProvisioningStateValues() []BlockchainMemberProvisi
 	}
 }
 
-// ToPtr returns a *BlockchainMemberProvisioningState pointing to the current value.
-func (c BlockchainMemberProvisioningState) ToPtr() *BlockchainMemberProvisioningState {
-	return &c
-}
-
 // BlockchainProtocol - Gets or sets the blockchain protocol.
 type BlockchainProtocol string
 
@@ -62,11 +57,6 @@ func PossibleBlockchainProtocolValues() []BlockchainProtocol {
 	}
 }
 
-// ToPtr returns a *BlockchainProtocol pointing to the current value.
-func (c BlockchainProtocol) ToPtr() *BlockchainProtocol {
-	return &c
-}
-
 // NameAvailabilityReason - Gets or sets the name availability reason.
 type NameAvailabilityReason string
 
@@ -83,11 +73,6 @@ func PossibleNameAvailabilityReasonValues() []NameAvailabilityReason {
 		NameAvailabilityReasonInvalid,
 		NameAvailabilityReasonNotSpecified,
 	}
-}
-
-// ToPtr returns a *NameAvailabilityReason pointing to the current value.
-func (c NameAvailabilityReason) ToPtr() *NameAvailabilityReason {
-	return &c
 }
 
 // NodeProvisioningState - Gets or sets the blockchain member provision state.
@@ -110,9 +95,4 @@ func PossibleNodeProvisioningStateValues() []NodeProvisioningState {
 		NodeProvisioningStateSucceeded,
 		NodeProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *NodeProvisioningState pointing to the current value.
-func (c NodeProvisioningState) ToPtr() *NodeProvisioningState {
-	return &c
 }

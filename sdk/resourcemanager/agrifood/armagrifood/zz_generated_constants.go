@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CheckNameAvailabilityReason - The reason why the given name is not available.
 type CheckNameAvailabilityReason string
 
@@ -46,11 +41,6 @@ func PossibleCheckNameAvailabilityReasonValues() []CheckNameAvailabilityReason {
 		CheckNameAvailabilityReasonAlreadyExists,
 		CheckNameAvailabilityReasonInvalid,
 	}
-}
-
-// ToPtr returns a *CheckNameAvailabilityReason pointing to the current value.
-func (c CheckNameAvailabilityReason) ToPtr() *CheckNameAvailabilityReason {
-	return &c
 }
 
 // CreatedByType - The type of identity that created the resource.
@@ -73,11 +63,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
 // value is "user,system"
 type Origin string
@@ -97,11 +82,6 @@ func PossibleOriginValues() []Origin {
 	}
 }
 
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
-}
-
 // ProvisioningState - FarmBeats instance provisioning state.
 type ProvisioningState string
 
@@ -116,9 +96,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateFailed,
 		ProvisioningStateSucceeded,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

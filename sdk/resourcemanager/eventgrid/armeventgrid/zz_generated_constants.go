@@ -63,11 +63,6 @@ func PossibleAdvancedFilterOperatorTypeValues() []AdvancedFilterOperatorType {
 	}
 }
 
-// ToPtr returns a *AdvancedFilterOperatorType pointing to the current value.
-func (c AdvancedFilterOperatorType) ToPtr() *AdvancedFilterOperatorType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -88,11 +83,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DeadLetterEndPointType - Type of the endpoint for the dead letter destination
 type DeadLetterEndPointType string
 
@@ -105,11 +95,6 @@ func PossibleDeadLetterEndPointTypeValues() []DeadLetterEndPointType {
 	return []DeadLetterEndPointType{
 		DeadLetterEndPointTypeStorageBlob,
 	}
-}
-
-// ToPtr returns a *DeadLetterEndPointType pointing to the current value.
-func (c DeadLetterEndPointType) ToPtr() *DeadLetterEndPointType {
-	return &c
 }
 
 // DeliveryAttributeMappingType - Type of the delivery attribute or header name.
@@ -126,11 +111,6 @@ func PossibleDeliveryAttributeMappingTypeValues() []DeliveryAttributeMappingType
 		DeliveryAttributeMappingTypeDynamic,
 		DeliveryAttributeMappingTypeStatic,
 	}
-}
-
-// ToPtr returns a *DeliveryAttributeMappingType pointing to the current value.
-func (c DeliveryAttributeMappingType) ToPtr() *DeliveryAttributeMappingType {
-	return &c
 }
 
 // DomainProvisioningState - Provisioning state of the Event Grid Domain Resource.
@@ -157,11 +137,6 @@ func PossibleDomainProvisioningStateValues() []DomainProvisioningState {
 	}
 }
 
-// ToPtr returns a *DomainProvisioningState pointing to the current value.
-func (c DomainProvisioningState) ToPtr() *DomainProvisioningState {
-	return &c
-}
-
 // DomainTopicProvisioningState - Provisioning state of the domain topic.
 type DomainTopicProvisioningState string
 
@@ -184,11 +159,6 @@ func PossibleDomainTopicProvisioningStateValues() []DomainTopicProvisioningState
 		DomainTopicProvisioningStateSucceeded,
 		DomainTopicProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *DomainTopicProvisioningState pointing to the current value.
-func (c DomainTopicProvisioningState) ToPtr() *DomainTopicProvisioningState {
-	return &c
 }
 
 // EndpointType - Type of the endpoint for the event subscription destination.
@@ -217,11 +187,6 @@ func PossibleEndpointTypeValues() []EndpointType {
 	}
 }
 
-// ToPtr returns a *EndpointType pointing to the current value.
-func (c EndpointType) ToPtr() *EndpointType {
-	return &c
-}
-
 type Enum18 string
 
 const (
@@ -235,11 +200,6 @@ func PossibleEnum18Values() []Enum18 {
 		Enum18Domains,
 		Enum18Topics,
 	}
-}
-
-// ToPtr returns a *Enum18 pointing to the current value.
-func (c Enum18) ToPtr() *Enum18 {
-	return &c
 }
 
 type Enum19 string
@@ -257,11 +217,6 @@ func PossibleEnum19Values() []Enum19 {
 	}
 }
 
-// ToPtr returns a *Enum19 pointing to the current value.
-func (c Enum19) ToPtr() *Enum19 {
-	return &c
-}
-
 type Enum20 string
 
 const (
@@ -277,11 +232,6 @@ func PossibleEnum20Values() []Enum20 {
 	}
 }
 
-// ToPtr returns a *Enum20 pointing to the current value.
-func (c Enum20) ToPtr() *Enum20 {
-	return &c
-}
-
 type Enum21 string
 
 const (
@@ -295,11 +245,6 @@ func PossibleEnum21Values() []Enum21 {
 		Enum21Domains,
 		Enum21Topics,
 	}
-}
-
-// ToPtr returns a *Enum21 pointing to the current value.
-func (c Enum21) ToPtr() *Enum21 {
-	return &c
 }
 
 // EventDeliverySchema - The event delivery schema for the event subscription.
@@ -320,11 +265,6 @@ func PossibleEventDeliverySchemaValues() []EventDeliverySchema {
 	}
 }
 
-// ToPtr returns a *EventDeliverySchema pointing to the current value.
-func (c EventDeliverySchema) ToPtr() *EventDeliverySchema {
-	return &c
-}
-
 // EventSubscriptionIdentityType - The type of managed identity used. The type 'SystemAssigned, UserAssigned' includes both
 // an implicitly created identity and a set of user-assigned identities. The type 'None' will remove any identity.
 type EventSubscriptionIdentityType string
@@ -340,11 +280,6 @@ func PossibleEventSubscriptionIdentityTypeValues() []EventSubscriptionIdentityTy
 		EventSubscriptionIdentityTypeSystemAssigned,
 		EventSubscriptionIdentityTypeUserAssigned,
 	}
-}
-
-// ToPtr returns a *EventSubscriptionIdentityType pointing to the current value.
-func (c EventSubscriptionIdentityType) ToPtr() *EventSubscriptionIdentityType {
-	return &c
 }
 
 // EventSubscriptionProvisioningState - Provisioning state of the event subscription.
@@ -373,11 +308,6 @@ func PossibleEventSubscriptionProvisioningStateValues() []EventSubscriptionProvi
 	}
 }
 
-// ToPtr returns a *EventSubscriptionProvisioningState pointing to the current value.
-func (c EventSubscriptionProvisioningState) ToPtr() *EventSubscriptionProvisioningState {
-	return &c
-}
-
 // IPActionType - Action to perform based on the match or no match of the IpMask.
 type IPActionType string
 
@@ -390,11 +320,6 @@ func PossibleIPActionTypeValues() []IPActionType {
 	return []IPActionType{
 		IPActionTypeAllow,
 	}
-}
-
-// ToPtr returns a *IPActionType pointing to the current value.
-func (c IPActionType) ToPtr() *IPActionType {
-	return &c
 }
 
 // IdentityType - The type of managed identity used. The type 'SystemAssigned, UserAssigned' includes both an implicitly created
@@ -418,11 +343,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 // InputSchema - This determines the format that Event Grid should expect for incoming events published to the domain.
 type InputSchema string
 
@@ -441,11 +361,6 @@ func PossibleInputSchemaValues() []InputSchema {
 	}
 }
 
-// ToPtr returns a *InputSchema pointing to the current value.
-func (c InputSchema) ToPtr() *InputSchema {
-	return &c
-}
-
 // InputSchemaMappingType - Type of the custom mapping
 type InputSchemaMappingType string
 
@@ -458,11 +373,6 @@ func PossibleInputSchemaMappingTypeValues() []InputSchemaMappingType {
 	return []InputSchemaMappingType{
 		InputSchemaMappingTypeJSON,
 	}
-}
-
-// ToPtr returns a *InputSchemaMappingType pointing to the current value.
-func (c InputSchemaMappingType) ToPtr() *InputSchemaMappingType {
-	return &c
 }
 
 // PersistedConnectionStatus - Status of the connection.
@@ -485,11 +395,6 @@ func PossiblePersistedConnectionStatusValues() []PersistedConnectionStatus {
 	}
 }
 
-// ToPtr returns a *PersistedConnectionStatus pointing to the current value.
-func (c PersistedConnectionStatus) ToPtr() *PersistedConnectionStatus {
-	return &c
-}
-
 // PublicNetworkAccess - This determines if traffic is allowed over public network. By default it is enabled. You can further
 // restrict to specific IPs by configuring
 type PublicNetworkAccess string
@@ -505,11 +410,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 		PublicNetworkAccessDisabled,
 		PublicNetworkAccessEnabled,
 	}
-}
-
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
 }
 
 // ResourceProvisioningState - Provisioning state of the Private Endpoint Connection.
@@ -536,11 +436,6 @@ func PossibleResourceProvisioningStateValues() []ResourceProvisioningState {
 	}
 }
 
-// ToPtr returns a *ResourceProvisioningState pointing to the current value.
-func (c ResourceProvisioningState) ToPtr() *ResourceProvisioningState {
-	return &c
-}
-
 // ResourceRegionType - Region type of the resource.
 type ResourceRegionType string
 
@@ -555,11 +450,6 @@ func PossibleResourceRegionTypeValues() []ResourceRegionType {
 		ResourceRegionTypeGlobalResource,
 		ResourceRegionTypeRegionalResource,
 	}
-}
-
-// ToPtr returns a *ResourceRegionType pointing to the current value.
-func (c ResourceRegionType) ToPtr() *ResourceRegionType {
-	return &c
 }
 
 // TopicProvisioningState - Provisioning state of the topic.
@@ -586,11 +476,6 @@ func PossibleTopicProvisioningStateValues() []TopicProvisioningState {
 	}
 }
 
-// ToPtr returns a *TopicProvisioningState pointing to the current value.
-func (c TopicProvisioningState) ToPtr() *TopicProvisioningState {
-	return &c
-}
-
 type TopicTypePropertiesSupportedScopesForSourceItem string
 
 const (
@@ -606,11 +491,6 @@ func PossibleTopicTypePropertiesSupportedScopesForSourceItemValues() []TopicType
 		TopicTypePropertiesSupportedScopesForSourceItemResource,
 		TopicTypePropertiesSupportedScopesForSourceItemResourceGroup,
 	}
-}
-
-// ToPtr returns a *TopicTypePropertiesSupportedScopesForSourceItem pointing to the current value.
-func (c TopicTypePropertiesSupportedScopesForSourceItem) ToPtr() *TopicTypePropertiesSupportedScopesForSourceItem {
-	return &c
 }
 
 // TopicTypeProvisioningState - Provisioning state of the topic type
@@ -635,9 +515,4 @@ func PossibleTopicTypeProvisioningStateValues() []TopicTypeProvisioningState {
 		TopicTypeProvisioningStateSucceeded,
 		TopicTypeProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *TopicTypeProvisioningState pointing to the current value.
-func (c TopicTypeProvisioningState) ToPtr() *TopicTypeProvisioningState {
-	return &c
 }

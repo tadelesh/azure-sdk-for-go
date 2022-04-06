@@ -31,11 +31,6 @@ func PossibleAppSKUValues() []AppSKU {
 	}
 }
 
-// ToPtr returns a *AppSKU pointing to the current value.
-func (c AppSKU) ToPtr() *AppSKU {
-	return &c
-}
-
 // AppState - The current state of the application.
 type AppState string
 
@@ -52,11 +47,6 @@ func PossibleAppStateValues() []AppState {
 	}
 }
 
-// ToPtr returns a *AppState pointing to the current value.
-func (c AppState) ToPtr() *AppState {
-	return &c
-}
-
 // SystemAssignedServiceIdentityType - Type of managed service identity (either system assigned, or none).
 type SystemAssignedServiceIdentityType string
 
@@ -71,9 +61,4 @@ func PossibleSystemAssignedServiceIdentityTypeValues() []SystemAssignedServiceId
 		SystemAssignedServiceIdentityTypeNone,
 		SystemAssignedServiceIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *SystemAssignedServiceIdentityType pointing to the current value.
-func (c SystemAssignedServiceIdentityType) ToPtr() *SystemAssignedServiceIdentityType {
-	return &c
 }

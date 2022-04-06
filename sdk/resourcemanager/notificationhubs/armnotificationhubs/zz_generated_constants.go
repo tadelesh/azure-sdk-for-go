@@ -30,11 +30,6 @@ func PossibleAccessRightsValues() []AccessRights {
 	}
 }
 
-// ToPtr returns a *AccessRights pointing to the current value.
-func (c AccessRights) ToPtr() *AccessRights {
-	return &c
-}
-
 // NamespaceType - The namespace type.
 type NamespaceType string
 
@@ -49,11 +44,6 @@ func PossibleNamespaceTypeValues() []NamespaceType {
 		NamespaceTypeMessaging,
 		NamespaceTypeNotificationHub,
 	}
-}
-
-// ToPtr returns a *NamespaceType pointing to the current value.
-func (c NamespaceType) ToPtr() *NamespaceType {
-	return &c
 }
 
 // SKUName - Name of the notification hub sku
@@ -72,9 +62,4 @@ func PossibleSKUNameValues() []SKUName {
 		SKUNameFree,
 		SKUNameStandard,
 	}
-}
-
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
 }

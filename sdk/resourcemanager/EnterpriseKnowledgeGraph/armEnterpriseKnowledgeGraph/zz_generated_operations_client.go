@@ -22,7 +22,7 @@ import (
 // Don't use this type directly, use NewOperationsClient() instead.
 type OperationsClient struct {
 	host string
-	pl   runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewOperationsClient creates a new instance of OperationsClient with the specified values.
@@ -38,7 +38,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 	}
 	client := &OperationsClient{
 		host: string(ep),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -46,7 +46,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 // List - Lists all the available EnterpriseKnowledgeGraph services operations.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
-func (client *OperationsClient) List(options *OperationsClientListOptions) *runtime.Pager[OperationsClientListResponse] {
+func (client *OperationsClient) List(options *OperationsClientListOptions) (*runtime.Pager[OperationsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[OperationsClientListResponse]{
 		More: func(page OperationsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -96,3 +96,4 @@ func (client *OperationsClient) listHandleResponse(resp *http.Response) (Operati
 	}
 	return result, nil
 }
+

@@ -50,11 +50,6 @@ func PossibleChannelNameValues() []ChannelName {
 	}
 }
 
-// ToPtr returns a *ChannelName pointing to the current value.
-func (c ChannelName) ToPtr() *ChannelName {
-	return &c
-}
-
 // Key - Determines which key is to be regenerated
 type Key string
 
@@ -69,11 +64,6 @@ func PossibleKeyValues() []Key {
 		KeyKey1,
 		KeyKey2,
 	}
-}
-
-// ToPtr returns a *Key pointing to the current value.
-func (c Key) ToPtr() *Key {
-	return &c
 }
 
 // Kind - Indicates the type of bot service
@@ -98,11 +88,6 @@ func PossibleKindValues() []Kind {
 	}
 }
 
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
-}
-
 // MsaAppType - Microsoft App Type for the bot
 type MsaAppType string
 
@@ -119,11 +104,6 @@ func PossibleMsaAppTypeValues() []MsaAppType {
 		MsaAppTypeSingleTenant,
 		MsaAppTypeUserAssignedMSI,
 	}
-}
-
-// ToPtr returns a *MsaAppType pointing to the current value.
-func (c MsaAppType) ToPtr() *MsaAppType {
-	return &c
 }
 
 // OperationResultStatus - The status of the operation being performed.
@@ -148,11 +128,6 @@ func PossibleOperationResultStatusValues() []OperationResultStatus {
 	}
 }
 
-// ToPtr returns a *OperationResultStatus pointing to the current value.
-func (c OperationResultStatus) ToPtr() *OperationResultStatus {
-	return &c
-}
-
 // PrivateEndpointConnectionProvisioningState - The current provisioning state.
 type PrivateEndpointConnectionProvisioningState string
 
@@ -173,11 +148,6 @@ func PossiblePrivateEndpointConnectionProvisioningStateValues() []PrivateEndpoin
 	}
 }
 
-// ToPtr returns a *PrivateEndpointConnectionProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionProvisioningState) ToPtr() *PrivateEndpointConnectionProvisioningState {
-	return &c
-}
-
 // PrivateEndpointServiceConnectionStatus - The private endpoint connection status.
 type PrivateEndpointServiceConnectionStatus string
 
@@ -196,11 +166,6 @@ func PossiblePrivateEndpointServiceConnectionStatusValues() []PrivateEndpointSer
 	}
 }
 
-// ToPtr returns a *PrivateEndpointServiceConnectionStatus pointing to the current value.
-func (c PrivateEndpointServiceConnectionStatus) ToPtr() *PrivateEndpointServiceConnectionStatus {
-	return &c
-}
-
 // PublicNetworkAccess - Whether the bot is in an isolated network
 type PublicNetworkAccess string
 
@@ -217,11 +182,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 	}
 }
 
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
-}
-
 type RegenerateKeysChannelName string
 
 const (
@@ -235,11 +195,6 @@ func PossibleRegenerateKeysChannelNameValues() []RegenerateKeysChannelName {
 		RegenerateKeysChannelNameWebChatChannel,
 		RegenerateKeysChannelNameDirectLineChannel,
 	}
-}
-
-// ToPtr returns a *RegenerateKeysChannelName pointing to the current value.
-func (c RegenerateKeysChannelName) ToPtr() *RegenerateKeysChannelName {
-	return &c
 }
 
 // SKUName - The name of SKU.
@@ -258,11 +213,6 @@ func PossibleSKUNameValues() []SKUName {
 	}
 }
 
-// ToPtr returns a *SKUName pointing to the current value.
-func (c SKUName) ToPtr() *SKUName {
-	return &c
-}
-
 // SKUTier - Gets the sku tier. This is based on the SKU name.
 type SKUTier string
 
@@ -277,9 +227,4 @@ func PossibleSKUTierValues() []SKUTier {
 		SKUTierFree,
 		SKUTierStandard,
 	}
-}
-
-// ToPtr returns a *SKUTier pointing to the current value.
-func (c SKUTier) ToPtr() *SKUTier {
-	return &c
 }

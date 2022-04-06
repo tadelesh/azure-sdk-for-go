@@ -25,8 +25,3 @@ func PossibleConfigurationNameValues() []ConfigurationName {
 		ConfigurationNameDefault,
 	}
 }
-
-// ToPtr returns a *ConfigurationName pointing to the current value.
-func (c ConfigurationName) ToPtr() *ConfigurationName {
-	return &c
-}

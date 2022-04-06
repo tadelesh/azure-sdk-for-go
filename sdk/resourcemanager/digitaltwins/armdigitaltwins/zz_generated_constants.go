@@ -31,11 +31,6 @@ func PossibleAuthenticationTypeValues() []AuthenticationType {
 	}
 }
 
-// ToPtr returns a *AuthenticationType pointing to the current value.
-func (c AuthenticationType) ToPtr() *AuthenticationType {
-	return &c
-}
-
 // ConnectionPropertiesProvisioningState - The provisioning state.
 type ConnectionPropertiesProvisioningState string
 
@@ -56,11 +51,6 @@ func PossibleConnectionPropertiesProvisioningStateValues() []ConnectionPropertie
 	}
 }
 
-// ToPtr returns a *ConnectionPropertiesProvisioningState pointing to the current value.
-func (c ConnectionPropertiesProvisioningState) ToPtr() *ConnectionPropertiesProvisioningState {
-	return &c
-}
-
 // ConnectionType - The type of time series connection resource.
 type ConnectionType string
 
@@ -73,11 +63,6 @@ func PossibleConnectionTypeValues() []ConnectionType {
 	return []ConnectionType{
 		ConnectionTypeAzureDataExplorer,
 	}
-}
-
-// ToPtr returns a *ConnectionType pointing to the current value.
-func (c ConnectionType) ToPtr() *ConnectionType {
-	return &c
 }
 
 // CreatedByType - The type of identity that created the resource.
@@ -100,11 +85,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DigitalTwinsIdentityType - The type of Managed Identity used by the DigitalTwinsInstance. Only SystemAssigned is supported.
 type DigitalTwinsIdentityType string
 
@@ -119,11 +99,6 @@ func PossibleDigitalTwinsIdentityTypeValues() []DigitalTwinsIdentityType {
 		DigitalTwinsIdentityTypeNone,
 		DigitalTwinsIdentityTypeSystemAssigned,
 	}
-}
-
-// ToPtr returns a *DigitalTwinsIdentityType pointing to the current value.
-func (c DigitalTwinsIdentityType) ToPtr() *DigitalTwinsIdentityType {
-	return &c
 }
 
 // EndpointProvisioningState - The provisioning state.
@@ -160,11 +135,6 @@ func PossibleEndpointProvisioningStateValues() []EndpointProvisioningState {
 	}
 }
 
-// ToPtr returns a *EndpointProvisioningState pointing to the current value.
-func (c EndpointProvisioningState) ToPtr() *EndpointProvisioningState {
-	return &c
-}
-
 // EndpointType - The type of Digital Twins endpoint
 type EndpointType string
 
@@ -181,11 +151,6 @@ func PossibleEndpointTypeValues() []EndpointType {
 		EndpointTypeEventHub,
 		EndpointTypeServiceBus,
 	}
-}
-
-// ToPtr returns a *EndpointType pointing to the current value.
-func (c EndpointType) ToPtr() *EndpointType {
-	return &c
 }
 
 // PrivateLinkServiceConnectionStatus - The status of a private endpoint connection.
@@ -206,11 +171,6 @@ func PossiblePrivateLinkServiceConnectionStatusValues() []PrivateLinkServiceConn
 		PrivateLinkServiceConnectionStatusPending,
 		PrivateLinkServiceConnectionStatusRejected,
 	}
-}
-
-// ToPtr returns a *PrivateLinkServiceConnectionStatus pointing to the current value.
-func (c PrivateLinkServiceConnectionStatus) ToPtr() *PrivateLinkServiceConnectionStatus {
-	return &c
 }
 
 // ProvisioningState - The provisioning state.
@@ -247,11 +207,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // PublicNetworkAccess - Public network access for the DigitalTwinsInstance.
 type PublicNetworkAccess string
 
@@ -268,11 +223,6 @@ func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
 	}
 }
 
-// ToPtr returns a *PublicNetworkAccess pointing to the current value.
-func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
-	return &c
-}
-
 // Reason - Message providing the reason why the given name is invalid.
 type Reason string
 
@@ -287,11 +237,6 @@ func PossibleReasonValues() []Reason {
 		ReasonAlreadyExists,
 		ReasonInvalid,
 	}
-}
-
-// ToPtr returns a *Reason pointing to the current value.
-func (c Reason) ToPtr() *Reason {
-	return &c
 }
 
 // TimeSeriesDatabaseConnectionState - The provisioning state.
@@ -326,9 +271,4 @@ func PossibleTimeSeriesDatabaseConnectionStateValues() []TimeSeriesDatabaseConne
 		TimeSeriesDatabaseConnectionStateSuspending,
 		TimeSeriesDatabaseConnectionStateWarning,
 	}
-}
-
-// ToPtr returns a *TimeSeriesDatabaseConnectionState pointing to the current value.
-func (c TimeSeriesDatabaseConnectionState) ToPtr() *TimeSeriesDatabaseConnectionState {
-	return &c
 }

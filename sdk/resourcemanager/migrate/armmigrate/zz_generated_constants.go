@@ -29,11 +29,6 @@ func PossibleAssessmentSizingCriterionValues() []AssessmentSizingCriterion {
 	}
 }
 
-// ToPtr returns a *AssessmentSizingCriterion pointing to the current value.
-func (c AssessmentSizingCriterion) ToPtr() *AssessmentSizingCriterion {
-	return &c
-}
-
 // AssessmentStage - User configurable setting that describes the status of the assessment.
 type AssessmentStage string
 
@@ -50,11 +45,6 @@ func PossibleAssessmentStageValues() []AssessmentStage {
 		AssessmentStageInProgress,
 		AssessmentStageUnderReview,
 	}
-}
-
-// ToPtr returns a *AssessmentStage pointing to the current value.
-func (c AssessmentStage) ToPtr() *AssessmentStage {
-	return &c
 }
 
 // AssessmentStatus - Whether the assessment has been created and is valid.
@@ -81,11 +71,6 @@ func PossibleAssessmentStatusValues() []AssessmentStatus {
 		AssessmentStatusRunning,
 		AssessmentStatusUpdated,
 	}
-}
-
-// ToPtr returns a *AssessmentStatus pointing to the current value.
-func (c AssessmentStatus) ToPtr() *AssessmentStatus {
-	return &c
 }
 
 // AzureDiskSize - Recommended Azure size for the disk, given utilization data and preferences set on Assessment.
@@ -168,11 +153,6 @@ func PossibleAzureDiskSizeValues() []AzureDiskSize {
 	}
 }
 
-// ToPtr returns a *AzureDiskSize pointing to the current value.
-func (c AzureDiskSize) ToPtr() *AzureDiskSize {
-	return &c
-}
-
 // AzureDiskSuitabilityDetail - If disk is suitable to be migrate but some conditions/checks were not considered while calculating
 // suitability, this explains the details.
 type AzureDiskSuitabilityDetail string
@@ -212,11 +192,6 @@ func PossibleAzureDiskSuitabilityDetailValues() []AzureDiskSuitabilityDetail {
 	}
 }
 
-// ToPtr returns a *AzureDiskSuitabilityDetail pointing to the current value.
-func (c AzureDiskSuitabilityDetail) ToPtr() *AzureDiskSuitabilityDetail {
-	return &c
-}
-
 // AzureDiskSuitabilityExplanation - If disk is not suitable to be migrated, this explains the reasons and mitigation steps.
 type AzureDiskSuitabilityExplanation string
 
@@ -247,11 +222,6 @@ func PossibleAzureDiskSuitabilityExplanationValues() []AzureDiskSuitabilityExpla
 	}
 }
 
-// ToPtr returns a *AzureDiskSuitabilityExplanation pointing to the current value.
-func (c AzureDiskSuitabilityExplanation) ToPtr() *AzureDiskSuitabilityExplanation {
-	return &c
-}
-
 // AzureDiskType - Storage type selected for this disk.
 type AzureDiskType string
 
@@ -274,11 +244,6 @@ func PossibleAzureDiskTypeValues() []AzureDiskType {
 	}
 }
 
-// ToPtr returns a *AzureDiskType pointing to the current value.
-func (c AzureDiskType) ToPtr() *AzureDiskType {
-	return &c
-}
-
 // AzureHybridUseBenefit - AHUB discount on windows virtual machines.
 type AzureHybridUseBenefit string
 
@@ -295,11 +260,6 @@ func PossibleAzureHybridUseBenefitValues() []AzureHybridUseBenefit {
 		AzureHybridUseBenefitUnknown,
 		AzureHybridUseBenefitYes,
 	}
-}
-
-// ToPtr returns a *AzureHybridUseBenefit pointing to the current value.
-func (c AzureHybridUseBenefit) ToPtr() *AzureHybridUseBenefit {
-	return &c
 }
 
 // AzureLocation - Target Azure location for which the machines should be assessed. These enums are the same as used by Compute
@@ -389,11 +349,6 @@ func PossibleAzureLocationValues() []AzureLocation {
 	}
 }
 
-// ToPtr returns a *AzureLocation pointing to the current value.
-func (c AzureLocation) ToPtr() *AzureLocation {
-	return &c
-}
-
 // AzureNetworkAdapterSuitabilityDetail - If network adapter is not suitable for cloud, this explains the reasons.
 type AzureNetworkAdapterSuitabilityDetail string
 
@@ -412,11 +367,6 @@ func PossibleAzureNetworkAdapterSuitabilityDetailValues() []AzureNetworkAdapterS
 	}
 }
 
-// ToPtr returns a *AzureNetworkAdapterSuitabilityDetail pointing to the current value.
-func (c AzureNetworkAdapterSuitabilityDetail) ToPtr() *AzureNetworkAdapterSuitabilityDetail {
-	return &c
-}
-
 // AzureNetworkAdapterSuitabilityExplanation - If network adapter is suitable, this explains the reasons and mitigation steps.
 type AzureNetworkAdapterSuitabilityExplanation string
 
@@ -433,11 +383,6 @@ func PossibleAzureNetworkAdapterSuitabilityExplanationValues() []AzureNetworkAda
 		AzureNetworkAdapterSuitabilityExplanationNotApplicable,
 		AzureNetworkAdapterSuitabilityExplanationUnknown,
 	}
-}
-
-// ToPtr returns a *AzureNetworkAdapterSuitabilityExplanation pointing to the current value.
-func (c AzureNetworkAdapterSuitabilityExplanation) ToPtr() *AzureNetworkAdapterSuitabilityExplanation {
-	return &c
 }
 
 // AzureOfferCode - Offer code according to which cost estimation is done.
@@ -532,11 +477,6 @@ func PossibleAzureOfferCodeValues() []AzureOfferCode {
 	}
 }
 
-// ToPtr returns a *AzureOfferCode pointing to the current value.
-func (c AzureOfferCode) ToPtr() *AzureOfferCode {
-	return &c
-}
-
 // AzurePricingTier - Pricing tier for Size evaluation.
 type AzurePricingTier string
 
@@ -551,11 +491,6 @@ func PossibleAzurePricingTierValues() []AzurePricingTier {
 		AzurePricingTierBasic,
 		AzurePricingTierStandard,
 	}
-}
-
-// ToPtr returns a *AzurePricingTier pointing to the current value.
-func (c AzurePricingTier) ToPtr() *AzurePricingTier {
-	return &c
 }
 
 // AzureStorageRedundancy - Storage Redundancy type offered by Azure.
@@ -578,11 +513,6 @@ func PossibleAzureStorageRedundancyValues() []AzureStorageRedundancy {
 		AzureStorageRedundancyUnknown,
 		AzureStorageRedundancyZoneRedundant,
 	}
-}
-
-// ToPtr returns a *AzureStorageRedundancy pointing to the current value.
-func (c AzureStorageRedundancy) ToPtr() *AzureStorageRedundancy {
-	return &c
 }
 
 // AzureVMFamily - Azure VM family.
@@ -639,11 +569,6 @@ func PossibleAzureVMFamilyValues() []AzureVMFamily {
 		AzureVMFamilyStandardA8A11,
 		AzureVMFamilyUnknown,
 	}
-}
-
-// ToPtr returns a *AzureVMFamily pointing to the current value.
-func (c AzureVMFamily) ToPtr() *AzureVMFamily {
-	return &c
 }
 
 // AzureVMSize - Recommended Azure size for this machine.
@@ -910,11 +835,6 @@ func PossibleAzureVMSizeValues() []AzureVMSize {
 	}
 }
 
-// ToPtr returns a *AzureVMSize pointing to the current value.
-func (c AzureVMSize) ToPtr() *AzureVMSize {
-	return &c
-}
-
 // AzureVMSuitabilityDetail - If machine is not suitable for cloud, this explains the reasons.
 type AzureVMSuitabilityDetail string
 
@@ -943,11 +863,6 @@ func PossibleAzureVMSuitabilityDetailValues() []AzureVMSuitabilityDetail {
 		AzureVMSuitabilityDetailPercentageOfMemoryUtilizedOutOfRange,
 		AzureVMSuitabilityDetailRecommendedSizeHasLessNetworkAdapters,
 	}
-}
-
-// ToPtr returns a *AzureVMSuitabilityDetail pointing to the current value.
-func (c AzureVMSuitabilityDetail) ToPtr() *AzureVMSuitabilityDetail {
-	return &c
 }
 
 // AzureVMSuitabilityExplanation - If machine is not ready to be migrated, this explains the reasons and mitigation steps.
@@ -1034,11 +949,6 @@ func PossibleAzureVMSuitabilityExplanationValues() []AzureVMSuitabilityExplanati
 	}
 }
 
-// ToPtr returns a *AzureVMSuitabilityExplanation pointing to the current value.
-func (c AzureVMSuitabilityExplanation) ToPtr() *AzureVMSuitabilityExplanation {
-	return &c
-}
-
 // CloudSuitability - Whether this disk is suitable for Azure.
 type CloudSuitability string
 
@@ -1059,11 +969,6 @@ func PossibleCloudSuitabilityValues() []CloudSuitability {
 		CloudSuitabilitySuitable,
 		CloudSuitabilityUnknown,
 	}
-}
-
-// ToPtr returns a *CloudSuitability pointing to the current value.
-func (c CloudSuitability) ToPtr() *CloudSuitability {
-	return &c
 }
 
 // Currency - Currency to report prices in.
@@ -1130,11 +1035,6 @@ func PossibleCurrencyValues() []Currency {
 	}
 }
 
-// ToPtr returns a *Currency pointing to the current value.
-func (c Currency) ToPtr() *Currency {
-	return &c
-}
-
 // GroupStatus - Whether the group has been created and is valid.
 type GroupStatus string
 
@@ -1157,11 +1057,6 @@ func PossibleGroupStatusValues() []GroupStatus {
 	}
 }
 
-// ToPtr returns a *GroupStatus pointing to the current value.
-func (c GroupStatus) ToPtr() *GroupStatus {
-	return &c
-}
-
 // GroupUpdateOperation - Whether to add or remove the machines.
 type GroupUpdateOperation string
 
@@ -1176,11 +1071,6 @@ func PossibleGroupUpdateOperationValues() []GroupUpdateOperation {
 		GroupUpdateOperationAdd,
 		GroupUpdateOperationRemove,
 	}
-}
-
-// ToPtr returns a *GroupUpdateOperation pointing to the current value.
-func (c GroupUpdateOperation) ToPtr() *GroupUpdateOperation {
-	return &c
 }
 
 // MachineBootType - Boot type of the machine.
@@ -1199,11 +1089,6 @@ func PossibleMachineBootTypeValues() []MachineBootType {
 		MachineBootTypeEFI,
 		MachineBootTypeUnknown,
 	}
-}
-
-// ToPtr returns a *MachineBootType pointing to the current value.
-func (c MachineBootType) ToPtr() *MachineBootType {
-	return &c
 }
 
 // Percentile - Percentile of performance data used to recommend Azure size.
@@ -1226,11 +1111,6 @@ func PossiblePercentileValues() []Percentile {
 	}
 }
 
-// ToPtr returns a *Percentile pointing to the current value.
-func (c Percentile) ToPtr() *Percentile {
-	return &c
-}
-
 // PrivateEndpointConnectionPropertiesProvisioningState - Indicates whether there is an ongoing operation on the private endpoint.
 type PrivateEndpointConnectionPropertiesProvisioningState string
 
@@ -1249,11 +1129,6 @@ func PossiblePrivateEndpointConnectionPropertiesProvisioningStateValues() []Priv
 		PrivateEndpointConnectionPropertiesProvisioningStateInProgress,
 		PrivateEndpointConnectionPropertiesProvisioningStateSucceeded,
 	}
-}
-
-// ToPtr returns a *PrivateEndpointConnectionPropertiesProvisioningState pointing to the current value.
-func (c PrivateEndpointConnectionPropertiesProvisioningState) ToPtr() *PrivateEndpointConnectionPropertiesProvisioningState {
-	return &c
 }
 
 // PrivateLinkServiceConnectionStateStatus - Connection status of the private endpoint connection.
@@ -1276,11 +1151,6 @@ func PossiblePrivateLinkServiceConnectionStateStatusValues() []PrivateLinkServic
 	}
 }
 
-// ToPtr returns a *PrivateLinkServiceConnectionStateStatus pointing to the current value.
-func (c PrivateLinkServiceConnectionStateStatus) ToPtr() *PrivateLinkServiceConnectionStateStatus {
-	return &c
-}
-
 // ProjectStatus - Assessment project status.
 type ProjectStatus string
 
@@ -1295,11 +1165,6 @@ func PossibleProjectStatusValues() []ProjectStatus {
 		ProjectStatusActive,
 		ProjectStatusInactive,
 	}
-}
-
-// ToPtr returns a *ProjectStatus pointing to the current value.
-func (c ProjectStatus) ToPtr() *ProjectStatus {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the project.
@@ -1326,11 +1191,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // ReservedInstance - Azure reserved instance.
 type ReservedInstance string
 
@@ -1347,11 +1207,6 @@ func PossibleReservedInstanceValues() []ReservedInstance {
 		ReservedInstanceRI1Year,
 		ReservedInstanceRI3Year,
 	}
-}
-
-// ToPtr returns a *ReservedInstance pointing to the current value.
-func (c ReservedInstance) ToPtr() *ReservedInstance {
-	return &c
 }
 
 // TimeRange - Time range of performance data used to recommend a size.
@@ -1372,9 +1227,4 @@ func PossibleTimeRangeValues() []TimeRange {
 		TimeRangeMonth,
 		TimeRangeWeek,
 	}
-}
-
-// ToPtr returns a *TimeRange pointing to the current value.
-func (c TimeRange) ToPtr() *TimeRange {
-	return &c
 }

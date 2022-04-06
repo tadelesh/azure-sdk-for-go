@@ -36,8 +36,3 @@ func PossibleHealthStateValues() []HealthState {
 		HealthStateWarning,
 	}
 }
-
-// ToPtr returns a *HealthState pointing to the current value.
-func (c HealthState) ToPtr() *HealthState {
-	return &c
-}

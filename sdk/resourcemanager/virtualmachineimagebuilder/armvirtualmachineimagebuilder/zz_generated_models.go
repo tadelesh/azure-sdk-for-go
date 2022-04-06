@@ -433,7 +433,7 @@ type Operation struct {
 	// The intended executor of the operation.
 	Origin *string `json:"origin,omitempty"`
 
-	// Properties of the operation.
+	// Anything
 	Properties interface{} `json:"properties,omitempty"`
 }
 

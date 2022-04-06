@@ -29,11 +29,6 @@ func PossibleContainerGroupIPAddressTypeValues() []ContainerGroupIPAddressType {
 	}
 }
 
-// ToPtr returns a *ContainerGroupIPAddressType pointing to the current value.
-func (c ContainerGroupIPAddressType) ToPtr() *ContainerGroupIPAddressType {
-	return &c
-}
-
 // ContainerGroupNetworkProtocol - The protocol associated with the port.
 type ContainerGroupNetworkProtocol string
 
@@ -48,11 +43,6 @@ func PossibleContainerGroupNetworkProtocolValues() []ContainerGroupNetworkProtoc
 		ContainerGroupNetworkProtocolTCP,
 		ContainerGroupNetworkProtocolUDP,
 	}
-}
-
-// ToPtr returns a *ContainerGroupNetworkProtocol pointing to the current value.
-func (c ContainerGroupNetworkProtocol) ToPtr() *ContainerGroupNetworkProtocol {
-	return &c
 }
 
 // ContainerGroupRestartPolicy - Restart policy for all containers within the container group.
@@ -76,11 +66,6 @@ func PossibleContainerGroupRestartPolicyValues() []ContainerGroupRestartPolicy {
 	}
 }
 
-// ToPtr returns a *ContainerGroupRestartPolicy pointing to the current value.
-func (c ContainerGroupRestartPolicy) ToPtr() *ContainerGroupRestartPolicy {
-	return &c
-}
-
 // ContainerGroupSKU - The container group SKU.
 type ContainerGroupSKU string
 
@@ -95,11 +80,6 @@ func PossibleContainerGroupSKUValues() []ContainerGroupSKU {
 		ContainerGroupSKUDedicated,
 		ContainerGroupSKUStandard,
 	}
-}
-
-// ToPtr returns a *ContainerGroupSKU pointing to the current value.
-func (c ContainerGroupSKU) ToPtr() *ContainerGroupSKU {
-	return &c
 }
 
 // ContainerInstanceOperationsOrigin - The intended executor of the operation.
@@ -118,11 +98,6 @@ func PossibleContainerInstanceOperationsOriginValues() []ContainerInstanceOperat
 	}
 }
 
-// ToPtr returns a *ContainerInstanceOperationsOrigin pointing to the current value.
-func (c ContainerInstanceOperationsOrigin) ToPtr() *ContainerInstanceOperationsOrigin {
-	return &c
-}
-
 // ContainerNetworkProtocol - The protocol associated with the port.
 type ContainerNetworkProtocol string
 
@@ -137,11 +112,6 @@ func PossibleContainerNetworkProtocolValues() []ContainerNetworkProtocol {
 		ContainerNetworkProtocolTCP,
 		ContainerNetworkProtocolUDP,
 	}
-}
-
-// ToPtr returns a *ContainerNetworkProtocol pointing to the current value.
-func (c ContainerNetworkProtocol) ToPtr() *ContainerNetworkProtocol {
-	return &c
 }
 
 // DNSNameLabelReusePolicy - The value representing the security enum.
@@ -166,11 +136,6 @@ func PossibleDNSNameLabelReusePolicyValues() []DNSNameLabelReusePolicy {
 	}
 }
 
-// ToPtr returns a *DNSNameLabelReusePolicy pointing to the current value.
-func (c DNSNameLabelReusePolicy) ToPtr() *DNSNameLabelReusePolicy {
-	return &c
-}
-
 // GpuSKU - The SKU of the GPU resource.
 type GpuSKU string
 
@@ -189,11 +154,6 @@ func PossibleGpuSKUValues() []GpuSKU {
 	}
 }
 
-// ToPtr returns a *GpuSKU pointing to the current value.
-func (c GpuSKU) ToPtr() *GpuSKU {
-	return &c
-}
-
 // LogAnalyticsLogType - The log type to be used.
 type LogAnalyticsLogType string
 
@@ -210,11 +170,6 @@ func PossibleLogAnalyticsLogTypeValues() []LogAnalyticsLogType {
 	}
 }
 
-// ToPtr returns a *LogAnalyticsLogType pointing to the current value.
-func (c LogAnalyticsLogType) ToPtr() *LogAnalyticsLogType {
-	return &c
-}
-
 // OperatingSystemTypes - The operating system type required by the containers in the container group.
 type OperatingSystemTypes string
 
@@ -229,11 +184,6 @@ func PossibleOperatingSystemTypesValues() []OperatingSystemTypes {
 		OperatingSystemTypesLinux,
 		OperatingSystemTypesWindows,
 	}
-}
-
-// ToPtr returns a *OperatingSystemTypes pointing to the current value.
-func (c OperatingSystemTypes) ToPtr() *OperatingSystemTypes {
-	return &c
 }
 
 // ResourceIdentityType - The type of identity used for the container group. The type 'SystemAssigned, UserAssigned' includes
@@ -258,11 +208,6 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 	}
 }
 
-// ToPtr returns a *ResourceIdentityType pointing to the current value.
-func (c ResourceIdentityType) ToPtr() *ResourceIdentityType {
-	return &c
-}
-
 // Scheme - The scheme.
 type Scheme string
 
@@ -277,9 +222,4 @@ func PossibleSchemeValues() []Scheme {
 		SchemeHTTP,
 		SchemeHTTPS,
 	}
-}
-
-// ToPtr returns a *Scheme pointing to the current value.
-func (c Scheme) ToPtr() *Scheme {
-	return &c
 }

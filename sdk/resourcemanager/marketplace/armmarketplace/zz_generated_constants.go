@@ -33,11 +33,6 @@ func PossibleAccessibilityValues() []Accessibility {
 	}
 }
 
-// ToPtr returns a *Accessibility pointing to the current value.
-func (c Accessibility) ToPtr() *Accessibility {
-	return &c
-}
-
 // AdminAction - Gets or sets admin action
 type AdminAction string
 
@@ -54,11 +49,6 @@ func PossibleAdminActionValues() []AdminAction {
 	}
 }
 
-// ToPtr returns a *AdminAction pointing to the current value.
-func (c AdminAction) ToPtr() *AdminAction {
-	return &c
-}
-
 // Availability - Indicates private store availability
 type Availability string
 
@@ -73,11 +63,6 @@ func PossibleAvailabilityValues() []Availability {
 		AvailabilityDisabled,
 		AvailabilityEnabled,
 	}
-}
-
-// ToPtr returns a *Availability pointing to the current value.
-func (c Availability) ToPtr() *Availability {
-	return &c
 }
 
 // IdentityType - The type of identity that creates/modifies resources
@@ -100,11 +85,6 @@ func PossibleIdentityTypeValues() []IdentityType {
 	}
 }
 
-// ToPtr returns a *IdentityType pointing to the current value.
-func (c IdentityType) ToPtr() *IdentityType {
-	return &c
-}
-
 // Operation - Set the Operation for the POST method. Ping or Delete
 type Operation string
 
@@ -125,11 +105,6 @@ func PossibleOperationValues() []Operation {
 	}
 }
 
-// ToPtr returns a *Operation pointing to the current value.
-func (c Operation) ToPtr() *Operation {
-	return &c
-}
-
 // Status - Gets the plan status
 type Status string
 
@@ -148,9 +123,4 @@ func PossibleStatusValues() []Status {
 		StatusPending,
 		StatusRejected,
 	}
-}
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
 }

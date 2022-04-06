@@ -28,8 +28,3 @@ func PossibleSerialPortStateValues() []SerialPortState {
 		SerialPortStateDisabled,
 	}
 }
-
-// ToPtr returns a *SerialPortState pointing to the current value.
-func (c SerialPortState) ToPtr() *SerialPortState {
-	return &c
-}

@@ -33,11 +33,6 @@ func PossibleAllowedEndpointRecordTypeValues() []AllowedEndpointRecordType {
 	}
 }
 
-// ToPtr returns a *AllowedEndpointRecordType pointing to the current value.
-func (c AllowedEndpointRecordType) ToPtr() *AllowedEndpointRecordType {
-	return &c
-}
-
 // EndpointMonitorStatus - The monitoring status of the endpoint.
 type EndpointMonitorStatus string
 
@@ -62,11 +57,6 @@ func PossibleEndpointMonitorStatusValues() []EndpointMonitorStatus {
 	}
 }
 
-// ToPtr returns a *EndpointMonitorStatus pointing to the current value.
-func (c EndpointMonitorStatus) ToPtr() *EndpointMonitorStatus {
-	return &c
-}
-
 // EndpointStatus - The status of the endpoint. If the endpoint is Enabled, it is probed for endpoint health and is included
 // in the traffic routing method.
 type EndpointStatus string
@@ -82,11 +72,6 @@ func PossibleEndpointStatusValues() []EndpointStatus {
 		EndpointStatusDisabled,
 		EndpointStatusEnabled,
 	}
-}
-
-// ToPtr returns a *EndpointStatus pointing to the current value.
-func (c EndpointStatus) ToPtr() *EndpointStatus {
-	return &c
 }
 
 type EndpointType string
@@ -106,11 +91,6 @@ func PossibleEndpointTypeValues() []EndpointType {
 	}
 }
 
-// ToPtr returns a *EndpointType pointing to the current value.
-func (c EndpointType) ToPtr() *EndpointType {
-	return &c
-}
-
 type Enum8 string
 
 const (
@@ -122,11 +102,6 @@ func PossibleEnum8Values() []Enum8 {
 	return []Enum8{
 		Enum8Default,
 	}
-}
-
-// ToPtr returns a *Enum8 pointing to the current value.
-func (c Enum8) ToPtr() *Enum8 {
-	return &c
 }
 
 // MonitorProtocol - The protocol (HTTP, HTTPS or TCP) used to probe for endpoint health.
@@ -145,11 +120,6 @@ func PossibleMonitorProtocolValues() []MonitorProtocol {
 		MonitorProtocolHTTPS,
 		MonitorProtocolTCP,
 	}
-}
-
-// ToPtr returns a *MonitorProtocol pointing to the current value.
-func (c MonitorProtocol) ToPtr() *MonitorProtocol {
-	return &c
 }
 
 // ProfileMonitorStatus - The profile-level monitoring status of the Traffic Manager profile.
@@ -174,11 +144,6 @@ func PossibleProfileMonitorStatusValues() []ProfileMonitorStatus {
 	}
 }
 
-// ToPtr returns a *ProfileMonitorStatus pointing to the current value.
-func (c ProfileMonitorStatus) ToPtr() *ProfileMonitorStatus {
-	return &c
-}
-
 // ProfileStatus - The status of the Traffic Manager profile.
 type ProfileStatus string
 
@@ -193,11 +158,6 @@ func PossibleProfileStatusValues() []ProfileStatus {
 		ProfileStatusDisabled,
 		ProfileStatusEnabled,
 	}
-}
-
-// ToPtr returns a *ProfileStatus pointing to the current value.
-func (c ProfileStatus) ToPtr() *ProfileStatus {
-	return &c
 }
 
 // TrafficRoutingMethod - The traffic routing method of the Traffic Manager profile.
@@ -224,11 +184,6 @@ func PossibleTrafficRoutingMethodValues() []TrafficRoutingMethod {
 	}
 }
 
-// ToPtr returns a *TrafficRoutingMethod pointing to the current value.
-func (c TrafficRoutingMethod) ToPtr() *TrafficRoutingMethod {
-	return &c
-}
-
 // TrafficViewEnrollmentStatus - Indicates whether Traffic View is 'Enabled' or 'Disabled' for the Traffic Manager profile.
 // Null, indicates 'Disabled'. Enabling this feature will increase the cost of the Traffic Manage profile.
 type TrafficViewEnrollmentStatus string
@@ -244,9 +199,4 @@ func PossibleTrafficViewEnrollmentStatusValues() []TrafficViewEnrollmentStatus {
 		TrafficViewEnrollmentStatusDisabled,
 		TrafficViewEnrollmentStatusEnabled,
 	}
-}
-
-// ToPtr returns a *TrafficViewEnrollmentStatus pointing to the current value.
-func (c TrafficViewEnrollmentStatus) ToPtr() *TrafficViewEnrollmentStatus {
-	return &c
 }

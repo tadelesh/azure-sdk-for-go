@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 type InstanceViewTypes string
 
 const (
@@ -49,11 +44,6 @@ func PossibleInstanceViewTypesValues() []InstanceViewTypes {
 	return []InstanceViewTypes{
 		InstanceViewTypesInstanceView,
 	}
-}
-
-// ToPtr returns a *InstanceViewTypes pointing to the current value.
-func (c InstanceViewTypes) ToPtr() *InstanceViewTypes {
-	return &c
 }
 
 // PublicNetworkAccessType - The network access policy to determine if Azure Arc agents can use public Azure Arc service endpoints.
@@ -77,11 +67,6 @@ func PossiblePublicNetworkAccessTypeValues() []PublicNetworkAccessType {
 	}
 }
 
-// ToPtr returns a *PublicNetworkAccessType pointing to the current value.
-func (c PublicNetworkAccessType) ToPtr() *PublicNetworkAccessType {
-	return &c
-}
-
 // StatusLevelTypes - The level code.
 type StatusLevelTypes string
 
@@ -100,11 +85,6 @@ func PossibleStatusLevelTypesValues() []StatusLevelTypes {
 	}
 }
 
-// ToPtr returns a *StatusLevelTypes pointing to the current value.
-func (c StatusLevelTypes) ToPtr() *StatusLevelTypes {
-	return &c
-}
-
 // StatusTypes - The status of the hybrid machine agent.
 type StatusTypes string
 
@@ -121,9 +101,4 @@ func PossibleStatusTypesValues() []StatusTypes {
 		StatusTypesDisconnected,
 		StatusTypesError,
 	}
-}
-
-// ToPtr returns a *StatusTypes pointing to the current value.
-func (c StatusTypes) ToPtr() *StatusTypes {
-	return &c
 }

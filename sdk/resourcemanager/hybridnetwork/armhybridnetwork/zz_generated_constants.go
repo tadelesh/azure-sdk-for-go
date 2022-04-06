@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DeviceType - The type of the device.
 type DeviceType string
 
@@ -54,11 +49,6 @@ func PossibleDeviceTypeValues() []DeviceType {
 	}
 }
 
-// ToPtr returns a *DeviceType pointing to the current value.
-func (c DeviceType) ToPtr() *DeviceType {
-	return &c
-}
-
 // DiskCreateOptionTypes - Specifies how the virtual machine should be created.
 type DiskCreateOptionTypes string
 
@@ -73,11 +63,6 @@ func PossibleDiskCreateOptionTypesValues() []DiskCreateOptionTypes {
 		DiskCreateOptionTypesEmpty,
 		DiskCreateOptionTypesUnknown,
 	}
-}
-
-// ToPtr returns a *DiskCreateOptionTypes pointing to the current value.
-func (c DiskCreateOptionTypes) ToPtr() *DiskCreateOptionTypes {
-	return &c
 }
 
 // IPAllocationMethod - IP address allocation method.
@@ -98,11 +83,6 @@ func PossibleIPAllocationMethodValues() []IPAllocationMethod {
 	}
 }
 
-// ToPtr returns a *IPAllocationMethod pointing to the current value.
-func (c IPAllocationMethod) ToPtr() *IPAllocationMethod {
-	return &c
-}
-
 // IPVersion - IP address version.
 type IPVersion string
 
@@ -119,11 +99,6 @@ func PossibleIPVersionValues() []IPVersion {
 	}
 }
 
-// ToPtr returns a *IPVersion pointing to the current value.
-func (c IPVersion) ToPtr() *IPVersion {
-	return &c
-}
-
 // NetworkFunctionRoleConfigurationType - Role type.
 type NetworkFunctionRoleConfigurationType string
 
@@ -138,11 +113,6 @@ func PossibleNetworkFunctionRoleConfigurationTypeValues() []NetworkFunctionRoleC
 		NetworkFunctionRoleConfigurationTypeUnknown,
 		NetworkFunctionRoleConfigurationTypeVirtualMachine,
 	}
-}
-
-// ToPtr returns a *NetworkFunctionRoleConfigurationType pointing to the current value.
-func (c NetworkFunctionRoleConfigurationType) ToPtr() *NetworkFunctionRoleConfigurationType {
-	return &c
 }
 
 // NetworkFunctionType - The network function type.
@@ -163,11 +133,6 @@ func PossibleNetworkFunctionTypeValues() []NetworkFunctionType {
 	}
 }
 
-// ToPtr returns a *NetworkFunctionType pointing to the current value.
-func (c NetworkFunctionType) ToPtr() *NetworkFunctionType {
-	return &c
-}
-
 // OperatingSystemTypes - The OS type.
 type OperatingSystemTypes string
 
@@ -184,11 +149,6 @@ func PossibleOperatingSystemTypesValues() []OperatingSystemTypes {
 		OperatingSystemTypesUnknown,
 		OperatingSystemTypesWindows,
 	}
-}
-
-// ToPtr returns a *OperatingSystemTypes pointing to the current value.
-func (c OperatingSystemTypes) ToPtr() *OperatingSystemTypes {
-	return &c
 }
 
 // OperationalState - The operational state of the role instance.
@@ -211,11 +171,6 @@ func PossibleOperationalStateValues() []OperationalState {
 		OperationalStateStopping,
 		OperationalStateUnknown,
 	}
-}
-
-// ToPtr returns a *OperationalState pointing to the current value.
-func (c OperationalState) ToPtr() *OperationalState {
-	return &c
 }
 
 // ProvisioningState - The current provisioning state.
@@ -244,11 +199,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // SKUDeploymentMode - The sku deployment mode.
 type SKUDeploymentMode string
 
@@ -265,11 +215,6 @@ func PossibleSKUDeploymentModeValues() []SKUDeploymentMode {
 		SKUDeploymentModePrivateEdgeZone,
 		SKUDeploymentModeUnknown,
 	}
-}
-
-// ToPtr returns a *SKUDeploymentMode pointing to the current value.
-func (c SKUDeploymentMode) ToPtr() *SKUDeploymentMode {
-	return &c
 }
 
 // SKUType - Sku type.
@@ -292,11 +237,6 @@ func PossibleSKUTypeValues() []SKUType {
 	}
 }
 
-// ToPtr returns a *SKUType pointing to the current value.
-func (c SKUType) ToPtr() *SKUType {
-	return &c
-}
-
 // Status - The current device status.
 type Status string
 
@@ -317,11 +257,6 @@ func PossibleStatusValues() []Status {
 	}
 }
 
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}
-
 // VMSwitchType - The type of the VM switch.
 type VMSwitchType string
 
@@ -340,11 +275,6 @@ func PossibleVMSwitchTypeValues() []VMSwitchType {
 		VMSwitchTypeUnknown,
 		VMSwitchTypeWan,
 	}
-}
-
-// ToPtr returns a *VMSwitchType pointing to the current value.
-func (c VMSwitchType) ToPtr() *VMSwitchType {
-	return &c
 }
 
 // VendorProvisioningState - The current vendor provisioning state.
@@ -369,11 +299,6 @@ func PossibleVendorProvisioningStateValues() []VendorProvisioningState {
 		VendorProvisioningStateUnknown,
 		VendorProvisioningStateUserDataValidationFailed,
 	}
-}
-
-// ToPtr returns a *VendorProvisioningState pointing to the current value.
-func (c VendorProvisioningState) ToPtr() *VendorProvisioningState {
-	return &c
 }
 
 // VirtualMachineSizeTypes - The size of the virtual machine.
@@ -440,9 +365,4 @@ func PossibleVirtualMachineSizeTypesValues() []VirtualMachineSizeTypes {
 		VirtualMachineSizeTypesStandardF8S,
 		VirtualMachineSizeTypesUnknown,
 	}
-}
-
-// ToPtr returns a *VirtualMachineSizeTypes pointing to the current value.
-func (c VirtualMachineSizeTypes) ToPtr() *VirtualMachineSizeTypes {
-	return &c
 }

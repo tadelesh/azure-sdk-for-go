@@ -32,11 +32,6 @@ func PossibleAvailabilityStateValuesValues() []AvailabilityStateValues {
 	}
 }
 
-// ToPtr returns a *AvailabilityStateValues pointing to the current value.
-func (c AvailabilityStateValues) ToPtr() *AvailabilityStateValues {
-	return &c
-}
-
 type Enum0 string
 
 const (
@@ -48,11 +43,6 @@ func PossibleEnum0Values() []Enum0 {
 	return []Enum0{
 		Enum0Default,
 	}
-}
-
-// ToPtr returns a *Enum0 pointing to the current value.
-func (c Enum0) ToPtr() *Enum0 {
-	return &c
 }
 
 // ReasonChronicityTypes - Chronicity of the availability transition.
@@ -69,11 +59,6 @@ func PossibleReasonChronicityTypesValues() []ReasonChronicityTypes {
 		ReasonChronicityTypesTransient,
 		ReasonChronicityTypesPersistent,
 	}
-}
-
-// ToPtr returns a *ReasonChronicityTypes pointing to the current value.
-func (c ReasonChronicityTypes) ToPtr() *ReasonChronicityTypes {
-	return &c
 }
 
 // SeverityValues - The severity level of this active event.
@@ -94,11 +79,6 @@ func PossibleSeverityValuesValues() []SeverityValues {
 	}
 }
 
-// ToPtr returns a *SeverityValues pointing to the current value.
-func (c SeverityValues) ToPtr() *SeverityValues {
-	return &c
-}
-
 // StageValues - The stage of this active event.
 type StageValues string
 
@@ -115,9 +95,4 @@ func PossibleStageValuesValues() []StageValues {
 		StageValuesArchived,
 		StageValuesResolve,
 	}
-}
-
-// ToPtr returns a *StageValues pointing to the current value.
-func (c StageValues) ToPtr() *StageValues {
-	return &c
 }

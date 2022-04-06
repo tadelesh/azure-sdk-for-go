@@ -31,11 +31,6 @@ func PossibleCommandValues() []Command {
 	}
 }
 
-// ToPtr returns a *Command pointing to the current value.
-func (c Command) ToPtr() *Command {
-	return &c
-}
-
 // ConnectionState - The state of the connection.
 type ConnectionState string
 
@@ -64,11 +59,6 @@ func PossibleConnectionStateValues() []ConnectionState {
 	}
 }
 
-// ToPtr returns a *ConnectionState pointing to the current value.
-func (c ConnectionState) ToPtr() *ConnectionState {
-	return &c
-}
-
 // DirectPeeringType - The type of direct peering.
 type DirectPeeringType string
 
@@ -95,11 +85,6 @@ func PossibleDirectPeeringTypeValues() []DirectPeeringType {
 	}
 }
 
-// ToPtr returns a *DirectPeeringType pointing to the current value.
-func (c DirectPeeringType) ToPtr() *DirectPeeringType {
-	return &c
-}
-
 type Enum0 string
 
 const (
@@ -113,11 +98,6 @@ func PossibleEnum0Values() []Enum0 {
 		Enum0Available,
 		Enum0Unavailable,
 	}
-}
-
-// ToPtr returns a *Enum0 pointing to the current value.
-func (c Enum0) ToPtr() *Enum0 {
-	return &c
 }
 
 // Family - The family of the peering SKU.
@@ -136,11 +116,6 @@ func PossibleFamilyValues() []Family {
 	}
 }
 
-// ToPtr returns a *Family pointing to the current value.
-func (c Family) ToPtr() *Family {
-	return &c
-}
-
 // Kind - The kind of the peering.
 type Kind string
 
@@ -155,11 +130,6 @@ func PossibleKindValues() []Kind {
 		KindDirect,
 		KindExchange,
 	}
-}
-
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
 }
 
 // LearnedType - The prefix learned type
@@ -180,11 +150,6 @@ func PossibleLearnedTypeValues() []LearnedType {
 	}
 }
 
-// ToPtr returns a *LearnedType pointing to the current value.
-func (c LearnedType) ToPtr() *LearnedType {
-	return &c
-}
-
 type LegacyPeeringsKind string
 
 const (
@@ -198,11 +163,6 @@ func PossibleLegacyPeeringsKindValues() []LegacyPeeringsKind {
 		LegacyPeeringsKindDirect,
 		LegacyPeeringsKindExchange,
 	}
-}
-
-// ToPtr returns a *LegacyPeeringsKind pointing to the current value.
-func (c LegacyPeeringsKind) ToPtr() *LegacyPeeringsKind {
-	return &c
 }
 
 type LookingGlassCommand string
@@ -222,11 +182,6 @@ func PossibleLookingGlassCommandValues() []LookingGlassCommand {
 	}
 }
 
-// ToPtr returns a *LookingGlassCommand pointing to the current value.
-func (c LookingGlassCommand) ToPtr() *LookingGlassCommand {
-	return &c
-}
-
 type LookingGlassSourceType string
 
 const (
@@ -240,11 +195,6 @@ func PossibleLookingGlassSourceTypeValues() []LookingGlassSourceType {
 		LookingGlassSourceTypeAzureRegion,
 		LookingGlassSourceTypeEdgeSite,
 	}
-}
-
-// ToPtr returns a *LookingGlassSourceType pointing to the current value.
-func (c LookingGlassSourceType) ToPtr() *LookingGlassSourceType {
-	return &c
 }
 
 type PeeringLocationsDirectPeeringType string
@@ -272,11 +222,6 @@ func PossiblePeeringLocationsDirectPeeringTypeValues() []PeeringLocationsDirectP
 	}
 }
 
-// ToPtr returns a *PeeringLocationsDirectPeeringType pointing to the current value.
-func (c PeeringLocationsDirectPeeringType) ToPtr() *PeeringLocationsDirectPeeringType {
-	return &c
-}
-
 type PeeringLocationsKind string
 
 const (
@@ -290,11 +235,6 @@ func PossiblePeeringLocationsKindValues() []PeeringLocationsKind {
 		PeeringLocationsKindDirect,
 		PeeringLocationsKindExchange,
 	}
-}
-
-// ToPtr returns a *PeeringLocationsKind pointing to the current value.
-func (c PeeringLocationsKind) ToPtr() *PeeringLocationsKind {
-	return &c
 }
 
 // PrefixValidationState - The prefix validation state.
@@ -323,11 +263,6 @@ func PossiblePrefixValidationStateValues() []PrefixValidationState {
 	}
 }
 
-// ToPtr returns a *PrefixValidationState pointing to the current value.
-func (c PrefixValidationState) ToPtr() *PrefixValidationState {
-	return &c
-}
-
 // ProvisioningState - The provisioning state of the resource.
 type ProvisioningState string
 
@@ -346,11 +281,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateSucceeded,
 		ProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }
 
 // Role - The role of the contact.
@@ -377,11 +307,6 @@ func PossibleRoleValues() []Role {
 	}
 }
 
-// ToPtr returns a *Role pointing to the current value.
-func (c Role) ToPtr() *Role {
-	return &c
-}
-
 // SessionAddressProvider - The field indicating if Microsoft provides session ip addresses.
 type SessionAddressProvider string
 
@@ -396,11 +321,6 @@ func PossibleSessionAddressProviderValues() []SessionAddressProvider {
 		SessionAddressProviderMicrosoft,
 		SessionAddressProviderPeer,
 	}
-}
-
-// ToPtr returns a *SessionAddressProvider pointing to the current value.
-func (c SessionAddressProvider) ToPtr() *SessionAddressProvider {
-	return &c
 }
 
 // SessionStateV4 - The state of the IPv4 session.
@@ -437,11 +357,6 @@ func PossibleSessionStateV4Values() []SessionStateV4 {
 	}
 }
 
-// ToPtr returns a *SessionStateV4 pointing to the current value.
-func (c SessionStateV4) ToPtr() *SessionStateV4 {
-	return &c
-}
-
 // SessionStateV6 - The state of the IPv6 session.
 type SessionStateV6 string
 
@@ -476,11 +391,6 @@ func PossibleSessionStateV6Values() []SessionStateV6 {
 	}
 }
 
-// ToPtr returns a *SessionStateV6 pointing to the current value.
-func (c SessionStateV6) ToPtr() *SessionStateV6 {
-	return &c
-}
-
 // Size - The size of the peering SKU.
 type Size string
 
@@ -499,11 +409,6 @@ func PossibleSizeValues() []Size {
 	}
 }
 
-// ToPtr returns a *Size pointing to the current value.
-func (c Size) ToPtr() *Size {
-	return &c
-}
-
 // Tier - The tier of the peering SKU.
 type Tier string
 
@@ -518,11 +423,6 @@ func PossibleTierValues() []Tier {
 		TierBasic,
 		TierPremium,
 	}
-}
-
-// ToPtr returns a *Tier pointing to the current value.
-func (c Tier) ToPtr() *Tier {
-	return &c
 }
 
 // ValidationState - The validation state of the ASN associated with the peer.
@@ -543,9 +443,4 @@ func PossibleValidationStateValues() []ValidationState {
 		ValidationStateNone,
 		ValidationStatePending,
 	}
-}
-
-// ToPtr returns a *ValidationState pointing to the current value.
-func (c ValidationState) ToPtr() *ValidationState {
-	return &c
 }

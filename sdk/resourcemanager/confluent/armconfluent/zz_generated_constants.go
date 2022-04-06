@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // ProvisionState - Provision states for confluent RP
 type ProvisionState string
 
@@ -66,11 +61,6 @@ func PossibleProvisionStateValues() []ProvisionState {
 		ProvisionStateSucceeded,
 		ProvisionStateUpdating,
 	}
-}
-
-// ToPtr returns a *ProvisionState pointing to the current value.
-func (c ProvisionState) ToPtr() *ProvisionState {
-	return &c
 }
 
 // SaaSOfferStatus - SaaS Offer Status for confluent RP
@@ -103,9 +93,4 @@ func PossibleSaaSOfferStatusValues() []SaaSOfferStatus {
 		SaaSOfferStatusUnsubscribed,
 		SaaSOfferStatusUpdating,
 	}
-}
-
-// ToPtr returns a *SaaSOfferStatus pointing to the current value.
-func (c SaaSOfferStatus) ToPtr() *SaaSOfferStatus {
-	return &c
 }

@@ -29,11 +29,6 @@ func PossibleCheckNameUnavailableReasonValues() []CheckNameUnavailableReason {
 	}
 }
 
-// ToPtr returns a *CheckNameUnavailableReason pointing to the current value.
-func (c CheckNameUnavailableReason) ToPtr() *CheckNameUnavailableReason {
-	return &c
-}
-
 // KeyRank - The rank of the EngagementFabric account key
 type KeyRank string
 
@@ -48,9 +43,4 @@ func PossibleKeyRankValues() []KeyRank {
 		KeyRankPrimaryKey,
 		KeyRankSecondaryKey,
 	}
-}
-
-// ToPtr returns a *KeyRank pointing to the current value.
-func (c KeyRank) ToPtr() *KeyRank {
-	return &c
 }

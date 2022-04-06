@@ -33,11 +33,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // ManagedServiceIdentityType - Type of managed service identity (where both SystemAssigned and UserAssigned types are allowed).
 type ManagedServiceIdentityType string
 
@@ -58,11 +53,6 @@ func PossibleManagedServiceIdentityTypeValues() []ManagedServiceIdentityType {
 	}
 }
 
-// ToPtr returns a *ManagedServiceIdentityType pointing to the current value.
-func (c ManagedServiceIdentityType) ToPtr() *ManagedServiceIdentityType {
-	return &c
-}
-
 // PermissionType - The requested permission
 type PermissionType string
 
@@ -77,11 +67,6 @@ func PossiblePermissionTypeValues() []PermissionType {
 		PermissionTypeContributor,
 		PermissionTypeReader,
 	}
-}
-
-// ToPtr returns a *PermissionType pointing to the current value.
-func (c PermissionType) ToPtr() *PermissionType {
-	return &c
 }
 
 // ProvisioningState - Gets the status of the account at the time the operation was called.
@@ -108,11 +93,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // Reason - Gets the reason that a Video Indexer account name could not be used. The Reason element is only returned if NameAvailable
 // is false.
 type Reason string
@@ -126,11 +106,6 @@ func PossibleReasonValues() []Reason {
 	return []Reason{
 		ReasonAlreadyExists,
 	}
-}
-
-// ToPtr returns a *Reason pointing to the current value.
-func (c Reason) ToPtr() *Reason {
-	return &c
 }
 
 // Scope - The requested media type
@@ -151,11 +126,6 @@ func PossibleScopeValues() []Scope {
 	}
 }
 
-// ToPtr returns a *Scope pointing to the current value.
-func (c Scope) ToPtr() *Scope {
-	return &c
-}
-
 // Type - The type of resource, Microsoft.VideoIndexer/accounts
 type Type string
 
@@ -168,9 +138,4 @@ func PossibleTypeValues() []Type {
 	return []Type{
 		TypeMicrosoftVideoIndexerAccounts,
 	}
-}
-
-// ToPtr returns a *Type pointing to the current value.
-func (c Type) ToPtr() *Type {
-	return &c
 }

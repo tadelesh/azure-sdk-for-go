@@ -30,11 +30,6 @@ func PossibleAccessRightsValues() []AccessRights {
 	}
 }
 
-// ToPtr returns a *AccessRights pointing to the current value.
-func (c AccessRights) ToPtr() *AccessRights {
-	return &c
-}
-
 // KeyType - The access key to regenerate.
 type KeyType string
 
@@ -49,11 +44,6 @@ func PossibleKeyTypeValues() []KeyType {
 		KeyTypePrimaryKey,
 		KeyTypeSecondaryKey,
 	}
-}
-
-// ToPtr returns a *KeyType pointing to the current value.
-func (c KeyType) ToPtr() *KeyType {
-	return &c
 }
 
 type ProvisioningStateEnum string
@@ -79,11 +69,6 @@ func PossibleProvisioningStateEnumValues() []ProvisioningStateEnum {
 	}
 }
 
-// ToPtr returns a *ProvisioningStateEnum pointing to the current value.
-func (c ProvisioningStateEnum) ToPtr() *ProvisioningStateEnum {
-	return &c
-}
-
 // Relaytype - WCF relay type.
 type Relaytype string
 
@@ -98,11 +83,6 @@ func PossibleRelaytypeValues() []Relaytype {
 		RelaytypeNetTCP,
 		RelaytypeHTTP,
 	}
-}
-
-// ToPtr returns a *Relaytype pointing to the current value.
-func (c Relaytype) ToPtr() *Relaytype {
-	return &c
 }
 
 // UnavailableReason - Specifies the reason for the unavailability of the service.
@@ -127,9 +107,4 @@ func PossibleUnavailableReasonValues() []UnavailableReason {
 		UnavailableReasonNameInLockdown,
 		UnavailableReasonTooManyNamespaceInCurrentSubscription,
 	}
-}
-
-// ToPtr returns a *UnavailableReason pointing to the current value.
-func (c UnavailableReason) ToPtr() *UnavailableReason {
-	return &c
 }

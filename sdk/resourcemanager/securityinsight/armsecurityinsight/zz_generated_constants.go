@@ -31,11 +31,6 @@ func PossibleAlertDetailValues() []AlertDetail {
 	}
 }
 
-// ToPtr returns a *AlertDetail pointing to the current value.
-func (c AlertDetail) ToPtr() *AlertDetail {
-	return &c
-}
-
 // AlertRuleKind - The kind of the alert rule
 type AlertRuleKind string
 
@@ -60,11 +55,6 @@ func PossibleAlertRuleKindValues() []AlertRuleKind {
 	}
 }
 
-// ToPtr returns a *AlertRuleKind pointing to the current value.
-func (c AlertRuleKind) ToPtr() *AlertRuleKind {
-	return &c
-}
-
 // AlertSeverity - The severity of the alert
 type AlertSeverity string
 
@@ -87,11 +77,6 @@ func PossibleAlertSeverityValues() []AlertSeverity {
 		AlertSeverityLow,
 		AlertSeverityMedium,
 	}
-}
-
-// ToPtr returns a *AlertSeverity pointing to the current value.
-func (c AlertSeverity) ToPtr() *AlertSeverity {
-	return &c
 }
 
 // AlertStatus - The lifecycle status of the alert.
@@ -121,11 +106,6 @@ func PossibleAlertStatusValues() []AlertStatus {
 	}
 }
 
-// ToPtr returns a *AlertStatus pointing to the current value.
-func (c AlertStatus) ToPtr() *AlertStatus {
-	return &c
-}
-
 // AntispamMailDirection - The directionality of this mail message
 type AntispamMailDirection string
 
@@ -148,11 +128,6 @@ func PossibleAntispamMailDirectionValues() []AntispamMailDirection {
 		AntispamMailDirectionOutbound,
 		AntispamMailDirectionUnknown,
 	}
-}
-
-// ToPtr returns a *AntispamMailDirection pointing to the current value.
-func (c AntispamMailDirection) ToPtr() *AntispamMailDirection {
-	return &c
 }
 
 // AttackTactic - The severity for alerts created by this alert rule.
@@ -193,11 +168,6 @@ func PossibleAttackTacticValues() []AttackTactic {
 	}
 }
 
-// ToPtr returns a *AttackTactic pointing to the current value.
-func (c AttackTactic) ToPtr() *AttackTactic {
-	return &c
-}
-
 // AutomationRuleActionType - The type of the automation rule action
 type AutomationRuleActionType string
 
@@ -216,11 +186,6 @@ func PossibleAutomationRuleActionTypeValues() []AutomationRuleActionType {
 	}
 }
 
-// ToPtr returns a *AutomationRuleActionType pointing to the current value.
-func (c AutomationRuleActionType) ToPtr() *AutomationRuleActionType {
-	return &c
-}
-
 // AutomationRuleConditionType - The type of the automation rule condition
 type AutomationRuleConditionType string
 
@@ -234,11 +199,6 @@ func PossibleAutomationRuleConditionTypeValues() []AutomationRuleConditionType {
 	return []AutomationRuleConditionType{
 		AutomationRuleConditionTypeProperty,
 	}
-}
-
-// ToPtr returns a *AutomationRuleConditionType pointing to the current value.
-func (c AutomationRuleConditionType) ToPtr() *AutomationRuleConditionType {
-	return &c
 }
 
 // AutomationRulePropertyConditionSupportedOperator - The operator to use for evaluation the condition
@@ -282,11 +242,6 @@ func PossibleAutomationRulePropertyConditionSupportedOperatorValues() []Automati
 		AutomationRulePropertyConditionSupportedOperatorNotStartsWith,
 		AutomationRulePropertyConditionSupportedOperatorStartsWith,
 	}
-}
-
-// ToPtr returns a *AutomationRulePropertyConditionSupportedOperator pointing to the current value.
-func (c AutomationRulePropertyConditionSupportedOperator) ToPtr() *AutomationRulePropertyConditionSupportedOperator {
-	return &c
 }
 
 // AutomationRulePropertyConditionSupportedProperty - The property to evaluate in an automation rule property condition
@@ -457,11 +412,6 @@ func PossibleAutomationRulePropertyConditionSupportedPropertyValues() []Automati
 	}
 }
 
-// ToPtr returns a *AutomationRulePropertyConditionSupportedProperty pointing to the current value.
-func (c AutomationRulePropertyConditionSupportedProperty) ToPtr() *AutomationRulePropertyConditionSupportedProperty {
-	return &c
-}
-
 // ConfidenceLevel - The confidence level of this alert.
 type ConfidenceLevel string
 
@@ -481,11 +431,6 @@ func PossibleConfidenceLevelValues() []ConfidenceLevel {
 		ConfidenceLevelLow,
 		ConfidenceLevelUnknown,
 	}
-}
-
-// ToPtr returns a *ConfidenceLevel pointing to the current value.
-func (c ConfidenceLevel) ToPtr() *ConfidenceLevel {
-	return &c
 }
 
 // ConfidenceScoreStatus - The confidence score calculation status, i.e. indicating if score calculation is pending for this
@@ -514,11 +459,6 @@ func PossibleConfidenceScoreStatusValues() []ConfidenceScoreStatus {
 	}
 }
 
-// ToPtr returns a *ConfidenceScoreStatus pointing to the current value.
-func (c ConfidenceScoreStatus) ToPtr() *ConfidenceScoreStatus {
-	return &c
-}
-
 // ConnectAuthKind - The authentication kind used to poll the data
 type ConnectAuthKind string
 
@@ -537,11 +477,6 @@ func PossibleConnectAuthKindValues() []ConnectAuthKind {
 	}
 }
 
-// ToPtr returns a *ConnectAuthKind pointing to the current value.
-func (c ConnectAuthKind) ToPtr() *ConnectAuthKind {
-	return &c
-}
-
 // ConnectivityType - type of connectivity
 type ConnectivityType string
 
@@ -554,11 +489,6 @@ func PossibleConnectivityTypeValues() []ConnectivityType {
 	return []ConnectivityType{
 		ConnectivityTypeIsConnectedQuery,
 	}
-}
-
-// ToPtr returns a *ConnectivityType pointing to the current value.
-func (c ConnectivityType) ToPtr() *ConnectivityType {
-	return &c
 }
 
 // ContentType - The content type of a source control path.
@@ -575,11 +505,6 @@ func PossibleContentTypeValues() []ContentType {
 		ContentTypeAnalyticRule,
 		ContentTypeWorkbook,
 	}
-}
-
-// ToPtr returns a *ContentType pointing to the current value.
-func (c ContentType) ToPtr() *ContentType {
-	return &c
 }
 
 // CreatedByType - The type of identity that created the resource.
@@ -602,11 +527,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // CustomEntityQueryKind - The kind of the entity query that supports put request.
 type CustomEntityQueryKind string
 
@@ -619,11 +539,6 @@ func PossibleCustomEntityQueryKindValues() []CustomEntityQueryKind {
 	return []CustomEntityQueryKind{
 		CustomEntityQueryKindActivity,
 	}
-}
-
-// ToPtr returns a *CustomEntityQueryKind pointing to the current value.
-func (c CustomEntityQueryKind) ToPtr() *CustomEntityQueryKind {
-	return &c
 }
 
 // DataConnectorAuthorizationState - Describes the state of user's authorization for a connector kind.
@@ -640,11 +555,6 @@ func PossibleDataConnectorAuthorizationStateValues() []DataConnectorAuthorizatio
 		DataConnectorAuthorizationStateInvalid,
 		DataConnectorAuthorizationStateValid,
 	}
-}
-
-// ToPtr returns a *DataConnectorAuthorizationState pointing to the current value.
-func (c DataConnectorAuthorizationState) ToPtr() *DataConnectorAuthorizationState {
-	return &c
 }
 
 // DataConnectorKind - The kind of the data connector
@@ -693,11 +603,6 @@ func PossibleDataConnectorKindValues() []DataConnectorKind {
 	}
 }
 
-// ToPtr returns a *DataConnectorKind pointing to the current value.
-func (c DataConnectorKind) ToPtr() *DataConnectorKind {
-	return &c
-}
-
 // DataConnectorLicenseState - Describes the state of user's license for a connector kind.
 type DataConnectorLicenseState string
 
@@ -716,11 +621,6 @@ func PossibleDataConnectorLicenseStateValues() []DataConnectorLicenseState {
 	}
 }
 
-// ToPtr returns a *DataConnectorLicenseState pointing to the current value.
-func (c DataConnectorLicenseState) ToPtr() *DataConnectorLicenseState {
-	return &c
-}
-
 // DataTypeState - Describe whether this data type connection is enabled or not.
 type DataTypeState string
 
@@ -735,11 +635,6 @@ func PossibleDataTypeStateValues() []DataTypeState {
 		DataTypeStateDisabled,
 		DataTypeStateEnabled,
 	}
-}
-
-// ToPtr returns a *DataTypeState pointing to the current value.
-func (c DataTypeState) ToPtr() *DataTypeState {
-	return &c
 }
 
 // DeliveryAction - The delivery action of this mail message like Delivered, Blocked, Replaced etc
@@ -767,11 +662,6 @@ func PossibleDeliveryActionValues() []DeliveryAction {
 		DeliveryActionBlocked,
 		DeliveryActionReplaced,
 	}
-}
-
-// ToPtr returns a *DeliveryAction pointing to the current value.
-func (c DeliveryAction) ToPtr() *DeliveryAction {
-	return &c
 }
 
 // DeliveryLocation - The delivery location of this mail message like Inbox, JunkFolder etc
@@ -813,11 +703,6 @@ func PossibleDeliveryLocationValues() []DeliveryLocation {
 	}
 }
 
-// ToPtr returns a *DeliveryLocation pointing to the current value.
-func (c DeliveryLocation) ToPtr() *DeliveryLocation {
-	return &c
-}
-
 // ElevationToken - The elevation token associated with the process.
 type ElevationToken string
 
@@ -839,11 +724,6 @@ func PossibleElevationTokenValues() []ElevationToken {
 	}
 }
 
-// ToPtr returns a *ElevationToken pointing to the current value.
-func (c ElevationToken) ToPtr() *ElevationToken {
-	return &c
-}
-
 type EntityItemQueryKind string
 
 const (
@@ -856,11 +736,6 @@ func PossibleEntityItemQueryKindValues() []EntityItemQueryKind {
 	return []EntityItemQueryKind{
 		EntityItemQueryKindInsight,
 	}
-}
-
-// ToPtr returns a *EntityItemQueryKind pointing to the current value.
-func (c EntityItemQueryKind) ToPtr() *EntityItemQueryKind {
-	return &c
 }
 
 // EntityKind - The kind of the entity
@@ -938,11 +813,6 @@ func PossibleEntityKindValues() []EntityKind {
 	}
 }
 
-// ToPtr returns a *EntityKind pointing to the current value.
-func (c EntityKind) ToPtr() *EntityKind {
-	return &c
-}
-
 // EntityMappingType - The V3 type of the mapped entity
 type EntityMappingType string
 
@@ -1009,11 +879,6 @@ func PossibleEntityMappingTypeValues() []EntityMappingType {
 	}
 }
 
-// ToPtr returns a *EntityMappingType pointing to the current value.
-func (c EntityMappingType) ToPtr() *EntityMappingType {
-	return &c
-}
-
 // EntityQueryKind - The kind of the entity query
 type EntityQueryKind string
 
@@ -1032,11 +897,6 @@ func PossibleEntityQueryKindValues() []EntityQueryKind {
 	}
 }
 
-// ToPtr returns a *EntityQueryKind pointing to the current value.
-func (c EntityQueryKind) ToPtr() *EntityQueryKind {
-	return &c
-}
-
 // EntityQueryTemplateKind - The kind of the entity query template.
 type EntityQueryTemplateKind string
 
@@ -1049,11 +909,6 @@ func PossibleEntityQueryTemplateKindValues() []EntityQueryTemplateKind {
 	return []EntityQueryTemplateKind{
 		EntityQueryTemplateKindActivity,
 	}
-}
-
-// ToPtr returns a *EntityQueryTemplateKind pointing to the current value.
-func (c EntityQueryTemplateKind) ToPtr() *EntityQueryTemplateKind {
-	return &c
 }
 
 // EntityTimelineKind - The entity query kind
@@ -1075,11 +930,6 @@ func PossibleEntityTimelineKindValues() []EntityTimelineKind {
 		EntityTimelineKindBookmark,
 		EntityTimelineKindSecurityAlert,
 	}
-}
-
-// ToPtr returns a *EntityTimelineKind pointing to the current value.
-func (c EntityTimelineKind) ToPtr() *EntityTimelineKind {
-	return &c
 }
 
 // EntityType - The type of the entity
@@ -1157,11 +1007,6 @@ func PossibleEntityTypeValues() []EntityType {
 	}
 }
 
-// ToPtr returns a *EntityType pointing to the current value.
-func (c EntityType) ToPtr() *EntityType {
-	return &c
-}
-
 type Enum39 string
 
 const (
@@ -1173,11 +1018,6 @@ func PossibleEnum39Values() []Enum39 {
 	return []Enum39{
 		Enum39Activity,
 	}
-}
-
-// ToPtr returns a *Enum39 pointing to the current value.
-func (c Enum39) ToPtr() *Enum39 {
-	return &c
 }
 
 type Enum8 string
@@ -1195,11 +1035,6 @@ func PossibleEnum8Values() []Enum8 {
 	}
 }
 
-// ToPtr returns a *Enum8 pointing to the current value.
-func (c Enum8) ToPtr() *Enum8 {
-	return &c
-}
-
 // EventGroupingAggregationKind - The event grouping aggregation kinds
 type EventGroupingAggregationKind string
 
@@ -1214,11 +1049,6 @@ func PossibleEventGroupingAggregationKindValues() []EventGroupingAggregationKind
 		EventGroupingAggregationKindAlertPerResult,
 		EventGroupingAggregationKindSingleAlert,
 	}
-}
-
-// ToPtr returns a *EventGroupingAggregationKind pointing to the current value.
-func (c EventGroupingAggregationKind) ToPtr() *EventGroupingAggregationKind {
-	return &c
 }
 
 // FileHashAlgorithm - The hash algorithm type.
@@ -1248,11 +1078,6 @@ func PossibleFileHashAlgorithmValues() []FileHashAlgorithm {
 	}
 }
 
-// ToPtr returns a *FileHashAlgorithm pointing to the current value.
-func (c FileHashAlgorithm) ToPtr() *FileHashAlgorithm {
-	return &c
-}
-
 // GetInsightsErrorKind - the query kind
 type GetInsightsErrorKind string
 
@@ -1265,11 +1090,6 @@ func PossibleGetInsightsErrorKindValues() []GetInsightsErrorKind {
 	return []GetInsightsErrorKind{
 		GetInsightsErrorKindInsight,
 	}
-}
-
-// ToPtr returns a *GetInsightsErrorKind pointing to the current value.
-func (c GetInsightsErrorKind) ToPtr() *GetInsightsErrorKind {
-	return &c
 }
 
 // IncidentClassification - The reason the incident was closed
@@ -1296,11 +1116,6 @@ func PossibleIncidentClassificationValues() []IncidentClassification {
 	}
 }
 
-// ToPtr returns a *IncidentClassification pointing to the current value.
-func (c IncidentClassification) ToPtr() *IncidentClassification {
-	return &c
-}
-
 // IncidentClassificationReason - The classification reason the incident was closed with
 type IncidentClassificationReason string
 
@@ -1325,11 +1140,6 @@ func PossibleIncidentClassificationReasonValues() []IncidentClassificationReason
 	}
 }
 
-// ToPtr returns a *IncidentClassificationReason pointing to the current value.
-func (c IncidentClassificationReason) ToPtr() *IncidentClassificationReason {
-	return &c
-}
-
 // IncidentLabelType - The type of the label
 type IncidentLabelType string
 
@@ -1346,11 +1156,6 @@ func PossibleIncidentLabelTypeValues() []IncidentLabelType {
 		IncidentLabelTypeSystem,
 		IncidentLabelTypeUser,
 	}
-}
-
-// ToPtr returns a *IncidentLabelType pointing to the current value.
-func (c IncidentLabelType) ToPtr() *IncidentLabelType {
-	return &c
 }
 
 // IncidentSeverity - The severity of the incident
@@ -1377,11 +1182,6 @@ func PossibleIncidentSeverityValues() []IncidentSeverity {
 	}
 }
 
-// ToPtr returns a *IncidentSeverity pointing to the current value.
-func (c IncidentSeverity) ToPtr() *IncidentSeverity {
-	return &c
-}
-
 // IncidentStatus - The status of the incident
 type IncidentStatus string
 
@@ -1401,11 +1201,6 @@ func PossibleIncidentStatusValues() []IncidentStatus {
 		IncidentStatusClosed,
 		IncidentStatusNew,
 	}
-}
-
-// ToPtr returns a *IncidentStatus pointing to the current value.
-func (c IncidentStatus) ToPtr() *IncidentStatus {
-	return &c
 }
 
 // KillChainIntent - Holds the alert intent stage(s) mapping for this alert.
@@ -1496,11 +1291,6 @@ func PossibleKillChainIntentValues() []KillChainIntent {
 	}
 }
 
-// ToPtr returns a *KillChainIntent pointing to the current value.
-func (c KillChainIntent) ToPtr() *KillChainIntent {
-	return &c
-}
-
 // Kind - The kind of content the metadata is for.
 type Kind string
 
@@ -1541,11 +1331,6 @@ func PossibleKindValues() []Kind {
 	}
 }
 
-// ToPtr returns a *Kind pointing to the current value.
-func (c Kind) ToPtr() *Kind {
-	return &c
-}
-
 // MatchingMethod - Grouping matching method. When method is Selected at least one of groupByEntities, groupByAlertDetails,
 // groupByCustomDetails must be provided and not empty.
 type MatchingMethod string
@@ -1567,11 +1352,6 @@ func PossibleMatchingMethodValues() []MatchingMethod {
 		MatchingMethodAnyAlert,
 		MatchingMethodSelected,
 	}
-}
-
-// ToPtr returns a *MatchingMethod pointing to the current value.
-func (c MatchingMethod) ToPtr() *MatchingMethod {
-	return &c
 }
 
 // MicrosoftSecurityProductName - The alerts' productName on which the cases will be generated
@@ -1598,11 +1378,6 @@ func PossibleMicrosoftSecurityProductNameValues() []MicrosoftSecurityProductName
 		MicrosoftSecurityProductNameMicrosoftDefenderAdvancedThreatProtection,
 		MicrosoftSecurityProductNameOffice365AdvancedThreatProtection,
 	}
-}
-
-// ToPtr returns a *MicrosoftSecurityProductName pointing to the current value.
-func (c MicrosoftSecurityProductName) ToPtr() *MicrosoftSecurityProductName {
-	return &c
 }
 
 // OSFamily - The operating system type.
@@ -1632,11 +1407,6 @@ func PossibleOSFamilyValues() []OSFamily {
 	}
 }
 
-// ToPtr returns a *OSFamily pointing to the current value.
-func (c OSFamily) ToPtr() *OSFamily {
-	return &c
-}
-
 // Operator - Operator used for list of dependencies in criteria array.
 type Operator string
 
@@ -1651,11 +1421,6 @@ func PossibleOperatorValues() []Operator {
 		OperatorAND,
 		OperatorOR,
 	}
-}
-
-// ToPtr returns a *Operator pointing to the current value.
-func (c Operator) ToPtr() *Operator {
-	return &c
 }
 
 // OutputType - Insights Column type.
@@ -1676,11 +1441,6 @@ func PossibleOutputTypeValues() []OutputType {
 		OutputTypeNumber,
 		OutputTypeString,
 	}
-}
-
-// ToPtr returns a *OutputType pointing to the current value.
-func (c OutputType) ToPtr() *OutputType {
-	return &c
 }
 
 // OwnerType - The type of the owner the incident is assigned to.
@@ -1704,11 +1464,6 @@ func PossibleOwnerTypeValues() []OwnerType {
 	}
 }
 
-// ToPtr returns a *OwnerType pointing to the current value.
-func (c OwnerType) ToPtr() *OwnerType {
-	return &c
-}
-
 // PermissionProviderScope - Permission provider scope
 type PermissionProviderScope string
 
@@ -1725,11 +1480,6 @@ func PossiblePermissionProviderScopeValues() []PermissionProviderScope {
 		PermissionProviderScopeSubscription,
 		PermissionProviderScopeWorkspace,
 	}
-}
-
-// ToPtr returns a *PermissionProviderScope pointing to the current value.
-func (c PermissionProviderScope) ToPtr() *PermissionProviderScope {
-	return &c
 }
 
 // PollingFrequency - The polling frequency for the TAXII server.
@@ -1751,11 +1501,6 @@ func PossiblePollingFrequencyValues() []PollingFrequency {
 		PollingFrequencyOnceAMinute,
 		PollingFrequencyOnceAnHour,
 	}
-}
-
-// ToPtr returns a *PollingFrequency pointing to the current value.
-func (c PollingFrequency) ToPtr() *PollingFrequency {
-	return &c
 }
 
 // ProviderName - Provider name
@@ -1780,11 +1525,6 @@ func PossibleProviderNameValues() []ProviderName {
 		ProviderNameMicrosoftOperationalInsightsWorkspacesDatasources,
 		ProviderNameMicrosoftOperationalInsightsWorkspacesSharedKeys,
 	}
-}
-
-// ToPtr returns a *ProviderName pointing to the current value.
-func (c ProviderName) ToPtr() *ProviderName {
-	return &c
 }
 
 // RegistryHive - the hive that holds the registry key.
@@ -1829,11 +1569,6 @@ func PossibleRegistryHiveValues() []RegistryHive {
 	}
 }
 
-// ToPtr returns a *RegistryHive pointing to the current value.
-func (c RegistryHive) ToPtr() *RegistryHive {
-	return &c
-}
-
 // RegistryValueKind - Specifies the data types to use when storing values in the registry, or identifies the data type of
 // a value in the registry.
 type RegistryValueKind string
@@ -1871,11 +1606,6 @@ func PossibleRegistryValueKindValues() []RegistryValueKind {
 	}
 }
 
-// ToPtr returns a *RegistryValueKind pointing to the current value.
-func (c RegistryValueKind) ToPtr() *RegistryValueKind {
-	return &c
-}
-
 // RepoType - The type of repository.
 type RepoType string
 
@@ -1892,11 +1622,6 @@ func PossibleRepoTypeValues() []RepoType {
 	}
 }
 
-// ToPtr returns a *RepoType pointing to the current value.
-func (c RepoType) ToPtr() *RepoType {
-	return &c
-}
-
 // SKUKind - The kind of the tier
 type SKUKind string
 
@@ -1911,11 +1636,6 @@ func PossibleSKUKindValues() []SKUKind {
 		SKUKindCapacityReservation,
 		SKUKindPerGB,
 	}
-}
-
-// ToPtr returns a *SKUKind pointing to the current value.
-func (c SKUKind) ToPtr() *SKUKind {
-	return &c
 }
 
 // SettingKind - The kind of the setting
@@ -1938,11 +1658,6 @@ func PossibleSettingKindValues() []SettingKind {
 	}
 }
 
-// ToPtr returns a *SettingKind pointing to the current value.
-func (c SettingKind) ToPtr() *SettingKind {
-	return &c
-}
-
 // SettingType - The kind of the setting
 type SettingType string
 
@@ -1961,11 +1676,6 @@ func PossibleSettingTypeValues() []SettingType {
 	}
 }
 
-// ToPtr returns a *SettingType pointing to the current value.
-func (c SettingType) ToPtr() *SettingType {
-	return &c
-}
-
 // Source - The source of the watchlist
 type Source string
 
@@ -1980,11 +1690,6 @@ func PossibleSourceValues() []Source {
 		SourceLocalFile,
 		SourceRemoteStorage,
 	}
-}
-
-// ToPtr returns a *Source pointing to the current value.
-func (c Source) ToPtr() *Source {
-	return &c
 }
 
 // SourceKind - Source type of the content
@@ -2007,11 +1712,6 @@ func PossibleSourceKindValues() []SourceKind {
 	}
 }
 
-// ToPtr returns a *SourceKind pointing to the current value.
-func (c SourceKind) ToPtr() *SourceKind {
-	return &c
-}
-
 // SupportTier - Type of support for content item
 type SupportTier string
 
@@ -2028,11 +1728,6 @@ func PossibleSupportTierValues() []SupportTier {
 		SupportTierMicrosoft,
 		SupportTierPartner,
 	}
-}
-
-// ToPtr returns a *SupportTier pointing to the current value.
-func (c SupportTier) ToPtr() *SupportTier {
-	return &c
 }
 
 // TemplateStatus - The alert rule template status.
@@ -2056,11 +1751,6 @@ func PossibleTemplateStatusValues() []TemplateStatus {
 	}
 }
 
-// ToPtr returns a *TemplateStatus pointing to the current value.
-func (c TemplateStatus) ToPtr() *TemplateStatus {
-	return &c
-}
-
 // ThreatIntelligenceResourceKindEnum - The kind of the threat intelligence entity
 type ThreatIntelligenceResourceKindEnum string
 
@@ -2074,11 +1764,6 @@ func PossibleThreatIntelligenceResourceKindEnumValues() []ThreatIntelligenceReso
 	return []ThreatIntelligenceResourceKindEnum{
 		ThreatIntelligenceResourceKindEnumIndicator,
 	}
-}
-
-// ToPtr returns a *ThreatIntelligenceResourceKindEnum pointing to the current value.
-func (c ThreatIntelligenceResourceKindEnum) ToPtr() *ThreatIntelligenceResourceKindEnum {
-	return &c
 }
 
 // ThreatIntelligenceSortingCriteriaEnum - Sorting order (ascending/descending/unsorted).
@@ -2097,11 +1782,6 @@ func PossibleThreatIntelligenceSortingCriteriaEnumValues() []ThreatIntelligenceS
 		ThreatIntelligenceSortingCriteriaEnumDescending,
 		ThreatIntelligenceSortingCriteriaEnumUnsorted,
 	}
-}
-
-// ToPtr returns a *ThreatIntelligenceSortingCriteriaEnum pointing to the current value.
-func (c ThreatIntelligenceSortingCriteriaEnum) ToPtr() *ThreatIntelligenceSortingCriteriaEnum {
-	return &c
 }
 
 // TriggerOperator - The operation against the threshold that triggers alert rule.
@@ -2124,11 +1804,6 @@ func PossibleTriggerOperatorValues() []TriggerOperator {
 	}
 }
 
-// ToPtr returns a *TriggerOperator pointing to the current value.
-func (c TriggerOperator) ToPtr() *TriggerOperator {
-	return &c
-}
-
 // TriggersOn - The type of object the automation rule triggers on
 type TriggersOn string
 
@@ -2144,11 +1819,6 @@ func PossibleTriggersOnValues() []TriggersOn {
 	}
 }
 
-// ToPtr returns a *TriggersOn pointing to the current value.
-func (c TriggersOn) ToPtr() *TriggersOn {
-	return &c
-}
-
 // TriggersWhen - The type of event the automation rule triggers on
 type TriggersWhen string
 
@@ -2162,11 +1832,6 @@ func PossibleTriggersWhenValues() []TriggersWhen {
 	return []TriggersWhen{
 		TriggersWhenCreated,
 	}
-}
-
-// ToPtr returns a *TriggersWhen pointing to the current value.
-func (c TriggersWhen) ToPtr() *TriggersWhen {
-	return &c
 }
 
 // UebaDataSources - The data source that enriched by ueba.
@@ -2187,9 +1852,4 @@ func PossibleUebaDataSourcesValues() []UebaDataSources {
 		UebaDataSourcesSecurityEvent,
 		UebaDataSourcesSigninLogs,
 	}
-}
-
-// ToPtr returns a *UebaDataSources pointing to the current value.
-func (c UebaDataSources) ToPtr() *UebaDataSources {
-	return &c
 }

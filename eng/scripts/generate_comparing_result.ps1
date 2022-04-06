@@ -154,6 +154,10 @@ function getComparingResult($logPath, $validationPath)
                     {
                         $mock_reason = "LRO response not contains 200 response"
                     }
+                    elseif ($errorDetail -match "Wrong response example for operation")
+                    {
+                        $mock_reason = "Wrong response example for operation"
+                    }
                     elseif ($errorDetail -match "parsing time")
                     {
                         $mock_reason = "Response has wrong datetime value"

@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // ArcSettingAggregateState - Aggregate state of Arc agent across the nodes in this HCI cluster.
 type ArcSettingAggregateState string
 
@@ -74,11 +69,6 @@ func PossibleArcSettingAggregateStateValues() []ArcSettingAggregateState {
 	}
 }
 
-// ToPtr returns a *ArcSettingAggregateState pointing to the current value.
-func (c ArcSettingAggregateState) ToPtr() *ArcSettingAggregateState {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -99,11 +89,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // DiagnosticLevel - Desired level of diagnostic data emitted by the cluster.
 type DiagnosticLevel string
 
@@ -120,11 +105,6 @@ func PossibleDiagnosticLevelValues() []DiagnosticLevel {
 		DiagnosticLevelEnhanced,
 		DiagnosticLevelOff,
 	}
-}
-
-// ToPtr returns a *DiagnosticLevel pointing to the current value.
-func (c DiagnosticLevel) ToPtr() *DiagnosticLevel {
-	return &c
 }
 
 // ExtensionAggregateState - Aggregate state of Arc Extensions across the nodes in this HCI cluster.
@@ -169,11 +149,6 @@ func PossibleExtensionAggregateStateValues() []ExtensionAggregateState {
 	}
 }
 
-// ToPtr returns a *ExtensionAggregateState pointing to the current value.
-func (c ExtensionAggregateState) ToPtr() *ExtensionAggregateState {
-	return &c
-}
-
 // ImdsAttestation - IMDS attestation status of the cluster.
 type ImdsAttestation string
 
@@ -188,11 +163,6 @@ func PossibleImdsAttestationValues() []ImdsAttestation {
 		ImdsAttestationDisabled,
 		ImdsAttestationEnabled,
 	}
-}
-
-// ToPtr returns a *ImdsAttestation pointing to the current value.
-func (c ImdsAttestation) ToPtr() *ImdsAttestation {
-	return &c
 }
 
 // NodeArcState - State of Arc agent in this node.
@@ -231,11 +201,6 @@ func PossibleNodeArcStateValues() []NodeArcState {
 	}
 }
 
-// ToPtr returns a *NodeArcState pointing to the current value.
-func (c NodeArcState) ToPtr() *NodeArcState {
-	return &c
-}
-
 // NodeExtensionState - State of Arc Extension in this node.
 type NodeExtensionState string
 
@@ -272,11 +237,6 @@ func PossibleNodeExtensionStateValues() []NodeExtensionState {
 	}
 }
 
-// ToPtr returns a *NodeExtensionState pointing to the current value.
-func (c NodeExtensionState) ToPtr() *NodeExtensionState {
-	return &c
-}
-
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
 // value is "user,system"
 type Origin string
@@ -294,11 +254,6 @@ func PossibleOriginValues() []Origin {
 		OriginUser,
 		OriginUserSystem,
 	}
-}
-
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the ArcSetting proxy resource.
@@ -323,11 +278,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // Status - Status of the cluster agent.
 type Status string
 
@@ -350,11 +300,6 @@ func PossibleStatusValues() []Status {
 	}
 }
 
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}
-
 // WindowsServerSubscription - Desired state of Windows Server Subscription.
 type WindowsServerSubscription string
 
@@ -369,9 +314,4 @@ func PossibleWindowsServerSubscriptionValues() []WindowsServerSubscription {
 		WindowsServerSubscriptionDisabled,
 		WindowsServerSubscriptionEnabled,
 	}
-}
-
-// ToPtr returns a *WindowsServerSubscription pointing to the current value.
-func (c WindowsServerSubscription) ToPtr() *WindowsServerSubscription {
-	return &c
 }

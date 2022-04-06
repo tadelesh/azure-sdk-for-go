@@ -29,11 +29,6 @@ func PossibleErrorCodeValues() []ErrorCode {
 	}
 }
 
-// ToPtr returns a *ErrorCode pointing to the current value.
-func (c ErrorCode) ToPtr() *ErrorCode {
-	return &c
-}
-
 // ProvisioningState - Represent the current state of the Reservation.
 type ProvisioningState string
 
@@ -50,9 +45,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateFailed,
 		ProvisioningStateSucceeded,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

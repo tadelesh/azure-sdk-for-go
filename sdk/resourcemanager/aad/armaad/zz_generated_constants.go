@@ -30,11 +30,6 @@ func PossibleCategoryValues() []Category {
 	}
 }
 
-// ToPtr returns a *Category pointing to the current value.
-func (c Category) ToPtr() *Category {
-	return &c
-}
-
 // CategoryType - The type of the diagnostic settings category.
 type CategoryType string
 
@@ -47,9 +42,4 @@ func PossibleCategoryTypeValues() []CategoryType {
 	return []CategoryType{
 		CategoryTypeLogs,
 	}
-}
-
-// ToPtr returns a *CategoryType pointing to the current value.
-func (c CategoryType) ToPtr() *CategoryType {
-	return &c
 }

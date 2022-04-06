@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -52,11 +47,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
-}
-
 // KeyType - The keyType to regenerate. Must be either 'primary' or 'secondary'(case-insensitive).
 type KeyType string
 
@@ -71,11 +61,6 @@ func PossibleKeyTypeValues() []KeyType {
 		KeyTypePrimary,
 		KeyTypeSecondary,
 	}
-}
-
-// ToPtr returns a *KeyType pointing to the current value.
-func (c KeyType) ToPtr() *KeyType {
-	return &c
 }
 
 // Origin - The intended executor of the operation; as in Resource Based Access Control (RBAC) and audit logs UX. Default
@@ -95,11 +80,6 @@ func PossibleOriginValues() []Origin {
 		OriginUser,
 		OriginUserSystem,
 	}
-}
-
-// ToPtr returns a *Origin pointing to the current value.
-func (c Origin) ToPtr() *Origin {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the resource.
@@ -130,9 +110,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateUnknown,
 		ProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
 }

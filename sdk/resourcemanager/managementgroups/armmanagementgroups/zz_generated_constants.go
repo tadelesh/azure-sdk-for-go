@@ -30,11 +30,6 @@ func PossibleEnum0Values() []Enum0 {
 	}
 }
 
-// ToPtr returns a *Enum0 pointing to the current value.
-func (c Enum0) ToPtr() *Enum0 {
-	return &c
-}
-
 type Enum2 string
 
 const (
@@ -56,11 +51,6 @@ func PossibleEnum2Values() []Enum2 {
 	}
 }
 
-// ToPtr returns a *Enum2 pointing to the current value.
-func (c Enum2) ToPtr() *Enum2 {
-	return &c
-}
-
 type Enum3 string
 
 const (
@@ -80,11 +70,6 @@ func PossibleEnum3Values() []Enum3 {
 	}
 }
 
-// ToPtr returns a *Enum3 pointing to the current value.
-func (c Enum3) ToPtr() *Enum3 {
-	return &c
-}
-
 // ManagementGroupChildType - The type of child resource.
 type ManagementGroupChildType string
 
@@ -99,11 +84,6 @@ func PossibleManagementGroupChildTypeValues() []ManagementGroupChildType {
 		ManagementGroupChildTypeMicrosoftManagementManagementGroups,
 		ManagementGroupChildTypeSubscriptions,
 	}
-}
-
-// ToPtr returns a *ManagementGroupChildType pointing to the current value.
-func (c ManagementGroupChildType) ToPtr() *ManagementGroupChildType {
-	return &c
 }
 
 // Permissions - The users specific permissions to this item.
@@ -126,11 +106,6 @@ func PossiblePermissionsValues() []Permissions {
 	}
 }
 
-// ToPtr returns a *Permissions pointing to the current value.
-func (c Permissions) ToPtr() *Permissions {
-	return &c
-}
-
 // Reason - Required if nameAvailable == false. Invalid indicates the name provided does not match the resource provider's
 // naming requirements (incorrect length, unsupported characters, etc.) AlreadyExists
 // indicates that the name is already in use and is therefore unavailable.
@@ -147,11 +122,6 @@ func PossibleReasonValues() []Reason {
 		ReasonInvalid,
 		ReasonAlreadyExists,
 	}
-}
-
-// ToPtr returns a *Reason pointing to the current value.
-func (c Reason) ToPtr() *Reason {
-	return &c
 }
 
 // Status - The status of the Tenant Backfill
@@ -176,9 +146,4 @@ func PossibleStatusValues() []Status {
 		StatusCancelled,
 		StatusCompleted,
 	}
-}
-
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
 }

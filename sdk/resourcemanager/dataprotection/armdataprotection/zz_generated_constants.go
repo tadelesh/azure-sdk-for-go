@@ -34,11 +34,6 @@ func PossibleAbsoluteMarkerValues() []AbsoluteMarker {
 	}
 }
 
-// ToPtr returns a *AbsoluteMarker pointing to the current value.
-func (c AbsoluteMarker) ToPtr() *AbsoluteMarker {
-	return &c
-}
-
 // CreatedByType - The type of identity that created the resource.
 type CreatedByType string
 
@@ -57,11 +52,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 		CreatedByTypeManagedIdentity,
 		CreatedByTypeUser,
 	}
-}
-
-// ToPtr returns a *CreatedByType pointing to the current value.
-func (c CreatedByType) ToPtr() *CreatedByType {
-	return &c
 }
 
 // CurrentProtectionState - Specifies the current protection state of the resource
@@ -100,11 +90,6 @@ func PossibleCurrentProtectionStateValues() []CurrentProtectionState {
 	}
 }
 
-// ToPtr returns a *CurrentProtectionState pointing to the current value.
-func (c CurrentProtectionState) ToPtr() *CurrentProtectionState {
-	return &c
-}
-
 // DataStoreTypes - type of datastore; Operational/Vault/Archive
 type DataStoreTypes string
 
@@ -121,11 +106,6 @@ func PossibleDataStoreTypesValues() []DataStoreTypes {
 		DataStoreTypesOperationalStore,
 		DataStoreTypesVaultStore,
 	}
-}
-
-// ToPtr returns a *DataStoreTypes pointing to the current value.
-func (c DataStoreTypes) ToPtr() *DataStoreTypes {
-	return &c
 }
 
 type DayOfWeek string
@@ -153,11 +133,6 @@ func PossibleDayOfWeekValues() []DayOfWeek {
 	}
 }
 
-// ToPtr returns a *DayOfWeek pointing to the current value.
-func (c DayOfWeek) ToPtr() *DayOfWeek {
-	return &c
-}
-
 // FeatureSupportStatus - feature support status
 type FeatureSupportStatus string
 
@@ -182,11 +157,6 @@ func PossibleFeatureSupportStatusValues() []FeatureSupportStatus {
 	}
 }
 
-// ToPtr returns a *FeatureSupportStatus pointing to the current value.
-func (c FeatureSupportStatus) ToPtr() *FeatureSupportStatus {
-	return &c
-}
-
 // FeatureType - backup support feature type.
 type FeatureType string
 
@@ -201,11 +171,6 @@ func PossibleFeatureTypeValues() []FeatureType {
 		FeatureTypeDataSourceType,
 		FeatureTypeInvalid,
 	}
-}
-
-// ToPtr returns a *FeatureType pointing to the current value.
-func (c FeatureType) ToPtr() *FeatureType {
-	return &c
 }
 
 type Month string
@@ -243,11 +208,6 @@ func PossibleMonthValues() []Month {
 	}
 }
 
-// ToPtr returns a *Month pointing to the current value.
-func (c Month) ToPtr() *Month {
-	return &c
-}
-
 // ProvisioningState - Provisioning state of the BackupVault resource
 type ProvisioningState string
 
@@ -270,11 +230,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // RecoveryOption - Recovery Option
 type RecoveryOption string
 
@@ -287,11 +242,6 @@ func PossibleRecoveryOptionValues() []RecoveryOption {
 	return []RecoveryOption{
 		RecoveryOptionFailIfExists,
 	}
-}
-
-// ToPtr returns a *RecoveryOption pointing to the current value.
-func (c RecoveryOption) ToPtr() *RecoveryOption {
-	return &c
 }
 
 // RehydrationPriority - Priority to be used for rehydration. Values High or Standard
@@ -310,11 +260,6 @@ func PossibleRehydrationPriorityValues() []RehydrationPriority {
 		RehydrationPriorityInvalid,
 		RehydrationPriorityStandard,
 	}
-}
-
-// ToPtr returns a *RehydrationPriority pointing to the current value.
-func (c RehydrationPriority) ToPtr() *RehydrationPriority {
-	return &c
 }
 
 type RehydrationStatus string
@@ -336,11 +281,6 @@ func PossibleRehydrationStatusValues() []RehydrationStatus {
 		RehydrationStatusDELETEINPROGRESS,
 		RehydrationStatusFAILED,
 	}
-}
-
-// ToPtr returns a *RehydrationStatus pointing to the current value.
-func (c RehydrationStatus) ToPtr() *RehydrationStatus {
-	return &c
 }
 
 // ResourceMoveState - Resource move state for backup vault
@@ -375,11 +315,6 @@ func PossibleResourceMoveStateValues() []ResourceMoveState {
 	}
 }
 
-// ToPtr returns a *ResourceMoveState pointing to the current value.
-func (c ResourceMoveState) ToPtr() *ResourceMoveState {
-	return &c
-}
-
 // RestoreSourceDataStoreType - Gets or sets the type of the source data store.
 type RestoreSourceDataStoreType string
 
@@ -396,11 +331,6 @@ func PossibleRestoreSourceDataStoreTypeValues() []RestoreSourceDataStoreType {
 		RestoreSourceDataStoreTypeOperationalStore,
 		RestoreSourceDataStoreTypeVaultStore,
 	}
-}
-
-// ToPtr returns a *RestoreSourceDataStoreType pointing to the current value.
-func (c RestoreSourceDataStoreType) ToPtr() *RestoreSourceDataStoreType {
-	return &c
 }
 
 // RestoreTargetLocationType - Denotes the target location where the data will be restored, string value for the enum {Microsoft.Internal.AzureBackup.DataProtection.Common.Interface.RestoreTargetLocationType}
@@ -421,11 +351,6 @@ func PossibleRestoreTargetLocationTypeValues() []RestoreTargetLocationType {
 	}
 }
 
-// ToPtr returns a *RestoreTargetLocationType pointing to the current value.
-func (c RestoreTargetLocationType) ToPtr() *RestoreTargetLocationType {
-	return &c
-}
-
 // SecretStoreType - Gets or sets the type of secret store
 type SecretStoreType string
 
@@ -440,11 +365,6 @@ func PossibleSecretStoreTypeValues() []SecretStoreType {
 		SecretStoreTypeAzureKeyVault,
 		SecretStoreTypeInvalid,
 	}
-}
-
-// ToPtr returns a *SecretStoreType pointing to the current value.
-func (c SecretStoreType) ToPtr() *SecretStoreType {
-	return &c
 }
 
 // SourceDataStoreType - Gets or sets the type of the source data store.
@@ -463,11 +383,6 @@ func PossibleSourceDataStoreTypeValues() []SourceDataStoreType {
 		SourceDataStoreTypeSnapshotStore,
 		SourceDataStoreTypeVaultStore,
 	}
-}
-
-// ToPtr returns a *SourceDataStoreType pointing to the current value.
-func (c SourceDataStoreType) ToPtr() *SourceDataStoreType {
-	return &c
 }
 
 // Status - Specifies the protection status of the resource
@@ -494,11 +409,6 @@ func PossibleStatusValues() []Status {
 	}
 }
 
-// ToPtr returns a *Status pointing to the current value.
-func (c Status) ToPtr() *Status {
-	return &c
-}
-
 // StorageSettingStoreTypes - Gets or sets the type of the datastore.
 type StorageSettingStoreTypes string
 
@@ -517,11 +427,6 @@ func PossibleStorageSettingStoreTypesValues() []StorageSettingStoreTypes {
 	}
 }
 
-// ToPtr returns a *StorageSettingStoreTypes pointing to the current value.
-func (c StorageSettingStoreTypes) ToPtr() *StorageSettingStoreTypes {
-	return &c
-}
-
 // StorageSettingTypes - Gets or sets the type.
 type StorageSettingTypes string
 
@@ -536,11 +441,6 @@ func PossibleStorageSettingTypesValues() []StorageSettingTypes {
 		StorageSettingTypesGeoRedundant,
 		StorageSettingTypesLocallyRedundant,
 	}
-}
-
-// ToPtr returns a *StorageSettingTypes pointing to the current value.
-func (c StorageSettingTypes) ToPtr() *StorageSettingTypes {
-	return &c
 }
 
 type WeekNumber string
@@ -562,9 +462,4 @@ func PossibleWeekNumberValues() []WeekNumber {
 		WeekNumberSecond,
 		WeekNumberThird,
 	}
-}
-
-// ToPtr returns a *WeekNumber pointing to the current value.
-func (c WeekNumber) ToPtr() *WeekNumber {
-	return &c
 }
