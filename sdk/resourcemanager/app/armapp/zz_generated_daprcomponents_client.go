@@ -101,7 +101,7 @@ func (client *DaprComponentsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, daprComponentEnvelope)
@@ -161,7 +161,7 @@ func (client *DaprComponentsClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -212,7 +212,7 @@ func (client *DaprComponentsClient) getCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -280,7 +280,7 @@ func (client *DaprComponentsClient) listCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -291,67 +291,6 @@ func (client *DaprComponentsClient) listHandleResponse(resp *http.Response) (Dap
 	result := DaprComponentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DaprComponentsCollection); err != nil {
 		return DaprComponentsClientListResponse{}, err
-	}
-	return result, nil
-}
-
-// ListSecrets - List secrets for a dapr component
-// If the operation fails it returns an *azcore.ResponseError type.
-// resourceGroupName - The name of the resource group. The name is case insensitive.
-// environmentName - Name of the Managed Environment.
-// name - Name of the Dapr Component.
-// options - DaprComponentsClientListSecretsOptions contains the optional parameters for the DaprComponentsClient.ListSecrets
-// method.
-func (client *DaprComponentsClient) ListSecrets(ctx context.Context, resourceGroupName string, environmentName string, name string, options *DaprComponentsClientListSecretsOptions) (DaprComponentsClientListSecretsResponse, error) {
-	req, err := client.listSecretsCreateRequest(ctx, resourceGroupName, environmentName, name, options)
-	if err != nil {
-		return DaprComponentsClientListSecretsResponse{}, err
-	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DaprComponentsClientListSecretsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DaprComponentsClientListSecretsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSecretsHandleResponse(resp)
-}
-
-// listSecretsCreateRequest creates the ListSecrets request.
-func (client *DaprComponentsClient) listSecretsCreateRequest(ctx context.Context, resourceGroupName string, environmentName string, name string, options *DaprComponentsClientListSecretsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.App/managedEnvironments/{environmentName}/daprComponents/{name}/listSecrets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
-	if err != nil {
-		return nil, err
-	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header.Set("Accept", "application/json")
-	return req, nil
-}
-
-// listSecretsHandleResponse handles the ListSecrets response.
-func (client *DaprComponentsClient) listSecretsHandleResponse(resp *http.Response) (DaprComponentsClientListSecretsResponse, error) {
-	result := DaprComponentsClientListSecretsResponse{}
-	if err := runtime.UnmarshalAsJSON(resp, &result.DaprSecretsCollection); err != nil {
-		return DaprComponentsClientListSecretsResponse{}, err
 	}
 	return result, nil
 }

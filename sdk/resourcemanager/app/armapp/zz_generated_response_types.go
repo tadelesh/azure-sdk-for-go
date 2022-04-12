@@ -90,7 +90,7 @@ type ContainerAppsClientListSecretsResponse struct {
 
 // ContainerAppsClientUpdateResponse contains the response from method ContainerAppsClient.Update.
 type ContainerAppsClientUpdateResponse struct {
-	// placeholder for future response values
+	ContainerApp
 }
 
 // ContainerAppsRevisionReplicasClientGetReplicaResponse contains the response from method ContainerAppsRevisionReplicasClient.GetReplica.
@@ -168,11 +168,6 @@ type DaprComponentsClientListResponse struct {
 	DaprComponentsCollection
 }
 
-// DaprComponentsClientListSecretsResponse contains the response from method DaprComponentsClient.ListSecrets.
-type DaprComponentsClientListSecretsResponse struct {
-	DaprSecretsCollection
-}
-
 // ManagedEnvironmentsClientCreateOrUpdateResponse contains the response from method ManagedEnvironmentsClient.CreateOrUpdate.
 type ManagedEnvironmentsClientCreateOrUpdateResponse struct {
 	ManagedEnvironment
@@ -200,7 +195,7 @@ type ManagedEnvironmentsClientListBySubscriptionResponse struct {
 
 // ManagedEnvironmentsClientUpdateResponse contains the response from method ManagedEnvironmentsClient.Update.
 type ManagedEnvironmentsClientUpdateResponse struct {
-	// placeholder for future response values
+	ManagedEnvironment
 }
 
 // ManagedEnvironmentsStoragesClientCreateOrUpdateResponse contains the response from method ManagedEnvironmentsStoragesClient.CreateOrUpdate.
@@ -221,11 +216,6 @@ type ManagedEnvironmentsStoragesClientGetResponse struct {
 // ManagedEnvironmentsStoragesClientListResponse contains the response from method ManagedEnvironmentsStoragesClient.List.
 type ManagedEnvironmentsStoragesClientListResponse struct {
 	ManagedEnvironmentStoragesCollection
-}
-
-// NamespacesClientCheckNameAvailabilityResponse contains the response from method NamespacesClient.CheckNameAvailability.
-type NamespacesClientCheckNameAvailabilityResponse struct {
-	CheckNameAvailabilityResponse
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.

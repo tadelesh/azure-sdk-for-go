@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -19,7 +19,7 @@ import (
 	"github.com/tadelesh/azure-sdk-for-go/sdk/resourcemanager/app/armapp"
 )
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_ListBySubscription.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_ListBySubscription.json
 func ExampleContainerAppsClient_ListBySubscription() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -46,7 +46,7 @@ func ExampleContainerAppsClient_ListBySubscription() {
 	}
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_ListByResourceGroup.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_ListByResourceGroup.json
 func ExampleContainerAppsClient_ListByResourceGroup() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -74,7 +74,7 @@ func ExampleContainerAppsClient_ListByResourceGroup() {
 	}
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_Get.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_Get.json
 func ExampleContainerAppsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -99,7 +99,7 @@ func ExampleContainerAppsClient_Get() {
 	_ = res
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_CreateOrUpdate.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_CreateOrUpdate.json
 func ExampleContainerAppsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -138,12 +138,6 @@ func ExampleContainerAppsClient_BeginCreateOrUpdate() {
 							}},
 						External:   to.Ptr(true),
 						TargetPort: to.Ptr[int32](3000),
-						Traffic: []*armapp.TrafficWeight{
-							{
-								Label:        to.Ptr("<label>"),
-								RevisionName: to.Ptr("<revision-name>"),
-								Weight:       to.Ptr[int32](100),
-							}},
 					},
 				},
 				ManagedEnvironmentID: to.Ptr("<managed-environment-id>"),
@@ -199,7 +193,7 @@ func ExampleContainerAppsClient_BeginCreateOrUpdate() {
 	_ = res
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_Delete.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_Delete.json
 func ExampleContainerAppsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -227,8 +221,8 @@ func ExampleContainerAppsClient_BeginDelete() {
 	}
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_Patch.json
-func ExampleContainerAppsClient_BeginUpdate() {
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_Patch.json
+func ExampleContainerAppsClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
@@ -240,95 +234,25 @@ func ExampleContainerAppsClient_BeginUpdate() {
 		log.Fatalf("failed to create client: %v", err)
 		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	res, err := client.Update(ctx,
 		"<resource-group-name>",
 		"<name>",
-		armapp.ContainerApp{
-			Location: to.Ptr("<location>"),
+		armapp.ContainerAppPatch{
 			Tags: map[string]*string{
 				"tag1": to.Ptr("value1"),
 				"tag2": to.Ptr("value2"),
 			},
-			Properties: &armapp.ContainerAppProperties{
-				Configuration: &armapp.Configuration{
-					Dapr: &armapp.Dapr{
-						AppPort:     to.Ptr[int32](3000),
-						AppProtocol: to.Ptr(armapp.AppProtocolHTTP),
-						Enabled:     to.Ptr(true),
-					},
-					Ingress: &armapp.Ingress{
-						CustomDomains: []*armapp.CustomDomain{
-							{
-								Name:          to.Ptr("<name>"),
-								BindingType:   to.Ptr(armapp.BindingTypeSniEnabled),
-								CertificateID: to.Ptr("<certificate-id>"),
-							},
-							{
-								Name:          to.Ptr("<name>"),
-								BindingType:   to.Ptr(armapp.BindingTypeSniEnabled),
-								CertificateID: to.Ptr("<certificate-id>"),
-							}},
-						External:   to.Ptr(true),
-						TargetPort: to.Ptr[int32](3000),
-						Traffic: []*armapp.TrafficWeight{
-							{
-								Label:        to.Ptr("<label>"),
-								RevisionName: to.Ptr("<revision-name>"),
-								Weight:       to.Ptr[int32](100),
-							}},
-					},
-				},
-				Template: &armapp.Template{
-					Containers: []*armapp.Container{
-						{
-							Name:  to.Ptr("<name>"),
-							Image: to.Ptr("<image>"),
-							Probes: []*armapp.ContainerAppProbe{
-								{
-									Type: to.Ptr(armapp.TypeLiveness),
-									HTTPGet: &armapp.ContainerAppProbeHTTPGet{
-										Path: to.Ptr("<path>"),
-										HTTPHeaders: []*armapp.ContainerAppProbeHTTPGetHTTPHeadersItem{
-											{
-												Name:  to.Ptr("<name>"),
-												Value: to.Ptr("<value>"),
-											}},
-										Port: to.Ptr[int32](8080),
-									},
-									InitialDelaySeconds: to.Ptr[int32](3),
-									PeriodSeconds:       to.Ptr[int32](3),
-								}},
-						}},
-					Scale: &armapp.Scale{
-						MaxReplicas: to.Ptr[int32](5),
-						MinReplicas: to.Ptr[int32](1),
-						Rules: []*armapp.ScaleRule{
-							{
-								Name: to.Ptr("<name>"),
-								Custom: &armapp.CustomScaleRule{
-									Type: to.Ptr("<type>"),
-									Metadata: map[string]*string{
-										"concurrentRequests": to.Ptr("50"),
-									},
-								},
-							}},
-					},
-				},
-			},
 		},
-		&armapp.ContainerAppsClientBeginUpdateOptions{ResumeToken: ""})
+		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
 		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
-	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
-		return
-	}
+	// TODO: use response item
+	_ = res
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_ListCustomHostNameAnalysis.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_ListCustomHostNameAnalysis.json
 func ExampleContainerAppsClient_ListCustomHostNameAnalysis() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -353,7 +277,7 @@ func ExampleContainerAppsClient_ListCustomHostNameAnalysis() {
 	_ = res
 }
 
-// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/stable/2022-03-01/examples/ContainerApps_ListSecrets.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/app/resource-manager/Microsoft.App/preview/2022-01-01-preview/examples/ContainerApps_ListSecrets.json
 func ExampleContainerAppsClient_ListSecrets() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {

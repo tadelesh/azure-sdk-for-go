@@ -329,27 +329,6 @@ type CertificatesClientUpdateOptions struct {
 	// placeholder for future optional parameters
 }
 
-// CheckNameAvailabilityRequest - The check availability request body.
-type CheckNameAvailabilityRequest struct {
-	// The name of the resource for which availability needs to be checked.
-	Name *string `json:"name,omitempty"`
-
-	// The resource type.
-	Type *string `json:"type,omitempty"`
-}
-
-// CheckNameAvailabilityResponse - The check availability result.
-type CheckNameAvailabilityResponse struct {
-	// Detailed reason why the given name is available.
-	Message *string `json:"message,omitempty"`
-
-	// Indicates if the resource name is available.
-	NameAvailable *bool `json:"nameAvailable,omitempty"`
-
-	// The reason why the given name is not available.
-	Reason *CheckNameAvailabilityReason `json:"reason,omitempty"`
-}
-
 // ClientRegistration - The configuration settings of the app registration for providers that have client ids and client secrets
 type ClientRegistration struct {
 	// The Client ID of the app used for login.
@@ -362,8 +341,8 @@ type ClientRegistration struct {
 // Configuration - Non versioned Container App configuration properties that define the mutable settings of a Container app
 type Configuration struct {
 	// ActiveRevisionsMode controls how active revisions are handled for the Container app:Multiple: multiple revisions can be
-// active.Single: Only one revision can be active at a time. Revision weights can
-// not be used in this mode. If no value if provided, this is the default.
+// active. If no value if provided, this is the defaultSingle: Only one revision
+// can be active at a time. Revision weights can not be used in this mode
 	ActiveRevisionsMode *ActiveRevisionsMode `json:"activeRevisionsMode,omitempty"`
 
 	// Dapr configuration for the Container App.
@@ -441,6 +420,12 @@ type ContainerAppCollection struct {
 
 	// READ-ONLY; Link to next page of resources.
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
+}
+
+// ContainerAppPatch - Container App Patch.
+type ContainerAppPatch struct {
+	// Application-specific metadata in the form of key-value pairs.
+	Tags map[string]*string `json:"tags,omitempty"`
 }
 
 // ContainerAppProbe - Probe describes a health check to be performed against a container to determine whether it is alive
@@ -594,12 +579,6 @@ type ContainerAppsClientBeginDeleteOptions struct {
 	ResumeToken string
 }
 
-// ContainerAppsClientBeginUpdateOptions contains the optional parameters for the ContainerAppsClient.BeginUpdate method.
-type ContainerAppsClientBeginUpdateOptions struct {
-	// Resumes the LRO from the provided token.
-	ResumeToken string
-}
-
 // ContainerAppsClientGetOptions contains the optional parameters for the ContainerAppsClient.Get method.
 type ContainerAppsClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -626,6 +605,11 @@ type ContainerAppsClientListCustomHostNameAnalysisOptions struct {
 
 // ContainerAppsClientListSecretsOptions contains the optional parameters for the ContainerAppsClient.ListSecrets method.
 type ContainerAppsClientListSecretsOptions struct {
+	// placeholder for future optional parameters
+}
+
+// ContainerAppsClientUpdateOptions contains the optional parameters for the ContainerAppsClient.Update method.
+type ContainerAppsClientUpdateOptions struct {
 	// placeholder for future optional parameters
 }
 
@@ -662,8 +646,7 @@ type ContainerAppsRevisionsClientGetRevisionOptions struct {
 // ContainerAppsRevisionsClientListRevisionsOptions contains the optional parameters for the ContainerAppsRevisionsClient.ListRevisions
 // method.
 type ContainerAppsRevisionsClientListRevisionsOptions struct {
-	// The filter to apply on the operation.
-	Filter *string
+	// placeholder for future optional parameters
 }
 
 // ContainerAppsRevisionsClientRestartRevisionOptions contains the optional parameters for the ContainerAppsRevisionsClient.RestartRevision
@@ -887,11 +870,6 @@ type DaprComponentsClientListOptions struct {
 	// placeholder for future optional parameters
 }
 
-// DaprComponentsClientListSecretsOptions contains the optional parameters for the DaprComponentsClient.ListSecrets method.
-type DaprComponentsClientListSecretsOptions struct {
-	// placeholder for future optional parameters
-}
-
 // DaprComponentsCollection - Dapr Components ARM resource.
 type DaprComponentsCollection struct {
 	// REQUIRED; Collection of resources.
@@ -911,12 +889,6 @@ type DaprMetadata struct {
 
 	// Metadata property value.
 	Value *string `json:"value,omitempty"`
-}
-
-// DaprSecretsCollection - Dapr component Secrets Collection ARM resource.
-type DaprSecretsCollection struct {
-	// REQUIRED; Collection of secrets used by a Dapr component
-	Value []*Secret `json:"value,omitempty"`
 }
 
 // DefaultAuthorizationPolicy - The configuration settings of the Azure Active Directory default authorization policy.
@@ -1020,11 +992,8 @@ type GithubActionConfiguration struct {
 	// AzureCredentials configurations.
 	AzureCredentials *AzureCredentials `json:"azureCredentials,omitempty"`
 
-	// Context path
-	ContextPath *string `json:"contextPath,omitempty"`
-
-	// Image name
-	Image *string `json:"image,omitempty"`
+	// Docker file path
+	DockerfilePath *string `json:"dockerfilePath,omitempty"`
 
 	// Operation system
 	OS *string `json:"os,omitempty"`
@@ -1038,7 +1007,7 @@ type GithubActionConfiguration struct {
 	// Runtime stack
 	RuntimeStack *string `json:"runtimeStack,omitempty"`
 
-	// Runtime version
+	// Runtime Version
 	RuntimeVersion *string `json:"runtimeVersion,omitempty"`
 }
 
@@ -1236,6 +1205,12 @@ type ManagedEnvironment struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
+// ManagedEnvironmentPatch - An environment for hosting container apps
+type ManagedEnvironmentPatch struct {
+	// Application-specific metadata in the form of key-value pairs.
+	Tags map[string]*string `json:"tags,omitempty"`
+}
+
 // ManagedEnvironmentProperties - Managed environment resource specific properties
 type ManagedEnvironmentProperties struct {
 	// Cluster configuration which enables the log daemon to export app logs to a destination. Currently only "log-analytics"
@@ -1305,13 +1280,6 @@ type ManagedEnvironmentsClientBeginDeleteOptions struct {
 	ResumeToken string
 }
 
-// ManagedEnvironmentsClientBeginUpdateOptions contains the optional parameters for the ManagedEnvironmentsClient.BeginUpdate
-// method.
-type ManagedEnvironmentsClientBeginUpdateOptions struct {
-	// Resumes the LRO from the provided token.
-	ResumeToken string
-}
-
 // ManagedEnvironmentsClientGetOptions contains the optional parameters for the ManagedEnvironmentsClient.Get method.
 type ManagedEnvironmentsClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -1326,6 +1294,11 @@ type ManagedEnvironmentsClientListByResourceGroupOptions struct {
 // ManagedEnvironmentsClientListBySubscriptionOptions contains the optional parameters for the ManagedEnvironmentsClient.ListBySubscription
 // method.
 type ManagedEnvironmentsClientListBySubscriptionOptions struct {
+	// placeholder for future optional parameters
+}
+
+// ManagedEnvironmentsClientUpdateOptions contains the optional parameters for the ManagedEnvironmentsClient.Update method.
+type ManagedEnvironmentsClientUpdateOptions struct {
 	// placeholder for future optional parameters
 }
 
@@ -1380,12 +1353,6 @@ type ManagedServiceIdentity struct {
 
 	// READ-ONLY; The tenant ID of the system assigned identity. This property will only be provided for a system assigned identity.
 	TenantID *string `json:"tenantId,omitempty" azure:"ro"`
-}
-
-// NamespacesClientCheckNameAvailabilityOptions contains the optional parameters for the NamespacesClient.CheckNameAvailability
-// method.
-type NamespacesClientCheckNameAvailabilityOptions struct {
-	// placeholder for future optional parameters
 }
 
 // Nonce - The configuration settings of the nonce used in the login flow.
@@ -1820,9 +1787,6 @@ type TrackedResource struct {
 
 // TrafficWeight - Traffic weight assigned to a revision
 type TrafficWeight struct {
-	// Associates a traffic label with a revision
-	Label *string `json:"label,omitempty"`
-
 	// Indicates that the traffic weight belongs to a latest stable revision
 	LatestRevision *bool `json:"latestRevision,omitempty"`
 

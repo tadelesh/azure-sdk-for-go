@@ -110,7 +110,7 @@ func (client *ManagedEnvironmentsClient) createOrUpdateCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, environmentEnvelope)
@@ -171,7 +171,7 @@ func (client *ManagedEnvironmentsClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -217,7 +217,7 @@ func (client *ManagedEnvironmentsClient) getCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -281,7 +281,7 @@ func (client *ManagedEnvironmentsClient) listByResourceGroupCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -340,7 +340,7 @@ func (client *ManagedEnvironmentsClient) listBySubscriptionCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -355,44 +355,30 @@ func (client *ManagedEnvironmentsClient) listBySubscriptionHandleResponse(resp *
 	return result, nil
 }
 
-// BeginUpdate - Patches a Managed Environment using JSON Merge Patch
+// Update - Patches a Managed Environment. Only patching of tags is supported currently
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // name - Name of the Environment.
 // environmentEnvelope - Configuration details of the Environment.
-// options - ManagedEnvironmentsClientBeginUpdateOptions contains the optional parameters for the ManagedEnvironmentsClient.BeginUpdate
+// options - ManagedEnvironmentsClientUpdateOptions contains the optional parameters for the ManagedEnvironmentsClient.Update
 // method.
-func (client *ManagedEnvironmentsClient) BeginUpdate(ctx context.Context, resourceGroupName string, name string, environmentEnvelope ManagedEnvironment, options *ManagedEnvironmentsClientBeginUpdateOptions) (*armruntime.Poller[ManagedEnvironmentsClientUpdateResponse], error) {
-	if options == nil || options.ResumeToken == "" {
-		resp, err := client.update(ctx, resourceGroupName, name, environmentEnvelope, options)
-		if err != nil {
-			return nil, err
-		}
-		return armruntime.NewPoller[ManagedEnvironmentsClientUpdateResponse](resp, client.pl, nil)
-	} else {
-		return armruntime.NewPollerFromResumeToken[ManagedEnvironmentsClientUpdateResponse](options.ResumeToken, client.pl, nil)
-	}
-}
-
-// Update - Patches a Managed Environment using JSON Merge Patch
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *ManagedEnvironmentsClient) update(ctx context.Context, resourceGroupName string, name string, environmentEnvelope ManagedEnvironment, options *ManagedEnvironmentsClientBeginUpdateOptions) (*http.Response, error) {
+func (client *ManagedEnvironmentsClient) Update(ctx context.Context, resourceGroupName string, name string, environmentEnvelope ManagedEnvironmentPatch, options *ManagedEnvironmentsClientUpdateOptions) (ManagedEnvironmentsClientUpdateResponse, error) {
 	req, err := client.updateCreateRequest(ctx, resourceGroupName, name, environmentEnvelope, options)
 	if err != nil {
-		return nil, err
+		return ManagedEnvironmentsClientUpdateResponse{}, err
 	}
 	resp, err := client.pl.Do(req)
 	if err != nil {
-		return nil, err
+		return ManagedEnvironmentsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+		return ManagedEnvironmentsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return client.updateHandleResponse(resp)
 }
 
 // updateCreateRequest creates the Update request.
-func (client *ManagedEnvironmentsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentEnvelope ManagedEnvironment, options *ManagedEnvironmentsClientBeginUpdateOptions) (*policy.Request, error) {
+func (client *ManagedEnvironmentsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentEnvelope ManagedEnvironmentPatch, options *ManagedEnvironmentsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.App/managedEnvironments/{name}"
 	if client.subscriptionID == "" {
 		return nil, errors.New("parameter client.subscriptionID cannot be empty")
@@ -411,9 +397,18 @@ func (client *ManagedEnvironmentsClient) updateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, environmentEnvelope)
+}
+
+// updateHandleResponse handles the Update response.
+func (client *ManagedEnvironmentsClient) updateHandleResponse(resp *http.Response) (ManagedEnvironmentsClientUpdateResponse, error) {
+	result := ManagedEnvironmentsClientUpdateResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedEnvironment); err != nil {
+		return ManagedEnvironmentsClientUpdateResponse{}, err
+	}
+	return result, nil
 }
 

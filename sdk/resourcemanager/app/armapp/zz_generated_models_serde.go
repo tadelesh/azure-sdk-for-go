@@ -201,6 +201,13 @@ func (c ContainerAppCollection) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// MarshalJSON implements the json.Marshaller interface for type ContainerAppPatch.
+func (c ContainerAppPatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	populate(objectMap, "tags", c.Tags)
+	return json.Marshal(objectMap)
+}
+
 // MarshalJSON implements the json.Marshaller interface for type ContainerAppProbeHTTPGet.
 func (c ContainerAppProbeHTTPGet) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
@@ -269,13 +276,6 @@ func (d DaprComponentProperties) MarshalJSON() ([]byte, error) {
 func (d DaprComponentsCollection) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DaprSecretsCollection.
-func (d DaprSecretsCollection) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
 	populate(objectMap, "value", d.Value)
 	return json.Marshal(objectMap)
 }
@@ -379,6 +379,13 @@ func (m ManagedEnvironment) MarshalJSON() ([]byte, error) {
 	populate(objectMap, "systemData", m.SystemData)
 	populate(objectMap, "tags", m.Tags)
 	populate(objectMap, "type", m.Type)
+	return json.Marshal(objectMap)
+}
+
+// MarshalJSON implements the json.Marshaller interface for type ManagedEnvironmentPatch.
+func (m ManagedEnvironmentPatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	populate(objectMap, "tags", m.Tags)
 	return json.Marshal(objectMap)
 }
 

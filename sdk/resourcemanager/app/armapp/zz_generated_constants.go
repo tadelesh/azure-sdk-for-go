@@ -30,8 +30,8 @@ func PossibleAccessModeValues() []AccessMode {
 }
 
 // ActiveRevisionsMode - ActiveRevisionsMode controls how active revisions are handled for the Container app:Multiple: multiple
-// revisions can be active.Single: Only one revision can be active at a time. Revision weights can
-// not be used in this mode. If no value if provided, this is the default.
+// revisions can be active. If no value if provided, this is the defaultSingle: Only one revision
+// can be active at a time. Revision weights can not be used in this mode
 type ActiveRevisionsMode string
 
 const (
@@ -98,22 +98,6 @@ func PossibleCertificateProvisioningStateValues() []CertificateProvisioningState
 		CertificateProvisioningStateFailed,
 		CertificateProvisioningStatePending,
 		CertificateProvisioningStateSucceeded,
-	}
-}
-
-// CheckNameAvailabilityReason - The reason why the given name is not available.
-type CheckNameAvailabilityReason string
-
-const (
-	CheckNameAvailabilityReasonAlreadyExists CheckNameAvailabilityReason = "AlreadyExists"
-	CheckNameAvailabilityReasonInvalid CheckNameAvailabilityReason = "Invalid"
-)
-
-// PossibleCheckNameAvailabilityReasonValues returns the possible values for the CheckNameAvailabilityReason const type.
-func PossibleCheckNameAvailabilityReasonValues() []CheckNameAvailabilityReason {
-	return []CheckNameAvailabilityReason{	
-		CheckNameAvailabilityReasonAlreadyExists,
-		CheckNameAvailabilityReasonInvalid,
 	}
 }
 

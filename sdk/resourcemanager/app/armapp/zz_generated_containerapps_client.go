@@ -110,7 +110,7 @@ func (client *ContainerAppsClient) createOrUpdateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, containerAppEnvelope)
@@ -171,7 +171,7 @@ func (client *ContainerAppsClient) deleteCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -217,7 +217,7 @@ func (client *ContainerAppsClient) getCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -281,7 +281,7 @@ func (client *ContainerAppsClient) listByResourceGroupCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -340,7 +340,7 @@ func (client *ContainerAppsClient) listBySubscriptionCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -399,7 +399,7 @@ func (client *ContainerAppsClient) listCustomHostNameAnalysisCreateRequest(ctx c
 	if options != nil && options.CustomHostname != nil {
 		reqQP.Set("customHostname", *options.CustomHostname)
 	}
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -455,7 +455,7 @@ func (client *ContainerAppsClient) listSecretsCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -470,44 +470,29 @@ func (client *ContainerAppsClient) listSecretsHandleResponse(resp *http.Response
 	return result, nil
 }
 
-// BeginUpdate - Patches a Container App using JSON Merge Patch
+// Update - Patches a Container App. Currently only patching of tags is supported
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // name - Name of the Container App.
-// containerAppEnvelope - Properties of a Container App that need to be updated
-// options - ContainerAppsClientBeginUpdateOptions contains the optional parameters for the ContainerAppsClient.BeginUpdate
-// method.
-func (client *ContainerAppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, name string, containerAppEnvelope ContainerApp, options *ContainerAppsClientBeginUpdateOptions) (*armruntime.Poller[ContainerAppsClientUpdateResponse], error) {
-	if options == nil || options.ResumeToken == "" {
-		resp, err := client.update(ctx, resourceGroupName, name, containerAppEnvelope, options)
-		if err != nil {
-			return nil, err
-		}
-		return armruntime.NewPoller[ContainerAppsClientUpdateResponse](resp, client.pl, nil)
-	} else {
-		return armruntime.NewPollerFromResumeToken[ContainerAppsClientUpdateResponse](options.ResumeToken, client.pl, nil)
-	}
-}
-
-// Update - Patches a Container App using JSON Merge Patch
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *ContainerAppsClient) update(ctx context.Context, resourceGroupName string, name string, containerAppEnvelope ContainerApp, options *ContainerAppsClientBeginUpdateOptions) (*http.Response, error) {
+// containerAppEnvelope - Properties of a container app that need to be updated
+// options - ContainerAppsClientUpdateOptions contains the optional parameters for the ContainerAppsClient.Update method.
+func (client *ContainerAppsClient) Update(ctx context.Context, resourceGroupName string, name string, containerAppEnvelope ContainerAppPatch, options *ContainerAppsClientUpdateOptions) (ContainerAppsClientUpdateResponse, error) {
 	req, err := client.updateCreateRequest(ctx, resourceGroupName, name, containerAppEnvelope, options)
 	if err != nil {
-		return nil, err
+		return ContainerAppsClientUpdateResponse{}, err
 	}
 	resp, err := client.pl.Do(req)
 	if err != nil {
-		return nil, err
+		return ContainerAppsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+		return ContainerAppsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return client.updateHandleResponse(resp)
 }
 
 // updateCreateRequest creates the Update request.
-func (client *ContainerAppsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, name string, containerAppEnvelope ContainerApp, options *ContainerAppsClientBeginUpdateOptions) (*policy.Request, error) {
+func (client *ContainerAppsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, name string, containerAppEnvelope ContainerAppPatch, options *ContainerAppsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.App/containerApps/{name}"
 	if client.subscriptionID == "" {
 		return nil, errors.New("parameter client.subscriptionID cannot be empty")
@@ -526,9 +511,18 @@ func (client *ContainerAppsClient) updateCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-03-01")
+	reqQP.Set("api-version", "2022-01-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, containerAppEnvelope)
+}
+
+// updateHandleResponse handles the Update response.
+func (client *ContainerAppsClient) updateHandleResponse(resp *http.Response) (ContainerAppsClientUpdateResponse, error) {
+	result := ContainerAppsClientUpdateResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerApp); err != nil {
+		return ContainerAppsClientUpdateResponse{}, err
+	}
+	return result, nil
 }
 
