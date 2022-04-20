@@ -25,9 +25,9 @@ import (
 // CloudServiceRolesClient contains the methods for the CloudServiceRoles group.
 // Don't use this type directly, use NewCloudServiceRolesClient() instead.
 type CloudServiceRolesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCloudServiceRolesClient creates a new instance of CloudServiceRolesClient with the specified values.
@@ -49,8 +49,8 @@ func NewCloudServiceRolesClient(subscriptionID string, credential azcore.TokenCr
 	}
 	client := &CloudServiceRolesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -117,7 +117,7 @@ func (client *CloudServiceRolesClient) getHandleResponse(resp *http.Response) (C
 // of roles. Do this till nextLink is null to fetch all the roles.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CloudServiceRolesClientListOptions contains the optional parameters for the CloudServiceRolesClient.List method.
-func (client *CloudServiceRolesClient) NewListPager(resourceGroupName string, cloudServiceName string, options *CloudServiceRolesClientListOptions) *runtime.Pager[CloudServiceRolesClientListResponse] {
+func (client *CloudServiceRolesClient) NewListPager(resourceGroupName string, cloudServiceName string, options *CloudServiceRolesClientListOptions) (*runtime.Pager[CloudServiceRolesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServiceRolesClientListResponse]{
 		More: func(page CloudServiceRolesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -179,3 +179,4 @@ func (client *CloudServiceRolesClient) listHandleResponse(resp *http.Response) (
 	}
 	return result, nil
 }
+

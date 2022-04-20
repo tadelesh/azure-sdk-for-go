@@ -25,9 +25,9 @@ import (
 // VirtualMachineRunCommandsClient contains the methods for the VirtualMachineRunCommands group.
 // Don't use this type directly, use NewVirtualMachineRunCommandsClient() instead.
 type VirtualMachineRunCommandsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineRunCommandsClient creates a new instance of VirtualMachineRunCommandsClient with the specified values.
@@ -49,8 +49,8 @@ func NewVirtualMachineRunCommandsClient(subscriptionID string, credential azcore
 	}
 	client := &VirtualMachineRunCommandsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *VirtualMachineRunCommandsClient) createOrUpdate(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -155,7 +155,7 @@ func (client *VirtualMachineRunCommandsClient) deleteOperation(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -313,7 +313,7 @@ func (client *VirtualMachineRunCommandsClient) getByVirtualMachineHandleResponse
 // location - The location upon which run commands is queried.
 // options - VirtualMachineRunCommandsClientListOptions contains the optional parameters for the VirtualMachineRunCommandsClient.List
 // method.
-func (client *VirtualMachineRunCommandsClient) NewListPager(location string, options *VirtualMachineRunCommandsClientListOptions) *runtime.Pager[VirtualMachineRunCommandsClientListResponse] {
+func (client *VirtualMachineRunCommandsClient) NewListPager(location string, options *VirtualMachineRunCommandsClientListOptions) (*runtime.Pager[VirtualMachineRunCommandsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineRunCommandsClientListResponse]{
 		More: func(page VirtualMachineRunCommandsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -378,7 +378,7 @@ func (client *VirtualMachineRunCommandsClient) listHandleResponse(resp *http.Res
 // vmName - The name of the virtual machine containing the run command.
 // options - VirtualMachineRunCommandsClientListByVirtualMachineOptions contains the optional parameters for the VirtualMachineRunCommandsClient.ListByVirtualMachine
 // method.
-func (client *VirtualMachineRunCommandsClient) NewListByVirtualMachinePager(resourceGroupName string, vmName string, options *VirtualMachineRunCommandsClientListByVirtualMachineOptions) *runtime.Pager[VirtualMachineRunCommandsClientListByVirtualMachineResponse] {
+func (client *VirtualMachineRunCommandsClient) NewListByVirtualMachinePager(resourceGroupName string, vmName string, options *VirtualMachineRunCommandsClientListByVirtualMachineOptions) (*runtime.Pager[VirtualMachineRunCommandsClientListByVirtualMachineResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineRunCommandsClientListByVirtualMachineResponse]{
 		More: func(page VirtualMachineRunCommandsClientListByVirtualMachineResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -478,7 +478,7 @@ func (client *VirtualMachineRunCommandsClient) update(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -510,3 +510,4 @@ func (client *VirtualMachineRunCommandsClient) updateCreateRequest(ctx context.C
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, runtime.MarshalAsJSON(req, runCommand)
 }
+

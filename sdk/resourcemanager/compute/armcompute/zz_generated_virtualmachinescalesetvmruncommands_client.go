@@ -25,9 +25,9 @@ import (
 // VirtualMachineScaleSetVMRunCommandsClient contains the methods for the VirtualMachineScaleSetVMRunCommands group.
 // Don't use this type directly, use NewVirtualMachineScaleSetVMRunCommandsClient() instead.
 type VirtualMachineScaleSetVMRunCommandsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineScaleSetVMRunCommandsClient creates a new instance of VirtualMachineScaleSetVMRunCommandsClient with the specified values.
@@ -49,8 +49,8 @@ func NewVirtualMachineScaleSetVMRunCommandsClient(subscriptionID string, credent
 	}
 	client := &VirtualMachineScaleSetVMRunCommandsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *VirtualMachineScaleSetVMRunCommandsClient) createOrUpdate(ctx cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -161,7 +161,7 @@ func (client *VirtualMachineScaleSetVMRunCommandsClient) deleteOperation(ctx con
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -274,7 +274,7 @@ func (client *VirtualMachineScaleSetVMRunCommandsClient) getHandleResponse(resp 
 // instanceID - The instance ID of the virtual machine.
 // options - VirtualMachineScaleSetVMRunCommandsClientListOptions contains the optional parameters for the VirtualMachineScaleSetVMRunCommandsClient.List
 // method.
-func (client *VirtualMachineScaleSetVMRunCommandsClient) NewListPager(resourceGroupName string, vmScaleSetName string, instanceID string, options *VirtualMachineScaleSetVMRunCommandsClientListOptions) *runtime.Pager[VirtualMachineScaleSetVMRunCommandsClientListResponse] {
+func (client *VirtualMachineScaleSetVMRunCommandsClient) NewListPager(resourceGroupName string, vmScaleSetName string, instanceID string, options *VirtualMachineScaleSetVMRunCommandsClientListOptions) (*runtime.Pager[VirtualMachineScaleSetVMRunCommandsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetVMRunCommandsClientListResponse]{
 		More: func(page VirtualMachineScaleSetVMRunCommandsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -379,7 +379,7 @@ func (client *VirtualMachineScaleSetVMRunCommandsClient) update(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -415,3 +415,4 @@ func (client *VirtualMachineScaleSetVMRunCommandsClient) updateCreateRequest(ctx
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, runtime.MarshalAsJSON(req, runCommand)
 }
+

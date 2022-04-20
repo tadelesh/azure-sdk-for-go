@@ -25,9 +25,9 @@ import (
 // GalleryImagesClient contains the methods for the GalleryImages group.
 // Don't use this type directly, use NewGalleryImagesClient() instead.
 type GalleryImagesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewGalleryImagesClient creates a new instance of GalleryImagesClient with the specified values.
@@ -49,8 +49,8 @@ func NewGalleryImagesClient(subscriptionID string, credential azcore.TokenCreden
 	}
 	client := &GalleryImagesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -91,7 +91,7 @@ func (client *GalleryImagesClient) createOrUpdate(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -157,7 +157,7 @@ func (client *GalleryImagesClient) deleteOperation(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -256,7 +256,7 @@ func (client *GalleryImagesClient) getHandleResponse(resp *http.Response) (Galle
 // galleryName - The name of the Shared Image Gallery from which Image Definitions are to be listed.
 // options - GalleryImagesClientListByGalleryOptions contains the optional parameters for the GalleryImagesClient.ListByGallery
 // method.
-func (client *GalleryImagesClient) NewListByGalleryPager(resourceGroupName string, galleryName string, options *GalleryImagesClientListByGalleryOptions) *runtime.Pager[GalleryImagesClientListByGalleryResponse] {
+func (client *GalleryImagesClient) NewListByGalleryPager(resourceGroupName string, galleryName string, options *GalleryImagesClientListByGalleryOptions) (*runtime.Pager[GalleryImagesClientListByGalleryResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[GalleryImagesClientListByGalleryResponse]{
 		More: func(page GalleryImagesClientListByGalleryResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -354,7 +354,7 @@ func (client *GalleryImagesClient) update(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -386,3 +386,4 @@ func (client *GalleryImagesClient) updateCreateRequest(ctx context.Context, reso
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, galleryImage)
 }
+

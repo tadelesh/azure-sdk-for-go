@@ -25,9 +25,9 @@ import (
 // DisksClient contains the methods for the Disks group.
 // Don't use this type directly, use NewDisksClient() instead.
 type DisksClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDisksClient creates a new instance of DisksClient with the specified values.
@@ -49,8 +49,8 @@ func NewDisksClient(subscriptionID string, credential azcore.TokenCredential, op
 	}
 	client := &DisksClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *DisksClient) createOrUpdate(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -152,7 +152,7 @@ func (client *DisksClient) deleteOperation(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -273,7 +273,7 @@ func (client *DisksClient) grantAccess(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // grantAccessCreateRequest creates the GrantAccess request.
@@ -305,7 +305,7 @@ func (client *DisksClient) grantAccessCreateRequest(ctx context.Context, resourc
 // NewListPager - Lists all the disks under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DisksClientListOptions contains the optional parameters for the DisksClient.List method.
-func (client *DisksClient) NewListPager(options *DisksClientListOptions) *runtime.Pager[DisksClientListResponse] {
+func (client *DisksClient) NewListPager(options *DisksClientListOptions) (*runtime.Pager[DisksClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DisksClientListResponse]{
 		More: func(page DisksClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -365,7 +365,7 @@ func (client *DisksClient) listHandleResponse(resp *http.Response) (DisksClientL
 // resourceGroupName - The name of the resource group.
 // options - DisksClientListByResourceGroupOptions contains the optional parameters for the DisksClient.ListByResourceGroup
 // method.
-func (client *DisksClient) NewListByResourceGroupPager(resourceGroupName string, options *DisksClientListByResourceGroupOptions) *runtime.Pager[DisksClientListByResourceGroupResponse] {
+func (client *DisksClient) NewListByResourceGroupPager(resourceGroupName string, options *DisksClientListByResourceGroupOptions) (*runtime.Pager[DisksClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DisksClientListByResourceGroupResponse]{
 		More: func(page DisksClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -459,7 +459,7 @@ func (client *DisksClient) revokeAccess(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // revokeAccessCreateRequest creates the RevokeAccess request.
@@ -521,7 +521,7 @@ func (client *DisksClient) update(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -549,3 +549,4 @@ func (client *DisksClient) updateCreateRequest(ctx context.Context, resourceGrou
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, disk)
 }
+

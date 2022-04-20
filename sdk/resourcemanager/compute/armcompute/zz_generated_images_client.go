@@ -25,9 +25,9 @@ import (
 // ImagesClient contains the methods for the Images group.
 // Don't use this type directly, use NewImagesClient() instead.
 type ImagesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewImagesClient creates a new instance of ImagesClient with the specified values.
@@ -49,8 +49,8 @@ func NewImagesClient(subscriptionID string, credential azcore.TokenCredential, o
 	}
 	client := &ImagesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -88,7 +88,7 @@ func (client *ImagesClient) createOrUpdate(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -148,7 +148,7 @@ func (client *ImagesClient) deleteOperation(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -239,7 +239,7 @@ func (client *ImagesClient) getHandleResponse(resp *http.Response) (ImagesClient
 // of Images. Do this till nextLink is null to fetch all the Images.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ImagesClientListOptions contains the optional parameters for the ImagesClient.List method.
-func (client *ImagesClient) NewListPager(options *ImagesClientListOptions) *runtime.Pager[ImagesClientListResponse] {
+func (client *ImagesClient) NewListPager(options *ImagesClientListOptions) (*runtime.Pager[ImagesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ImagesClientListResponse]{
 		More: func(page ImagesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -299,7 +299,7 @@ func (client *ImagesClient) listHandleResponse(resp *http.Response) (ImagesClien
 // resourceGroupName - The name of the resource group.
 // options - ImagesClientListByResourceGroupOptions contains the optional parameters for the ImagesClient.ListByResourceGroup
 // method.
-func (client *ImagesClient) NewListByResourceGroupPager(resourceGroupName string, options *ImagesClientListByResourceGroupOptions) *runtime.Pager[ImagesClientListByResourceGroupResponse] {
+func (client *ImagesClient) NewListByResourceGroupPager(resourceGroupName string, options *ImagesClientListByResourceGroupOptions) (*runtime.Pager[ImagesClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ImagesClientListByResourceGroupResponse]{
 		More: func(page ImagesClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -390,7 +390,7 @@ func (client *ImagesClient) update(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -418,3 +418,4 @@ func (client *ImagesClient) updateCreateRequest(ctx context.Context, resourceGro
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

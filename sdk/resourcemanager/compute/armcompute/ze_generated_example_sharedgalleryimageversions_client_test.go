@@ -21,23 +21,20 @@ func ExampleSharedGalleryImageVersionsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSharedGalleryImageVersionsClient("<subscription-id>", cred, nil)
+	sharedGalleryImageVersionsClient, err := armcompute.NewSharedGalleryImageVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<location>",
+	sharedGalleryImageVersionsClientNewListPager := sharedGalleryImageVersionsClient.NewListPager("<location>",
 		"<gallery-unique-name>",
 		"<gallery-image-name>",
 		&armcompute.SharedGalleryImageVersionsClientListOptions{SharedTo: nil})
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for sharedGalleryImageVersionsClientNewListPager.More() {
+		nextResult, err := sharedGalleryImageVersionsClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -51,15 +48,13 @@ func ExampleSharedGalleryImageVersionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSharedGalleryImageVersionsClient("<subscription-id>", cred, nil)
+	sharedGalleryImageVersionsClient, err := armcompute.NewSharedGalleryImageVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	sharedGalleryImageVersionsClientGetResponse, err := sharedGalleryImageVersionsClient.Get(ctx,
 		"<location>",
 		"<gallery-unique-name>",
 		"<gallery-image-name>",
@@ -67,8 +62,7 @@ func ExampleSharedGalleryImageVersionsClient_Get() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = sharedGalleryImageVersionsClientGetResponse
 }

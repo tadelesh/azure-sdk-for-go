@@ -25,9 +25,9 @@ import (
 // VirtualMachineScaleSetRollingUpgradesClient contains the methods for the VirtualMachineScaleSetRollingUpgrades group.
 // Don't use this type directly, use NewVirtualMachineScaleSetRollingUpgradesClient() instead.
 type VirtualMachineScaleSetRollingUpgradesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineScaleSetRollingUpgradesClient creates a new instance of VirtualMachineScaleSetRollingUpgradesClient with the specified values.
@@ -49,8 +49,8 @@ func NewVirtualMachineScaleSetRollingUpgradesClient(subscriptionID string, crede
 	}
 	client := &VirtualMachineScaleSetRollingUpgradesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -87,7 +87,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) cancel(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -208,7 +208,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) startExtensionUpgrade
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startExtensionUpgradeCreateRequest creates the StartExtensionUpgrade request.
@@ -273,7 +273,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) startOSUpgrade(ctx co
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startOSUpgradeCreateRequest creates the StartOSUpgrade request.
@@ -301,3 +301,4 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) startOSUpgradeCreateR
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
+

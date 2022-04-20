@@ -24,46 +24,42 @@ func ExampleVirtualMachineScaleSetExtensionsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetExtensionsClient, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	virtualMachineScaleSetExtensionsClientCreateOrUpdateResponsePoller, err := virtualMachineScaleSetExtensionsClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		"<vmss-extension-name>",
 		armcompute.VirtualMachineScaleSetExtension{
-			Name: to.Ptr("<name>"),
+			Name: to.Ptr("<the-name-of-the-extension.>"),
 			Properties: &armcompute.VirtualMachineScaleSetExtensionProperties{
-				Type:                    to.Ptr("<type>"),
+				Type:                    to.Ptr("<specifies-the-type-of-the-extension;-an-example-is-\"custom-script-extension\".>"),
 				AutoUpgradeMinorVersion: to.Ptr(true),
 				EnableAutomaticUpgrade:  to.Ptr(true),
-				ForceUpdateTag:          to.Ptr("<force-update-tag>"),
+				ForceUpdateTag:          to.Ptr("<if-a-value-is-provided-and-is-different-from-the-previous-value,-the-extension-handler-will-be-forced-to-update-even-if-the-extension-configuration-has-not-changed.>"),
 				ProtectedSettings:       map[string]interface{}{},
 				ProvisionAfterExtensions: []*string{
 					to.Ptr("aa")},
-				Publisher:          to.Ptr("<publisher>"),
+				Publisher:          to.Ptr("<the-name-of-the-extension-handler-publisher.>"),
 				Settings:           map[string]interface{}{},
 				SuppressFailures:   to.Ptr(true),
-				TypeHandlerVersion: to.Ptr("<type-handler-version>"),
+				TypeHandlerVersion: to.Ptr("<specifies-the-version-of-the-script-handler.>"),
 			},
 		},
 		&armcompute.VirtualMachineScaleSetExtensionsClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	virtualMachineScaleSetExtensionsClientCreateOrUpdateResponse, err := virtualMachineScaleSetExtensionsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineScaleSetExtensionsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineScaleSetExtensions_Update_MaximumSet_Gen.json
@@ -71,45 +67,41 @@ func ExampleVirtualMachineScaleSetExtensionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetExtensionsClient, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	virtualMachineScaleSetExtensionsClientUpdateResponsePoller, err := virtualMachineScaleSetExtensionsClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		"<vmss-extension-name>",
 		armcompute.VirtualMachineScaleSetExtensionUpdate{
 			Properties: &armcompute.VirtualMachineScaleSetExtensionProperties{
-				Type:                    to.Ptr("<type>"),
+				Type:                    to.Ptr("<specifies-the-type-of-the-extension;-an-example-is-\"custom-script-extension\".>"),
 				AutoUpgradeMinorVersion: to.Ptr(true),
 				EnableAutomaticUpgrade:  to.Ptr(true),
-				ForceUpdateTag:          to.Ptr("<force-update-tag>"),
+				ForceUpdateTag:          to.Ptr("<if-a-value-is-provided-and-is-different-from-the-previous-value,-the-extension-handler-will-be-forced-to-update-even-if-the-extension-configuration-has-not-changed.>"),
 				ProtectedSettings:       map[string]interface{}{},
 				ProvisionAfterExtensions: []*string{
 					to.Ptr("aa")},
-				Publisher:          to.Ptr("<publisher>"),
+				Publisher:          to.Ptr("<the-name-of-the-extension-handler-publisher.>"),
 				Settings:           map[string]interface{}{},
 				SuppressFailures:   to.Ptr(true),
-				TypeHandlerVersion: to.Ptr("<type-handler-version>"),
+				TypeHandlerVersion: to.Ptr("<specifies-the-version-of-the-script-handler.>"),
 			},
 		},
 		&armcompute.VirtualMachineScaleSetExtensionsClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	virtualMachineScaleSetExtensionsClientUpdateResponse, err := virtualMachineScaleSetExtensionsClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineScaleSetExtensionsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineScaleSetExtensions_Delete_MaximumSet_Gen.json
@@ -117,27 +109,23 @@ func ExampleVirtualMachineScaleSetExtensionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetExtensionsClient, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	virtualMachineScaleSetExtensionsClientDeleteResponsePoller, err := virtualMachineScaleSetExtensionsClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		"<vmss-extension-name>",
 		&armcompute.VirtualMachineScaleSetExtensionsClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = virtualMachineScaleSetExtensionsClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -146,25 +134,22 @@ func ExampleVirtualMachineScaleSetExtensionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetExtensionsClient, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	virtualMachineScaleSetExtensionsClientGetResponse, err := virtualMachineScaleSetExtensionsClient.Get(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		"<vmss-extension-name>",
 		&armcompute.VirtualMachineScaleSetExtensionsClientGetOptions{Expand: to.Ptr("<expand>")})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineScaleSetExtensionsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineScaleSetExtensions_List_MaximumSet_Gen.json
@@ -172,22 +157,19 @@ func ExampleVirtualMachineScaleSetExtensionsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetExtensionsClient, err := armcompute.NewVirtualMachineScaleSetExtensionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<resource-group-name>",
+	virtualMachineScaleSetExtensionsClientNewListPager := virtualMachineScaleSetExtensionsClient.NewListPager("<resource-group-name>",
 		"<vm-scale-set-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for virtualMachineScaleSetExtensionsClientNewListPager.More() {
+		nextResult, err := virtualMachineScaleSetExtensionsClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

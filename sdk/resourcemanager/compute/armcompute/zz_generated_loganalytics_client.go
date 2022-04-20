@@ -25,9 +25,9 @@ import (
 // LogAnalyticsClient contains the methods for the LogAnalytics group.
 // Don't use this type directly, use NewLogAnalyticsClient() instead.
 type LogAnalyticsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewLogAnalyticsClient creates a new instance of LogAnalyticsClient with the specified values.
@@ -49,8 +49,8 @@ func NewLogAnalyticsClient(subscriptionID string, credential azcore.TokenCredent
 	}
 	client := &LogAnalyticsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -91,7 +91,7 @@ func (client *LogAnalyticsClient) exportRequestRateByInterval(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // exportRequestRateByIntervalCreateRequest creates the ExportRequestRateByInterval request.
@@ -151,7 +151,7 @@ func (client *LogAnalyticsClient) exportThrottledRequests(ctx context.Context, l
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // exportThrottledRequestsCreateRequest creates the ExportThrottledRequests request.
@@ -175,3 +175,4 @@ func (client *LogAnalyticsClient) exportThrottledRequestsCreateRequest(ctx conte
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

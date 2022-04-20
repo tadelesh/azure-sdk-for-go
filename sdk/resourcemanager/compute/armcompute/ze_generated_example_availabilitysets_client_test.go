@@ -22,19 +22,17 @@ func ExampleAvailabilitySetsClient_CreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.CreateOrUpdate(ctx,
+	availabilitySetsClientCreateOrUpdateResponse, err := availabilitySetsClient.CreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<availability-set-name>",
 		armcompute.AvailabilitySet{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.AvailabilitySetProperties{
 				PlatformFaultDomainCount:  to.Ptr[int32](2),
 				PlatformUpdateDomainCount: to.Ptr[int32](20),
@@ -43,10 +41,9 @@ func ExampleAvailabilitySetsClient_CreateOrUpdate() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = availabilitySetsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/AvailabilitySets_Update_MaximumSet_Gen.json
@@ -54,15 +51,13 @@ func ExampleAvailabilitySetsClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Update(ctx,
+	availabilitySetsClientUpdateResponse, err := availabilitySetsClient.Update(ctx,
 		"<resource-group-name>",
 		"<availability-set-name>",
 		armcompute.AvailabilitySetUpdate{
@@ -73,26 +68,25 @@ func ExampleAvailabilitySetsClient_Update() {
 				PlatformFaultDomainCount:  to.Ptr[int32](2),
 				PlatformUpdateDomainCount: to.Ptr[int32](20),
 				ProximityPlacementGroup: &armcompute.SubResource{
-					ID: to.Ptr("<id>"),
+					ID: to.Ptr("<resource-id>"),
 				},
 				VirtualMachines: []*armcompute.SubResource{
 					{
-						ID: to.Ptr("<id>"),
+						ID: to.Ptr("<resource-id>"),
 					}},
 			},
 			SKU: &armcompute.SKU{
-				Name:     to.Ptr("<name>"),
+				Name:     to.Ptr("<the-sku-name.>"),
 				Capacity: to.Ptr[int64](7),
-				Tier:     to.Ptr("<tier>"),
+				Tier:     to.Ptr("<specifies-the-tier-of-virtual-machines-in-a-scale-set.<br-/><br-/>-possible-values:<br-/><br-/>-**standard**<br-/><br-/>-**basic**>"),
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = availabilitySetsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/AvailabilitySets_Delete_MaximumSet_Gen.json
@@ -100,21 +94,18 @@ func ExampleAvailabilitySetsClient_Delete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	_, err = client.Delete(ctx,
+	_, err = availabilitySetsClient.Delete(ctx,
 		"<resource-group-name>",
 		"<availability-set-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 }
 
@@ -123,24 +114,21 @@ func ExampleAvailabilitySetsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	availabilitySetsClientGetResponse, err := availabilitySetsClient.Get(ctx,
 		"<resource-group-name>",
 		"<availability-set-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = availabilitySetsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/ListAvailabilitySetsInASubscription.json
@@ -148,20 +136,17 @@ func ExampleAvailabilitySetsClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListBySubscriptionPager(&armcompute.AvailabilitySetsClientListBySubscriptionOptions{Expand: to.Ptr("<expand>")})
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	availabilitySetsClientNewListBySubscriptionPager := availabilitySetsClient.NewListBySubscriptionPager(&armcompute.AvailabilitySetsClientListBySubscriptionOptions{Expand: to.Ptr("<expand>")})
+	for availabilitySetsClientNewListBySubscriptionPager.More() {
+		nextResult, err := availabilitySetsClientNewListBySubscriptionPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -175,21 +160,18 @@ func ExampleAvailabilitySetsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<resource-group-name>",
+	availabilitySetsClientNewListPager := availabilitySetsClient.NewListPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for availabilitySetsClientNewListPager.More() {
+		nextResult, err := availabilitySetsClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -203,22 +185,19 @@ func ExampleAvailabilitySetsClient_NewListAvailableSizesPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
+	availabilitySetsClient, err := armcompute.NewAvailabilitySetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListAvailableSizesPager("<resource-group-name>",
+	availabilitySetsClientNewListAvailableSizesPager := availabilitySetsClient.NewListAvailableSizesPager("<resource-group-name>",
 		"<availability-set-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for availabilitySetsClientNewListAvailableSizesPager.More() {
+		nextResult, err := availabilitySetsClientNewListAvailableSizesPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

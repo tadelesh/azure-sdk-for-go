@@ -26,9 +26,9 @@ import (
 // VirtualMachineScaleSetsClient contains the methods for the VirtualMachineScaleSets group.
 // Don't use this type directly, use NewVirtualMachineScaleSetsClient() instead.
 type VirtualMachineScaleSetsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineScaleSetsClient creates a new instance of VirtualMachineScaleSetsClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachineScaleSetsClient(subscriptionID string, credential azcore.T
 	}
 	client := &VirtualMachineScaleSetsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -137,7 +137,7 @@ func (client *VirtualMachineScaleSetsClient) createOrUpdate(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -202,7 +202,7 @@ func (client *VirtualMachineScaleSetsClient) deallocate(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deallocateCreateRequest creates the Deallocate request.
@@ -266,7 +266,7 @@ func (client *VirtualMachineScaleSetsClient) deleteOperation(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -331,7 +331,7 @@ func (client *VirtualMachineScaleSetsClient) deleteInstances(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteInstancesCreateRequest creates the DeleteInstances request.
@@ -549,7 +549,7 @@ func (client *VirtualMachineScaleSetsClient) getInstanceViewHandleResponse(resp 
 // vmScaleSetName - The name of the VM scale set.
 // options - VirtualMachineScaleSetsClientGetOSUpgradeHistoryOptions contains the optional parameters for the VirtualMachineScaleSetsClient.GetOSUpgradeHistory
 // method.
-func (client *VirtualMachineScaleSetsClient) NewGetOSUpgradeHistoryPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetsClientGetOSUpgradeHistoryOptions) *runtime.Pager[VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse] {
+func (client *VirtualMachineScaleSetsClient) NewGetOSUpgradeHistoryPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetsClientGetOSUpgradeHistoryOptions) (*runtime.Pager[VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse]{
 		More: func(page VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -617,7 +617,7 @@ func (client *VirtualMachineScaleSetsClient) getOSUpgradeHistoryHandleResponse(r
 // resourceGroupName - The name of the resource group.
 // options - VirtualMachineScaleSetsClientListOptions contains the optional parameters for the VirtualMachineScaleSetsClient.List
 // method.
-func (client *VirtualMachineScaleSetsClient) NewListPager(resourceGroupName string, options *VirtualMachineScaleSetsClientListOptions) *runtime.Pager[VirtualMachineScaleSetsClientListResponse] {
+func (client *VirtualMachineScaleSetsClient) NewListPager(resourceGroupName string, options *VirtualMachineScaleSetsClientListOptions) (*runtime.Pager[VirtualMachineScaleSetsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetsClientListResponse]{
 		More: func(page VirtualMachineScaleSetsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -682,7 +682,7 @@ func (client *VirtualMachineScaleSetsClient) listHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualMachineScaleSetsClientListAllOptions contains the optional parameters for the VirtualMachineScaleSetsClient.ListAll
 // method.
-func (client *VirtualMachineScaleSetsClient) NewListAllPager(options *VirtualMachineScaleSetsClientListAllOptions) *runtime.Pager[VirtualMachineScaleSetsClientListAllResponse] {
+func (client *VirtualMachineScaleSetsClient) NewListAllPager(options *VirtualMachineScaleSetsClientListAllOptions) (*runtime.Pager[VirtualMachineScaleSetsClientListAllResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetsClientListAllResponse]{
 		More: func(page VirtualMachineScaleSetsClientListAllResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -742,7 +742,7 @@ func (client *VirtualMachineScaleSetsClient) listAllHandleResponse(resp *http.Re
 // location - The location for which VM scale sets under the subscription are queried.
 // options - VirtualMachineScaleSetsClientListByLocationOptions contains the optional parameters for the VirtualMachineScaleSetsClient.ListByLocation
 // method.
-func (client *VirtualMachineScaleSetsClient) NewListByLocationPager(location string, options *VirtualMachineScaleSetsClientListByLocationOptions) *runtime.Pager[VirtualMachineScaleSetsClientListByLocationResponse] {
+func (client *VirtualMachineScaleSetsClient) NewListByLocationPager(location string, options *VirtualMachineScaleSetsClientListByLocationOptions) (*runtime.Pager[VirtualMachineScaleSetsClientListByLocationResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetsClientListByLocationResponse]{
 		More: func(page VirtualMachineScaleSetsClientListByLocationResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -808,7 +808,7 @@ func (client *VirtualMachineScaleSetsClient) listByLocationHandleResponse(resp *
 // vmScaleSetName - The name of the VM scale set.
 // options - VirtualMachineScaleSetsClientListSKUsOptions contains the optional parameters for the VirtualMachineScaleSetsClient.ListSKUs
 // method.
-func (client *VirtualMachineScaleSetsClient) NewListSKUsPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetsClientListSKUsOptions) *runtime.Pager[VirtualMachineScaleSetsClientListSKUsResponse] {
+func (client *VirtualMachineScaleSetsClient) NewListSKUsPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetsClientListSKUsOptions) (*runtime.Pager[VirtualMachineScaleSetsClientListSKUsResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetsClientListSKUsResponse]{
 		More: func(page VirtualMachineScaleSetsClientListSKUsResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -907,7 +907,7 @@ func (client *VirtualMachineScaleSetsClient) performMaintenance(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // performMaintenanceCreateRequest creates the PerformMaintenance request.
@@ -975,7 +975,7 @@ func (client *VirtualMachineScaleSetsClient) powerOff(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // powerOffCreateRequest creates the PowerOff request.
@@ -1044,7 +1044,7 @@ func (client *VirtualMachineScaleSetsClient) redeploy(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // redeployCreateRequest creates the Redeploy request.
@@ -1112,7 +1112,7 @@ func (client *VirtualMachineScaleSetsClient) reimage(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageCreateRequest creates the Reimage request.
@@ -1178,7 +1178,7 @@ func (client *VirtualMachineScaleSetsClient) reimageAll(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageAllCreateRequest creates the ReimageAll request.
@@ -1242,7 +1242,7 @@ func (client *VirtualMachineScaleSetsClient) restart(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -1307,7 +1307,7 @@ func (client *VirtualMachineScaleSetsClient) setOrchestrationServiceState(ctx co
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // setOrchestrationServiceStateCreateRequest creates the SetOrchestrationServiceState request.
@@ -1368,7 +1368,7 @@ func (client *VirtualMachineScaleSetsClient) start(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -1433,7 +1433,7 @@ func (client *VirtualMachineScaleSetsClient) update(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -1495,7 +1495,7 @@ func (client *VirtualMachineScaleSetsClient) updateInstances(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateInstancesCreateRequest creates the UpdateInstances request.
@@ -1523,3 +1523,4 @@ func (client *VirtualMachineScaleSetsClient) updateInstancesCreateRequest(ctx co
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, vmInstanceIDs)
 }
+

@@ -25,9 +25,9 @@ import (
 // RestorePointCollectionsClient contains the methods for the RestorePointCollections group.
 // Don't use this type directly, use NewRestorePointCollectionsClient() instead.
 type RestorePointCollectionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewRestorePointCollectionsClient creates a new instance of RestorePointCollectionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewRestorePointCollectionsClient(subscriptionID string, credential azcore.T
 	}
 	client := &RestorePointCollectionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -147,7 +147,7 @@ func (client *RestorePointCollectionsClient) deleteOperation(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -240,7 +240,7 @@ func (client *RestorePointCollectionsClient) getHandleResponse(resp *http.Respon
 // resourceGroupName - The name of the resource group.
 // options - RestorePointCollectionsClientListOptions contains the optional parameters for the RestorePointCollectionsClient.List
 // method.
-func (client *RestorePointCollectionsClient) NewListPager(resourceGroupName string, options *RestorePointCollectionsClientListOptions) *runtime.Pager[RestorePointCollectionsClientListResponse] {
+func (client *RestorePointCollectionsClient) NewListPager(resourceGroupName string, options *RestorePointCollectionsClientListOptions) (*runtime.Pager[RestorePointCollectionsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[RestorePointCollectionsClientListResponse]{
 		More: func(page RestorePointCollectionsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -305,7 +305,7 @@ func (client *RestorePointCollectionsClient) listHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - RestorePointCollectionsClientListAllOptions contains the optional parameters for the RestorePointCollectionsClient.ListAll
 // method.
-func (client *RestorePointCollectionsClient) NewListAllPager(options *RestorePointCollectionsClientListAllOptions) *runtime.Pager[RestorePointCollectionsClientListAllResponse] {
+func (client *RestorePointCollectionsClient) NewListAllPager(options *RestorePointCollectionsClientListAllOptions) (*runtime.Pager[RestorePointCollectionsClientListAllResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[RestorePointCollectionsClientListAllResponse]{
 		More: func(page RestorePointCollectionsClientListAllResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -416,3 +416,4 @@ func (client *RestorePointCollectionsClient) updateHandleResponse(resp *http.Res
 	}
 	return result, nil
 }
+

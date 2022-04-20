@@ -21,21 +21,18 @@ func ExampleUsageClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewUsageClient("<subscription-id>", cred, nil)
+	usageClient, err := armcompute.NewUsageClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<location>",
+	usageClientNewListPager := usageClient.NewListPager("<location>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for usageClientNewListPager.More() {
+		nextResult, err := usageClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

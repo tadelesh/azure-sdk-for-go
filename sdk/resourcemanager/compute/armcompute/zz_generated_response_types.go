@@ -1401,3 +1401,4 @@ type VirtualMachinesClientStartResponse struct {
 type VirtualMachinesClientUpdateResponse struct {
 	VirtualMachine
 }
+

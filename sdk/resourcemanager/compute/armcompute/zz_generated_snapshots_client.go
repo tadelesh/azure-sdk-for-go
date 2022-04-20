@@ -25,9 +25,9 @@ import (
 // SnapshotsClient contains the methods for the Snapshots group.
 // Don't use this type directly, use NewSnapshotsClient() instead.
 type SnapshotsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewSnapshotsClient creates a new instance of SnapshotsClient with the specified values.
@@ -49,8 +49,8 @@ func NewSnapshotsClient(subscriptionID string, credential azcore.TokenCredential
 	}
 	client := &SnapshotsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *SnapshotsClient) createOrUpdate(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -152,7 +152,7 @@ func (client *SnapshotsClient) deleteOperation(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -274,7 +274,7 @@ func (client *SnapshotsClient) grantAccess(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // grantAccessCreateRequest creates the GrantAccess request.
@@ -306,7 +306,7 @@ func (client *SnapshotsClient) grantAccessCreateRequest(ctx context.Context, res
 // NewListPager - Lists snapshots under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SnapshotsClientListOptions contains the optional parameters for the SnapshotsClient.List method.
-func (client *SnapshotsClient) NewListPager(options *SnapshotsClientListOptions) *runtime.Pager[SnapshotsClientListResponse] {
+func (client *SnapshotsClient) NewListPager(options *SnapshotsClientListOptions) (*runtime.Pager[SnapshotsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[SnapshotsClientListResponse]{
 		More: func(page SnapshotsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -366,7 +366,7 @@ func (client *SnapshotsClient) listHandleResponse(resp *http.Response) (Snapshot
 // resourceGroupName - The name of the resource group.
 // options - SnapshotsClientListByResourceGroupOptions contains the optional parameters for the SnapshotsClient.ListByResourceGroup
 // method.
-func (client *SnapshotsClient) NewListByResourceGroupPager(resourceGroupName string, options *SnapshotsClientListByResourceGroupOptions) *runtime.Pager[SnapshotsClientListByResourceGroupResponse] {
+func (client *SnapshotsClient) NewListByResourceGroupPager(resourceGroupName string, options *SnapshotsClientListByResourceGroupOptions) (*runtime.Pager[SnapshotsClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[SnapshotsClientListByResourceGroupResponse]{
 		More: func(page SnapshotsClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -461,7 +461,7 @@ func (client *SnapshotsClient) revokeAccess(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // revokeAccessCreateRequest creates the RevokeAccess request.
@@ -523,7 +523,7 @@ func (client *SnapshotsClient) update(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -551,3 +551,4 @@ func (client *SnapshotsClient) updateCreateRequest(ctx context.Context, resource
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, snapshot)
 }
+

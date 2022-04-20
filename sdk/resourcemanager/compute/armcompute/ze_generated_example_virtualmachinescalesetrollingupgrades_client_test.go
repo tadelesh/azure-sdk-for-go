@@ -23,26 +23,22 @@ func ExampleVirtualMachineScaleSetRollingUpgradesClient_BeginCancel() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetRollingUpgradesClient, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCancel(ctx,
+	virtualMachineScaleSetRollingUpgradesClientCancelResponsePoller, err := virtualMachineScaleSetRollingUpgradesClient.BeginCancel(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		&armcompute.VirtualMachineScaleSetRollingUpgradesClientBeginCancelOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = virtualMachineScaleSetRollingUpgradesClientCancelResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -51,26 +47,22 @@ func ExampleVirtualMachineScaleSetRollingUpgradesClient_BeginStartOSUpgrade() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetRollingUpgradesClient, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginStartOSUpgrade(ctx,
+	virtualMachineScaleSetRollingUpgradesClientStartOSUpgradeResponsePoller, err := virtualMachineScaleSetRollingUpgradesClient.BeginStartOSUpgrade(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		&armcompute.VirtualMachineScaleSetRollingUpgradesClientBeginStartOSUpgradeOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = virtualMachineScaleSetRollingUpgradesClientStartOSUpgradeResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -79,26 +71,22 @@ func ExampleVirtualMachineScaleSetRollingUpgradesClient_BeginStartExtensionUpgra
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetRollingUpgradesClient, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginStartExtensionUpgrade(ctx,
+	virtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradeResponsePoller, err := virtualMachineScaleSetRollingUpgradesClient.BeginStartExtensionUpgrade(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		&armcompute.VirtualMachineScaleSetRollingUpgradesClientBeginStartExtensionUpgradeOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = virtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradeResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -107,22 +95,19 @@ func ExampleVirtualMachineScaleSetRollingUpgradesClient_GetLatest() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
+	virtualMachineScaleSetRollingUpgradesClient, err := armcompute.NewVirtualMachineScaleSetRollingUpgradesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetLatest(ctx,
+	virtualMachineScaleSetRollingUpgradesClientGetLatestResponse, err := virtualMachineScaleSetRollingUpgradesClient.GetLatest(ctx,
 		"<resource-group-name>",
 		"<vm-scale-set-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineScaleSetRollingUpgradesClientGetLatestResponse
 }

@@ -22,19 +22,17 @@ func ExampleProximityPlacementGroupsClient_CreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.CreateOrUpdate(ctx,
+	proximityPlacementGroupsClientCreateOrUpdateResponse, err := proximityPlacementGroupsClient.CreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<proximity-placement-group-name>",
 		armcompute.ProximityPlacementGroup{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.ProximityPlacementGroupProperties{
 				ProximityPlacementGroupType: to.Ptr(armcompute.ProximityPlacementGroupTypeStandard),
 			},
@@ -42,10 +40,9 @@ func ExampleProximityPlacementGroupsClient_CreateOrUpdate() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = proximityPlacementGroupsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/PatchAProximityPlacementGroup.json
@@ -53,15 +50,13 @@ func ExampleProximityPlacementGroupsClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Update(ctx,
+	proximityPlacementGroupsClientUpdateResponse, err := proximityPlacementGroupsClient.Update(ctx,
 		"<resource-group-name>",
 		"<proximity-placement-group-name>",
 		armcompute.ProximityPlacementGroupUpdate{
@@ -72,10 +67,9 @@ func ExampleProximityPlacementGroupsClient_Update() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = proximityPlacementGroupsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DeleteAProximityPlacementGroup.json
@@ -83,21 +77,18 @@ func ExampleProximityPlacementGroupsClient_Delete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	_, err = client.Delete(ctx,
+	_, err = proximityPlacementGroupsClient.Delete(ctx,
 		"<resource-group-name>",
 		"<proximity-placement-group-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 }
 
@@ -106,24 +97,21 @@ func ExampleProximityPlacementGroupsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	proximityPlacementGroupsClientGetResponse, err := proximityPlacementGroupsClient.Get(ctx,
 		"<resource-group-name>",
 		"<proximity-placement-group-name>",
 		&armcompute.ProximityPlacementGroupsClientGetOptions{IncludeColocationStatus: nil})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = proximityPlacementGroupsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/ListProximityPlacementGroupsInASubscription.json
@@ -131,20 +119,17 @@ func ExampleProximityPlacementGroupsClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListBySubscriptionPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	proximityPlacementGroupsClientNewListBySubscriptionPager := proximityPlacementGroupsClient.NewListBySubscriptionPager(nil)
+	for proximityPlacementGroupsClientNewListBySubscriptionPager.More() {
+		nextResult, err := proximityPlacementGroupsClientNewListBySubscriptionPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -158,21 +143,18 @@ func ExampleProximityPlacementGroupsClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
+	proximityPlacementGroupsClient, err := armcompute.NewProximityPlacementGroupsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	proximityPlacementGroupsClientNewListByResourceGroupPager := proximityPlacementGroupsClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for proximityPlacementGroupsClientNewListByResourceGroupPager.More() {
+		nextResult, err := proximityPlacementGroupsClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

@@ -25,9 +25,9 @@ import (
 // CloudServicesClient contains the methods for the CloudServices group.
 // Don't use this type directly, use NewCloudServicesClient() instead.
 type CloudServicesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCloudServicesClient creates a new instance of CloudServicesClient with the specified values.
@@ -49,8 +49,8 @@ func NewCloudServicesClient(subscriptionID string, credential azcore.TokenCreden
 	}
 	client := &CloudServicesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -88,7 +88,7 @@ func (client *CloudServicesClient) createOrUpdate(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -152,7 +152,7 @@ func (client *CloudServicesClient) deleteOperation(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -213,7 +213,7 @@ func (client *CloudServicesClient) deleteInstances(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteInstancesCreateRequest creates the DeleteInstances request.
@@ -361,7 +361,7 @@ func (client *CloudServicesClient) getInstanceViewHandleResponse(resp *http.Resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - Name of the resource group.
 // options - CloudServicesClientListOptions contains the optional parameters for the CloudServicesClient.List method.
-func (client *CloudServicesClient) NewListPager(resourceGroupName string, options *CloudServicesClientListOptions) *runtime.Pager[CloudServicesClientListResponse] {
+func (client *CloudServicesClient) NewListPager(resourceGroupName string, options *CloudServicesClientListOptions) (*runtime.Pager[CloudServicesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServicesClientListResponse]{
 		More: func(page CloudServicesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -425,7 +425,7 @@ func (client *CloudServicesClient) listHandleResponse(resp *http.Response) (Clou
 // is null to fetch all the Cloud Services.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CloudServicesClientListAllOptions contains the optional parameters for the CloudServicesClient.ListAll method.
-func (client *CloudServicesClient) NewListAllPager(options *CloudServicesClientListAllOptions) *runtime.Pager[CloudServicesClientListAllResponse] {
+func (client *CloudServicesClient) NewListAllPager(options *CloudServicesClientListAllOptions) (*runtime.Pager[CloudServicesClientListAllResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServicesClientListAllResponse]{
 		More: func(page CloudServicesClientListAllResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -513,7 +513,7 @@ func (client *CloudServicesClient) powerOff(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // powerOffCreateRequest creates the PowerOff request.
@@ -578,7 +578,7 @@ func (client *CloudServicesClient) rebuild(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // rebuildCreateRequest creates the Rebuild request.
@@ -642,7 +642,7 @@ func (client *CloudServicesClient) reimage(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageCreateRequest creates the Reimage request.
@@ -706,7 +706,7 @@ func (client *CloudServicesClient) restart(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -770,7 +770,7 @@ func (client *CloudServicesClient) start(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -831,7 +831,7 @@ func (client *CloudServicesClient) update(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -862,3 +862,4 @@ func (client *CloudServicesClient) updateCreateRequest(ctx context.Context, reso
 	}
 	return req, nil
 }
+

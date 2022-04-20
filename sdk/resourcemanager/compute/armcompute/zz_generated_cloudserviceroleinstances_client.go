@@ -25,9 +25,9 @@ import (
 // CloudServiceRoleInstancesClient contains the methods for the CloudServiceRoleInstances group.
 // Don't use this type directly, use NewCloudServiceRoleInstancesClient() instead.
 type CloudServiceRoleInstancesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCloudServiceRoleInstancesClient creates a new instance of CloudServiceRoleInstancesClient with the specified values.
@@ -49,8 +49,8 @@ func NewCloudServiceRoleInstancesClient(subscriptionID string, credential azcore
 	}
 	client := &CloudServiceRoleInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -86,7 +86,7 @@ func (client *CloudServiceRoleInstancesClient) deleteOperation(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -296,7 +296,7 @@ func (client *CloudServiceRoleInstancesClient) getRemoteDesktopFileCreateRequest
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CloudServiceRoleInstancesClientListOptions contains the optional parameters for the CloudServiceRoleInstancesClient.List
 // method.
-func (client *CloudServiceRoleInstancesClient) NewListPager(resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientListOptions) *runtime.Pager[CloudServiceRoleInstancesClientListResponse] {
+func (client *CloudServiceRoleInstancesClient) NewListPager(resourceGroupName string, cloudServiceName string, options *CloudServiceRoleInstancesClientListOptions) (*runtime.Pager[CloudServiceRoleInstancesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServiceRoleInstancesClientListResponse]{
 		More: func(page CloudServiceRoleInstancesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -397,7 +397,7 @@ func (client *CloudServiceRoleInstancesClient) rebuild(ctx context.Context, role
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // rebuildCreateRequest creates the Rebuild request.
@@ -463,7 +463,7 @@ func (client *CloudServiceRoleInstancesClient) reimage(ctx context.Context, role
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageCreateRequest creates the Reimage request.
@@ -527,7 +527,7 @@ func (client *CloudServiceRoleInstancesClient) restart(ctx context.Context, role
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -559,3 +559,4 @@ func (client *CloudServiceRoleInstancesClient) restartCreateRequest(ctx context.
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
+

@@ -26,9 +26,9 @@ import (
 // CloudServicesUpdateDomainClient contains the methods for the CloudServicesUpdateDomain group.
 // Don't use this type directly, use NewCloudServicesUpdateDomainClient() instead.
 type CloudServicesUpdateDomainClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCloudServicesUpdateDomainClient creates a new instance of CloudServicesUpdateDomainClient with the specified values.
@@ -50,8 +50,8 @@ func NewCloudServicesUpdateDomainClient(subscriptionID string, credential azcore
 	}
 	client := &CloudServicesUpdateDomainClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -122,7 +122,7 @@ func (client *CloudServicesUpdateDomainClient) getUpdateDomainHandleResponse(res
 // cloudServiceName - Name of the cloud service.
 // options - CloudServicesUpdateDomainClientListUpdateDomainsOptions contains the optional parameters for the CloudServicesUpdateDomainClient.ListUpdateDomains
 // method.
-func (client *CloudServicesUpdateDomainClient) NewListUpdateDomainsPager(resourceGroupName string, cloudServiceName string, options *CloudServicesUpdateDomainClientListUpdateDomainsOptions) *runtime.Pager[CloudServicesUpdateDomainClientListUpdateDomainsResponse] {
+func (client *CloudServicesUpdateDomainClient) NewListUpdateDomainsPager(resourceGroupName string, cloudServiceName string, options *CloudServicesUpdateDomainClientListUpdateDomainsOptions) (*runtime.Pager[CloudServicesUpdateDomainClientListUpdateDomainsResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServicesUpdateDomainClientListUpdateDomainsResponse]{
 		More: func(page CloudServicesUpdateDomainClientListUpdateDomainsResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -219,7 +219,7 @@ func (client *CloudServicesUpdateDomainClient) walkUpdateDomain(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // walkUpdateDomainCreateRequest creates the WalkUpdateDomain request.
@@ -251,3 +251,4 @@ func (client *CloudServicesUpdateDomainClient) walkUpdateDomainCreateRequest(ctx
 	}
 	return req, nil
 }
+

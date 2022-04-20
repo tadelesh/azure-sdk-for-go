@@ -25,9 +25,9 @@ import (
 // VirtualMachineExtensionsClient contains the methods for the VirtualMachineExtensions group.
 // Don't use this type directly, use NewVirtualMachineExtensionsClient() instead.
 type VirtualMachineExtensionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineExtensionsClient creates a new instance of VirtualMachineExtensionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewVirtualMachineExtensionsClient(subscriptionID string, credential azcore.
 	}
 	client := &VirtualMachineExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *VirtualMachineExtensionsClient) createOrUpdate(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -155,7 +155,7 @@ func (client *VirtualMachineExtensionsClient) deleteOperation(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -345,7 +345,7 @@ func (client *VirtualMachineExtensionsClient) update(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -377,3 +377,4 @@ func (client *VirtualMachineExtensionsClient) updateCreateRequest(ctx context.Co
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extensionParameters)
 }
+

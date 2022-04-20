@@ -25,9 +25,9 @@ import (
 // SharedGalleriesClient contains the methods for the SharedGalleries group.
 // Don't use this type directly, use NewSharedGalleriesClient() instead.
 type SharedGalleriesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewSharedGalleriesClient creates a new instance of SharedGalleriesClient with the specified values.
@@ -49,8 +49,8 @@ func NewSharedGalleriesClient(subscriptionID string, credential azcore.TokenCred
 	}
 	client := &SharedGalleriesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -114,7 +114,7 @@ func (client *SharedGalleriesClient) getHandleResponse(resp *http.Response) (Sha
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - Resource location.
 // options - SharedGalleriesClientListOptions contains the optional parameters for the SharedGalleriesClient.List method.
-func (client *SharedGalleriesClient) NewListPager(location string, options *SharedGalleriesClientListOptions) *runtime.Pager[SharedGalleriesClientListResponse] {
+func (client *SharedGalleriesClient) NewListPager(location string, options *SharedGalleriesClientListOptions) (*runtime.Pager[SharedGalleriesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[SharedGalleriesClientListResponse]{
 		More: func(page SharedGalleriesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -175,3 +175,4 @@ func (client *SharedGalleriesClient) listHandleResponse(resp *http.Response) (Sh
 	}
 	return result, nil
 }
+

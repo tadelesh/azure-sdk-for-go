@@ -25,9 +25,9 @@ import (
 // DiskEncryptionSetsClient contains the methods for the DiskEncryptionSets group.
 // Don't use this type directly, use NewDiskEncryptionSetsClient() instead.
 type DiskEncryptionSetsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDiskEncryptionSetsClient creates a new instance of DiskEncryptionSetsClient with the specified values.
@@ -49,8 +49,8 @@ func NewDiskEncryptionSetsClient(subscriptionID string, credential azcore.TokenC
 	}
 	client := &DiskEncryptionSetsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *DiskEncryptionSetsClient) createOrUpdate(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -153,7 +153,7 @@ func (client *DiskEncryptionSetsClient) deleteOperation(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -242,7 +242,7 @@ func (client *DiskEncryptionSetsClient) getHandleResponse(resp *http.Response) (
 // NewListPager - Lists all the disk encryption sets under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DiskEncryptionSetsClientListOptions contains the optional parameters for the DiskEncryptionSetsClient.List method.
-func (client *DiskEncryptionSetsClient) NewListPager(options *DiskEncryptionSetsClientListOptions) *runtime.Pager[DiskEncryptionSetsClientListResponse] {
+func (client *DiskEncryptionSetsClient) NewListPager(options *DiskEncryptionSetsClientListOptions) (*runtime.Pager[DiskEncryptionSetsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskEncryptionSetsClientListResponse]{
 		More: func(page DiskEncryptionSetsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -305,7 +305,7 @@ func (client *DiskEncryptionSetsClient) listHandleResponse(resp *http.Response) 
 // name length is 80 characters.
 // options - DiskEncryptionSetsClientListAssociatedResourcesOptions contains the optional parameters for the DiskEncryptionSetsClient.ListAssociatedResources
 // method.
-func (client *DiskEncryptionSetsClient) NewListAssociatedResourcesPager(resourceGroupName string, diskEncryptionSetName string, options *DiskEncryptionSetsClientListAssociatedResourcesOptions) *runtime.Pager[DiskEncryptionSetsClientListAssociatedResourcesResponse] {
+func (client *DiskEncryptionSetsClient) NewListAssociatedResourcesPager(resourceGroupName string, diskEncryptionSetName string, options *DiskEncryptionSetsClientListAssociatedResourcesOptions) (*runtime.Pager[DiskEncryptionSetsClientListAssociatedResourcesResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskEncryptionSetsClientListAssociatedResourcesResponse]{
 		More: func(page DiskEncryptionSetsClientListAssociatedResourcesResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -373,7 +373,7 @@ func (client *DiskEncryptionSetsClient) listAssociatedResourcesHandleResponse(re
 // resourceGroupName - The name of the resource group.
 // options - DiskEncryptionSetsClientListByResourceGroupOptions contains the optional parameters for the DiskEncryptionSetsClient.ListByResourceGroup
 // method.
-func (client *DiskEncryptionSetsClient) NewListByResourceGroupPager(resourceGroupName string, options *DiskEncryptionSetsClientListByResourceGroupOptions) *runtime.Pager[DiskEncryptionSetsClientListByResourceGroupResponse] {
+func (client *DiskEncryptionSetsClient) NewListByResourceGroupPager(resourceGroupName string, options *DiskEncryptionSetsClientListByResourceGroupOptions) (*runtime.Pager[DiskEncryptionSetsClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskEncryptionSetsClientListByResourceGroupResponse]{
 		More: func(page DiskEncryptionSetsClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -467,7 +467,7 @@ func (client *DiskEncryptionSetsClient) update(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -495,3 +495,4 @@ func (client *DiskEncryptionSetsClient) updateCreateRequest(ctx context.Context,
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, diskEncryptionSet)
 }
+

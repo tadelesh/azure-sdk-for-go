@@ -25,9 +25,9 @@ import (
 // CapacityReservationsClient contains the methods for the CapacityReservations group.
 // Don't use this type directly, use NewCapacityReservationsClient() instead.
 type CapacityReservationsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCapacityReservationsClient creates a new instance of CapacityReservationsClient with the specified values.
@@ -49,8 +49,8 @@ func NewCapacityReservationsClient(subscriptionID string, credential azcore.Toke
 	}
 	client := &CapacityReservationsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -93,7 +93,7 @@ func (client *CapacityReservationsClient) createOrUpdate(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -163,7 +163,7 @@ func (client *CapacityReservationsClient) deleteOperation(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -267,7 +267,7 @@ func (client *CapacityReservationsClient) getHandleResponse(resp *http.Response)
 // capacityReservationGroupName - The name of the capacity reservation group.
 // options - CapacityReservationsClientListByCapacityReservationGroupOptions contains the optional parameters for the CapacityReservationsClient.ListByCapacityReservationGroup
 // method.
-func (client *CapacityReservationsClient) NewListByCapacityReservationGroupPager(resourceGroupName string, capacityReservationGroupName string, options *CapacityReservationsClientListByCapacityReservationGroupOptions) *runtime.Pager[CapacityReservationsClientListByCapacityReservationGroupResponse] {
+func (client *CapacityReservationsClient) NewListByCapacityReservationGroupPager(resourceGroupName string, capacityReservationGroupName string, options *CapacityReservationsClientListByCapacityReservationGroupOptions) (*runtime.Pager[CapacityReservationsClientListByCapacityReservationGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CapacityReservationsClientListByCapacityReservationGroupResponse]{
 		More: func(page CapacityReservationsClientListByCapacityReservationGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -364,7 +364,7 @@ func (client *CapacityReservationsClient) update(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -396,3 +396,4 @@ func (client *CapacityReservationsClient) updateCreateRequest(ctx context.Contex
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

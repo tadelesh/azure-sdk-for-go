@@ -22,15 +22,13 @@ func ExampleVirtualMachineImagesEdgeZoneClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
+	virtualMachineImagesEdgeZoneClient, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	virtualMachineImagesEdgeZoneClientGetResponse, err := virtualMachineImagesEdgeZoneClient.Get(ctx,
 		"<location>",
 		"<edge-zone>",
 		"<publisher-name>",
@@ -40,10 +38,9 @@ func ExampleVirtualMachineImagesEdgeZoneClient_Get() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesEdgeZoneClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImagesEdgeZone_List_MaximumSet_Gen.json
@@ -51,15 +48,13 @@ func ExampleVirtualMachineImagesEdgeZoneClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
+	virtualMachineImagesEdgeZoneClient, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.List(ctx,
+	virtualMachineImagesEdgeZoneClientListResponse, err := virtualMachineImagesEdgeZoneClient.List(ctx,
 		"<location>",
 		"<edge-zone>",
 		"<publisher-name>",
@@ -71,10 +66,9 @@ func ExampleVirtualMachineImagesEdgeZoneClient_List() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesEdgeZoneClientListResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImagesEdgeZone_ListOffers_MaximumSet_Gen.json
@@ -82,25 +76,22 @@ func ExampleVirtualMachineImagesEdgeZoneClient_ListOffers() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
+	virtualMachineImagesEdgeZoneClient, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListOffers(ctx,
+	virtualMachineImagesEdgeZoneClientListOffersResponse, err := virtualMachineImagesEdgeZoneClient.ListOffers(ctx,
 		"<location>",
 		"<edge-zone>",
 		"<publisher-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesEdgeZoneClientListOffersResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImagesEdgeZone_ListPublishers_MaximumSet_Gen.json
@@ -108,22 +99,19 @@ func ExampleVirtualMachineImagesEdgeZoneClient_ListPublishers() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
+	virtualMachineImagesEdgeZoneClient, err := armcompute.NewVirtualMachineImagesEdgeZoneClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListPublishers(ctx,
+	virtualMachineImagesEdgeZoneClientListPublishersResponse, err := virtualMachineImagesEdgeZoneClient.ListPublishers(ctx,
 		"<location>",
 		"<edge-zone>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesEdgeZoneClientListPublishersResponse
 }

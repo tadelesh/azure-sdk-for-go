@@ -23,7 +23,7 @@ import (
 // Don't use this type directly, use NewOperationsClient() instead.
 type OperationsClient struct {
 	host string
-	pl   runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewOperationsClient creates a new instance of OperationsClient with the specified values.
@@ -43,7 +43,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 	}
 	client := &OperationsClient{
 		host: ep,
-		pl:   pl,
+pl: pl,
 	}
 	return client, nil
 }
@@ -51,7 +51,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 // NewListPager - Gets a list of compute operations.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
-func (client *OperationsClient) NewListPager(options *OperationsClientListOptions) *runtime.Pager[OperationsClientListResponse] {
+func (client *OperationsClient) NewListPager(options *OperationsClientListOptions) (*runtime.Pager[OperationsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[OperationsClientListResponse]{
 		More: func(page OperationsClientListResponse) bool {
 			return false
@@ -95,3 +95,4 @@ func (client *OperationsClient) listHandleResponse(resp *http.Response) (Operati
 	}
 	return result, nil
 }
+

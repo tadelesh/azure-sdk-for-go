@@ -26,9 +26,9 @@ import (
 // VirtualMachineImagesClient contains the methods for the VirtualMachineImages group.
 // Don't use this type directly, use NewVirtualMachineImagesClient() instead.
 type VirtualMachineImagesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineImagesClient creates a new instance of VirtualMachineImagesClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachineImagesClient(subscriptionID string, credential azcore.Toke
 	}
 	client := &VirtualMachineImagesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -369,3 +369,4 @@ func (client *VirtualMachineImagesClient) listSKUsHandleResponse(resp *http.Resp
 	}
 	return result, nil
 }
+

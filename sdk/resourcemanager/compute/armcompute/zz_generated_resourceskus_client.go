@@ -25,9 +25,9 @@ import (
 // ResourceSKUsClient contains the methods for the ResourceSKUs group.
 // Don't use this type directly, use NewResourceSKUsClient() instead.
 type ResourceSKUsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewResourceSKUsClient creates a new instance of ResourceSKUsClient with the specified values.
@@ -49,8 +49,8 @@ func NewResourceSKUsClient(subscriptionID string, credential azcore.TokenCredent
 	}
 	client := &ResourceSKUsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -58,7 +58,7 @@ func NewResourceSKUsClient(subscriptionID string, credential azcore.TokenCredent
 // NewListPager - Gets the list of Microsoft.Compute SKUs available for your Subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ResourceSKUsClientListOptions contains the optional parameters for the ResourceSKUsClient.List method.
-func (client *ResourceSKUsClient) NewListPager(options *ResourceSKUsClientListOptions) *runtime.Pager[ResourceSKUsClientListResponse] {
+func (client *ResourceSKUsClient) NewListPager(options *ResourceSKUsClientListOptions) (*runtime.Pager[ResourceSKUsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ResourceSKUsClientListResponse]{
 		More: func(page ResourceSKUsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -118,3 +118,4 @@ func (client *ResourceSKUsClient) listHandleResponse(resp *http.Response) (Resou
 	}
 	return result, nil
 }
+

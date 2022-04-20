@@ -24,25 +24,23 @@ func ExampleDiskEncryptionSetsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	diskEncryptionSetsClientCreateOrUpdateResponsePoller, err := diskEncryptionSetsClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<disk-encryption-set-name>",
 		armcompute.DiskEncryptionSet{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Identity: &armcompute.EncryptionSetIdentity{
 				Type: to.Ptr(armcompute.DiskEncryptionSetIdentityTypeSystemAssigned),
 			},
 			Properties: &armcompute.EncryptionSetProperties{
 				ActiveKey: &armcompute.KeyForDiskEncryptionSet{
-					KeyURL: to.Ptr("<key-url>"),
+					KeyURL: to.Ptr("<fully-versioned-key-url-pointing-to-a-key-in-key-vault.-version-segment-of-the-url-is-required-regardless-of-rotation-to-latest-key-version-enabled-value.>"),
 				},
 				EncryptionType: to.Ptr(armcompute.DiskEncryptionSetTypeEncryptionAtRestWithCustomerKey),
 			},
@@ -50,15 +48,13 @@ func ExampleDiskEncryptionSetsClient_BeginCreateOrUpdate() {
 		&armcompute.DiskEncryptionSetsClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	diskEncryptionSetsClientCreateOrUpdateResponse, err := diskEncryptionSetsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskEncryptionSetsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/UpdateADiskEncryptionSetWithRotationToLatestKeyVersionEnabled.json
@@ -66,15 +62,13 @@ func ExampleDiskEncryptionSetsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	diskEncryptionSetsClientUpdateResponsePoller, err := diskEncryptionSetsClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<disk-encryption-set-name>",
 		armcompute.DiskEncryptionSetUpdate{
@@ -83,7 +77,7 @@ func ExampleDiskEncryptionSetsClient_BeginUpdate() {
 			},
 			Properties: &armcompute.DiskEncryptionSetUpdateProperties{
 				ActiveKey: &armcompute.KeyForDiskEncryptionSet{
-					KeyURL: to.Ptr("<key-url>"),
+					KeyURL: to.Ptr("<fully-versioned-key-url-pointing-to-a-key-in-key-vault.-version-segment-of-the-url-is-required-regardless-of-rotation-to-latest-key-version-enabled-value.>"),
 				},
 				EncryptionType:                    to.Ptr(armcompute.DiskEncryptionSetTypeEncryptionAtRestWithCustomerKey),
 				RotationToLatestKeyVersionEnabled: to.Ptr(true),
@@ -92,15 +86,13 @@ func ExampleDiskEncryptionSetsClient_BeginUpdate() {
 		&armcompute.DiskEncryptionSetsClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	diskEncryptionSetsClientUpdateResponse, err := diskEncryptionSetsClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskEncryptionSetsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/GetInformationAboutADiskEncryptionSetWithAutoKeyRotationError.json
@@ -108,24 +100,21 @@ func ExampleDiskEncryptionSetsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	diskEncryptionSetsClientGetResponse, err := diskEncryptionSetsClient.Get(ctx,
 		"<resource-group-name>",
 		"<disk-encryption-set-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskEncryptionSetsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/DeleteADiskEncryptionSet.json
@@ -133,26 +122,22 @@ func ExampleDiskEncryptionSetsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	diskEncryptionSetsClientDeleteResponsePoller, err := diskEncryptionSetsClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<disk-encryption-set-name>",
 		&armcompute.DiskEncryptionSetsClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = diskEncryptionSetsClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -161,21 +146,18 @@ func ExampleDiskEncryptionSetsClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	diskEncryptionSetsClientNewListByResourceGroupPager := diskEncryptionSetsClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for diskEncryptionSetsClientNewListByResourceGroupPager.More() {
+		nextResult, err := diskEncryptionSetsClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -189,20 +171,17 @@ func ExampleDiskEncryptionSetsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	diskEncryptionSetsClientNewListPager := diskEncryptionSetsClient.NewListPager(nil)
+	for diskEncryptionSetsClientNewListPager.More() {
+		nextResult, err := diskEncryptionSetsClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -216,22 +195,19 @@ func ExampleDiskEncryptionSetsClient_NewListAssociatedResourcesPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
+	diskEncryptionSetsClient, err := armcompute.NewDiskEncryptionSetsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListAssociatedResourcesPager("<resource-group-name>",
+	diskEncryptionSetsClientNewListAssociatedResourcesPager := diskEncryptionSetsClient.NewListAssociatedResourcesPager("<resource-group-name>",
 		"<disk-encryption-set-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for diskEncryptionSetsClientNewListAssociatedResourcesPager.More() {
+		nextResult, err := diskEncryptionSetsClientNewListAssociatedResourcesPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

@@ -25,9 +25,9 @@ import (
 // RestorePointsClient contains the methods for the RestorePoints group.
 // Don't use this type directly, use NewRestorePointsClient() instead.
 type RestorePointsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewRestorePointsClient creates a new instance of RestorePointsClient with the specified values.
@@ -49,8 +49,8 @@ func NewRestorePointsClient(subscriptionID string, credential azcore.TokenCreden
 	}
 	client := &RestorePointsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *RestorePointsClient) create(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createCreateRequest creates the Create request.
@@ -155,7 +155,7 @@ func (client *RestorePointsClient) deleteOperation(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -250,3 +250,4 @@ func (client *RestorePointsClient) getHandleResponse(resp *http.Response) (Resto
 	}
 	return result, nil
 }
+

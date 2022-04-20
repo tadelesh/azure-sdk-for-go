@@ -21,23 +21,20 @@ func ExampleCommunityGalleryImagesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCommunityGalleryImagesClient("<subscription-id>", cred, nil)
+	communityGalleryImagesClient, err := armcompute.NewCommunityGalleryImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	communityGalleryImagesClientGetResponse, err := communityGalleryImagesClient.Get(ctx,
 		"<location>",
 		"<public-gallery-name>",
 		"<gallery-image-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = communityGalleryImagesClientGetResponse
 }

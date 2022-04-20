@@ -25,9 +25,9 @@ import (
 // CommunityGalleryImagesClient contains the methods for the CommunityGalleryImages group.
 // Don't use this type directly, use NewCommunityGalleryImagesClient() instead.
 type CommunityGalleryImagesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCommunityGalleryImagesClient creates a new instance of CommunityGalleryImagesClient with the specified values.
@@ -49,8 +49,8 @@ func NewCommunityGalleryImagesClient(subscriptionID string, credential azcore.To
 	}
 	client := &CommunityGalleryImagesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -115,3 +115,4 @@ func (client *CommunityGalleryImagesClient) getHandleResponse(resp *http.Respons
 	}
 	return result, nil
 }
+

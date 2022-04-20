@@ -24,21 +24,19 @@ func ExampleGalleryApplicationVersionsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
+	galleryApplicationVersionsClient, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	galleryApplicationVersionsClientCreateOrUpdateResponsePoller, err := galleryApplicationVersionsClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		"<gallery-application-name>",
 		"<gallery-application-version-name>",
 		armcompute.GalleryApplicationVersion{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.GalleryApplicationVersionProperties{
 				PublishingProfile: &armcompute.GalleryApplicationVersionPublishingProfile{
 					EndOfLifeDate:      to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-07-01T07:00:00Z"); return t }()),
@@ -46,16 +44,16 @@ func ExampleGalleryApplicationVersionsClient_BeginCreateOrUpdate() {
 					StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 					TargetRegions: []*armcompute.TargetRegion{
 						{
-							Name:                 to.Ptr("<name>"),
+							Name:                 to.Ptr("<the-name-of-the-region.>"),
 							RegionalReplicaCount: to.Ptr[int32](1),
 							StorageAccountType:   to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 						}},
 					ManageActions: &armcompute.UserArtifactManage{
-						Install: to.Ptr("<install>"),
-						Remove:  to.Ptr("<remove>"),
+						Install: to.Ptr("<required.-the-path-and-arguments-to-install-the-gallery-application.-this-is-limited-to-4096-characters.>"),
+						Remove:  to.Ptr("<required.-the-path-and-arguments-to-remove-the-gallery-application.-this-is-limited-to-4096-characters.>"),
 					},
 					Source: &armcompute.UserArtifactSource{
-						MediaLink: to.Ptr("<media-link>"),
+						MediaLink: to.Ptr("<required.-the-media-link-of-the-artifact,-must-be-a-readable-storage-page-blob.>"),
 					},
 				},
 			},
@@ -63,15 +61,13 @@ func ExampleGalleryApplicationVersionsClient_BeginCreateOrUpdate() {
 		&armcompute.GalleryApplicationVersionsClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	galleryApplicationVersionsClientCreateOrUpdateResponse, err := galleryApplicationVersionsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleryApplicationVersionsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/UpdateASimpleGalleryApplicationVersion.json
@@ -79,15 +75,13 @@ func ExampleGalleryApplicationVersionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
+	galleryApplicationVersionsClient, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	galleryApplicationVersionsClientUpdateResponsePoller, err := galleryApplicationVersionsClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		"<gallery-application-name>",
@@ -100,16 +94,16 @@ func ExampleGalleryApplicationVersionsClient_BeginUpdate() {
 					StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 					TargetRegions: []*armcompute.TargetRegion{
 						{
-							Name:                 to.Ptr("<name>"),
+							Name:                 to.Ptr("<the-name-of-the-region.>"),
 							RegionalReplicaCount: to.Ptr[int32](1),
 							StorageAccountType:   to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 						}},
 					ManageActions: &armcompute.UserArtifactManage{
-						Install: to.Ptr("<install>"),
-						Remove:  to.Ptr("<remove>"),
+						Install: to.Ptr("<required.-the-path-and-arguments-to-install-the-gallery-application.-this-is-limited-to-4096-characters.>"),
+						Remove:  to.Ptr("<required.-the-path-and-arguments-to-remove-the-gallery-application.-this-is-limited-to-4096-characters.>"),
 					},
 					Source: &armcompute.UserArtifactSource{
-						MediaLink: to.Ptr("<media-link>"),
+						MediaLink: to.Ptr("<required.-the-media-link-of-the-artifact,-must-be-a-readable-storage-page-blob.>"),
 					},
 				},
 			},
@@ -117,15 +111,13 @@ func ExampleGalleryApplicationVersionsClient_BeginUpdate() {
 		&armcompute.GalleryApplicationVersionsClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	galleryApplicationVersionsClientUpdateResponse, err := galleryApplicationVersionsClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleryApplicationVersionsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/GetAGalleryApplicationVersionWithReplicationStatus.json
@@ -133,15 +125,13 @@ func ExampleGalleryApplicationVersionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
+	galleryApplicationVersionsClient, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	galleryApplicationVersionsClientGetResponse, err := galleryApplicationVersionsClient.Get(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		"<gallery-application-name>",
@@ -149,10 +139,9 @@ func ExampleGalleryApplicationVersionsClient_Get() {
 		&armcompute.GalleryApplicationVersionsClientGetOptions{Expand: to.Ptr(armcompute.ReplicationStatusTypesReplicationStatus)})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleryApplicationVersionsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/DeleteAGalleryApplicationVersion.json
@@ -160,15 +149,13 @@ func ExampleGalleryApplicationVersionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
+	galleryApplicationVersionsClient, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	galleryApplicationVersionsClientDeleteResponsePoller, err := galleryApplicationVersionsClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		"<gallery-application-name>",
@@ -176,12 +163,10 @@ func ExampleGalleryApplicationVersionsClient_BeginDelete() {
 		&armcompute.GalleryApplicationVersionsClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = galleryApplicationVersionsClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -190,23 +175,20 @@ func ExampleGalleryApplicationVersionsClient_NewListByGalleryApplicationPager() 
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
+	galleryApplicationVersionsClient, err := armcompute.NewGalleryApplicationVersionsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByGalleryApplicationPager("<resource-group-name>",
+	galleryApplicationVersionsClientNewListByGalleryApplicationPager := galleryApplicationVersionsClient.NewListByGalleryApplicationPager("<resource-group-name>",
 		"<gallery-name>",
 		"<gallery-application-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for galleryApplicationVersionsClientNewListByGalleryApplicationPager.More() {
+		nextResult, err := galleryApplicationVersionsClientNewListByGalleryApplicationPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

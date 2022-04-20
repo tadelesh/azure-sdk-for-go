@@ -26,9 +26,9 @@ import (
 // VirtualMachineScaleSetVMsClient contains the methods for the VirtualMachineScaleSetVMs group.
 // Don't use this type directly, use NewVirtualMachineScaleSetVMsClient() instead.
 type VirtualMachineScaleSetVMsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineScaleSetVMsClient creates a new instance of VirtualMachineScaleSetVMsClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachineScaleSetVMsClient(subscriptionID string, credential azcore
 	}
 	client := &VirtualMachineScaleSetVMsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -93,7 +93,7 @@ func (client *VirtualMachineScaleSetVMsClient) deallocate(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deallocateCreateRequest creates the Deallocate request.
@@ -159,7 +159,7 @@ func (client *VirtualMachineScaleSetVMsClient) deleteOperation(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -326,7 +326,7 @@ func (client *VirtualMachineScaleSetVMsClient) getInstanceViewHandleResponse(res
 // virtualMachineScaleSetName - The name of the VM scale set.
 // options - VirtualMachineScaleSetVMsClientListOptions contains the optional parameters for the VirtualMachineScaleSetVMsClient.List
 // method.
-func (client *VirtualMachineScaleSetVMsClient) NewListPager(resourceGroupName string, virtualMachineScaleSetName string, options *VirtualMachineScaleSetVMsClientListOptions) *runtime.Pager[VirtualMachineScaleSetVMsClientListResponse] {
+func (client *VirtualMachineScaleSetVMsClient) NewListPager(resourceGroupName string, virtualMachineScaleSetName string, options *VirtualMachineScaleSetVMsClientListOptions) (*runtime.Pager[VirtualMachineScaleSetVMsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetVMsClientListResponse]{
 		More: func(page VirtualMachineScaleSetVMsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -431,7 +431,7 @@ func (client *VirtualMachineScaleSetVMsClient) performMaintenance(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // performMaintenanceCreateRequest creates the PerformMaintenance request.
@@ -501,7 +501,7 @@ func (client *VirtualMachineScaleSetVMsClient) powerOff(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // powerOffCreateRequest creates the PowerOff request.
@@ -572,7 +572,7 @@ func (client *VirtualMachineScaleSetVMsClient) redeploy(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // redeployCreateRequest creates the Redeploy request.
@@ -638,7 +638,7 @@ func (client *VirtualMachineScaleSetVMsClient) reimage(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageCreateRequest creates the Reimage request.
@@ -709,7 +709,7 @@ func (client *VirtualMachineScaleSetVMsClient) reimageAll(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageAllCreateRequest creates the ReimageAll request.
@@ -775,7 +775,7 @@ func (client *VirtualMachineScaleSetVMsClient) restart(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -909,7 +909,7 @@ func (client *VirtualMachineScaleSetVMsClient) runCommand(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // runCommandCreateRequest creates the RunCommand request.
@@ -1027,7 +1027,7 @@ func (client *VirtualMachineScaleSetVMsClient) start(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -1094,7 +1094,7 @@ func (client *VirtualMachineScaleSetVMsClient) update(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -1126,3 +1126,4 @@ func (client *VirtualMachineScaleSetVMsClient) updateCreateRequest(ctx context.C
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

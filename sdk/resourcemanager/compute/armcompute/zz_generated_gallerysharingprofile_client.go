@@ -25,9 +25,9 @@ import (
 // GallerySharingProfileClient contains the methods for the GallerySharingProfile group.
 // Don't use this type directly, use NewGallerySharingProfileClient() instead.
 type GallerySharingProfileClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewGallerySharingProfileClient creates a new instance of GallerySharingProfileClient with the specified values.
@@ -49,8 +49,8 @@ func NewGallerySharingProfileClient(subscriptionID string, credential azcore.Tok
 	}
 	client := &GallerySharingProfileClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -88,7 +88,7 @@ func (client *GallerySharingProfileClient) update(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -116,3 +116,4 @@ func (client *GallerySharingProfileClient) updateCreateRequest(ctx context.Conte
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, sharingUpdate)
 }
+

@@ -22,15 +22,13 @@ func ExampleVirtualMachineExtensionImagesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
+	virtualMachineExtensionImagesClient, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	virtualMachineExtensionImagesClientGetResponse, err := virtualMachineExtensionImagesClient.Get(ctx,
 		"<location>",
 		"<publisher-name>",
 		"<type-param>",
@@ -38,10 +36,9 @@ func ExampleVirtualMachineExtensionImagesClient_Get() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineExtensionImagesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineExtensionImages_ListTypes_MaximumSet_Gen.json
@@ -49,24 +46,21 @@ func ExampleVirtualMachineExtensionImagesClient_ListTypes() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
+	virtualMachineExtensionImagesClient, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListTypes(ctx,
+	virtualMachineExtensionImagesClientListTypesResponse, err := virtualMachineExtensionImagesClient.ListTypes(ctx,
 		"<location>",
 		"<publisher-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineExtensionImagesClientListTypesResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineExtensionImages_ListVersions_MaximumSet_Gen.json
@@ -74,15 +68,13 @@ func ExampleVirtualMachineExtensionImagesClient_ListVersions() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
+	virtualMachineExtensionImagesClient, err := armcompute.NewVirtualMachineExtensionImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListVersions(ctx,
+	virtualMachineExtensionImagesClientListVersionsResponse, err := virtualMachineExtensionImagesClient.ListVersions(ctx,
 		"<location>",
 		"<publisher-name>",
 		"<type-param>",
@@ -92,8 +84,7 @@ func ExampleVirtualMachineExtensionImagesClient_ListVersions() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineExtensionImagesClientListVersionsResponse
 }

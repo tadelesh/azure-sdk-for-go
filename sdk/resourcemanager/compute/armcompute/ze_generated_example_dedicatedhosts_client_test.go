@@ -24,20 +24,18 @@ func ExampleDedicatedHostsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	dedicatedHostsClientCreateOrUpdateResponsePoller, err := dedicatedHostsClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<host-group-name>",
 		"<host-name>",
 		armcompute.DedicatedHost{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Tags: map[string]*string{
 				"department": to.Ptr("HR"),
 			},
@@ -45,21 +43,19 @@ func ExampleDedicatedHostsClient_BeginCreateOrUpdate() {
 				PlatformFaultDomain: to.Ptr[int32](1),
 			},
 			SKU: &armcompute.SKU{
-				Name: to.Ptr("<name>"),
+				Name: to.Ptr("<the-sku-name.>"),
 			},
 		},
 		&armcompute.DedicatedHostsClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	dedicatedHostsClientCreateOrUpdateResponse, err := dedicatedHostsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = dedicatedHostsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DedicatedHosts_Update_MaximumSet_Gen.json
@@ -67,15 +63,13 @@ func ExampleDedicatedHostsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	dedicatedHostsClientUpdateResponsePoller, err := dedicatedHostsClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<host-group-name>",
 		"<host-name>",
@@ -90,15 +84,15 @@ func ExampleDedicatedHostsClient_BeginUpdate() {
 						AllocatableVMs: []*armcompute.DedicatedHostAllocatableVM{
 							{
 								Count:  to.Ptr[float64](26),
-								VMSize: to.Ptr("<vmsize>"),
+								VMSize: to.Ptr("<vm-size-in-terms-of-which-the-unutilized-capacity-is-represented.>"),
 							}},
 					},
 					Statuses: []*armcompute.InstanceViewStatus{
 						{
-							Code:          to.Ptr("<code>"),
-							DisplayStatus: to.Ptr("<display-status>"),
+							Code:          to.Ptr("<the-status-code.>"),
+							DisplayStatus: to.Ptr("<the-short-localizable-label-for-the-status.>"),
 							Level:         to.Ptr(armcompute.StatusLevelTypesInfo),
-							Message:       to.Ptr("<message>"),
+							Message:       to.Ptr("<the-detailed-status-message,-including-for-alerts-and-error-messages.>"),
 							Time:          to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-11-30T12:58:26.522Z"); return t }()),
 						}},
 				},
@@ -109,15 +103,13 @@ func ExampleDedicatedHostsClient_BeginUpdate() {
 		&armcompute.DedicatedHostsClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	dedicatedHostsClientUpdateResponse, err := dedicatedHostsClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = dedicatedHostsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DedicatedHosts_Delete_MaximumSet_Gen.json
@@ -125,27 +117,23 @@ func ExampleDedicatedHostsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	dedicatedHostsClientDeleteResponsePoller, err := dedicatedHostsClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<host-group-name>",
 		"<host-name>",
 		&armcompute.DedicatedHostsClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = dedicatedHostsClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -154,25 +142,22 @@ func ExampleDedicatedHostsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	dedicatedHostsClientGetResponse, err := dedicatedHostsClient.Get(ctx,
 		"<resource-group-name>",
 		"<host-group-name>",
 		"<host-name>",
 		&armcompute.DedicatedHostsClientGetOptions{Expand: nil})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = dedicatedHostsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/DedicatedHosts_ListByHostGroup_MaximumSet_Gen.json
@@ -180,22 +165,19 @@ func ExampleDedicatedHostsClient_NewListByHostGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByHostGroupPager("<resource-group-name>",
+	dedicatedHostsClientNewListByHostGroupPager := dedicatedHostsClient.NewListByHostGroupPager("<resource-group-name>",
 		"<host-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for dedicatedHostsClientNewListByHostGroupPager.More() {
+		nextResult, err := dedicatedHostsClientNewListByHostGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -209,26 +191,22 @@ func ExampleDedicatedHostsClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
+	dedicatedHostsClient, err := armcompute.NewDedicatedHostsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRestart(ctx,
+	dedicatedHostsClientRestartResponsePoller, err := dedicatedHostsClient.BeginRestart(ctx,
 		"<resource-group-name>",
 		"<host-group-name>",
 		"<host-name>",
 		&armcompute.DedicatedHostsClientBeginRestartOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = dedicatedHostsClientRestartResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }

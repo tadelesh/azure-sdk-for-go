@@ -25,9 +25,9 @@ import (
 // DiskAccessesClient contains the methods for the DiskAccesses group.
 // Don't use this type directly, use NewDiskAccessesClient() instead.
 type DiskAccessesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDiskAccessesClient creates a new instance of DiskAccessesClient with the specified values.
@@ -49,8 +49,8 @@ func NewDiskAccessesClient(subscriptionID string, credential azcore.TokenCredent
 	}
 	client := &DiskAccessesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *DiskAccessesClient) createOrUpdate(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -153,7 +153,7 @@ func (client *DiskAccessesClient) deleteOperation(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *DiskAccessesClient) deleteAPrivateEndpointConnection(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteAPrivateEndpointConnectionCreateRequest creates the DeleteAPrivateEndpointConnection request.
@@ -431,7 +431,7 @@ func (client *DiskAccessesClient) getPrivateLinkResourcesHandleResponse(resp *ht
 // NewListPager - Lists all the disk access resources under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DiskAccessesClientListOptions contains the optional parameters for the DiskAccessesClient.List method.
-func (client *DiskAccessesClient) NewListPager(options *DiskAccessesClientListOptions) *runtime.Pager[DiskAccessesClientListResponse] {
+func (client *DiskAccessesClient) NewListPager(options *DiskAccessesClientListOptions) (*runtime.Pager[DiskAccessesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListResponse]{
 		More: func(page DiskAccessesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -491,7 +491,7 @@ func (client *DiskAccessesClient) listHandleResponse(resp *http.Response) (DiskA
 // resourceGroupName - The name of the resource group.
 // options - DiskAccessesClientListByResourceGroupOptions contains the optional parameters for the DiskAccessesClient.ListByResourceGroup
 // method.
-func (client *DiskAccessesClient) NewListByResourceGroupPager(resourceGroupName string, options *DiskAccessesClientListByResourceGroupOptions) *runtime.Pager[DiskAccessesClientListByResourceGroupResponse] {
+func (client *DiskAccessesClient) NewListByResourceGroupPager(resourceGroupName string, options *DiskAccessesClientListByResourceGroupOptions) (*runtime.Pager[DiskAccessesClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListByResourceGroupResponse]{
 		More: func(page DiskAccessesClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -558,7 +558,7 @@ func (client *DiskAccessesClient) listByResourceGroupHandleResponse(resp *http.R
 // maximum name length is 80 characters.
 // options - DiskAccessesClientListPrivateEndpointConnectionsOptions contains the optional parameters for the DiskAccessesClient.ListPrivateEndpointConnections
 // method.
-func (client *DiskAccessesClient) NewListPrivateEndpointConnectionsPager(resourceGroupName string, diskAccessName string, options *DiskAccessesClientListPrivateEndpointConnectionsOptions) *runtime.Pager[DiskAccessesClientListPrivateEndpointConnectionsResponse] {
+func (client *DiskAccessesClient) NewListPrivateEndpointConnectionsPager(resourceGroupName string, diskAccessName string, options *DiskAccessesClientListPrivateEndpointConnectionsOptions) (*runtime.Pager[DiskAccessesClientListPrivateEndpointConnectionsResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskAccessesClientListPrivateEndpointConnectionsResponse]{
 		More: func(page DiskAccessesClientListPrivateEndpointConnectionsResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -656,7 +656,7 @@ func (client *DiskAccessesClient) update(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -724,7 +724,7 @@ func (client *DiskAccessesClient) updateAPrivateEndpointConnection(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateAPrivateEndpointConnectionCreateRequest creates the UpdateAPrivateEndpointConnection request.
@@ -756,3 +756,4 @@ func (client *DiskAccessesClient) updateAPrivateEndpointConnectionCreateRequest(
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, privateEndpointConnection)
 }
+

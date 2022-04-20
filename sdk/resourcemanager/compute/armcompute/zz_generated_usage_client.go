@@ -25,9 +25,9 @@ import (
 // UsageClient contains the methods for the Usage group.
 // Don't use this type directly, use NewUsageClient() instead.
 type UsageClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewUsageClient creates a new instance of UsageClient with the specified values.
@@ -49,8 +49,8 @@ func NewUsageClient(subscriptionID string, credential azcore.TokenCredential, op
 	}
 	client := &UsageClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -60,7 +60,7 @@ func NewUsageClient(subscriptionID string, credential azcore.TokenCredential, op
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The location for which resource usage is queried.
 // options - UsageClientListOptions contains the optional parameters for the UsageClient.List method.
-func (client *UsageClient) NewListPager(location string, options *UsageClientListOptions) *runtime.Pager[UsageClientListResponse] {
+func (client *UsageClient) NewListPager(location string, options *UsageClientListOptions) (*runtime.Pager[UsageClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[UsageClientListResponse]{
 		More: func(page UsageClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -118,3 +118,4 @@ func (client *UsageClient) listHandleResponse(resp *http.Response) (UsageClientL
 	}
 	return result, nil
 }
+

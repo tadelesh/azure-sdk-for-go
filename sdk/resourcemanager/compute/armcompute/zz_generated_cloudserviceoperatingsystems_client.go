@@ -25,9 +25,9 @@ import (
 // CloudServiceOperatingSystemsClient contains the methods for the CloudServiceOperatingSystems group.
 // Don't use this type directly, use NewCloudServiceOperatingSystemsClient() instead.
 type CloudServiceOperatingSystemsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCloudServiceOperatingSystemsClient creates a new instance of CloudServiceOperatingSystemsClient with the specified values.
@@ -49,8 +49,8 @@ func NewCloudServiceOperatingSystemsClient(subscriptionID string, credential azc
 	}
 	client := &CloudServiceOperatingSystemsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -176,7 +176,7 @@ func (client *CloudServiceOperatingSystemsClient) getOSVersionHandleResponse(res
 // location - Name of the location that the OS families pertain to.
 // options - CloudServiceOperatingSystemsClientListOSFamiliesOptions contains the optional parameters for the CloudServiceOperatingSystemsClient.ListOSFamilies
 // method.
-func (client *CloudServiceOperatingSystemsClient) NewListOSFamiliesPager(location string, options *CloudServiceOperatingSystemsClientListOSFamiliesOptions) *runtime.Pager[CloudServiceOperatingSystemsClientListOSFamiliesResponse] {
+func (client *CloudServiceOperatingSystemsClient) NewListOSFamiliesPager(location string, options *CloudServiceOperatingSystemsClientListOSFamiliesOptions) (*runtime.Pager[CloudServiceOperatingSystemsClientListOSFamiliesResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServiceOperatingSystemsClientListOSFamiliesResponse]{
 		More: func(page CloudServiceOperatingSystemsClientListOSFamiliesResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -242,7 +242,7 @@ func (client *CloudServiceOperatingSystemsClient) listOSFamiliesHandleResponse(r
 // location - Name of the location that the OS versions pertain to.
 // options - CloudServiceOperatingSystemsClientListOSVersionsOptions contains the optional parameters for the CloudServiceOperatingSystemsClient.ListOSVersions
 // method.
-func (client *CloudServiceOperatingSystemsClient) NewListOSVersionsPager(location string, options *CloudServiceOperatingSystemsClientListOSVersionsOptions) *runtime.Pager[CloudServiceOperatingSystemsClientListOSVersionsResponse] {
+func (client *CloudServiceOperatingSystemsClient) NewListOSVersionsPager(location string, options *CloudServiceOperatingSystemsClientListOSVersionsOptions) (*runtime.Pager[CloudServiceOperatingSystemsClientListOSVersionsResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[CloudServiceOperatingSystemsClientListOSVersionsResponse]{
 		More: func(page CloudServiceOperatingSystemsClientListOSVersionsResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -300,3 +300,4 @@ func (client *CloudServiceOperatingSystemsClient) listOSVersionsHandleResponse(r
 	}
 	return result, nil
 }
+

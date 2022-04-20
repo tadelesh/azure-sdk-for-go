@@ -25,9 +25,9 @@ import (
 // ProximityPlacementGroupsClient contains the methods for the ProximityPlacementGroups group.
 // Don't use this type directly, use NewProximityPlacementGroupsClient() instead.
 type ProximityPlacementGroupsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewProximityPlacementGroupsClient creates a new instance of ProximityPlacementGroupsClient with the specified values.
@@ -49,8 +49,8 @@ func NewProximityPlacementGroupsClient(subscriptionID string, credential azcore.
 	}
 	client := &ProximityPlacementGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -223,7 +223,7 @@ func (client *ProximityPlacementGroupsClient) getHandleResponse(resp *http.Respo
 // resourceGroupName - The name of the resource group.
 // options - ProximityPlacementGroupsClientListByResourceGroupOptions contains the optional parameters for the ProximityPlacementGroupsClient.ListByResourceGroup
 // method.
-func (client *ProximityPlacementGroupsClient) NewListByResourceGroupPager(resourceGroupName string, options *ProximityPlacementGroupsClientListByResourceGroupOptions) *runtime.Pager[ProximityPlacementGroupsClientListByResourceGroupResponse] {
+func (client *ProximityPlacementGroupsClient) NewListByResourceGroupPager(resourceGroupName string, options *ProximityPlacementGroupsClientListByResourceGroupOptions) (*runtime.Pager[ProximityPlacementGroupsClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ProximityPlacementGroupsClientListByResourceGroupResponse]{
 		More: func(page ProximityPlacementGroupsClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -286,7 +286,7 @@ func (client *ProximityPlacementGroupsClient) listByResourceGroupHandleResponse(
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProximityPlacementGroupsClientListBySubscriptionOptions contains the optional parameters for the ProximityPlacementGroupsClient.ListBySubscription
 // method.
-func (client *ProximityPlacementGroupsClient) NewListBySubscriptionPager(options *ProximityPlacementGroupsClientListBySubscriptionOptions) *runtime.Pager[ProximityPlacementGroupsClientListBySubscriptionResponse] {
+func (client *ProximityPlacementGroupsClient) NewListBySubscriptionPager(options *ProximityPlacementGroupsClientListBySubscriptionOptions) (*runtime.Pager[ProximityPlacementGroupsClientListBySubscriptionResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[ProximityPlacementGroupsClientListBySubscriptionResponse]{
 		More: func(page ProximityPlacementGroupsClientListBySubscriptionResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -397,3 +397,4 @@ func (client *ProximityPlacementGroupsClient) updateHandleResponse(resp *http.Re
 	}
 	return result, nil
 }
+

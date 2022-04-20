@@ -24,21 +24,19 @@ func ExampleGalleriesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	galleriesClientCreateOrUpdateResponsePoller, err := galleriesClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		armcompute.Gallery{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.GalleryProperties{
-				Description: to.Ptr("<description>"),
+				Description: to.Ptr("<the-description-of-this-shared-image-gallery-resource.-this-property-is-updatable.>"),
 				SharingProfile: &armcompute.SharingProfile{
 					CommunityGalleryInfo: map[string]interface{}{
 						"eula":             "eula",
@@ -53,15 +51,13 @@ func ExampleGalleriesClient_BeginCreateOrUpdate() {
 		&armcompute.GalleriesClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	galleriesClientCreateOrUpdateResponse, err := galleriesClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleriesClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/UpdateASimpleGallery.json
@@ -69,34 +65,30 @@ func ExampleGalleriesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	galleriesClientUpdateResponsePoller, err := galleriesClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		armcompute.GalleryUpdate{
 			Properties: &armcompute.GalleryProperties{
-				Description: to.Ptr("<description>"),
+				Description: to.Ptr("<the-description-of-this-shared-image-gallery-resource.-this-property-is-updatable.>"),
 			},
 		},
 		&armcompute.GalleriesClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	galleriesClientUpdateResponse, err := galleriesClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleriesClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/GetACommunityGallery.json
@@ -104,15 +96,13 @@ func ExampleGalleriesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	galleriesClientGetResponse, err := galleriesClient.Get(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		&armcompute.GalleriesClientGetOptions{Select: nil,
@@ -120,10 +110,9 @@ func ExampleGalleriesClient_Get() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = galleriesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-10-01/examples/gallery/DeleteAGallery.json
@@ -131,26 +120,22 @@ func ExampleGalleriesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	galleriesClientDeleteResponsePoller, err := galleriesClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<gallery-name>",
 		&armcompute.GalleriesClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = galleriesClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -159,21 +144,18 @@ func ExampleGalleriesClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	galleriesClientNewListByResourceGroupPager := galleriesClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for galleriesClientNewListByResourceGroupPager.More() {
+		nextResult, err := galleriesClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -187,20 +169,17 @@ func ExampleGalleriesClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
+	galleriesClient, err := armcompute.NewGalleriesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	galleriesClientNewListPager := galleriesClient.NewListPager(nil)
+	for galleriesClientNewListPager.More() {
+		nextResult, err := galleriesClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

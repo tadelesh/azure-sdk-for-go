@@ -97,29 +97,29 @@ func (a *AvailablePatchSummary) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "assessmentActivityId":
-			err = unpopulate(val, &a.AssessmentActivityID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.AssessmentActivityID)
+				delete(rawMsg, key)
 		case "criticalAndSecurityPatchCount":
-			err = unpopulate(val, &a.CriticalAndSecurityPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.CriticalAndSecurityPatchCount)
+				delete(rawMsg, key)
 		case "error":
-			err = unpopulate(val, &a.Error)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.Error)
+				delete(rawMsg, key)
 		case "lastModifiedTime":
-			err = unpopulateTimeRFC3339(val, &a.LastModifiedTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &a.LastModifiedTime)
+				delete(rawMsg, key)
 		case "otherPatchCount":
-			err = unpopulate(val, &a.OtherPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.OtherPatchCount)
+				delete(rawMsg, key)
 		case "rebootPending":
-			err = unpopulate(val, &a.RebootPending)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.RebootPending)
+				delete(rawMsg, key)
 		case "startTime":
-			err = unpopulateTimeRFC3339(val, &a.StartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &a.StartTime)
+				delete(rawMsg, key)
 		case "status":
-			err = unpopulate(val, &a.Status)
-			delete(rawMsg, key)
+				err = unpopulate(val, &a.Status)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -234,23 +234,23 @@ func (c *CapacityReservationProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "instanceView":
-			err = unpopulate(val, &c.InstanceView)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.InstanceView)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &c.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.ProvisioningState)
+				delete(rawMsg, key)
 		case "provisioningTime":
-			err = unpopulateTimeRFC3339(val, &c.ProvisioningTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &c.ProvisioningTime)
+				delete(rawMsg, key)
 		case "reservationId":
-			err = unpopulate(val, &c.ReservationID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.ReservationID)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &c.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &c.TimeCreated)
+				delete(rawMsg, key)
 		case "virtualMachinesAssociated":
-			err = unpopulate(val, &c.VirtualMachinesAssociated)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.VirtualMachinesAssociated)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -398,32 +398,32 @@ func (c *CommunityGalleryImageProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "disallowed":
-			err = unpopulate(val, &c.Disallowed)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.Disallowed)
+				delete(rawMsg, key)
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &c.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &c.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "features":
-			err = unpopulate(val, &c.Features)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.Features)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &c.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.HyperVGeneration)
+				delete(rawMsg, key)
 		case "identifier":
-			err = unpopulate(val, &c.Identifier)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.Identifier)
+				delete(rawMsg, key)
 		case "osState":
-			err = unpopulate(val, &c.OSState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.OSState)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &c.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.OSType)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &c.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.PurchasePlan)
+				delete(rawMsg, key)
 		case "recommended":
-			err = unpopulate(val, &c.Recommended)
-			delete(rawMsg, key)
+				err = unpopulate(val, &c.Recommended)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -450,11 +450,11 @@ func (c *CommunityGalleryImageVersionProperties) UnmarshalJSON(data []byte) erro
 		var err error
 		switch key {
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &c.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &c.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &c.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &c.PublishedDate)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -594,32 +594,32 @@ func (d *DedicatedHostProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "autoReplaceOnFailure":
-			err = unpopulate(val, &d.AutoReplaceOnFailure)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.AutoReplaceOnFailure)
+				delete(rawMsg, key)
 		case "hostId":
-			err = unpopulate(val, &d.HostID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.HostID)
+				delete(rawMsg, key)
 		case "instanceView":
-			err = unpopulate(val, &d.InstanceView)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.InstanceView)
+				delete(rawMsg, key)
 		case "licenseType":
-			err = unpopulate(val, &d.LicenseType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.LicenseType)
+				delete(rawMsg, key)
 		case "platformFaultDomain":
-			err = unpopulate(val, &d.PlatformFaultDomain)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PlatformFaultDomain)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &d.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.ProvisioningState)
+				delete(rawMsg, key)
 		case "provisioningTime":
-			err = unpopulateTimeRFC3339(val, &d.ProvisioningTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &d.ProvisioningTime)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &d.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &d.TimeCreated)
+				delete(rawMsg, key)
 		case "virtualMachines":
-			err = unpopulate(val, &d.VirtualMachines)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.VirtualMachines)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -700,14 +700,14 @@ func (d *DiskAccessProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "privateEndpointConnections":
-			err = unpopulate(val, &d.PrivateEndpointConnections)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PrivateEndpointConnections)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &d.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.ProvisioningState)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &d.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &d.TimeCreated)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -815,92 +815,92 @@ func (d *DiskProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "burstingEnabled":
-			err = unpopulate(val, &d.BurstingEnabled)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.BurstingEnabled)
+				delete(rawMsg, key)
 		case "completionPercent":
-			err = unpopulate(val, &d.CompletionPercent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.CompletionPercent)
+				delete(rawMsg, key)
 		case "creationData":
-			err = unpopulate(val, &d.CreationData)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.CreationData)
+				delete(rawMsg, key)
 		case "dataAccessAuthMode":
-			err = unpopulate(val, &d.DataAccessAuthMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DataAccessAuthMode)
+				delete(rawMsg, key)
 		case "diskAccessId":
-			err = unpopulate(val, &d.DiskAccessID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskAccessID)
+				delete(rawMsg, key)
 		case "diskIOPSReadOnly":
-			err = unpopulate(val, &d.DiskIOPSReadOnly)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskIOPSReadOnly)
+				delete(rawMsg, key)
 		case "diskIOPSReadWrite":
-			err = unpopulate(val, &d.DiskIOPSReadWrite)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskIOPSReadWrite)
+				delete(rawMsg, key)
 		case "diskMBpsReadOnly":
-			err = unpopulate(val, &d.DiskMBpsReadOnly)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskMBpsReadOnly)
+				delete(rawMsg, key)
 		case "diskMBpsReadWrite":
-			err = unpopulate(val, &d.DiskMBpsReadWrite)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskMBpsReadWrite)
+				delete(rawMsg, key)
 		case "diskSizeBytes":
-			err = unpopulate(val, &d.DiskSizeBytes)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskSizeBytes)
+				delete(rawMsg, key)
 		case "diskSizeGB":
-			err = unpopulate(val, &d.DiskSizeGB)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskSizeGB)
+				delete(rawMsg, key)
 		case "diskState":
-			err = unpopulate(val, &d.DiskState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskState)
+				delete(rawMsg, key)
 		case "encryption":
-			err = unpopulate(val, &d.Encryption)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.Encryption)
+				delete(rawMsg, key)
 		case "encryptionSettingsCollection":
-			err = unpopulate(val, &d.EncryptionSettingsCollection)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.EncryptionSettingsCollection)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &d.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.HyperVGeneration)
+				delete(rawMsg, key)
 		case "maxShares":
-			err = unpopulate(val, &d.MaxShares)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.MaxShares)
+				delete(rawMsg, key)
 		case "networkAccessPolicy":
-			err = unpopulate(val, &d.NetworkAccessPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.NetworkAccessPolicy)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &d.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.OSType)
+				delete(rawMsg, key)
 		case "propertyUpdatesInProgress":
-			err = unpopulate(val, &d.PropertyUpdatesInProgress)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PropertyUpdatesInProgress)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &d.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.ProvisioningState)
+				delete(rawMsg, key)
 		case "publicNetworkAccess":
-			err = unpopulate(val, &d.PublicNetworkAccess)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PublicNetworkAccess)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &d.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PurchasePlan)
+				delete(rawMsg, key)
 		case "securityProfile":
-			err = unpopulate(val, &d.SecurityProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SecurityProfile)
+				delete(rawMsg, key)
 		case "shareInfo":
-			err = unpopulate(val, &d.ShareInfo)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.ShareInfo)
+				delete(rawMsg, key)
 		case "supportedCapabilities":
-			err = unpopulate(val, &d.SupportedCapabilities)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SupportedCapabilities)
+				delete(rawMsg, key)
 		case "supportsHibernation":
-			err = unpopulate(val, &d.SupportsHibernation)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SupportsHibernation)
+				delete(rawMsg, key)
 		case "tier":
-			err = unpopulate(val, &d.Tier)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.Tier)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &d.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &d.TimeCreated)
+				delete(rawMsg, key)
 		case "uniqueId":
-			err = unpopulate(val, &d.UniqueID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.UniqueID)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -949,53 +949,53 @@ func (d *DiskRestorePointProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "completionPercent":
-			err = unpopulate(val, &d.CompletionPercent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.CompletionPercent)
+				delete(rawMsg, key)
 		case "diskAccessId":
-			err = unpopulate(val, &d.DiskAccessID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.DiskAccessID)
+				delete(rawMsg, key)
 		case "encryption":
-			err = unpopulate(val, &d.Encryption)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.Encryption)
+				delete(rawMsg, key)
 		case "familyId":
-			err = unpopulate(val, &d.FamilyID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.FamilyID)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &d.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.HyperVGeneration)
+				delete(rawMsg, key)
 		case "networkAccessPolicy":
-			err = unpopulate(val, &d.NetworkAccessPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.NetworkAccessPolicy)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &d.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.OSType)
+				delete(rawMsg, key)
 		case "publicNetworkAccess":
-			err = unpopulate(val, &d.PublicNetworkAccess)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PublicNetworkAccess)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &d.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.PurchasePlan)
+				delete(rawMsg, key)
 		case "replicationState":
-			err = unpopulate(val, &d.ReplicationState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.ReplicationState)
+				delete(rawMsg, key)
 		case "sourceResourceId":
-			err = unpopulate(val, &d.SourceResourceID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SourceResourceID)
+				delete(rawMsg, key)
 		case "sourceResourceLocation":
-			err = unpopulate(val, &d.SourceResourceLocation)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SourceResourceLocation)
+				delete(rawMsg, key)
 		case "sourceUniqueId":
-			err = unpopulate(val, &d.SourceUniqueID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SourceUniqueID)
+				delete(rawMsg, key)
 		case "supportedCapabilities":
-			err = unpopulate(val, &d.SupportedCapabilities)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SupportedCapabilities)
+				delete(rawMsg, key)
 		case "supportsHibernation":
-			err = unpopulate(val, &d.SupportsHibernation)
-			delete(rawMsg, key)
+				err = unpopulate(val, &d.SupportsHibernation)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &d.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &d.TimeCreated)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1044,26 +1044,26 @@ func (e *EncryptionSetProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "activeKey":
-			err = unpopulate(val, &e.ActiveKey)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.ActiveKey)
+				delete(rawMsg, key)
 		case "autoKeyRotationError":
-			err = unpopulate(val, &e.AutoKeyRotationError)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.AutoKeyRotationError)
+				delete(rawMsg, key)
 		case "encryptionType":
-			err = unpopulate(val, &e.EncryptionType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.EncryptionType)
+				delete(rawMsg, key)
 		case "lastKeyRotationTimestamp":
-			err = unpopulateTimeRFC3339(val, &e.LastKeyRotationTimestamp)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &e.LastKeyRotationTimestamp)
+				delete(rawMsg, key)
 		case "previousKeys":
-			err = unpopulate(val, &e.PreviousKeys)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.PreviousKeys)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &e.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.ProvisioningState)
+				delete(rawMsg, key)
 		case "rotationToLatestKeyVersionEnabled":
-			err = unpopulate(val, &e.RotationToLatestKeyVersionEnabled)
-			delete(rawMsg, key)
+				err = unpopulate(val, &e.RotationToLatestKeyVersionEnabled)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1135,23 +1135,23 @@ func (g *GalleryApplicationProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "description":
-			err = unpopulate(val, &g.Description)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Description)
+				delete(rawMsg, key)
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "eula":
-			err = unpopulate(val, &g.Eula)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Eula)
+				delete(rawMsg, key)
 		case "privacyStatementUri":
-			err = unpopulate(val, &g.PrivacyStatementURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.PrivacyStatementURI)
+				delete(rawMsg, key)
 		case "releaseNoteUri":
-			err = unpopulate(val, &g.ReleaseNoteURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReleaseNoteURI)
+				delete(rawMsg, key)
 		case "supportedOSType":
-			err = unpopulate(val, &g.SupportedOSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.SupportedOSType)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1218,38 +1218,38 @@ func (g *GalleryApplicationVersionPublishingProfile) UnmarshalJSON(data []byte) 
 		var err error
 		switch key {
 		case "enableHealthCheck":
-			err = unpopulate(val, &g.EnableHealthCheck)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.EnableHealthCheck)
+				delete(rawMsg, key)
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "excludeFromLatest":
-			err = unpopulate(val, &g.ExcludeFromLatest)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ExcludeFromLatest)
+				delete(rawMsg, key)
 		case "manageActions":
-			err = unpopulate(val, &g.ManageActions)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ManageActions)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &g.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.PublishedDate)
+				delete(rawMsg, key)
 		case "replicaCount":
-			err = unpopulate(val, &g.ReplicaCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicaCount)
+				delete(rawMsg, key)
 		case "replicationMode":
-			err = unpopulate(val, &g.ReplicationMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicationMode)
+				delete(rawMsg, key)
 		case "source":
-			err = unpopulate(val, &g.Source)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Source)
+				delete(rawMsg, key)
 		case "storageAccountType":
-			err = unpopulate(val, &g.StorageAccountType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.StorageAccountType)
+				delete(rawMsg, key)
 		case "targetExtendedLocations":
-			err = unpopulate(val, &g.TargetExtendedLocations)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetExtendedLocations)
+				delete(rawMsg, key)
 		case "targetRegions":
-			err = unpopulate(val, &g.TargetRegions)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetRegions)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1293,29 +1293,29 @@ func (g *GalleryArtifactPublishingProfileBase) UnmarshalJSON(data []byte) error 
 		var err error
 		switch key {
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "excludeFromLatest":
-			err = unpopulate(val, &g.ExcludeFromLatest)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ExcludeFromLatest)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &g.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.PublishedDate)
+				delete(rawMsg, key)
 		case "replicaCount":
-			err = unpopulate(val, &g.ReplicaCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicaCount)
+				delete(rawMsg, key)
 		case "replicationMode":
-			err = unpopulate(val, &g.ReplicationMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicationMode)
+				delete(rawMsg, key)
 		case "storageAccountType":
-			err = unpopulate(val, &g.StorageAccountType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.StorageAccountType)
+				delete(rawMsg, key)
 		case "targetExtendedLocations":
-			err = unpopulate(val, &g.TargetExtendedLocations)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetExtendedLocations)
+				delete(rawMsg, key)
 		case "targetRegions":
-			err = unpopulate(val, &g.TargetRegions)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetRegions)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1375,50 +1375,50 @@ func (g *GalleryImageProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "architecture":
-			err = unpopulate(val, &g.Architecture)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Architecture)
+				delete(rawMsg, key)
 		case "description":
-			err = unpopulate(val, &g.Description)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Description)
+				delete(rawMsg, key)
 		case "disallowed":
-			err = unpopulate(val, &g.Disallowed)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Disallowed)
+				delete(rawMsg, key)
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "eula":
-			err = unpopulate(val, &g.Eula)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Eula)
+				delete(rawMsg, key)
 		case "features":
-			err = unpopulate(val, &g.Features)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Features)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &g.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.HyperVGeneration)
+				delete(rawMsg, key)
 		case "identifier":
-			err = unpopulate(val, &g.Identifier)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Identifier)
+				delete(rawMsg, key)
 		case "osState":
-			err = unpopulate(val, &g.OSState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.OSState)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &g.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.OSType)
+				delete(rawMsg, key)
 		case "privacyStatementUri":
-			err = unpopulate(val, &g.PrivacyStatementURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.PrivacyStatementURI)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &g.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ProvisioningState)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &g.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.PurchasePlan)
+				delete(rawMsg, key)
 		case "recommended":
-			err = unpopulate(val, &g.Recommended)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.Recommended)
+				delete(rawMsg, key)
 		case "releaseNoteUri":
-			err = unpopulate(val, &g.ReleaseNoteURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReleaseNoteURI)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1482,29 +1482,29 @@ func (g *GalleryImageVersionPublishingProfile) UnmarshalJSON(data []byte) error 
 		var err error
 		switch key {
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "excludeFromLatest":
-			err = unpopulate(val, &g.ExcludeFromLatest)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ExcludeFromLatest)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &g.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &g.PublishedDate)
+				delete(rawMsg, key)
 		case "replicaCount":
-			err = unpopulate(val, &g.ReplicaCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicaCount)
+				delete(rawMsg, key)
 		case "replicationMode":
-			err = unpopulate(val, &g.ReplicationMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.ReplicationMode)
+				delete(rawMsg, key)
 		case "storageAccountType":
-			err = unpopulate(val, &g.StorageAccountType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.StorageAccountType)
+				delete(rawMsg, key)
 		case "targetExtendedLocations":
-			err = unpopulate(val, &g.TargetExtendedLocations)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetExtendedLocations)
+				delete(rawMsg, key)
 		case "targetRegions":
-			err = unpopulate(val, &g.TargetRegions)
-			delete(rawMsg, key)
+				err = unpopulate(val, &g.TargetRegions)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1611,20 +1611,20 @@ func (i *InstanceViewStatus) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "code":
-			err = unpopulate(val, &i.Code)
-			delete(rawMsg, key)
+				err = unpopulate(val, &i.Code)
+				delete(rawMsg, key)
 		case "displayStatus":
-			err = unpopulate(val, &i.DisplayStatus)
-			delete(rawMsg, key)
+				err = unpopulate(val, &i.DisplayStatus)
+				delete(rawMsg, key)
 		case "level":
-			err = unpopulate(val, &i.Level)
-			delete(rawMsg, key)
+				err = unpopulate(val, &i.Level)
+				delete(rawMsg, key)
 		case "message":
-			err = unpopulate(val, &i.Message)
-			delete(rawMsg, key)
+				err = unpopulate(val, &i.Message)
+				delete(rawMsg, key)
 		case "time":
-			err = unpopulateTimeRFC3339(val, &i.Time)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &i.Time)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1667,38 +1667,38 @@ func (l *LastPatchInstallationSummary) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "error":
-			err = unpopulate(val, &l.Error)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.Error)
+				delete(rawMsg, key)
 		case "excludedPatchCount":
-			err = unpopulate(val, &l.ExcludedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.ExcludedPatchCount)
+				delete(rawMsg, key)
 		case "failedPatchCount":
-			err = unpopulate(val, &l.FailedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.FailedPatchCount)
+				delete(rawMsg, key)
 		case "installationActivityId":
-			err = unpopulate(val, &l.InstallationActivityID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.InstallationActivityID)
+				delete(rawMsg, key)
 		case "installedPatchCount":
-			err = unpopulate(val, &l.InstalledPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.InstalledPatchCount)
+				delete(rawMsg, key)
 		case "lastModifiedTime":
-			err = unpopulateTimeRFC3339(val, &l.LastModifiedTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &l.LastModifiedTime)
+				delete(rawMsg, key)
 		case "maintenanceWindowExceeded":
-			err = unpopulate(val, &l.MaintenanceWindowExceeded)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.MaintenanceWindowExceeded)
+				delete(rawMsg, key)
 		case "notSelectedPatchCount":
-			err = unpopulate(val, &l.NotSelectedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.NotSelectedPatchCount)
+				delete(rawMsg, key)
 		case "pendingPatchCount":
-			err = unpopulate(val, &l.PendingPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.PendingPatchCount)
+				delete(rawMsg, key)
 		case "startTime":
-			err = unpopulateTimeRFC3339(val, &l.StartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &l.StartTime)
+				delete(rawMsg, key)
 		case "status":
-			err = unpopulate(val, &l.Status)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.Status)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1756,29 +1756,29 @@ func (l *LogAnalyticsInputBase) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "blobContainerSasUri":
-			err = unpopulate(val, &l.BlobContainerSasURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.BlobContainerSasURI)
+				delete(rawMsg, key)
 		case "fromTime":
-			err = unpopulateTimeRFC3339(val, &l.FromTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &l.FromTime)
+				delete(rawMsg, key)
 		case "groupByClientApplicationId":
-			err = unpopulate(val, &l.GroupByClientApplicationID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.GroupByClientApplicationID)
+				delete(rawMsg, key)
 		case "groupByOperationName":
-			err = unpopulate(val, &l.GroupByOperationName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.GroupByOperationName)
+				delete(rawMsg, key)
 		case "groupByResourceName":
-			err = unpopulate(val, &l.GroupByResourceName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.GroupByResourceName)
+				delete(rawMsg, key)
 		case "groupByThrottlePolicy":
-			err = unpopulate(val, &l.GroupByThrottlePolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.GroupByThrottlePolicy)
+				delete(rawMsg, key)
 		case "groupByUserAgent":
-			err = unpopulate(val, &l.GroupByUserAgent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &l.GroupByUserAgent)
+				delete(rawMsg, key)
 		case "toTime":
-			err = unpopulateTimeRFC3339(val, &l.ToTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &l.ToTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1810,26 +1810,26 @@ func (m *MaintenanceRedeployStatus) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "isCustomerInitiatedMaintenanceAllowed":
-			err = unpopulate(val, &m.IsCustomerInitiatedMaintenanceAllowed)
-			delete(rawMsg, key)
+				err = unpopulate(val, &m.IsCustomerInitiatedMaintenanceAllowed)
+				delete(rawMsg, key)
 		case "lastOperationMessage":
-			err = unpopulate(val, &m.LastOperationMessage)
-			delete(rawMsg, key)
+				err = unpopulate(val, &m.LastOperationMessage)
+				delete(rawMsg, key)
 		case "lastOperationResultCode":
-			err = unpopulate(val, &m.LastOperationResultCode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &m.LastOperationResultCode)
+				delete(rawMsg, key)
 		case "maintenanceWindowEndTime":
-			err = unpopulateTimeRFC3339(val, &m.MaintenanceWindowEndTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &m.MaintenanceWindowEndTime)
+				delete(rawMsg, key)
 		case "maintenanceWindowStartTime":
-			err = unpopulateTimeRFC3339(val, &m.MaintenanceWindowStartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &m.MaintenanceWindowStartTime)
+				delete(rawMsg, key)
 		case "preMaintenanceWindowEndTime":
-			err = unpopulateTimeRFC3339(val, &m.PreMaintenanceWindowEndTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &m.PreMaintenanceWindowEndTime)
+				delete(rawMsg, key)
 		case "preMaintenanceWindowStartTime":
-			err = unpopulateTimeRFC3339(val, &m.PreMaintenanceWindowStartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &m.PreMaintenanceWindowStartTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2001,32 +2001,32 @@ func (r *RequestRateByIntervalInput) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "blobContainerSasUri":
-			err = unpopulate(val, &r.BlobContainerSasURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.BlobContainerSasURI)
+				delete(rawMsg, key)
 		case "fromTime":
-			err = unpopulateTimeRFC3339(val, &r.FromTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.FromTime)
+				delete(rawMsg, key)
 		case "groupByClientApplicationId":
-			err = unpopulate(val, &r.GroupByClientApplicationID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.GroupByClientApplicationID)
+				delete(rawMsg, key)
 		case "groupByOperationName":
-			err = unpopulate(val, &r.GroupByOperationName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.GroupByOperationName)
+				delete(rawMsg, key)
 		case "groupByResourceName":
-			err = unpopulate(val, &r.GroupByResourceName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.GroupByResourceName)
+				delete(rawMsg, key)
 		case "groupByThrottlePolicy":
-			err = unpopulate(val, &r.GroupByThrottlePolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.GroupByThrottlePolicy)
+				delete(rawMsg, key)
 		case "groupByUserAgent":
-			err = unpopulate(val, &r.GroupByUserAgent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.GroupByUserAgent)
+				delete(rawMsg, key)
 		case "intervalLength":
-			err = unpopulate(val, &r.IntervalLength)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.IntervalLength)
+				delete(rawMsg, key)
 		case "toTime":
-			err = unpopulateTimeRFC3339(val, &r.ToTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.ToTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2067,20 +2067,20 @@ func (r *ResourceInstanceViewStatus) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "code":
-			err = unpopulate(val, &r.Code)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.Code)
+				delete(rawMsg, key)
 		case "displayStatus":
-			err = unpopulate(val, &r.DisplayStatus)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.DisplayStatus)
+				delete(rawMsg, key)
 		case "level":
-			err = unpopulate(val, &r.Level)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.Level)
+				delete(rawMsg, key)
 		case "message":
-			err = unpopulate(val, &r.Message)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.Message)
+				delete(rawMsg, key)
 		case "time":
-			err = unpopulateTimeRFC3339(val, &r.Time)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.Time)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2230,26 +2230,26 @@ func (r *RestorePointProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "consistencyMode":
-			err = unpopulate(val, &r.ConsistencyMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.ConsistencyMode)
+				delete(rawMsg, key)
 		case "excludeDisks":
-			err = unpopulate(val, &r.ExcludeDisks)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.ExcludeDisks)
+				delete(rawMsg, key)
 		case "instanceView":
-			err = unpopulate(val, &r.InstanceView)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.InstanceView)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &r.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.ProvisioningState)
+				delete(rawMsg, key)
 		case "sourceMetadata":
-			err = unpopulate(val, &r.SourceMetadata)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.SourceMetadata)
+				delete(rawMsg, key)
 		case "sourceRestorePoint":
-			err = unpopulate(val, &r.SourceRestorePoint)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.SourceRestorePoint)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &r.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.TimeCreated)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2331,17 +2331,17 @@ func (r *RollingUpgradeRunningStatus) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "code":
-			err = unpopulate(val, &r.Code)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.Code)
+				delete(rawMsg, key)
 		case "lastAction":
-			err = unpopulate(val, &r.LastAction)
-			delete(rawMsg, key)
+				err = unpopulate(val, &r.LastAction)
+				delete(rawMsg, key)
 		case "lastActionTime":
-			err = unpopulateTimeRFC3339(val, &r.LastActionTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.LastActionTime)
+				delete(rawMsg, key)
 		case "startTime":
-			err = unpopulateTimeRFC3339(val, &r.StartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &r.StartTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2475,32 +2475,32 @@ func (s *SharedGalleryImageProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "disallowed":
-			err = unpopulate(val, &s.Disallowed)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Disallowed)
+				delete(rawMsg, key)
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &s.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "features":
-			err = unpopulate(val, &s.Features)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Features)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &s.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.HyperVGeneration)
+				delete(rawMsg, key)
 		case "identifier":
-			err = unpopulate(val, &s.Identifier)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Identifier)
+				delete(rawMsg, key)
 		case "osState":
-			err = unpopulate(val, &s.OSState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.OSState)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &s.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.OSType)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &s.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.PurchasePlan)
+				delete(rawMsg, key)
 		case "recommended":
-			err = unpopulate(val, &s.Recommended)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Recommended)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2535,11 +2535,11 @@ func (s *SharedGalleryImageVersionProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "endOfLifeDate":
-			err = unpopulateTimeRFC3339(val, &s.EndOfLifeDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.EndOfLifeDate)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &s.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.PublishedDate)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2649,68 +2649,68 @@ func (s *SnapshotProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "completionPercent":
-			err = unpopulate(val, &s.CompletionPercent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.CompletionPercent)
+				delete(rawMsg, key)
 		case "creationData":
-			err = unpopulate(val, &s.CreationData)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.CreationData)
+				delete(rawMsg, key)
 		case "dataAccessAuthMode":
-			err = unpopulate(val, &s.DataAccessAuthMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.DataAccessAuthMode)
+				delete(rawMsg, key)
 		case "diskAccessId":
-			err = unpopulate(val, &s.DiskAccessID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.DiskAccessID)
+				delete(rawMsg, key)
 		case "diskSizeBytes":
-			err = unpopulate(val, &s.DiskSizeBytes)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.DiskSizeBytes)
+				delete(rawMsg, key)
 		case "diskSizeGB":
-			err = unpopulate(val, &s.DiskSizeGB)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.DiskSizeGB)
+				delete(rawMsg, key)
 		case "diskState":
-			err = unpopulate(val, &s.DiskState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.DiskState)
+				delete(rawMsg, key)
 		case "encryption":
-			err = unpopulate(val, &s.Encryption)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Encryption)
+				delete(rawMsg, key)
 		case "encryptionSettingsCollection":
-			err = unpopulate(val, &s.EncryptionSettingsCollection)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.EncryptionSettingsCollection)
+				delete(rawMsg, key)
 		case "hyperVGeneration":
-			err = unpopulate(val, &s.HyperVGeneration)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.HyperVGeneration)
+				delete(rawMsg, key)
 		case "incremental":
-			err = unpopulate(val, &s.Incremental)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.Incremental)
+				delete(rawMsg, key)
 		case "networkAccessPolicy":
-			err = unpopulate(val, &s.NetworkAccessPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.NetworkAccessPolicy)
+				delete(rawMsg, key)
 		case "osType":
-			err = unpopulate(val, &s.OSType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.OSType)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &s.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.ProvisioningState)
+				delete(rawMsg, key)
 		case "publicNetworkAccess":
-			err = unpopulate(val, &s.PublicNetworkAccess)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.PublicNetworkAccess)
+				delete(rawMsg, key)
 		case "purchasePlan":
-			err = unpopulate(val, &s.PurchasePlan)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.PurchasePlan)
+				delete(rawMsg, key)
 		case "securityProfile":
-			err = unpopulate(val, &s.SecurityProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.SecurityProfile)
+				delete(rawMsg, key)
 		case "supportedCapabilities":
-			err = unpopulate(val, &s.SupportedCapabilities)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.SupportedCapabilities)
+				delete(rawMsg, key)
 		case "supportsHibernation":
-			err = unpopulate(val, &s.SupportsHibernation)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.SupportsHibernation)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &s.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.TimeCreated)
+				delete(rawMsg, key)
 		case "uniqueId":
-			err = unpopulate(val, &s.UniqueID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.UniqueID)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2761,29 +2761,29 @@ func (t *ThrottledRequestsInput) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "blobContainerSasUri":
-			err = unpopulate(val, &t.BlobContainerSasURI)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.BlobContainerSasURI)
+				delete(rawMsg, key)
 		case "fromTime":
-			err = unpopulateTimeRFC3339(val, &t.FromTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &t.FromTime)
+				delete(rawMsg, key)
 		case "groupByClientApplicationId":
-			err = unpopulate(val, &t.GroupByClientApplicationID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.GroupByClientApplicationID)
+				delete(rawMsg, key)
 		case "groupByOperationName":
-			err = unpopulate(val, &t.GroupByOperationName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.GroupByOperationName)
+				delete(rawMsg, key)
 		case "groupByResourceName":
-			err = unpopulate(val, &t.GroupByResourceName)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.GroupByResourceName)
+				delete(rawMsg, key)
 		case "groupByThrottlePolicy":
-			err = unpopulate(val, &t.GroupByThrottlePolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.GroupByThrottlePolicy)
+				delete(rawMsg, key)
 		case "groupByUserAgent":
-			err = unpopulate(val, &t.GroupByUserAgent)
-			delete(rawMsg, key)
+				err = unpopulate(val, &t.GroupByUserAgent)
+				delete(rawMsg, key)
 		case "toTime":
-			err = unpopulateTimeRFC3339(val, &t.ToTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &t.ToTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2836,14 +2836,14 @@ func (u *UpgradeOperationHistoryStatus) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "code":
-			err = unpopulate(val, &u.Code)
-			delete(rawMsg, key)
+				err = unpopulate(val, &u.Code)
+				delete(rawMsg, key)
 		case "endTime":
-			err = unpopulateTimeRFC3339(val, &u.EndTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &u.EndTime)
+				delete(rawMsg, key)
 		case "startTime":
-			err = unpopulateTimeRFC3339(val, &u.StartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &u.StartTime)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -2910,29 +2910,29 @@ func (v *VirtualMachineAssessPatchesResult) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "assessmentActivityId":
-			err = unpopulate(val, &v.AssessmentActivityID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AssessmentActivityID)
+				delete(rawMsg, key)
 		case "availablePatches":
-			err = unpopulate(val, &v.AvailablePatches)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AvailablePatches)
+				delete(rawMsg, key)
 		case "criticalAndSecurityPatchCount":
-			err = unpopulate(val, &v.CriticalAndSecurityPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.CriticalAndSecurityPatchCount)
+				delete(rawMsg, key)
 		case "error":
-			err = unpopulate(val, &v.Error)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Error)
+				delete(rawMsg, key)
 		case "otherPatchCount":
-			err = unpopulate(val, &v.OtherPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.OtherPatchCount)
+				delete(rawMsg, key)
 		case "rebootPending":
-			err = unpopulate(val, &v.RebootPending)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.RebootPending)
+				delete(rawMsg, key)
 		case "startDateTime":
-			err = unpopulateTimeRFC3339(val, &v.StartDateTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.StartDateTime)
+				delete(rawMsg, key)
 		case "status":
-			err = unpopulate(val, &v.Status)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Status)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -3077,41 +3077,41 @@ func (v *VirtualMachineInstallPatchesResult) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "error":
-			err = unpopulate(val, &v.Error)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Error)
+				delete(rawMsg, key)
 		case "excludedPatchCount":
-			err = unpopulate(val, &v.ExcludedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ExcludedPatchCount)
+				delete(rawMsg, key)
 		case "failedPatchCount":
-			err = unpopulate(val, &v.FailedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.FailedPatchCount)
+				delete(rawMsg, key)
 		case "installationActivityId":
-			err = unpopulate(val, &v.InstallationActivityID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.InstallationActivityID)
+				delete(rawMsg, key)
 		case "installedPatchCount":
-			err = unpopulate(val, &v.InstalledPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.InstalledPatchCount)
+				delete(rawMsg, key)
 		case "maintenanceWindowExceeded":
-			err = unpopulate(val, &v.MaintenanceWindowExceeded)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.MaintenanceWindowExceeded)
+				delete(rawMsg, key)
 		case "notSelectedPatchCount":
-			err = unpopulate(val, &v.NotSelectedPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.NotSelectedPatchCount)
+				delete(rawMsg, key)
 		case "patches":
-			err = unpopulate(val, &v.Patches)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Patches)
+				delete(rawMsg, key)
 		case "pendingPatchCount":
-			err = unpopulate(val, &v.PendingPatchCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.PendingPatchCount)
+				delete(rawMsg, key)
 		case "rebootStatus":
-			err = unpopulate(val, &v.RebootStatus)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.RebootStatus)
+				delete(rawMsg, key)
 		case "startDateTime":
-			err = unpopulateTimeRFC3339(val, &v.StartDateTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.StartDateTime)
+				delete(rawMsg, key)
 		case "status":
-			err = unpopulate(val, &v.Status)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Status)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -3236,83 +3236,83 @@ func (v *VirtualMachineProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "additionalCapabilities":
-			err = unpopulate(val, &v.AdditionalCapabilities)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AdditionalCapabilities)
+				delete(rawMsg, key)
 		case "applicationProfile":
-			err = unpopulate(val, &v.ApplicationProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ApplicationProfile)
+				delete(rawMsg, key)
 		case "availabilitySet":
-			err = unpopulate(val, &v.AvailabilitySet)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AvailabilitySet)
+				delete(rawMsg, key)
 		case "billingProfile":
-			err = unpopulate(val, &v.BillingProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.BillingProfile)
+				delete(rawMsg, key)
 		case "capacityReservation":
-			err = unpopulate(val, &v.CapacityReservation)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.CapacityReservation)
+				delete(rawMsg, key)
 		case "diagnosticsProfile":
-			err = unpopulate(val, &v.DiagnosticsProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.DiagnosticsProfile)
+				delete(rawMsg, key)
 		case "evictionPolicy":
-			err = unpopulate(val, &v.EvictionPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.EvictionPolicy)
+				delete(rawMsg, key)
 		case "extensionsTimeBudget":
-			err = unpopulate(val, &v.ExtensionsTimeBudget)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ExtensionsTimeBudget)
+				delete(rawMsg, key)
 		case "hardwareProfile":
-			err = unpopulate(val, &v.HardwareProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.HardwareProfile)
+				delete(rawMsg, key)
 		case "host":
-			err = unpopulate(val, &v.Host)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Host)
+				delete(rawMsg, key)
 		case "hostGroup":
-			err = unpopulate(val, &v.HostGroup)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.HostGroup)
+				delete(rawMsg, key)
 		case "instanceView":
-			err = unpopulate(val, &v.InstanceView)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.InstanceView)
+				delete(rawMsg, key)
 		case "licenseType":
-			err = unpopulate(val, &v.LicenseType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.LicenseType)
+				delete(rawMsg, key)
 		case "networkProfile":
-			err = unpopulate(val, &v.NetworkProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.NetworkProfile)
+				delete(rawMsg, key)
 		case "osProfile":
-			err = unpopulate(val, &v.OSProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.OSProfile)
+				delete(rawMsg, key)
 		case "platformFaultDomain":
-			err = unpopulate(val, &v.PlatformFaultDomain)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.PlatformFaultDomain)
+				delete(rawMsg, key)
 		case "priority":
-			err = unpopulate(val, &v.Priority)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Priority)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &v.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ProvisioningState)
+				delete(rawMsg, key)
 		case "proximityPlacementGroup":
-			err = unpopulate(val, &v.ProximityPlacementGroup)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ProximityPlacementGroup)
+				delete(rawMsg, key)
 		case "scheduledEventsProfile":
-			err = unpopulate(val, &v.ScheduledEventsProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ScheduledEventsProfile)
+				delete(rawMsg, key)
 		case "securityProfile":
-			err = unpopulate(val, &v.SecurityProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.SecurityProfile)
+				delete(rawMsg, key)
 		case "storageProfile":
-			err = unpopulate(val, &v.StorageProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.StorageProfile)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &v.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.TimeCreated)
+				delete(rawMsg, key)
 		case "userData":
-			err = unpopulate(val, &v.UserData)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.UserData)
+				delete(rawMsg, key)
 		case "vmId":
-			err = unpopulate(val, &v.VMID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.VMID)
+				delete(rawMsg, key)
 		case "virtualMachineScaleSet":
-			err = unpopulate(val, &v.VirtualMachineScaleSet)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.VirtualMachineScaleSet)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -3370,29 +3370,29 @@ func (v *VirtualMachineRunCommandInstanceView) UnmarshalJSON(data []byte) error 
 		var err error
 		switch key {
 		case "endTime":
-			err = unpopulateTimeRFC3339(val, &v.EndTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.EndTime)
+				delete(rawMsg, key)
 		case "error":
-			err = unpopulate(val, &v.Error)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Error)
+				delete(rawMsg, key)
 		case "executionMessage":
-			err = unpopulate(val, &v.ExecutionMessage)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ExecutionMessage)
+				delete(rawMsg, key)
 		case "executionState":
-			err = unpopulate(val, &v.ExecutionState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ExecutionState)
+				delete(rawMsg, key)
 		case "exitCode":
-			err = unpopulate(val, &v.ExitCode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ExitCode)
+				delete(rawMsg, key)
 		case "output":
-			err = unpopulate(val, &v.Output)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Output)
+				delete(rawMsg, key)
 		case "startTime":
-			err = unpopulateTimeRFC3339(val, &v.StartTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.StartTime)
+				delete(rawMsg, key)
 		case "statuses":
-			err = unpopulate(val, &v.Statuses)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Statuses)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -3661,56 +3661,56 @@ func (v *VirtualMachineScaleSetProperties) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "additionalCapabilities":
-			err = unpopulate(val, &v.AdditionalCapabilities)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AdditionalCapabilities)
+				delete(rawMsg, key)
 		case "automaticRepairsPolicy":
-			err = unpopulate(val, &v.AutomaticRepairsPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AutomaticRepairsPolicy)
+				delete(rawMsg, key)
 		case "doNotRunExtensionsOnOverprovisionedVMs":
-			err = unpopulate(val, &v.DoNotRunExtensionsOnOverprovisionedVMs)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.DoNotRunExtensionsOnOverprovisionedVMs)
+				delete(rawMsg, key)
 		case "hostGroup":
-			err = unpopulate(val, &v.HostGroup)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.HostGroup)
+				delete(rawMsg, key)
 		case "orchestrationMode":
-			err = unpopulate(val, &v.OrchestrationMode)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.OrchestrationMode)
+				delete(rawMsg, key)
 		case "overprovision":
-			err = unpopulate(val, &v.Overprovision)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Overprovision)
+				delete(rawMsg, key)
 		case "platformFaultDomainCount":
-			err = unpopulate(val, &v.PlatformFaultDomainCount)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.PlatformFaultDomainCount)
+				delete(rawMsg, key)
 		case "provisioningState":
-			err = unpopulate(val, &v.ProvisioningState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ProvisioningState)
+				delete(rawMsg, key)
 		case "proximityPlacementGroup":
-			err = unpopulate(val, &v.ProximityPlacementGroup)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ProximityPlacementGroup)
+				delete(rawMsg, key)
 		case "scaleInPolicy":
-			err = unpopulate(val, &v.ScaleInPolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ScaleInPolicy)
+				delete(rawMsg, key)
 		case "singlePlacementGroup":
-			err = unpopulate(val, &v.SinglePlacementGroup)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.SinglePlacementGroup)
+				delete(rawMsg, key)
 		case "spotRestorePolicy":
-			err = unpopulate(val, &v.SpotRestorePolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.SpotRestorePolicy)
+				delete(rawMsg, key)
 		case "timeCreated":
-			err = unpopulateTimeRFC3339(val, &v.TimeCreated)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.TimeCreated)
+				delete(rawMsg, key)
 		case "uniqueId":
-			err = unpopulate(val, &v.UniqueID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.UniqueID)
+				delete(rawMsg, key)
 		case "upgradePolicy":
-			err = unpopulate(val, &v.UpgradePolicy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.UpgradePolicy)
+				delete(rawMsg, key)
 		case "virtualMachineProfile":
-			err = unpopulate(val, &v.VirtualMachineProfile)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.VirtualMachineProfile)
+				delete(rawMsg, key)
 		case "zoneBalance":
-			err = unpopulate(val, &v.ZoneBalance)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ZoneBalance)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -3949,35 +3949,35 @@ func (v *VirtualMachineSoftwarePatchProperties) UnmarshalJSON(data []byte) error
 		var err error
 		switch key {
 		case "activityId":
-			err = unpopulate(val, &v.ActivityID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.ActivityID)
+				delete(rawMsg, key)
 		case "assessmentState":
-			err = unpopulate(val, &v.AssessmentState)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.AssessmentState)
+				delete(rawMsg, key)
 		case "classifications":
-			err = unpopulate(val, &v.Classifications)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Classifications)
+				delete(rawMsg, key)
 		case "kbId":
-			err = unpopulate(val, &v.KbID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.KbID)
+				delete(rawMsg, key)
 		case "lastModifiedDateTime":
-			err = unpopulateTimeRFC3339(val, &v.LastModifiedDateTime)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.LastModifiedDateTime)
+				delete(rawMsg, key)
 		case "name":
-			err = unpopulate(val, &v.Name)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Name)
+				delete(rawMsg, key)
 		case "patchId":
-			err = unpopulate(val, &v.PatchID)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.PatchID)
+				delete(rawMsg, key)
 		case "publishedDate":
-			err = unpopulateTimeRFC3339(val, &v.PublishedDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &v.PublishedDate)
+				delete(rawMsg, key)
 		case "rebootBehavior":
-			err = unpopulate(val, &v.RebootBehavior)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.RebootBehavior)
+				delete(rawMsg, key)
 		case "version":
-			err = unpopulate(val, &v.Version)
-			delete(rawMsg, key)
+				err = unpopulate(val, &v.Version)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -4037,20 +4037,20 @@ func (w *WindowsParameters) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "classificationsToInclude":
-			err = unpopulate(val, &w.ClassificationsToInclude)
-			delete(rawMsg, key)
+				err = unpopulate(val, &w.ClassificationsToInclude)
+				delete(rawMsg, key)
 		case "excludeKbsRequiringReboot":
-			err = unpopulate(val, &w.ExcludeKbsRequiringReboot)
-			delete(rawMsg, key)
+				err = unpopulate(val, &w.ExcludeKbsRequiringReboot)
+				delete(rawMsg, key)
 		case "kbNumbersToExclude":
-			err = unpopulate(val, &w.KbNumbersToExclude)
-			delete(rawMsg, key)
+				err = unpopulate(val, &w.KbNumbersToExclude)
+				delete(rawMsg, key)
 		case "kbNumbersToInclude":
-			err = unpopulate(val, &w.KbNumbersToInclude)
-			delete(rawMsg, key)
+				err = unpopulate(val, &w.KbNumbersToInclude)
+				delete(rawMsg, key)
 		case "maxPatchPublishDate":
-			err = unpopulateTimeRFC3339(val, &w.MaxPatchPublishDate)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &w.MaxPatchPublishDate)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -4075,3 +4075,4 @@ func unpopulate(data json.RawMessage, v interface{}) error {
 	}
 	return json.Unmarshal(data, v)
 }
+

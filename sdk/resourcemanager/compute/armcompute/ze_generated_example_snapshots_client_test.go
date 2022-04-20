@@ -24,39 +24,35 @@ func ExampleSnapshotsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	snapshotsClientCreateOrUpdateResponsePoller, err := snapshotsClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		armcompute.Snapshot{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.SnapshotProperties{
 				CreationData: &armcompute.CreationData{
 					CreateOption:     to.Ptr(armcompute.DiskCreateOptionImport),
-					SourceURI:        to.Ptr("<source-uri>"),
-					StorageAccountID: to.Ptr("<storage-account-id>"),
+					SourceURI:        to.Ptr("<if-create-option-is-import,-this-is-the-uri-of-a-blob-to-be-imported-into-a-managed-disk.>"),
+					StorageAccountID: to.Ptr("<required-if-create-option-is-import.-the-azure-resource-manager-identifier-of-the-storage-account-containing-the-blob-to-import-as-a-disk.>"),
 				},
 			},
 		},
 		&armcompute.SnapshotsClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	snapshotsClientCreateOrUpdateResponse, err := snapshotsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = snapshotsClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/UpdateASnapshotWithAcceleratedNetwork.json
@@ -64,15 +60,13 @@ func ExampleSnapshotsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	snapshotsClientUpdateResponsePoller, err := snapshotsClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		armcompute.SnapshotUpdate{
@@ -90,15 +84,13 @@ func ExampleSnapshotsClient_BeginUpdate() {
 		&armcompute.SnapshotsClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	snapshotsClientUpdateResponse, err := snapshotsClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = snapshotsClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/GetInformationAboutASnapshot.json
@@ -106,24 +98,21 @@ func ExampleSnapshotsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	snapshotsClientGetResponse, err := snapshotsClient.Get(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = snapshotsClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/DeleteASnapshot.json
@@ -131,26 +120,22 @@ func ExampleSnapshotsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	snapshotsClientDeleteResponsePoller, err := snapshotsClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		&armcompute.SnapshotsClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = snapshotsClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -159,21 +144,18 @@ func ExampleSnapshotsClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	snapshotsClientNewListByResourceGroupPager := snapshotsClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for snapshotsClientNewListByResourceGroupPager.More() {
+		nextResult, err := snapshotsClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -187,20 +169,17 @@ func ExampleSnapshotsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	snapshotsClientNewListPager := snapshotsClient.NewListPager(nil)
+	for snapshotsClientNewListPager.More() {
+		nextResult, err := snapshotsClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -214,15 +193,13 @@ func ExampleSnapshotsClient_BeginGrantAccess() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginGrantAccess(ctx,
+	snapshotsClientGrantAccessResponsePoller, err := snapshotsClient.BeginGrantAccess(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		armcompute.GrantAccessData{
@@ -232,15 +209,13 @@ func ExampleSnapshotsClient_BeginGrantAccess() {
 		&armcompute.SnapshotsClientBeginGrantAccessOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	snapshotsClientGrantAccessResponse, err := snapshotsClientGrantAccessResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = snapshotsClientGrantAccessResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/EndGetAccessSnapshot.json
@@ -248,25 +223,21 @@ func ExampleSnapshotsClient_BeginRevokeAccess() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
+	snapshotsClient, err := armcompute.NewSnapshotsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRevokeAccess(ctx,
+	snapshotsClientRevokeAccessResponsePoller, err := snapshotsClient.BeginRevokeAccess(ctx,
 		"<resource-group-name>",
 		"<snapshot-name>",
 		&armcompute.SnapshotsClientBeginRevokeAccessOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = snapshotsClientRevokeAccessResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }

@@ -25,9 +25,9 @@ import (
 // AvailabilitySetsClient contains the methods for the AvailabilitySets group.
 // Don't use this type directly, use NewAvailabilitySetsClient() instead.
 type AvailabilitySetsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewAvailabilitySetsClient creates a new instance of AvailabilitySetsClient with the specified values.
@@ -49,8 +49,8 @@ func NewAvailabilitySetsClient(subscriptionID string, credential azcore.TokenCre
 	}
 	client := &AvailabilitySetsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -217,7 +217,7 @@ func (client *AvailabilitySetsClient) getHandleResponse(resp *http.Response) (Av
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group.
 // options - AvailabilitySetsClientListOptions contains the optional parameters for the AvailabilitySetsClient.List method.
-func (client *AvailabilitySetsClient) NewListPager(resourceGroupName string, options *AvailabilitySetsClientListOptions) *runtime.Pager[AvailabilitySetsClientListResponse] {
+func (client *AvailabilitySetsClient) NewListPager(resourceGroupName string, options *AvailabilitySetsClientListOptions) (*runtime.Pager[AvailabilitySetsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[AvailabilitySetsClientListResponse]{
 		More: func(page AvailabilitySetsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -283,7 +283,7 @@ func (client *AvailabilitySetsClient) listHandleResponse(resp *http.Response) (A
 // availabilitySetName - The name of the availability set.
 // options - AvailabilitySetsClientListAvailableSizesOptions contains the optional parameters for the AvailabilitySetsClient.ListAvailableSizes
 // method.
-func (client *AvailabilitySetsClient) NewListAvailableSizesPager(resourceGroupName string, availabilitySetName string, options *AvailabilitySetsClientListAvailableSizesOptions) *runtime.Pager[AvailabilitySetsClientListAvailableSizesResponse] {
+func (client *AvailabilitySetsClient) NewListAvailableSizesPager(resourceGroupName string, availabilitySetName string, options *AvailabilitySetsClientListAvailableSizesOptions) (*runtime.Pager[AvailabilitySetsClientListAvailableSizesResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[AvailabilitySetsClientListAvailableSizesResponse]{
 		More: func(page AvailabilitySetsClientListAvailableSizesResponse) bool {
 			return false
@@ -344,7 +344,7 @@ func (client *AvailabilitySetsClient) listAvailableSizesHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AvailabilitySetsClientListBySubscriptionOptions contains the optional parameters for the AvailabilitySetsClient.ListBySubscription
 // method.
-func (client *AvailabilitySetsClient) NewListBySubscriptionPager(options *AvailabilitySetsClientListBySubscriptionOptions) *runtime.Pager[AvailabilitySetsClientListBySubscriptionResponse] {
+func (client *AvailabilitySetsClient) NewListBySubscriptionPager(options *AvailabilitySetsClientListBySubscriptionOptions) (*runtime.Pager[AvailabilitySetsClientListBySubscriptionResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[AvailabilitySetsClientListBySubscriptionResponse]{
 		More: func(page AvailabilitySetsClientListBySubscriptionResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -457,3 +457,4 @@ func (client *AvailabilitySetsClient) updateHandleResponse(resp *http.Response) 
 	}
 	return result, nil
 }
+

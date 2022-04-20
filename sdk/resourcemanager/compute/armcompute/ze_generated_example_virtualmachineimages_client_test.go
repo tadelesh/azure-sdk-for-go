@@ -22,15 +22,13 @@ func ExampleVirtualMachineImagesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
+	virtualMachineImagesClient, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	virtualMachineImagesClientGetResponse, err := virtualMachineImagesClient.Get(ctx,
 		"<location>",
 		"<publisher-name>",
 		"<offer>",
@@ -39,10 +37,9 @@ func ExampleVirtualMachineImagesClient_Get() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImages_List_MaximumSet_Gen.json
@@ -50,15 +47,13 @@ func ExampleVirtualMachineImagesClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
+	virtualMachineImagesClient, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.List(ctx,
+	virtualMachineImagesClientListResponse, err := virtualMachineImagesClient.List(ctx,
 		"<location>",
 		"<publisher-name>",
 		"<offer>",
@@ -69,10 +64,9 @@ func ExampleVirtualMachineImagesClient_List() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesClientListResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImages_ListOffers_MaximumSet_Gen.json
@@ -80,24 +74,21 @@ func ExampleVirtualMachineImagesClient_ListOffers() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
+	virtualMachineImagesClient, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListOffers(ctx,
+	virtualMachineImagesClientListOffersResponse, err := virtualMachineImagesClient.ListOffers(ctx,
 		"<location>",
 		"<publisher-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesClientListOffersResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/VirtualMachineImages_ListPublishers_MaximumSet_Gen.json
@@ -105,21 +96,18 @@ func ExampleVirtualMachineImagesClient_ListPublishers() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
+	virtualMachineImagesClient, err := armcompute.NewVirtualMachineImagesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.ListPublishers(ctx,
+	virtualMachineImagesClientListPublishersResponse, err := virtualMachineImagesClient.ListPublishers(ctx,
 		"<location>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = virtualMachineImagesClientListPublishersResponse
 }

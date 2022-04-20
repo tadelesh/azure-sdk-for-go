@@ -25,9 +25,9 @@ import (
 // DedicatedHostGroupsClient contains the methods for the DedicatedHostGroups group.
 // Don't use this type directly, use NewDedicatedHostGroupsClient() instead.
 type DedicatedHostGroupsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDedicatedHostGroupsClient creates a new instance of DedicatedHostGroupsClient with the specified values.
@@ -49,8 +49,8 @@ func NewDedicatedHostGroupsClient(subscriptionID string, credential azcore.Token
 	}
 	client := &DedicatedHostGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -224,7 +224,7 @@ func (client *DedicatedHostGroupsClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group.
 // options - DedicatedHostGroupsClientListByResourceGroupOptions contains the optional parameters for the DedicatedHostGroupsClient.ListByResourceGroup
 // method.
-func (client *DedicatedHostGroupsClient) NewListByResourceGroupPager(resourceGroupName string, options *DedicatedHostGroupsClientListByResourceGroupOptions) *runtime.Pager[DedicatedHostGroupsClientListByResourceGroupResponse] {
+func (client *DedicatedHostGroupsClient) NewListByResourceGroupPager(resourceGroupName string, options *DedicatedHostGroupsClientListByResourceGroupOptions) (*runtime.Pager[DedicatedHostGroupsClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DedicatedHostGroupsClientListByResourceGroupResponse]{
 		More: func(page DedicatedHostGroupsClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -288,7 +288,7 @@ func (client *DedicatedHostGroupsClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DedicatedHostGroupsClientListBySubscriptionOptions contains the optional parameters for the DedicatedHostGroupsClient.ListBySubscription
 // method.
-func (client *DedicatedHostGroupsClient) NewListBySubscriptionPager(options *DedicatedHostGroupsClientListBySubscriptionOptions) *runtime.Pager[DedicatedHostGroupsClientListBySubscriptionResponse] {
+func (client *DedicatedHostGroupsClient) NewListBySubscriptionPager(options *DedicatedHostGroupsClientListBySubscriptionOptions) (*runtime.Pager[DedicatedHostGroupsClientListBySubscriptionResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DedicatedHostGroupsClientListBySubscriptionResponse]{
 		More: func(page DedicatedHostGroupsClientListBySubscriptionResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -399,3 +399,4 @@ func (client *DedicatedHostGroupsClient) updateHandleResponse(resp *http.Respons
 	}
 	return result, nil
 }
+

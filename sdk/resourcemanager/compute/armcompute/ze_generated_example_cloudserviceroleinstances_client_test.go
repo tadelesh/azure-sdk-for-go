@@ -23,27 +23,23 @@ func ExampleCloudServiceRoleInstancesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	cloudServiceRoleInstancesClientDeleteResponsePoller, err := cloudServiceRoleInstancesClient.BeginDelete(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServiceRoleInstancesClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -52,25 +48,22 @@ func ExampleCloudServiceRoleInstancesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	cloudServiceRoleInstancesClientGetResponse, err := cloudServiceRoleInstancesClient.Get(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientGetOptions{Expand: nil})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServiceRoleInstancesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/GetInstanceViewOfCloudServiceRoleInstance.json
@@ -78,25 +71,22 @@ func ExampleCloudServiceRoleInstancesClient_GetInstanceView() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetInstanceView(ctx,
+	cloudServiceRoleInstancesClientGetInstanceViewResponse, err := cloudServiceRoleInstancesClient.GetInstanceView(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServiceRoleInstancesClientGetInstanceViewResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/ListCloudServiceRolesInstances.json
@@ -104,22 +94,19 @@ func ExampleCloudServiceRoleInstancesClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<resource-group-name>",
+	cloudServiceRoleInstancesClientNewListPager := cloudServiceRoleInstancesClient.NewListPager("<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientListOptions{Expand: nil})
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for cloudServiceRoleInstancesClientNewListPager.More() {
+		nextResult, err := cloudServiceRoleInstancesClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -133,27 +120,23 @@ func ExampleCloudServiceRoleInstancesClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRestart(ctx,
+	cloudServiceRoleInstancesClientRestartResponsePoller, err := cloudServiceRoleInstancesClient.BeginRestart(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientBeginRestartOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServiceRoleInstancesClientRestartResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -162,27 +145,23 @@ func ExampleCloudServiceRoleInstancesClient_BeginReimage() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginReimage(ctx,
+	cloudServiceRoleInstancesClientReimageResponsePoller, err := cloudServiceRoleInstancesClient.BeginReimage(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientBeginReimageOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServiceRoleInstancesClientReimageResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -191,26 +170,22 @@ func ExampleCloudServiceRoleInstancesClient_BeginRebuild() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
+	cloudServiceRoleInstancesClient, err := armcompute.NewCloudServiceRoleInstancesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRebuild(ctx,
+	cloudServiceRoleInstancesClientRebuildResponsePoller, err := cloudServiceRoleInstancesClient.BeginRebuild(ctx,
 		"<role-instance-name>",
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServiceRoleInstancesClientBeginRebuildOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServiceRoleInstancesClientRebuildResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }

@@ -22,20 +22,17 @@ func ExampleSSHPublicKeysClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListBySubscriptionPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	sSHPublicKeysClientNewListBySubscriptionPager := sSHPublicKeysClient.NewListBySubscriptionPager(nil)
+	for sSHPublicKeysClientNewListBySubscriptionPager.More() {
+		nextResult, err := sSHPublicKeysClientNewListBySubscriptionPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -49,21 +46,18 @@ func ExampleSSHPublicKeysClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	sSHPublicKeysClientNewListByResourceGroupPager := sSHPublicKeysClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for sSHPublicKeysClientNewListByResourceGroupPager.More() {
+		nextResult, err := sSHPublicKeysClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -77,30 +71,27 @@ func ExampleSSHPublicKeysClient_Create() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Create(ctx,
+	sSHPublicKeysClientCreateResponse, err := sSHPublicKeysClient.Create(ctx,
 		"<resource-group-name>",
 		"<ssh-public-key-name>",
 		armcompute.SSHPublicKeyResource{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 			Properties: &armcompute.SSHPublicKeyResourceProperties{
-				PublicKey: to.Ptr("<public-key>"),
+				PublicKey: to.Ptr("<ssh-public-key-used-to-authenticate-to-a-virtual-machine-through-ssh.-if-this-property-is-not-initially-provided-when-the-resource-is-created,-the-public-key-property-will-be-populated-when-generate-key-pair-is-called.-if-the-public-key-is-provided-upon-resource-creation,-the-provided-public-key-needs-to-be-at-least-2048-bit-and-in-ssh-rsa-format.>"),
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = sSHPublicKeysClientCreateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/SshPublicKeys_Update_MaximumSet_Gen.json
@@ -108,15 +99,13 @@ func ExampleSSHPublicKeysClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Update(ctx,
+	sSHPublicKeysClientUpdateResponse, err := sSHPublicKeysClient.Update(ctx,
 		"<resource-group-name>",
 		"<ssh-public-key-name>",
 		armcompute.SSHPublicKeyUpdateResource{
@@ -124,16 +113,15 @@ func ExampleSSHPublicKeysClient_Update() {
 				"key2854": to.Ptr("a"),
 			},
 			Properties: &armcompute.SSHPublicKeyResourceProperties{
-				PublicKey: to.Ptr("<public-key>"),
+				PublicKey: to.Ptr("<ssh-public-key-used-to-authenticate-to-a-virtual-machine-through-ssh.-if-this-property-is-not-initially-provided-when-the-resource-is-created,-the-public-key-property-will-be-populated-when-generate-key-pair-is-called.-if-the-public-key-is-provided-upon-resource-creation,-the-provided-public-key-needs-to-be-at-least-2048-bit-and-in-ssh-rsa-format.>"),
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = sSHPublicKeysClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/SshPublicKeys_Delete_MaximumSet_Gen.json
@@ -141,21 +129,18 @@ func ExampleSSHPublicKeysClient_Delete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	_, err = client.Delete(ctx,
+	_, err = sSHPublicKeysClient.Delete(ctx,
 		"<resource-group-name>",
 		"<ssh-public-key-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 }
 
@@ -164,24 +149,21 @@ func ExampleSSHPublicKeysClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	sSHPublicKeysClientGetResponse, err := sSHPublicKeysClient.Get(ctx,
 		"<resource-group-name>",
 		"<ssh-public-key-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = sSHPublicKeysClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-11-01/examples/compute/GenerateSshKeyPair.json
@@ -189,22 +171,19 @@ func ExampleSSHPublicKeysClient_GenerateKeyPair() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
+	sSHPublicKeysClient, err := armcompute.NewSSHPublicKeysClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GenerateKeyPair(ctx,
+	sSHPublicKeysClientGenerateKeyPairResponse, err := sSHPublicKeysClient.GenerateKeyPair(ctx,
 		"<resource-group-name>",
 		"<ssh-public-key-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = sSHPublicKeysClientGenerateKeyPairResponse
 }

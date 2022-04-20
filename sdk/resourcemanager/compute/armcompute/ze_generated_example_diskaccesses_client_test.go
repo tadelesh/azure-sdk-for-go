@@ -24,32 +24,28 @@ func ExampleDiskAccessesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	diskAccessesClientCreateOrUpdateResponsePoller, err := diskAccessesClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		armcompute.DiskAccess{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location>"),
 		},
 		&armcompute.DiskAccessesClientBeginCreateOrUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	diskAccessesClientCreateOrUpdateResponse, err := diskAccessesClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/UpdateADiskAccess.json
@@ -57,15 +53,13 @@ func ExampleDiskAccessesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	diskAccessesClientUpdateResponsePoller, err := diskAccessesClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		armcompute.DiskAccessUpdate{
@@ -77,15 +71,13 @@ func ExampleDiskAccessesClient_BeginUpdate() {
 		&armcompute.DiskAccessesClientBeginUpdateOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	diskAccessesClientUpdateResponse, err := diskAccessesClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/GetInformationAboutADiskAccessWithPrivateEndpoints.json
@@ -93,24 +85,21 @@ func ExampleDiskAccessesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	diskAccessesClientGetResponse, err := diskAccessesClient.Get(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/DeleteADiskAccess.json
@@ -118,26 +107,22 @@ func ExampleDiskAccessesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	diskAccessesClientDeleteResponsePoller, err := diskAccessesClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		&armcompute.DiskAccessesClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = diskAccessesClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -146,21 +131,18 @@ func ExampleDiskAccessesClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListByResourceGroupPager("<resource-group-name>",
+	diskAccessesClientNewListByResourceGroupPager := diskAccessesClient.NewListByResourceGroupPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for diskAccessesClientNewListByResourceGroupPager.More() {
+		nextResult, err := diskAccessesClientNewListByResourceGroupPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -174,20 +156,17 @@ func ExampleDiskAccessesClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	diskAccessesClientNewListPager := diskAccessesClient.NewListPager(nil)
+	for diskAccessesClientNewListPager.More() {
+		nextResult, err := diskAccessesClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -201,24 +180,21 @@ func ExampleDiskAccessesClient_GetPrivateLinkResources() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetPrivateLinkResources(ctx,
+	diskAccessesClientGetPrivateLinkResourcesResponse, err := diskAccessesClient.GetPrivateLinkResources(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientGetPrivateLinkResourcesResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/ApprovePrivateEndpointConnection.json
@@ -226,22 +202,20 @@ func ExampleDiskAccessesClient_BeginUpdateAPrivateEndpointConnection() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdateAPrivateEndpointConnection(ctx,
+	diskAccessesClientUpdateAPrivateEndpointConnectionResponsePoller, err := diskAccessesClient.BeginUpdateAPrivateEndpointConnection(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		"<private-endpoint-connection-name>",
 		armcompute.PrivateEndpointConnection{
 			Properties: &armcompute.PrivateEndpointConnectionProperties{
 				PrivateLinkServiceConnectionState: &armcompute.PrivateLinkServiceConnectionState{
-					Description: to.Ptr("<description>"),
+					Description: to.Ptr("<the-reason-for-approval/rejection-of-the-connection.>"),
 					Status:      to.Ptr(armcompute.PrivateEndpointServiceConnectionStatusApproved),
 				},
 			},
@@ -249,15 +223,13 @@ func ExampleDiskAccessesClient_BeginUpdateAPrivateEndpointConnection() {
 		&armcompute.DiskAccessesClientBeginUpdateAPrivateEndpointConnectionOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	diskAccessesClientUpdateAPrivateEndpointConnectionResponse, err := diskAccessesClientUpdateAPrivateEndpointConnectionResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientUpdateAPrivateEndpointConnectionResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/GetInformationAboutAPrivateEndpointConnection.json
@@ -265,25 +237,22 @@ func ExampleDiskAccessesClient_GetAPrivateEndpointConnection() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetAPrivateEndpointConnection(ctx,
+	diskAccessesClientGetAPrivateEndpointConnectionResponse, err := diskAccessesClient.GetAPrivateEndpointConnection(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		"<private-endpoint-connection-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = diskAccessesClientGetAPrivateEndpointConnectionResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-12-01/examples/DeleteAPrivateEndpointConnection.json
@@ -291,27 +260,23 @@ func ExampleDiskAccessesClient_BeginDeleteAPrivateEndpointConnection() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDeleteAPrivateEndpointConnection(ctx,
+	diskAccessesClientDeleteAPrivateEndpointConnectionResponsePoller, err := diskAccessesClient.BeginDeleteAPrivateEndpointConnection(ctx,
 		"<resource-group-name>",
 		"<disk-access-name>",
 		"<private-endpoint-connection-name>",
 		&armcompute.DiskAccessesClientBeginDeleteAPrivateEndpointConnectionOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = diskAccessesClientDeleteAPrivateEndpointConnectionResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -320,22 +285,19 @@ func ExampleDiskAccessesClient_NewListPrivateEndpointConnectionsPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
+	diskAccessesClient, err := armcompute.NewDiskAccessesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPrivateEndpointConnectionsPager("<resource-group-name>",
+	diskAccessesClientNewListPrivateEndpointConnectionsPager := diskAccessesClient.NewListPrivateEndpointConnectionsPager("<resource-group-name>",
 		"<disk-access-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for diskAccessesClientNewListPrivateEndpointConnectionsPager.More() {
+		nextResult, err := diskAccessesClientNewListPrivateEndpointConnectionsPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

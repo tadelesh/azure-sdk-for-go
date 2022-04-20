@@ -25,9 +25,9 @@ import (
 // VirtualMachineScaleSetExtensionsClient contains the methods for the VirtualMachineScaleSetExtensions group.
 // Don't use this type directly, use NewVirtualMachineScaleSetExtensionsClient() instead.
 type VirtualMachineScaleSetExtensionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineScaleSetExtensionsClient creates a new instance of VirtualMachineScaleSetExtensionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewVirtualMachineScaleSetExtensionsClient(subscriptionID string, credential
 	}
 	client := &VirtualMachineScaleSetExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *VirtualMachineScaleSetExtensionsClient) createOrUpdate(ctx context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -155,7 +155,7 @@ func (client *VirtualMachineScaleSetExtensionsClient) deleteOperation(ctx contex
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -258,7 +258,7 @@ func (client *VirtualMachineScaleSetExtensionsClient) getHandleResponse(resp *ht
 // vmScaleSetName - The name of the VM scale set containing the extension.
 // options - VirtualMachineScaleSetExtensionsClientListOptions contains the optional parameters for the VirtualMachineScaleSetExtensionsClient.List
 // method.
-func (client *VirtualMachineScaleSetExtensionsClient) NewListPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetExtensionsClientListOptions) *runtime.Pager[VirtualMachineScaleSetExtensionsClientListResponse] {
+func (client *VirtualMachineScaleSetExtensionsClient) NewListPager(resourceGroupName string, vmScaleSetName string, options *VirtualMachineScaleSetExtensionsClientListOptions) (*runtime.Pager[VirtualMachineScaleSetExtensionsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachineScaleSetExtensionsClientListResponse]{
 		More: func(page VirtualMachineScaleSetExtensionsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -355,7 +355,7 @@ func (client *VirtualMachineScaleSetExtensionsClient) update(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -387,3 +387,4 @@ func (client *VirtualMachineScaleSetExtensionsClient) updateCreateRequest(ctx co
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extensionParameters)
 }
+

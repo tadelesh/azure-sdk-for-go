@@ -21,24 +21,21 @@ func ExampleCloudServiceOperatingSystemsClient_GetOSVersion() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
+	cloudServiceOperatingSystemsClient, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetOSVersion(ctx,
+	cloudServiceOperatingSystemsClientGetOSVersionResponse, err := cloudServiceOperatingSystemsClient.GetOSVersion(ctx,
 		"<location>",
 		"<os-version-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServiceOperatingSystemsClientGetOSVersionResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/ListCloudServiceOSVersions.json
@@ -46,21 +43,18 @@ func ExampleCloudServiceOperatingSystemsClient_NewListOSVersionsPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
+	cloudServiceOperatingSystemsClient, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListOSVersionsPager("<location>",
+	cloudServiceOperatingSystemsClientNewListOSVersionsPager := cloudServiceOperatingSystemsClient.NewListOSVersionsPager("<location>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for cloudServiceOperatingSystemsClientNewListOSVersionsPager.More() {
+		nextResult, err := cloudServiceOperatingSystemsClientNewListOSVersionsPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -74,24 +68,21 @@ func ExampleCloudServiceOperatingSystemsClient_GetOSFamily() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
+	cloudServiceOperatingSystemsClient, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetOSFamily(ctx,
+	cloudServiceOperatingSystemsClientGetOSFamilyResponse, err := cloudServiceOperatingSystemsClient.GetOSFamily(ctx,
 		"<location>",
 		"<os-family-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServiceOperatingSystemsClientGetOSFamilyResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/ListCloudServiceOSFamilies.json
@@ -99,21 +90,18 @@ func ExampleCloudServiceOperatingSystemsClient_NewListOSFamiliesPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
+	cloudServiceOperatingSystemsClient, err := armcompute.NewCloudServiceOperatingSystemsClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListOSFamiliesPager("<location>",
+	cloudServiceOperatingSystemsClientNewListOSFamiliesPager := cloudServiceOperatingSystemsClient.NewListOSFamiliesPager("<location>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for cloudServiceOperatingSystemsClientNewListOSFamiliesPager.More() {
+		nextResult, err := cloudServiceOperatingSystemsClientNewListOSFamiliesPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item

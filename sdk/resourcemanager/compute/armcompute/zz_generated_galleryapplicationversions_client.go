@@ -25,9 +25,9 @@ import (
 // GalleryApplicationVersionsClient contains the methods for the GalleryApplicationVersions group.
 // Don't use this type directly, use NewGalleryApplicationVersionsClient() instead.
 type GalleryApplicationVersionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewGalleryApplicationVersionsClient creates a new instance of GalleryApplicationVersionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewGalleryApplicationVersionsClient(subscriptionID string, credential azcor
 	}
 	client := &GalleryApplicationVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -92,7 +92,7 @@ func (client *GalleryApplicationVersionsClient) createOrUpdate(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -163,7 +163,7 @@ func (client *GalleryApplicationVersionsClient) deleteOperation(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -277,7 +277,7 @@ func (client *GalleryApplicationVersionsClient) getHandleResponse(resp *http.Res
 // are to be listed.
 // options - GalleryApplicationVersionsClientListByGalleryApplicationOptions contains the optional parameters for the GalleryApplicationVersionsClient.ListByGalleryApplication
 // method.
-func (client *GalleryApplicationVersionsClient) NewListByGalleryApplicationPager(resourceGroupName string, galleryName string, galleryApplicationName string, options *GalleryApplicationVersionsClientListByGalleryApplicationOptions) *runtime.Pager[GalleryApplicationVersionsClientListByGalleryApplicationResponse] {
+func (client *GalleryApplicationVersionsClient) NewListByGalleryApplicationPager(resourceGroupName string, galleryName string, galleryApplicationName string, options *GalleryApplicationVersionsClientListByGalleryApplicationOptions) (*runtime.Pager[GalleryApplicationVersionsClientListByGalleryApplicationResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[GalleryApplicationVersionsClientListByGalleryApplicationResponse]{
 		More: func(page GalleryApplicationVersionsClientListByGalleryApplicationResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -381,7 +381,7 @@ func (client *GalleryApplicationVersionsClient) update(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -417,3 +417,4 @@ func (client *GalleryApplicationVersionsClient) updateCreateRequest(ctx context.
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, galleryApplicationVersion)
 }
+

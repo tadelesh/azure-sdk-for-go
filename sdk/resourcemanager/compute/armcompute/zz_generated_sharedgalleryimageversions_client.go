@@ -25,9 +25,9 @@ import (
 // SharedGalleryImageVersionsClient contains the methods for the SharedGalleryImageVersions group.
 // Don't use this type directly, use NewSharedGalleryImageVersionsClient() instead.
 type SharedGalleryImageVersionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewSharedGalleryImageVersionsClient creates a new instance of SharedGalleryImageVersionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewSharedGalleryImageVersionsClient(subscriptionID string, credential azcor
 	}
 	client := &SharedGalleryImageVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -130,7 +130,7 @@ func (client *SharedGalleryImageVersionsClient) getHandleResponse(resp *http.Res
 // galleryImageName - The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
 // options - SharedGalleryImageVersionsClientListOptions contains the optional parameters for the SharedGalleryImageVersionsClient.List
 // method.
-func (client *SharedGalleryImageVersionsClient) NewListPager(location string, galleryUniqueName string, galleryImageName string, options *SharedGalleryImageVersionsClientListOptions) *runtime.Pager[SharedGalleryImageVersionsClientListResponse] {
+func (client *SharedGalleryImageVersionsClient) NewListPager(location string, galleryUniqueName string, galleryImageName string, options *SharedGalleryImageVersionsClientListOptions) (*runtime.Pager[SharedGalleryImageVersionsClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[SharedGalleryImageVersionsClientListResponse]{
 		More: func(page SharedGalleryImageVersionsClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -199,3 +199,4 @@ func (client *SharedGalleryImageVersionsClient) listHandleResponse(resp *http.Re
 	}
 	return result, nil
 }
+

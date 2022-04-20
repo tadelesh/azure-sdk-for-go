@@ -26,9 +26,9 @@ import (
 // VirtualMachineExtensionImagesClient contains the methods for the VirtualMachineExtensionImages group.
 // Don't use this type directly, use NewVirtualMachineExtensionImagesClient() instead.
 type VirtualMachineExtensionImagesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineExtensionImagesClient creates a new instance of VirtualMachineExtensionImagesClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachineExtensionImagesClient(subscriptionID string, credential az
 	}
 	client := &VirtualMachineExtensionImagesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -241,3 +241,4 @@ func (client *VirtualMachineExtensionImagesClient) listVersionsHandleResponse(re
 	}
 	return result, nil
 }
+

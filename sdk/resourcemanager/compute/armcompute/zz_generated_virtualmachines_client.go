@@ -26,9 +26,9 @@ import (
 // VirtualMachinesClient contains the methods for the VirtualMachines group.
 // Don't use this type directly, use NewVirtualMachinesClient() instead.
 type VirtualMachinesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachinesClient creates a new instance of VirtualMachinesClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachinesClient(subscriptionID string, credential azcore.TokenCred
 	}
 	client := &VirtualMachinesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -90,7 +90,7 @@ func (client *VirtualMachinesClient) assessPatches(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // assessPatchesCreateRequest creates the AssessPatches request.
@@ -156,7 +156,7 @@ func (client *VirtualMachinesClient) capture(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // captureCreateRequest creates the Capture request.
@@ -219,7 +219,7 @@ func (client *VirtualMachinesClient) convertToManagedDisks(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // convertToManagedDisksCreateRequest creates the ConvertToManagedDisks request.
@@ -283,7 +283,7 @@ func (client *VirtualMachinesClient) createOrUpdate(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -346,7 +346,7 @@ func (client *VirtualMachinesClient) deallocate(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deallocateCreateRequest creates the Deallocate request.
@@ -410,7 +410,7 @@ func (client *VirtualMachinesClient) deleteOperation(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -586,7 +586,7 @@ func (client *VirtualMachinesClient) installPatches(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // installPatchesCreateRequest creates the InstallPatches request.
@@ -676,7 +676,7 @@ func (client *VirtualMachinesClient) instanceViewHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group.
 // options - VirtualMachinesClientListOptions contains the optional parameters for the VirtualMachinesClient.List method.
-func (client *VirtualMachinesClient) NewListPager(resourceGroupName string, options *VirtualMachinesClientListOptions) *runtime.Pager[VirtualMachinesClientListResponse] {
+func (client *VirtualMachinesClient) NewListPager(resourceGroupName string, options *VirtualMachinesClientListOptions) (*runtime.Pager[VirtualMachinesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListResponse]{
 		More: func(page VirtualMachinesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -742,7 +742,7 @@ func (client *VirtualMachinesClient) listHandleResponse(resp *http.Response) (Vi
 // to get the next page of virtual machines.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - VirtualMachinesClientListAllOptions contains the optional parameters for the VirtualMachinesClient.ListAll method.
-func (client *VirtualMachinesClient) NewListAllPager(options *VirtualMachinesClientListAllOptions) *runtime.Pager[VirtualMachinesClientListAllResponse] {
+func (client *VirtualMachinesClient) NewListAllPager(options *VirtualMachinesClientListAllOptions) (*runtime.Pager[VirtualMachinesClientListAllResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListAllResponse]{
 		More: func(page VirtualMachinesClientListAllResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -809,7 +809,7 @@ func (client *VirtualMachinesClient) listAllHandleResponse(resp *http.Response) 
 // vmName - The name of the virtual machine.
 // options - VirtualMachinesClientListAvailableSizesOptions contains the optional parameters for the VirtualMachinesClient.ListAvailableSizes
 // method.
-func (client *VirtualMachinesClient) NewListAvailableSizesPager(resourceGroupName string, vmName string, options *VirtualMachinesClientListAvailableSizesOptions) *runtime.Pager[VirtualMachinesClientListAvailableSizesResponse] {
+func (client *VirtualMachinesClient) NewListAvailableSizesPager(resourceGroupName string, vmName string, options *VirtualMachinesClientListAvailableSizesOptions) (*runtime.Pager[VirtualMachinesClientListAvailableSizesResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListAvailableSizesResponse]{
 		More: func(page VirtualMachinesClientListAvailableSizesResponse) bool {
 			return false
@@ -871,7 +871,7 @@ func (client *VirtualMachinesClient) listAvailableSizesHandleResponse(resp *http
 // location - The location for which virtual machines under the subscription are queried.
 // options - VirtualMachinesClientListByLocationOptions contains the optional parameters for the VirtualMachinesClient.ListByLocation
 // method.
-func (client *VirtualMachinesClient) NewListByLocationPager(location string, options *VirtualMachinesClientListByLocationOptions) *runtime.Pager[VirtualMachinesClientListByLocationResponse] {
+func (client *VirtualMachinesClient) NewListByLocationPager(location string, options *VirtualMachinesClientListByLocationOptions) (*runtime.Pager[VirtualMachinesClientListByLocationResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[VirtualMachinesClientListByLocationResponse]{
 		More: func(page VirtualMachinesClientListByLocationResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -962,7 +962,7 @@ func (client *VirtualMachinesClient) performMaintenance(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // performMaintenanceCreateRequest creates the PerformMaintenance request.
@@ -1025,7 +1025,7 @@ func (client *VirtualMachinesClient) powerOff(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // powerOffCreateRequest creates the PowerOff request.
@@ -1089,7 +1089,7 @@ func (client *VirtualMachinesClient) reapply(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reapplyCreateRequest creates the Reapply request.
@@ -1150,7 +1150,7 @@ func (client *VirtualMachinesClient) redeploy(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // redeployCreateRequest creates the Redeploy request.
@@ -1211,7 +1211,7 @@ func (client *VirtualMachinesClient) reimage(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // reimageCreateRequest creates the Reimage request.
@@ -1275,7 +1275,7 @@ func (client *VirtualMachinesClient) restart(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -1398,7 +1398,7 @@ func (client *VirtualMachinesClient) runCommand(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // runCommandCreateRequest creates the RunCommand request.
@@ -1506,7 +1506,7 @@ func (client *VirtualMachinesClient) start(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -1568,7 +1568,7 @@ func (client *VirtualMachinesClient) update(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -1596,3 +1596,4 @@ func (client *VirtualMachinesClient) updateCreateRequest(ctx context.Context, re
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

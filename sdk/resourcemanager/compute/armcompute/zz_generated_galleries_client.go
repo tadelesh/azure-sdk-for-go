@@ -25,9 +25,9 @@ import (
 // GalleriesClient contains the methods for the Galleries group.
 // Don't use this type directly, use NewGalleriesClient() instead.
 type GalleriesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewGalleriesClient creates a new instance of GalleriesClient with the specified values.
@@ -49,8 +49,8 @@ func NewGalleriesClient(subscriptionID string, credential azcore.TokenCredential
 	}
 	client := &GalleriesClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *GalleriesClient) createOrUpdate(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -149,7 +149,7 @@ func (client *GalleriesClient) deleteOperation(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -242,7 +242,7 @@ func (client *GalleriesClient) getHandleResponse(resp *http.Response) (Galleries
 // NewListPager - List galleries under a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - GalleriesClientListOptions contains the optional parameters for the GalleriesClient.List method.
-func (client *GalleriesClient) NewListPager(options *GalleriesClientListOptions) *runtime.Pager[GalleriesClientListResponse] {
+func (client *GalleriesClient) NewListPager(options *GalleriesClientListOptions) (*runtime.Pager[GalleriesClientListResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[GalleriesClientListResponse]{
 		More: func(page GalleriesClientListResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -302,7 +302,7 @@ func (client *GalleriesClient) listHandleResponse(resp *http.Response) (Gallerie
 // resourceGroupName - The name of the resource group.
 // options - GalleriesClientListByResourceGroupOptions contains the optional parameters for the GalleriesClient.ListByResourceGroup
 // method.
-func (client *GalleriesClient) NewListByResourceGroupPager(resourceGroupName string, options *GalleriesClientListByResourceGroupOptions) *runtime.Pager[GalleriesClientListByResourceGroupResponse] {
+func (client *GalleriesClient) NewListByResourceGroupPager(resourceGroupName string, options *GalleriesClientListByResourceGroupOptions) (*runtime.Pager[GalleriesClientListByResourceGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[GalleriesClientListByResourceGroupResponse]{
 		More: func(page GalleriesClientListByResourceGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -394,7 +394,7 @@ func (client *GalleriesClient) update(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -422,3 +422,4 @@ func (client *GalleriesClient) updateCreateRequest(ctx context.Context, resource
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, gallery)
 }
+

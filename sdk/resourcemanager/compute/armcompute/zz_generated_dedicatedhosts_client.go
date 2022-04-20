@@ -25,9 +25,9 @@ import (
 // DedicatedHostsClient contains the methods for the DedicatedHosts group.
 // Don't use this type directly, use NewDedicatedHostsClient() instead.
 type DedicatedHostsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDedicatedHostsClient creates a new instance of DedicatedHostsClient with the specified values.
@@ -49,8 +49,8 @@ func NewDedicatedHostsClient(subscriptionID string, credential azcore.TokenCrede
 	}
 	client := &DedicatedHostsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -89,7 +89,7 @@ func (client *DedicatedHostsClient) createOrUpdate(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -155,7 +155,7 @@ func (client *DedicatedHostsClient) deleteOperation(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -258,7 +258,7 @@ func (client *DedicatedHostsClient) getHandleResponse(resp *http.Response) (Dedi
 // hostGroupName - The name of the dedicated host group.
 // options - DedicatedHostsClientListByHostGroupOptions contains the optional parameters for the DedicatedHostsClient.ListByHostGroup
 // method.
-func (client *DedicatedHostsClient) NewListByHostGroupPager(resourceGroupName string, hostGroupName string, options *DedicatedHostsClientListByHostGroupOptions) *runtime.Pager[DedicatedHostsClientListByHostGroupResponse] {
+func (client *DedicatedHostsClient) NewListByHostGroupPager(resourceGroupName string, hostGroupName string, options *DedicatedHostsClientListByHostGroupOptions) (*runtime.Pager[DedicatedHostsClientListByHostGroupResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DedicatedHostsClientListByHostGroupResponse]{
 		More: func(page DedicatedHostsClientListByHostGroupResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -360,7 +360,7 @@ func (client *DedicatedHostsClient) restart(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -427,7 +427,7 @@ func (client *DedicatedHostsClient) update(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -459,3 +459,4 @@ func (client *DedicatedHostsClient) updateCreateRequest(ctx context.Context, res
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
+

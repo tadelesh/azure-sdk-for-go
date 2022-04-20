@@ -26,9 +26,9 @@ import (
 // VirtualMachineImagesEdgeZoneClient contains the methods for the VirtualMachineImagesEdgeZone group.
 // Don't use this type directly, use NewVirtualMachineImagesEdgeZoneClient() instead.
 type VirtualMachineImagesEdgeZoneClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewVirtualMachineImagesEdgeZoneClient creates a new instance of VirtualMachineImagesEdgeZoneClient with the specified values.
@@ -50,8 +50,8 @@ func NewVirtualMachineImagesEdgeZoneClient(subscriptionID string, credential azc
 	}
 	client := &VirtualMachineImagesEdgeZoneClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -394,3 +394,4 @@ func (client *VirtualMachineImagesEdgeZoneClient) listSKUsHandleResponse(resp *h
 	}
 	return result, nil
 }
+

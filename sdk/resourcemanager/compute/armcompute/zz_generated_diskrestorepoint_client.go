@@ -25,9 +25,9 @@ import (
 // DiskRestorePointClient contains the methods for the DiskRestorePoint group.
 // Don't use this type directly, use NewDiskRestorePointClient() instead.
 type DiskRestorePointClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDiskRestorePointClient creates a new instance of DiskRestorePointClient with the specified values.
@@ -49,8 +49,8 @@ func NewDiskRestorePointClient(subscriptionID string, credential azcore.TokenCre
 	}
 	client := &DiskRestorePointClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -157,7 +157,7 @@ func (client *DiskRestorePointClient) grantAccess(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // grantAccessCreateRequest creates the GrantAccess request.
@@ -201,7 +201,7 @@ func (client *DiskRestorePointClient) grantAccessCreateRequest(ctx context.Conte
 // vmRestorePointName - The name of the vm restore point that the disk disk restore point belongs.
 // options - DiskRestorePointClientListByRestorePointOptions contains the optional parameters for the DiskRestorePointClient.ListByRestorePoint
 // method.
-func (client *DiskRestorePointClient) NewListByRestorePointPager(resourceGroupName string, restorePointCollectionName string, vmRestorePointName string, options *DiskRestorePointClientListByRestorePointOptions) *runtime.Pager[DiskRestorePointClientListByRestorePointResponse] {
+func (client *DiskRestorePointClient) NewListByRestorePointPager(resourceGroupName string, restorePointCollectionName string, vmRestorePointName string, options *DiskRestorePointClientListByRestorePointOptions) (*runtime.Pager[DiskRestorePointClientListByRestorePointResponse]) {
 	return runtime.NewPager(runtime.PageProcessor[DiskRestorePointClientListByRestorePointResponse]{
 		More: func(page DiskRestorePointClientListByRestorePointResponse) bool {
 			return page.NextLink != nil && len(*page.NextLink) > 0
@@ -304,7 +304,7 @@ func (client *DiskRestorePointClient) revokeAccess(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // revokeAccessCreateRequest creates the RevokeAccess request.
@@ -340,3 +340,4 @@ func (client *DiskRestorePointClient) revokeAccessCreateRequest(ctx context.Cont
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
+

@@ -25,9 +25,9 @@ import (
 // CommunityGalleryImageVersionsClient contains the methods for the CommunityGalleryImageVersions group.
 // Don't use this type directly, use NewCommunityGalleryImageVersionsClient() instead.
 type CommunityGalleryImageVersionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCommunityGalleryImageVersionsClient creates a new instance of CommunityGalleryImageVersionsClient with the specified values.
@@ -49,8 +49,8 @@ func NewCommunityGalleryImageVersionsClient(subscriptionID string, credential az
 	}
 	client := &CommunityGalleryImageVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           ep,
-		pl:             pl,
+		host: ep,
+pl: pl,
 	}
 	return client, nil
 }
@@ -122,3 +122,4 @@ func (client *CommunityGalleryImageVersionsClient) getHandleResponse(resp *http.
 	}
 	return result, nil
 }
+

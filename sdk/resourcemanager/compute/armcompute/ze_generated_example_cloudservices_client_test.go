@@ -24,55 +24,53 @@ func ExampleCloudServicesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginCreateOrUpdate(ctx,
+	cloudServicesClientCreateOrUpdateResponsePoller, err := cloudServicesClient.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginCreateOrUpdateOptions{Parameters: &armcompute.CloudService{
-			Location: to.Ptr("<location>"),
+			Location: to.Ptr("<resource-location.>"),
 			Properties: &armcompute.CloudServiceProperties{
-				Configuration: to.Ptr("<configuration>"),
+				Configuration: to.Ptr("<specifies-the-xml-service-configuration-(.cscfg)-for-the-cloud-service.>"),
 				NetworkProfile: &armcompute.CloudServiceNetworkProfile{
 					LoadBalancerConfigurations: []*armcompute.LoadBalancerConfiguration{
 						{
-							Name: to.Ptr("<name>"),
+							Name: to.Ptr("<the-name-of-the-load-balancer>"),
 							Properties: &armcompute.LoadBalancerConfigurationProperties{
 								FrontendIPConfigurations: []*armcompute.LoadBalancerFrontendIPConfiguration{
 									{
-										Name: to.Ptr("<name>"),
+										Name: to.Ptr("<the-name-of-the-resource-that-is-unique-within-the-set-of-frontend-ip-configurations-used-by-the-load-balancer.-this-name-can-be-used-to-access-the-resource.>"),
 										Properties: &armcompute.LoadBalancerFrontendIPConfigurationProperties{
 											PublicIPAddress: &armcompute.SubResource{
-												ID: to.Ptr("<id>"),
+												ID: to.Ptr("<resource-id>"),
 											},
 										},
 									}},
 							},
 						}},
 				},
-				PackageURL: to.Ptr("<package-url>"),
+				PackageURL: to.Ptr("<specifies-a-url-that-refers-to-the-location-of-the-service-package-in-the-blob-service.-the-service-package-url-can-be-shared-access-signature-(sas)-uri-from-any-storage-account.\r\nthis-is-a-write-only-property-and-is-not-returned-in-get-calls.>"),
 				RoleProfile: &armcompute.CloudServiceRoleProfile{
 					Roles: []*armcompute.CloudServiceRoleProfileProperties{
 						{
-							Name: to.Ptr("<name>"),
+							Name: to.Ptr("<resource-name.>"),
 							SKU: &armcompute.CloudServiceRoleSKU{
-								Name:     to.Ptr("<name>"),
+								Name:     to.Ptr("<the-sku-name.-note:-if-the-new-sku-is-not-supported-on-the-hardware-the-cloud-service-is-currently-on,-you-need-to-delete-and-recreate-the-cloud-service-or-move-back-to-the-old-sku.>"),
 								Capacity: to.Ptr[int64](1),
-								Tier:     to.Ptr("<tier>"),
+								Tier:     to.Ptr("<specifies-the-tier-of-the-cloud-service.-possible-values-are-<br-/><br-/>-**standard**-<br-/><br-/>-**basic**>"),
 							},
 						},
 						{
-							Name: to.Ptr("<name>"),
+							Name: to.Ptr("<resource-name.>"),
 							SKU: &armcompute.CloudServiceRoleSKU{
-								Name:     to.Ptr("<name>"),
+								Name:     to.Ptr("<the-sku-name.-note:-if-the-new-sku-is-not-supported-on-the-hardware-the-cloud-service-is-currently-on,-you-need-to-delete-and-recreate-the-cloud-service-or-move-back-to-the-old-sku.>"),
 								Capacity: to.Ptr[int64](1),
-								Tier:     to.Ptr("<tier>"),
+								Tier:     to.Ptr("<specifies-the-tier-of-the-cloud-service.-possible-values-are-<br-/><br-/>-**standard**-<br-/><br-/>-**basic**>"),
 							},
 						}},
 				},
@@ -83,15 +81,13 @@ func ExampleCloudServicesClient_BeginCreateOrUpdate() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	cloudServicesClientCreateOrUpdateResponse, err := cloudServicesClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServicesClientCreateOrUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/UpdateCloudServiceToIncludeTags.json
@@ -99,15 +95,13 @@ func ExampleCloudServicesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginUpdate(ctx,
+	cloudServicesClientUpdateResponsePoller, err := cloudServicesClient.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginUpdateOptions{Parameters: &armcompute.CloudServiceUpdate{
@@ -119,15 +113,13 @@ func ExampleCloudServicesClient_BeginUpdate() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	res, err := poller.PollUntilDone(ctx, 30*time.Second)
+	cloudServicesClientUpdateResponse, err := cloudServicesClientUpdateResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServicesClientUpdateResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/DeleteCloudService.json
@@ -135,26 +127,22 @@ func ExampleCloudServicesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDelete(ctx,
+	cloudServicesClientDeleteResponsePoller, err := cloudServicesClient.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginDeleteOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientDeleteResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -163,24 +151,21 @@ func ExampleCloudServicesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.Get(ctx,
+	cloudServicesClientGetResponse, err := cloudServicesClient.Get(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServicesClientGetResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/GetCloudServiceInstanceViewWithMultiRole.json
@@ -188,24 +173,21 @@ func ExampleCloudServicesClient_GetInstanceView() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	res, err := client.GetInstanceView(ctx,
+	cloudServicesClientGetInstanceViewResponse, err := cloudServicesClient.GetInstanceView(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res
+	_ = cloudServicesClientGetInstanceViewResponse
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/compute/resource-manager/Microsoft.Compute/stable/2021-03-01/examples/ListCloudServicesInSubscription.json
@@ -213,20 +195,17 @@ func ExampleCloudServicesClient_NewListAllPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListAllPager(nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	cloudServicesClientNewListAllPager := cloudServicesClient.NewListAllPager(nil)
+	for cloudServicesClientNewListAllPager.More() {
+		nextResult, err := cloudServicesClientNewListAllPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -240,21 +219,18 @@ func ExampleCloudServicesClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	pager := client.NewListPager("<resource-group-name>",
+	cloudServicesClientNewListPager := cloudServicesClient.NewListPager("<resource-group-name>",
 		nil)
-	for pager.More() {
-		nextResult, err := pager.NextPage(ctx)
+	for cloudServicesClientNewListPager.More() {
+		nextResult, err := cloudServicesClientNewListPager.NextPage(ctx)
 		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
 		for _, v := range nextResult.Value {
 			// TODO: use page item
@@ -268,26 +244,22 @@ func ExampleCloudServicesClient_BeginStart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginStart(ctx,
+	cloudServicesClientStartResponsePoller, err := cloudServicesClient.BeginStart(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginStartOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientStartResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -296,26 +268,22 @@ func ExampleCloudServicesClient_BeginPowerOff() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginPowerOff(ctx,
+	cloudServicesClientPowerOffResponsePoller, err := cloudServicesClient.BeginPowerOff(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginPowerOffOptions{ResumeToken: ""})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientPowerOffResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -324,15 +292,13 @@ func ExampleCloudServicesClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRestart(ctx,
+	cloudServicesClientRestartResponsePoller, err := cloudServicesClient.BeginRestart(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginRestartOptions{Parameters: &armcompute.RoleInstances{
@@ -344,12 +310,10 @@ func ExampleCloudServicesClient_BeginRestart() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientRestartResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -358,15 +322,13 @@ func ExampleCloudServicesClient_BeginReimage() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginReimage(ctx,
+	cloudServicesClientReimageResponsePoller, err := cloudServicesClient.BeginReimage(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginReimageOptions{Parameters: &armcompute.RoleInstances{
@@ -378,12 +340,10 @@ func ExampleCloudServicesClient_BeginReimage() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientReimageResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -392,15 +352,13 @@ func ExampleCloudServicesClient_BeginRebuild() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginRebuild(ctx,
+	cloudServicesClientRebuildResponsePoller, err := cloudServicesClient.BeginRebuild(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginRebuildOptions{Parameters: &armcompute.RoleInstances{
@@ -412,12 +370,10 @@ func ExampleCloudServicesClient_BeginRebuild() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientRebuildResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -426,15 +382,13 @@ func ExampleCloudServicesClient_BeginDeleteInstances() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
 	ctx := context.Background()
-	client, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
+	cloudServicesClient, err := armcompute.NewCloudServicesClient("<subscription-id>", cred, nil)
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
-		return
 	}
-	poller, err := client.BeginDeleteInstances(ctx,
+	cloudServicesClientDeleteInstancesResponsePoller, err := cloudServicesClient.BeginDeleteInstances(ctx,
 		"<resource-group-name>",
 		"<cloud-service-name>",
 		&armcompute.CloudServicesClientBeginDeleteInstancesOptions{Parameters: &armcompute.RoleInstances{
@@ -446,11 +400,9 @@ func ExampleCloudServicesClient_BeginDeleteInstances() {
 		})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
+	_, err = cloudServicesClientDeleteInstancesResponsePoller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
