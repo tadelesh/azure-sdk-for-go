@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -27,11 +27,6 @@ func PossibleActionTypeValues() []ActionType {
 	}
 }
 
-// ToPtr returns a *ActionType pointing to the current value.
-func (c ActionType) ToPtr() *ActionType {
-	return &c
-}
-
 // AppResourceProvisioningState - Provisioning state of the App
 type AppResourceProvisioningState string
 
@@ -50,11 +45,6 @@ func PossibleAppResourceProvisioningStateValues() []AppResourceProvisioningState
 		AppResourceProvisioningStateSucceeded,
 		AppResourceProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *AppResourceProvisioningState pointing to the current value.
-func (c AppResourceProvisioningState) ToPtr() *AppResourceProvisioningState {
-	return &c
 }
 
 // ConfigServerState - State of the config server.
@@ -79,11 +69,6 @@ func PossibleConfigServerStateValues() []ConfigServerState {
 	}
 }
 
-// ToPtr returns a *ConfigServerState pointing to the current value.
-func (c ConfigServerState) ToPtr() *ConfigServerState {
-	return &c
-}
-
 // DeploymentResourceProvisioningState - Provisioning state of the Deployment
 type DeploymentResourceProvisioningState string
 
@@ -102,11 +87,6 @@ func PossibleDeploymentResourceProvisioningStateValues() []DeploymentResourcePro
 		DeploymentResourceProvisioningStateSucceeded,
 		DeploymentResourceProvisioningStateUpdating,
 	}
-}
-
-// ToPtr returns a *DeploymentResourceProvisioningState pointing to the current value.
-func (c DeploymentResourceProvisioningState) ToPtr() *DeploymentResourceProvisioningState {
-	return &c
 }
 
 // DeploymentResourceStatus - Status of the Deployment
@@ -135,11 +115,6 @@ func PossibleDeploymentResourceStatusValues() []DeploymentResourceStatus {
 	}
 }
 
-// ToPtr returns a *DeploymentResourceStatus pointing to the current value.
-func (c DeploymentResourceStatus) ToPtr() *DeploymentResourceStatus {
-	return &c
-}
-
 // ManagedIdentityType - Type of the managed identity
 type ManagedIdentityType string
 
@@ -160,11 +135,6 @@ func PossibleManagedIdentityTypeValues() []ManagedIdentityType {
 	}
 }
 
-// ToPtr returns a *ManagedIdentityType pointing to the current value.
-func (c ManagedIdentityType) ToPtr() *ManagedIdentityType {
-	return &c
-}
-
 // MonitoringSettingState - State of the Monitoring Setting.
 type MonitoringSettingState string
 
@@ -183,11 +153,6 @@ func PossibleMonitoringSettingStateValues() []MonitoringSettingState {
 		MonitoringSettingStateSucceeded,
 		MonitoringSettingStateUpdating,
 	}
-}
-
-// ToPtr returns a *MonitoringSettingState pointing to the current value.
-func (c MonitoringSettingState) ToPtr() *MonitoringSettingState {
-	return &c
 }
 
 // ProvisioningState - Provisioning state of the Service
@@ -220,11 +185,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 	}
 }
 
-// ToPtr returns a *ProvisioningState pointing to the current value.
-func (c ProvisioningState) ToPtr() *ProvisioningState {
-	return &c
-}
-
 // ResourceSKURestrictionsReasonCode - Gets the reason for restriction. Possible values include: 'QuotaId', 'NotAvailableForSubscription'
 type ResourceSKURestrictionsReasonCode string
 
@@ -241,11 +201,6 @@ func PossibleResourceSKURestrictionsReasonCodeValues() []ResourceSKURestrictions
 	}
 }
 
-// ToPtr returns a *ResourceSKURestrictionsReasonCode pointing to the current value.
-func (c ResourceSKURestrictionsReasonCode) ToPtr() *ResourceSKURestrictionsReasonCode {
-	return &c
-}
-
 // ResourceSKURestrictionsType - Gets the type of restrictions. Possible values include: 'Location', 'Zone'
 type ResourceSKURestrictionsType string
 
@@ -260,11 +215,6 @@ func PossibleResourceSKURestrictionsTypeValues() []ResourceSKURestrictionsType {
 		ResourceSKURestrictionsTypeLocation,
 		ResourceSKURestrictionsTypeZone,
 	}
-}
-
-// ToPtr returns a *ResourceSKURestrictionsType pointing to the current value.
-func (c ResourceSKURestrictionsType) ToPtr() *ResourceSKURestrictionsType {
-	return &c
 }
 
 // RuntimeVersion - Runtime version
@@ -285,11 +235,6 @@ func PossibleRuntimeVersionValues() []RuntimeVersion {
 	}
 }
 
-// ToPtr returns a *RuntimeVersion pointing to the current value.
-func (c RuntimeVersion) ToPtr() *RuntimeVersion {
-	return &c
-}
-
 // SKUScaleType - Gets or sets the type of the scale.
 type SKUScaleType string
 
@@ -308,11 +253,6 @@ func PossibleSKUScaleTypeValues() []SKUScaleType {
 	}
 }
 
-// ToPtr returns a *SKUScaleType pointing to the current value.
-func (c SKUScaleType) ToPtr() *SKUScaleType {
-	return &c
-}
-
 // SupportedRuntimePlatform - The platform of this runtime version (possible values: "Java" or ".NET").
 type SupportedRuntimePlatform string
 
@@ -327,11 +267,6 @@ func PossibleSupportedRuntimePlatformValues() []SupportedRuntimePlatform {
 		SupportedRuntimePlatformJava,
 		SupportedRuntimePlatformNETCore,
 	}
-}
-
-// ToPtr returns a *SupportedRuntimePlatform pointing to the current value.
-func (c SupportedRuntimePlatform) ToPtr() *SupportedRuntimePlatform {
-	return &c
 }
 
 // SupportedRuntimeValue - The raw value which could be passed to deployment CRUD operations.
@@ -352,11 +287,6 @@ func PossibleSupportedRuntimeValueValues() []SupportedRuntimeValue {
 	}
 }
 
-// ToPtr returns a *SupportedRuntimeValue pointing to the current value.
-func (c SupportedRuntimeValue) ToPtr() *SupportedRuntimeValue {
-	return &c
-}
-
 // TestKeyType - Type of the test key
 type TestKeyType string
 
@@ -371,11 +301,6 @@ func PossibleTestKeyTypeValues() []TestKeyType {
 		TestKeyTypePrimary,
 		TestKeyTypeSecondary,
 	}
-}
-
-// ToPtr returns a *TestKeyType pointing to the current value.
-func (c TestKeyType) ToPtr() *TestKeyType {
-	return &c
 }
 
 // TrafficDirection - The direction of required traffic
@@ -394,11 +319,6 @@ func PossibleTrafficDirectionValues() []TrafficDirection {
 	}
 }
 
-// ToPtr returns a *TrafficDirection pointing to the current value.
-func (c TrafficDirection) ToPtr() *TrafficDirection {
-	return &c
-}
-
 // UserSourceType - Type of the source uploaded
 type UserSourceType string
 
@@ -415,10 +335,5 @@ func PossibleUserSourceTypeValues() []UserSourceType {
 		UserSourceTypeNetCoreZip,
 		UserSourceTypeSource,
 	}
-}
-
-// ToPtr returns a *UserSourceType pointing to the current value.
-func (c UserSourceType) ToPtr() *UserSourceType {
-	return &c
 }
 

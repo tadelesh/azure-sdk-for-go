@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -11,9 +11,9 @@ package armappplatform_test
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
-	"runtime/debug"
 	"testing"
 
 	"encoding/json"
@@ -22,6 +22,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/cloud"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
@@ -42,12 +43,10 @@ func TestServices_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -56,61 +55,59 @@ func TestServices_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ServiceResource{
-			Name:     to.StringPtr("myservice"),
-			Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-			ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-			Location: to.StringPtr("eastus"),
-			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
-			},
-			Properties: &armappplatform.ClusterResourceProperties{
-				NetworkProfile: &armappplatform.NetworkProfile{
-					OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-						PublicIPs: []*string{
-							to.StringPtr("20.39.3.173"),
-							to.StringPtr("40.64.67.13")},
-					},
-					RequiredTraffics: []*armappplatform.RequiredTraffic{
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(443),
-							Protocol: to.StringPtr("TCP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(1194),
-							Protocol: to.StringPtr("UDP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(9000),
-							Protocol: to.StringPtr("TCP"),
-						}},
+	exampleRes := armappplatform.ServiceResource{
+		Name:     to.Ptr("myservice"),
+		Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+		ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+		Location: to.Ptr("eastus"),
+		Tags: map[string]*string{
+			"key1": to.Ptr("value1"),
+		},
+		Properties: &armappplatform.ClusterResourceProperties{
+			NetworkProfile: &armappplatform.NetworkProfile{
+				OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+					PublicIPs: []*string{
+						to.Ptr("20.39.3.173"),
+						to.Ptr("40.64.67.13")},
 				},
-				ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-				ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+				RequiredTraffics: []*armappplatform.RequiredTraffic{
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](443),
+						Protocol: to.Ptr("TCP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](1194),
+						Protocol: to.Ptr("UDP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](9000),
+						Protocol: to.Ptr("TCP"),
+					}},
 			},
-			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ServiceResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+			ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+		},
+		SKU: &armappplatform.SKU{
+			Name: to.Ptr("S0"),
+			Tier: to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ServiceResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -119,24 +116,22 @@ func TestServices_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.ServiceResource{
-			Location: to.StringPtr("eastus"),
+			Location: to.Ptr("eastus"),
 			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
+				"key1": to.Ptr("value1"),
 			},
 			Properties: &armappplatform.ClusterResourceProperties{},
 			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
+				Name: to.Ptr("S0"),
+				Tier: to.Ptr("Standard"),
 			},
 		},
 		nil)
@@ -148,88 +143,89 @@ func TestServices_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ServiceResource{
-			Name:     to.StringPtr("myservice"),
-			Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-			ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-			Location: to.StringPtr("eastus"),
-			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
-			},
-			Properties: &armappplatform.ClusterResourceProperties{
-				NetworkProfile: &armappplatform.NetworkProfile{
-					OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-						PublicIPs: []*string{
-							to.StringPtr("20.39.3.173"),
-							to.StringPtr("40.64.67.13")},
-					},
-					RequiredTraffics: []*armappplatform.RequiredTraffic{
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(443),
-							Protocol: to.StringPtr("TCP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(1194),
-							Protocol: to.StringPtr("UDP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(9000),
-							Protocol: to.StringPtr("TCP"),
-						}},
+	exampleRes := armappplatform.ServiceResource{
+		Name:     to.Ptr("myservice"),
+		Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+		ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+		Location: to.Ptr("eastus"),
+		Tags: map[string]*string{
+			"key1": to.Ptr("value1"),
+		},
+		Properties: &armappplatform.ClusterResourceProperties{
+			NetworkProfile: &armappplatform.NetworkProfile{
+				OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+					PublicIPs: []*string{
+						to.Ptr("20.39.3.173"),
+						to.Ptr("40.64.67.13")},
 				},
-				ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-				ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+				RequiredTraffics: []*armappplatform.RequiredTraffic{
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](443),
+						Protocol: to.Ptr("TCP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](1194),
+						Protocol: to.Ptr("UDP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](9000),
+						Protocol: to.Ptr("TCP"),
+					}},
 			},
-			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ServiceResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+			ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+		},
+		SKU: &armappplatform.SKU{
+			Name: to.Ptr("S0"),
+			Tier: to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ServiceResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 
 	// From example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate_VNetInjection.json
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_CreateOrUpdate_VNetInjection"},
 	})
-	client = armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err = armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err = client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.ServiceResource{
-			Location: to.StringPtr("eastus"),
+			Location: to.Ptr("eastus"),
 			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
+				"key1": to.Ptr("value1"),
 			},
 			Properties: &armappplatform.ClusterResourceProperties{
 				NetworkProfile: &armappplatform.NetworkProfile{
-					AppNetworkResourceGroup:            to.StringPtr("my-app-network-rg"),
-					AppSubnetID:                        to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/apps"),
-					ServiceCidr:                        to.StringPtr("10.8.0.0/16,10.244.0.0/16,10.245.0.1/16"),
-					ServiceRuntimeNetworkResourceGroup: to.StringPtr("my-service-runtime-network-rg"),
-					ServiceRuntimeSubnetID:             to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/serviceRuntime"),
+					AppNetworkResourceGroup:            to.Ptr("my-app-network-rg"),
+					AppSubnetID:                        to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/apps"),
+					ServiceCidr:                        to.Ptr("10.8.0.0/16,10.244.0.0/16,10.245.0.1/16"),
+					ServiceRuntimeNetworkResourceGroup: to.Ptr("my-service-runtime-network-rg"),
+					ServiceRuntimeSubnetID:             to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/serviceRuntime"),
 				},
 			},
 			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
+				Name: to.Ptr("S0"),
+				Tier: to.Ptr("Standard"),
 			},
 		},
 		nil)
@@ -241,65 +237,63 @@ func TestServices_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate_VNetInjection.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ServiceResource{
-			Name:     to.StringPtr("myservice"),
-			Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-			ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-			Location: to.StringPtr("eastus"),
-			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
-			},
-			Properties: &armappplatform.ClusterResourceProperties{
-				NetworkProfile: &armappplatform.NetworkProfile{
-					AppNetworkResourceGroup: to.StringPtr("my-app-network-rg"),
-					AppSubnetID:             to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/apps"),
-					OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-						PublicIPs: []*string{
-							to.StringPtr("40.64.67.13")},
-					},
-					RequiredTraffics: []*armappplatform.RequiredTraffic{
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(443),
-							Protocol: to.StringPtr("TCP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(1194),
-							Protocol: to.StringPtr("UDP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(9000),
-							Protocol: to.StringPtr("TCP"),
-						}},
-					ServiceCidr:                        to.StringPtr("10.8.0.0/16,10.244.0.0/16,10.245.0.1/16"),
-					ServiceRuntimeNetworkResourceGroup: to.StringPtr("my-service-runtime-network-rg"),
-					ServiceRuntimeSubnetID:             to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/serviceRuntime"),
+	exampleRes = armappplatform.ServiceResource{
+		Name:     to.Ptr("myservice"),
+		Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+		ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+		Location: to.Ptr("eastus"),
+		Tags: map[string]*string{
+			"key1": to.Ptr("value1"),
+		},
+		Properties: &armappplatform.ClusterResourceProperties{
+			NetworkProfile: &armappplatform.NetworkProfile{
+				AppNetworkResourceGroup: to.Ptr("my-app-network-rg"),
+				AppSubnetID:             to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/apps"),
+				OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+					PublicIPs: []*string{
+						to.Ptr("40.64.67.13")},
 				},
-				ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-				ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+				RequiredTraffics: []*armappplatform.RequiredTraffic{
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](443),
+						Protocol: to.Ptr("TCP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](1194),
+						Protocol: to.Ptr("UDP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](9000),
+						Protocol: to.Ptr("TCP"),
+					}},
+				ServiceCidr:                        to.Ptr("10.8.0.0/16,10.244.0.0/16,10.245.0.1/16"),
+				ServiceRuntimeNetworkResourceGroup: to.Ptr("my-service-runtime-network-rg"),
+				ServiceRuntimeSubnetID:             to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVirtualNetwork/subnets/serviceRuntime"),
 			},
-			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ServiceResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate_VNetInjection.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+			ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+		},
+		SKU: &armappplatform.SKU{
+			Name: to.Ptr("S0"),
+			Tier: to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ServiceResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate_VNetInjection.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -308,12 +302,10 @@ func TestServices_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -332,24 +324,22 @@ func TestServices_Update(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_Update"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.ServiceResource{
-			Location: to.StringPtr("eastus"),
+			Location: to.Ptr("eastus"),
 			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
+				"key1": to.Ptr("value1"),
 			},
 			Properties: &armappplatform.ClusterResourceProperties{},
 			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
+				Name: to.Ptr("S0"),
+				Tier: to.Ptr("Standard"),
 			},
 		},
 		nil)
@@ -361,61 +351,59 @@ func TestServices_Update(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Update.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ServiceResource{
-			Name:     to.StringPtr("myservice"),
-			Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-			ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-			Location: to.StringPtr("eastus"),
-			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
-			},
-			Properties: &armappplatform.ClusterResourceProperties{
-				NetworkProfile: &armappplatform.NetworkProfile{
-					OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-						PublicIPs: []*string{
-							to.StringPtr("20.39.3.173"),
-							to.StringPtr("40.64.67.13")},
-					},
-					RequiredTraffics: []*armappplatform.RequiredTraffic{
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(443),
-							Protocol: to.StringPtr("TCP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(1194),
-							Protocol: to.StringPtr("UDP"),
-						},
-						{
-							Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-							IPs: []*string{
-								to.StringPtr("20.62.211.25"),
-								to.StringPtr("52.188.47.226")},
-							Port:     to.Int32Ptr(9000),
-							Protocol: to.StringPtr("TCP"),
-						}},
+	exampleRes := armappplatform.ServiceResource{
+		Name:     to.Ptr("myservice"),
+		Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+		ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+		Location: to.Ptr("eastus"),
+		Tags: map[string]*string{
+			"key1": to.Ptr("value1"),
+		},
+		Properties: &armappplatform.ClusterResourceProperties{
+			NetworkProfile: &armappplatform.NetworkProfile{
+				OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+					PublicIPs: []*string{
+						to.Ptr("20.39.3.173"),
+						to.Ptr("40.64.67.13")},
 				},
-				ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-				ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+				RequiredTraffics: []*armappplatform.RequiredTraffic{
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](443),
+						Protocol: to.Ptr("TCP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](1194),
+						Protocol: to.Ptr("UDP"),
+					},
+					{
+						Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+						IPs: []*string{
+							to.Ptr("20.62.211.25"),
+							to.Ptr("52.188.47.226")},
+						Port:     to.Ptr[int32](9000),
+						Protocol: to.Ptr("TCP"),
+					}},
 			},
-			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ServiceResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+			ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+		},
+		SKU: &armappplatform.SKU{
+			Name: to.Ptr("S0"),
+			Tier: to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ServiceResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ServiceResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -424,12 +412,10 @@ func TestServices_ListTestKeys(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_ListTestKeys"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.ListTestKeys(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -438,19 +424,17 @@ func TestServices_ListTestKeys(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListTestKeys.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.TestKeys{
-			Enabled:               to.BoolPtr(true),
-			PrimaryKey:            to.StringPtr("<primaryKey>"),
-			PrimaryTestEndpoint:   to.StringPtr("<primaryTestEndpoint>"),
-			SecondaryKey:          to.StringPtr("<secondaryKey>"),
-			SecondaryTestEndpoint: to.StringPtr("<secondaryTestEndpoint>"),
-		}
-		if !reflect.DeepEqual(exampleRes, res.TestKeys) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.TestKeys)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListTestKeys.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.TestKeys{
+		Enabled:               to.Ptr(true),
+		PrimaryKey:            to.Ptr("<primaryKey>"),
+		PrimaryTestEndpoint:   to.Ptr("<primaryTestEndpoint>"),
+		SecondaryKey:          to.Ptr("<secondaryKey>"),
+		SecondaryTestEndpoint: to.Ptr("<secondaryTestEndpoint>"),
+	}
+	if !reflect.DeepEqual(exampleRes, res.TestKeys) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.TestKeys)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListTestKeys.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -459,36 +443,32 @@ func TestServices_RegenerateTestKey(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_RegenerateTestKey"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.RegenerateTestKey(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.RegenerateTestKeyRequestPayload{
-			KeyType: armappplatform.TestKeyTypePrimary.ToPtr(),
+			KeyType: to.Ptr(armappplatform.TestKeyTypePrimary),
 		},
 		nil)
 	if err != nil {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_RegenerateTestKey.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.TestKeys{
-			Enabled:               to.BoolPtr(true),
-			PrimaryKey:            to.StringPtr("<primaryKey>"),
-			PrimaryTestEndpoint:   to.StringPtr("<primaryTestEndpoint>"),
-			SecondaryKey:          to.StringPtr("<secondaryKey>"),
-			SecondaryTestEndpoint: to.StringPtr("<secondaryTestEndpoint>"),
-		}
-		if !reflect.DeepEqual(exampleRes, res.TestKeys) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.TestKeys)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_RegenerateTestKey.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.TestKeys{
+		Enabled:               to.Ptr(true),
+		PrimaryKey:            to.Ptr("<primaryKey>"),
+		PrimaryTestEndpoint:   to.Ptr("<primaryTestEndpoint>"),
+		SecondaryKey:          to.Ptr("<secondaryKey>"),
+		SecondaryTestEndpoint: to.Ptr("<secondaryTestEndpoint>"),
+	}
+	if !reflect.DeepEqual(exampleRes, res.TestKeys) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.TestKeys)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_RegenerateTestKey.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -497,13 +477,11 @@ func TestServices_DisableTestEndpoint(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_DisableTestEndpoint"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	_, err := client.DisableTestEndpoint(ctx,
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	_, err = client.DisableTestEndpoint(ctx,
 		"myResourceGroup",
 		"myservice",
 		nil)
@@ -517,12 +495,10 @@ func TestServices_EnableTestEndpoint(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_EnableTestEndpoint"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.EnableTestEndpoint(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -531,19 +507,17 @@ func TestServices_EnableTestEndpoint(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_EnableTestEndpoint.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.TestKeys{
-			Enabled:               to.BoolPtr(true),
-			PrimaryKey:            to.StringPtr("<primaryKey>"),
-			PrimaryTestEndpoint:   to.StringPtr("<primaryTestEndpoint>"),
-			SecondaryKey:          to.StringPtr("<secondaryKey>"),
-			SecondaryTestEndpoint: to.StringPtr("<secondaryTestEndpoint>"),
-		}
-		if !reflect.DeepEqual(exampleRes, res.TestKeys) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.TestKeys)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_EnableTestEndpoint.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.TestKeys{
+		Enabled:               to.Ptr(true),
+		PrimaryKey:            to.Ptr("<primaryKey>"),
+		PrimaryTestEndpoint:   to.Ptr("<primaryTestEndpoint>"),
+		SecondaryKey:          to.Ptr("<secondaryKey>"),
+		SecondaryTestEndpoint: to.Ptr("<secondaryTestEndpoint>"),
+	}
+	if !reflect.DeepEqual(exampleRes, res.TestKeys) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.TestKeys)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_EnableTestEndpoint.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -552,34 +526,30 @@ func TestServices_CheckNameAvailability(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_CheckNameAvailability"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.CheckNameAvailability(ctx,
 		"eastus",
 		armappplatform.NameAvailabilityParameters{
-			Name: to.StringPtr("myservice"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring"),
+			Name: to.Ptr("myservice"),
+			Type: to.Ptr("Microsoft.AppPlatform/Spring"),
 		},
 		nil)
 	if err != nil {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CheckNameAvailability.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.NameAvailability{
-			Message:       to.StringPtr("The name is already used."),
-			NameAvailable: to.BoolPtr(false),
-			Reason:        to.StringPtr("AlreadyExists"),
-		}
-		if !reflect.DeepEqual(exampleRes, res.NameAvailability) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.NameAvailability)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CheckNameAvailability.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.NameAvailability{
+		Message:       to.Ptr("The name is already used."),
+		NameAvailable: to.Ptr(false),
+		Reason:        to.Ptr("AlreadyExists"),
+	}
+	if !reflect.DeepEqual(exampleRes, res.NameAvailability) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.NameAvailability)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CheckNameAvailability.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -588,80 +558,74 @@ func TestServices_ListBySubscription(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_ListBySubscription"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.ListBySubscription(nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListBySubscriptionPager(nil)
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListBySubscription.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.ServiceResourceList{
-				Value: []*armappplatform.ServiceResource{
-					{
-						Name:     to.StringPtr("myservice"),
-						Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-						ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-						Location: to.StringPtr("eastus"),
-						Tags: map[string]*string{
-							"key1": to.StringPtr("value1"),
-						},
-						Properties: &armappplatform.ClusterResourceProperties{
-							NetworkProfile: &armappplatform.NetworkProfile{
-								OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-									PublicIPs: []*string{
-										to.StringPtr("20.39.3.173"),
-										to.StringPtr("40.64.67.13")},
-								},
-								RequiredTraffics: []*armappplatform.RequiredTraffic{
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(443),
-										Protocol: to.StringPtr("TCP"),
-									},
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(1194),
-										Protocol: to.StringPtr("UDP"),
-									},
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(9000),
-										Protocol: to.StringPtr("TCP"),
-									}},
+		pagerExampleRes := armappplatform.ServiceResourceList{
+			Value: []*armappplatform.ServiceResource{
+				{
+					Name:     to.Ptr("myservice"),
+					Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+					ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+					Location: to.Ptr("eastus"),
+					Tags: map[string]*string{
+						"key1": to.Ptr("value1"),
+					},
+					Properties: &armappplatform.ClusterResourceProperties{
+						NetworkProfile: &armappplatform.NetworkProfile{
+							OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+								PublicIPs: []*string{
+									to.Ptr("20.39.3.173"),
+									to.Ptr("40.64.67.13")},
 							},
-							ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-							ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+							RequiredTraffics: []*armappplatform.RequiredTraffic{
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](443),
+									Protocol: to.Ptr("TCP"),
+								},
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](1194),
+									Protocol: to.Ptr("UDP"),
+								},
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](9000),
+									Protocol: to.Ptr("TCP"),
+								}},
 						},
-						SKU: &armappplatform.SKU{
-							Name: to.StringPtr("S0"),
-							Tier: to.StringPtr("Standard"),
-						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().ServiceResourceList) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().ServiceResourceList)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListBySubscription.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+						ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+					},
+					SKU: &armappplatform.SKU{
+						Name: to.Ptr("S0"),
+						Tier: to.Ptr("Standard"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.ServiceResourceList) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.ServiceResourceList)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListBySubscription.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -671,81 +635,75 @@ func TestServices_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Services_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewServicesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.ServiceResourceList{
-				Value: []*armappplatform.ServiceResource{
-					{
-						Name:     to.StringPtr("myservice"),
-						Type:     to.StringPtr("Microsoft.AppPlatform/Spring"),
-						ID:       to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
-						Location: to.StringPtr("eastus"),
-						Tags: map[string]*string{
-							"key1": to.StringPtr("value1"),
-						},
-						Properties: &armappplatform.ClusterResourceProperties{
-							NetworkProfile: &armappplatform.NetworkProfile{
-								OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
-									PublicIPs: []*string{
-										to.StringPtr("20.39.3.173"),
-										to.StringPtr("40.64.67.13")},
-								},
-								RequiredTraffics: []*armappplatform.RequiredTraffic{
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(443),
-										Protocol: to.StringPtr("TCP"),
-									},
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(1194),
-										Protocol: to.StringPtr("UDP"),
-									},
-									{
-										Direction: armappplatform.TrafficDirectionOutbound.ToPtr(),
-										IPs: []*string{
-											to.StringPtr("20.62.211.25"),
-											to.StringPtr("52.188.47.226")},
-										Port:     to.Int32Ptr(9000),
-										Protocol: to.StringPtr("TCP"),
-									}},
+		pagerExampleRes := armappplatform.ServiceResourceList{
+			Value: []*armappplatform.ServiceResource{
+				{
+					Name:     to.Ptr("myservice"),
+					Type:     to.Ptr("Microsoft.AppPlatform/Spring"),
+					ID:       to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice"),
+					Location: to.Ptr("eastus"),
+					Tags: map[string]*string{
+						"key1": to.Ptr("value1"),
+					},
+					Properties: &armappplatform.ClusterResourceProperties{
+						NetworkProfile: &armappplatform.NetworkProfile{
+							OutboundIPs: &armappplatform.NetworkProfileOutboundIPs{
+								PublicIPs: []*string{
+									to.Ptr("20.39.3.173"),
+									to.Ptr("40.64.67.13")},
 							},
-							ProvisioningState: armappplatform.ProvisioningStateSucceeded.ToPtr(),
-							ServiceID:         to.StringPtr("12345678abcd1234abcd12345678abcd"),
+							RequiredTraffics: []*armappplatform.RequiredTraffic{
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](443),
+									Protocol: to.Ptr("TCP"),
+								},
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](1194),
+									Protocol: to.Ptr("UDP"),
+								},
+								{
+									Direction: to.Ptr(armappplatform.TrafficDirectionOutbound),
+									IPs: []*string{
+										to.Ptr("20.62.211.25"),
+										to.Ptr("52.188.47.226")},
+									Port:     to.Ptr[int32](9000),
+									Protocol: to.Ptr("TCP"),
+								}},
 						},
-						SKU: &armappplatform.SKU{
-							Name: to.StringPtr("S0"),
-							Tier: to.StringPtr("Standard"),
-						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().ServiceResourceList) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().ServiceResourceList)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						ProvisioningState: to.Ptr(armappplatform.ProvisioningStateSucceeded),
+						ServiceID:         to.Ptr("12345678abcd1234abcd12345678abcd"),
+					},
+					SKU: &armappplatform.SKU{
+						Name: to.Ptr("S0"),
+						Tier: to.Ptr("Standard"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.ServiceResourceList) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.ServiceResourceList)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -755,12 +713,10 @@ func TestConfigServers_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"ConfigServers_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -769,28 +725,26 @@ func TestConfigServers_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ConfigServerResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/configServers"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
-			Properties: &armappplatform.ConfigServerProperties{
-				ConfigServer: &armappplatform.ConfigServerSettings{
-					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
-						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
-					},
+	exampleRes := armappplatform.ConfigServerResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/configServers"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
+		Properties: &armappplatform.ConfigServerProperties{
+			ConfigServer: &armappplatform.ConfigServerSettings{
+				GitProperty: &armappplatform.ConfigServerGitProperty{
+					Label: to.Ptr("master"),
+					SearchPaths: []*string{
+						to.Ptr("/")},
+					URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 				},
-				ProvisioningState: armappplatform.ConfigServerStateSucceeded.ToPtr(),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ConfigServerResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ConfigServerStateSucceeded),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ConfigServerResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -799,12 +753,10 @@ func TestConfigServers_UpdatePut(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"ConfigServers_UpdatePut"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePut(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -812,10 +764,10 @@ func TestConfigServers_UpdatePut(t *testing.T) {
 			Properties: &armappplatform.ConfigServerProperties{
 				ConfigServer: &armappplatform.ConfigServerSettings{
 					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
+						Label: to.Ptr("master"),
 						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
+							to.Ptr("/")},
+						URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 					},
 				},
 			},
@@ -829,28 +781,26 @@ func TestConfigServers_UpdatePut(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePut.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ConfigServerResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/configServers"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
-			Properties: &armappplatform.ConfigServerProperties{
-				ConfigServer: &armappplatform.ConfigServerSettings{
-					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
-						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
-					},
+	exampleRes := armappplatform.ConfigServerResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/configServers"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
+		Properties: &armappplatform.ConfigServerProperties{
+			ConfigServer: &armappplatform.ConfigServerSettings{
+				GitProperty: &armappplatform.ConfigServerGitProperty{
+					Label: to.Ptr("master"),
+					SearchPaths: []*string{
+						to.Ptr("/")},
+					URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 				},
-				ProvisioningState: armappplatform.ConfigServerStateSucceeded.ToPtr(),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ConfigServerResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePut.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ConfigServerStateSucceeded),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ConfigServerResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePut.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -859,12 +809,10 @@ func TestConfigServers_UpdatePatch(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"ConfigServers_UpdatePatch"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePatch(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -872,10 +820,10 @@ func TestConfigServers_UpdatePatch(t *testing.T) {
 			Properties: &armappplatform.ConfigServerProperties{
 				ConfigServer: &armappplatform.ConfigServerSettings{
 					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
+						Label: to.Ptr("master"),
 						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
+							to.Ptr("/")},
+						URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 					},
 				},
 			},
@@ -889,28 +837,26 @@ func TestConfigServers_UpdatePatch(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePatch.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ConfigServerResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/configServers"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
-			Properties: &armappplatform.ConfigServerProperties{
-				ConfigServer: &armappplatform.ConfigServerSettings{
-					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
-						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
-					},
+	exampleRes := armappplatform.ConfigServerResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/configServers"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/configServers/default"),
+		Properties: &armappplatform.ConfigServerProperties{
+			ConfigServer: &armappplatform.ConfigServerSettings{
+				GitProperty: &armappplatform.ConfigServerGitProperty{
+					Label: to.Ptr("master"),
+					SearchPaths: []*string{
+						to.Ptr("/")},
+					URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 				},
-				ProvisioningState: armappplatform.ConfigServerStateSucceeded.ToPtr(),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ConfigServerResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePatch.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			ProvisioningState: to.Ptr(armappplatform.ConfigServerStateSucceeded),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.ConfigServerResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ConfigServerResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_UpdatePatch.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -919,21 +865,19 @@ func TestConfigServers_Validate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"ConfigServers_Validate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewConfigServersClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginValidate(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.ConfigServerSettings{
 			GitProperty: &armappplatform.ConfigServerGitProperty{
-				Label: to.StringPtr("master"),
+				Label: to.Ptr("master"),
 				SearchPaths: []*string{
-					to.StringPtr("/")},
-				URI: to.StringPtr("https://github.com/fake-user/fake-repository.git"),
+					to.Ptr("/")},
+				URI: to.Ptr("https://github.com/fake-user/fake-repository.git"),
 			},
 		},
 		nil)
@@ -945,15 +889,13 @@ func TestConfigServers_Validate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Validate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.ConfigServerSettingsValidateResult{
-			IsValid: to.BoolPtr(true),
-		}
-		if !reflect.DeepEqual(exampleRes, res.ConfigServerSettingsValidateResult) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.ConfigServerSettingsValidateResult)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Validate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.ConfigServerSettingsValidateResult{
+		IsValid: to.Ptr(true),
+	}
+	if !reflect.DeepEqual(exampleRes, res.ConfigServerSettingsValidateResult) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.ConfigServerSettingsValidateResult)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/ConfigServers_Validate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -962,12 +904,10 @@ func TestMonitoringSettings_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"MonitoringSettings_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -976,26 +916,24 @@ func TestMonitoringSettings_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.MonitoringSettingResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/monitoringSettings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
-			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
-					Java: to.StringPtr("3.0.0"),
-				},
-				AppInsightsInstrumentationKey: to.StringPtr("00000000-0000-0000-0000-000000000000"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				ProvisioningState:             armappplatform.MonitoringSettingStateSucceeded.ToPtr(),
-				TraceEnabled:                  to.BoolPtr(true),
+	exampleRes := armappplatform.MonitoringSettingResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/monitoringSettings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
+		Properties: &armappplatform.MonitoringSettingProperties{
+			AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
+				Java: to.Ptr("3.0.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			AppInsightsInstrumentationKey: to.Ptr("00000000-0000-0000-0000-000000000000"),
+			AppInsightsSamplingRate:       to.Ptr[float64](10),
+			ProvisioningState:             to.Ptr(armappplatform.MonitoringSettingStateSucceeded),
+			TraceEnabled:                  to.Ptr(true),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1004,20 +942,18 @@ func TestMonitoringSettings_UpdatePut(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"MonitoringSettings_UpdatePut"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePut(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsInstrumentationKey: to.StringPtr("00000000-0000-0000-0000-000000000000"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				TraceEnabled:                  to.BoolPtr(true),
+				AppInsightsInstrumentationKey: to.Ptr("00000000-0000-0000-0000-000000000000"),
+				AppInsightsSamplingRate:       to.Ptr[float64](10),
+				TraceEnabled:                  to.Ptr(true),
 			},
 		},
 		nil)
@@ -1029,26 +965,24 @@ func TestMonitoringSettings_UpdatePut(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePut.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.MonitoringSettingResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/monitoringSettings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
-			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
-					Java: to.StringPtr("3.0.0"),
-				},
-				AppInsightsInstrumentationKey: to.StringPtr("00000000-0000-0000-0000-000000000000"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				ProvisioningState:             armappplatform.MonitoringSettingStateSucceeded.ToPtr(),
-				TraceEnabled:                  to.BoolPtr(true),
+	exampleRes := armappplatform.MonitoringSettingResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/monitoringSettings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
+		Properties: &armappplatform.MonitoringSettingProperties{
+			AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
+				Java: to.Ptr("3.0.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePut.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			AppInsightsInstrumentationKey: to.Ptr("00000000-0000-0000-0000-000000000000"),
+			AppInsightsSamplingRate:       to.Ptr[float64](10),
+			ProvisioningState:             to.Ptr(armappplatform.MonitoringSettingStateSucceeded),
+			TraceEnabled:                  to.Ptr(true),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePut.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1057,20 +991,18 @@ func TestMonitoringSettings_UpdatePatch(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"MonitoringSettings_UpdatePatch"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewMonitoringSettingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePatch(ctx,
 		"myResourceGroup",
 		"myservice",
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsInstrumentationKey: to.StringPtr("00000000-0000-0000-0000-000000000000"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				TraceEnabled:                  to.BoolPtr(true),
+				AppInsightsInstrumentationKey: to.Ptr("00000000-0000-0000-0000-000000000000"),
+				AppInsightsSamplingRate:       to.Ptr[float64](10),
+				TraceEnabled:                  to.Ptr(true),
 			},
 		},
 		nil)
@@ -1082,26 +1014,24 @@ func TestMonitoringSettings_UpdatePatch(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePatch.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.MonitoringSettingResource{
-			Name: to.StringPtr("default"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/monitoringSettings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
-			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
-					Java: to.StringPtr("3.0.0"),
-				},
-				AppInsightsInstrumentationKey: to.StringPtr("00000000-0000-0000-0000-000000000000"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				ProvisioningState:             armappplatform.MonitoringSettingStateSucceeded.ToPtr(),
-				TraceEnabled:                  to.BoolPtr(true),
+	exampleRes := armappplatform.MonitoringSettingResource{
+		Name: to.Ptr("default"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/monitoringSettings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/monitoringSettings/default"),
+		Properties: &armappplatform.MonitoringSettingProperties{
+			AppInsightsAgentVersions: &armappplatform.ApplicationInsightsAgentVersions{
+				Java: to.Ptr("3.0.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePatch.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			AppInsightsInstrumentationKey: to.Ptr("00000000-0000-0000-0000-000000000000"),
+			AppInsightsSamplingRate:       to.Ptr[float64](10),
+			ProvisioningState:             to.Ptr(armappplatform.MonitoringSettingStateSucceeded),
+			TraceEnabled:                  to.Ptr(true),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.MonitoringSettingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.MonitoringSettingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePatch.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1110,12 +1040,10 @@ func TestApps_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1125,41 +1053,39 @@ func TestApps_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.AppResource{
-			Name: to.StringPtr("myapp"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
-			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+	exampleRes := armappplatform.AppResource{
+		Name: to.Ptr("myapp"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
+		Identity: &armappplatform.ManagedIdentityProperties{
+			Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+			PrincipalID: to.Ptr("principalid"),
+			TenantID:    to.Ptr("tenantid"),
+		},
+		Location: to.Ptr("eastus"),
+		Properties: &armappplatform.AppResourceProperties{
+			ActiveDeploymentName: to.Ptr("mydeployment1"),
+			EnableEndToEndTLS:    to.Ptr(false),
+			Fqdn:                 to.Ptr("myapp.mydomain.com"),
+			HTTPSOnly:            to.Ptr(false),
+			PersistentDisk: &armappplatform.PersistentDisk{
+				MountPath: to.Ptr("/mypersistentdisk"),
+				SizeInGB:  to.Ptr[int32](2),
+				UsedInGB:  to.Ptr[int32](1),
 			},
-			Location: to.StringPtr("eastus"),
-			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
-				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/mypersistentdisk"),
-					SizeInGB:  to.Int32Ptr(2),
-					UsedInGB:  to.Int32Ptr(1),
-				},
-				ProvisioningState: armappplatform.AppResourceProvisioningStateSucceeded.ToPtr(),
-				Public:            to.BoolPtr(true),
-				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/mytemporarydisk"),
-					SizeInGB:  to.Int32Ptr(2),
-				},
-				URL: to.StringPtr("myapp.myservice.azuremicroservices.io"),
+			ProvisioningState: to.Ptr(armappplatform.AppResourceProvisioningStateSucceeded),
+			Public:            to.Ptr(true),
+			TemporaryDisk: &armappplatform.TemporaryDisk{
+				MountPath: to.Ptr("/mytemporarydisk"),
+				SizeInGB:  to.Ptr[int32](2),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.AppResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.AppResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			URL: to.Ptr("myapp.myservice.azuremicroservices.io"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.AppResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.AppResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1168,31 +1094,29 @@ func TestApps_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		"myapp",
 		armappplatform.AppResource{
-			Location: to.StringPtr("eastus"),
+			Location: to.Ptr("eastus"),
 			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
+				ActiveDeploymentName: to.Ptr("mydeployment1"),
+				EnableEndToEndTLS:    to.Ptr(false),
+				Fqdn:                 to.Ptr("myapp.mydomain.com"),
+				HTTPSOnly:            to.Ptr(false),
 				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/mypersistentdisk"),
-					SizeInGB:  to.Int32Ptr(2),
+					MountPath: to.Ptr("/mypersistentdisk"),
+					SizeInGB:  to.Ptr[int32](2),
 				},
-				Public: to.BoolPtr(true),
+				Public: to.Ptr(true),
 				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/mytemporarydisk"),
-					SizeInGB:  to.Int32Ptr(2),
+					MountPath: to.Ptr("/mytemporarydisk"),
+					SizeInGB:  to.Ptr[int32](2),
 				},
 			},
 		},
@@ -1205,41 +1129,39 @@ func TestApps_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.AppResource{
-			Name: to.StringPtr("myapp"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
-			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+	exampleRes := armappplatform.AppResource{
+		Name: to.Ptr("myapp"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
+		Identity: &armappplatform.ManagedIdentityProperties{
+			Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+			PrincipalID: to.Ptr("principalid"),
+			TenantID:    to.Ptr("tenantid"),
+		},
+		Location: to.Ptr("eastus"),
+		Properties: &armappplatform.AppResourceProperties{
+			ActiveDeploymentName: to.Ptr("mydeployment1"),
+			EnableEndToEndTLS:    to.Ptr(false),
+			Fqdn:                 to.Ptr("myapp.mydomain.com"),
+			HTTPSOnly:            to.Ptr(false),
+			PersistentDisk: &armappplatform.PersistentDisk{
+				MountPath: to.Ptr("/mypersistentdisk"),
+				SizeInGB:  to.Ptr[int32](2),
+				UsedInGB:  to.Ptr[int32](1),
 			},
-			Location: to.StringPtr("eastus"),
-			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
-				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/mypersistentdisk"),
-					SizeInGB:  to.Int32Ptr(2),
-					UsedInGB:  to.Int32Ptr(1),
-				},
-				ProvisioningState: armappplatform.AppResourceProvisioningStateSucceeded.ToPtr(),
-				Public:            to.BoolPtr(true),
-				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/mytemporarydisk"),
-					SizeInGB:  to.Int32Ptr(2),
-				},
-				URL: to.StringPtr("myapp.myservice.azuremicroservices.io"),
+			ProvisioningState: to.Ptr(armappplatform.AppResourceProvisioningStateSucceeded),
+			Public:            to.Ptr(true),
+			TemporaryDisk: &armappplatform.TemporaryDisk{
+				MountPath: to.Ptr("/mytemporarydisk"),
+				SizeInGB:  to.Ptr[int32](2),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.AppResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.AppResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			URL: to.Ptr("myapp.myservice.azuremicroservices.io"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.AppResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.AppResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1248,12 +1170,10 @@ func TestApps_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1273,34 +1193,32 @@ func TestApps_Update(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_Update"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		"myapp",
 		armappplatform.AppResource{
 			Identity: &armappplatform.ManagedIdentityProperties{
-				Type: armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
+				Type: to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
 			},
-			Location: to.StringPtr("eastus"),
+			Location: to.Ptr("eastus"),
 			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
+				ActiveDeploymentName: to.Ptr("mydeployment1"),
+				EnableEndToEndTLS:    to.Ptr(false),
+				Fqdn:                 to.Ptr("myapp.mydomain.com"),
+				HTTPSOnly:            to.Ptr(false),
 				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/mypersistentdisk"),
-					SizeInGB:  to.Int32Ptr(2),
+					MountPath: to.Ptr("/mypersistentdisk"),
+					SizeInGB:  to.Ptr[int32](2),
 				},
-				Public: to.BoolPtr(true),
+				Public: to.Ptr(true),
 				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/mytemporarydisk"),
-					SizeInGB:  to.Int32Ptr(2),
+					MountPath: to.Ptr("/mytemporarydisk"),
+					SizeInGB:  to.Ptr[int32](2),
 				},
 			},
 		},
@@ -1313,41 +1231,39 @@ func TestApps_Update(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Update.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.AppResource{
-			Name: to.StringPtr("myapp"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
-			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+	exampleRes := armappplatform.AppResource{
+		Name: to.Ptr("myapp"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
+		Identity: &armappplatform.ManagedIdentityProperties{
+			Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+			PrincipalID: to.Ptr("principalid"),
+			TenantID:    to.Ptr("tenantid"),
+		},
+		Location: to.Ptr("eastus"),
+		Properties: &armappplatform.AppResourceProperties{
+			ActiveDeploymentName: to.Ptr("mydeployment1"),
+			EnableEndToEndTLS:    to.Ptr(false),
+			Fqdn:                 to.Ptr("myapp.mydomain.com"),
+			HTTPSOnly:            to.Ptr(false),
+			PersistentDisk: &armappplatform.PersistentDisk{
+				MountPath: to.Ptr("/mypersistentdisk"),
+				SizeInGB:  to.Ptr[int32](2),
+				UsedInGB:  to.Ptr[int32](1),
 			},
-			Location: to.StringPtr("eastus"),
-			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
-				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/mypersistentdisk"),
-					SizeInGB:  to.Int32Ptr(2),
-					UsedInGB:  to.Int32Ptr(1),
-				},
-				ProvisioningState: armappplatform.AppResourceProvisioningStateSucceeded.ToPtr(),
-				Public:            to.BoolPtr(true),
-				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/mytemporarydisk"),
-					SizeInGB:  to.Int32Ptr(2),
-				},
-				URL: to.StringPtr("myapp.myservice.azuremicroservices.io"),
+			ProvisioningState: to.Ptr(armappplatform.AppResourceProvisioningStateSucceeded),
+			Public:            to.Ptr(true),
+			TemporaryDisk: &armappplatform.TemporaryDisk{
+				MountPath: to.Ptr("/mytemporarydisk"),
+				SizeInGB:  to.Ptr[int32](2),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.AppResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.AppResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			URL: to.Ptr("myapp.myservice.azuremicroservices.io"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.AppResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.AppResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1356,62 +1272,56 @@ func TestApps_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		"myservice",
 		nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.AppResourceCollection{
-				Value: []*armappplatform.AppResource{
-					{
-						Name: to.StringPtr("myapp"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
-						Identity: &armappplatform.ManagedIdentityProperties{
-							Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-							PrincipalID: to.StringPtr("principalid"),
-							TenantID:    to.StringPtr("tenantid"),
+		pagerExampleRes := armappplatform.AppResourceCollection{
+			Value: []*armappplatform.AppResource{
+				{
+					Name: to.Ptr("myapp"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/apps"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp"),
+					Identity: &armappplatform.ManagedIdentityProperties{
+						Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+						PrincipalID: to.Ptr("principalid"),
+						TenantID:    to.Ptr("tenantid"),
+					},
+					Location: to.Ptr("eastus"),
+					Properties: &armappplatform.AppResourceProperties{
+						ActiveDeploymentName: to.Ptr("mydeployment1"),
+						EnableEndToEndTLS:    to.Ptr(false),
+						Fqdn:                 to.Ptr("myapp.mydomain.com"),
+						HTTPSOnly:            to.Ptr(false),
+						PersistentDisk: &armappplatform.PersistentDisk{
+							MountPath: to.Ptr("/mypersistentdisk"),
+							SizeInGB:  to.Ptr[int32](2),
+							UsedInGB:  to.Ptr[int32](1),
 						},
-						Location: to.StringPtr("eastus"),
-						Properties: &armappplatform.AppResourceProperties{
-							ActiveDeploymentName: to.StringPtr("mydeployment1"),
-							EnableEndToEndTLS:    to.BoolPtr(false),
-							Fqdn:                 to.StringPtr("myapp.mydomain.com"),
-							HTTPSOnly:            to.BoolPtr(false),
-							PersistentDisk: &armappplatform.PersistentDisk{
-								MountPath: to.StringPtr("/mypersistentdisk"),
-								SizeInGB:  to.Int32Ptr(2),
-								UsedInGB:  to.Int32Ptr(1),
-							},
-							ProvisioningState: armappplatform.AppResourceProvisioningStateSucceeded.ToPtr(),
-							Public:            to.BoolPtr(true),
-							TemporaryDisk: &armappplatform.TemporaryDisk{
-								MountPath: to.StringPtr("/mytemporarydisk"),
-								SizeInGB:  to.Int32Ptr(2),
-							},
-							URL: to.StringPtr("myapp.myservice.azuremicroservices.io"),
+						ProvisioningState: to.Ptr(armappplatform.AppResourceProvisioningStateSucceeded),
+						Public:            to.Ptr(true),
+						TemporaryDisk: &armappplatform.TemporaryDisk{
+							MountPath: to.Ptr("/mytemporarydisk"),
+							SizeInGB:  to.Ptr[int32](2),
 						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().AppResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().AppResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						URL: to.Ptr("myapp.myservice.azuremicroservices.io"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.AppResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.AppResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -1421,34 +1331,30 @@ func TestApps_ValidateDomain(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Apps_ValidateDomain"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewAppsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.ValidateDomain(ctx,
 		"myResourceGroup",
 		"myservice",
 		"myapp",
 		armappplatform.CustomDomainValidatePayload{
-			Name: to.StringPtr("mydomain.io"),
+			Name: to.Ptr("mydomain.io"),
 		},
 		nil)
 	if err != nil {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_ValidateDomain.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CustomDomainValidateResult{
-			IsValid: to.BoolPtr(false),
-			Message: to.StringPtr("Certificate is invalid, please check if it is a self signed cert or if it contains a suitable dns name"),
-		}
-		if !reflect.DeepEqual(exampleRes, res.CustomDomainValidateResult) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CustomDomainValidateResult)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_ValidateDomain.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CustomDomainValidateResult{
+		IsValid: to.Ptr(false),
+		Message: to.Ptr("Certificate is invalid, please check if it is a self signed cert or if it contains a suitable dns name"),
+	}
+	if !reflect.DeepEqual(exampleRes, res.CustomDomainValidateResult) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CustomDomainValidateResult)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Apps_ValidateDomain.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1457,12 +1363,10 @@ func TestBindings_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Bindings_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1473,29 +1377,27 @@ func TestBindings_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.BindingResource{
-			Name: to.StringPtr("mybinding"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/bindings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
-			Properties: &armappplatform.BindingResourceProperties{
-				BindingParameters: map[string]interface{}{
-					"apiType":      "SQL",
-					"databaseName": "db1",
-				},
-				CreatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
-				GeneratedProperties: to.StringPtr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
-				ResourceID:          to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
-				ResourceName:        to.StringPtr("my-cosmosdb-1"),
-				ResourceType:        to.StringPtr("Microsoft.DocumentDB"),
-				UpdatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
+	exampleRes := armappplatform.BindingResource{
+		Name: to.Ptr("mybinding"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/bindings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
+		Properties: &armappplatform.BindingResourceProperties{
+			BindingParameters: map[string]interface{}{
+				"apiType":      "SQL",
+				"databaseName": "db1",
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.BindingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.BindingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			CreatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+			GeneratedProperties: to.Ptr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
+			ResourceID:          to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+			ResourceName:        to.Ptr("my-cosmosdb-1"),
+			ResourceType:        to.Ptr("Microsoft.DocumentDB"),
+			UpdatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.BindingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.BindingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1504,12 +1406,10 @@ func TestBindings_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Bindings_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1521,8 +1421,8 @@ func TestBindings_CreateOrUpdate(t *testing.T) {
 					"apiType":      "SQL",
 					"databaseName": "db1",
 				},
-				Key:        to.StringPtr("xxxx"),
-				ResourceID: to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+				Key:        to.Ptr("xxxx"),
+				ResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
 			},
 		},
 		nil)
@@ -1534,29 +1434,27 @@ func TestBindings_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.BindingResource{
-			Name: to.StringPtr("mybinding"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/bindings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
-			Properties: &armappplatform.BindingResourceProperties{
-				BindingParameters: map[string]interface{}{
-					"apiType":      "SQL",
-					"databaseName": "db1",
-				},
-				CreatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
-				GeneratedProperties: to.StringPtr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
-				ResourceID:          to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
-				ResourceName:        to.StringPtr("my-cosmosdb-1"),
-				ResourceType:        to.StringPtr("Microsoft.DocumentDB"),
-				UpdatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
+	exampleRes := armappplatform.BindingResource{
+		Name: to.Ptr("mybinding"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/bindings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
+		Properties: &armappplatform.BindingResourceProperties{
+			BindingParameters: map[string]interface{}{
+				"apiType":      "SQL",
+				"databaseName": "db1",
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.BindingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.BindingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			CreatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+			GeneratedProperties: to.Ptr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
+			ResourceID:          to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+			ResourceName:        to.Ptr("my-cosmosdb-1"),
+			ResourceType:        to.Ptr("Microsoft.DocumentDB"),
+			UpdatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.BindingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.BindingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1565,12 +1463,10 @@ func TestBindings_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Bindings_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1591,12 +1487,10 @@ func TestBindings_Update(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Bindings_Update"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1608,7 +1502,7 @@ func TestBindings_Update(t *testing.T) {
 					"apiType":      "SQL",
 					"databaseName": "db1",
 				},
-				Key: to.StringPtr("xxxx"),
+				Key: to.Ptr("xxxx"),
 			},
 		},
 		nil)
@@ -1620,29 +1514,27 @@ func TestBindings_Update(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Update.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.BindingResource{
-			Name: to.StringPtr("mybinding"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/bindings"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
-			Properties: &armappplatform.BindingResourceProperties{
-				BindingParameters: map[string]interface{}{
-					"apiType":      "SQL",
-					"databaseName": "db1",
-				},
-				CreatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
-				GeneratedProperties: to.StringPtr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
-				ResourceID:          to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
-				ResourceName:        to.StringPtr("my-cosmosdb-1"),
-				ResourceType:        to.StringPtr("Microsoft.DocumentDB"),
-				UpdatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
+	exampleRes := armappplatform.BindingResource{
+		Name: to.Ptr("mybinding"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/bindings"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
+		Properties: &armappplatform.BindingResourceProperties{
+			BindingParameters: map[string]interface{}{
+				"apiType":      "SQL",
+				"databaseName": "db1",
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.BindingResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.BindingResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			CreatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+			GeneratedProperties: to.Ptr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
+			ResourceID:          to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+			ResourceName:        to.Ptr("my-cosmosdb-1"),
+			ResourceType:        to.Ptr("Microsoft.DocumentDB"),
+			UpdatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.BindingResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.BindingResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1651,51 +1543,45 @@ func TestBindings_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Bindings_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewBindingsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		"myservice",
 		"myapp",
 		nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.BindingResourceCollection{
-				Value: []*armappplatform.BindingResource{
-					{
-						Name: to.StringPtr("mybinding"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/bindings"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
-						Properties: &armappplatform.BindingResourceProperties{
-							BindingParameters: map[string]interface{}{
-								"apiType":      "SQL",
-								"databaseName": "db1",
-							},
-							CreatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
-							GeneratedProperties: to.StringPtr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
-							ResourceID:          to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
-							ResourceName:        to.StringPtr("my-cosmosdb-1"),
-							ResourceType:        to.StringPtr("Microsoft.DocumentDB"),
-							UpdatedAt:           to.StringPtr("2019-01-01T12:34:56.000Z"),
+		pagerExampleRes := armappplatform.BindingResourceCollection{
+			Value: []*armappplatform.BindingResource{
+				{
+					Name: to.Ptr("mybinding"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/bindings"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/bindings/mybinding"),
+					Properties: &armappplatform.BindingResourceProperties{
+						BindingParameters: map[string]interface{}{
+							"apiType":      "SQL",
+							"databaseName": "db1",
 						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().BindingResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().BindingResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						CreatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+						GeneratedProperties: to.Ptr("spring.datasource.url=jdbc:mysql://localhost:3306/test\nspring.datasource.username=root\nspring.datasource.password=1****6"),
+						ResourceID:          to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+						ResourceName:        to.Ptr("my-cosmosdb-1"),
+						ResourceType:        to.Ptr("Microsoft.DocumentDB"),
+						UpdatedAt:           to.Ptr("2019-01-01T12:34:56.000Z"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.BindingResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.BindingResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Bindings_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -1705,12 +1591,10 @@ func TestCertificates_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Certificates_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1720,32 +1604,30 @@ func TestCertificates_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CertificateResource{
-			Name: to.StringPtr("mycertificate"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/certificates"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
-			Properties: &armappplatform.CertificateProperties{
-				ActivateDate: to.StringPtr("2019-02-22T07:40:42Z"),
-				CertVersion:  to.StringPtr("08a219d06d874795a96db47e06fbb01e"),
-				DNSNames: []*string{
-					to.StringPtr("mydomain.com"),
-					to.StringPtr("mydomain.net"),
-					to.StringPtr("mydomain.io")},
-				ExpirationDate:   to.StringPtr("2019-02-21T07:40:42Z"),
-				IssuedDate:       to.StringPtr("2019-02-20T07:40:42Z"),
-				Issuer:           to.StringPtr("mydomain.com"),
-				KeyVaultCertName: to.StringPtr("mycert"),
-				SubjectName:      to.StringPtr("mysubjectname"),
-				Thumbprint:       to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-				VaultURI:         to.StringPtr("https://myvault.vault.azure.net"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.CertificateResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CertificateResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CertificateResource{
+		Name: to.Ptr("mycertificate"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/certificates"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
+		Properties: &armappplatform.CertificateProperties{
+			ActivateDate: to.Ptr("2019-02-22T07:40:42Z"),
+			CertVersion:  to.Ptr("08a219d06d874795a96db47e06fbb01e"),
+			DNSNames: []*string{
+				to.Ptr("mydomain.com"),
+				to.Ptr("mydomain.net"),
+				to.Ptr("mydomain.io")},
+			ExpirationDate:   to.Ptr("2019-02-21T07:40:42Z"),
+			IssuedDate:       to.Ptr("2019-02-20T07:40:42Z"),
+			Issuer:           to.Ptr("mydomain.com"),
+			KeyVaultCertName: to.Ptr("mycert"),
+			SubjectName:      to.Ptr("mysubjectname"),
+			Thumbprint:       to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+			VaultURI:         to.Ptr("https://myvault.vault.azure.net"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.CertificateResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CertificateResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1754,21 +1636,19 @@ func TestCertificates_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Certificates_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
 		"mycertificate",
 		armappplatform.CertificateResource{
 			Properties: &armappplatform.CertificateProperties{
-				CertVersion:      to.StringPtr("08a219d06d874795a96db47e06fbb01e"),
-				KeyVaultCertName: to.StringPtr("mycert"),
-				VaultURI:         to.StringPtr("https://myvault.vault.azure.net"),
+				CertVersion:      to.Ptr("08a219d06d874795a96db47e06fbb01e"),
+				KeyVaultCertName: to.Ptr("mycert"),
+				VaultURI:         to.Ptr("https://myvault.vault.azure.net"),
 			},
 		},
 		nil)
@@ -1780,32 +1660,30 @@ func TestCertificates_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CertificateResource{
-			Name: to.StringPtr("mycertificate"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/certificates"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
-			Properties: &armappplatform.CertificateProperties{
-				ActivateDate: to.StringPtr("2019-02-22T07:40:42Z"),
-				CertVersion:  to.StringPtr("08a219d06d874795a96db47e06fbb01e"),
-				DNSNames: []*string{
-					to.StringPtr("mydomain.com"),
-					to.StringPtr("mydomain.net"),
-					to.StringPtr("mydomain.io")},
-				ExpirationDate:   to.StringPtr("2019-02-21T07:40:42Z"),
-				IssuedDate:       to.StringPtr("2019-02-20T07:40:42Z"),
-				Issuer:           to.StringPtr("mydomain.com"),
-				KeyVaultCertName: to.StringPtr("mycert"),
-				SubjectName:      to.StringPtr("mysubjectname"),
-				Thumbprint:       to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-				VaultURI:         to.StringPtr("https://myvault.vault.azure.net"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.CertificateResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CertificateResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CertificateResource{
+		Name: to.Ptr("mycertificate"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/certificates"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
+		Properties: &armappplatform.CertificateProperties{
+			ActivateDate: to.Ptr("2019-02-22T07:40:42Z"),
+			CertVersion:  to.Ptr("08a219d06d874795a96db47e06fbb01e"),
+			DNSNames: []*string{
+				to.Ptr("mydomain.com"),
+				to.Ptr("mydomain.net"),
+				to.Ptr("mydomain.io")},
+			ExpirationDate:   to.Ptr("2019-02-21T07:40:42Z"),
+			IssuedDate:       to.Ptr("2019-02-20T07:40:42Z"),
+			Issuer:           to.Ptr("mydomain.com"),
+			KeyVaultCertName: to.Ptr("mycert"),
+			SubjectName:      to.Ptr("mysubjectname"),
+			Thumbprint:       to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+			VaultURI:         to.Ptr("https://myvault.vault.azure.net"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.CertificateResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CertificateResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1814,12 +1692,10 @@ func TestCertificates_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Certificates_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1839,53 +1715,47 @@ func TestCertificates_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Certificates_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewCertificatesClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		"myService",
 		nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.CertificateResourceCollection{
-				Value: []*armappplatform.CertificateResource{
-					{
-						Name: to.StringPtr("mycertificate"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/certificates"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
-						Properties: &armappplatform.CertificateProperties{
-							ActivateDate: to.StringPtr("2019-02-22T07:40:42Z"),
-							CertVersion:  to.StringPtr("08a219d06d874795a96db47e06fbb01e"),
-							DNSNames: []*string{
-								to.StringPtr("mydomain.com"),
-								to.StringPtr("mydomain.net"),
-								to.StringPtr("mydomain.io")},
-							ExpirationDate:   to.StringPtr("2019-02-21T07:40:42Z"),
-							IssuedDate:       to.StringPtr("2019-02-20T07:40:42Z"),
-							Issuer:           to.StringPtr("mydomain.com"),
-							KeyVaultCertName: to.StringPtr("mycert"),
-							SubjectName:      to.StringPtr("mysubjectname"),
-							Thumbprint:       to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-							VaultURI:         to.StringPtr("https://myvault.vault.azure.net"),
-						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().CertificateResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().CertificateResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+		pagerExampleRes := armappplatform.CertificateResourceCollection{
+			Value: []*armappplatform.CertificateResource{
+				{
+					Name: to.Ptr("mycertificate"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/certificates"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/certificates/mycertificate"),
+					Properties: &armappplatform.CertificateProperties{
+						ActivateDate: to.Ptr("2019-02-22T07:40:42Z"),
+						CertVersion:  to.Ptr("08a219d06d874795a96db47e06fbb01e"),
+						DNSNames: []*string{
+							to.Ptr("mydomain.com"),
+							to.Ptr("mydomain.net"),
+							to.Ptr("mydomain.io")},
+						ExpirationDate:   to.Ptr("2019-02-21T07:40:42Z"),
+						IssuedDate:       to.Ptr("2019-02-20T07:40:42Z"),
+						Issuer:           to.Ptr("mydomain.com"),
+						KeyVaultCertName: to.Ptr("mycert"),
+						SubjectName:      to.Ptr("mysubjectname"),
+						Thumbprint:       to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+						VaultURI:         to.Ptr("https://myvault.vault.azure.net"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.CertificateResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.CertificateResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -1895,12 +1765,10 @@ func TestCustomDomains_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"CustomDomains_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1911,22 +1779,20 @@ func TestCustomDomains_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CustomDomainResource{
-			Name: to.StringPtr("mydomain.com"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/domains"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
-			Properties: &armappplatform.CustomDomainProperties{
-				AppName:    to.StringPtr("myapp"),
-				CertName:   to.StringPtr("mycert"),
-				Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CustomDomainResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CustomDomainResource{
+		Name: to.Ptr("mydomain.com"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/domains"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
+		Properties: &armappplatform.CustomDomainProperties{
+			AppName:    to.Ptr("myapp"),
+			CertName:   to.Ptr("mycert"),
+			Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CustomDomainResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1935,12 +1801,10 @@ func TestCustomDomains_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"CustomDomains_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -1948,8 +1812,8 @@ func TestCustomDomains_CreateOrUpdate(t *testing.T) {
 		"mydomain.com",
 		armappplatform.CustomDomainResource{
 			Properties: &armappplatform.CustomDomainProperties{
-				CertName:   to.StringPtr("mycert"),
-				Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
+				CertName:   to.Ptr("mycert"),
+				Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
 			},
 		},
 		nil)
@@ -1961,22 +1825,20 @@ func TestCustomDomains_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CustomDomainResource{
-			Name: to.StringPtr("mydomain.com"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/domains"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
-			Properties: &armappplatform.CustomDomainProperties{
-				AppName:    to.StringPtr("myapp"),
-				CertName:   to.StringPtr("mycert"),
-				Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CustomDomainResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CustomDomainResource{
+		Name: to.Ptr("mydomain.com"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/domains"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
+		Properties: &armappplatform.CustomDomainProperties{
+			AppName:    to.Ptr("myapp"),
+			CertName:   to.Ptr("mycert"),
+			Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CustomDomainResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -1985,12 +1847,10 @@ func TestCustomDomains_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"CustomDomains_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2011,12 +1871,10 @@ func TestCustomDomains_Update(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"CustomDomains_Update"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2024,8 +1882,8 @@ func TestCustomDomains_Update(t *testing.T) {
 		"mydomain.com",
 		armappplatform.CustomDomainResource{
 			Properties: &armappplatform.CustomDomainProperties{
-				CertName:   to.StringPtr("mycert"),
-				Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
+				CertName:   to.Ptr("mycert"),
+				Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
 			},
 		},
 		nil)
@@ -2037,22 +1895,20 @@ func TestCustomDomains_Update(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Update.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.CustomDomainResource{
-			Name: to.StringPtr("mydomain.com"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/domains"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
-			Properties: &armappplatform.CustomDomainProperties{
-				AppName:    to.StringPtr("myapp"),
-				CertName:   to.StringPtr("mycert"),
-				Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.CustomDomainResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.CustomDomainResource{
+		Name: to.Ptr("mydomain.com"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/domains"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
+		Properties: &armappplatform.CustomDomainProperties{
+			AppName:    to.Ptr("myapp"),
+			CertName:   to.Ptr("mycert"),
+			Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.CustomDomainResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.CustomDomainResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -2061,44 +1917,38 @@ func TestCustomDomains_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"CustomDomains_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewCustomDomainsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		"myservice",
 		"myapp",
 		nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.CustomDomainResourceCollection{
-				Value: []*armappplatform.CustomDomainResource{
-					{
-						Name: to.StringPtr("mydomain.com"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/domains"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
-						Properties: &armappplatform.CustomDomainProperties{
-							AppName:    to.StringPtr("myapp"),
-							CertName:   to.StringPtr("mycert"),
-							Thumbprint: to.StringPtr("934367bf1c97033f877db0f15cb1b586957d3133"),
-						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().CustomDomainResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().CustomDomainResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+		pagerExampleRes := armappplatform.CustomDomainResourceCollection{
+			Value: []*armappplatform.CustomDomainResource{
+				{
+					Name: to.Ptr("mydomain.com"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/domains"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/domains/mydomain.com"),
+					Properties: &armappplatform.CustomDomainProperties{
+						AppName:    to.Ptr("myapp"),
+						CertName:   to.Ptr("mycert"),
+						Thumbprint: to.Ptr("934367bf1c97033f877db0f15cb1b586957d3133"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.CustomDomainResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.CustomDomainResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/CustomDomains_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -2108,12 +1958,10 @@ func TestDeployments_Get(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Get"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2124,50 +1972,48 @@ func TestDeployments_Get(t *testing.T) {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Get.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.DeploymentResource{
-			Name: to.StringPtr("mydeployment"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/deployments"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
-			Properties: &armappplatform.DeploymentResourceProperties{
-				Active:  to.BoolPtr(false),
-				AppName: to.StringPtr("myapp"),
-				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
-					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
-					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+	exampleRes := armappplatform.DeploymentResource{
+		Name: to.Ptr("mydeployment"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/deployments"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
+		Properties: &armappplatform.DeploymentResourceProperties{
+			Active:  to.Ptr(false),
+			AppName: to.Ptr("myapp"),
+			DeploymentSettings: &armappplatform.DeploymentSettings{
+				CPU: to.Ptr[int32](1),
+				EnvironmentVariables: map[string]*string{
+					"env": to.Ptr("test"),
 				},
-				Instances: []*armappplatform.DeploymentInstance{
-					{
-						Name:            to.StringPtr("instance1"),
-						DiscoveryStatus: to.StringPtr("pending"),
-						StartTime:       to.StringPtr("2020-08-26T01:55:02Z"),
-						Status:          to.StringPtr("Running"),
-					}},
-				ProvisioningState: armappplatform.DeploymentResourceProvisioningStateSucceeded.ToPtr(),
-				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-					Version:          to.StringPtr("1.0"),
-				},
-				Status: armappplatform.DeploymentResourceStatusRunning.ToPtr(),
+				JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+				MemoryInGB:     to.Ptr[int32](3),
+				RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 			},
-			SKU: &armappplatform.SKU{
-				Name:     to.StringPtr("S0"),
-				Capacity: to.Int32Ptr(1),
-				Tier:     to.StringPtr("Standard"),
+			Instances: []*armappplatform.DeploymentInstance{
+				{
+					Name:            to.Ptr("instance1"),
+					DiscoveryStatus: to.Ptr("pending"),
+					StartTime:       to.Ptr("2020-08-26T01:55:02Z"),
+					Status:          to.Ptr("Running"),
+				}},
+			ProvisioningState: to.Ptr(armappplatform.DeploymentResourceProvisioningStateSucceeded),
+			Source: &armappplatform.UserSourceInfo{
+				Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+				ArtifactSelector: to.Ptr("sub-module-1"),
+				RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+				Version:          to.Ptr("1.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.DeploymentResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			Status: to.Ptr(armappplatform.DeploymentResourceStatusRunning),
+		},
+		SKU: &armappplatform.SKU{
+			Name:     to.Ptr("S0"),
+			Capacity: to.Ptr[int32](1),
+			Tier:     to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.DeploymentResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Get.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -2176,12 +2022,10 @@ func TestDeployments_CreateOrUpdate(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_CreateOrUpdate"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2190,19 +2034,19 @@ func TestDeployments_CreateOrUpdate(t *testing.T) {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
+					CPU: to.Ptr[int32](1),
 					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
+						"env": to.Ptr("test"),
 					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+					JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+					MemoryInGB:     to.Ptr[int32](3),
+					RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 				},
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-					Version:          to.StringPtr("1.0"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+					ArtifactSelector: to.Ptr("sub-module-1"),
+					RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+					Version:          to.Ptr("1.0"),
 				},
 			},
 		},
@@ -2215,50 +2059,48 @@ func TestDeployments_CreateOrUpdate(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_CreateOrUpdate.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.DeploymentResource{
-			Name: to.StringPtr("mydeployment"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/deployments"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
-			Properties: &armappplatform.DeploymentResourceProperties{
-				Active:  to.BoolPtr(false),
-				AppName: to.StringPtr("myapp"),
-				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
-					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
-					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+	exampleRes := armappplatform.DeploymentResource{
+		Name: to.Ptr("mydeployment"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/deployments"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
+		Properties: &armappplatform.DeploymentResourceProperties{
+			Active:  to.Ptr(false),
+			AppName: to.Ptr("myapp"),
+			DeploymentSettings: &armappplatform.DeploymentSettings{
+				CPU: to.Ptr[int32](1),
+				EnvironmentVariables: map[string]*string{
+					"env": to.Ptr("test"),
 				},
-				Instances: []*armappplatform.DeploymentInstance{
-					{
-						Name:            to.StringPtr("instance1"),
-						DiscoveryStatus: to.StringPtr("pending"),
-						StartTime:       to.StringPtr("2020-08-26T01:55:02Z"),
-						Status:          to.StringPtr("Running"),
-					}},
-				ProvisioningState: armappplatform.DeploymentResourceProvisioningStateSucceeded.ToPtr(),
-				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-					Version:          to.StringPtr("1.0"),
-				},
-				Status: armappplatform.DeploymentResourceStatusRunning.ToPtr(),
+				JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+				MemoryInGB:     to.Ptr[int32](3),
+				RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 			},
-			SKU: &armappplatform.SKU{
-				Name:     to.StringPtr("S0"),
-				Capacity: to.Int32Ptr(1),
-				Tier:     to.StringPtr("Standard"),
+			Instances: []*armappplatform.DeploymentInstance{
+				{
+					Name:            to.Ptr("instance1"),
+					DiscoveryStatus: to.Ptr("pending"),
+					StartTime:       to.Ptr("2020-08-26T01:55:02Z"),
+					Status:          to.Ptr("Running"),
+				}},
+			ProvisioningState: to.Ptr(armappplatform.DeploymentResourceProvisioningStateSucceeded),
+			Source: &armappplatform.UserSourceInfo{
+				Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+				ArtifactSelector: to.Ptr("sub-module-1"),
+				RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+				Version:          to.Ptr("1.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.DeploymentResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			Status: to.Ptr(armappplatform.DeploymentResourceStatusRunning),
+		},
+		SKU: &armappplatform.SKU{
+			Name:     to.Ptr("S0"),
+			Capacity: to.Ptr[int32](1),
+			Tier:     to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.DeploymentResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_CreateOrUpdate.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -2267,12 +2109,10 @@ func TestDeployments_Delete(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Delete"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2293,12 +2133,10 @@ func TestDeployments_Update(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Update"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2307,10 +2145,10 @@ func TestDeployments_Update(t *testing.T) {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-					Version:          to.StringPtr("1.0"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+					ArtifactSelector: to.Ptr("sub-module-1"),
+					RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+					Version:          to.Ptr("1.0"),
 				},
 			},
 		},
@@ -2323,50 +2161,48 @@ func TestDeployments_Update(t *testing.T) {
 		t.Fatalf("Failed to get LRO result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Update.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.DeploymentResource{
-			Name: to.StringPtr("mydeployment"),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/deployments"),
-			ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
-			Properties: &armappplatform.DeploymentResourceProperties{
-				Active:  to.BoolPtr(false),
-				AppName: to.StringPtr("myapp"),
-				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
-					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
-					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+	exampleRes := armappplatform.DeploymentResource{
+		Name: to.Ptr("mydeployment"),
+		Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/deployments"),
+		ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
+		Properties: &armappplatform.DeploymentResourceProperties{
+			Active:  to.Ptr(false),
+			AppName: to.Ptr("myapp"),
+			DeploymentSettings: &armappplatform.DeploymentSettings{
+				CPU: to.Ptr[int32](1),
+				EnvironmentVariables: map[string]*string{
+					"env": to.Ptr("test"),
 				},
-				Instances: []*armappplatform.DeploymentInstance{
-					{
-						Name:            to.StringPtr("instance1"),
-						DiscoveryStatus: to.StringPtr("pending"),
-						StartTime:       to.StringPtr("2020-08-26T01:55:02Z"),
-						Status:          to.StringPtr("Running"),
-					}},
-				ProvisioningState: armappplatform.DeploymentResourceProvisioningStateSucceeded.ToPtr(),
-				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-					Version:          to.StringPtr("1.0"),
-				},
-				Status: armappplatform.DeploymentResourceStatusRunning.ToPtr(),
+				JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+				MemoryInGB:     to.Ptr[int32](3),
+				RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 			},
-			SKU: &armappplatform.SKU{
-				Name:     to.StringPtr("S0"),
-				Capacity: to.Int32Ptr(1),
-				Tier:     to.StringPtr("Standard"),
+			Instances: []*armappplatform.DeploymentInstance{
+				{
+					Name:            to.Ptr("instance1"),
+					DiscoveryStatus: to.Ptr("pending"),
+					StartTime:       to.Ptr("2020-08-26T01:55:02Z"),
+					Status:          to.Ptr("Running"),
+				}},
+			ProvisioningState: to.Ptr(armappplatform.DeploymentResourceProvisioningStateSucceeded),
+			Source: &armappplatform.UserSourceInfo{
+				Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+				ArtifactSelector: to.Ptr("sub-module-1"),
+				RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+				Version:          to.Ptr("1.0"),
 			},
-		}
-		if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.DeploymentResource)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+			Status: to.Ptr(armappplatform.DeploymentResourceStatusRunning),
+		},
+		SKU: &armappplatform.SKU{
+			Name:     to.Ptr("S0"),
+			Capacity: to.Ptr[int32](1),
+			Tier:     to.Ptr("Standard"),
+		},
+	}
+	if !reflect.DeepEqual(exampleRes, res.DeploymentResource) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.DeploymentResource)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Update.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -2375,72 +2211,66 @@ func TestDeployments_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List("myResourceGroup",
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("myResourceGroup",
 		"myservice",
 		"myapp",
 		&armappplatform.DeploymentsClientListOptions{Version: []string{}})
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.DeploymentResourceCollection{
-				Value: []*armappplatform.DeploymentResource{
-					{
-						Name: to.StringPtr("mydeployment"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/deployments"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
-						Properties: &armappplatform.DeploymentResourceProperties{
-							Active:  to.BoolPtr(false),
-							AppName: to.StringPtr("myapp"),
-							DeploymentSettings: &armappplatform.DeploymentSettings{
-								CPU: to.Int32Ptr(1),
-								EnvironmentVariables: map[string]*string{
-									"env": to.StringPtr("test"),
-								},
-								JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-								MemoryInGB:     to.Int32Ptr(3),
-								RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+		pagerExampleRes := armappplatform.DeploymentResourceCollection{
+			Value: []*armappplatform.DeploymentResource{
+				{
+					Name: to.Ptr("mydeployment"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/deployments"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
+					Properties: &armappplatform.DeploymentResourceProperties{
+						Active:  to.Ptr(false),
+						AppName: to.Ptr("myapp"),
+						DeploymentSettings: &armappplatform.DeploymentSettings{
+							CPU: to.Ptr[int32](1),
+							EnvironmentVariables: map[string]*string{
+								"env": to.Ptr("test"),
 							},
-							Instances: []*armappplatform.DeploymentInstance{
-								{
-									Name:            to.StringPtr("instance1"),
-									DiscoveryStatus: to.StringPtr("pending"),
-									StartTime:       to.StringPtr("2020-08-26T01:55:02Z"),
-									Status:          to.StringPtr("Running"),
-								}},
-							ProvisioningState: armappplatform.DeploymentResourceProvisioningStateSucceeded.ToPtr(),
-							Source: &armappplatform.UserSourceInfo{
-								Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-								ArtifactSelector: to.StringPtr("sub-module-1"),
-								RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-								Version:          to.StringPtr("1.0"),
-							},
-							Status: armappplatform.DeploymentResourceStatusRunning.ToPtr(),
+							JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+							MemoryInGB:     to.Ptr[int32](3),
+							RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 						},
-						SKU: &armappplatform.SKU{
-							Name:     to.StringPtr("S0"),
-							Capacity: to.Int32Ptr(1),
-							Tier:     to.StringPtr("Standard"),
+						Instances: []*armappplatform.DeploymentInstance{
+							{
+								Name:            to.Ptr("instance1"),
+								DiscoveryStatus: to.Ptr("pending"),
+								StartTime:       to.Ptr("2020-08-26T01:55:02Z"),
+								Status:          to.Ptr("Running"),
+							}},
+						ProvisioningState: to.Ptr(armappplatform.DeploymentResourceProvisioningStateSucceeded),
+						Source: &armappplatform.UserSourceInfo{
+							Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+							ArtifactSelector: to.Ptr("sub-module-1"),
+							RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+							Version:          to.Ptr("1.0"),
 						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().DeploymentResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().DeploymentResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						Status: to.Ptr(armappplatform.DeploymentResourceStatusRunning),
+					},
+					SKU: &armappplatform.SKU{
+						Name:     to.Ptr("S0"),
+						Capacity: to.Ptr[int32](1),
+						Tier:     to.Ptr("Standard"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.DeploymentResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.DeploymentResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -2450,71 +2280,65 @@ func TestDeployments_ListForCluster(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_ListForCluster"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.ListForCluster("myResourceGroup",
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListForClusterPager("myResourceGroup",
 		"myservice",
 		&armappplatform.DeploymentsClientListForClusterOptions{Version: []string{}})
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_ListForCluster.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.DeploymentResourceCollection{
-				Value: []*armappplatform.DeploymentResource{
-					{
-						Name: to.StringPtr("mydeployment"),
-						Type: to.StringPtr("Microsoft.AppPlatform/Spring/apps/deployments"),
-						ID:   to.StringPtr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
-						Properties: &armappplatform.DeploymentResourceProperties{
-							Active:  to.BoolPtr(false),
-							AppName: to.StringPtr("myapp"),
-							DeploymentSettings: &armappplatform.DeploymentSettings{
-								CPU: to.Int32Ptr(1),
-								EnvironmentVariables: map[string]*string{
-									"env": to.StringPtr("test"),
-								},
-								JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-								MemoryInGB:     to.Int32Ptr(3),
-								RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+		pagerExampleRes := armappplatform.DeploymentResourceCollection{
+			Value: []*armappplatform.DeploymentResource{
+				{
+					Name: to.Ptr("mydeployment"),
+					Type: to.Ptr("Microsoft.AppPlatform/Spring/apps/deployments"),
+					ID:   to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.AppPlatform/Spring/myservice/apps/myapp/deployments/mydeployment"),
+					Properties: &armappplatform.DeploymentResourceProperties{
+						Active:  to.Ptr(false),
+						AppName: to.Ptr("myapp"),
+						DeploymentSettings: &armappplatform.DeploymentSettings{
+							CPU: to.Ptr[int32](1),
+							EnvironmentVariables: map[string]*string{
+								"env": to.Ptr("test"),
 							},
-							Instances: []*armappplatform.DeploymentInstance{
-								{
-									Name:            to.StringPtr("instance1"),
-									DiscoveryStatus: to.StringPtr("pending"),
-									StartTime:       to.StringPtr("2020-08-26T01:55:02Z"),
-									Status:          to.StringPtr("Running"),
-								}},
-							ProvisioningState: armappplatform.DeploymentResourceProvisioningStateSucceeded.ToPtr(),
-							Source: &armappplatform.UserSourceInfo{
-								Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-								ArtifactSelector: to.StringPtr("sub-module-1"),
-								RelativePath:     to.StringPtr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
-								Version:          to.StringPtr("1.0"),
-							},
-							Status: armappplatform.DeploymentResourceStatusRunning.ToPtr(),
+							JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+							MemoryInGB:     to.Ptr[int32](3),
+							RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 						},
-						SKU: &armappplatform.SKU{
-							Name:     to.StringPtr("S0"),
-							Capacity: to.Int32Ptr(1),
-							Tier:     to.StringPtr("Standard"),
+						Instances: []*armappplatform.DeploymentInstance{
+							{
+								Name:            to.Ptr("instance1"),
+								DiscoveryStatus: to.Ptr("pending"),
+								StartTime:       to.Ptr("2020-08-26T01:55:02Z"),
+								Status:          to.Ptr("Running"),
+							}},
+						ProvisioningState: to.Ptr(armappplatform.DeploymentResourceProvisioningStateSucceeded),
+						Source: &armappplatform.UserSourceInfo{
+							Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+							ArtifactSelector: to.Ptr("sub-module-1"),
+							RelativePath:     to.Ptr("resources/a172cedcae47474b615c54d510a5d84a8dea3032e958587430b413538be3f333-2019082605-e3095339-1723-44b7-8b5e-31b1003978bc"),
+							Version:          to.Ptr("1.0"),
 						},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().DeploymentResourceCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().DeploymentResourceCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_ListForCluster.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+						Status: to.Ptr(armappplatform.DeploymentResourceStatusRunning),
+					},
+					SKU: &armappplatform.SKU{
+						Name:     to.Ptr("S0"),
+						Capacity: to.Ptr[int32](1),
+						Tier:     to.Ptr("Standard"),
+					},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.DeploymentResourceCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.DeploymentResourceCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_ListForCluster.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -2524,12 +2348,10 @@ func TestDeployments_Start(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Start"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginStart(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2550,12 +2372,10 @@ func TestDeployments_Stop(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Stop"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginStop(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2576,12 +2396,10 @@ func TestDeployments_Restart(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Deployments_Restart"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	client, err := armappplatform.NewDeploymentsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginRestart(ctx,
 		"myResourceGroup",
 		"myservice",
@@ -2602,43 +2420,37 @@ func TestOperations_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Operations_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewOperationsClient(cred, &options)
-	pager := client.List(nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	client, err := armappplatform.NewOperationsClient(cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager(nil)
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Operations_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.AvailableOperations{
-				Value: []*armappplatform.OperationDetail{
-					{
-						Name: to.StringPtr("Microsoft.AppPlatform/Spring/read"),
-						Display: &armappplatform.OperationDisplay{
-							Description: to.StringPtr("Create or Update Managed Applications"),
-							Operation:   to.StringPtr("Create or Update Managed Applications"),
-							Provider:    to.StringPtr("Microsoft Azure Distributed Managed Service for Spring"),
-							Resource:    to.StringPtr("Managed Applications"),
-						},
-						IsDataAction: to.BoolPtr(false),
-						Origin:       to.StringPtr("user,system"),
-						Properties:   &armappplatform.OperationProperties{},
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().AvailableOperations) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().AvailableOperations)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Operations_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+		pagerExampleRes := armappplatform.AvailableOperations{
+			Value: []*armappplatform.OperationDetail{
+				{
+					Name: to.Ptr("Microsoft.AppPlatform/Spring/read"),
+					Display: &armappplatform.OperationDisplay{
+						Description: to.Ptr("Create or Update Managed Applications"),
+						Operation:   to.Ptr("Create or Update Managed Applications"),
+						Provider:    to.Ptr("Microsoft Azure Distributed Managed Service for Spring"),
+						Resource:    to.Ptr("Managed Applications"),
+					},
+					IsDataAction: to.Ptr(false),
+					Origin:       to.Ptr("user,system"),
+					Properties:   &armappplatform.OperationProperties{},
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.AvailableOperations) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.AvailableOperations)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Operations_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -2648,42 +2460,38 @@ func TestRuntimeVersions_ListRuntimeVersions(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"RuntimeVersions_ListRuntimeVersions"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewRuntimeVersionsClient(cred, &options)
+	client, err := armappplatform.NewRuntimeVersionsClient(cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.ListRuntimeVersions(ctx,
 		nil)
 	if err != nil {
 		t.Fatalf("Failed to get result for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/RuntimeVersions_ListRuntimeVersions.json: %v", err)
 	}
 	// Response check
-	{
-		exampleRes := armappplatform.AvailableRuntimeVersions{
-			Value: []*armappplatform.SupportedRuntimeVersion{
-				{
-					Platform: armappplatform.SupportedRuntimePlatformJava.ToPtr(),
-					Value:    armappplatform.SupportedRuntimeValueJava8.ToPtr(),
-					Version:  to.StringPtr("8"),
-				},
-				{
-					Platform: armappplatform.SupportedRuntimePlatformJava.ToPtr(),
-					Value:    armappplatform.SupportedRuntimeValueJava11.ToPtr(),
-					Version:  to.StringPtr("11"),
-				},
-				{
-					Platform: armappplatform.SupportedRuntimePlatformNETCore.ToPtr(),
-					Value:    armappplatform.SupportedRuntimeValueNetCore31.ToPtr(),
-					Version:  to.StringPtr("3.1"),
-				}},
-		}
-		if !reflect.DeepEqual(exampleRes, res.AvailableRuntimeVersions) {
-			exampleResJson, _ := json.Marshal(exampleRes)
-			mockResJson, _ := json.Marshal(res.AvailableRuntimeVersions)
-			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/RuntimeVersions_ListRuntimeVersions.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-		}
+	exampleRes := armappplatform.AvailableRuntimeVersions{
+		Value: []*armappplatform.SupportedRuntimeVersion{
+			{
+				Platform: to.Ptr(armappplatform.SupportedRuntimePlatformJava),
+				Value:    to.Ptr(armappplatform.SupportedRuntimeValueJava8),
+				Version:  to.Ptr("8"),
+			},
+			{
+				Platform: to.Ptr(armappplatform.SupportedRuntimePlatformJava),
+				Value:    to.Ptr(armappplatform.SupportedRuntimeValueJava11),
+				Version:  to.Ptr("11"),
+			},
+			{
+				Platform: to.Ptr(armappplatform.SupportedRuntimePlatformNETCore),
+				Value:    to.Ptr(armappplatform.SupportedRuntimeValueNetCore31),
+				Version:  to.Ptr("3.1"),
+			}},
+	}
+	if !reflect.DeepEqual(exampleRes, res.AvailableRuntimeVersions) {
+		exampleResJson, _ := json.Marshal(exampleRes)
+		mockResJson, _ := json.Marshal(res.AvailableRuntimeVersions)
+		t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/RuntimeVersions_ListRuntimeVersions.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 	}
 }
 
@@ -2692,51 +2500,45 @@ func TestSKUs_List(t *testing.T) {
 	ctx = runtime.WithHTTPHeader(ctx, map[string][]string{
 		"example-id": {"Skus_List"},
 	})
-	defer func() {
-		if r := recover(); r != nil {
-			t.Fatal("stacktrace from panic: \n" + string(debug.Stack()))
-		}
-	}()
-	client := armappplatform.NewSKUsClient("00000000-0000-0000-0000-000000000000", cred, &options)
-	pager := client.List(nil)
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	client, err := armappplatform.NewSKUsClient("00000000-0000-0000-0000-000000000000", cred, &options)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager(nil)
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			t.Fatalf("Failed to advance page for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Skus_List.json: %v", err)
+			break
 		}
 		// Response check
-		if nextResult {
-			pagerExampleRes := armappplatform.ResourceSKUCollection{
-				Value: []*armappplatform.ResourceSKU{
-					{
-						Name: to.StringPtr("B0"),
-						Capacity: &armappplatform.SKUCapacity{
-							Default:   to.Int32Ptr(1),
-							Maximum:   to.Int32Ptr(20),
-							Minimum:   to.Int32Ptr(1),
-							ScaleType: armappplatform.SKUScaleTypeAutomatic.ToPtr(),
-						},
-						LocationInfo: []*armappplatform.ResourceSKULocationInfo{
-							{
-								Location:    to.StringPtr("eastus"),
-								ZoneDetails: []*armappplatform.ResourceSKUZoneDetails{},
-								Zones:       []*string{},
-							}},
-						Locations: []*string{
-							to.StringPtr("eastus")},
-						ResourceType: to.StringPtr("Spring"),
-						Restrictions: []*armappplatform.ResourceSKURestrictions{},
-						Tier:         to.StringPtr("Basic"),
-					}},
-			}
-			if !reflect.DeepEqual(pagerExampleRes, pager.PageResponse().ResourceSKUCollection) {
-				exampleResJson, _ := json.Marshal(pagerExampleRes)
-				mockResJson, _ := json.Marshal(pager.PageResponse().ResourceSKUCollection)
-				t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Skus_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
-			}
-		} else {
-			t.Logf("Page end.")
-			break
+		pagerExampleRes := armappplatform.ResourceSKUCollection{
+			Value: []*armappplatform.ResourceSKU{
+				{
+					Name: to.Ptr("B0"),
+					Capacity: &armappplatform.SKUCapacity{
+						Default:   to.Ptr[int32](1),
+						Maximum:   to.Ptr[int32](20),
+						Minimum:   to.Ptr[int32](1),
+						ScaleType: to.Ptr(armappplatform.SKUScaleTypeAutomatic),
+					},
+					LocationInfo: []*armappplatform.ResourceSKULocationInfo{
+						{
+							Location:    to.Ptr("eastus"),
+							ZoneDetails: []*armappplatform.ResourceSKUZoneDetails{},
+							Zones:       []*string{},
+						}},
+					Locations: []*string{
+						to.Ptr("eastus")},
+					ResourceType: to.Ptr("Spring"),
+					Restrictions: []*armappplatform.ResourceSKURestrictions{},
+					Tier:         to.Ptr("Basic"),
+				}},
+		}
+		if !reflect.DeepEqual(pagerExampleRes, nextResult.ResourceSKUCollection) {
+			exampleResJson, _ := json.Marshal(pagerExampleRes)
+			mockResJson, _ := json.Marshal(nextResult.ResourceSKUCollection)
+			t.Fatalf("Mock response is not equal to example response for example specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Skus_List.json:\nmock response: %s\nexample response: %s", mockResJson, exampleResJson)
 		}
 	}
 }
@@ -2775,8 +2577,15 @@ func setUp() {
 				IncludeBody: true,
 			},
 			Transport: client,
+			Cloud: cloud.Configuration{
+				Services: map[cloud.ServiceName]cloud.ServiceConfiguration{
+					cloud.ResourceManager: {
+						Audience: mockHost,
+						Endpoint: mockHost,
+					},
+				},
+			},
 		},
-		Endpoint: arm.Endpoint(mockHost),
 	}
 }
 

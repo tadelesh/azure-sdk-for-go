@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -28,17 +28,12 @@ var (
 	ctx                        context.Context
 	cred                       azcore.TokenCredential
 	appName                    = "app01"
-	ascDomainName              = ".azuremicroservices.io"
-	dnsCname                   = "asc"
 	insightsInstrumentationKey string
 	serviceName                = "test-scenario-instance"
 	blobUrl                    = getEnv("BLOB_URL", "")
-	customDomainName           = getEnv("CUSTOM_DOMAIN_NAME", "")
-	dnsResourceGroup           = getEnv("DNS_RESOURCE_GROUP", "")
-	dnsSubscriptionId          = getEnv("DNS_SUBSCRIPTION_ID", "")
-	location                   = getEnv("LOCATION", "eastus")
+	location                   = getEnv("LOCATION", "westus")
 	mysqlKey                   = getEnv("MYSQL_KEY", "")
-	resourceGroupName          = getEnv("RESOURCE_GROUP_NAME", "")
+	resourceGroupName          = getEnv("RESOURCE_GROUP_NAME", "scenarioTestTempGroup")
 	subscriptionId             = getEnv("AZURE_SUBSCRIPTION_ID", "")
 	userAssignedIdentity       = getEnv("USER_ASSIGNED_IDENTITY", "")
 )
@@ -52,7 +47,6 @@ func main() {
 	createResourceGroup()
 	prepare()
 	springSample()
-	cleanup()
 	deleteResourceGroup()
 }
 
@@ -83,11 +77,11 @@ func prepare() {
 		Properties: &armresources.DeploymentProperties{
 			Template:   template,
 			Parameters: params,
-			Mode:       armresources.DeploymentModeIncremental.ToPtr(),
+			Mode:       to.Ptr(armresources.DeploymentModeIncremental),
 		},
 	}
 	deploymentExtend := createDeployment("Generate_Unique_ServiceName", &deployment)
-	serviceName = deploymentExtend.Properties.Outputs["serviceName"].(map[string]interface{})["value"].(string)
+	serviceName = deploymentExtend.Properties.Outputs.(map[string]interface{})["serviceName"].(map[string]interface{})["value"].(string)
 
 	// From step Create_Application_Insight_Instance
 	template = map[string]interface{}{
@@ -129,91 +123,26 @@ func prepare() {
 		Properties: &armresources.DeploymentProperties{
 			Template:   template,
 			Parameters: params,
-			Mode:       armresources.DeploymentModeIncremental.ToPtr(),
+			Mode:       to.Ptr(armresources.DeploymentModeIncremental),
 		},
 	}
 	deploymentExtend = createDeployment("Create_Application_Insight_Instance", &deployment)
-	insightsInstrumentationKey = deploymentExtend.Properties.Outputs["insightsInstrumentationKey"].(map[string]interface{})["value"].(string)
-
-	// From step Add_Dns_Cname_Record
-	template = map[string]interface{}{
-		"$schema":        "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-		"contentVersion": "1.0.0.0",
-		"parameters": map[string]interface{}{
-			"userAssignedIdentity": map[string]interface{}{
-				"type":         "string",
-				"defaultValue": "$(userAssignedIdentity)",
-			},
-			"utcValue": map[string]interface{}{
-				"type":         "string",
-				"defaultValue": "[utcNow()]",
-			},
-		},
-		"resources": []interface{}{
-			map[string]interface{}{
-				"name":       "Add_Dns_Cname_Record",
-				"type":       "Microsoft.Resources/deploymentScripts",
-				"apiVersion": "2020-10-01",
-				"identity": map[string]interface{}{
-					"type": "UserAssigned",
-					"userAssignedIdentities": map[string]interface{}{
-						"[parameters('userAssignedIdentity')]": map[string]interface{}{},
-					},
-				},
-				"kind":     "AzurePowerShell",
-				"location": "[resourceGroup().location]",
-				"properties": map[string]interface{}{
-					"azPowerShellVersion": "6.2",
-					"cleanupPreference":   "OnSuccess",
-					"environmentVariables": []interface{}{
-						map[string]interface{}{
-							"name":  "resourceGroupName",
-							"value": dnsResourceGroup,
-						},
-						map[string]interface{}{
-							"name":  "dnsZoneName",
-							"value": customDomainName,
-						},
-						map[string]interface{}{
-							"name":  "dnsCname",
-							"value": "asc",
-						},
-						map[string]interface{}{
-							"name":  "dnsCnameAlias",
-							"value": serviceName + ".azuremicroservices.io",
-						},
-					},
-					"forceUpdateTag":    "[parameters('utcValue')]",
-					"retentionInterval": "P1D",
-					"scriptContent":     "# Copyright (c) 2021 Microsoft Corporation\n# \n# This software is released under the MIT License.\n# https://opensource.org/licenses/MIT\n$resourceGroupName = ${Env:resourceGroupName}\n$dnsCname = ${Env:dnsCname}\n$dnsZoneName = ${Env:dnsZoneName}\n$dnsCnameAlias = ${Env:dnsCnameAlias}\nConnect-AzAccount -Identity\nNew-AzDnsRecordSet -Name $dnsCname -RecordType CNAME -ZoneName $dnsZoneName -ResourceGroupName $resourceGroupName -Ttl 3600 -DnsRecords (New-AzDnsRecordConfig -Cname $dnsCnameAlias) -Overwrite\n$RecordSet = Get-AzDnsRecordSet -Name $dnsCname -RecordType CNAME -ResourceGroupName $resourceGroupName -ZoneName $dnsZoneName\n$RecordSet",
-					"timeout":           "PT1H",
-				},
-			},
-		},
-	}
-	params = map[string]interface{}{
-		"userAssignedIdentity": map[string]interface{}{"value": userAssignedIdentity},
-	}
-	deployment = armresources.Deployment{
-		Properties: &armresources.DeploymentProperties{
-			Template:   template,
-			Parameters: params,
-			Mode:       armresources.DeploymentModeIncremental.ToPtr(),
-		},
-	}
-	_ = createDeployment("Add_Dns_Cname_Record", &deployment)
+	insightsInstrumentationKey = deploymentExtend.Properties.Outputs.(map[string]interface{})["insightsInstrumentationKey"].(map[string]interface{})["value"].(string)
 }
 
 func springSample() {
 	var relativePath string
 	var uploadUrl string
 	// From step Services_CheckNameAvailability
-	servicesClient := armappplatform.NewServicesClient(subscriptionId, cred, nil)
+	servicesClient, err := armappplatform.NewServicesClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
 	_, err = servicesClient.CheckNameAvailability(ctx,
 		location,
 		armappplatform.NameAvailabilityParameters{
-			Name: to.StringPtr(serviceName),
-			Type: to.StringPtr("Microsoft.AppPlatform/Spring"),
+			Name: to.Ptr(serviceName),
+			Type: to.Ptr("Microsoft.AppPlatform/Spring"),
 		},
 		nil)
 	if err != nil {
@@ -221,25 +150,25 @@ func springSample() {
 	}
 
 	// From step Services_CreateOrUpdate
-	servicesClientCreateOrUpdatePollerResponse, err := servicesClient.BeginCreateOrUpdate(ctx,
+	servicesClientCreateOrUpdateResponsePoller, err := servicesClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.ServiceResource{
-			Location: to.StringPtr(location),
+			Location: to.Ptr(location),
 			Tags: map[string]*string{
-				"key1": to.StringPtr("value1"),
+				"key1": to.Ptr("value1"),
 			},
 			Properties: &armappplatform.ClusterResourceProperties{},
 			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
+				Name: to.Ptr("S0"),
+				Tier: to.Ptr("Standard"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = servicesClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = servicesClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -254,24 +183,24 @@ func springSample() {
 	}
 
 	// From step Services_Update
-	servicesClientUpdatePollerResponse, err := servicesClient.BeginUpdate(ctx,
+	servicesClientUpdateResponsePoller, err := servicesClient.BeginUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.ServiceResource{
 			Tags: map[string]*string{
-				"created-by": to.StringPtr("api-test"),
-				"hello":      to.StringPtr("world"),
+				"created-by": to.Ptr("api-test"),
+				"hello":      to.Ptr("world"),
 			},
 			SKU: &armappplatform.SKU{
-				Name: to.StringPtr("S0"),
-				Tier: to.StringPtr("Standard"),
+				Name: to.Ptr("S0"),
+				Tier: to.Ptr("Standard"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = servicesClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = servicesClientUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -299,7 +228,7 @@ func springSample() {
 		resourceGroupName,
 		serviceName,
 		armappplatform.RegenerateTestKeyRequestPayload{
-			KeyType: armappplatform.TestKeyTypePrimary.ToPtr(),
+			KeyType: to.Ptr(armappplatform.TestKeyTypePrimary),
 		},
 		nil)
 	if err != nil {
@@ -316,23 +245,26 @@ func springSample() {
 	}
 
 	// From step Certificates_CreateOrUpdate
-	certificatesClient := armappplatform.NewCertificatesClient(subscriptionId, cred, nil)
+	certificatesClient, err := armappplatform.NewCertificatesClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
 	certificateName := "asc-certificate"
-	certificatesClientCreateOrUpdatePollerResponse, err := certificatesClient.BeginCreateOrUpdate(ctx,
+	certificatesClientCreateOrUpdateResponsePoller, err := certificatesClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		certificateName,
 		armappplatform.CertificateResource{
 			Properties: &armappplatform.CertificateProperties{
-				KeyVaultCertName: to.StringPtr("pfx-cert"),
-				VaultURI:         to.StringPtr("https://integration-test-prod.vault.azure.net/"),
+				KeyVaultCertName: to.Ptr("pfx-cert"),
+				VaultURI:         to.Ptr("https://integration-test-prod.vault.azure.net/"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = certificatesClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = certificatesClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -349,53 +281,54 @@ func springSample() {
 	}
 
 	// From step Certificates_List
-	certificatesClientListPager := certificatesClient.List(resourceGroupName,
+	certificatesClientNewListPagerPager := certificatesClient.NewListPager(resourceGroupName,
 		serviceName,
 		nil)
-	for certificatesClientListPager.NextPage(ctx) {
-		err = certificatesClientListPager.Err()
+	for certificatesClientNewListPagerPager.More() {
+		_, err := certificatesClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range certificatesClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step ConfigServers_Validate
-	configServersClient := armappplatform.NewConfigServersClient(subscriptionId, cred, nil)
-	configServersClientValidatePollerResponse, err := configServersClient.BeginValidate(ctx,
+	configServersClient, err := armappplatform.NewConfigServersClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	configServersClientValidateResponsePoller, err := configServersClient.BeginValidate(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.ConfigServerSettings{
 			GitProperty: &armappplatform.ConfigServerGitProperty{
-				Label: to.StringPtr("master"),
+				Label: to.Ptr("master"),
 				SearchPaths: []*string{
-					to.StringPtr("/")},
-				URI: to.StringPtr("https://github.com/VSChina/asc-config-server-test-public.git"),
+					to.Ptr("/")},
+				URI: to.Ptr("https://github.com/VSChina/asc-config-server-test-public.git"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = configServersClientValidatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = configServersClientValidateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step ConfigServers_UpdatePut
-	configServersClientUpdatePutPollerResponse, err := configServersClient.BeginUpdatePut(ctx,
+	configServersClientUpdatePutResponsePoller, err := configServersClient.BeginUpdatePut(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.ConfigServerResource{
 			Properties: &armappplatform.ConfigServerProperties{
 				ConfigServer: &armappplatform.ConfigServerSettings{
 					GitProperty: &armappplatform.ConfigServerGitProperty{
-						Label: to.StringPtr("master"),
+						Label: to.Ptr("master"),
 						SearchPaths: []*string{
-							to.StringPtr("/")},
-						URI: to.StringPtr("https://github.com/VSChina/asc-config-server-test-public.git"),
+							to.Ptr("/")},
+						URI: to.Ptr("https://github.com/VSChina/asc-config-server-test-public.git"),
 					},
 				},
 			},
@@ -404,20 +337,20 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = configServersClientUpdatePutPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = configServersClientUpdatePutResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step ConfigServers_UpdatePatch
-	configServersClientUpdatePatchPollerResponse, err := configServersClient.BeginUpdatePatch(ctx,
+	configServersClientUpdatePatchResponsePoller, err := configServersClient.BeginUpdatePatch(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.ConfigServerResource{
 			Properties: &armappplatform.ConfigServerProperties{
 				ConfigServer: &armappplatform.ConfigServerSettings{
 					GitProperty: &armappplatform.ConfigServerGitProperty{
-						URI: to.StringPtr("https://github.com/azure-samples/spring-petclinic-microservices-config"),
+						URI: to.Ptr("https://github.com/azure-samples/spring-petclinic-microservices-config"),
 					},
 				},
 			},
@@ -426,7 +359,7 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = configServersClientUpdatePatchPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = configServersClientUpdatePatchResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -441,22 +374,25 @@ func springSample() {
 	}
 
 	// From step MonitoringSettings_UpdatePut
-	monitoringSettingsClient := armappplatform.NewMonitoringSettingsClient(subscriptionId, cred, nil)
-	monitoringSettingsClientUpdatePutPollerResponse, err := monitoringSettingsClient.BeginUpdatePut(ctx,
+	monitoringSettingsClient, err := armappplatform.NewMonitoringSettingsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	monitoringSettingsClientUpdatePutResponsePoller, err := monitoringSettingsClient.BeginUpdatePut(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsInstrumentationKey: to.StringPtr(insightsInstrumentationKey),
-				AppInsightsSamplingRate:       to.Float64Ptr(50),
-				TraceEnabled:                  to.BoolPtr(true),
+				AppInsightsInstrumentationKey: to.Ptr(insightsInstrumentationKey),
+				AppInsightsSamplingRate:       to.Ptr[float64](50),
+				TraceEnabled:                  to.Ptr(true),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = monitoringSettingsClientUpdatePutPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = monitoringSettingsClientUpdatePutResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -471,49 +407,52 @@ func springSample() {
 	}
 
 	// From step MonitoringSettings_UpdatePatch
-	monitoringSettingsClientUpdatePatchPollerResponse, err := monitoringSettingsClient.BeginUpdatePatch(ctx,
+	monitoringSettingsClientUpdatePatchResponsePoller, err := monitoringSettingsClient.BeginUpdatePatch(ctx,
 		resourceGroupName,
 		serviceName,
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsSamplingRate: to.Float64Ptr(100),
+				AppInsightsSamplingRate: to.Ptr[float64](100),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = monitoringSettingsClientUpdatePatchPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = monitoringSettingsClientUpdatePatchResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Apps_Create
-	appsClient := armappplatform.NewAppsClient(subscriptionId, cred, nil)
-	appsClientCreateOrUpdatePollerResponse, err := appsClient.BeginCreateOrUpdate(ctx,
+	appsClient, err := armappplatform.NewAppsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	appsClientCreateOrUpdateResponsePoller, err := appsClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
 		armappplatform.AppResource{
 			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+				Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+				PrincipalID: to.Ptr("principalid"),
+				TenantID:    to.Ptr("tenantid"),
 			},
-			Location: to.StringPtr(location),
+			Location: to.Ptr(location),
 			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("mydeployment1"),
-				EnableEndToEndTLS:    to.BoolPtr(false),
-				Fqdn:                 to.StringPtr(appName + ".mydomain.com"),
-				HTTPSOnly:            to.BoolPtr(false),
-				Public:               to.BoolPtr(false),
+				ActiveDeploymentName: to.Ptr("mydeployment1"),
+				EnableEndToEndTLS:    to.Ptr(false),
+				Fqdn:                 to.Ptr(appName + ".mydomain.com"),
+				HTTPSOnly:            to.Ptr(false),
+				Public:               to.Ptr(false),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = appsClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = appsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -529,9 +468,12 @@ func springSample() {
 	}
 
 	// From step Deployments_CreateOrUpdate_Default
-	deploymentsClient := armappplatform.NewDeploymentsClient(subscriptionId, cred, nil)
+	deploymentsClient, err := armappplatform.NewDeploymentsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
 	deploymentName := "default"
-	deploymentsClientCreateOrUpdatePollerResponse, err := deploymentsClient.BeginCreateOrUpdate(ctx,
+	deploymentsClientCreateOrUpdateResponsePoller, err := deploymentsClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -539,32 +481,32 @@ func springSample() {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
+					CPU: to.Ptr[int32](1),
 					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
+						"env": to.Ptr("test"),
 					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+					JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+					MemoryInGB:     to.Ptr[int32](3),
+					RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 				},
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeJar.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr("<default>"),
-					Version:          to.StringPtr("1.0"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeJar),
+					ArtifactSelector: to.Ptr("sub-module-1"),
+					RelativePath:     to.Ptr("<default>"),
+					Version:          to.Ptr("1.0"),
 				},
 			},
 			SKU: &armappplatform.SKU{
-				Name:     to.StringPtr("S0"),
-				Capacity: to.Int32Ptr(1),
-				Tier:     to.StringPtr("Standard"),
+				Name:     to.Ptr("S0"),
+				Capacity: to.Ptr[int32](1),
+				Tier:     to.Ptr("Standard"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -582,48 +524,48 @@ func springSample() {
 	}
 
 	// From step Apps_Update_ActiveDeployment
-	appsClientUpdatePollerResponse, err := appsClient.BeginUpdate(ctx,
+	appsClientUpdateResponsePoller, err := appsClient.BeginUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
 		armappplatform.AppResource{
 			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+				Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+				PrincipalID: to.Ptr("principalid"),
+				TenantID:    to.Ptr("tenantid"),
 			},
 			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("default"),
+				ActiveDeploymentName: to.Ptr("default"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = appsClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = appsClientUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Apps_Update_Disk
-	appsClientUpdatePollerResponse, err = appsClient.BeginUpdate(ctx,
+	appsClientUpdateResponsePoller, err = appsClient.BeginUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
 		armappplatform.AppResource{
 			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+				Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+				PrincipalID: to.Ptr("principalid"),
+				TenantID:    to.Ptr("tenantid"),
 			},
 			Properties: &armappplatform.AppResourceProperties{
 				PersistentDisk: &armappplatform.PersistentDisk{
-					MountPath: to.StringPtr("/data"),
-					SizeInGB:  to.Int32Ptr(10),
+					MountPath: to.Ptr("/data"),
+					SizeInGB:  to.Ptr[int32](10),
 				},
 				TemporaryDisk: &armappplatform.TemporaryDisk{
-					MountPath: to.StringPtr("/tmpdisk"),
-					SizeInGB:  to.Int32Ptr(3),
+					MountPath: to.Ptr("/tmpdisk"),
+					SizeInGB:  to.Ptr[int32](3),
 				},
 			},
 		},
@@ -631,29 +573,30 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = appsClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = appsClientUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Apps_List
-	appsClientListPager := appsClient.List(resourceGroupName,
+	appsClientNewListPagerPager := appsClient.NewListPager(resourceGroupName,
 		serviceName,
 		nil)
-	for appsClientListPager.NextPage(ctx) {
-		err = appsClientListPager.Err()
+	for appsClientNewListPagerPager.More() {
+		_, err := appsClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range appsClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Bindings_Create
-	bindingsClient := armappplatform.NewBindingsClient(subscriptionId, cred, nil)
+	bindingsClient, err := armappplatform.NewBindingsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
 	bindingName := "mysql-binding"
-	bindingsClientCreateOrUpdatePollerResponse, err := bindingsClient.BeginCreateOrUpdate(ctx,
+	bindingsClientCreateOrUpdateResponsePoller, err := bindingsClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -664,22 +607,22 @@ func springSample() {
 					"databaseName": "mysqldb",
 					"username":     "test",
 				},
-				Key:        to.StringPtr(mysqlKey),
-				ResourceID: to.StringPtr("/subscriptions/b46590cb-a111-4b84-935f-c305aaf1f424/resourceGroups/mary-west/providers/Microsoft.DBforMySQL/servers/fake-sql"),
+				Key:        to.Ptr(mysqlKey),
+				ResourceID: to.Ptr("/subscriptions/b46590cb-a111-4b84-935f-c305aaf1f424/resourceGroups/mary-west/providers/Microsoft.DBforMySQL/servers/fake-sql"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = bindingsClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = bindingsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Bindings_Update
 	bindingName = "mysql-binding"
-	bindingsClientUpdatePollerResponse, err := bindingsClient.BeginUpdate(ctx,
+	bindingsClientUpdateResponsePoller, err := bindingsClient.BeginUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -690,15 +633,15 @@ func springSample() {
 					"databaseName": "mysqldb2",
 					"username":     "test2",
 				},
-				Key:        to.StringPtr(mysqlKey),
-				ResourceID: to.StringPtr("/subscriptions/" + subscriptionId + "/resourceGroups/" + resourceGroupName + "/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
+				Key:        to.Ptr(mysqlKey),
+				ResourceID: to.Ptr("/subscriptions/" + subscriptionId + "/resourceGroups/" + resourceGroupName + "/providers/Microsoft.DocumentDB/databaseAccounts/my-cosmosdb-1"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = bindingsClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = bindingsClientUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -716,23 +659,21 @@ func springSample() {
 	}
 
 	// From step Bindings_List
-	bindingsClientListPager := bindingsClient.List(resourceGroupName,
+	bindingsClientNewListPagerPager := bindingsClient.NewListPager(resourceGroupName,
 		serviceName,
 		appName,
 		nil)
-	for bindingsClientListPager.NextPage(ctx) {
-		err = bindingsClientListPager.Err()
+	for bindingsClientNewListPagerPager.More() {
+		_, err := bindingsClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range bindingsClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Bindings_Delete
 	bindingName = "mysql-binding"
-	bindingsClientDeletePollerResponse, err := bindingsClient.BeginDelete(ctx,
+	bindingsClientDeleteResponsePoller, err := bindingsClient.BeginDelete(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -741,92 +682,9 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = bindingsClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = bindingsClientDeleteResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
-	}
-
-	// From step Apps_ValidateDomain
-	_, err = appsClient.ValidateDomain(ctx,
-		resourceGroupName,
-		serviceName,
-		appName,
-		armappplatform.CustomDomainValidatePayload{
-			Name: to.StringPtr(customDomainName),
-		},
-		nil)
-	if err != nil {
-		panic(err)
-	}
-
-	// From step CustomDomains_CreateOrUpdate
-	customDomainsClient := armappplatform.NewCustomDomainsClient(subscriptionId, cred, nil)
-	domainName := dnsCname + "." + customDomainName
-	customDomainsClientCreateOrUpdatePollerResponse, err := customDomainsClient.BeginCreateOrUpdate(ctx,
-		resourceGroupName,
-		serviceName,
-		appName,
-		domainName,
-		armappplatform.CustomDomainResource{
-			Properties: &armappplatform.CustomDomainProperties{
-				CertName: to.StringPtr("asc-certificate"),
-			},
-		},
-		nil)
-	if err != nil {
-		panic(err)
-	}
-	_, err = customDomainsClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
-	if err != nil {
-		panic(err)
-	}
-
-	// From step CustomDomains_Update
-	domainName = dnsCname + "." + customDomainName
-	customDomainsClientUpdatePollerResponse, err := customDomainsClient.BeginUpdate(ctx,
-		resourceGroupName,
-		serviceName,
-		appName,
-		domainName,
-		armappplatform.CustomDomainResource{
-			Properties: &armappplatform.CustomDomainProperties{
-				CertName: to.StringPtr("asc-certificate"),
-			},
-		},
-		nil)
-	if err != nil {
-		panic(err)
-	}
-	_, err = customDomainsClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
-	if err != nil {
-		panic(err)
-	}
-
-	// From step CustomDomains_Get
-	domainName = dnsCname + "." + customDomainName
-	_, err = customDomainsClient.Get(ctx,
-		resourceGroupName,
-		serviceName,
-		appName,
-		domainName,
-		nil)
-	if err != nil {
-		panic(err)
-	}
-
-	// From step CustomDomains_List
-	customDomainsClientListPager := customDomainsClient.List(resourceGroupName,
-		serviceName,
-		appName,
-		nil)
-	for customDomainsClientListPager.NextPage(ctx) {
-		err = customDomainsClientListPager.Err()
-		if err != nil {
-			panic(err)
-		}
-		for _, v := range customDomainsClientListPager.PageResponse().Value {
-			_ = v
-		}
 	}
 
 	// From step Apps_GetResourceUploadUrl
@@ -896,14 +754,14 @@ func springSample() {
 		Properties: &armresources.DeploymentProperties{
 			Template:   template,
 			Parameters: params,
-			Mode:       armresources.DeploymentModeIncremental.ToPtr(),
+			Mode:       to.Ptr(armresources.DeploymentModeIncremental),
 		},
 	}
 	_ = createDeployment("Upload_File", &deployment)
 
 	// From step Deployments_CreateOrUpdate
 	deploymentName = "blue"
-	deploymentsClientCreateOrUpdatePollerResponse, err = deploymentsClient.BeginCreateOrUpdate(ctx,
+	deploymentsClientCreateOrUpdateResponsePoller, err = deploymentsClient.BeginCreateOrUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -911,63 +769,63 @@ func springSample() {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
+					CPU: to.Ptr[int32](1),
 					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
+						"env": to.Ptr("test"),
 					},
-					JvmOptions:     to.StringPtr("-Xms1G -Xmx3G"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+					JvmOptions:     to.Ptr("-Xms1G -Xmx3G"),
+					MemoryInGB:     to.Ptr[int32](3),
+					RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 				},
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeJar.ToPtr(),
-					ArtifactSelector: to.StringPtr("sub-module-1"),
-					RelativePath:     to.StringPtr(relativePath),
-					Version:          to.StringPtr("1.0"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeJar),
+					ArtifactSelector: to.Ptr("sub-module-1"),
+					RelativePath:     to.Ptr(relativePath),
+					Version:          to.Ptr("1.0"),
 				},
 			},
 			SKU: &armappplatform.SKU{
-				Name:     to.StringPtr("S0"),
-				Capacity: to.Int32Ptr(2),
-				Tier:     to.StringPtr("Standard"),
+				Name:     to.Ptr("S0"),
+				Capacity: to.Ptr[int32](2),
+				Tier:     to.Ptr("Standard"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientCreateOrUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientCreateOrUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Apps_Update
-	appsClientUpdatePollerResponse, err = appsClient.BeginUpdate(ctx,
+	appsClientUpdateResponsePoller, err = appsClient.BeginUpdate(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
 		armappplatform.AppResource{
 			Identity: &armappplatform.ManagedIdentityProperties{
-				Type:        armappplatform.ManagedIdentityTypeSystemAssigned.ToPtr(),
-				PrincipalID: to.StringPtr("principalid"),
-				TenantID:    to.StringPtr("tenantid"),
+				Type:        to.Ptr(armappplatform.ManagedIdentityTypeSystemAssigned),
+				PrincipalID: to.Ptr("principalid"),
+				TenantID:    to.Ptr("tenantid"),
 			},
 			Properties: &armappplatform.AppResourceProperties{
-				ActiveDeploymentName: to.StringPtr("blue"),
+				ActiveDeploymentName: to.Ptr("blue"),
 			},
 		},
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = appsClientUpdatePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = appsClientUpdateResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Deployments_Restart
 	deploymentName = "blue"
-	deploymentsClientRestartPollerResponse, err := deploymentsClient.BeginRestart(ctx,
+	deploymentsClientRestartResponsePoller, err := deploymentsClient.BeginRestart(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -976,14 +834,14 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientRestartPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientRestartResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Deployments_Stop
 	deploymentName = "blue"
-	deploymentsClientStopPollerResponse, err := deploymentsClient.BeginStop(ctx,
+	deploymentsClientStopResponsePoller, err := deploymentsClient.BeginStop(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -992,14 +850,14 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientStopPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientStopResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Deployments_Start
 	deploymentName = "blue"
-	deploymentsClientStartPollerResponse, err := deploymentsClient.BeginStart(ctx,
+	deploymentsClientStartResponsePoller, err := deploymentsClient.BeginStart(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -1008,7 +866,7 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientStartPollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientStartResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
@@ -1026,62 +884,54 @@ func springSample() {
 	}
 
 	// From step Deployments_List
-	deploymentsClientListPager := deploymentsClient.List(resourceGroupName,
+	deploymentsClientNewListPagerPager := deploymentsClient.NewListPager(resourceGroupName,
 		serviceName,
 		appName,
 		&armappplatform.DeploymentsClientListOptions{Version: []string{}})
-	for deploymentsClientListPager.NextPage(ctx) {
-		err = deploymentsClientListPager.Err()
+	for deploymentsClientNewListPagerPager.More() {
+		_, err := deploymentsClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range deploymentsClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Deployments_ListForCluster
-	deploymentsClientListForClusterPager := deploymentsClient.ListForCluster(resourceGroupName,
+	deploymentsClientNewListForClusterPagerPager := deploymentsClient.NewListForClusterPager(resourceGroupName,
 		serviceName,
 		&armappplatform.DeploymentsClientListForClusterOptions{Version: []string{}})
-	for deploymentsClientListForClusterPager.NextPage(ctx) {
-		err = deploymentsClientListForClusterPager.Err()
+	for deploymentsClientNewListForClusterPagerPager.More() {
+		_, err := deploymentsClientNewListForClusterPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range deploymentsClientListForClusterPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Services_List
-	servicesClientListPager := servicesClient.List(resourceGroupName,
+	servicesClientNewListPagerPager := servicesClient.NewListPager(resourceGroupName,
 		nil)
-	for servicesClientListPager.NextPage(ctx) {
-		err = servicesClientListPager.Err()
+	for servicesClientNewListPagerPager.More() {
+		_, err := servicesClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range servicesClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Services_ListBySubscription
-	servicesClientListBySubscriptionPager := servicesClient.ListBySubscription(nil)
-	for servicesClientListBySubscriptionPager.NextPage(ctx) {
-		err = servicesClientListBySubscriptionPager.Err()
+	servicesClientNewListBySubscriptionPagerPager := servicesClient.NewListBySubscriptionPager(nil)
+	for servicesClientNewListBySubscriptionPagerPager.More() {
+		_, err := servicesClientNewListBySubscriptionPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range servicesClientListBySubscriptionPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Deployments_Delete
 	deploymentName = "blue"
-	deploymentsClientDeletePollerResponse, err := deploymentsClient.BeginDelete(ctx,
+	deploymentsClientDeleteResponsePoller, err := deploymentsClient.BeginDelete(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -1090,30 +940,14 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = deploymentsClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
-	if err != nil {
-		panic(err)
-	}
-
-	// From step CustomDomains_Delete
-	domainName = dnsCname + "." + customDomainName
-	customDomainsClientDeletePollerResponse, err := customDomainsClient.BeginDelete(ctx,
-		resourceGroupName,
-		serviceName,
-		appName,
-		domainName,
-		nil)
-	if err != nil {
-		panic(err)
-	}
-	_, err = customDomainsClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = deploymentsClientDeleteResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Apps_Delete
 	appName := "app01"
-	appsClientDeletePollerResponse, err := appsClient.BeginDelete(ctx,
+	appsClientDeleteResponsePoller, err := appsClient.BeginDelete(ctx,
 		resourceGroupName,
 		serviceName,
 		appName,
@@ -1121,14 +955,14 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = appsClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = appsClientDeleteResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Certificates_Delete
 	certificateName = "asc-certificate"
-	certificatesClientDeletePollerResponse, err := certificatesClient.BeginDelete(ctx,
+	certificatesClientDeleteResponsePoller, err := certificatesClient.BeginDelete(ctx,
 		resourceGroupName,
 		serviceName,
 		certificateName,
@@ -1136,125 +970,64 @@ func springSample() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = certificatesClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = certificatesClientDeleteResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Services_Delete
-	servicesClientDeletePollerResponse, err := servicesClient.BeginDelete(ctx,
+	servicesClientDeleteResponsePoller, err := servicesClient.BeginDelete(ctx,
 		resourceGroupName,
 		serviceName,
 		nil)
 	if err != nil {
 		panic(err)
 	}
-	_, err = servicesClientDeletePollerResponse.PollUntilDone(ctx, 10*time.Second)
+	_, err = servicesClientDeleteResponsePoller.PollUntilDone(ctx, 10*time.Second)
 	if err != nil {
 		panic(err)
 	}
 
 	// From step Skus_List
-	sKUsClient := armappplatform.NewSKUsClient(subscriptionId, cred, nil)
-	sKUsClientListPager := sKUsClient.List(nil)
-	for sKUsClientListPager.NextPage(ctx) {
-		err = sKUsClientListPager.Err()
+	sKUsClient, err := armappplatform.NewSKUsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	sKUsClientNewListPagerPager := sKUsClient.NewListPager(nil)
+	for sKUsClientNewListPagerPager.More() {
+		_, err := sKUsClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range sKUsClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
 
 	// From step Operations_List
-	operationsClient := armappplatform.NewOperationsClient(cred, nil)
-	operationsClientListPager := operationsClient.List(nil)
-	for operationsClientListPager.NextPage(ctx) {
-		err = operationsClientListPager.Err()
+	operationsClient, err := armappplatform.NewOperationsClient(cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	operationsClientNewListPagerPager := operationsClient.NewListPager(nil)
+	for operationsClientNewListPagerPager.More() {
+		_, err := operationsClientNewListPagerPager.NextPage(ctx)
 		if err != nil {
 			panic(err)
 		}
-		for _, v := range operationsClientListPager.PageResponse().Value {
-			_ = v
-		}
+		break
 	}
-}
-
-func cleanup() {
-	// From step delete_cname_record
-	template := map[string]interface{}{
-		"$schema":        "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-		"contentVersion": "1.0.0.0",
-		"parameters": map[string]interface{}{
-			"userAssignedIdentity": map[string]interface{}{
-				"type":         "string",
-				"defaultValue": "$(userAssignedIdentity)",
-			},
-			"utcValue": map[string]interface{}{
-				"type":         "string",
-				"defaultValue": "[utcNow()]",
-			},
-		},
-		"resources": []interface{}{
-			map[string]interface{}{
-				"name":       "delete_cname_record",
-				"type":       "Microsoft.Resources/deploymentScripts",
-				"apiVersion": "2020-10-01",
-				"identity": map[string]interface{}{
-					"type": "UserAssigned",
-					"userAssignedIdentities": map[string]interface{}{
-						"[parameters('userAssignedIdentity')]": map[string]interface{}{},
-					},
-				},
-				"kind":     "AzurePowerShell",
-				"location": "[resourceGroup().location]",
-				"properties": map[string]interface{}{
-					"azPowerShellVersion": "6.2",
-					"cleanupPreference":   "OnSuccess",
-					"environmentVariables": []interface{}{
-						map[string]interface{}{
-							"name":  "resourceGroupName",
-							"value": dnsResourceGroup,
-						},
-						map[string]interface{}{
-							"name":  "dnsCname",
-							"value": "asc",
-						},
-						map[string]interface{}{
-							"name":  "dnsZoneName",
-							"value": customDomainName,
-						},
-					},
-					"forceUpdateTag":    "[parameters('utcValue')]",
-					"retentionInterval": "P1D",
-					"scriptContent":     "$resourceGroupName = ${Env:resourceGroupName}\n$dnsCNAME = ${Env:dnsCname}\n$dnsZoneName = ${Env:dnsZoneName}\n\nConnect-AzAccount -Identity\n\n$RecordSet = Get-AzDnsRecordSet -Name $dnsCname -RecordType CNAME -ResourceGroupName $resourceGroupName -ZoneName $dnsZoneName\n$Result = Remove-AzDnsRecordSet -RecordSet $RecordSet\n$Result",
-					"timeout":           "PT1H",
-				},
-			},
-		},
-	}
-	params := map[string]interface{}{
-		"userAssignedIdentity": map[string]interface{}{"value": userAssignedIdentity},
-	}
-	deployment := armresources.Deployment{
-		Properties: &armresources.DeploymentProperties{
-			Template:   template,
-			Parameters: params,
-			Mode:       armresources.DeploymentModeIncremental.ToPtr(),
-		},
-	}
-	_ = createDeployment("delete_cname_record", &deployment)
 }
 
 func createResourceGroup() error {
 	rand.Seed(time.Now().UnixNano())
 	resourceGroupName = fmt.Sprintf("go-sdk-sample-%d", rand.Intn(1000))
-	rgClient := armresources.NewResourceGroupsClient(subscriptionId, cred, nil)
-	param := armresources.ResourceGroup{
-		Location: to.StringPtr(location),
+	rgClient, err := armresources.NewResourceGroupsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
 	}
-	_, err := rgClient.CreateOrUpdate(ctx, resourceGroupName, param, nil)
+	param := armresources.ResourceGroup{
+		Location: to.Ptr(location),
+	}
+	_, err = rgClient.CreateOrUpdate(ctx, resourceGroupName, param, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -1262,8 +1035,11 @@ func createResourceGroup() error {
 }
 
 func deleteResourceGroup() error {
-	resourceGroup := armresources.NewResourceGroupsClient(subscriptionId, cred, nil)
-	pollerResponse, err := resourceGroup.BeginDelete(ctx, resourceGroupName, nil)
+	rgClient, err := armresources.NewResourceGroupsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
+	pollerResponse, err := rgClient.BeginDelete(ctx, resourceGroupName, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -1282,7 +1058,10 @@ func getEnv(key, fallback string) string {
 }
 
 func createDeployment(deploymentName string, deployment *armresources.Deployment) *armresources.DeploymentExtended {
-	deployClient := armresources.NewDeploymentsClient(subscriptionId, cred, nil)
+	deployClient, err := armresources.NewDeploymentsClient(subscriptionId, cred, nil)
+	if err != nil {
+		panic(err)
+	}
 	poller, err := deployClient.BeginCreateOrUpdate(
 		ctx,
 		resourceGroupName,

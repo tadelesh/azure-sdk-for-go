@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -24,21 +24,21 @@ func ExampleMonitoringSettingsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"<resource-group-name>",
 		"<service-name>",
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.MonitoringSettingsClientGetResult
+	_ = res
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePut.json
@@ -46,33 +46,32 @@ func ExampleMonitoringSettingsClient_BeginUpdatePut() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePut(ctx,
 		"<resource-group-name>",
 		"<service-name>",
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsInstrumentationKey: to.StringPtr("<app-insights-instrumentation-key>"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				TraceEnabled:                  to.BoolPtr(true),
+				AppInsightsInstrumentationKey: to.Ptr("<app-insights-instrumentation-key>"),
+				AppInsightsSamplingRate:       to.Ptr[float64](10),
+				TraceEnabled:                  to.Ptr(true),
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.MonitoringSettingsClientUpdatePutResult
+	_ = res
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePatch.json
@@ -80,31 +79,30 @@ func ExampleMonitoringSettingsClient_BeginUpdatePatch() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdatePatch(ctx,
 		"<resource-group-name>",
 		"<service-name>",
 		armappplatform.MonitoringSettingResource{
 			Properties: &armappplatform.MonitoringSettingProperties{
-				AppInsightsInstrumentationKey: to.StringPtr("<app-insights-instrumentation-key>"),
-				AppInsightsSamplingRate:       to.Float64Ptr(10),
-				TraceEnabled:                  to.BoolPtr(true),
+				AppInsightsInstrumentationKey: to.Ptr("<app-insights-instrumentation-key>"),
+				AppInsightsSamplingRate:       to.Ptr[float64](10),
+				TraceEnabled:                  to.Ptr(true),
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.MonitoringSettingsClientUpdatePatchResult
+	_ = res
 }

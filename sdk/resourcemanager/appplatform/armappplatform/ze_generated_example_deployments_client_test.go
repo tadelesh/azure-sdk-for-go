@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -24,11 +24,12 @@ func ExampleDeploymentsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	res, err := client.Get(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -37,10 +38,9 @@ func ExampleDeploymentsClient_Get() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.DeploymentsClientGetResult
+	_ = res
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_CreateOrUpdate.json
@@ -48,11 +48,12 @@ func ExampleDeploymentsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginCreateOrUpdate(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -61,34 +62,32 @@ func ExampleDeploymentsClient_BeginCreateOrUpdate() {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				DeploymentSettings: &armappplatform.DeploymentSettings{
-					CPU: to.Int32Ptr(1),
+					CPU: to.Ptr[int32](1),
 					EnvironmentVariables: map[string]*string{
-						"env": to.StringPtr("test"),
+						"env": to.Ptr("test"),
 					},
-					JvmOptions:     to.StringPtr("<jvm-options>"),
-					MemoryInGB:     to.Int32Ptr(3),
-					RuntimeVersion: armappplatform.RuntimeVersionJava8.ToPtr(),
+					JvmOptions:     to.Ptr("<jvm-options>"),
+					MemoryInGB:     to.Ptr[int32](3),
+					RuntimeVersion: to.Ptr(armappplatform.RuntimeVersionJava8),
 				},
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("<artifact-selector>"),
-					RelativePath:     to.StringPtr("<relative-path>"),
-					Version:          to.StringPtr("<version>"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+					ArtifactSelector: to.Ptr("<artifact-selector>"),
+					RelativePath:     to.Ptr("<relative-path>"),
+					Version:          to.Ptr("<version>"),
 				},
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.DeploymentsClientCreateOrUpdateResult
+	_ = res
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_Delete.json
@@ -96,11 +95,12 @@ func ExampleDeploymentsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginDelete(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -109,12 +109,10 @@ func ExampleDeploymentsClient_BeginDelete() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -123,11 +121,12 @@ func ExampleDeploymentsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginUpdate(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -136,51 +135,46 @@ func ExampleDeploymentsClient_BeginUpdate() {
 		armappplatform.DeploymentResource{
 			Properties: &armappplatform.DeploymentResourceProperties{
 				Source: &armappplatform.UserSourceInfo{
-					Type:             armappplatform.UserSourceTypeSource.ToPtr(),
-					ArtifactSelector: to.StringPtr("<artifact-selector>"),
-					RelativePath:     to.StringPtr("<relative-path>"),
-					Version:          to.StringPtr("<version>"),
+					Type:             to.Ptr(armappplatform.UserSourceTypeSource),
+					ArtifactSelector: to.Ptr("<artifact-selector>"),
+					RelativePath:     to.Ptr("<relative-path>"),
+					Version:          to.Ptr("<version>"),
 				},
 			},
 		},
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 	// TODO: use response item
-	_ = res.DeploymentsClientUpdateResult
+	_ = res
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_List.json
-func ExampleDeploymentsClient_List() {
+func ExampleDeploymentsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
-	pager := client.List("<resource-group-name>",
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListPager("<resource-group-name>",
 		"<service-name>",
 		"<app-name>",
 		&armappplatform.DeploymentsClientListOptions{Version: []string{}})
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
-		if !nextResult {
-			break
-		}
-		for _, v := range pager.PageResponse().Value {
+		for _, v := range nextResult.Value {
 			// TODO: use page item
 			_ = v
 		}
@@ -188,28 +182,25 @@ func ExampleDeploymentsClient_List() {
 }
 
 // Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Deployments_ListForCluster.json
-func ExampleDeploymentsClient_ListForCluster() {
+func ExampleDeploymentsClient_NewListForClusterPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
-	pager := client.ListForCluster("<resource-group-name>",
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	pager := client.NewListForClusterPager("<resource-group-name>",
 		"<service-name>",
 		&armappplatform.DeploymentsClientListForClusterOptions{Version: []string{}})
-	for {
-		nextResult := pager.NextPage(ctx)
-		if err := pager.Err(); err != nil {
+	for pager.More() {
+		nextResult, err := pager.NextPage(ctx)
+		if err != nil {
 			log.Fatalf("failed to advance page: %v", err)
-			return
 		}
-		if !nextResult {
-			break
-		}
-		for _, v := range pager.PageResponse().Value {
+		for _, v := range nextResult.Value {
 			// TODO: use page item
 			_ = v
 		}
@@ -221,11 +212,12 @@ func ExampleDeploymentsClient_BeginStart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginStart(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -234,12 +226,10 @@ func ExampleDeploymentsClient_BeginStart() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -248,11 +238,12 @@ func ExampleDeploymentsClient_BeginStop() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginStop(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -261,12 +252,10 @@ func ExampleDeploymentsClient_BeginStop() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }
 
@@ -275,11 +264,12 @@ func ExampleDeploymentsClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
-		return
 	}
-
 	ctx := context.Background()
-	client := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	client, err := armappplatform.NewDeploymentsClient("<subscription-id>", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 	poller, err := client.BeginRestart(ctx,
 		"<resource-group-name>",
 		"<service-name>",
@@ -288,11 +278,9 @@ func ExampleDeploymentsClient_BeginRestart() {
 		nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
-		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
 		log.Fatalf("failed to pull the result: %v", err)
-		return
 	}
 }

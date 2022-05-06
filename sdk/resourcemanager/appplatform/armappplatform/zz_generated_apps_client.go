@@ -1,5 +1,5 @@
-//go:build go1.16
-// +build go1.16
+//go:build go1.18
+// +build go1.18
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
@@ -14,6 +14,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/cloud"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
@@ -34,20 +35,24 @@ type AppsClient struct {
 // part of the URI for every service call.
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
-func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AppsClient {
+func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*AppsClient, error) {
 	if options == nil {
 		options = &arm.ClientOptions{}
 	}
-	ep := options.Endpoint
-	if len(ep) == 0 {
-		ep = arm.AzurePublicCloud
+	ep := cloud.AzurePublicCloud.Services[cloud.ResourceManager].Endpoint
+	if c, ok := options.Cloud.Services[cloud.ResourceManager]; ok {
+		ep = c.Endpoint
+	}
+	pl, err := armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options)
+	if err != nil {
+		return nil, err
 	}
 	client := &AppsClient{
 		subscriptionID: subscriptionID,
-		host: string(ep),
-		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host: ep,
+pl: pl,
 	}
-	return client
+	return client, nil
 }
 
 // BeginCreateOrUpdate - Create a new App or update an exiting App.
@@ -59,22 +64,18 @@ func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // appResource - Parameters for the create or update operation
 // options - AppsClientBeginCreateOrUpdateOptions contains the optional parameters for the AppsClient.BeginCreateOrUpdate
 // method.
-func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginCreateOrUpdateOptions) (AppsClientCreateOrUpdatePollerResponse, error) {
-	resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, appResource, options)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
+func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginCreateOrUpdateOptions) (*armruntime.Poller[AppsClientCreateOrUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.createOrUpdate(ctx, resourceGroupName, serviceName, appName, appResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller(resp, client.pl, &armruntime.NewPollerOptions[AppsClientCreateOrUpdateResponse]{
+			FinalStateVia: armruntime.FinalStateViaAzureAsyncOp,
+		})
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientCreateOrUpdateResponse](options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("AppsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientCreateOrUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientCreateOrUpdatePoller {
-		pt: pt,
-	}
-	return result, nil
 }
 
 // CreateOrUpdate - Create a new App or update an exiting App.
@@ -131,22 +132,18 @@ func (client *AppsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - AppsClientBeginDeleteOptions contains the optional parameters for the AppsClient.BeginDelete method.
-func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, options *AppsClientBeginDeleteOptions) (AppsClientDeletePollerResponse, error) {
-	resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, options)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
+func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName string, serviceName string, appName string, options *AppsClientBeginDeleteOptions) (*armruntime.Poller[AppsClientDeleteResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.deleteOperation(ctx, resourceGroupName, serviceName, appName, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller(resp, client.pl, &armruntime.NewPollerOptions[AppsClientDeleteResponse]{
+			FinalStateVia: armruntime.FinalStateViaAzureAsyncOp,
+		})
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientDeleteResponse](options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("AppsClient.Delete", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientDeletePollerResponse{}, err
-	}
-	result.Poller = &AppsClientDeletePoller {
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Delete - Operation to delete an App.
@@ -253,7 +250,7 @@ func (client *AppsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *AppsClient) getHandleResponse(resp *http.Response) (AppsClientGetResponse, error) {
-	result := AppsClientGetResponse{RawResponse: resp}
+	result := AppsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppResource); err != nil {
 		return AppsClientGetResponse{}, err
 	}
@@ -315,29 +312,45 @@ func (client *AppsClient) getResourceUploadURLCreateRequest(ctx context.Context,
 
 // getResourceUploadURLHandleResponse handles the GetResourceUploadURL response.
 func (client *AppsClient) getResourceUploadURLHandleResponse(resp *http.Response) (AppsClientGetResourceUploadURLResponse, error) {
-	result := AppsClientGetResourceUploadURLResponse{RawResponse: resp}
+	result := AppsClientGetResourceUploadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUploadDefinition); err != nil {
 		return AppsClientGetResourceUploadURLResponse{}, err
 	}
 	return result, nil
 }
 
-// List - Handles requests to list all resources in a Service.
+// NewListPager - Handles requests to list all resources in a Service.
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - AppsClientListOptions contains the optional parameters for the AppsClient.List method.
-func (client *AppsClient) List(resourceGroupName string, serviceName string, options *AppsClientListOptions) (*AppsClientListPager) {
-	return &AppsClientListPager{
-		client: client,
-		requester: func(ctx context.Context) (*policy.Request, error) {
-			return client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+func (client *AppsClient) NewListPager(resourceGroupName string, serviceName string, options *AppsClientListOptions) (*runtime.Pager[AppsClientListResponse]) {
+	return runtime.NewPager(runtime.PageProcessor[AppsClientListResponse]{
+		More: func(page AppsClientListResponse) bool {
+			return page.NextLink != nil && len(*page.NextLink) > 0
 		},
-		advancer: func(ctx context.Context, resp AppsClientListResponse) (*policy.Request, error) {
-			return runtime.NewRequest(ctx, http.MethodGet, *resp.AppResourceCollection.NextLink)
+		Fetcher: func(ctx context.Context, page *AppsClientListResponse) (AppsClientListResponse, error) {
+			var req *policy.Request
+			var err error
+			if page == nil {
+				req, err = client.listCreateRequest(ctx, resourceGroupName, serviceName, options)
+			} else {
+				req, err = runtime.NewRequest(ctx, http.MethodGet, *page.NextLink)
+			}
+			if err != nil {
+				return AppsClientListResponse{}, err
+			}
+			resp, err := client.pl.Do(req)
+			if err != nil {
+				return AppsClientListResponse{}, err
+			}
+			if !runtime.HasStatusCode(resp, http.StatusOK) {
+				return AppsClientListResponse{}, runtime.NewResponseError(resp)
+			}
+			return client.listHandleResponse(resp)
 		},
-	}
+	})
 }
 
 // listCreateRequest creates the List request.
@@ -368,7 +381,7 @@ func (client *AppsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *AppsClient) listHandleResponse(resp *http.Response) (AppsClientListResponse, error) {
-	result := AppsClientListResponse{RawResponse: resp}
+	result := AppsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppResourceCollection); err != nil {
 		return AppsClientListResponse{}, err
 	}
@@ -383,22 +396,18 @@ func (client *AppsClient) listHandleResponse(resp *http.Response) (AppsClientLis
 // appName - The name of the App resource.
 // appResource - Parameters for the update operation
 // options - AppsClientBeginUpdateOptions contains the optional parameters for the AppsClient.BeginUpdate method.
-func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginUpdateOptions) (AppsClientUpdatePollerResponse, error) {
-	resp, err := client.update(ctx, resourceGroupName, serviceName, appName, appResource, options)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
+func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName string, serviceName string, appName string, appResource AppResource, options *AppsClientBeginUpdateOptions) (*armruntime.Poller[AppsClientUpdateResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.update(ctx, resourceGroupName, serviceName, appName, appResource, options)
+		if err != nil {
+			return nil, err
+		}
+		return armruntime.NewPoller(resp, client.pl, &armruntime.NewPollerOptions[AppsClientUpdateResponse]{
+			FinalStateVia: armruntime.FinalStateViaAzureAsyncOp,
+		})
+	} else {
+		return armruntime.NewPollerFromResumeToken[AppsClientUpdateResponse](options.ResumeToken, client.pl, nil)
 	}
-	result := AppsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("AppsClient.Update", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientUpdatePollerResponse{}, err
-	}
-	result.Poller = &AppsClientUpdatePoller {
-		pt: pt,
-	}
-	return result, nil
 }
 
 // Update - Operation to update an exiting App.
@@ -503,7 +512,7 @@ func (client *AppsClient) validateDomainCreateRequest(ctx context.Context, resou
 
 // validateDomainHandleResponse handles the ValidateDomain response.
 func (client *AppsClient) validateDomainHandleResponse(resp *http.Response) (AppsClientValidateDomainResponse, error) {
-	result := AppsClientValidateDomainResponse{RawResponse: resp}
+	result := AppsClientValidateDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainValidateResult); err != nil {
 		return AppsClientValidateDomainResponse{}, err
 	}
