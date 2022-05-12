@@ -441,6 +441,10 @@ type ResourceGroupsClientListResponse struct {
 	ResourceGroupListResult
 }
 
+func (p ResourceGroupsClientListResponse) Items() []*ResourceGroup {
+	return p.Value
+}
+
 // ResourceGroupsClientUpdateResponse contains the response from method ResourceGroupsClient.Update.
 type ResourceGroupsClientUpdateResponse struct {
 	ResourceGroup

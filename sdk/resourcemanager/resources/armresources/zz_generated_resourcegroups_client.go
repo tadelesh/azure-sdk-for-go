@@ -11,16 +11,18 @@ package armresources
 import (
 	"context"
 	"errors"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/cloud"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
 )
 
 // ResourceGroupsClient contains the methods for the ResourceGroups group.
@@ -148,6 +150,14 @@ func (client *ResourceGroupsClient) createOrUpdateHandleResponse(resp *http.Resp
 		return ResourceGroupsClientCreateOrUpdateResponse{}, err
 	}
 	return result, nil
+}
+
+func (client *ResourceGroupsClient) Delete(ctx context.Context, resourceGroupName string, options *ResourceGroupsClientBeginDeleteOptions) (ResourceGroupsClientDeleteResponse, error) {
+	poller, err := client.BeginDelete(ctx, resourceGroupName, options)
+	if err!= nil {
+		return ResourceGroupsClientDeleteResponse{}, err
+	}
+	return poller.PollUntilDone(ctx, 5*time.Second)
 }
 
 // BeginDelete - When you delete a resource group, all of its resources are also deleted. Deleting a resource group deletes
