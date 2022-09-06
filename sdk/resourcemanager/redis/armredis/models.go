@@ -453,6 +453,9 @@ type LinkedServerClientBeginCreateOptions struct {
 	ResumeToken string
 }
 
+// LinkedServerClientDeleteOptions contains the optional parameters for the LinkedServerClient.Delete method.
+type LinkedServerClientDeleteOptions LinkedServerClientBeginDeleteOptions
+
 // LinkedServerClientBeginDeleteOptions contains the optional parameters for the LinkedServerClient.BeginDelete method.
 type LinkedServerClientBeginDeleteOptions struct {
 	// Resumes the LRO from the provided token.

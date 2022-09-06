@@ -125,6 +125,22 @@ func (client *LinkedServerClient) createCreateRequest(ctx context.Context, resou
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
 
+// Delete - Deletes the linked server from a redis cache (requires Premium SKU).
+// If the operation fails it returns an *azcore.ResponseError type.
+// Generated from API version 2022-05-01
+// resourceGroupName - The name of the resource group.
+// name - The name of the redis cache.
+// linkedServerName - The name of the linked server that is being added to the Redis cache.
+// options - LinkedServerClientDeleteOptions contains the optional parameters for the LinkedServerClient.Delete method.
+func (client *LinkedServerClient) Delete(ctx context.Context, resourceGroupName string, name string, linkedServerName string, options *LinkedServerClientDeleteOptions) (LinkedServerClientDeleteResponse, error) {
+	lroOptions := LinkedServerClientBeginDeleteOptions(*options)
+	poller, err := client.BeginDelete(ctx, resourceGroupName, name, linkedServerName, &lroOptions)
+	if err != nil {
+		return LinkedServerClientDeleteResponse{}, err
+	}
+	return poller.PollUntilDone(ctx, nil)
+}
+
 // BeginDelete - Deletes the linked server from a redis cache (requires Premium SKU).
 // If the operation fails it returns an *azcore.ResponseError type.
 // Generated from API version 2022-05-01

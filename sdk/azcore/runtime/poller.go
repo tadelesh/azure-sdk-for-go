@@ -213,7 +213,7 @@ func (p *Poller[T]) PollUntilDone(ctx context.Context, options *PollUntilDoneOpt
 
 	// skip the floor check when executing tests so they don't take so long
 	if isTest := flag.Lookup("test.v"); isTest == nil && cp.Frequency < time.Second {
-		return *new(T), errors.New("polling frequency minimum is one second")
+		return *new(T), NewPollingError(errors.New("polling frequency minimum is one second"), p)
 	}
 
 	start := time.Now()
@@ -227,7 +227,7 @@ func (p *Poller[T]) PollUntilDone(ctx context.Context, options *PollUntilDoneOpt
 			log.Writef(log.EventLRO, "initial Retry-After delay for %s", retryAfter.String())
 			if err := shared.Delay(ctx, retryAfter); err != nil {
 				logPollUntilDoneExit(err)
-				return *new(T), err
+				return *new(T), NewPollingError(err, p)
 			}
 		}
 	}
@@ -236,7 +236,7 @@ func (p *Poller[T]) PollUntilDone(ctx context.Context, options *PollUntilDoneOpt
 		resp, err := p.Poll(ctx)
 		if err != nil {
 			logPollUntilDoneExit(err)
-			return *new(T), err
+			return *new(T), NewPollingError(err, p)
 		}
 		if p.Done() {
 			logPollUntilDoneExit("succeeded")
@@ -251,7 +251,7 @@ func (p *Poller[T]) PollUntilDone(ctx context.Context, options *PollUntilDoneOpt
 		}
 		if err = shared.Delay(ctx, d); err != nil {
 			logPollUntilDoneExit(err)
-			return *new(T), err
+			return *new(T), NewPollingError(err, p)
 		}
 	}
 }
@@ -267,7 +267,7 @@ func (p *Poller[T]) Poll(ctx context.Context) (*http.Response, error) {
 	}
 	resp, err := p.op.Poll(ctx)
 	if err != nil {
-		return nil, err
+		return nil, NewPollingError(err, p)
 	}
 	p.resp = resp
 	return p.resp, nil
