@@ -28,15 +28,29 @@ func TestLinkedServerClient_Delete(t *testing.T) {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
+
+	poller, err := client.BeginDelete(ctx, "rg1", "cache1", "cache2", nil)
+	if err != nil {
+		// retry for start operation failure
+		log.Fatalf("failed to start operation: %v", err)
+	}
+	_, err=poller.PollUntilDone(ctx, nil)
+	if err != nil {
+		// retry for polling failure
+		log.Fatalf("failed to poll result: %v", err)
+	}
+
 	_, err = client.Delete(ctx, "rg1", "cache1", "cache2", nil)
 	if err != nil {
 		var pollingErr *runtime.PollingError[LinkedServerClientDeleteResponse]
 		if errors.As(err, &pollingErr) {
 			poller := pollingErr.Poller
-			_ = poller // retry with poller
-			log.Fatalf("Inner error: %+v", errors.Unwrap(err))
+			_ = poller // retry for polling failure
+			log.Fatalf("failed to poll result: %v", err)
 		} else {
-			log.Fatalf("Other error: %+v", err)
+			// retry for start operation failure
+			log.Fatalf("failed to start operation: %v", err)
 		}
 	}
+
 }
