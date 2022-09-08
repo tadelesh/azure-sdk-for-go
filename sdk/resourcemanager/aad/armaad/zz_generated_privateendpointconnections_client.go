@@ -322,3 +322,7 @@ func (client *PrivateEndpointConnectionsClient) listByPolicyNameHandleResponse(r
 	}
 	return result, nil
 }
+
+func (client *PrivateEndpointConnectionsClient) Do(request *policy.Request) (*http.Response, error) {
+	return client.pl.Do(request)
+}
