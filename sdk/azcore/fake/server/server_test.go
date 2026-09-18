@@ -5,6 +5,7 @@ package server
 
 import (
 	"bytes"
+	"context"
 	"encoding/xml"
 	"errors"
 	"io"
@@ -301,9 +302,15 @@ func TestMarshalSSEResponder(t *testing.T) {
 	body, err := MarshalSSEResponder(&responder, encodeSSETestValue)
 	require.NoError(t, err)
 
-	reader := streaming.NewEvent(body, func(f streaming.Frame) (streaming.Frame, bool, error) {
-		return f, false, nil
+	reader, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[streaming.Frame]{
+		Decode: func(f streaming.Frame) (streaming.Frame, bool, error) {
+			return f, false, nil
+		},
+		Connect: func(context.Context, string) (*http.Response, error) {
+			return &http.Response{StatusCode: http.StatusOK, Body: body}, nil
+		},
 	})
+	require.NoError(t, err)
 	var got []streaming.Frame
 	for f, err := range reader.Events() {
 		require.NoError(t, err)
@@ -314,6 +321,6 @@ func TestMarshalSSEResponder(t *testing.T) {
 	require.JSONEq(t, `{"id":"resp_1"}`, string(got[0].Data))
 	require.Equal(t, "responseDelta", got[1].Type)
 	require.Equal(t, "message", got[2].Type)
-	require.Equal(t, "event-1", reader.LastEventID())
-	require.Equal(t, 1000, reader.RetryAfter())
+	require.Equal(t, "event-1", got[2].ID)
+	require.Equal(t, 1000, got[2].Retry)
 }

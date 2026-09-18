@@ -4,9 +4,11 @@
 package streaming_test
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
+	"net/http"
 	"strings"
 	"testing"
 
@@ -19,6 +21,7 @@ import (
 type frameView struct {
 	eventType string
 	data      string
+	retry     int
 	fields    map[string]any
 }
 
@@ -26,7 +29,7 @@ type frameView struct {
 // fields, the "[DONE]" sentinel is treated as terminal, and everything else is
 // surfaced as raw text.
 func decodeView(f streaming.Frame) (frameView, bool, error) {
-	v := frameView{eventType: f.Type, data: string(f.Data)}
+	v := frameView{eventType: f.Type, data: string(f.Data), retry: f.Retry}
 	if v.data == "[DONE]" {
 		return v, true, nil
 	}
@@ -38,9 +41,21 @@ func decodeView(f streaming.Frame) (frameView, bool, error) {
 	return v, false, nil
 }
 
+func bodyConnect(body string) func(context.Context, string) (*http.Response, error) {
+	return func(context.Context, string) (*http.Response, error) {
+		return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(body))}, nil
+	}
+}
+
 func collect[T any](t *testing.T, body string, decode func(streaming.Frame) (T, bool, error)) ([]T, *streaming.Event[T]) {
 	t.Helper()
-	s := streaming.NewEvent(io.NopCloser(strings.NewReader(body)), decode)
+	s, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[T]{
+		Decode:  decode,
+		Connect: bodyConnect(body),
+	})
+	if err != nil {
+		t.Fatalf("NewEvent: %v", err)
+	}
 	var got []T
 	for {
 		v, err := s.Next()
@@ -102,17 +117,17 @@ func TestProtocolEnvelopeMetadata(t *testing.T) {
 
 func TestProtocolRetryValid(t *testing.T) {
 	body := "retry: 1000\nevent: message\ndata: {\"message\": \"hello\"}\n\n"
-	_, s := collect(t, body, decodeView)
-	if s.RetryAfter() != 1000 {
-		t.Fatalf("RetryAfter = %d, want 1000", s.RetryAfter())
+	got, _ := collect(t, body, decodeView)
+	if len(got) != 1 || got[0].retry != 1000 {
+		t.Fatalf("retry = %d, want 1000", got[0].retry)
 	}
 }
 
 func TestProtocolRetryInvalidIgnored(t *testing.T) {
 	body := "retry: not-a-number\nevent: message\ndata: {\"message\": \"hello\"}\n\n"
-	_, s := collect(t, body, decodeView)
-	if s.RetryAfter() != -1 {
-		t.Fatalf("RetryAfter = %d, want -1 for invalid retry", s.RetryAfter())
+	got, _ := collect(t, body, decodeView)
+	if len(got) != 1 || got[0].retry != -1 {
+		t.Fatalf("retry = %d, want -1 for invalid retry", got[0].retry)
 	}
 }
 
@@ -163,7 +178,13 @@ func TestMultilineData(t *testing.T) {
 
 func TestEventsIterator(t *testing.T) {
 	body := "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
-	s := streaming.NewEvent(io.NopCloser(strings.NewReader(body)), decodeView)
+	s, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[frameView]{
+		Decode:  decodeView,
+		Connect: bodyConnect(body),
+	})
+	if err != nil {
+		t.Fatalf("NewEvent: %v", err)
+	}
 	var descs []string
 	for ev, err := range s.Events() {
 		if err != nil {
@@ -173,5 +194,102 @@ func TestEventsIterator(t *testing.T) {
 	}
 	if strings.Join(descs, ",") != "a,b" {
 		t.Fatalf("descs = %v", descs)
+	}
+}
+
+func TestNewEventConnectError(t *testing.T) {
+	handler := streaming.EventStreamHandler[frameView]{
+		Decode: decodeView,
+		Connect: func(context.Context, string) (*http.Response, error) {
+			return nil, errors.New("boom")
+		},
+	}
+	if _, err := streaming.NewEvent(context.Background(), handler); err == nil {
+		t.Fatal("expected initial connect error")
+	}
+}
+
+func TestReconnectResumesWithLastEventID(t *testing.T) {
+	segments := []string{
+		"id: 1\ndata: {\"desc\": \"a\"}\n\nid: 2\ndata: {\"desc\": \"b\"}\n\n",
+		"id: 3\ndata: {\"desc\": \"c\"}\n\n",
+		"", // an empty segment signals the stream is exhausted
+	}
+	var lastIDs []string
+	call := 0
+	handler := streaming.EventStreamHandler[frameView]{
+		Decode:    decodeView,
+		Reconnect: true,
+		Connect: func(_ context.Context, lastEventID string) (*http.Response, error) {
+			lastIDs = append(lastIDs, lastEventID)
+			body := segments[call]
+			call++
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(body)),
+			}, nil
+		},
+	}
+	s, err := streaming.NewEvent(context.Background(), handler)
+	if err != nil {
+		t.Fatalf("NewEvent: %v", err)
+	}
+	var got []string
+	for {
+		v, err := s.Next()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		got = append(got, v.fields["desc"].(string))
+	}
+	if strings.Join(got, ",") != "a,b,c" {
+		t.Fatalf("got %v, want a,b,c", got)
+	}
+	// initial connect ("") then reconnect after id 2, then after id 3.
+	if strings.Join(lastIDs, ",") != ",2,3" {
+		t.Fatalf("lastIDs = %v, want [\"\" 2 3]", lastIDs)
+	}
+}
+
+// A reconnect-enabled stream whose frames carry no event id has no resumable
+// position, so it must end at a clean end of body instead of reconnecting and
+// replaying the same body forever (the missing-terminal-event footgun).
+func TestReconnectWithoutEventIDDoesNotReplay(t *testing.T) {
+	const body = "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
+	connects := 0
+	handler := streaming.EventStreamHandler[frameView]{
+		Decode:    decodeView,
+		Reconnect: true,
+		Connect: func(context.Context, string) (*http.Response, error) {
+			connects++
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(strings.NewReader(body)),
+			}, nil
+		},
+	}
+	s, err := streaming.NewEvent(context.Background(), handler)
+	if err != nil {
+		t.Fatalf("NewEvent: %v", err)
+	}
+	var got []string
+	for {
+		v, err := s.Next()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		got = append(got, v.fields["desc"].(string))
+	}
+	if strings.Join(got, ",") != "a,b" {
+		t.Fatalf("got %v, want a,b", got)
+	}
+	if connects != 1 {
+		t.Fatalf("connects = %d, want 1 (no replay)", connects)
 	}
 }
