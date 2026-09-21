@@ -239,6 +239,6 @@ func SanitizePagerPollerPath(path string) string {
 // MarshalSSEResponder renders the events in an SSEResponder to a text/event-stream body.
 // The encode callback maps each typed event to an SSE frame.
 // This function is called by the fake server internals.
-func MarshalSSEResponder[T any](s *fake.SSEResponder[T], encode func(T) (streaming.Frame, error)) (io.ReadCloser, error) {
+func MarshalSSEResponder[T any](s *fake.SSEResponder[T], encode func(T) (streaming.EventFrame, error)) (io.ReadCloser, error) {
 	return (*exported.SSEResponder[T])(s).MarshalEvents(encode)
 }

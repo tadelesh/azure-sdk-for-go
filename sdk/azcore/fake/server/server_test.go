@@ -289,21 +289,21 @@ type sseTestValue struct {
 	data      string
 }
 
-func encodeSSETestValue(v sseTestValue) (streaming.Frame, error) {
-	return streaming.Frame{Type: v.eventType, Data: []byte(v.data)}, nil
+func encodeSSETestValue(v sseTestValue) (streaming.EventFrame, error) {
+	return streaming.EventFrame{Type: v.eventType, Data: []byte(v.data)}, nil
 }
 
 func TestMarshalSSEResponder(t *testing.T) {
 	var responder fake.SSEResponder[sseTestValue]
 	responder.AddEvent(sseTestValue{eventType: "responseCreated", data: `{"id":"resp_1"}`})
 	responder.AddEvent(sseTestValue{eventType: "responseDelta", data: `{"delta":"Hello"}`})
-	responder.AddFrame(streaming.Frame{ID: "event-1", Type: "message", Retry: 1000, Data: []byte(`{"message":"hello"}`)})
+	responder.AddFrame(streaming.EventFrame{ID: "event-1", Type: "message", Retry: 1000, Data: []byte(`{"message":"hello"}`)})
 
 	body, err := MarshalSSEResponder(&responder, encodeSSETestValue)
 	require.NoError(t, err)
 
-	reader, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[streaming.Frame]{
-		Decode: func(f streaming.Frame) (streaming.Frame, bool, error) {
+	reader, err := streaming.NewEventReader(context.Background(), streaming.EventHandler[streaming.EventFrame]{
+		Decode: func(f streaming.EventFrame) (streaming.EventFrame, bool, error) {
 			return f, false, nil
 		},
 		Connect: func(context.Context, string) (*http.Response, error) {
@@ -311,7 +311,7 @@ func TestMarshalSSEResponder(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	var got []streaming.Frame
+	var got []streaming.EventFrame
 	for f, err := range reader.Events() {
 		require.NoError(t, err)
 		got = append(got, f)

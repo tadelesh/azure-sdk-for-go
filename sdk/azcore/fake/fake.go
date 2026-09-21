@@ -150,7 +150,7 @@ func (s *SSEResponder[T]) AddEvent(event T) {
 
 // AddFrame adds a raw SSE frame to the stream, giving full control over the SSE
 // envelope (id, event type, retry, data).
-func (s *SSEResponder[T]) AddFrame(frame streaming.Frame) {
+func (s *SSEResponder[T]) AddFrame(frame streaming.EventFrame) {
 	(*exported.SSEResponder[T])(s).AddFrame(frame)
 }
 

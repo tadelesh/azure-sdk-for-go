@@ -28,7 +28,7 @@ type frameView struct {
 // decodeView is a generic decoder: JSON object payloads are unmarshaled into
 // fields, the "[DONE]" sentinel is treated as terminal, and everything else is
 // surfaced as raw text.
-func decodeView(f streaming.Frame) (frameView, bool, error) {
+func decodeView(f streaming.EventFrame) (frameView, bool, error) {
 	v := frameView{eventType: f.Type, data: string(f.Data), retry: f.Retry}
 	if v.data == "[DONE]" {
 		return v, true, nil
@@ -47,14 +47,14 @@ func bodyConnect(body string) func(context.Context, string) (*http.Response, err
 	}
 }
 
-func collect[T any](t *testing.T, body string, decode func(streaming.Frame) (T, bool, error)) ([]T, *streaming.Event[T]) {
+func collect[T any](t *testing.T, body string, decode func(streaming.EventFrame) (T, bool, error)) ([]T, *streaming.EventReader[T]) {
 	t.Helper()
-	s, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[T]{
+	s, err := streaming.NewEventReader(context.Background(), streaming.EventHandler[T]{
 		Decode:  decode,
 		Connect: bodyConnect(body),
-	})
+	}, nil)
 	if err != nil {
-		t.Fatalf("NewEvent: %v", err)
+		t.Fatalf("NewEventReader: %v", err)
 	}
 	var got []T
 	for {
@@ -178,12 +178,12 @@ func TestMultilineData(t *testing.T) {
 
 func TestEventsIterator(t *testing.T) {
 	body := "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
-	s, err := streaming.NewEvent(context.Background(), streaming.EventStreamHandler[frameView]{
+	s, err := streaming.NewEventReader(context.Background(), streaming.EventHandler[frameView]{
 		Decode:  decodeView,
 		Connect: bodyConnect(body),
-	})
+	}, nil)
 	if err != nil {
-		t.Fatalf("NewEvent: %v", err)
+		t.Fatalf("NewEventReader: %v", err)
 	}
 	var descs []string
 	for ev, err := range s.Events() {
@@ -198,13 +198,13 @@ func TestEventsIterator(t *testing.T) {
 }
 
 func TestNewEventConnectError(t *testing.T) {
-	handler := streaming.EventStreamHandler[frameView]{
+	handler := streaming.EventHandler[frameView]{
 		Decode: decodeView,
 		Connect: func(context.Context, string) (*http.Response, error) {
 			return nil, errors.New("boom")
 		},
 	}
-	if _, err := streaming.NewEvent(context.Background(), handler); err == nil {
+	if _, err := streaming.NewEventReader(context.Background(), handler, nil); err == nil {
 		t.Fatal("expected initial connect error")
 	}
 }
@@ -217,7 +217,7 @@ func TestReconnectResumesWithLastEventID(t *testing.T) {
 	}
 	var lastIDs []string
 	call := 0
-	handler := streaming.EventStreamHandler[frameView]{
+	handler := streaming.EventHandler[frameView]{
 		Decode:    decodeView,
 		Reconnect: true,
 		Connect: func(_ context.Context, lastEventID string) (*http.Response, error) {
@@ -230,9 +230,9 @@ func TestReconnectResumesWithLastEventID(t *testing.T) {
 			}, nil
 		},
 	}
-	s, err := streaming.NewEvent(context.Background(), handler)
+	s, err := streaming.NewEventReader(context.Background(), handler, nil)
 	if err != nil {
-		t.Fatalf("NewEvent: %v", err)
+		t.Fatalf("NewEventReader: %v", err)
 	}
 	var got []string
 	for {
@@ -260,7 +260,7 @@ func TestReconnectResumesWithLastEventID(t *testing.T) {
 func TestReconnectWithoutEventIDDoesNotReplay(t *testing.T) {
 	const body = "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
 	connects := 0
-	handler := streaming.EventStreamHandler[frameView]{
+	handler := streaming.EventHandler[frameView]{
 		Decode:    decodeView,
 		Reconnect: true,
 		Connect: func(context.Context, string) (*http.Response, error) {
@@ -271,9 +271,9 @@ func TestReconnectWithoutEventIDDoesNotReplay(t *testing.T) {
 			}, nil
 		},
 	}
-	s, err := streaming.NewEvent(context.Background(), handler)
+	s, err := streaming.NewEventReader(context.Background(), handler, nil)
 	if err != nil {
-		t.Fatalf("NewEvent: %v", err)
+		t.Fatalf("NewEventReader: %v", err)
 	}
 	var got []string
 	for {

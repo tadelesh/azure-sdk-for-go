@@ -16,10 +16,10 @@ import (
 	"time"
 )
 
-// Frame is a single Server-Sent Event frame parsed from a text/event-stream
+// EventFrame is a single Server-Sent Event frame parsed from a text/event-stream
 // body. It exposes only the wire-level SSE envelope; the strongly-typed payload
-// is produced by a generated per-stream decoder that consumes a Frame.
-type Frame struct {
+// is produced by a generated per-stream decoder that consumes a EventFrame.
+type EventFrame struct {
 	// Type is the value of the SSE "event" field. An empty value means the
 	// default "message" event type.
 	Type string
@@ -38,15 +38,15 @@ type Frame struct {
 	Retry int
 }
 
-// Event provides typed, forward-only iteration over a Server-Sent Events
+// EventReader provides typed, forward-only iteration over a Server-Sent Events
 // response body. T is the generated event union for the operation.
 //
 // The zero value is a valid, already-exhausted stream: iteration yields no
 // events and Close is a no-op.
-type Event[T any] struct {
+type EventReader[T any] struct {
 	body      io.ReadCloser
 	scanner   *sseScanner
-	decode    func(Frame) (T, bool, error)
+	decode    func(EventFrame) (T, bool, error)
 	connect   func(ctx context.Context, lastEventID string) (*http.Response, error)
 	ctx       context.Context // governs the stream lifetime; used for reconnect
 	reconnect bool
@@ -56,12 +56,12 @@ type Event[T any] struct {
 	segFrames int // events delivered since the current segment connected
 }
 
-// EventStreamHandler supplies the typed decoder and the connection factory used
+// EventHandler supplies the typed decoder and the connection factory used
 // to open, and on an unexpected disconnect reopen, an SSE stream.
-type EventStreamHandler[T any] struct {
-	// Decode maps a wire-level Frame to the typed union value; it returns
+type EventHandler[T any] struct {
+	// Decode maps a wire-level EventFrame to the typed union value; it returns
 	// terminal=true when the event signals the end of the stream.
-	Decode func(frame Frame) (value T, terminal bool, err error)
+	Decode func(frame EventFrame) (value T, terminal bool, err error)
 
 	// Connect opens the stream. lastEventID is empty on the initial connect and
 	// carries the most recent event id on a reconnect so the server can resume.
@@ -76,16 +76,21 @@ type EventStreamHandler[T any] struct {
 	Reconnect bool
 }
 
-// NewEvent opens an SSE stream via handler.Connect and returns a typed reader
+// EventReaderOptions contains the optional values when constructing an EventReader.
+type EventReaderOptions struct {
+	// for future expansion
+}
+
+// NewEventReader opens an SSE stream via handler.Connect and returns a typed reader
 // over it. The provided ctx governs the lifetime of the whole stream, including
 // any reconnect attempts made by Next after an unexpected disconnect; canceling
 // ctx aborts an in-progress reconnect and ends the stream.
-func NewEvent[T any](ctx context.Context, handler EventStreamHandler[T]) (*Event[T], error) {
+func NewEventReader[T any](ctx context.Context, handler EventHandler[T], _ *EventReaderOptions) (*EventReader[T], error) {
 	resp, err := handler.Connect(ctx, "")
 	if err != nil {
 		return nil, err
 	}
-	return &Event[T]{
+	return &EventReader[T]{
 		body:      resp.Body,
 		scanner:   newSSEScanner(resp.Body),
 		decode:    handler.Decode,
@@ -106,47 +111,47 @@ func newSSEScanner(body io.ReadCloser) *sseScanner {
 
 // Next returns the next typed event in the stream. It returns io.EOF when the
 // stream is complete, including when a terminal event is reached. When the
-// Event was created with reconnect support, an unexpected end of the current
+// EventReader was created with reconnect support, an unexpected end of the current
 // segment triggers a reconnect (honoring the server retry delay, bound by the
 // stream's context) before Next reports io.EOF.
-func (s *Event[T]) Next() (T, error) {
+func (e *EventReader[T]) Next() (T, error) {
 	var zero T
 	// a nil scanner is an empty stream: nothing to consume.
-	if s.done || s.scanner == nil {
+	if e.done || e.scanner == nil {
 		return zero, io.EOF
 	}
 	for {
-		frame, err := s.scanner.next()
+		frame, err := e.scanner.next()
 		if err != nil {
 			if errors.Is(err, io.EOF) {
 				// Reconnect only from a resumable position: SSE resumes via
 				// Last-Event-ID, so a stream that never emitted an event id cannot
 				// be resumed and reconnecting would only replay it indefinitely.
 				// The segFrames guard stops a resumed-but-empty segment from looping.
-				if s.reconnect && s.lastID != "" && s.segFrames > 0 {
-					if rerr := s.reopen(); rerr != nil {
-						s.done = true
+				if e.reconnect && e.lastID != "" && e.segFrames > 0 {
+					if rerr := e.reopen(); rerr != nil {
+						e.done = true
 						return zero, rerr
 					}
 					continue
 				}
-				s.done = true
+				e.done = true
 			}
 			return zero, err
 		}
-		s.lastID = frame.ID
+		e.lastID = frame.ID
 		if frame.Retry >= 0 {
-			s.retry = frame.Retry
+			e.retry = frame.Retry
 		}
-		value, terminal, derr := s.decode(frame)
+		value, terminal, derr := e.decode(frame)
 		if derr != nil {
 			return zero, derr
 		}
 		if terminal {
-			s.done = true
+			e.done = true
 			return zero, io.EOF
 		}
-		s.segFrames++
+		e.segFrames++
 		return value, nil
 	}
 }
@@ -154,35 +159,35 @@ func (s *Event[T]) Next() (T, error) {
 // reopen waits the server-suggested retry delay, then reconnects via the
 // factory and swaps in the new segment's body, forwarding the last event id.
 // It is bound by the stream's context.
-func (s *Event[T]) reopen() error {
-	if s.retry > 0 {
-		timer := time.NewTimer(time.Duration(s.retry) * time.Millisecond)
+func (e *EventReader[T]) reopen() error {
+	if e.retry > 0 {
+		timer := time.NewTimer(time.Duration(e.retry) * time.Millisecond)
 		defer timer.Stop()
 		select {
-		case <-s.ctx.Done():
-			return s.ctx.Err()
+		case <-e.ctx.Done():
+			return e.ctx.Err()
 		case <-timer.C:
 		}
 	}
-	resp, err := s.connect(s.ctx, s.lastID)
+	resp, err := e.connect(e.ctx, e.lastID)
 	if err != nil {
 		return err
 	}
-	if s.body != nil {
-		s.body.Close()
+	if e.body != nil {
+		e.body.Close()
 	}
-	s.body = resp.Body
-	s.scanner = newSSEScanner(resp.Body)
-	s.segFrames = 0
+	e.body = resp.Body
+	e.scanner = newSSEScanner(resp.Body)
+	e.segFrames = 0
 	return nil
 }
 
 // Events returns a range-over-func iterator over the stream. Iteration ends at
 // end of stream (io.EOF is not yielded) or after the first error is yielded.
-func (s *Event[T]) Events() iter.Seq2[T, error] {
+func (e *EventReader[T]) Events() iter.Seq2[T, error] {
 	return func(yield func(T, error) bool) {
 		for {
-			value, err := s.Next()
+			value, err := e.Next()
 			if errors.Is(err, io.EOF) {
 				return
 			}
@@ -198,34 +203,34 @@ func (s *Event[T]) Events() iter.Seq2[T, error] {
 
 // LastEventID returns the id of the most recently received event. On reconnect
 // this value is sent in the Last-Event-ID request header.
-func (s *Event[T]) LastEventID() string { return s.lastID }
+func (e *EventReader[T]) LastEventID() string { return e.lastID }
 
 // Close closes the underlying response body, if any.
-func (s *Event[T]) Close() error {
-	if s.body == nil {
+func (e *EventReader[T]) Close() error {
+	if e.body == nil {
 		return nil
 	}
-	return s.body.Close()
+	return e.body.Close()
 }
 
-// sseScanner turns a stream of SSE lines into discrete Frame values following
-// the WHATWG event stream parsing rules.
+// sseScanner turns a stream of SSE lines into discrete EventFrame values following
+// the WHATWG event stream parsing rulee.
 type sseScanner struct {
 	scanner *bufio.Scanner
 	lastID  string
 }
 
-func (s *sseScanner) next() (Frame, error) {
+func (e *sseScanner) next() (EventFrame, error) {
 	var (
-		frame    Frame
+		frame    EventFrame
 		dataBuf  bytes.Buffer
 		haveData bool
 		haveAny  bool
 	)
 	frame.Retry = -1
-	frame.ID = s.lastID
-	for s.scanner.Scan() {
-		line := s.scanner.Text()
+	frame.ID = e.lastID
+	for e.scanner.Scan() {
+		line := e.scanner.Text()
 		if line == "" {
 			if !haveAny {
 				continue // ignore leading blank lines between events
@@ -247,7 +252,7 @@ func (s *sseScanner) next() (Frame, error) {
 		case "id":
 			if !strings.ContainsRune(value, 0) { // ignore ids containing U+0000 NULL
 				frame.ID = value
-				s.lastID = value
+				e.lastID = value
 			}
 		case "retry":
 			if isASCIIDigits(value) {
@@ -257,17 +262,17 @@ func (s *sseScanner) next() (Frame, error) {
 			}
 		}
 	}
-	if err := s.scanner.Err(); err != nil {
-		return Frame{}, err
+	if err := e.scanner.Err(); err != nil {
+		return EventFrame{}, err
 	}
 	// EOF: dispatch a final event when the body ended without a trailing blank line.
 	if haveAny {
 		return finishFrame(&frame, &dataBuf, haveData), nil
 	}
-	return Frame{}, io.EOF
+	return EventFrame{}, io.EOF
 }
 
-func finishFrame(frame *Frame, dataBuf *bytes.Buffer, haveData bool) Frame {
+func finishFrame(frame *EventFrame, dataBuf *bytes.Buffer, haveData bool) EventFrame {
 	if haveData {
 		d := dataBuf.Bytes()
 		if n := len(d); n > 0 && d[n-1] == '\n' {
@@ -319,7 +324,7 @@ func scanSSELines(data []byte, atEOF bool) (advance int, token []byte, err error
 			if atEOF {
 				return i + 1, data[:i], nil
 			}
-			// A trailing CR might be the first half of a CRLF split across reads.
+			// A trailing CR might be the first half of a CRLF split across reade.
 			return 0, nil, nil
 		}
 	}

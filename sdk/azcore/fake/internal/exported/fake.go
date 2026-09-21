@@ -340,14 +340,14 @@ func (s *SSEResponder[T]) AddEvent(event T) {
 
 // AddFrame adds a raw SSE frame to the stream, giving full control over the SSE
 // envelope (id, event type, retry, data). Use this to exercise envelope metadata.
-func (s *SSEResponder[T]) AddFrame(frame streaming.Frame) {
+func (s *SSEResponder[T]) AddFrame(frame streaming.EventFrame) {
 	s.entries = append(s.entries, sseEntry[T]{frame: frame})
 }
 
 // MarshalEvents renders the added events to the SSE wire format. Typed events
 // are encoded with encode; raw frames are written as-is.
 // This function is called by the fake server internals.
-func (s *SSEResponder[T]) MarshalEvents(encode func(T) (streaming.Frame, error)) (io.ReadCloser, error) {
+func (s *SSEResponder[T]) MarshalEvents(encode func(T) (streaming.EventFrame, error)) (io.ReadCloser, error) {
 	var buf bytes.Buffer
 	for _, e := range s.entries {
 		frame := e.frame
@@ -365,11 +365,11 @@ func (s *SSEResponder[T]) MarshalEvents(encode func(T) (streaming.Frame, error))
 
 type sseEntry[T any] struct {
 	value    T
-	frame    streaming.Frame
+	frame    streaming.EventFrame
 	hasValue bool
 }
 
-func writeSSEFrame(buf *bytes.Buffer, f streaming.Frame) {
+func writeSSEFrame(buf *bytes.Buffer, f streaming.EventFrame) {
 	if f.ID != "" {
 		buf.WriteString("id: ")
 		buf.WriteString(f.ID)
