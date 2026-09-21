@@ -49,9 +49,14 @@ func bodyConnect(body string) func(context.Context, string) (*http.Response, err
 
 func collect[T any](t *testing.T, body string, decode func(streaming.EventFrame) (T, bool, error)) ([]T, *streaming.EventReader[T]) {
 	t.Helper()
-	s, err := streaming.NewEventReader(context.Background(), streaming.EventHandler[T]{
+	connect := bodyConnect(body)
+	resp, err := connect(context.Background(), "")
+	if err != nil {
+		t.Fatalf("connect: %v", err)
+	}
+	s, err := streaming.NewEventReader(resp, streaming.EventHandler[T]{
 		Decode:  decode,
-		Connect: bodyConnect(body),
+		Connect: connect,
 	}, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
@@ -178,9 +183,14 @@ func TestMultilineData(t *testing.T) {
 
 func TestEventsIterator(t *testing.T) {
 	body := "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
-	s, err := streaming.NewEventReader(context.Background(), streaming.EventHandler[frameView]{
+	connect := bodyConnect(body)
+	resp, err := connect(context.Background(), "")
+	if err != nil {
+		t.Fatalf("connect: %v", err)
+	}
+	s, err := streaming.NewEventReader(resp, streaming.EventHandler[frameView]{
 		Decode:  decodeView,
-		Connect: bodyConnect(body),
+		Connect: connect,
 	}, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
@@ -197,15 +207,10 @@ func TestEventsIterator(t *testing.T) {
 	}
 }
 
-func TestNewEventConnectError(t *testing.T) {
-	handler := streaming.EventHandler[frameView]{
-		Decode: decodeView,
-		Connect: func(context.Context, string) (*http.Response, error) {
-			return nil, errors.New("boom")
-		},
-	}
-	if _, err := streaming.NewEventReader(context.Background(), handler, nil); err == nil {
-		t.Fatal("expected initial connect error")
+func TestNewEventReaderNilResponse(t *testing.T) {
+	handler := streaming.EventHandler[frameView]{Decode: decodeView}
+	if _, err := streaming.NewEventReader(nil, handler, nil); err == nil {
+		t.Fatal("expected error for nil response")
 	}
 }
 
@@ -230,7 +235,11 @@ func TestReconnectResumesWithLastEventID(t *testing.T) {
 			}, nil
 		},
 	}
-	s, err := streaming.NewEventReader(context.Background(), handler, nil)
+	resp, err := handler.Connect(context.Background(), "")
+	if err != nil {
+		t.Fatalf("connect: %v", err)
+	}
+	s, err := streaming.NewEventReader(resp, handler, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
 	}
@@ -271,7 +280,11 @@ func TestReconnectWithoutEventIDDoesNotReplay(t *testing.T) {
 			}, nil
 		},
 	}
-	s, err := streaming.NewEventReader(context.Background(), handler, nil)
+	resp, err := handler.Connect(context.Background(), "")
+	if err != nil {
+		t.Fatalf("connect: %v", err)
+	}
+	s, err := streaming.NewEventReader(resp, handler, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
 	}

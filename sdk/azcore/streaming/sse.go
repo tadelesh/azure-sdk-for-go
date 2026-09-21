@@ -41,6 +41,10 @@ type EventFrame struct {
 // EventReader provides typed, forward-only iteration over a Server-Sent Events
 // response body. T is the generated event union for the operation.
 //
+// The stream is bound to the context of the request that opened it: canceling
+// that context ends the stream and fails in-progress reads. Call Close to release
+// the stream early.
+//
 // The zero value is a valid, already-exhausted stream: iteration yields no
 // events and Close is a no-op.
 type EventReader[T any] struct {
@@ -57,14 +61,15 @@ type EventReader[T any] struct {
 }
 
 // EventHandler supplies the typed decoder and the connection factory used
-// to open, and on an unexpected disconnect reopen, an SSE stream.
+// to reopen an SSE stream after an unexpected disconnect.
 type EventHandler[T any] struct {
 	// Decode maps a wire-level EventFrame to the typed union value; it returns
 	// terminal=true when the event signals the end of the stream.
 	Decode func(frame EventFrame) (value T, terminal bool, err error)
 
-	// Connect opens the stream. lastEventID is empty on the initial connect and
-	// carries the most recent event id on a reconnect so the server can resume.
+	// Connect reopens the stream after an unexpected disconnect; the initial
+	// connection is made by the caller, not through this factory. lastEventID
+	// carries the most recent event id so the server can resume from it.
 	Connect func(ctx context.Context, lastEventID string) (*http.Response, error)
 
 	// Reconnect enables transparent reconnection after an unexpected mid-stream
@@ -81,14 +86,19 @@ type EventReaderOptions struct {
 	// for future expansion
 }
 
-// NewEventReader opens an SSE stream via handler.Connect and returns a typed reader
-// over it. The provided ctx governs the lifetime of the whole stream, including
-// any reconnect attempts made by Next after an unexpected disconnect; canceling
-// ctx aborts an in-progress reconnect and ends the stream.
-func NewEventReader[T any](ctx context.Context, handler EventHandler[T], _ *EventReaderOptions) (*EventReader[T], error) {
-	resp, err := handler.Connect(ctx, "")
-	if err != nil {
-		return nil, err
+// NewEventReader wraps an already-open Server-Sent Events response in a typed
+// reader. The caller makes the initial connection so it can inspect the response
+// (status, headers) first; handler.Connect is used only to reopen the stream on
+// an unexpected mid-stream disconnect. The response's request context governs the
+// stream lifetime, including reconnect attempts made by Next; canceling it aborts
+// an in-progress reconnect and ends the stream.
+func NewEventReader[T any](resp *http.Response, handler EventHandler[T], _ *EventReaderOptions) (*EventReader[T], error) {
+	if resp == nil || resp.Body == nil {
+		return nil, errors.New("streaming: response and its body must not be nil")
+	}
+	ctx := context.Background()
+	if resp.Request != nil {
+		ctx = resp.Request.Context()
 	}
 	return &EventReader[T]{
 		body:      resp.Body,
