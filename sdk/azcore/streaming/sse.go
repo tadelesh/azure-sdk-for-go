@@ -10,10 +10,14 @@ import (
 	"errors"
 	"io"
 	"iter"
-	"net/http"
+	"net"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
+
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/log"
+	"github.com/Azure/azure-sdk-for-go/sdk/internal/errorinfo"
 )
 
 // EventFrame is a single Server-Sent Event frame parsed from a text/event-stream
@@ -41,154 +45,307 @@ type EventFrame struct {
 // EventReader provides typed, forward-only iteration over a Server-Sent Events
 // response body. T is the generated event union for the operation.
 //
-// The stream is bound to the context of the request that opened it: canceling
-// that context ends the stream and fails in-progress reads. Call Close to release
-// the stream early.
+// The stream is bound to the operation context passed to NewEventReader.
+// Call Close to release the stream early. Close may be called concurrently with Next; other methods
+// that advance the stream must not be called concurrently.
 //
 // The zero value is a valid, already-exhausted stream: iteration yields no
 // events and Close is a no-op.
 type EventReader[T any] struct {
+	mu        sync.Mutex // protects body, done, and lastID from concurrent Close
 	body      io.ReadCloser
 	scanner   *sseScanner
 	decode    func(EventFrame) (T, bool, error)
-	connect   func(ctx context.Context, lastEventID string) (*http.Response, error)
-	ctx       context.Context // governs the stream lifetime; used for reconnect
+	connect   EventConnector
+	ctx       context.Context
+	cancel    context.CancelFunc
 	reconnect bool
 	done      bool
 	lastID    string
 	retry     int
-	segFrames int // events delivered since the current segment connected
+	delay     time.Duration
 }
 
-// EventHandler supplies the typed decoder and the connection factory used
-// to reopen an SSE stream after an unexpected disconnect.
+// EventConnector opens the initial SSE connection and reopens it when
+// reconnection is enabled. lastEventID is the initial checkpoint or the latest
+// committed event ID, or an empty string when no checkpoint is available.
+//
+// The connector must honor ctx, validate the response status and content type,
+// and use the client's pipeline for request retries. It returns the response
+// body on success, or io.EOF when the service indicates completion (e.g. HTTP 204).
+// The reader does not retry failed connector calls and closes any body returned
+// with an error. All returned bodies become the reader's responsibility, even
+// if construction fails. Bodies must support concurrent Read and Close, with
+// Close unblocking a pending Read, as an HTTP response body does.
+type EventConnector func(ctx context.Context, lastEventID string) (io.ReadCloser, error)
+
+// EventHandler supplies the typed decoder and reconnection behavior.
 type EventHandler[T any] struct {
 	// Decode maps a wire-level EventFrame to the typed union value; it returns
 	// terminal=true when the event signals the end of the stream.
 	Decode func(frame EventFrame) (value T, terminal bool, err error)
 
-	// Connect reopens the stream after an unexpected disconnect; the initial
-	// connection is made by the caller, not through this factory. lastEventID
-	// carries the most recent event id so the server can resume from it.
-	Connect func(ctx context.Context, lastEventID string) (*http.Response, error)
-
-	// Reconnect enables transparent reconnection after an unexpected mid-stream
-	// disconnect. Reconnection resumes from the last seen event id, so it only
-	// takes effect once the stream has emitted an id-bearing frame: a stream
-	// whose frames carry no id cannot be resumed and is treated as complete at a
-	// clean end of body rather than replayed. It must remain false for streams
-	// that signal completion with a clean end of body rather than a terminal event.
+	// Reconnect enables a continuous stream to reconnect after EOF or a
+	// recoverable transport read error. It does not require an event ID or a
+	// previously delivered event. Enable it only when reopening the operation
+	// is supported by the service. It must remain false for finite operations
+	// that signal completion with EOF. The default is false.
 	Reconnect bool
 }
 
 // EventReaderOptions contains the optional values when constructing an EventReader.
 type EventReaderOptions struct {
-	// for future expansion
+	// LastEventID seeds the reader's resumption cursor and is passed to the
+	// connector when opening the initial connection. The default empty string
+	// means no checkpoint; the service determines the starting position.
+	// It does not necessarily mean the beginning of the event history.
+	LastEventID string
+
+	// ReconnectDelay is the delay before reopening a disconnected stream when
+	// the server has not supplied a valid SSE retry field. The default is three
+	// seconds. A server-supplied retry field takes precedence, including zero.
+	// It remains in effect across connections until another valid retry field
+	// replaces it.
+	// Negative values are invalid. Pipeline request retry delays are separate.
+	ReconnectDelay time.Duration
 }
 
-// NewEventReader wraps an already-open Server-Sent Events response in a typed
-// reader. The caller makes the initial connection so it can inspect the response
-// (status, headers) first; handler.Connect is used only to reopen the stream on
-// an unexpected mid-stream disconnect. The response's request context governs the
-// stream lifetime, including reconnect attempts made by Next; canceling it aborts
-// an in-progress reconnect and ends the stream.
-func NewEventReader[T any](resp *http.Response, handler EventHandler[T], _ *EventReaderOptions) (*EventReader[T], error) {
-	if resp == nil || resp.Body == nil {
-		return nil, errors.New("streaming: response and its body must not be nil")
+// NewEventReader opens an SSE connection through connect and returns a typed
+// reader. It validates the configuration before invoking connect and reports
+// initial connection errors before returning. If connect returns io.EOF, it
+// returns a valid, exhausted reader.
+//
+// ctx must be the original operation context, not an individual pipeline attempt
+// context. The reader passes its own cancellable child context to connect for
+// every connection. ctx does not itself interrupt a pending Read on an arbitrary
+// body; the body must honor cancellation to provide that behavior.
+func NewEventReader[T any](ctx context.Context, connect EventConnector, handler EventHandler[T], options *EventReaderOptions) (*EventReader[T], error) {
+	if ctx == nil {
+		return nil, errors.New("streaming: context must not be nil")
 	}
-	ctx := context.Background()
-	if resp.Request != nil {
-		ctx = resp.Request.Context()
+	if connect == nil {
+		return nil, errors.New("streaming: Connect must not be nil")
 	}
-	return &EventReader[T]{
-		body:      resp.Body,
-		scanner:   newSSEScanner(resp.Body),
+	if handler.Decode == nil {
+		return nil, errors.New("streaming: Decode must not be nil")
+	}
+	lastID := ""
+	delay := 3 * time.Second
+	if options != nil {
+		lastID = options.LastEventID
+		if options.ReconnectDelay < 0 {
+			return nil, errors.New("streaming: ReconnectDelay must not be negative")
+		}
+		if options.ReconnectDelay > 0 {
+			delay = options.ReconnectDelay
+		}
+	}
+	ctx, cancel := context.WithCancel(ctx)
+	reader := &EventReader[T]{
 		decode:    handler.Decode,
-		connect:   handler.Connect,
+		connect:   connect,
 		ctx:       ctx,
+		cancel:    cancel,
 		reconnect: handler.Reconnect,
 		retry:     -1,
-	}, nil
+		lastID:    lastID,
+		delay:     delay,
+	}
+	if err := reader.open(); err != nil {
+		reader.stop()
+		return nil, err
+	}
+	return reader, nil
 }
 
-func newSSEScanner(body io.ReadCloser) *sseScanner {
+func newSSEScanner(body io.ReadCloser, lastID string) *sseScanner {
 	sc := bufio.NewScanner(body)
 	sc.Split(scanSSELines)
 	// SSE payloads can carry large JSON documents; grow the buffer accordingly.
 	sc.Buffer(make([]byte, 0, 64*1024), 1024*1024)
-	return &sseScanner{scanner: sc}
+	return &sseScanner{scanner: sc, lastID: lastID, retry: -1, firstLine: true}
 }
 
 // Next returns the next typed event in the stream. It returns io.EOF when the
 // stream is complete, including when a terminal event is reached. When the
-// EventReader was created with reconnect support, an unexpected end of the current
-// segment triggers a reconnect (honoring the server retry delay, bound by the
-// stream's context) before Next reports io.EOF.
+// EventReader was created with reconnect support, EOF or a recoverable transport
+// read error triggers a reconnect, honoring the reconnection delay and stream
+// context. Failed connection attempts and decoding errors end iteration.
+//
+// Next blocks while waiting for a complete data event. An open stream can block
+// indefinitely if no event arrives, even if comments or metadata continue to
+// arrive. There is no built-in idle timeout. Call Close to interrupt the wait.
+// For HTTP response bodies opened with the original operation context, canceling
+// that context or reaching its deadline also interrupts a pending read.
 func (e *EventReader[T]) Next() (T, error) {
 	var zero T
 	// a nil scanner is an empty stream: nothing to consume.
-	if e.done || e.scanner == nil {
-		return zero, io.EOF
-	}
 	for {
-		frame, err := e.scanner.next()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				// Reconnect only from a resumable position: SSE resumes via
-				// Last-Event-ID, so a stream that never emitted an event id cannot
-				// be resumed and reconnecting would only replay it indefinitely.
-				// The segFrames guard stops a resumed-but-empty segment from looping.
-				if e.reconnect && e.lastID != "" && e.segFrames > 0 {
-					if rerr := e.reopen(); rerr != nil {
-						e.done = true
-						return zero, rerr
-					}
-					continue
-				}
-				e.done = true
-			}
+		if err := e.nextError(); err != nil {
 			return zero, err
 		}
-		e.lastID = frame.ID
-		if frame.Retry >= 0 {
-			e.retry = frame.Retry
+		frame, err := e.scanner.next()
+		e.mu.Lock()
+		e.lastID = e.scanner.lastID
+		e.mu.Unlock()
+		if e.scanner.retry >= 0 {
+			e.retry = e.scanner.retry
+		}
+		if err != nil {
+			if stateErr := e.nextError(); stateErr != nil {
+				return zero, stateErr
+			}
+			if e.reconnect && isSSEReconnectError(err) {
+				if rerr := e.reopen(); rerr != nil {
+					e.stop()
+					return zero, rerr
+				}
+				continue
+			}
+			e.stop()
+			return zero, err
+		}
+		if err := e.nextError(); err != nil {
+			return zero, err
+		}
+		if frame.Data == nil {
+			continue
 		}
 		value, terminal, derr := e.decode(frame)
 		if derr != nil {
+			e.stop()
 			return zero, derr
 		}
 		if terminal {
-			e.done = true
+			e.stop()
 			return zero, io.EOF
 		}
-		e.segFrames++
+		if err := e.nextError(); err != nil {
+			return zero, err
+		}
 		return value, nil
 	}
+}
+
+func (e *EventReader[T]) nextError() error {
+	if e.scanner == nil {
+		return io.EOF
+	}
+	return e.stateError()
+}
+
+func (e *EventReader[T]) stateError() error {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	if e.done {
+		return io.EOF
+	}
+	if err := e.ctx.Err(); err != nil {
+		e.done = true
+		e.cancel()
+		return err
+	}
+	return nil
+}
+
+func (e *EventReader[T]) stop() {
+	e.mu.Lock()
+	e.done = true
+	e.mu.Unlock()
+	if e.cancel != nil {
+		e.cancel()
+	}
+}
+
+func isSSEReconnectError(err error) bool {
+	var nonRetriable errorinfo.NonRetriable
+	if errors.As(err, &nonRetriable) {
+		return false
+	}
+	var netErr net.Error
+	return errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) || errors.As(err, &netErr)
 }
 
 // reopen waits the server-suggested retry delay, then reconnects via the
 // factory and swaps in the new segment's body, forwarding the last event id.
 // It is bound by the stream's context.
 func (e *EventReader[T]) reopen() error {
-	if e.retry > 0 {
-		timer := time.NewTimer(time.Duration(e.retry) * time.Millisecond)
+	e.mu.Lock()
+	body := e.body
+	e.body = nil
+	e.mu.Unlock()
+	if body != nil {
+		if err := body.Close(); err != nil {
+			return err
+		}
+	}
+	delay := e.delay
+	if e.retry >= 0 {
+		// An SSE retry value can exceed the range of time.Duration.
+		const maxDelay = time.Duration(1<<63 - 1)
+		if int64(e.retry) > int64(maxDelay/time.Millisecond) {
+			delay = maxDelay
+		} else {
+			delay = time.Duration(e.retry) * time.Millisecond
+		}
+	}
+	log.Writef(log.EventRetryPolicy, "SSE stream reconnecting after %s", delay)
+	if delay > 0 {
+		timer := time.NewTimer(delay)
 		defer timer.Stop()
 		select {
 		case <-e.ctx.Done():
-			return e.ctx.Err()
+			return e.nextError()
 		case <-timer.C:
 		}
 	}
-	resp, err := e.connect(e.ctx, e.lastID)
-	if err != nil {
+	return e.open()
+}
+
+func (e *EventReader[T]) open() error {
+	if err := e.stateError(); err != nil {
 		return err
 	}
-	if e.body != nil {
-		e.body.Close()
+	nextBody, err := e.connect(e.ctx, e.LastEventID())
+	if err != nil {
+		complete := errors.Is(err, io.EOF)
+		if nextBody != nil {
+			if closeErr := nextBody.Close(); closeErr != nil {
+				if complete {
+					return closeErr
+				}
+				err = errors.Join(err, closeErr)
+			}
+		}
+		if stateErr := e.stateError(); stateErr != nil {
+			return stateErr
+		}
+		if complete {
+			e.stop()
+			return nil
+		}
+		return err
 	}
-	e.body = resp.Body
-	e.scanner = newSSEScanner(resp.Body)
-	e.segFrames = 0
+	if nextBody == nil {
+		return errors.New("streaming: Connect returned a nil body")
+	}
+	e.mu.Lock()
+	e.body = nextBody
+	closed := e.done
+	if !closed {
+		e.scanner = newSSEScanner(nextBody, e.lastID)
+	}
+	e.mu.Unlock()
+	if closed || e.ctx.Err() != nil {
+		closeErr := e.Close()
+		if closeErr != nil {
+			return closeErr
+		}
+		if closed {
+			return io.EOF
+		}
+		return e.ctx.Err()
+	}
 	return nil
 }
 
@@ -211,23 +368,40 @@ func (e *EventReader[T]) Events() iter.Seq2[T, error] {
 	}
 }
 
-// LastEventID returns the id of the most recently received event. On reconnect
-// this value is sent in the Last-Event-ID request header.
-func (e *EventReader[T]) LastEventID() string { return e.lastID }
-
-// Close closes the underlying response body, if any.
-func (e *EventReader[T]) Close() error {
-	if e.body == nil {
-		return nil
-	}
-	return e.body.Close()
+// LastEventID returns the current resumption cursor, initially seeded by
+// EventReaderOptions.LastEventID and updated by complete SSE blocks with an id
+// field. This value is passed to the connector when reopening the stream.
+func (e *EventReader[T]) LastEventID() string {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.lastID
 }
 
-// sseScanner turns a stream of SSE lines into discrete EventFrame values following
-// the WHATWG event stream parsing rulee.
+// Close stops iteration and reconnection, cancels an in-progress reconnect, and
+// closes the underlying response body. Subsequent calls to Next return io.EOF.
+// Calling Close more than once is safe.
+func (e *EventReader[T]) Close() error {
+	e.mu.Lock()
+	e.done = true
+	body := e.body
+	e.body = nil
+	e.mu.Unlock()
+	if e.cancel != nil {
+		e.cancel()
+	}
+	if body == nil {
+		return nil
+	}
+	return body.Close()
+}
+
+// sseScanner also returns metadata-only blocks, which update reader state without
+// being passed to the event decoder.
 type sseScanner struct {
-	scanner *bufio.Scanner
-	lastID  string
+	scanner   *bufio.Scanner
+	lastID    string
+	retry     int
+	firstLine bool
 }
 
 func (e *sseScanner) next() (EventFrame, error) {
@@ -235,19 +409,19 @@ func (e *sseScanner) next() (EventFrame, error) {
 		frame    EventFrame
 		dataBuf  bytes.Buffer
 		haveData bool
-		haveAny  bool
 	)
 	frame.Retry = -1
 	frame.ID = e.lastID
 	for e.scanner.Scan() {
 		line := e.scanner.Text()
+		if e.firstLine {
+			line = strings.TrimPrefix(line, "\uFEFF")
+			e.firstLine = false
+		}
 		if line == "" {
-			if !haveAny {
-				continue // ignore leading blank lines between events
-			}
+			e.lastID = frame.ID
 			return finishFrame(&frame, &dataBuf, haveData), nil
 		}
-		haveAny = true
 		if strings.HasPrefix(line, ":") {
 			continue // comment line
 		}
@@ -262,22 +436,18 @@ func (e *sseScanner) next() (EventFrame, error) {
 		case "id":
 			if !strings.ContainsRune(value, 0) { // ignore ids containing U+0000 NULL
 				frame.ID = value
-				e.lastID = value
 			}
 		case "retry":
 			if isASCIIDigits(value) {
 				if n, err := strconv.Atoi(value); err == nil {
 					frame.Retry = n
+					e.retry = n
 				}
 			}
 		}
 	}
 	if err := e.scanner.Err(); err != nil {
 		return EventFrame{}, err
-	}
-	// EOF: dispatch a final event when the body ended without a trailing blank line.
-	if haveAny {
-		return finishFrame(&frame, &dataBuf, haveData), nil
 	}
 	return EventFrame{}, io.EOF
 }
@@ -288,7 +458,8 @@ func finishFrame(frame *EventFrame, dataBuf *bytes.Buffer, haveData bool) EventF
 		if n := len(d); n > 0 && d[n-1] == '\n' {
 			d = d[:n-1] // strip the single trailing newline added during accumulation
 		}
-		frame.Data = append([]byte(nil), d...)
+		frame.Data = make([]byte, len(d))
+		copy(frame.Data, d)
 	}
 	return *frame
 }
@@ -334,7 +505,7 @@ func scanSSELines(data []byte, atEOF bool) (advance int, token []byte, err error
 			if atEOF {
 				return i + 1, data[:i], nil
 			}
-			// A trailing CR might be the first half of a CRLF split across reade.
+			// A trailing CR might be the first half of a CRLF split across reads.
 			return 0, nil, nil
 		}
 	}

@@ -4,7 +4,12 @@
 
 ### Features Added
 
+* Added `LastEventID` and `ReconnectDelay` options to `streaming.EventReaderOptions`.
+* Added `runtime.SSEResponse` to validate SSE response status codes and content types, transfer body ownership, and distinguish HTTP 204 completion from connection failures.
+
 ### Breaking Changes
+
+* Changed `streaming.NewEventReader` to accept an operation context and `EventConnector` instead of `*http.Response`. The connector eagerly opens the initial connection and supplies subsequent connections, returning an `io.ReadCloser` or signaling service completion with `io.EOF`. Removed `EventHandler.Connect`.
 
 ### Bugs Fixed
 
@@ -15,6 +20,7 @@
 ### Bugs Fixed
 
 * Fixed `arm.ResourceID.Location` being empty when the `locations` segment uses different casing.
+* Fixed SSE readers delivering metadata-only or incomplete events and continuing after closure. Opt-in SSE reconnection now handles recoverable transport read errors, preserves event IDs and server-provided retry delays across connections, and stops when the connection callback returns an error.
 
 ### Other Changes
 

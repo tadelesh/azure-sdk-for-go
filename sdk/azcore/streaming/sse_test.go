@@ -8,11 +8,12 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/streaming"
+	"github.com/stretchr/testify/require"
 )
 
 // frameView is a decoded SSE frame used only by these tests. It captures the
@@ -41,26 +42,22 @@ func decodeView(f streaming.EventFrame) (frameView, bool, error) {
 	return v, false, nil
 }
 
-func bodyConnect(body string) func(context.Context, string) (*http.Response, error) {
-	return func(context.Context, string) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(body))}, nil
+func bodyConnect(body string) streaming.EventConnector {
+	return func(context.Context, string) (io.ReadCloser, error) {
+		return io.NopCloser(strings.NewReader(body)), nil
 	}
 }
 
 func collect[T any](t *testing.T, body string, decode func(streaming.EventFrame) (T, bool, error)) ([]T, *streaming.EventReader[T]) {
 	t.Helper()
 	connect := bodyConnect(body)
-	resp, err := connect(context.Background(), "")
-	if err != nil {
-		t.Fatalf("connect: %v", err)
-	}
-	s, err := streaming.NewEventReader(resp, streaming.EventHandler[T]{
-		Decode:  decode,
-		Connect: connect,
+	s, err := streaming.NewEventReader(context.Background(), connect, streaming.EventHandler[T]{
+		Decode: decode,
 	}, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
 	}
+	t.Cleanup(func() { require.NoError(t, s.Close()) })
 	var got []T
 	for {
 		v, err := s.Next()
@@ -144,16 +141,14 @@ func TestProtocolInvalidIDIgnored(t *testing.T) {
 	}
 }
 
-func TestDataWithEnvelopeNoTrailingBlank(t *testing.T) {
+func TestIncompleteEventIsDiscarded(t *testing.T) {
 	body := "event: withEnvelope\ndata: hello"
 	got, _ := collect(t, body, decodeView)
-	if len(got) != 1 || got[0].data != "hello" {
-		t.Fatalf("got %+v", got)
-	}
+	require.Empty(t, got)
 }
 
 func TestDataWithoutEnvelope(t *testing.T) {
-	body := "event: withoutEnvelope\ndata: {\"metadata\": {\"source\": \"test\"}, \"contents\": \"world\"}\n"
+	body := "event: withoutEnvelope\ndata: {\"metadata\": {\"source\": \"test\"}, \"contents\": \"world\"}\n\n"
 	got, _ := collect(t, body, decodeView)
 	if len(got) != 1 || got[0].fields["contents"] != "world" {
 		t.Fatalf("got %+v", got)
@@ -184,13 +179,8 @@ func TestMultilineData(t *testing.T) {
 func TestEventsIterator(t *testing.T) {
 	body := "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
 	connect := bodyConnect(body)
-	resp, err := connect(context.Background(), "")
-	if err != nil {
-		t.Fatalf("connect: %v", err)
-	}
-	s, err := streaming.NewEventReader(resp, streaming.EventHandler[frameView]{
-		Decode:  decodeView,
-		Connect: connect,
+	s, err := streaming.NewEventReader(context.Background(), connect, streaming.EventHandler[frameView]{
+		Decode: decodeView,
 	}, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
@@ -207,39 +197,34 @@ func TestEventsIterator(t *testing.T) {
 	}
 }
 
-func TestNewEventReaderNilResponse(t *testing.T) {
+func TestNewEventReaderNilConnector(t *testing.T) {
 	handler := streaming.EventHandler[frameView]{Decode: decodeView}
-	if _, err := streaming.NewEventReader(nil, handler, nil); err == nil {
-		t.Fatal("expected error for nil response")
-	}
+	_, err := streaming.NewEventReader(context.Background(), nil, handler, nil)
+	require.ErrorContains(t, err, "Connect must not be nil")
 }
 
 func TestReconnectResumesWithLastEventID(t *testing.T) {
 	segments := []string{
 		"id: 1\ndata: {\"desc\": \"a\"}\n\nid: 2\ndata: {\"desc\": \"b\"}\n\n",
 		"id: 3\ndata: {\"desc\": \"c\"}\n\n",
-		"", // an empty segment signals the stream is exhausted
+		"", // Connect returning io.EOF signals the continuous stream is exhausted
 	}
 	var lastIDs []string
 	call := 0
 	handler := streaming.EventHandler[frameView]{
 		Decode:    decodeView,
 		Reconnect: true,
-		Connect: func(_ context.Context, lastEventID string) (*http.Response, error) {
-			lastIDs = append(lastIDs, lastEventID)
-			body := segments[call]
-			call++
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Body:       io.NopCloser(strings.NewReader(body)),
-			}, nil
-		},
 	}
-	resp, err := handler.Connect(context.Background(), "")
-	if err != nil {
-		t.Fatalf("connect: %v", err)
+	connect := func(_ context.Context, lastEventID string) (io.ReadCloser, error) {
+		lastIDs = append(lastIDs, lastEventID)
+		body := segments[call]
+		call++
+		if call == len(segments) {
+			return nil, io.EOF
+		}
+		return io.NopCloser(strings.NewReader(body)), nil
 	}
-	s, err := streaming.NewEventReader(resp, handler, nil)
+	s, err := streaming.NewEventReader(context.Background(), connect, handler, &streaming.EventReaderOptions{ReconnectDelay: time.Millisecond})
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
 	}
@@ -263,28 +248,14 @@ func TestReconnectResumesWithLastEventID(t *testing.T) {
 	}
 }
 
-// A reconnect-enabled stream whose frames carry no event id has no resumable
-// position, so it must end at a clean end of body instead of reconnecting and
-// replaying the same body forever (the missing-terminal-event footgun).
-func TestReconnectWithoutEventIDDoesNotReplay(t *testing.T) {
+func TestFiniteStreamWithoutEventIDDoesNotReplay(t *testing.T) {
 	const body = "data: {\"desc\": \"a\"}\n\ndata: {\"desc\": \"b\"}\n\n"
 	connects := 0
-	handler := streaming.EventHandler[frameView]{
-		Decode:    decodeView,
-		Reconnect: true,
-		Connect: func(context.Context, string) (*http.Response, error) {
-			connects++
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Body:       io.NopCloser(strings.NewReader(body)),
-			}, nil
-		},
+	connect := func(context.Context, string) (io.ReadCloser, error) {
+		connects++
+		return io.NopCloser(strings.NewReader(body)), nil
 	}
-	resp, err := handler.Connect(context.Background(), "")
-	if err != nil {
-		t.Fatalf("connect: %v", err)
-	}
-	s, err := streaming.NewEventReader(resp, handler, nil)
+	s, err := streaming.NewEventReader(context.Background(), connect, streaming.EventHandler[frameView]{Decode: decodeView}, nil)
 	if err != nil {
 		t.Fatalf("NewEventReader: %v", err)
 	}

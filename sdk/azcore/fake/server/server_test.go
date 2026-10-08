@@ -5,6 +5,7 @@ package server
 
 import (
 	"bytes"
+	"context"
 	"encoding/xml"
 	"errors"
 	"io"
@@ -301,13 +302,15 @@ func TestMarshalSSEResponder(t *testing.T) {
 	body, err := MarshalSSEResponder(&responder, encodeSSETestValue)
 	require.NoError(t, err)
 
-	resp := &http.Response{StatusCode: http.StatusOK, Body: body}
-	reader, err := streaming.NewEventReader(resp, streaming.EventHandler[streaming.EventFrame]{
+	reader, err := streaming.NewEventReader(context.Background(), func(context.Context, string) (io.ReadCloser, error) {
+		return body, nil
+	}, streaming.EventHandler[streaming.EventFrame]{
 		Decode: func(f streaming.EventFrame) (streaming.EventFrame, bool, error) {
 			return f, false, nil
 		},
 	}, nil)
 	require.NoError(t, err)
+	defer reader.Close()
 	var got []streaming.EventFrame
 	for f, err := range reader.Events() {
 		require.NoError(t, err)
