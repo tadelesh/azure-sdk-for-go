@@ -30,12 +30,14 @@ func TestReviewNamedTerminalPayloadIsDelivered(t *testing.T) {
 	type completion struct {
 		Total int `json:"total"`
 	}
-	body := io.NopCloser(strings.NewReader("event: complete\ndata: {\"total\":7}\n\ndata: after\n\n"))
+	body := io.NopCloser(strings.NewReader("event: complete\ndata: {\"total\":7}\n\n"))
 	reader := reviewReader(t, body, func(frame streaming.EventFrame) (completion, bool, error) {
 		var value completion
 		err := json.Unmarshal(frame.Data, &value)
 		return value, frame.Type == "complete", err
 	})
+	// A terminal model carries useful data that should be delivered once before EOF.
+	// The current reader discards that data as soon as Decode reports terminal=true.
 	event, err := reader.Next()
 	require.NoError(t, err, "a terminal model event must be delivered before EOF")
 	assert.Equal(t, 7, event.Total)
@@ -60,8 +62,12 @@ func TestReviewLoneCRDispatchesWithoutAnotherRead(t *testing.T) {
 			event, err := reader.Next()
 			next <- result{event: event, err: err}
 		}()
+		// CR (\r, carriage return) is a valid SSE line ending: these two CRs end the
+		// data line and its terminating blank line. Keep the pipe open to expose the
+		// splitter waiting for a possible LF (\n), rather than letting EOF hide it.
 		_, err := io.WriteString(write, "data: hello\r\r")
 		require.NoError(t, err)
+		// Synchronize with Next so the nonblocking result check is deterministic.
 		synctest.Wait()
 		select {
 		case got := <-next:
